@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.17">
+<title>sfl::small_vector</title>
+<style>
+body {
+    color: #333333;
+    font-family: sans-serif;
+    font-size: 10pt;
+    margin-left: 22em;
+    margin-right: 10%;
+}
+
+code, pre {
+    color: #333333;
+    font-family: monospace;
+    font-size: 90%;
+}
+
+code {
+    padding: 2px 4px;
+    background-color: #f5f5f5;
+    border-style: solid;
+    border-width: 0px;
+    border-color: darkgrey;
+    border-radius: 5px;
+    line-height: 1.5;
+}
+
+pre {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-style: solid;
+    border-width: 1px;
+    border-color: darkgrey;
+    border-radius: 5px;
+    line-height: 1.5;
+}
+
+h1 {
+    font-size: 30pt;
+    font-weight: normal;
+    padding-bottom: 10px;
+    border-bottom-color: darkgrey;
+    border-bottom-style: solid;
+    border-bottom-width: 2px;
+}
+
+h2 {
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 14pt;
+    font-weight: bold;
+}
+
+p {
+    margin: 0 0 0.5em;
+}
+
+/*****************************************************************************/
+
+a, a code {
+    color: darkblue;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/*****************************************************************************/
+
+#toc {
+    position: fixed;
+    background: #cccccc;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    padding: 1em;
+    width: 14em;
+    overflow: scroll;
+}
+
+#toctitle {
+    font-size: larger;
+    font-weight: bold;
+    padding-top: 0em;
+    padding-bottom: 1em;
+}
+
+#toc ul {
+    font-weight: bold;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#toc ul li {
+    padding-bottom: 0.5em;
+}
+
+#toc ul ul {
+    font-weight: normal;
+    padding-left: 2em;
+}
+
+#toc ul ul li {
+    padding-bottom: 0em;
+}
+
+#toc a {
+    color: #333333;
+    /* color: darkblue; */
+    display: inline-block;
+    text-decoration: none;
+}
+
+#toc a:hover {
+    text-decoration: underline;
+}
+
+</style>
+</head>
+<body class="article">
+<div id="header">
+<h1>sfl::small_vector</h1>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_summary">Summary</a></li>
+<li><a href="#_template_parameters">Template parameters</a></li>
+<li><a href="#_member_types">Member types</a></li>
+<li><a href="#_member_functions">Member functions</a>
+<ul class="sectlevel2">
+<li><a href="#_constructor">(constructor)</a></li>
+<li><a href="#_destructor">(destructor)</a></li>
+<li><a href="#_assign">assign</a></li>
+<li><a href="#_operator">operator=</a></li>
+<li><a href="#_get_allocator">get_allocator</a></li>
+<li><a href="#_begin_cbegin">begin, cbegin</a></li>
+<li><a href="#_end_cend">end, cend</a></li>
+<li><a href="#_rbegin_crbegin">rbegin, crbegin</a></li>
+<li><a href="#_rend_crend">rend, crend</a></li>
+<li><a href="#_nth">nth</a></li>
+<li><a href="#_index_of">index_of</a></li>
+<li><a href="#_empty">empty</a></li>
+<li><a href="#_size">size</a></li>
+<li><a href="#_max_size">max_size</a></li>
+<li><a href="#_capacity">capacity</a></li>
+<li><a href="#_reserve">reserve</a></li>
+<li><a href="#_shrink_to_fit">shrink_to_fit</a></li>
+<li><a href="#_at">at</a></li>
+<li><a href="#_operator_2">operator[]</a></li>
+<li><a href="#_front">front</a></li>
+<li><a href="#_back">back</a></li>
+<li><a href="#_data">data</a></li>
+<li><a href="#_clear">clear</a></li>
+<li><a href="#_emplace">emplace</a></li>
+<li><a href="#_insert">insert</a></li>
+<li><a href="#_emplace_back">emplace_back</a></li>
+<li><a href="#_push_back">push_back</a></li>
+<li><a href="#_pop_back">pop_back</a></li>
+<li><a href="#_erase">erase</a></li>
+<li><a href="#_resize">resize</a></li>
+<li><a href="#_swap">swap</a></li>
+</ul>
+</li>
+<li><a href="#_non_member_functions">Non-member functions</a>
+<ul class="sectlevel2">
+<li><a href="#_operator_3">operator==</a></li>
+<li><a href="#_operator_4">operator!=</a></li>
+<li><a href="#_operator_5">operator&lt;</a></li>
+<li><a href="#_operator_6">operator&gt;</a></li>
+<li><a href="#_operator_7">operator&lt;=</a></li>
+<li><a href="#_operator_8">operator&gt;=</a></li>
+<li><a href="#_swap_2">swap</a></li>
+<li><a href="#_erase_2">erase</a></li>
+<li><a href="#_erase_if">erase_if</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_summary">Summary</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Defined in header <code>&lt;sfl/small_vector.hpp&gt;</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>namespace sfl
+{
+
+template &lt; typename T,
+           std::size_t N,
+           typename Allocator = std::allocator&lt;T&gt; &gt;
+class small_vector;
+
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>sfl::small_vector</code> is a sequence container similar to <code>std::vector</code>.
+The elements are stored contiguously in the memory.
+The storage is handled automatically, being expanded and contracted as needed.
+<code>sfl::small_vector</code> holds statically allocated array of size <code>N</code> in
+the object itself.
+The container stores elements into this array until number of elements is not
+greater than <code>N</code>, which avoids dynamic memory allocation and deallocation.
+The dynamic memory management is used when the number of elements has to be
+greater than <code>N</code>.
+The size <code>N</code> is specified at the compile time as a template parameter.
+In case when <code>N</code> is equal to zero the container does not hold any statically
+allocated array and uses only dynamic memory management.
+In case when <code>N</code> is equal to zero <code>sfl::small_vector</code> behaves just like
+<code>std::vector</code>.</p>
+</div>
+<div class="paragraph">
+<p><code>sfl::small_vector</code> meets the requirements of
+<a href="https://en.cppreference.com/w/cpp/named_req/Container"><code>Container</code></a>,
+<a href="https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer"><code>AllocatorAwareContainer</code></a>,
+<a href="https://en.cppreference.com/w/cpp/named_req/ReversibleContainer"><code>ReversibleContainer</code></a>,
+<a href="https://en.cppreference.com/w/cpp/named_req/ContiguousContainer"><code>ContiguousContainer</code></a> and
+<a href="https://en.cppreference.com/w/cpp/named_req/SequenceContainer"><code>SequenceContainer</code></a>.</p>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_template_parameters">Template parameters</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><code>typename T</code></p>
+<div class="paragraph">
+<p>The type of the elements.</p>
+</div>
+</li>
+<li>
+<p><code>std::size_t N</code></p>
+<div class="paragraph">
+<p>Size of the internal statically allocated array. This parameter can be zero.</p>
+</div>
+</li>
+<li>
+<p><code>typename Allocator</code></p>
+<div class="paragraph">
+<p>Allocator used for memory allocation/deallocation and construction/destruction
+of elements.
+This type must meet the requirements of
+<a href="https://en.cppreference.com/w/cpp/named_req/Allocator"><code>Allocator</code></a>.
+The program is ill-formed if <code>Allocator::value_type</code> is not the same as <code>T</code>.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_member_types">Member types</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre>using allocator_type         = Allocator;
+using allocator_traits       = std::allocator_traits&lt;Allocator&gt;;
+using value_type             = T;
+using size_type              = typename allocator_traits::size_type;
+using difference_type        = typename allocator_traits::difference_type;
+using reference              = T&amp;;
+using const_reference        = const T&amp;;
+using pointer                = typename allocator_traits::pointer;
+using const_pointer          = typename allocator_traits::const_pointer;
+using iterator               = pointer;
+using const_iterator         = const_pointer;
+using reverse_iterator       = std::reverse_iterator&lt;iterator&gt;;
+using const_reverse_iterator = std::reverse_iterator&lt;const_iterator&gt;;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_member_functions">Member functions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_constructor">(constructor)</h3>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector() noexcept;
+explicit small_vector(const Allocator&amp; alloc) noexcept(
+    std::is_nothrow_copy_constructible&lt;Allocator&gt;::value
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Constructs an empty container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>explicit small_vector(size_type n);
+explicit small_vector(size_type n, const Allocator&amp; alloc);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Constructs the container with <code>n</code> default-constructed elements.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>n</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector(size_type n, const T&amp; value);
+small_vector(size_type n, const T&amp; value, const Allocator&amp; alloc);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Constructs the container with <code>n</code> copies of elements with value <code>value</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>n</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename InputIt&gt;
+  small_vector(InputIt first, InputIt last);
+template &lt;typename InputIt&gt;
+  small_vector(InputIt first, InputIt last, const Allocator&amp; alloc);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Constructs the container with the contents of the range <code>[first, last)</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+This overload participates in overload resolution only if <code>InputIt</code>
+satisfies requirements of
+<a href="https://en.cppreference.com/w/cpp/named_req/InputIterator"><code>LegacyInputIterator</code></a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>std::distance(first, last)</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector(std::initializer_list&lt;T&gt; ilist);
+small_vector(std::initializer_list&lt;T&gt; ilist, const Allocator&amp; alloc);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Constructs the container with the contents of the initializer list <code>ilist</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>ilist.size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector(const small_vector&amp; other);
+small_vector(const small_vector&amp; other, const Allocator&amp; alloc);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Constructs the container with the copy of the contents of <code>other</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>other.size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector(small_vector&amp;&amp; other);
+small_vector(small_vector&amp;&amp; other, const Allocator&amp; alloc);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Constructs the container with the contents of <code>other</code> using move semantics.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant in the best case. Linear in <code>N</code> in the worst case.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_destructor">(destructor)</h3>
+<div class="listingblock">
+<div class="content">
+<pre>~small_vector();</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Destructs the container. The destructors of the elements are called and
+the used storage is deallocated.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_assign">assign</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void assign(size_type n, const T&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Replaces the contents of the container with <code>n</code> copies of value <code>value</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>n</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename InputIt&gt;
+void assign(InputIt first, InputIt last);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Replaces the contents of the container with the contents of the range
+<code>[first, last)</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+This overload participates in overload resolution only if <code>InputIt</code>
+satisfies requirements of
+<a href="https://en.cppreference.com/w/cpp/named_req/InputIterator"><code>LegacyInputIterator</code></a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+The behavior is undefined if either <code>first</code> or <code>last</code> is an iterator into <code>*this</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>std::distance(first, last)</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>void assign(std::initializer_list&lt;T&gt; ilist);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Replaces the contents of the container with the contents of the initializer
+list <code>ilist</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>ilist.size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_operator">operator=</h3>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector&amp; operator=(const small_vector&amp; other);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Copy assignment operator. Replaces the contents with a copy of the contents
+of <code>other</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+<code>*this()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>this-&gt;size()</code> plus linear in <code>other.size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector&amp; operator=(small_vector&amp;&amp; other);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Move assignment operator. Replaces the contents with those of <code>other</code> using
+move semantics. <code>other</code> is guaranteed to be <code>empty()</code> afterwards.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+<code>*this()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The best case: Linear in <code>this-&gt;size()</code> plus constant.</p>
+</li>
+<li>
+<p>The worst case: Linear in <code>this-&gt;size()</code> plus linear in <code>other.size()</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>small_vector&amp; operator=(std::initializer_list&lt;T&gt; ilist);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Replaces the contents with those identified by initializer list <code>ilist</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+<code>*this()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>this-&gt;size()</code> plus linear in <code>ilist.size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_get_allocator">get_allocator</h3>
+<div class="listingblock">
+<div class="content">
+<pre>allocator_type get_allocator() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns the allocator associated with the container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_begin_cbegin">begin, cbegin</h3>
+<div class="listingblock">
+<div class="content">
+<pre>iterator       begin() noexcept;
+const_iterator begin() const noexcept;
+const_iterator cbegin() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns an iterator to the first element of the container.
+If the container is empty, the returned iterator is equal to <code>end()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_end_cend">end, cend</h3>
+<div class="listingblock">
+<div class="content">
+<pre>iterator       end() noexcept;
+const_iterator end() const noexcept;
+const_iterator cend() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns an iterator to the element following the last element of
+the container. This element acts as a placeholder, attempting to
+access it results in undefined behavior.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rbegin_crbegin">rbegin, crbegin</h3>
+<div class="listingblock">
+<div class="content">
+<pre>reverse_iterator       rbegin() noexcept;
+const_reverse_iterator rbegin() const noexcept;
+const_reverse_iterator crbegin() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns a reverse iterator to the first element of the reversed container.
+It corresponds to the last element of the non-reversed containers.
+If the container is empty, the returned iterator is equal to <code>rend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rend_crend">rend, crend</h3>
+<div class="listingblock">
+<div class="content">
+<pre>reverse_iterator       rend() noexcept;
+const_reverse_iterator rend() const noexcept;
+const_reverse_iterator crend() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns a reverse iterator to the element following the last element of
+the reversed container. It corresponds to the element preceding the first
+element of the non-reversed container. This element acts as a placeholder,
+attempting to access it results in undefined behavior.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nth">nth</h3>
+<div class="listingblock">
+<div class="content">
+<pre>iterator       nth(size_type pos) noexcept;
+const_iterator nth(size_type pos) const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>pos &lt;= size()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns an iterator to the element at position <code>pos</code>.
+If <code>pos == size()</code>, the returned iterator is equal to <code>end()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_index_of">index_of</h3>
+<div class="listingblock">
+<div class="content">
+<pre>size_type index_of(const_iterator pos) const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns position of the element pointed by iterator <code>pos</code>.
+If <code>pos == end()</code>, the returned value is equal to <code>size()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_empty">empty</h3>
+<div class="listingblock">
+<div class="content">
+<pre>bool empty() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns <code>true</code> if the container has no elements,
+i.e. whether <code>begin() == end()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_size">size</h3>
+<div class="listingblock">
+<div class="content">
+<pre>size_type size() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns the number of elements in the container,
+i.e. <code>std::distance(begin(), end())</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_max_size">max_size</h3>
+<div class="listingblock">
+<div class="content">
+<pre>size_type max_size() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns the maximum number of elements the container is able to hold,
+i.e. <code>std::distance(begin(), end())</code> for the largest container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_capacity">capacity</h3>
+<div class="listingblock">
+<div class="content">
+<pre>size_type capacity() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns the number of elements that the container has currently
+allocated space for.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reserve">reserve</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void reserve(size_type new_cap);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Tries to increase capacity by allocating additional memory.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If <code>new_cap &gt; capacity()</code>, the function allocates memory for new storage
+of capacity equal to the value of <code>new_cap</code>, moves elements from old storage
+to new storage, and deallocates memory used by old storage.</p>
+</li>
+<li>
+<p>Otherwise the function does nothing.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This function does not change size of the container.</p>
+</div>
+<div class="paragraph">
+<p>If the capacity is changed, all iterators and all references to the elements
+are invalidated. Otherwise, no iterators or references are invalidated.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear.</p>
+</div>
+<div class="paragraph">
+<p><strong>Exceptions:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Allocator::allocate</code> may throw.</p>
+</li>
+<li>
+<p><code>T</code>'s move or copy constructor may throw.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If an exception is thrown:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If type <code>T</code> has available <code>noexcept</code> move constructor:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This function has no effects (strong exception guarantee).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Else if type <code>T</code> has available copy constructor:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This function has no effects (strong exception guarantee).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Else if type <code>T</code> has available throwing move constructor:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Container is changed but in valid state (basic exception guarantee).</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shrink_to_fit">shrink_to_fit</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void shrink_to_fit();</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Tries to reduce memory usage by freeing unused memory.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If <code>size() &gt; N &amp;&amp; size() &lt; capacity()</code>, the function allocates memory for
+new storage of capacity equal to the value of <code>size()</code>, moves elements from
+old storage to new storage, and deallocates memory used by old storage.</p>
+</li>
+<li>
+<p>If <code>size() &lt;= N &amp;&amp; N &lt; capacity()</code>, the function sets new storage to be
+internal statically allocated array of capacity <code>N</code>, moves elements from
+old storage to new storage, and deallocates memory used by old storage.</p>
+</li>
+<li>
+<p>Otherwise the function does nothing.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This function does not change size of the container.</p>
+</div>
+<div class="paragraph">
+<p>If the capacity is changed, all iterators and all references to the elements
+are invalidated. Otherwise, no iterators or references are invalidated.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear.</p>
+</div>
+<div class="paragraph">
+<p><strong>Exceptions:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Allocator::allocate</code> may throw.</p>
+</li>
+<li>
+<p><code>T</code>'s move or copy constructor may throw.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>If an exception is thrown:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If type <code>T</code> has available <code>noexcept</code> move constructor:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This function has no effects (strong exception guarantee).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Else if type <code>T</code> has available copy constructor:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This function has no effects (strong exception guarantee).</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Else if type <code>T</code> has available throwing move constructor:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Container is changed but in valid state (basic exception guarantee).</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_at">at</h3>
+<div class="listingblock">
+<div class="content">
+<pre>reference       at(size_type pos);
+const_reference at(size_type pos) const;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns a reference to the element at specified location <code>pos</code>, with bounds
+checking.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+<div class="paragraph">
+<p><strong>Exceptions:</strong>
+<code>std::out_of_range</code> if <code>pos &gt;= size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_operator_2">operator[]</h3>
+<div class="listingblock">
+<div class="content">
+<pre>reference       operator[](size_type pos) noexcept;
+const_reference operator[](size_type pos) const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>pos &lt; size()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns a reference to the element at specified location pos. No bounds
+checking is performed.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+This operator never inserts a new element into the container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_front">front</h3>
+<div class="listingblock">
+<div class="content">
+<pre>reference       front() noexcept;
+const_reference front() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>!empty()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns a reference to the first element in the container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_back">back</h3>
+<div class="listingblock">
+<div class="content">
+<pre>reference       back() noexcept;
+const_reference back() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>!empty()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns a reference to the last element in the container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_data">data</h3>
+<div class="listingblock">
+<div class="content">
+<pre>T*       data() noexcept;
+const T* data() const noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns pointer to the underlying array serving as element storage.
+The pointer is such that range <code>[data(), data() + size())</code> is always
+a valid range, even if the container is empty. <code>data()</code> is not
+dereferenceable if the container is empty.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_clear">clear</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void clear() noexcept;</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Erases all elements from the container.
+After this call, <code>size()</code> returns zero and <code>capacity()</code> remains unchanged.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>size()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_emplace">emplace</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename... Args&gt;
+iterator emplace(const_iterator pos, Args&amp;&amp;... args);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts a new element into the container at position <code>pos</code>.
+New element is constructed as <code>value_type(std::forward&lt;Args&gt;(args)...)</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Returns an iterator to the inserted element.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant plus linear in <code>std::distance(pos, end())</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_insert">insert</h3>
+<div class="listingblock">
+<div class="content">
+<pre>iterator insert(const_iterator pos, const T&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts copy of <code>value</code> at position <code>pos</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Returns an iterator to the inserted element.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant plus linear in <code>std::distance(pos, end())</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>iterator insert(const_iterator pos, T&amp;&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts <code>value</code> using move semantics at position <code>pos</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Returns an iterator to the inserted element.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant plus linear in <code>std::distance(pos, end())</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>iterator insert(const_iterator pos, size_type n, const T&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts <code>n</code> copies of <code>value</code> before position <code>pos</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Iterator pointing to the first element inserted, or <code>pos</code> if <code>n == 0</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>n</code> plus linear in <code>std::distance(pos, end())</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename InputIt&gt;
+iterator insert(const_iterator pos, InputIt first, InputIt last);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts elements from the range <code>[first, last)</code> before position <code>pos</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+This overload participates in overload resolution only if <code>InputIt</code>
+satisfies requirements of
+<a href="https://en.cppreference.com/w/cpp/named_req/InputIterator"><code>LegacyInputIterator</code></a>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+The behavior is undefined if either <code>first</code> or <code>last</code> is an iterator into <code>*this</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Iterator pointing to the first element inserted, or <code>pos</code> if <code>first == last</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>std::distance(first, last)</code> plus linear in <code>std::distance(pos, end())</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>iterator insert(const_iterator pos, std::initializer_list&lt;T&gt; ilist);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts elements from initializer list <code>ilist</code> before position <code>pos</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Iterator pointing to the first element inserted, or <code>pos</code> if <code>ilist</code> is empty.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in <code>ilist.size()</code> plus linear in <code>std::distance(pos, end())</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_emplace_back">emplace_back</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename... Args&gt;
+reference emplace_back(Args&amp;&amp;... args);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts a new element at the end of container. New element is constructed as
+<code>value_type(std::forward&lt;Args&gt;(args)...)</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Returns a reference to the inserted element.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_push_back">push_back</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void push_back(const T&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts copy of <code>value</code> at the end of container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>void push_back(T&amp;&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Inserts <code>value</code> using move semantics at the end of container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_pop_back">pop_back</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void pop_back();</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>!empty()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Removes the last element of the container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_erase">erase</h3>
+<div class="listingblock">
+<div class="content">
+<pre>iterator erase(const_iterator pos);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= pos &amp;&amp; pos &lt; cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Removes the element pointed by iterator <code>pos</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Iterator following the last removed element.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>iterator erase(const_iterator first, const_iterator last);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>cbegin() &lt;= first &amp;&amp; first &lt;= last &amp;&amp; last &lt;= cend()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Removes the elements in the range <code>[first, last)</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+Iterator following the last removed element.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_resize">resize</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void resize(size_type n);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Resizes the container to contain <code>n</code> elements.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the <code>size() &gt; n</code>, the last <code>size() - n</code> elements are removed.</p>
+</li>
+<li>
+<p>If the <code>size() &lt; n</code>, additional default-constructed elements are inserted at
+the end of container.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in difference between <code>size()</code> and <code>n</code>.
+Additional complexity possible due to reallocation if <code>n &gt; capacity()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>void resize(size_type n, const T&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Resizes the container to contain <code>n</code> elements.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If the <code>size() &gt; n</code>, the last <code>size() - n</code> elements are removed.</p>
+</li>
+<li>
+<p>If the <code>size() &lt; n</code>, additional copies of <code>value</code> are inserted at
+the end of container.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in difference between <code>size()</code> and <code>n</code>.
+Additional complexity possible due to reallocation if <code>n &gt; capacity()</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_swap">swap</h3>
+<div class="listingblock">
+<div class="content">
+<pre>void swap(small_vector&amp; other);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Preconditions:</strong>
+<code>allocator_traits::propagate_on_container_swap::value || get_allocator() == other.get_allocator()</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Exchanges the contents of the container with those of <code>other</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant in the best case. Linear in <code>this-&gt;size()</code> plus linear in
+<code>other.size()</code> in the worst case.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_non_member_functions">Non-member functions</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_operator_3">operator==</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A&gt;
+bool operator==
+(
+    const small_vector&lt;T, N, A&gt;&amp; x,
+    const small_vector&lt;T, N, A&gt;&amp; y
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns <code>true</code> if the contents of the <code>x</code> and <code>y</code> are equal, <code>false</code> otherwise.</p>
+</div>
+<div class="paragraph">
+<p>The contents of the <code>x</code> and <code>y</code> are equal if they have the same number of
+elements and each element in <code>x</code> compares equal with the element in <code>y</code> at
+the same position</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant if <code>x</code> and <code>y</code> are of different size, otherwise linear in the size
+of the container.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_operator_4">operator!=</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A&gt;
+bool operator!=
+(
+    const small_vector&lt;T, N, A&gt;&amp; x,
+    const small_vector&lt;T, N, A&gt;&amp; y
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns <code>true</code> if the contents of the <code>x</code> and <code>y</code> are not equal, <code>false</code> otherwise.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Constant if <code>x</code> and <code>y</code> are of different size, otherwise linear in the size
+of the container.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_operator_5">operator&lt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A&gt;
+bool operator&lt;
+(
+    const small_vector&lt;T, N, A&gt;&amp; x,
+    const small_vector&lt;T, N, A&gt;&amp; y
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns <code>true</code> if the contents of the <code>x</code> are lexicographically less than
+the contents of <code>y</code>, <code>false</code> otherwise.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+The comparison is performed by <code>std::lexicographical_compare</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in the size of the container.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_operator_6">operator&gt;</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A&gt;
+bool operator&gt;
+(
+    const small_vector&lt;T, N, A&gt;&amp; x,
+    const small_vector&lt;T, N, A&gt;&amp; y
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns <code>true</code> if the contents of the <code>x</code> are lexicographically greater than
+the contents of <code>y</code>, <code>false</code> otherwise.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+The comparison is performed by <code>std::lexicographical_compare</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in the size of the container.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_operator_7">operator&lt;=</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A&gt;
+bool operator&lt;=
+(
+    const small_vector&lt;T, N, A&gt;&amp; x,
+    const small_vector&lt;T, N, A&gt;&amp; y
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns <code>true</code> if the contents of the <code>x</code> are lexicographically less than
+or equal to the contents of <code>y</code>, <code>false</code> otherwise.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+The comparison is performed by <code>std::lexicographical_compare</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in the size of the container.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_operator_8">operator&gt;=</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A&gt;
+bool operator&gt;=
+(
+    const small_vector&lt;T, N, A&gt;&amp; x,
+    const small_vector&lt;T, N, A&gt;&amp; y
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Returns <code>true</code> if the contents of the <code>x</code> are lexicographically greater than
+or equal to the contents of <code>y</code>, <code>false</code> otherwise.</p>
+</div>
+<div class="paragraph">
+<p><strong>Note:</strong>
+The comparison is performed by <code>std::lexicographical_compare</code>.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear in the size of the container.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_swap_2">swap</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A&gt;
+void swap
+(
+    small_vector&lt;T, N, A&gt;&amp; x,
+    small_vector&lt;T, N, A&gt;&amp; y
+);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Swaps the contents of <code>x</code> and <code>y</code>. Calls <code>x.swap(y)</code>.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_erase_2">erase</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A, typename U&gt;
+typename small_vector&lt;T, N, A&gt;::size_type
+    erase(small_vector&lt;T, N, A&gt;&amp; c, const U&amp; value);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Erases all elements that compare equal to <code>value</code> from the container.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+The number of erased elements.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_erase_if">erase_if</h3>
+<div class="listingblock">
+<div class="content">
+<pre>template &lt;typename T, std::size_t N, typename A, typename Predicate&gt;
+typename small_vector&lt;T, N, A&gt;::size_type
+    erase_if(small_vector&lt;T, N, A&gt;&amp; c, Predicate pred);</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1"> </dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p><strong>Effects:</strong>
+Erases all elements that satisfy the predicate <code>pred</code> from the container.</p>
+</div>
+<div class="paragraph">
+<p>Parameter <code>pred</code> is unary predicate which returns <code>true</code> if the element should
+be removed.</p>
+</div>
+<div class="paragraph">
+<p><strong>Returns:</strong>
+The number of erased elements.</p>
+</div>
+<div class="paragraph">
+<p><strong>Complexity:</strong>
+Linear.</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p><br></p>
+</div>
+<div class="paragraph">
+<p>End of document.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+</div>
+</div>
+</body>
+</html>
