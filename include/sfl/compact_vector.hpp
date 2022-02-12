@@ -1481,16 +1481,7 @@ private:
             }
             catch (...)
             {
-                SFL_DTL::deallocate
-                (
-                    ref_to_alloc(),
-                    data_.first_,
-                    n
-                );
-
-                data_.first_ = nullptr;
-                data_.last_  = nullptr;
-
+                clear();
                 throw;
             }
         }
@@ -1549,16 +1540,7 @@ private:
             }
             catch (...)
             {
-                SFL_DTL::deallocate
-                (
-                    ref_to_alloc(),
-                    data_.first_,
-                    n
-                );
-
-                data_.first_ = nullptr;
-                data_.last_  = nullptr;
-
+                clear();
                 throw;
             }
         }
@@ -1632,7 +1614,10 @@ private:
 
             if (new_size < size() || new_size > max_size())
             {
-                SFL_DTL::throw_length_error("sfl::compact_vector::insert_fill_n");
+                SFL_DTL::throw_length_error
+                (
+                    "sfl::compact_vector::insert_fill_n"
+                );
             }
 
             pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_size);
@@ -1752,7 +1737,10 @@ private:
 
             if (new_size < size() || new_size > max_size())
             {
-                SFL_DTL::throw_length_error("sfl::compact_vector::insert_range");
+                SFL_DTL::throw_length_error
+                (
+                    "sfl::compact_vector::insert_range"
+                );
             }
 
             pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_size);
