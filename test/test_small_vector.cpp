@@ -429,6 +429,55 @@ int main()
 
             assert(res == v.nth(0));
             assert(v.size() == 4);
+            assert(v.capacity() == 10);
+            assert(v[0] == 10);
+            assert(v[1] == 20);
+            assert(v[2] == 30);
+            assert(v[3] == 40);
+        }
+
+        {
+            const std::vector<MyInt> data({50, 60});
+
+            cout << ">" << endl;
+            auto res = v.insert(v.nth(2), data.begin(), data.end());
+            cout << "<" << endl;
+
+            assert(res == v.nth(2));
+            assert(v.size() == 6);
+            assert(v.capacity() == 10);
+            assert(v[0] == 10);
+            assert(v[1] == 20);
+            assert(v[2] == 50);
+            assert(v[3] == 60);
+            assert(v[4] == 30);
+            assert(v[5] == 40);
+        }
+    }
+
+    cout << "Test insert(const_iterator, MoveIterator, MoveIterator)." << endl;
+    {
+        sfl::small_vector<MyInt, 10> v;
+
+        {
+            std::vector<MyInt> data({10, 20, 30, 40});
+
+            cout << ">" << endl;
+            auto res = v.insert
+            (
+                v.begin(),
+                std::make_move_iterator(data.begin()),
+                std::make_move_iterator(data.end())
+            );
+            cout << "<" << endl;
+
+            assert(res == v.nth(0));
+            assert(data[0] == -10);
+            assert(data[1] == -20);
+            assert(data[2] == -30);
+            assert(data[3] == -40);
+            assert(v.size() == 4);
+            assert(v.capacity() == 10);
             assert(v[0] == 10);
             assert(v[1] == 20);
             assert(v[2] == 30);
@@ -467,10 +516,13 @@ int main()
         }
 
         {
+            MyInt i(20);
+
             cout << ">" << endl;
-            v.emplace_back(20);
+            v.emplace_back(std::move(i));
             cout << "<" << endl;
 
+            assert(i == -20);
             assert(v.size() == 2);
             assert(v.capacity() == 10);
             assert(v[0] == 10);
@@ -486,7 +538,7 @@ int main()
             const MyInt i(10);
 
             cout << ">" << endl;
-            v.emplace_back(i);
+            v.push_back(i);
             cout << "<" << endl;
 
             assert(v.size() == 1);
@@ -498,7 +550,7 @@ int main()
             const MyInt i(20);
 
             cout << ">" << endl;
-            v.emplace_back(i);
+            v.push_back(i);
             cout << "<" << endl;
 
             assert(v.size() == 2);
@@ -508,7 +560,7 @@ int main()
         }
     }
 
-    cout << "Test push_back(const T&)." << endl;
+    cout << "Test push_back(T&&)." << endl;
     {
         sfl::small_vector<MyInt, 10> v;
 
@@ -516,7 +568,7 @@ int main()
             MyInt i(10);
 
             cout << ">" << endl;
-            v.emplace_back(std::move(i));
+            v.push_back(std::move(i));
             cout << "<" << endl;
 
             assert(i == -10);
@@ -529,7 +581,7 @@ int main()
             MyInt i(20);
 
             cout << ">" << endl;
-            v.emplace_back(std::move(i));
+            v.push_back(std::move(i));
             cout << "<" << endl;
 
             assert(i == -20);
@@ -821,7 +873,6 @@ int main()
     {
         sfl::small_vector<MyInt, 5> v;
 
-        // n > size && n <= capacity
         {
             cout << ">" << endl;
             v.emplace_back(10);
@@ -860,9 +911,9 @@ int main()
             assert(v[0] == 10);
             assert(v[1] == 20);
             assert(v[2] == 30);
-            assert(v[3] == MyInt::default_value);
-            assert(v[4] == MyInt::default_value);
-            assert(v[5] == MyInt::default_value);
+            assert(v[3] == SFL_MY_INT_DEFAULT_VALUE);
+            assert(v[4] == SFL_MY_INT_DEFAULT_VALUE);
+            assert(v[5] == SFL_MY_INT_DEFAULT_VALUE);
         }
 
         // n < size
@@ -887,8 +938,8 @@ int main()
             assert(v.capacity() == 6);
             assert(v[0] == 10);
             assert(v[1] == 20);
-            assert(v[2] == MyInt::default_value);
-            assert(v[3] == MyInt::default_value);
+            assert(v[2] == SFL_MY_INT_DEFAULT_VALUE);
+            assert(v[3] == SFL_MY_INT_DEFAULT_VALUE);
         }
     }
 
@@ -896,7 +947,6 @@ int main()
     {
         sfl::small_vector<MyInt, 5> v;
 
-        // n > size && n <= capacity
         {
             cout << ">" << endl;
             v.emplace_back(10);
@@ -967,7 +1017,7 @@ int main()
         }
     }
 
-    cout << "Test swap." << endl;
+    cout << "Test swap(small_vector&)." << endl;
     {
         // v1 uses internal storage, v2 uses internal storage
         {
@@ -1288,7 +1338,7 @@ int main()
         }
     }
 
-    cout << "Test empty constructors." << endl;
+    cout << "Test constructor()." << endl;
     {
         std::allocator<MyInt> alloc;
 
@@ -1302,7 +1352,7 @@ int main()
         assert(v2.capacity() == 10);
     }
 
-    cout << "Test fill (default) constructors." << endl;
+    cout << "Test constructor(size_type)." << endl;
     {
         std::allocator<MyInt> alloc;
 
@@ -1315,21 +1365,26 @@ int main()
         assert(v1.capacity() == 10);
         assert(v2.capacity() == 10);
 
-        assert(v1[0] == MyInt::default_value);
-        assert(v1[1] == MyInt::default_value);
-        assert(v1[2] == MyInt::default_value);
+        assert(v1[0] == SFL_MY_INT_DEFAULT_VALUE);
+        assert(v1[1] == SFL_MY_INT_DEFAULT_VALUE);
+        assert(v1[2] == SFL_MY_INT_DEFAULT_VALUE);
 
-        assert(v2[0] == MyInt::default_value);
-        assert(v2[1] == MyInt::default_value);
-        assert(v2[2] == MyInt::default_value);
+        assert(v2[0] == SFL_MY_INT_DEFAULT_VALUE);
+        assert(v2[1] == SFL_MY_INT_DEFAULT_VALUE);
+        assert(v2[2] == SFL_MY_INT_DEFAULT_VALUE);
     }
 
-    cout << "Test fill (copy) constructors." << endl;
+    cout << "Test constructor(size_type, const T&)." << endl;
     {
         std::allocator<MyInt> alloc;
 
+        cout << ">" << endl;
         sfl::small_vector<MyInt, 10> v1(3, 42);
+        cout << "<" << endl;
+
+        cout << ">" << endl;
         sfl::small_vector<MyInt, 10> v2(3, 42, alloc);
+        cout << "<" << endl;
 
         assert(v1.size() == 3);
         assert(v2.size() == 3);
@@ -1346,25 +1401,29 @@ int main()
         assert(v2[2] == 42);
     }
 
-    cout << "Test range constructors (input iterator)." << endl;
+    cout << "Test constructor(InputIt, InputIt)." << endl;
     {
         std::allocator<MyInt> alloc;
 
         std::istringstream iss1("10 20 30 40");
         std::istringstream iss2("10 20 30 40");
 
+        cout << ">" << endl;
         sfl::small_vector<MyInt, 10> v1
         (
             (std::istream_iterator<int>(iss1)),
             (std::istream_iterator<int>())
         );
+        cout << "<" << endl;
 
+        cout << ">" << endl;
         sfl::small_vector<MyInt, 10> v2
         (
             (std::istream_iterator<int>(iss2)),
             (std::istream_iterator<int>()),
             alloc
         );
+        cout << "<" << endl;
 
         assert(v1.size() == 4);
         assert(v2.size() == 4);
@@ -1383,14 +1442,19 @@ int main()
         assert(v2[3] == 40);
     }
 
-    cout << "Test range constructors (forward iterator)." << endl;
+    cout << "Test constructor(ForwardIt, ForwardIt)." << endl;
     {
         std::allocator<MyInt> alloc;
 
-        std::vector<MyInt> v({10, 20, 30, 40});
+        const std::vector<MyInt> data({10, 20, 30, 40});
 
-        sfl::small_vector<MyInt, 10> v1(v.begin(), v.end());
-        sfl::small_vector<MyInt, 10> v2(v.begin(), v.end(), alloc);
+        cout << ">" << endl;
+        sfl::small_vector<MyInt, 10> v1(data.begin(), data.end());
+        cout << "<" << endl;
+
+        cout << ">" << endl;
+        sfl::small_vector<MyInt, 10> v2(data.begin(), data.end(), alloc);
+        cout << "<" << endl;
 
         assert(v1.size() == 4);
         assert(v2.size() == 4);
@@ -1409,12 +1473,68 @@ int main()
         assert(v2[3] == 40);
     }
 
-    cout << "Test initializer_list constructors." << endl;
+    cout << "Test constructor(MoveIterator, MoveIterator)." << endl;
     {
         std::allocator<MyInt> alloc;
 
+        std::vector<MyInt> data1({10, 20, 30, 40});
+        std::vector<MyInt> data2({10, 20, 30, 40});
+
+        cout << ">" << endl;
+        sfl::small_vector<MyInt, 10> v1
+        (
+            std::make_move_iterator(data1.begin()),
+            std::make_move_iterator(data1.end())
+        );
+        cout << "<" << endl;
+
+        cout << ">" << endl;
+        sfl::small_vector<MyInt, 10> v2
+        (
+            std::make_move_iterator(data2.begin()),
+            std::make_move_iterator(data2.end()),
+            alloc
+        );
+        cout << "<" << endl;
+
+        assert(data1[0] == -10);
+        assert(data1[1] == -20);
+        assert(data1[2] == -30);
+        assert(data1[3] == -40);
+
+        assert(data2[0] == -10);
+        assert(data2[1] == -20);
+        assert(data2[2] == -30);
+        assert(data2[3] == -40);
+
+        assert(v1.size() == 4);
+        assert(v2.size() == 4);
+
+        assert(v1.capacity() == 10);
+        assert(v2.capacity() == 10);
+
+        assert(v1[0] == 10);
+        assert(v1[1] == 20);
+        assert(v1[2] == 30);
+        assert(v1[3] == 40);
+
+        assert(v2[0] == 10);
+        assert(v2[1] == 20);
+        assert(v2[2] == 30);
+        assert(v2[3] == 40);
+    }
+
+    cout << "Test constructor(std::initializer_list)." << endl;
+    {
+        std::allocator<MyInt> alloc;
+
+        cout << ">" << endl;
         sfl::small_vector<MyInt, 10> v1({10, 20, 30, 40});
+        cout << "<" << endl;
+
+        cout << ">" << endl;
         sfl::small_vector<MyInt, 10> v2({10, 20, 30, 40}, alloc);
+        cout << "<" << endl;
 
         assert(v1.size() == 4);
         assert(v2.size() == 4);
@@ -1569,7 +1689,7 @@ int main()
         {
             cout << ">" << endl;
             v.assign(3, 10);
-            cout << ">" << endl;
+            cout << "<" << endl;
 
             assert(v.size() == 3);
             assert(v.capacity() == 5);
@@ -1582,7 +1702,7 @@ int main()
         {
             cout << ">" << endl;
             v.assign(2, 20);
-            cout << ">" << endl;
+            cout << "<" << endl;
 
             assert(v.size() == 2);
             assert(v.capacity() == 5);
@@ -1594,7 +1714,7 @@ int main()
         {
             cout << ">" << endl;
             v.assign(4, 30);
-            cout << ">" << endl;
+            cout << "<" << endl;
 
             assert(v.size() == 4);
             assert(v.capacity() == 5);
@@ -1608,7 +1728,7 @@ int main()
         {
             cout << ">" << endl;
             v.assign(6, 40);
-            cout << ">" << endl;
+            cout << "<" << endl;
 
             assert(v.size() == 6);
             assert(v.capacity() == 6);
@@ -1618,6 +1738,15 @@ int main()
             assert(v[3] == 40);
             assert(v[4] == 40);
             assert(v[5] == 40);
+        }
+
+        {
+            cout << ">" << endl;
+            v.assign(0, 50);
+            cout << "<" << endl;
+
+            assert(v.size() == 0);
+            assert(v.capacity() == 6);
         }
     }
 
@@ -1629,7 +1758,11 @@ int main()
             std::istringstream iss("11 12 13");
 
             cout << ">" << endl;
-            v.assign(std::istream_iterator<int>(iss), std::istream_iterator<int>());
+            v.assign
+            (
+                std::istream_iterator<int>(iss),
+                std::istream_iterator<int>()
+            );
             cout << "<" << endl;
 
             assert(v.size() == 3);
@@ -1643,7 +1776,11 @@ int main()
             std::istringstream iss("21 22");
 
             cout << ">" << endl;
-            v.assign(std::istream_iterator<int>(iss), std::istream_iterator<int>());
+            v.assign
+            (
+                std::istream_iterator<int>(iss),
+                std::istream_iterator<int>()
+            );
             cout << "<" << endl;
 
             assert(v.size() == 2);
@@ -1656,7 +1793,11 @@ int main()
             std::istringstream iss("31 32 33 34");
 
             cout << ">" << endl;
-            v.assign(std::istream_iterator<int>(iss), std::istream_iterator<int>());
+            v.assign
+            (
+                std::istream_iterator<int>(iss),
+                std::istream_iterator<int>()
+            );
             cout << "<" << endl;
 
             assert(v.size() == 4);
@@ -1671,7 +1812,11 @@ int main()
             std::istringstream iss("41 42 43 44 45 46");
 
             cout << ">" << endl;
-            v.assign(std::istream_iterator<int>(iss), std::istream_iterator<int>());
+            v.assign
+            (
+                std::istream_iterator<int>(iss),
+                std::istream_iterator<int>()
+            );
             cout << "<" << endl;
 
             assert(v.size() == 6);
@@ -1683,6 +1828,21 @@ int main()
             assert(v[4] == 45);
             assert(v[5] == 46);
         }
+
+        {
+            std::istringstream iss("");
+
+            cout << ">" << endl;
+            v.assign
+            (
+                std::istream_iterator<int>(iss),
+                std::istream_iterator<int>()
+            );
+            cout << "<" << endl;
+
+            assert(v.size() == 0);
+            assert(v.capacity() == 10);
+        }
     }
 
     cout << "Test assign(ForwardIt, ForwardIt)." << endl;
@@ -1691,7 +1851,7 @@ int main()
 
         // n <= capacity && n > size
         {
-            std::vector<int> data({11, 12, 13});
+            const std::vector<int> data({11, 12, 13});
 
             cout << ">" << endl;
             v.assign(data.begin(), data.end());
@@ -1706,7 +1866,7 @@ int main()
 
         // n <= capacity && n <= size
         {
-            std::vector<int> data({21, 22});
+            const std::vector<int> data({21, 22});
 
             cout << ">" << endl;
             v.assign(data.begin(), data.end());
@@ -1720,7 +1880,7 @@ int main()
 
         // n <= capacity && n > size
         {
-            std::vector<int> data({31, 32, 33, 34});
+            const std::vector<int> data({31, 32, 33, 34});
 
             cout << ">" << endl;
             v.assign(data.begin(), data.end());
@@ -1736,7 +1896,7 @@ int main()
 
         // n > capacity
         {
-            std::vector<int> data({41, 42, 43, 44, 45, 46});
+            const std::vector<int> data({41, 42, 43, 44, 45, 46});
 
             cout << ">" << endl;
             v.assign(data.begin(), data.end());
@@ -1751,9 +1911,119 @@ int main()
             assert(v[4] == 45);
             assert(v[5] == 46);
         }
+
+        {
+            const std::vector<int> data;
+
+            cout << ">" << endl;
+            v.assign(data.begin(), data.end());
+            cout << "<" << endl;
+
+            assert(v.size() == 0);
+            assert(v.capacity() == 6);
+        }
     }
 
-    cout << "Test assign(std::initializer_list<T>)." << endl;
+    cout << "Test assign(MoveIterator, MoveIterator)." << endl;
+    {
+        sfl::small_vector<MyInt, 5> v;
+
+        // n <= capacity && n > size
+        {
+            std::vector<MyInt> data({11, 12, 13});
+
+            cout << ">" << endl;
+            v.assign
+            (
+                std::make_move_iterator(data.begin()),
+                std::make_move_iterator(data.end())
+            );
+            cout << "<" << endl;
+
+            assert(data[0] == -11);
+            assert(data[1] == -12);
+            assert(data[2] == -13);
+            assert(v.size() == 3);
+            assert(v.capacity() == 5);
+            assert(v[0] == 11);
+            assert(v[1] == 12);
+            assert(v[2] == 13);
+        }
+
+        // n <= capacity && n <= size
+        {
+            std::vector<MyInt> data({21, 22});
+
+            cout << ">" << endl;
+            v.assign
+            (
+                std::make_move_iterator(data.begin()),
+                std::make_move_iterator(data.end())
+            );
+            cout << "<" << endl;
+
+            assert(data[0] == -21);
+            assert(data[1] == -22);
+            assert(v.size() == 2);
+            assert(v.capacity() == 5);
+            assert(v[0] == 21);
+            assert(v[1] == 22);
+        }
+
+        // n <= capacity && n > size
+        {
+            std::vector<MyInt> data({31, 32, 33, 34});
+
+            cout << ">" << endl;
+            v.assign
+            (
+                std::make_move_iterator(data.begin()),
+                std::make_move_iterator(data.end())
+            );
+            cout << "<" << endl;
+
+            assert(data[0] == -31);
+            assert(data[1] == -32);
+            assert(data[2] == -33);
+            assert(data[3] == -34);
+            assert(v.size() == 4);
+            assert(v.capacity() == 5);
+            assert(v[0] == 31);
+            assert(v[1] == 32);
+            assert(v[2] == 33);
+            assert(v[3] == 34);
+        }
+
+        // n > capacity
+        {
+            std::vector<MyInt> data({41, 42, 43, 44, 45, 46});
+
+            cout << ">" << endl;
+            v.assign
+            (
+                std::make_move_iterator(data.begin()),
+                std::make_move_iterator(data.end())
+            );
+            cout << "<" << endl;
+
+            assert(data[0] == -41);
+            assert(data[1] == -42);
+            assert(data[2] == -43);
+            assert(data[3] == -44);
+            assert(data[4] == -45);
+            assert(data[5] == -46);
+            assert(v.size() == 6);
+            assert(v.capacity() == 6);
+            assert(v[0] == 41);
+            assert(v[1] == 42);
+            assert(v[2] == 43);
+            assert(v[3] == 44);
+            assert(v[4] == 45);
+            assert(v[5] == 46);
+        }
+    }
+
+    cout << "Test assign(std::initializer_list)." << endl;
     {
         sfl::small_vector<MyInt, 5> v;
 
@@ -1811,9 +2081,18 @@ int main()
             assert(v[4] == 45);
             assert(v[5] == 46);
         }
+
+        {
+            cout << ">" << endl;
+            v.assign({});
+            cout << "<" << endl;
+
+            assert(v.size() == 0);
+            assert(v.capacity() == 6);
+        }
     }
 
-    cout << "Test copy assignment operator." << endl;
+    cout << "Test operator=(const small_vector&)." << endl;
     {
         // n <= capacity && n <= size
         {
@@ -1908,7 +2187,7 @@ int main()
         }
     }
 
-    cout << "Test move assignment operator (N > 0)." << endl;
+    cout << "Test operator=(small_vector&&) (N > 0)." << endl;
     {
         sfl::small_vector<MyInt, 5> v1({11, 12, 13});
 
@@ -1945,7 +2224,7 @@ int main()
         assert(*v2.nth(1) == 22);
     }
 
-    cout << "Test move assignment operator (N == 0)." << endl;
+    cout << "Test operator=(small_vector&&) (N == 0)." << endl;
     {
         sfl::small_vector<MyInt, 0> v1;
 
@@ -2000,7 +2279,7 @@ int main()
         assert(*v2.nth(1) == 22);
     }
 
-    cout << "Test initializer_list assignment operator." << endl;
+    cout << "Test operator=(std::initializer_list)." << endl;
     {
         sfl::small_vector<MyInt, 5> v1({11, 12, 13});
         assert(v1.size() == 3);
@@ -2019,8 +2298,8 @@ int main()
 
     cout << "Test non-member comparison operators." << endl;
     {
-        sfl::small_vector<MyInt, 5> v1({10, 20, 30});
-        sfl::small_vector<MyInt, 5> v2({10, 20, 30, 40});
+        sfl::small_vector<int, 5> v1({10, 20, 30});
+        sfl::small_vector<int, 5> v2({10, 20, 30, 40});
 
         assert(v1 == v1);
         assert(!(v1 != v1));
@@ -2038,8 +2317,8 @@ int main()
 
     cout << "Test non-member swap." << endl;
     {
-        sfl::small_vector<MyInt, 5> v1({10, 11, 12});
-        sfl::small_vector<MyInt, 5> v2({20, 21, 22});
+        sfl::small_vector<int, 5> v1({10, 11, 12});
+        sfl::small_vector<int, 5> v2({20, 21, 22});
 
         using std::swap;
         swap(v1, v2);

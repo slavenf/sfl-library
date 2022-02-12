@@ -4,6 +4,8 @@
 #include <iostream>
 #include <functional>
 
+#define SFL_MY_INT_DEFAULT_VALUE 999
+
 class MyInt
 {
 private:
@@ -13,12 +15,10 @@ private:
 
 public:
 
-    static const int default_value = 999;
-
     MyInt() noexcept
     {
         ++counter_;
-        value_ = new int(default_value);
+        value_ = new int(SFL_MY_INT_DEFAULT_VALUE);
         std::cout << "  ++ MyInt::MyInt() [value = " << *value_ << "]\n";
     }
 
