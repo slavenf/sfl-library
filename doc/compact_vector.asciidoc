@@ -21,7 +21,7 @@ class compact_vector;
 `sfl::compact_vector` is a sequence container similar to `std::vector`.
 The main difference is that `sfl::compact_vector` always has `capacity()`
 equal to `size()`.
-The container reallocates storage every time an element is inserted or
+This container reallocates storage every time an element is inserted or
 removed such that capacity becomes equal to the size.
 This behavior cannot be changed, `capacity()` is always equal to `size()`.
 That means insertion and removal are very inefficient.

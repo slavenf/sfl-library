@@ -12,6 +12,8 @@ This is header-only C++11 library that offers several new containers:
   * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.asciidoc)
   * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.asciidoc)
 
+  * [`compact_vector`](doc/compact_vector.asciidoc)
+
 All containers are defined in namespace `sfl`.
 
 ## About _small_ vector
@@ -43,6 +45,77 @@ is identical to the storage model of `sfl::small_vector`.
 That means that (1) all of them store elements contiguously in the memory,
 (2) iterators to the elements are random access iterators and
 (3) all of them hold statically allocated array of size `N` in the object itself.
+
+## About _compact_ vector
+
+`sfl::compact_vector` is a sequence container similar to `std::vector`.
+The main difference is that `sfl::compact_vector` always has `capacity()`
+equal to `size()`.
+This container reallocates storage every time an element is inserted or
+removed such that capacity becomes equal to the size.
+That means insertion and removal are very inefficient.
+
+In general it is not recommended to use `sfl::compact_vector` instead of
+`std::vector` because of its inefficient memory management but there are some
+situations where `sfl::compact_vector` is an excellent choice.
+For example consider the following code snippet:
+
+```C++
+const std::size_t N = 1000000; // Very, very, very big number.
+
+std::vector<std::vector<int>> vv(N);
+
+for (std::size_t i = 0; i < N; ++i)
+{
+    const std::size_t M = get_random_M();
+
+    for (std::size_t j = 0; j < M; ++j)
+    {
+        vv[i].push_back(get_random_int());
+    }
+
+    // In general vv[i].capacity() can be greater than vv[i].size(), that is,
+    // we have unused capacity.
+    //
+    // Using vv[i].shrink_to_fit() does not guarantee that
+    // vv[i].capacity() will become equal to vv[i].size().
+    //
+    // vv[i].assign(InputIterator, InputIterator) also does not guarantee
+    // that vv[i].capacity() will be equal to vv[i].size().
+}
+
+// Now use vector vv but never change its contents.
+```
+
+The example above is pretty stupid but it clearly ilustrates the point.
+Because we used `std::vector` there is a high probability that we will have
+unused capacity.
+The example below does not have problems with unused capacity:
+
+```C++
+const std::size_t N = 1000000; // Very big number.
+
+std::vector<sfl::compact_vector<int>> vv(N);
+
+for (std::size_t i = 0; i < N; ++i)
+{
+    const std::size_t M = get_random_M();
+
+    std::vector<int> temp;
+
+    for (std::size_t j = 0; j < M; ++j)
+    {
+        temp.push_back(get_random_int());
+    }
+
+    vv[i].assign(temp.begin(), temp.end());
+
+    // vv[i].capacity() is equal to vv[i].size(). This is guaranteed.
+    // We do not have unused capacity.
+}
+
+// Now use vector vv but never change its contents.
+```
 
 # Requirements
 
