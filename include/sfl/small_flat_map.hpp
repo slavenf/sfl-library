@@ -1452,7 +1452,7 @@ public:
         SFL_ASSERT
         (
             allocator_traits::propagate_on_container_swap::value ||
-            ref_to_alloc() == other.ref_to_alloc()
+            this->ref_to_alloc() == other.ref_to_alloc()
         );
 
         // If this and other allocator compares equal then one allocator
@@ -1462,35 +1462,35 @@ public:
 
         if (allocator_traits::propagate_on_container_swap::value)
         {
-            swap(ref_to_alloc(), other.ref_to_alloc());
+            swap(this->ref_to_alloc(), other.ref_to_alloc());
         }
 
-        swap(ref_to_comp(), other.ref_to_comp());
+        swap(this->ref_to_comp(), other.ref_to_comp());
 
         if
         (
-            data_.first_ == data_.internal_storage() &&
+            this->data_.first_ == this->data_.internal_storage() &&
             other.data_.first_ == other.data_.internal_storage()
         )
         {
-            const size_type this_size = size();
+            const size_type this_size  = this->size();
             const size_type other_size = other.size();
 
             if (this_size <= other_size)
             {
                 std::swap_ranges
                 (
-                    data_.first_,
-                    data_.first_ + this_size,
+                    this->data_.first_,
+                    this->data_.first_ + this_size,
                     other.data_.first_
                 );
 
                 SFL_DTL::uninitialized_move
                 (
-                    ref_to_alloc(),
+                    this->ref_to_alloc(),
                     other.data_.first_ + this_size,
                     other.data_.first_ + other_size,
-                    data_.first_ + this_size
+                    this->data_.first_ + this_size
                 );
 
                 SFL_DTL::destroy
@@ -1506,22 +1506,22 @@ public:
                 (
                     other.data_.first_,
                     other.data_.first_ + other_size,
-                    data_.first_
+                    this->data_.first_
                 );
 
                 SFL_DTL::uninitialized_move
                 (
                     other.ref_to_alloc(),
-                    data_.first_ + other_size,
-                    data_.first_ + this_size,
+                    this->data_.first_ + other_size,
+                    this->data_.first_ + this_size,
                     other.data_.first_ + other_size
                 );
 
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
-                    data_.first_ + other_size,
-                    data_.first_ + this_size
+                    this->ref_to_alloc(),
+                    this->data_.first_ + other_size,
+                    this->data_.first_ + this_size
                 );
             }
 
@@ -1530,57 +1530,53 @@ public:
         }
         else if
         (
-            data_.first_ == data_.internal_storage() &&
+            this->data_.first_ == this->data_.internal_storage() &&
             other.data_.first_ != other.data_.internal_storage()
         )
         {
-            pointer tmp_first = other.data_.first_;
-            pointer tmp_last  = other.data_.last_;
-            pointer tmp_end   = other.data_.end_;
+            pointer new_other_first = other.data_.internal_storage();
+            pointer new_other_last  = new_other_first;
+            pointer new_other_end   = new_other_first + N;
 
-            other.data_.first_ = other.data_.internal_storage();
-            other.data_.last_  = other.data_.first_;
-            other.data_.end_   = other.data_.first_ + N;
-
-            other.data_.last_ = SFL_DTL::uninitialized_move
+            new_other_last = SFL_DTL::uninitialized_move
             (
                 other.ref_to_alloc(),
-                data_.first_,
-                data_.last_,
-                other.data_.first_
+                this->data_.first_,
+                this->data_.last_,
+                new_other_first
             );
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
-                data_.first_,
-                data_.last_
+                this->ref_to_alloc(),
+                this->data_.first_,
+                this->data_.last_
             );
 
-            data_.first_ = tmp_first;
-            data_.last_  = tmp_last;
-            data_.end_   = tmp_end;
+            this->data_.first_ = other.data_.first_;
+            this->data_.last_  = other.data_.last_;
+            this->data_.end_   = other.data_.end_;
+
+            other.data_.first_ = new_other_first;
+            other.data_.last_  = new_other_last;
+            other.data_.end_   = new_other_end;
         }
         else if
         (
-            data_.first_ != data_.internal_storage() &&
+            this->data_.first_ != this->data_.internal_storage() &&
             other.data_.first_ == other.data_.internal_storage()
         )
         {
-            pointer tmp_first = data_.first_;
-            pointer tmp_last  = data_.last_;
-            pointer tmp_end   = data_.end_;
+            pointer new_this_first = this->data_.internal_storage();
+            pointer new_this_last  = new_this_first;
+            pointer new_this_end   = new_this_first + N;
 
-            data_.first_ = data_.internal_storage();
-            data_.last_  = data_.first_;
-            data_.end_   = data_.first_ + N;
-
-            data_.last_ = SFL_DTL::uninitialized_move
+            new_this_last = SFL_DTL::uninitialized_move
             (
-                ref_to_alloc(),
+                this->ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
-                data_.first_
+                new_this_first
             );
 
             SFL_DTL::destroy
@@ -1590,15 +1586,19 @@ public:
                 other.data_.last_
             );
 
-            other.data_.first_ = tmp_first;
-            other.data_.last_  = tmp_last;
-            other.data_.end_   = tmp_end;
+            other.data_.first_ = this->data_.first_;
+            other.data_.last_  = this->data_.last_;
+            other.data_.end_   = this->data_.end_;
+
+            this->data_.first_ = new_this_first;
+            this->data_.last_  = new_this_last;
+            this->data_.end_   = new_this_end;
         }
         else
         {
-            swap(data_.first_, other.data_.first_);
-            swap(data_.last_, other.data_.last_);
-            swap(data_.end_, other.data_.end_);
+            swap(this->data_.first_, other.data_.first_);
+            swap(this->data_.last_,  other.data_.last_);
+            swap(this->data_.end_,   other.data_.end_);
         }
     }
 
