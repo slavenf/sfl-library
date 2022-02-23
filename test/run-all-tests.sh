@@ -31,3 +31,6 @@ test small_unordered_flat_set
 test small_unordered_flat_multiset
 test small_vector
 test compact_vector
+
+echo ""
+echo "All test finished successfully."
