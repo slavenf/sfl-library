@@ -11,7 +11,6 @@ This is header-only C++11 library that offers several new containers:
   * [`small_unordered_flat_map`](doc/small_unordered_flat_map.asciidoc)
   * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.asciidoc)
   * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.asciidoc)
-
   * [`compact_vector`](doc/compact_vector.asciidoc)
 
 All containers are defined in namespace `sfl`.
@@ -122,6 +121,8 @@ for (std::size_t i = 0; i < N; ++i)
 The only requirement is C++11 compiler or newer.
 
 Tested with GCC 4.8.5 on CentOS 7.
+
+Tested with Clang 3.4.2 on CentOS 7.
 
 # Installation and usage
 
