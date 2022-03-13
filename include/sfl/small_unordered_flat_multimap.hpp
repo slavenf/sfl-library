@@ -270,7 +270,7 @@ struct has_is_transparent<
 template <typename T>
 T* to_address(T* p) noexcept
 {
-    static_assert(!std::is_function<T>::value);
+    static_assert(!std::is_function<T>::value, "not a function pointer");
     return p;
 }
 

@@ -1,3 +1,6 @@
+2022-03-13-1
+* `static_assert` must have message in C++11.
+
 2022-03-13
 * Added pointer trait `to_address`. Added support for fancy pointers.
 * Updating tests.
