@@ -2,3 +2,7 @@
 * Added pointer trait `to_address`. Added support for fancy pointers.
 * Updating tests.
 * Added file CHANGELOG.txt.
+
+2022-02-24
+* Fixed `swap` member functions. Old member functions could create memory leaks
+  in case of exceptions.
