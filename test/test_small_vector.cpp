@@ -277,6 +277,93 @@ int main()
         }
     }
 
+    cout << "Test non-modifying member functions on non-empty container." << endl;
+    {
+        sfl::small_vector<MyInt, 10> v;
+
+        v.emplace(v.end(), 10);
+        v.emplace(v.end(), 20);
+        v.emplace(v.end(), 30);
+
+        {
+            auto it = v.begin();
+            assert(*it == 10); ++it;
+            assert(*it == 20); ++it;
+            assert(*it == 30); ++it;
+            assert(it == v.end());
+        }
+
+        {
+            auto it = v.cbegin();
+            assert(*it == 10); ++it;
+            assert(*it == 20); ++it;
+            assert(*it == 30); ++it;
+            assert(it == v.cend());
+        }
+
+        {
+            auto it = v.rbegin();
+            assert(*it == 30); ++it;
+            assert(*it == 20); ++it;
+            assert(*it == 10); ++it;
+            assert(it == v.rend());
+        }
+
+        {
+            auto it = v.crbegin();
+            assert(*it == 30); ++it;
+            assert(*it == 20); ++it;
+            assert(*it == 10); ++it;
+            assert(it == v.crend());
+        }
+
+        {
+            assert(*v.nth(0) == 10);
+            assert(*v.nth(1) == 20);
+            assert(*v.nth(2) == 30);
+            assert(v.nth(3) == v.end());
+        }
+
+        {
+            assert(std::next(v.begin(), 0) == v.nth(0));
+            assert(std::next(v.begin(), 1) == v.nth(1));
+            assert(std::next(v.begin(), 2) == v.nth(2));
+        }
+
+        {
+            assert(std::next(v.cbegin(), 0) == v.nth(0));
+            assert(std::next(v.cbegin(), 1) == v.nth(1));
+            assert(std::next(v.cbegin(), 2) == v.nth(2));
+        }
+
+        {
+            assert(v.index_of(v.nth(0)) == 0);
+            assert(v.index_of(v.nth(1)) == 1);
+            assert(v.index_of(v.nth(2)) == 2);
+        }
+
+        {
+            assert(v.at(0) == 10);
+            assert(v.at(1) == 20);
+            assert(v.at(2) == 30);
+
+            assert(v[0] == 10);
+            assert(v[1] == 20);
+            assert(v[2] == 30);
+
+            assert(v.front() == 10);
+
+            assert(v.back() == 30);
+        }
+
+        {
+            auto data = v.data();
+            assert(*data == 10); ++data;
+            assert(*data == 20); ++data;
+            assert(*data == 30); ++data;
+        }
+    }
+
     cout << "Test insert(const_iterator, const T& value)." << endl;
     {
         sfl::small_vector<MyInt, 2> v;

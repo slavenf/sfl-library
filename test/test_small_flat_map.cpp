@@ -417,6 +417,277 @@ int main()
         }
     }
 
+    cout << "Test non-modifying member functions on non-empty container (1)." << endl;
+    {
+        sfl::small_flat_map<MyInt, MyString, 10> m;
+
+        m.emplace(10, "/10/");
+        m.emplace(20, "/20/");
+        m.emplace(30, "/30/");
+
+        {
+            auto it = m.begin();
+            assert(it->first == 10 && it->second == "/10/"); ++it;
+            assert(it->first == 20 && it->second == "/20/"); ++it;
+            assert(it->first == 30 && it->second == "/30/"); ++it;
+            assert(it == m.end());
+        }
+
+        {
+            auto it = m.cbegin();
+            assert(it->first == 10 && it->second == "/10/"); ++it;
+            assert(it->first == 20 && it->second == "/20/"); ++it;
+            assert(it->first == 30 && it->second == "/30/"); ++it;
+            assert(it == m.cend());
+        }
+
+        {
+            auto it = m.rbegin();
+            assert(it->first == 30 && it->second == "/30/"); ++it;
+            assert(it->first == 20 && it->second == "/20/"); ++it;
+            assert(it->first == 10 && it->second == "/10/"); ++it;
+            assert(it == m.rend());
+        }
+
+        {
+            auto it = m.crbegin();
+            assert(it->first == 30 && it->second == "/30/"); ++it;
+            assert(it->first == 20 && it->second == "/20/"); ++it;
+            assert(it->first == 10 && it->second == "/10/"); ++it;
+            assert(it == m.crend());
+        }
+
+        {
+            assert(m.nth(0)->first == 10 && m.nth(0)->second == "/10/");
+            assert(m.nth(1)->first == 20 && m.nth(1)->second == "/20/");
+            assert(m.nth(2)->first == 30 && m.nth(2)->second == "/30/");
+            assert(m.nth(3) == m.end());
+        }
+
+        {
+            assert(std::next(m.begin(), 0) == m.nth(0));
+            assert(std::next(m.begin(), 1) == m.nth(1));
+            assert(std::next(m.begin(), 2) == m.nth(2));
+        }
+
+        {
+            assert(std::next(m.cbegin(), 0) == m.nth(0));
+            assert(std::next(m.cbegin(), 1) == m.nth(1));
+            assert(std::next(m.cbegin(), 2) == m.nth(2));
+        }
+
+        {
+            assert(m.index_of(m.nth(0)) == 0);
+            assert(m.index_of(m.nth(1)) == 1);
+            assert(m.index_of(m.nth(2)) == 2);
+        }
+
+        {
+            auto data = m.data();
+            assert(data->first == 10 && data->second == "/10/"); ++data;
+            assert(data->first == 20 && data->second == "/20/"); ++data;
+            assert(data->first == 30 && data->second == "/30/"); ++data;
+        }
+
+        {
+            assert(m.lower_bound(10) == m.nth(0));
+            assert(m.lower_bound(20) == m.nth(1));
+            assert(m.lower_bound(30) == m.nth(2));
+        }
+
+        {
+            assert(m.upper_bound(10) == m.nth(1));
+            assert(m.upper_bound(20) == m.nth(2));
+            assert(m.upper_bound(30) == m.nth(3));
+        }
+
+        {
+            assert(m.equal_range(10) == std::make_pair(m.nth(0), m.nth(1)));
+            assert(m.equal_range(20) == std::make_pair(m.nth(1), m.nth(2)));
+            assert(m.equal_range(30) == std::make_pair(m.nth(2), m.nth(3)));
+            assert(m.equal_range(40) == std::make_pair(m.end(), m.end()));
+        }
+
+        {
+            assert(m.find(10) == m.nth(0));
+            assert(m.find(20) == m.nth(1));
+            assert(m.find(30) == m.nth(2));
+            assert(m.find(40) == m.end());
+        }
+
+        {
+            assert(m.count(10) == 1);
+            assert(m.count(20) == 1);
+            assert(m.count(30) == 1);
+            assert(m.count(40) == 0);
+        }
+
+        {
+            assert(m.contains(10) == true);
+            assert(m.contains(20) == true);
+            assert(m.contains(30) == true);
+            assert(m.contains(40) == false);
+        }
+
+        {
+            assert(m.at(10) == "/10/");
+            assert(m.at(20) == "/20/");
+            assert(m.at(30) == "/30/");
+        }
+
+        {
+            assert(m[10] == "/10/");
+            assert(m[20] == "/20/");
+            assert(m[30] == "/30/");
+        }
+    }
+
+    cout << "Test non-modifying member functions on non-empty container (2)." << endl;
+    {
+        sfl::small_flat_map<Person, MyString, 10, PersonLess> m;
+
+        m.emplace(Person(10, "Name 10"), "Person 10");
+        m.emplace(Person(20, "Name 20"), "Person 20");
+        m.emplace(Person(30, "Name 30"), "Person 30");
+
+        {
+            auto it = m.begin();
+            assert(it->first.id() == 10 && it->first.name() == "Name 10" && it->second == "Person 10"); ++it;
+            assert(it->first.id() == 20 && it->first.name() == "Name 20" && it->second == "Person 20"); ++it;
+            assert(it->first.id() == 30 && it->first.name() == "Name 30" && it->second == "Person 30"); ++it;
+            assert(it == m.end());
+        }
+
+        {
+            auto it = m.cbegin();
+            assert(it->first.id() == 10 && it->first.name() == "Name 10" && it->second == "Person 10"); ++it;
+            assert(it->first.id() == 20 && it->first.name() == "Name 20" && it->second == "Person 20"); ++it;
+            assert(it->first.id() == 30 && it->first.name() == "Name 30" && it->second == "Person 30"); ++it;
+            assert(it == m.cend());
+        }
+
+        {
+            auto it = m.rbegin();
+            assert(it->first.id() == 30 && it->first.name() == "Name 30" && it->second == "Person 30"); ++it;
+            assert(it->first.id() == 20 && it->first.name() == "Name 20" && it->second == "Person 20"); ++it;
+            assert(it->first.id() == 10 && it->first.name() == "Name 10" && it->second == "Person 10"); ++it;
+            assert(it == m.rend());
+        }
+
+        {
+            auto it = m.crbegin();
+            assert(it->first.id() == 30 && it->first.name() == "Name 30" && it->second == "Person 30"); ++it;
+            assert(it->first.id() == 20 && it->first.name() == "Name 20" && it->second == "Person 20"); ++it;
+            assert(it->first.id() == 10 && it->first.name() == "Name 10" && it->second == "Person 10"); ++it;
+            assert(it == m.crend());
+        }
+
+        {
+            assert(std::next(m.begin(), 0) == m.nth(0));
+            assert(std::next(m.begin(), 1) == m.nth(1));
+            assert(std::next(m.begin(), 2) == m.nth(2));
+        }
+
+        {
+            assert(std::next(m.cbegin(), 0) == m.nth(0));
+            assert(std::next(m.cbegin(), 1) == m.nth(1));
+            assert(std::next(m.cbegin(), 2) == m.nth(2));
+        }
+
+        {
+            assert(m.index_of(m.nth(0)) == 0);
+            assert(m.index_of(m.nth(1)) == 1);
+            assert(m.index_of(m.nth(2)) == 2);
+        }
+
+        {
+            auto data = m.data();
+            assert(data->first.id() == 10 && data->first.name() == "Name 10" && data->second == "Person 10"); ++data;
+            assert(data->first.id() == 20 && data->first.name() == "Name 20" && data->second == "Person 20"); ++data;
+            assert(data->first.id() == 30 && data->first.name() == "Name 30" && data->second == "Person 30"); ++data;
+        }
+
+        {
+            assert(m.lower_bound(Person(10, "xxx")) == m.nth(0));
+            assert(m.lower_bound(Person(20, "xxx")) == m.nth(1));
+            assert(m.lower_bound(Person(30, "xxx")) == m.nth(2));
+        }
+
+        {
+            assert(m.lower_bound(10) == m.nth(0));
+            assert(m.lower_bound(20) == m.nth(1));
+            assert(m.lower_bound(30) == m.nth(2));
+        }
+
+        {
+            assert(m.upper_bound(Person(10, "xxx")) == m.nth(1));
+            assert(m.upper_bound(Person(20, "xxx")) == m.nth(2));
+            assert(m.upper_bound(Person(30, "xxx")) == m.nth(3));
+        }
+
+        {
+            assert(m.upper_bound(10) == m.nth(1));
+            assert(m.upper_bound(20) == m.nth(2));
+            assert(m.upper_bound(30) == m.nth(3));
+        }
+
+        {
+            assert(m.equal_range(Person(10, "xxx")) == std::make_pair(m.nth(0), m.nth(1)));
+            assert(m.equal_range(Person(20, "xxx")) == std::make_pair(m.nth(1), m.nth(2)));
+            assert(m.equal_range(Person(30, "xxx")) == std::make_pair(m.nth(2), m.nth(3)));
+            assert(m.equal_range(Person(40, "xxx")) == std::make_pair(m.end(), m.end()));
+        }
+
+        {
+            assert(m.equal_range(10) == std::make_pair(m.nth(0), m.nth(1)));
+            assert(m.equal_range(20) == std::make_pair(m.nth(1), m.nth(2)));
+            assert(m.equal_range(30) == std::make_pair(m.nth(2), m.nth(3)));
+            assert(m.equal_range(40) == std::make_pair(m.end(), m.end()));
+        }
+
+        {
+            assert(m.find(Person(10, "xxx")) == m.nth(0));
+            assert(m.find(Person(20, "xxx")) == m.nth(1));
+            assert(m.find(Person(30, "xxx")) == m.nth(2));
+            assert(m.find(Person(40, "xxx")) == m.end());
+        }
+
+        {
+            assert(m.find(10) == m.nth(0));
+            assert(m.find(20) == m.nth(1));
+            assert(m.find(30) == m.nth(2));
+            assert(m.find(40) == m.end());
+        }
+
+        {
+            assert(m.count(Person(10, "xxx")) == 1);
+            assert(m.count(Person(20, "xxx")) == 1);
+            assert(m.count(Person(30, "xxx")) == 1);
+            assert(m.count(Person(40, "xxx")) == 0);
+        }
+
+        {
+            assert(m.count(10) == 1);
+            assert(m.count(20) == 1);
+            assert(m.count(30) == 1);
+            assert(m.count(40) == 0);
+        }
+
+        {
+            assert(m.contains(Person(10, "xxx")) == true);
+            assert(m.contains(Person(20, "xxx")) == true);
+            assert(m.contains(Person(30, "xxx")) == true);
+            assert(m.contains(Person(40, "xxx")) == false);
+        }
+
+        {
+            assert(m.contains(10) == true);
+            assert(m.contains(20) == true);
+            assert(m.contains(30) == true);
+            assert(m.contains(40) == false);
+        }
+    }
+
     cout << "Test emplace_hint(const_iterator, Args&&...)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10> m;

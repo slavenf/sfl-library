@@ -353,6 +353,176 @@ int main()
         }
     }
 
+    cout << "Test non-modifying member functions on non-empty container (1)." << endl;
+    {
+        sfl::small_unordered_flat_set<MyInt, 10> s;
+
+        s.emplace(10);
+        s.emplace(20);
+        s.emplace(30);
+
+        {
+            auto it = s.begin();
+            assert(*it == 10); ++it;
+            assert(*it == 20); ++it;
+            assert(*it == 30); ++it;
+            assert(it == s.end());
+        }
+
+        {
+            auto it = s.cbegin();
+            assert(*it == 10); ++it;
+            assert(*it == 20); ++it;
+            assert(*it == 30); ++it;
+            assert(it == s.cend());
+        }
+
+        {
+            assert(*s.nth(0) == 10);
+            assert(*s.nth(1) == 20);
+            assert(*s.nth(2) == 30);
+            assert(s.nth(3) == s.end());
+        }
+
+        {
+            assert(std::next(s.begin(), 0) == s.nth(0));
+            assert(std::next(s.begin(), 1) == s.nth(1));
+            assert(std::next(s.begin(), 2) == s.nth(2));
+        }
+
+        {
+            assert(std::next(s.cbegin(), 0) == s.nth(0));
+            assert(std::next(s.cbegin(), 1) == s.nth(1));
+            assert(std::next(s.cbegin(), 2) == s.nth(2));
+        }
+
+        {
+            assert(s.index_of(s.nth(0)) == 0);
+            assert(s.index_of(s.nth(1)) == 1);
+            assert(s.index_of(s.nth(2)) == 2);
+        }
+
+        {
+            auto data = s.data();
+            assert(*data == 10); ++data;
+            assert(*data == 20); ++data;
+            assert(*data == 30); ++data;
+        }
+
+        {
+            assert(s.find(10) == s.nth(0));
+            assert(s.find(20) == s.nth(1));
+            assert(s.find(30) == s.nth(2));
+            assert(s.find(40) == s.end());
+        }
+
+        {
+            assert(s.count(10) == 1);
+            assert(s.count(20) == 1);
+            assert(s.count(30) == 1);
+            assert(s.count(40) == 0);
+        }
+
+        {
+            assert(s.contains(10) == true);
+            assert(s.contains(20) == true);
+            assert(s.contains(30) == true);
+            assert(s.contains(40) == false);
+        }
+    }
+
+    cout << "Test non-modifying member functions on non-empty container (2)." << endl;
+    {
+        sfl::small_unordered_flat_set<Person, 10, PersonEqual> s;
+
+        s.emplace(10, "Name 10");
+        s.emplace(20, "Name 20");
+        s.emplace(30, "Name 30");
+
+        {
+            auto it = s.begin();
+            assert(it->id() == 10 && it->name() == "Name 10"); ++it;
+            assert(it->id() == 20 && it->name() == "Name 20"); ++it;
+            assert(it->id() == 30 && it->name() == "Name 30"); ++it;
+            assert(it == s.end());
+        }
+
+        {
+            auto it = s.cbegin();
+            assert(it->id() == 10 && it->name() == "Name 10"); ++it;
+            assert(it->id() == 20 && it->name() == "Name 20"); ++it;
+            assert(it->id() == 30 && it->name() == "Name 30"); ++it;
+            assert(it == s.cend());
+        }
+
+        {
+            assert(std::next(s.begin(), 0) == s.nth(0));
+            assert(std::next(s.begin(), 1) == s.nth(1));
+            assert(std::next(s.begin(), 2) == s.nth(2));
+        }
+
+        {
+            assert(std::next(s.cbegin(), 0) == s.nth(0));
+            assert(std::next(s.cbegin(), 1) == s.nth(1));
+            assert(std::next(s.cbegin(), 2) == s.nth(2));
+        }
+
+        {
+            assert(s.index_of(s.nth(0)) == 0);
+            assert(s.index_of(s.nth(1)) == 1);
+            assert(s.index_of(s.nth(2)) == 2);
+        }
+
+        {
+            auto data = s.data();
+            assert(data->id() == 10 && data->name() == "Name 10"); ++data;
+            assert(data->id() == 20 && data->name() == "Name 20"); ++data;
+            assert(data->id() == 30 && data->name() == "Name 30"); ++data;
+        }
+
+        {
+            assert(s.find(Person(10, "xxx")) == s.nth(0));
+            assert(s.find(Person(20, "xxx")) == s.nth(1));
+            assert(s.find(Person(30, "xxx")) == s.nth(2));
+            assert(s.find(Person(40, "xxx")) == s.end());
+        }
+
+        {
+            assert(s.find(10) == s.nth(0));
+            assert(s.find(20) == s.nth(1));
+            assert(s.find(30) == s.nth(2));
+            assert(s.find(40) == s.end());
+        }
+
+        {
+            assert(s.count(Person(10, "xxx")) == 1);
+            assert(s.count(Person(20, "xxx")) == 1);
+            assert(s.count(Person(30, "xxx")) == 1);
+            assert(s.count(Person(40, "xxx")) == 0);
+        }
+
+        {
+            assert(s.count(10) == 1);
+            assert(s.count(20) == 1);
+            assert(s.count(30) == 1);
+            assert(s.count(40) == 0);
+        }
+
+        {
+            assert(s.contains(Person(10, "xxx")) == true);
+            assert(s.contains(Person(20, "xxx")) == true);
+            assert(s.contains(Person(30, "xxx")) == true);
+            assert(s.contains(Person(40, "xxx")) == false);
+        }
+
+        {
+            assert(s.contains(10) == true);
+            assert(s.contains(20) == true);
+            assert(s.contains(30) == true);
+            assert(s.contains(40) == false);
+        }
+    }
+
     cout << "Test emplace_hint(const_iterator, Args&&...)." << endl;
     {
         sfl::small_unordered_flat_set<MyInt, 10> s;
