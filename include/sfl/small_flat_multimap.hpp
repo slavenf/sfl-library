@@ -263,6 +263,24 @@ struct has_is_transparent<
 > : std::true_type {};
 
 //
+// ---- POINTER TRAITS --------------------------------------------------------
+//
+
+template <typename T>
+T* to_address(T* p) noexcept
+{
+    static_assert(!std::is_function<T>::value);
+    return p;
+}
+
+template <typename Pointer>
+auto to_address(const Pointer& p) noexcept
+-> typename std::pointer_traits<Pointer>::element_type*
+{
+    return p == nullptr ? nullptr : to_address(p.operator->());
+}
+
+//
 // ---- EXCEPTIONS ------------------------------------------------------------
 //
 
@@ -1636,13 +1654,13 @@ public:
     SFL_NODISCARD
     value_type* data() noexcept
     {
-        return data_.first_;
+        return SFL_DTL::to_address(data_.first_);
     }
 
     SFL_NODISCARD
     const value_type* data() const noexcept
     {
-        return data_.first_;
+        return SFL_DTL::to_address(data_.first_);
     }
 
 private:
