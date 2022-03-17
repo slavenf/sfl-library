@@ -2,7 +2,7 @@
 
 test()
 {
-    g++ -Wall -Wextra -Werror -std=c++11 -g -I ../include -o test.out "test_${1}.cpp"
+    g++ -Wall -Wextra -Werror -Wpedantic -std=c++11 -g -I ../include -o test.out "test_${1}.cpp"
 
     if [ $? -ne 0 ]
     then

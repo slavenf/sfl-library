@@ -57,6 +57,30 @@ SFL_DTL_BEGIN /////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
 //
+// ---- POINTER TRAITS --------------------------------------------------------
+//
+
+/// Raw pointer overload.
+/// Obtains a dereferenceable pointer to its argument.
+///
+template <typename T>
+T* to_address(T* p) noexcept
+{
+    static_assert(!std::is_function<T>::value, "not a function pointer");
+    return p;
+}
+
+/// Fancy pointer overload.
+/// Obtains a raw pointer from a fancy pointer.
+///
+template <typename Pointer>
+auto to_address(const Pointer& p) noexcept
+-> typename std::pointer_traits<Pointer>::element_type*
+{
+    return p == nullptr ? nullptr : to_address(p.operator->());
+}
+
+//
 // ---- UNINITIALIZED MEMORY ALGORITHMS ---------------------------------------
 //
 
@@ -83,13 +107,22 @@ inline void deallocate(Allocator& a, Pointer p, Size n)
 template <typename Allocator, typename Pointer, typename... Args>
 inline void construct_at(Allocator& a, Pointer p, Args&&... args)
 {
-    std::allocator_traits<Allocator>::construct(a, p, std::forward<Args>(args)...);
+    std::allocator_traits<Allocator>::construct
+    (
+        a,
+        to_address(p),
+        std::forward<Args>(args)...
+    );
 }
 
 template <typename Allocator, typename Pointer>
 inline void destroy_at(Allocator& a, Pointer p)
 {
-    std::allocator_traits<Allocator>::destroy(a, p);
+    std::allocator_traits<Allocator>::destroy
+    (
+        a,
+        to_address(p)
+    );
 }
 
 template <typename Allocator, typename ForwardIt>
@@ -263,24 +296,6 @@ struct has_is_transparent<
 > : std::true_type {};
 
 //
-// ---- POINTER TRAITS --------------------------------------------------------
-//
-
-template <typename T>
-T* to_address(T* p) noexcept
-{
-    static_assert(!std::is_function<T>::value, "not a function pointer");
-    return p;
-}
-
-template <typename Pointer>
-auto to_address(const Pointer& p) noexcept
--> typename std::pointer_traits<Pointer>::element_type*
-{
-    return p == nullptr ? nullptr : to_address(p.operator->());
-}
-
-//
 // ---- EXCEPTIONS ------------------------------------------------------------
 //
 
@@ -314,14 +329,23 @@ public:
     Pointer end_;
 
     small_unordered_flat_set_data() noexcept
-        : first_(reinterpret_cast<Pointer>(internal_storage_))
+        : first_
+        (
+            std::pointer_traits<Pointer>::pointer_to
+            (
+                *reinterpret_cast<T*>(internal_storage_)
+            )
+        )
         , last_(first_)
         , end_(first_ + N)
     {}
 
     Pointer internal_storage() noexcept
     {
-        return reinterpret_cast<Pointer>(internal_storage_);
+        return std::pointer_traits<Pointer>::pointer_to
+        (
+            *reinterpret_cast<T*>(internal_storage_)
+        );
     }
 };
 
