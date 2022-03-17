@@ -1,3 +1,8 @@
+1.0.0 (2022-03-17)
+* Fancy pointers revisited. Using pointer traits `to_address` and `to_pointer`.
+* Started semantic versioning (see https://semver.org).
+* Added file VERSION.txt.
+
 2022-03-13-1
 * `static_assert` must have message in C++11.
 
