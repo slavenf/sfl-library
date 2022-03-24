@@ -77,7 +77,7 @@ template <typename Pointer>
 auto to_address(const Pointer& p) noexcept
 -> typename std::pointer_traits<Pointer>::element_type*
 {
-    return p == nullptr ? nullptr : to_address(p.operator->());
+    return p == nullptr ? nullptr : SFL_DTL::to_address(p.operator->());
 }
 
 //
@@ -110,7 +110,7 @@ inline void construct_at(Allocator& a, Pointer p, Args&&... args)
     std::allocator_traits<Allocator>::construct
     (
         a,
-        to_address(p),
+        SFL_DTL::to_address(p),
         std::forward<Args>(args)...
     );
 }
@@ -121,7 +121,7 @@ inline void destroy_at(Allocator& a, Pointer p)
     std::allocator_traits<Allocator>::destroy
     (
         a,
-        to_address(p)
+        SFL_DTL::to_address(p)
     );
 }
 
