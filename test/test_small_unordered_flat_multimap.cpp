@@ -1,5 +1,5 @@
 //
-// g++ -Wall -Wextra -std=c++11 -g -I ../include -o test.out test_small_unordered_flat_multimap.cpp
+// g++ -Wall -Wextra -Wpedantic -std=c++11 -g -I ../include -o test.out test_small_unordered_flat_multimap.cpp
 // valgrind --leak-check=full ./test.out
 //
 
@@ -13,6 +13,18 @@
 #include "MyInt.hpp"
 #include "MyString.hpp"
 #include "Person.hpp"
+#include "test_allocator_1.hpp"
+#include "test_allocator_2.hpp"
+#include "test_allocator_3.hpp"
+#include "test_allocator_4.hpp"
+
+#ifndef SFL_TEST_ALLOCATOR
+#define SFL_TEST_ALLOCATOR std::allocator
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_1
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_2
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_3
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_4
+#endif
 
 int main()
 {
@@ -22,10 +34,21 @@ int main()
     cout << "Create empty containers and test all non-modifying "
             "member functions." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m1;
-        const sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m2;
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m3;
-        const sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m4;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1;
+
+        const sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2;
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3;
+
+        const sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m4;
 
         assert(m1.empty());
         assert(m2.empty());
@@ -72,11 +95,6 @@ int main()
         assert(m3.index_of(m3.nth(0)) == 0);
         assert(m4.index_of(m4.nth(0)) == 0);
 
-        assert(m1.data() == m1.begin());
-        assert(m2.data() == m2.begin());
-        assert(m3.data() == m3.begin());
-        assert(m4.data() == m4.begin());
-
         assert(m1.find(42) == m1.end());
         assert(m2.find(42) == m2.end());
         assert(m3.find(42) == m3.end());
@@ -117,8 +135,13 @@ int main()
     cout << "Create empty containers and test all lookup functions "
             "that support transparent lookup." << endl;
     {
-        sfl::small_unordered_flat_multimap<Person, MyString, 0, PersonEqual> m1;
-        const sfl::small_unordered_flat_multimap<Person, MyString, 0, PersonEqual> m2;
+        sfl::small_unordered_flat_multimap<Person, MyString, 0, PersonEqual,
+            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+        > m1;
+
+        const sfl::small_unordered_flat_multimap<Person, MyString, 0, PersonEqual,
+            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+        > m2;
 
         Person p(42, "John");
 
@@ -143,7 +166,9 @@ int main()
 
     cout << "Test emplace(Args&&...) (N > 0, with reallocation)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 3> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 3, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -307,7 +332,9 @@ int main()
 
     cout << "Test emplace(Args&&...) (N == 0, with reallocation)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -471,7 +498,9 @@ int main()
 
     cout << "Test non-modifying member functions on non-empty container (1)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         m.emplace(10, "/10/");
         m.emplace(20, "/20/");
@@ -554,7 +583,9 @@ int main()
 
     cout << "Test non-modifying member functions on non-empty container (2)." << endl;
     {
-        sfl::small_unordered_flat_multimap<Person, MyString, 10, PersonEqual> m;
+        sfl::small_unordered_flat_multimap<Person, MyString, 10, PersonEqual,
+            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+        > m;
 
         m.emplace(Person(10, "Name 10"), "Person 10");
         m.emplace(Person(20, "Name 20"), "Person 20");
@@ -650,7 +681,9 @@ int main()
 
     cout << "Test emplace_hint(const_iterator, Args&&...)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -680,7 +713,9 @@ int main()
 
     cout << "Test insert(const value_type&)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             const std::pair<MyInt, MyString> v(10, "/10.1/");
@@ -712,7 +747,9 @@ int main()
 
     cout << "Test insert(value_type&&)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             std::pair<MyInt, MyString> v(10, "/10.1/");
@@ -746,7 +783,9 @@ int main()
 
     cout << "Test insert(P&&)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -774,7 +813,9 @@ int main()
 
     cout << "Test insert(const_iterator, const value_type&)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             const std::pair<MyInt, MyString> v(10, "/10.1/");
@@ -808,7 +849,9 @@ int main()
 
     cout << "Test insert(const_iterator, value_type&&)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             std::pair<MyInt, MyString> v(10, "/10.1/");
@@ -844,7 +887,9 @@ int main()
 
     cout << "Test insert(const_iterator, P&&...)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -888,7 +933,9 @@ int main()
             }
         );
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         cout << ">" << endl;
         m.insert(v.begin(), v.end());
@@ -908,7 +955,9 @@ int main()
 
     cout << "Test insert(std::initializer_list)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         cout << ">" << endl;
         m.insert
@@ -940,7 +989,9 @@ int main()
 
     cout << "Test clear()." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -987,7 +1038,9 @@ int main()
 
     cout << "Test erase(const_iterator)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -1049,7 +1102,9 @@ int main()
 
     cout << "Test erase(const_iterator, const_iterator)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -1155,7 +1210,9 @@ int main()
 
     cout << "Test erase(const Key&)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -1228,7 +1285,9 @@ int main()
 
     cout << "Test erase(K&&) (transparent erase)." << endl;
     {
-        sfl::small_unordered_flat_multimap<Person, MyString, 10, PersonEqual> s;
+        sfl::small_unordered_flat_multimap<Person, MyString, 10, PersonEqual,
+            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+        > s;
 
         {
             cout << ">" << endl;
@@ -1274,8 +1333,13 @@ int main()
     {
         // m1 uses internal storage, m2 uses internal storage
         {
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1;
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2;
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m1;
+
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m2;
 
             m1.emplace(10, "/10/");
             m1.emplace(11, "/11/");
@@ -1330,8 +1394,13 @@ int main()
 
         // m1 uses internal storage, m2 uses external storage
         {
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1;
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2;
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m1;
+
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m2;
 
             m1.emplace(10, "/10/");
             m1.emplace(11, "/11/");
@@ -1377,8 +1446,13 @@ int main()
 
         // m1 uses external storage, m2 uses internal storage
         {
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1;
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2;
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m1;
+
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m2;
 
             m1.emplace(10, "/10/");
             m1.emplace(11, "/11/");
@@ -1424,8 +1498,13 @@ int main()
 
         // m1 uses external storage, m2 uses external storage
         {
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1;
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2;
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m1;
+
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m2;
 
             m1.emplace(10, "/10/");
             m1.emplace(11, "/11/");
@@ -1481,7 +1560,9 @@ int main()
 
     cout << "Test reserve and shrink_to_fit (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -1548,7 +1629,9 @@ int main()
 
     cout << "Test reserve and shrink_to_fit (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m;
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m;
 
         {
             cout << ">" << endl;
@@ -1643,12 +1726,23 @@ int main()
     cout << "Test empty constructors." << endl;
     {
         std::equal_to<MyInt> eq;
-        std::allocator<MyInt> alloc;
+        SFL_TEST_ALLOCATOR<MyInt> alloc;
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m1;
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m2(eq);
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m3(alloc);
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m4(eq, alloc);
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1;
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2(eq);
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3(alloc);
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m4(eq, alloc);
 
         assert(m1.size() == 0);
         assert(m1.capacity() == 10);
@@ -1666,7 +1760,7 @@ int main()
     cout << "Test range constructors." << endl;
     {
         std::equal_to<MyInt> eq;
-        std::allocator<MyInt> alloc;
+        SFL_TEST_ALLOCATOR<MyInt> alloc;
 
         const std::vector<std::pair<MyInt, MyString>> v
         (
@@ -1679,10 +1773,21 @@ int main()
             }
         );
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m1(v.begin(), v.end());
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m2(v.begin(), v.end(), eq);
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m3(v.begin(), v.end(), alloc);
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m4(v.begin(), v.end(), eq, alloc);
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1(v.begin(), v.end());
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2(v.begin(), v.end(), eq);
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3(v.begin(), v.end(), alloc);
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m4(v.begin(), v.end(), eq, alloc);
 
         assert(m1.size() == 5);
         assert(m1.capacity() == 10);
@@ -1720,9 +1825,11 @@ int main()
     cout << "Test initializer_list constructors." << endl;
     {
         std::equal_to<MyInt> eq;
-        std::allocator<MyInt> alloc;
+        SFL_TEST_ALLOCATOR<MyInt> alloc;
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {30, "/30/"},
@@ -1732,7 +1839,10 @@ int main()
                 {20, "/20/"}
             }
         );
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m2
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2
         (
             {
                 {30, "/30/"},
@@ -1742,7 +1852,10 @@ int main()
                 {20, "/20/"}
             }, eq
         );
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m3
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3
         (
             {
                 {30, "/30/"},
@@ -1752,7 +1865,10 @@ int main()
                 {20, "/20/"}
             }, alloc
         );
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m4
+
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m4
         (
             {
                 {30, "/30/"},
@@ -1798,7 +1914,9 @@ int main()
 
     cout << "Test copy constructors (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -1807,9 +1925,13 @@ int main()
             }
         );
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m2(m1);
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2(m1);
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m3(m1, std::allocator<MyInt>());
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3(m1, SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(m1.size() == 3);
         assert(m1.capacity() == 10);
@@ -1832,7 +1954,9 @@ int main()
 
     cout << "Test copy constructors (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -1841,9 +1965,13 @@ int main()
             }
         );
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m2(m1);
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2(m1);
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m3(m1, std::allocator<MyInt>());
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3(m1, SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(m1.size() == 3);
         assert(m1.capacity() == 4);
@@ -1866,7 +1994,9 @@ int main()
 
     cout << "Test move constructors (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -1881,7 +2011,9 @@ int main()
         assert(m1.nth(1)->first == 20 && m1.nth(1)->second == "/20/");
         assert(m1.nth(2)->first == 30 && m1.nth(2)->second == "/30/");
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m2(std::move(m1));
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2(std::move(m1));
 
         assert(m1.size() == 0);
         assert(m1.capacity() == 10);
@@ -1892,7 +2024,9 @@ int main()
         assert(m2.nth(1)->first == 20 && m2.nth(1)->second == "/20/");
         assert(m2.nth(2)->first == 30 && m2.nth(2)->second == "/30/");
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m3(std::move(m2), std::allocator<MyInt>());
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3(std::move(m2), SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(m2.size() == 0);
         assert(m2.capacity() == 10);
@@ -1906,7 +2040,9 @@ int main()
 
     cout << "Test move constructors (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -1921,24 +2057,28 @@ int main()
         assert(m1.nth(1)->first == 20 && m1.nth(1)->second == "/20/");
         assert(m1.nth(2)->first == 10 && m1.nth(2)->second == "/10/");
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m2(std::move(m1));
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2(std::move(m1));
 
         assert(m1.size() == 0);
         assert(m1.capacity() == 0);
 
         assert(m2.size() == 3);
-        assert(m2.capacity() == 4);
+        assert(m2.capacity() == 3 || m2.capacity() == 4); // Capacity depends on allocators.
         assert(m2.nth(0)->first == 30 && m2.nth(0)->second == "/30/");
         assert(m2.nth(1)->first == 20 && m2.nth(1)->second == "/20/");
         assert(m2.nth(2)->first == 10 && m2.nth(2)->second == "/10/");
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m3(std::move(m2), std::allocator<MyInt>());
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3(std::move(m2), SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(m2.size() == 0);
         assert(m2.capacity() == 0);
 
         assert(m3.size() == 3);
-        assert(m3.capacity() == 4);
+        assert(m3.capacity() == 3 || m3.capacity() == 4); // Capacity depends on allocators.
         assert(m3.nth(0)->first == 30 && m3.nth(0)->second == "/30/");
         assert(m3.nth(1)->first == 20 && m3.nth(1)->second == "/20/");
         assert(m3.nth(2)->first == 10 && m3.nth(2)->second == "/10/");
@@ -1948,7 +2088,9 @@ int main()
     {
         // n <= capacity && n <= size
         {
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m1
             (
                 {
                     {10, "/10/"},
@@ -1963,7 +2105,9 @@ int main()
             assert(m1.nth(1)->first == 11 && m1.nth(1)->second == "/11/");
             assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m2
             (
                 {
                     {20, "/20/"},
@@ -1993,7 +2137,9 @@ int main()
 
         // n <= capacity && n > size
         {
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m1
             (
                 {
                     {10, "/10/"},
@@ -2008,7 +2154,9 @@ int main()
             assert(m1.nth(1)->first == 11 && m1.nth(1)->second == "/11/");
             assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m2
             (
                 {
                     {20, "/20/"},
@@ -2050,7 +2198,9 @@ int main()
 
         // n > capacity
         {
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m1
             (
                 {
                     {10, "/10/"},
@@ -2065,7 +2215,9 @@ int main()
             assert(m1.nth(1)->first == 11 && m1.nth(1)->second == "/11/");
             assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
-            sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2
+            sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            > m2
             (
                 {
                     {20, "/20/"},
@@ -2112,7 +2264,9 @@ int main()
 
     cout << "Test move assignment operator (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -2127,7 +2281,9 @@ int main()
         assert(m1.nth(1)->first == 11 && m1.nth(1)->second == "/11/");
         assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2
         (
             {
                 {20, "/20/"},
@@ -2167,7 +2323,9 @@ int main()
 
     cout << "Test move assignment operator (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -2182,7 +2340,9 @@ int main()
         assert(m1.nth(1)->first == 11 && m1.nth(1)->second == "/11/");
         assert(m1.nth(2)->first == 10 && m1.nth(2)->second == "/10/");
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m2
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2
         (
             {
                 {20, "/20/"},
@@ -2207,7 +2367,9 @@ int main()
         assert(m2.size() == 0);
         assert(m2.capacity() == 0);
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 0> m3
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m3
         (
             {
                 {30, "/30/"},
@@ -2235,7 +2397,9 @@ int main()
 
     cout << "Test initializer_list assignment operator." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -2271,22 +2435,26 @@ int main()
 
     cout << "Test non-member comparison operators." << endl;
     {
-        sfl::small_unordered_flat_multimap<int, char, 5> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
-                {1, 'a'},
-                {2, 'b'},
-                {3, 'c'}
+                {10, "/10/"},
+                {20, "/20/"},
+                {30, "/30/"}
             }
         );
 
-        sfl::small_unordered_flat_multimap<int, char, 5> m2
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2
         (
             {
-                {1, 'a'},
-                {2, 'b'},
-                {3, 'c'},
-                {4, 'd'}
+                {10, "/10/"},
+                {20, "/20/"},
+                {30, "/30/"},
+                {40, "/40/"}
             }
         );
 
@@ -2296,7 +2464,9 @@ int main()
 
     cout << "Test non-member swap." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -2305,7 +2475,9 @@ int main()
             }
         );
 
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 5> m2
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m2
         (
             {
                 {20, "/20/"},
@@ -2319,7 +2491,9 @@ int main()
 
     cout << "Test non-member erase_if(small_unordered_flat_multimap&, Predicate)." << endl;
     {
-        sfl::small_unordered_flat_multimap<MyInt, MyString, 10> m1
+        sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+        > m1
         (
             {
                 {10, "/10/"},
@@ -2330,7 +2504,9 @@ int main()
         );
 
         using const_reference =
-            typename sfl::small_unordered_flat_multimap<MyInt, MyString, 10>::const_reference;
+            typename sfl::small_unordered_flat_multimap<MyInt, MyString, 10, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            >::const_reference;
 
         assert(m1.size() == 4);
         assert(m1.nth(0)->first == 10 && m1.nth(0)->second == "/10/");

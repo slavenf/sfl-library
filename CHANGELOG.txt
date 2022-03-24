@@ -3,6 +3,8 @@
   Call to `to_address` must be fully qualified, i.e. `SFL_DTL::to_address`.
   If call is not fully qualified then compiler somehow cannot decide between
   `std::to_address` and `SFL_DTL::to_address`.
+* Improved tests. Testing with different allocators. Several allocators are
+  designed specially for tests. One of allocators uses fancy pointers.
 
 1.0.0 (2022-03-17)
 * Fancy pointers revisited. Using pointer traits `to_address` and `to_pointer`.

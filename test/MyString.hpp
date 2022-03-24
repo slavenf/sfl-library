@@ -91,6 +91,21 @@ bool operator==(const MyString& x, const char* y)
     return x.value() == y;
 }
 
+bool operator<(const MyString& x, const MyString& y)
+{
+    return x.value() < y.value();
+}
+
+bool operator<(const char* x, const MyString& y)
+{
+    return x < y.value();
+}
+
+bool operator<(const MyString& x, const char* y)
+{
+    return x.value() < y;
+}
+
 std::ostream& operator<<(std::ostream& os, const MyString& x)
 {
     return os << x.value();

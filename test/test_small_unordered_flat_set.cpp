@@ -1,5 +1,5 @@
 //
-// g++ -Wall -Wextra -std=c++11 -g -I ../include -o test.out test_small_unordered_flat_set.cpp
+// g++ -Wall -Wextra -Wpedantic -std=c++11 -g -I ../include -o test.out test_small_unordered_flat_set.cpp
 // valgrind --leak-check=full ./test.out
 //
 
@@ -13,6 +13,18 @@
 
 #include "MyInt.hpp"
 #include "Person.hpp"
+#include "test_allocator_1.hpp"
+#include "test_allocator_2.hpp"
+#include "test_allocator_3.hpp"
+#include "test_allocator_4.hpp"
+
+#ifndef SFL_TEST_ALLOCATOR
+#define SFL_TEST_ALLOCATOR std::allocator
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_1
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_2
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_3
+//#define SFL_TEST_ALLOCATOR sfl::test_allocator_4
+#endif
 
 int main()
 {
@@ -22,10 +34,21 @@ int main()
     cout << "Create empty containers and test all non-modifying "
             "member functions." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 0> s1;
-        const sfl::small_unordered_flat_set<MyInt, 0> s2;
-        sfl::small_unordered_flat_set<MyInt, 5> s3;
-        const sfl::small_unordered_flat_set<MyInt, 5> s4;
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1;
+
+        const sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2;
+
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3;
+
+        const sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s4;
 
         assert(s1.empty());
         assert(s2.empty());
@@ -72,11 +95,6 @@ int main()
         assert(s3.index_of(s3.nth(0)) == 0);
         assert(s4.index_of(s4.nth(0)) == 0);
 
-        assert(s1.data() == s1.begin());
-        assert(s2.data() == s2.begin());
-        assert(s3.data() == s3.begin());
-        assert(s4.data() == s4.begin());
-
         assert(s1.find(42) == s1.end());
         assert(s2.find(42) == s2.end());
         assert(s3.find(42) == s3.end());
@@ -109,8 +127,13 @@ int main()
     cout << "Create empty containers and test all lookup functions "
             "that support transparent lookup." << endl;
     {
-        sfl::small_unordered_flat_set<Person, 0, PersonEqual> s1;
-        const sfl::small_unordered_flat_set<Person, 0, PersonEqual> s2;
+        sfl::small_unordered_flat_set<Person, 0, PersonEqual,
+            SFL_TEST_ALLOCATOR<Person>
+        > s1;
+
+        const sfl::small_unordered_flat_set<Person, 0, PersonEqual,
+            SFL_TEST_ALLOCATOR<Person>
+        > s2;
 
         Person p(42, "John");
 
@@ -135,7 +158,9 @@ int main()
 
     cout << "Test emplace(Args&&...) (N > 0, with reallocation)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 3> s;
+        sfl::small_unordered_flat_set<MyInt, 3, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -245,7 +270,9 @@ int main()
 
     cout << "Test emplace(Args&&...) (N == 0, with reallocation)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 0> s;
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -355,7 +382,9 @@ int main()
 
     cout << "Test non-modifying member functions on non-empty container (1)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         s.emplace(10);
         s.emplace(20);
@@ -433,7 +462,9 @@ int main()
 
     cout << "Test non-modifying member functions on non-empty container (2)." << endl;
     {
-        sfl::small_unordered_flat_set<Person, 10, PersonEqual> s;
+        sfl::small_unordered_flat_set<Person, 10, PersonEqual,
+            SFL_TEST_ALLOCATOR<Person>
+        > s;
 
         s.emplace(10, "Name 10");
         s.emplace(20, "Name 20");
@@ -525,7 +556,9 @@ int main()
 
     cout << "Test emplace_hint(const_iterator, Args&&...)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -554,7 +587,9 @@ int main()
 
     cout << "Test insert(const value_type&)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             const MyInt v(10);
@@ -585,7 +620,9 @@ int main()
 
     cout << "Test insert(value_type&&)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             MyInt v(10);
@@ -618,7 +655,9 @@ int main()
 
     cout << "Test insert(const_iterator, const value_type&)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             const MyInt v(10);
@@ -651,7 +690,9 @@ int main()
 
     cout << "Test insert(const_iterator, value_type&&)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             MyInt v(10);
@@ -688,7 +729,9 @@ int main()
     {
         const std::vector<MyInt> v({10, 10, 20, 20, 15, 15, 30, 30});;
 
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         cout << ">" << endl;
         s.insert(v.begin(), v.end());
@@ -704,7 +747,9 @@ int main()
 
     cout << "Test insert(std::initializer_list)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         cout << ">" << endl;
         s.insert({10, 10, 20, 20, 15, 15, 30, 30});
@@ -720,7 +765,9 @@ int main()
 
     cout << "Test clear()." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -767,7 +814,9 @@ int main()
 
     cout << "Test erase(const_iterator)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -829,7 +878,9 @@ int main()
 
     cout << "Test erase(const_iterator, const_iterator)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -935,7 +986,9 @@ int main()
 
     cout << "Test erase(const Key&)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s;
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -983,7 +1036,9 @@ int main()
 
     cout << "Test erase(K&&) (transparent erase)." << endl;
     {
-        sfl::small_unordered_flat_set<Person, 10, PersonEqual> s;
+        sfl::small_unordered_flat_set<Person, 10, PersonEqual,
+            SFL_TEST_ALLOCATOR<Person>
+        > s;
 
         {
             cout << ">" << endl;
@@ -1029,8 +1084,13 @@ int main()
     {
         // s1 uses internal storage, s2 uses internal storage
         {
-            sfl::small_unordered_flat_set<MyInt, 5> s1;
-            sfl::small_unordered_flat_set<MyInt, 5> s2;
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s1;
+
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s2;
 
             s1.emplace(10);
             s1.emplace(11);
@@ -1085,8 +1145,13 @@ int main()
 
         // s1 uses internal storage, s2 uses external storage
         {
-            sfl::small_unordered_flat_set<MyInt, 5> s1;
-            sfl::small_unordered_flat_set<MyInt, 5> s2;
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s1;
+
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s2;
 
             s1.emplace(10);
             s1.emplace(11);
@@ -1132,8 +1197,13 @@ int main()
 
         // s1 uses external storage, s2 uses internal storage
         {
-            sfl::small_unordered_flat_set<MyInt, 5> s1;
-            sfl::small_unordered_flat_set<MyInt, 5> s2;
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s1;
+
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s2;
 
             s1.emplace(10);
             s1.emplace(11);
@@ -1179,8 +1249,13 @@ int main()
 
         // s1 uses external storage, s2 uses external storage
         {
-            sfl::small_unordered_flat_set<MyInt, 5> s1;
-            sfl::small_unordered_flat_set<MyInt, 5> s2;
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s1;
+
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s2;
 
             s1.emplace(10);
             s1.emplace(11);
@@ -1236,7 +1311,9 @@ int main()
 
     cout << "Test reserve and shrink_to_fit (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 5> s;
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -1303,7 +1380,9 @@ int main()
 
     cout << "Test reserve and shrink_to_fit (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 0> s;
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s;
 
         {
             cout << ">" << endl;
@@ -1398,12 +1477,23 @@ int main()
     cout << "Test empty constructors." << endl;
     {
         std::equal_to<MyInt> eq;
-        std::allocator<MyInt> alloc;
+        SFL_TEST_ALLOCATOR<MyInt> alloc;
 
-        sfl::small_unordered_flat_set<MyInt, 10> s1;
-        sfl::small_unordered_flat_set<MyInt, 10> s2(eq);
-        sfl::small_unordered_flat_set<MyInt, 10> s3(alloc);
-        sfl::small_unordered_flat_set<MyInt, 10> s4(eq, alloc);
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1;
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2(eq);
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3(alloc);
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s4(eq, alloc);
 
         assert(s1.size() == 0);
         assert(s1.capacity() == 10);
@@ -1421,14 +1511,25 @@ int main()
     cout << "Test range constructors." << endl;
     {
         std::equal_to<MyInt> eq;
-        std::allocator<MyInt> alloc;
+        SFL_TEST_ALLOCATOR<MyInt> alloc;
 
         const std::vector<MyInt> v({10, 20, 30, 10, 20});
 
-        sfl::small_unordered_flat_set<MyInt, 10> s1(v.begin(), v.end());
-        sfl::small_unordered_flat_set<MyInt, 10> s2(v.begin(), v.end(), eq);
-        sfl::small_unordered_flat_set<MyInt, 10> s3(v.begin(), v.end(), alloc);
-        sfl::small_unordered_flat_set<MyInt, 10> s4(v.begin(), v.end(), eq, alloc);
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1(v.begin(), v.end());
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2(v.begin(), v.end(), eq);
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3(v.begin(), v.end(), alloc);
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s4(v.begin(), v.end(), eq, alloc);
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 10);
@@ -1458,12 +1559,23 @@ int main()
     cout << "Test initializer_list constructors." << endl;
     {
         std::equal_to<MyInt> eq;
-        std::allocator<MyInt> alloc;
+        SFL_TEST_ALLOCATOR<MyInt> alloc;
 
-        sfl::small_unordered_flat_set<MyInt, 10> s1({10, 20, 30, 10, 20});
-        sfl::small_unordered_flat_set<MyInt, 10> s2({10, 20, 30, 10, 20}, eq);
-        sfl::small_unordered_flat_set<MyInt, 10> s3({10, 20, 30, 10, 20}, alloc);
-        sfl::small_unordered_flat_set<MyInt, 10> s4({10, 20, 30, 10, 20}, eq, alloc);
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 20, 30, 10, 20});
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2({10, 20, 30, 10, 20}, eq);
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3({10, 20, 30, 10, 20}, alloc);
+
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s4({10, 20, 30, 10, 20}, eq, alloc);
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 10);
@@ -1492,11 +1604,17 @@ int main()
 
     cout << "Test copy constructors (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s1({10, 20, 30});
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 20, 30});
 
-        sfl::small_unordered_flat_set<MyInt, 10> s2(s1);
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2(s1);
 
-        sfl::small_unordered_flat_set<MyInt, 10> s3(s1, std::allocator<MyInt>());
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3(s1, SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 10);
@@ -1519,11 +1637,17 @@ int main()
 
     cout << "Test copy constructors (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 0> s1({10, 20, 30});
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 20, 30});
 
-        sfl::small_unordered_flat_set<MyInt, 0> s2(s1);
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2(s1);
 
-        sfl::small_unordered_flat_set<MyInt, 0> s3(s1, std::allocator<MyInt>());
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3(s1, SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 4);
@@ -1546,7 +1670,9 @@ int main()
 
     cout << "Test move constructors (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s1({10, 20, 30});
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 20, 30});
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 10);
@@ -1554,7 +1680,9 @@ int main()
         assert(*s1.nth(1) == 20);
         assert(*s1.nth(2) == 30);
 
-        sfl::small_unordered_flat_set<MyInt, 10> s2(std::move(s1));
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2(std::move(s1));
 
         assert(s1.size() == 0);
         assert(s1.capacity() == 10);
@@ -1565,7 +1693,9 @@ int main()
         assert(*s2.nth(1) == 20);
         assert(*s2.nth(2) == 30);
 
-        sfl::small_unordered_flat_set<MyInt, 10> s3(std::move(s2), std::allocator<MyInt>());
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3(std::move(s2), SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(s2.size() == 0);
         assert(s2.capacity() == 10);
@@ -1579,7 +1709,9 @@ int main()
 
     cout << "Test move constructors (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 0> s1({10, 20, 30});
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 20, 30});
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 4);
@@ -1587,24 +1719,28 @@ int main()
         assert(*s1.nth(1) == 20);
         assert(*s1.nth(2) == 10);
 
-        sfl::small_unordered_flat_set<MyInt, 0> s2(std::move(s1));
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2(std::move(s1));
 
         assert(s1.size() == 0);
         assert(s1.capacity() == 0);
 
         assert(s2.size() == 3);
-        assert(s2.capacity() == 4);
+        assert(s2.capacity() == 3 || s2.capacity() == 4); // Capacity depends on allocators.
         assert(*s2.nth(0) == 30);
         assert(*s2.nth(1) == 20);
         assert(*s2.nth(2) == 10);
 
-        sfl::small_unordered_flat_set<MyInt, 0> s3(std::move(s2), std::allocator<MyInt>());
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3(std::move(s2), SFL_TEST_ALLOCATOR<MyInt>());
 
         assert(s2.size() == 0);
         assert(s2.capacity() == 0);
 
         assert(s3.size() == 3);
-        assert(s3.capacity() == 4);
+        assert(s3.capacity() == 3 || s3.capacity() == 4); // Capacity depends on allocators.
         assert(*s3.nth(0) == 30);
         assert(*s3.nth(1) == 20);
         assert(*s3.nth(2) == 10);
@@ -1614,7 +1750,9 @@ int main()
     {
         // n <= capacity && n <= size
         {
-            sfl::small_unordered_flat_set<MyInt, 5> s1({10, 11, 12});
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s1({10, 11, 12});
 
             assert(s1.size() == 3);
             assert(s1.capacity() == 5);
@@ -1622,7 +1760,9 @@ int main()
             assert(*s1.nth(1) == 11);
             assert(*s1.nth(2) == 12);
 
-            sfl::small_unordered_flat_set<MyInt, 5> s2({20, 21});
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s2({20, 21});
 
             assert(s2.size() == 2);
             assert(s2.capacity() == 5);
@@ -1646,7 +1786,9 @@ int main()
 
         // n <= capacity && n > size
         {
-            sfl::small_unordered_flat_set<MyInt, 5> s1({10, 11, 12});
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s1({10, 11, 12});
 
             assert(s1.size() == 3);
             assert(s1.capacity() == 5);
@@ -1654,7 +1796,9 @@ int main()
             assert(*s1.nth(1) == 11);
             assert(*s1.nth(2) == 12);
 
-            sfl::small_unordered_flat_set<MyInt, 5> s2({20, 21, 22, 23, 24});
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s2({20, 21, 22, 23, 24});
 
             assert(s2.size() == 5);
             assert(s2.capacity() == 5);
@@ -1687,7 +1831,9 @@ int main()
 
         // n > capacity
         {
-            sfl::small_unordered_flat_set<MyInt, 5> s1({10, 11, 12});
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s1({10, 11, 12});
 
             assert(s1.size() == 3);
             assert(s1.capacity() == 5);
@@ -1695,7 +1841,9 @@ int main()
             assert(*s1.nth(1) == 11);
             assert(*s1.nth(2) == 12);
 
-            sfl::small_unordered_flat_set<MyInt, 5> s2({20, 21, 22, 23, 24, 25});
+            sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            > s2({20, 21, 22, 23, 24, 25});
 
             assert(s2.size() == 6);
             assert(s2.capacity() == 10);
@@ -1732,7 +1880,9 @@ int main()
 
     cout << "Test move assignment operator (N > 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 5> s1({10, 11, 12});
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 11, 12});
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 5);
@@ -1740,7 +1890,9 @@ int main()
         assert(*s1.nth(1) == 11);
         assert(*s1.nth(2) == 12);
 
-        sfl::small_unordered_flat_set<MyInt, 5> s2({20, 21});
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2({20, 21});
 
         assert(s2.size() == 2);
         assert(s2.capacity() == 5);
@@ -1774,7 +1926,9 @@ int main()
 
     cout << "Test move assignment operator (N == 0)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 0> s1({10, 11, 12});
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 11, 12});
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 4);
@@ -1782,7 +1936,9 @@ int main()
         assert(*s1.nth(1) == 11);
         assert(*s1.nth(2) == 10);
 
-        sfl::small_unordered_flat_set<MyInt, 0> s2({20, 21});
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2({20, 21});
 
         assert(s2.size() == 2);
         assert(s2.capacity() == 2);
@@ -1801,7 +1957,9 @@ int main()
         assert(s2.size() == 0);
         assert(s2.capacity() == 0);
 
-        sfl::small_unordered_flat_set<MyInt, 0> s3({30, 31});
+        sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3({30, 31});
 
         assert(s3.size() == 2);
         assert(s3.capacity() == 2);
@@ -1823,7 +1981,9 @@ int main()
 
     cout << "Test initializer_list assignment operator." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 5> s1({10, 11, 12});
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 11, 12});
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 5);
@@ -1844,9 +2004,17 @@ int main()
 
     cout << "Test non-member comparison operators." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 5> s1({10, 20, 30});
-        sfl::small_unordered_flat_set<MyInt, 5> s2({20, 30, 10});
-        sfl::small_unordered_flat_set<MyInt, 5> s3({30, 40, 10, 20});
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 20, 30});
+
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2({20, 30, 10});
+
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s3({30, 40, 10, 20});
 
         assert(s1 == s1);
         assert(s1 == s2);
@@ -1855,8 +2023,13 @@ int main()
 
     cout << "Test non-member swap." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 5> s1({10, 11, 12});
-        sfl::small_unordered_flat_set<MyInt, 5> s2({20, 21, 22});
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 11, 12});
+
+        sfl::small_unordered_flat_set<MyInt, 5, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s2({20, 21, 22});
 
         using std::swap;
         swap(s1, s2);
@@ -1864,10 +2037,14 @@ int main()
 
     cout << "Test non-member erase_if(small_unordered_flat_set&, Predicate)." << endl;
     {
-        sfl::small_unordered_flat_set<MyInt, 10> s1({10, 20, 30});
+        sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+            SFL_TEST_ALLOCATOR<MyInt>
+        > s1({10, 20, 30});
 
         using const_reference =
-            typename sfl::small_unordered_flat_set<MyInt, 10>::const_reference;
+            typename sfl::small_unordered_flat_set<MyInt, 10, std::equal_to<MyInt>,
+                SFL_TEST_ALLOCATOR<MyInt>
+            >::const_reference;
 
         assert(s1.size() == 3);
         assert(*s1.nth(0) == 10);
