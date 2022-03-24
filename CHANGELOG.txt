@@ -1,4 +1,4 @@
-1.0.1
+1.0.1 (2022-03-24)
 * Fixed compile error regarding function `to_pointer` when C++20 is used.
   Call to `to_address` must be fully qualified, i.e. `SFL_DTL::to_address`.
   If call is not fully qualified then compiler somehow cannot decide between
