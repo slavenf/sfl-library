@@ -909,6 +909,7 @@ int main()
 
     cout << "Test at(const T&)." << endl;
     {
+        #ifndef SFL_NO_EXCEPTIONS
         sfl::compact_vector<MyInt, SFL_TEST_ALLOCATOR<MyInt>> v;
 
         const auto& rv = v;
@@ -978,6 +979,7 @@ int main()
 
             assert(exception_caught);
         }
+        #endif
     }
 
     cout << "Test constructor()." << endl;

@@ -39,6 +39,12 @@
 #define SFL_DTL_END    } }
 #define SFL_DTL        dtl::small_unordered_flat_set_dtl
 
+#if __cplusplus >= 201402L
+    #define SFL_CONSTEXPR_14 constexpr
+#else
+    #define SFL_CONSTEXPR_14
+#endif
+
 #if __cplusplus >= 201703L
     #define SFL_NODISCARD [[nodiscard]]
 #else
@@ -46,6 +52,16 @@
 #endif
 
 #define SFL_UNUSED(x)
+
+#ifdef SFL_NO_EXCEPTIONS
+    #define SFL_TRY      if (true)
+    #define SFL_CATCH(x) if (false)
+    #define SFL_RETHROW
+#else
+    #define SFL_TRY      try
+    #define SFL_CATCH(x) catch (x)
+    #define SFL_RETHROW  throw
+#endif
 
 namespace sfl
 {
@@ -55,6 +71,19 @@ namespace sfl
 SFL_DTL_BEGIN /////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+//
+// ---- UTILITY FUNCTIONS -----------------------------------------------------
+//
+
+/// This function is used for silencing warnings about unused variables.
+///
+template <typename... Args>
+SFL_CONSTEXPR_14
+void ignore_unused(Args&&...)
+{
+    // Do nothing.
+}
 
 //
 // ---- POINTER TRAITS --------------------------------------------------------
@@ -153,7 +182,7 @@ inline ForwardIt uninitialized_default_construct_n
 )
 {
     ForwardIt curr = first;
-    try
+    SFL_TRY
     {
         while (n > 0)
         {
@@ -163,10 +192,10 @@ inline ForwardIt uninitialized_default_construct_n
         }
         return curr;
     }
-    catch (...)
+    SFL_CATCH (...)
     {
         destroy(a, first, curr);
-        throw;
+        SFL_RETHROW;
     }
 }
 
@@ -177,7 +206,7 @@ inline ForwardIt uninitialized_fill_n
 )
 {
     ForwardIt curr = first;
-    try
+    SFL_TRY
     {
         while (n > 0)
         {
@@ -187,10 +216,10 @@ inline ForwardIt uninitialized_fill_n
         }
         return curr;
     }
-    catch (...)
+    SFL_CATCH (...)
     {
         destroy(a, first, curr);
-        throw;
+        SFL_RETHROW;
     }
 }
 
@@ -201,7 +230,7 @@ inline ForwardIt uninitialized_copy
 )
 {
     ForwardIt d_curr = d_first;
-    try
+    SFL_TRY
     {
         while (first != last)
         {
@@ -211,10 +240,10 @@ inline ForwardIt uninitialized_copy
         }
         return d_curr;
     }
-    catch (...)
+    SFL_CATCH (...)
     {
         destroy(a, d_first, d_curr);
-        throw;
+        SFL_RETHROW;
     }
 }
 
@@ -225,7 +254,7 @@ inline ForwardIt uninitialized_move
 )
 {
     ForwardIt d_curr = d_first;
-    try
+    SFL_TRY
     {
         while (first != last)
         {
@@ -235,10 +264,10 @@ inline ForwardIt uninitialized_move
         }
         return d_curr;
     }
-    catch (...)
+    SFL_CATCH (...)
     {
         destroy(a, d_first, d_curr);
-        throw;
+        SFL_RETHROW;
     }
 }
 
@@ -249,7 +278,7 @@ inline ForwardIt uninitialized_move_if_noexcept
 )
 {
     ForwardIt d_curr = d_first;
-    try
+    SFL_TRY
     {
         while (first != last)
         {
@@ -259,10 +288,10 @@ inline ForwardIt uninitialized_move_if_noexcept
         }
         return d_curr;
     }
-    catch (...)
+    SFL_CATCH (...)
     {
         destroy(a, d_first, d_curr);
-        throw;
+        SFL_RETHROW;
     }
 }
 
@@ -302,13 +331,25 @@ struct has_is_transparent<
 [[noreturn]]
 inline void throw_length_error(const char* msg)
 {
+    #ifdef SFL_NO_EXCEPTIONS
+    SFL_DTL::ignore_unused(msg);
+    SFL_ASSERT(!"std::length_error thrown");
+    std::abort();
+    #else
     throw std::length_error(msg);
+    #endif
 }
 
 [[noreturn]]
 inline void throw_out_of_range(const char* msg)
 {
+    #ifdef SFL_NO_EXCEPTIONS
+    SFL_DTL::ignore_unused(msg);
+    SFL_ASSERT(!"std::out_of_range thrown");
+    std::abort();
+    #else
     throw std::out_of_range(msg);
+    #endif
 }
 
 //
@@ -775,7 +816,7 @@ public:
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
-                try
+                SFL_TRY
                 {
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
@@ -785,7 +826,7 @@ public:
                         new_first
                     );
                 }
-                catch (...)
+                SFL_CATCH (...)
                 {
                     SFL_DTL::deallocate
                     (
@@ -794,7 +835,7 @@ public:
                         new_cap
                     );
 
-                    throw;
+                    SFL_RETHROW;
                 }
 
                 SFL_DTL::destroy
@@ -875,7 +916,7 @@ public:
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
-                try
+                SFL_TRY
                 {
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
@@ -885,7 +926,7 @@ public:
                         new_first
                     );
                 }
-                catch (...)
+                SFL_CATCH (...)
                 {
                     SFL_DTL::deallocate
                     (
@@ -894,7 +935,7 @@ public:
                         new_cap
                     );
 
-                    throw;
+                    SFL_RETHROW;
                 }
 
                 SFL_DTL::destroy
@@ -1508,7 +1549,7 @@ private:
     template <typename InputIt>
     void initialize_range(InputIt first, InputIt last)
     {
-        try
+        SFL_TRY
         {
             while (first != last)
             {
@@ -1516,7 +1557,7 @@ private:
                 ++first;
             }
         }
-        catch (...)
+        SFL_CATCH (...)
         {
             SFL_DTL::destroy
             (
@@ -1535,7 +1576,7 @@ private:
                 );
             }
 
-            throw;
+            SFL_RETHROW;
         }
     }
 
@@ -1552,7 +1593,7 @@ private:
             data_.end_   = data_.first_ + n;
         }
 
-        try
+        SFL_TRY
         {
             data_.last_ = SFL_DTL::uninitialized_copy
             (
@@ -1562,14 +1603,14 @@ private:
                 data_.first_
             );
         }
-        catch (...)
+        SFL_CATCH (...)
         {
             if (n > N)
             {
                 SFL_DTL::deallocate(ref_to_alloc(), data_.first_, n);
             }
 
-            throw;
+            SFL_RETHROW;
         }
     }
 
@@ -1608,7 +1649,7 @@ private:
                 data_.end_   = data_.first_ + n;
             }
 
-            try
+            SFL_TRY
             {
                 data_.last_ = SFL_DTL::uninitialized_move
                 (
@@ -1618,14 +1659,14 @@ private:
                     data_.first_
                 );
             }
-            catch (...)
+            SFL_CATCH (...)
             {
                 if (n > N)
                 {
                     SFL_DTL::deallocate(ref_to_alloc(), data_.first_, n);
                 }
 
-                throw;
+                SFL_RETHROW;
             }
         }
 
@@ -1801,7 +1842,7 @@ private:
                 new_end   = new_first + new_cap;
             }
 
-            try
+            SFL_TRY
             {
                 // This is unordered container. We will first construct
                 // new element in new storage and after that we will move
@@ -1826,7 +1867,7 @@ private:
                     new_last
                 );
             }
-            catch (...)
+            SFL_CATCH (...)
             {
                 SFL_DTL::destroy
                 (
@@ -1845,7 +1886,7 @@ private:
                     );
                 }
 
-                throw;
+                SFL_RETHROW;
             }
 
             SFL_DTL::destroy
@@ -1940,5 +1981,8 @@ typename small_unordered_flat_set<K, N, E, A>::size_type
 #undef SFL_DTL
 #undef SFL_NODISCARD
 #undef SFL_UNUSED
+#undef SFL_TRY
+#undef SFL_CATCH
+#undef SFL_RETHROW
 
 #endif // SFL_SMALL_UNORDERED_FLAT_SET_HPP

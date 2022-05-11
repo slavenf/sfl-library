@@ -1282,6 +1282,7 @@ int main()
 
     cout << "Test at(const T&)." << endl;
     {
+        #ifndef SFL_NO_EXCEPTIONS
         sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
 
         const auto& rv = v;
@@ -1351,6 +1352,7 @@ int main()
 
             assert(exception_caught);
         }
+        #endif
     }
 
     cout << "Test reserve and shrink_to_fit (N > 0)." << endl;

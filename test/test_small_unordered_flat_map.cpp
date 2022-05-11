@@ -1924,6 +1924,7 @@ int main()
 
     cout << "Test at(const Key&)." << endl;
     {
+        #ifndef SFL_NO_EXCEPTIONS
         sfl::small_unordered_flat_map<MyInt, MyString, 10, std::equal_to<MyInt>,
             SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
         > m;
@@ -1995,6 +1996,7 @@ int main()
 
             assert(exception_caught);
         }
+        #endif
     }
 
     cout << "Test operator[]." << endl;

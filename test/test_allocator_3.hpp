@@ -64,7 +64,12 @@ public:
     {
         if (n > max_size())
         {
+            #ifdef SFL_NO_EXCEPTIONS
+            assert(!"n > max_size()");
+            std::abort();
+            #else
             throw std::bad_alloc();
+            #endif
         }
 
         return static_cast<T*>(::operator new(n * sizeof(T)));
