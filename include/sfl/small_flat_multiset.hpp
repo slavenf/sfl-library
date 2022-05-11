@@ -51,8 +51,6 @@
     #define SFL_NODISCARD
 #endif
 
-#define SFL_UNUSED(x)
-
 #ifdef SFL_NO_EXCEPTIONS
     #define SFL_TRY      if (true)
     #define SFL_CATCH(x) if (false)
@@ -2285,7 +2283,6 @@ erase_if(small_flat_multiset<K, N, C, A>& c, Predicate pred)
 #undef SFL_DTL_END
 #undef SFL_DTL
 #undef SFL_NODISCARD
-#undef SFL_UNUSED
 #undef SFL_TRY
 #undef SFL_CATCH
 #undef SFL_RETHROW

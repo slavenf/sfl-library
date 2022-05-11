@@ -51,8 +51,6 @@
     #define SFL_NODISCARD
 #endif
 
-#define SFL_UNUSED(x)
-
 #ifdef SFL_NO_EXCEPTIONS
     #define SFL_TRY      if (true)
     #define SFL_CATCH(x) if (false)
@@ -985,8 +983,9 @@ public:
     }
 
     template <typename... Args>
-    iterator emplace_hint(const_iterator SFL_UNUSED(hint), Args&&... args)
+    iterator emplace_hint(const_iterator hint, Args&&... args)
     {
+        SFL_DTL::ignore_unused(hint);
         return emplace(std::forward<Args>(args)...);
     }
 
@@ -1000,13 +999,15 @@ public:
         return insert_aux(std::move(value));
     }
 
-    iterator insert(const_iterator SFL_UNUSED(hint), const value_type& value)
+    iterator insert(const_iterator hint, const value_type& value)
     {
+        SFL_DTL::ignore_unused(hint);
         return insert(value);
     }
 
-    iterator insert(const_iterator SFL_UNUSED(hint), value_type&& value)
+    iterator insert(const_iterator hint, value_type&& value)
     {
+        SFL_DTL::ignore_unused(hint);
         return insert(std::move(value));
     }
 
@@ -1991,7 +1992,6 @@ typename small_unordered_flat_multiset<K, N, E, A>::size_type
 #undef SFL_DTL_END
 #undef SFL_DTL
 #undef SFL_NODISCARD
-#undef SFL_UNUSED
 #undef SFL_TRY
 #undef SFL_CATCH
 #undef SFL_RETHROW
