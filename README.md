@@ -15,7 +15,7 @@ This is header-only C++11 library that offers several new containers:
 
 All containers are defined in namespace `sfl`.
 
-## About _small_ vector
+## About small vector
 
 `sfl::small_vector` is a sequence container similar to `std::vector`.
 
@@ -31,7 +31,7 @@ allocated array and uses only dynamic memory management.
 In case when `N` is equal to zero `sfl::small_vector` behaves just like
 `std::vector`.
 
-## About other _small_ containers
+## About other small containers
 
 `sfl::small_flat_XXX` are sorted associative containers similar
 to `std::XXX` sorted associative containers.
@@ -45,7 +45,7 @@ That means that (1) all of them store elements contiguously in the memory,
 (2) iterators to the elements are random access iterators and
 (3) all of them hold statically allocated array of size `N` in the object itself.
 
-## About _compact_ vector
+## About compact vector
 
 `sfl::compact_vector` is a sequence container similar to `std::vector`.
 The main difference is that `sfl::compact_vector` always has `capacity()`
@@ -60,9 +60,9 @@ situations where `sfl::compact_vector` is an excellent choice.
 For example consider the following code snippet:
 
 ```C++
-const std::size_t N = 1000000; // Very, very, very big number.
+const std::size_t N = 1000000; // Very big number.
 
-std::vector<std::vector<int>> vv(N);
+std::vector<std::vector<int>> vv(N); // Vector of vectors.
 
 for (std::size_t i = 0; i < N; ++i)
 {
@@ -94,7 +94,7 @@ The example below does not have problems with unused capacity:
 ```C++
 const std::size_t N = 1000000; // Very big number.
 
-std::vector<sfl::compact_vector<int>> vv(N);
+std::vector<sfl::compact_vector<int>> vv(N); // Vector of COMPACT vectors!!!
 
 for (std::size_t i = 0; i < N; ++i)
 {
@@ -137,6 +137,17 @@ That means you can copy into your project directory only what you need.
 For example, if you need `sfl::small_vector` container then copy only
 `small_vector.hpp` into your project directory.
 
+# Exceptions
+
+This library by default uses `try`, `catch` and `throw` statements for
+error handling.
+
+If macro `SFL_NO_EXCEPTIONS` is defined then library avoids using `try`, `catch`
+and `throw` statements, and in case of error library calls `std::abort`.
+
+The library does not automatically detect whether the compiler is invoked
+with appropriate flag, like `-fno-exceptions` in GCC and Clang.
+
 # Detailed documentation
 
 The detailed documentation is located in `doc` directory.
@@ -150,9 +161,9 @@ using your favorite web browser.
 
 # Tests
 
-Directory `test` contains test programs for each container.
-I didn't write unit tests because this was easier for me.
-Test programs are checked with `valgrind` tool.
+Directory `test` contains test programs and allocators used for testing.
+There is a Bash script `run-all-tests.sh` that build and run all test programs.
+Each test programs is checked with `valgrind` tool.
 
 # License
 
