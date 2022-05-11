@@ -1,3 +1,10 @@
+1.1.0 (2022-05-11)
+* Added option to avoid exception handling. If `SFL_NO_EXCEPTIONS` is defined,
+  the library avoids using try/catch/throw statements. In case of error
+  `std::abort` is called.
+* Internal changes: Removed macro `SFL_UNUSED`. Added function `ignore_unused`.
+  Added macro `SFL_CONSTEXPR_14`.
+
 1.0.1 (2022-03-24)
 * Fixed compile error regarding function `to_pointer` when C++20 is used.
   Call to `to_address` must be fully qualified, i.e. `SFL_DTL::to_address`.
