@@ -13,17 +13,18 @@
 #include "MyInt.hpp"
 #include "MyString.hpp"
 #include "Person.hpp"
-#include "test_allocator_1.hpp"
-#include "test_allocator_2.hpp"
-#include "test_allocator_3.hpp"
-#include "test_allocator_4.hpp"
 
-#ifndef SFL_TEST_ALLOCATOR
-#define SFL_TEST_ALLOCATOR std::allocator
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_1
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_2
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_3
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_4
+#include "statefull_alloc.hpp"
+#include "stateless_alloc.hpp"
+#include "stateless_alloc_no_prop.hpp"
+#include "stateless_fancy_alloc.hpp"
+
+#ifndef TP_ALLOC
+//#define TP_ALLOC std::allocator
+//#define TP_ALLOC sfl::statefull_alloc
+//#define TP_ALLOC sfl::stateless_alloc
+//#define TP_ALLOC sfl::stateless_alloc_no_prop
+#define TP_ALLOC sfl::stateless_fancy_alloc
 #endif
 
 int main()
@@ -35,19 +36,19 @@ int main()
             "member functions." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1;
 
         const sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2;
 
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m3;
 
         const sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m4;
 
         assert(m1.empty());
@@ -166,11 +167,11 @@ int main()
             "that support transparent lookup." << endl;
     {
         sfl::small_flat_map<Person, MyString, 0, PersonLess,
-            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+            TP_ALLOC<std::pair<Person, MyString>>
         > m1;
 
         const sfl::small_flat_map<Person, MyString, 0, PersonLess,
-            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+            TP_ALLOC<std::pair<Person, MyString>>
         > m2;
 
         Person p(42, "John");
@@ -215,7 +216,7 @@ int main()
     cout << "Test emplace(Args&&...) (N > 0, with reallocation)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 3, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -331,7 +332,7 @@ int main()
     cout << "Test emplace(Args&&...) (N == 0, with reallocation)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -447,7 +448,7 @@ int main()
     cout << "Test non-modifying member functions on non-empty container (1)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         m.emplace(10, "/10/");
@@ -574,7 +575,7 @@ int main()
     cout << "Test non-modifying member functions on non-empty container (2)." << endl;
     {
         sfl::small_flat_map<Person, MyString, 10, PersonLess,
-            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+            TP_ALLOC<std::pair<Person, MyString>>
         > m;
 
         m.emplace(Person(10, "Name 10"), "Person 10");
@@ -722,7 +723,7 @@ int main()
     cout << "Test emplace_hint(const_iterator, Args&&...)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -837,7 +838,7 @@ int main()
     cout << "Test insert(const value_type&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -916,7 +917,7 @@ int main()
     cout << "Test insert(value_type&&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1001,7 +1002,7 @@ int main()
     cout << "Test insert(P&&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1068,7 +1069,7 @@ int main()
     cout << "Test insert(const_iterator, const value_type&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1199,7 +1200,7 @@ int main()
     cout << "Test insert(const_iterator, value_type&&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1338,7 +1339,7 @@ int main()
     cout << "Test insert(const_iterator, P&&...)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1459,7 +1460,7 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         cout << ">" << endl;
@@ -1477,7 +1478,7 @@ int main()
     cout << "Test insert(std::initializer_list)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         cout << ">" << endl;
@@ -1507,7 +1508,7 @@ int main()
     cout << "Test insert_or_assign(const Key&, M&&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1602,7 +1603,7 @@ int main()
     cout << "Test insert_or_assign(Key&&, M&&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1703,7 +1704,7 @@ int main()
     cout << "Test insert_or_assign(const_iterator, const Key&, M&&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1804,7 +1805,7 @@ int main()
     cout << "Test insert_or_assign(const_iterator, Key&&, M&&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1911,7 +1912,7 @@ int main()
     cout << "Test try_emplace(const Key&, Args&&...)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -1990,7 +1991,7 @@ int main()
     cout << "Test try_emplace(Key&&, Args&&...)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2075,7 +2076,7 @@ int main()
     cout << "Test try_emplace(const_iterator, const Key&, Args&&...)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2172,7 +2173,7 @@ int main()
     cout << "Test try_emplace(const_iterator, Key&&, Args&&...)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2275,7 +2276,7 @@ int main()
     cout << "Test clear()." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2324,7 +2325,7 @@ int main()
     cout << "Test erase(const_iterator)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2388,7 +2389,7 @@ int main()
     cout << "Test erase(const_iterator, const_iterator)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2496,7 +2497,7 @@ int main()
     cout << "Test erase(const Key&)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2554,7 +2555,7 @@ int main()
     cout << "Test erase(K&&) (transparent erase)." << endl;
     {
         sfl::small_flat_map<Person, MyString, 10, PersonLess,
-            SFL_TEST_ALLOCATOR<std::pair<Person, MyString>>
+            TP_ALLOC<std::pair<Person, MyString>>
         > m;
 
         {
@@ -2611,11 +2612,11 @@ int main()
         // m1 uses internal storage, m2 uses internal storage
         {
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m1;
 
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m2;
 
             m1.emplace(10, "/10/");
@@ -2672,11 +2673,11 @@ int main()
         // m1 uses internal storage, m2 uses external storage
         {
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m1;
 
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m2;
 
             m1.emplace(10, "/10/");
@@ -2724,11 +2725,11 @@ int main()
         // m1 uses external storage, m2 uses internal storage
         {
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m1;
 
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m2;
 
             m1.emplace(10, "/10/");
@@ -2776,11 +2777,11 @@ int main()
         // m1 uses external storage, m2 uses external storage
         {
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m1;
 
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m2;
 
             m1.emplace(10, "/10/");
@@ -2839,7 +2840,7 @@ int main()
     {
         #ifndef SFL_NO_EXCEPTIONS
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         const auto& rm = m;
@@ -2915,7 +2916,7 @@ int main()
     cout << "Test operator[]." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -2973,7 +2974,7 @@ int main()
     cout << "Test reserve and shrink_to_fit (N > 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -3042,7 +3043,7 @@ int main()
     cout << "Test reserve and shrink_to_fit (N == 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m;
 
         {
@@ -3138,22 +3139,22 @@ int main()
     cout << "Test empty constructors." << endl;
     {
         std::less<MyInt> comp;
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1;
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(comp);
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m3(alloc);
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m4(comp, alloc);
 
         assert(m1.size() == 0);
@@ -3172,7 +3173,7 @@ int main()
     cout << "Test range constructors." << endl;
     {
         std::less<MyInt> comp;
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         const std::vector<std::pair<MyInt, MyString>> v
         (
@@ -3186,19 +3187,19 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1(v.begin(), v.end());
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(v.begin(), v.end(), comp);
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m3(v.begin(), v.end(), alloc);
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m4(v.begin(), v.end(), comp, alloc);
 
         assert(m1.size() == 3);
@@ -3229,10 +3230,10 @@ int main()
     cout << "Test initializer_list constructors." << endl;
     {
         std::less<MyInt> comp;
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3245,7 +3246,7 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2
         (
             {
@@ -3258,7 +3259,7 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m3
         (
             {
@@ -3271,7 +3272,7 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m4
         (
             {
@@ -3311,7 +3312,7 @@ int main()
     cout << "Test copy constructors (N > 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3324,12 +3325,12 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(m1);
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
-        > m3(m1, SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<std::pair<MyInt, MyString>>
+        > m3(m1, TP_ALLOC<MyInt>());
 
         assert(m1.size() == 3);
         assert(m1.capacity() == 10);
@@ -3353,7 +3354,7 @@ int main()
     cout << "Test copy constructors (N == 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3366,12 +3367,12 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(m1);
 
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
-        > m3(m1, SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<std::pair<MyInt, MyString>>
+        > m3(m1, TP_ALLOC<MyInt>());
 
         assert(m1.size() == 3);
         assert(m1.capacity() == 4);
@@ -3395,7 +3396,7 @@ int main()
     cout << "Test move constructors (N > 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3414,7 +3415,7 @@ int main()
         assert(m1.nth(2)->first == 30 && m1.nth(2)->second == "/30/");
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(std::move(m1));
 
         assert(m1.size() == 0);
@@ -3427,8 +3428,8 @@ int main()
         assert(m2.nth(2)->first == 30 && m2.nth(2)->second == "/30/");
 
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
-        > m3(std::move(m2), SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<std::pair<MyInt, MyString>>
+        > m3(std::move(m2), TP_ALLOC<MyInt>());
 
         assert(m2.size() == 0);
         assert(m2.capacity() == 10);
@@ -3443,7 +3444,7 @@ int main()
     cout << "Test move constructors (N == 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3462,7 +3463,7 @@ int main()
         assert(m1.nth(2)->first == 30 && m1.nth(2)->second == "/30/");
 
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(std::move(m1));
 
         assert(m1.size() == 0);
@@ -3475,8 +3476,8 @@ int main()
         assert(m2.nth(2)->first == 30 && m2.nth(2)->second == "/30/");
 
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
-        > m3(std::move(m2), SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<std::pair<MyInt, MyString>>
+        > m3(std::move(m2), TP_ALLOC<MyInt>());
 
         assert(m2.size() == 0);
         assert(m2.capacity() == 0);
@@ -3493,7 +3494,7 @@ int main()
         // n <= capacity && n <= size
         {
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m1
             (
                 {
@@ -3510,7 +3511,7 @@ int main()
             assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m2
             (
                 {
@@ -3542,7 +3543,7 @@ int main()
         // n <= capacity && n > size
         {
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m1
             (
                 {
@@ -3559,7 +3560,7 @@ int main()
             assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m2
             (
                 {
@@ -3603,7 +3604,7 @@ int main()
         // n > capacity
         {
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m1
             (
                 {
@@ -3620,7 +3621,7 @@ int main()
             assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
             sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             > m2
             (
                 {
@@ -3669,7 +3670,7 @@ int main()
     cout << "Test move assignment operator (N > 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3686,7 +3687,7 @@ int main()
         assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2
         (
             {
@@ -3728,7 +3729,7 @@ int main()
     cout << "Test move assignment operator (N == 0)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3745,7 +3746,7 @@ int main()
         assert(m1.nth(2)->first == 12 && m1.nth(2)->second == "/12/");
 
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2
         (
             {
@@ -3772,7 +3773,7 @@ int main()
         assert(m2.capacity() == 0);
 
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m3
         (
             {
@@ -3802,7 +3803,7 @@ int main()
     cout << "Test initializer_list assignment operator." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3838,7 +3839,7 @@ int main()
     cout << "Test non-member comparison operators." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3849,7 +3850,7 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2
         (
             {
@@ -3873,7 +3874,7 @@ int main()
     cout << "Test non-member swap." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3884,7 +3885,7 @@ int main()
         );
 
         sfl::small_flat_map<MyInt, MyString, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m2
         (
             {
@@ -3900,7 +3901,7 @@ int main()
     cout << "Test non-member erase_if(small_flat_map&, Predicate)." << endl;
     {
         sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+            TP_ALLOC<std::pair<MyInt, MyString>>
         > m1
         (
             {
@@ -3912,7 +3913,7 @@ int main()
 
         using const_reference =
             typename sfl::small_flat_map<MyInt, MyString, 10, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<std::pair<MyInt, MyString>>
+                TP_ALLOC<std::pair<MyInt, MyString>>
             >::const_reference;
 
         assert(m1.size() == 3);

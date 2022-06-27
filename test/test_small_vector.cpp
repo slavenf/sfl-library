@@ -13,17 +13,18 @@
 
 #include "MyInt.hpp"
 #include "Person.hpp"
-#include "test_allocator_1.hpp"
-#include "test_allocator_2.hpp"
-#include "test_allocator_3.hpp"
-#include "test_allocator_4.hpp"
 
-#ifndef SFL_TEST_ALLOCATOR
-#define SFL_TEST_ALLOCATOR std::allocator
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_1
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_2
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_3
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_4
+#include "statefull_alloc.hpp"
+#include "stateless_alloc.hpp"
+#include "stateless_alloc_no_prop.hpp"
+#include "stateless_fancy_alloc.hpp"
+
+#ifndef TP_ALLOC
+//#define TP_ALLOC std::allocator
+//#define TP_ALLOC sfl::statefull_alloc
+//#define TP_ALLOC sfl::stateless_alloc
+//#define TP_ALLOC sfl::stateless_alloc_no_prop
+#define TP_ALLOC sfl::stateless_fancy_alloc
 #endif
 
 int main()
@@ -34,10 +35,10 @@ int main()
     cout << "Create empty containers and test all non-modifying "
             "member functions." << endl;
     {
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v1;
-        const sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v2;
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v3;
-        const sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v4;
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v1;
+        const sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v2;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v3;
+        const sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v4;
 
         assert(v1.empty());
         assert(v2.empty());
@@ -107,7 +108,7 @@ int main()
 
     cout << "Test emplace(const_iterator, Args&&...) (N > 0)." << endl;
     {
-        sfl::small_vector<MyInt, 2, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 2, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -199,7 +200,7 @@ int main()
 
     cout << "Test emplace(const_iterator, Args&&...) (N == 0)." << endl;
     {
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -291,7 +292,7 @@ int main()
 
     cout << "Test non-modifying member functions on non-empty container." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         v.emplace(v.end(), 10);
         v.emplace(v.end(), 20);
@@ -395,7 +396,7 @@ int main()
 
     cout << "Test insert(const_iterator, const T&)." << endl;
     {
-        sfl::small_vector<MyInt, 2, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 2, TP_ALLOC<MyInt>> v;
 
         {
             const MyInt i(10);
@@ -414,7 +415,7 @@ int main()
 
     cout << "Test insert(const_iterator, T&&)." << endl;
     {
-        sfl::small_vector<MyInt, 2, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 2, TP_ALLOC<MyInt>> v;
 
         {
             MyInt i(10);
@@ -434,7 +435,7 @@ int main()
 
     cout << "Test insert(const_iterator, size_type, const T&)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -508,7 +509,7 @@ int main()
 
     cout << "Test insert(const_iterator, InputIt, InputIt)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             std::istringstream iss("10 20 30 40");
@@ -534,7 +535,7 @@ int main()
 
     cout << "Test insert(const_iterator, ForwardIt, ForwardIt)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             const std::vector<MyInt> data({10, 20, 30, 40});
@@ -573,7 +574,7 @@ int main()
 
     cout << "Test insert(const_iterator, MoveIterator, MoveIterator)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             std::vector<MyInt> data({10, 20, 30, 40});
@@ -603,7 +604,7 @@ int main()
 
     cout << "Test insert(const_iterator, std::initializer_list)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         cout << ">" << endl;
         auto res = v.insert(v.nth(0), {10, 20, 30, 40});
@@ -619,7 +620,7 @@ int main()
 
     cout << "Test emplace_back(Args&&...)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -648,7 +649,7 @@ int main()
 
     cout << "Test push_back(const T&)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             const MyInt i(10);
@@ -678,7 +679,7 @@ int main()
 
     cout << "Test push_back(T&&)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             MyInt i(10);
@@ -710,7 +711,7 @@ int main()
 
     cout << "Test pop_back()." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -789,7 +790,7 @@ int main()
 
     cout << "Test clear()." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -836,7 +837,7 @@ int main()
 
     cout << "Test erase(const_iterator)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -898,7 +899,7 @@ int main()
 
     cout << "Test erase(const_iterator, const_iterator)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -1004,7 +1005,7 @@ int main()
 
     cout << "Test resize(size_type)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -1078,7 +1079,7 @@ int main()
 
     cout << "Test resize(size_type, const T&)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -1154,8 +1155,8 @@ int main()
     {
         // v1 uses internal storage, v2 uses internal storage
         {
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 11, 12});
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({20, 21, 22, 23});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({10, 11, 12});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({20, 21, 22, 23});
 
             assert(v1.size() == 3);
             assert(*v1.nth(0) == 10);
@@ -1201,8 +1202,8 @@ int main()
 
         // v1 uses internal storage, v2 uses external storage
         {
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 11, 12});
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({20, 21, 22, 23, 24, 25});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({10, 11, 12});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({20, 21, 22, 23, 24, 25});
 
             assert(v1.size() == 3);
             assert(*v1.nth(0) == 10);
@@ -1237,8 +1238,8 @@ int main()
 
         // v1 uses external storage, v2 uses internal storage
         {
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 11, 12, 13, 14, 15});
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({20, 21, 22});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({10, 11, 12, 13, 14, 15});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({20, 21, 22});
 
             assert(v1.size() == 6);
             assert(*v1.nth(0) == 10);
@@ -1273,8 +1274,8 @@ int main()
 
         // v1 uses external storage, v2 uses external storage
         {
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 11, 12, 13, 14, 15});
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({20, 21, 22, 23, 24, 25});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({10, 11, 12, 13, 14, 15});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({20, 21, 22, 23, 24, 25});
 
             assert(v1.size() == 6);
             assert(*v1.nth(0) == 10);
@@ -1317,7 +1318,7 @@ int main()
     cout << "Test at(const T&)." << endl;
     {
         #ifndef SFL_NO_EXCEPTIONS
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v;
 
         const auto& rv = v;
 
@@ -1391,7 +1392,7 @@ int main()
 
     cout << "Test reserve and shrink_to_fit (N > 0)." << endl;
     {
-        sfl::small_vector<MyInt, 4, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 4, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -1471,7 +1472,7 @@ int main()
 
     cout << "Test reserve and shrink_to_fit (N == 0)." << endl;
     {
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v;
 
         {
             cout << ">" << endl;
@@ -1548,10 +1549,10 @@ int main()
 
     cout << "Test constructor()." << endl;
     {
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2(alloc);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1;
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2(alloc);
 
         assert(v1.size() == 0);
         assert(v2.size() == 0);
@@ -1562,10 +1563,10 @@ int main()
 
     cout << "Test constructor(size_type)." << endl;
     {
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1(3);
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2(3, alloc);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1(3);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2(3, alloc);
 
         assert(v1.size() == 3);
         assert(v2.size() == 3);
@@ -1584,14 +1585,14 @@ int main()
 
     cout << "Test constructor(size_type, const T&)." << endl;
     {
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1(3, 42);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1(3, 42);
         cout << "<" << endl;
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2(3, 42, alloc);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2(3, 42, alloc);
         cout << "<" << endl;
 
         assert(v1.size() == 3);
@@ -1611,13 +1612,13 @@ int main()
 
     cout << "Test constructor(InputIt, InputIt)." << endl;
     {
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         std::istringstream iss1("10 20 30 40");
         std::istringstream iss2("10 20 30 40");
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1
         (
             (std::istream_iterator<int>(iss1)),
             (std::istream_iterator<int>())
@@ -1625,7 +1626,7 @@ int main()
         cout << "<" << endl;
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2
         (
             (std::istream_iterator<int>(iss2)),
             (std::istream_iterator<int>()),
@@ -1652,16 +1653,16 @@ int main()
 
     cout << "Test constructor(ForwardIt, ForwardIt)." << endl;
     {
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         const std::vector<MyInt> data({10, 20, 30, 40});
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1(data.begin(), data.end());
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1(data.begin(), data.end());
         cout << "<" << endl;
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2(data.begin(), data.end(), alloc);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2(data.begin(), data.end(), alloc);
         cout << "<" << endl;
 
         assert(v1.size() == 4);
@@ -1683,13 +1684,13 @@ int main()
 
     cout << "Test constructor(MoveIterator, MoveIterator)." << endl;
     {
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         std::vector<MyInt> data1({10, 20, 30, 40});
         std::vector<MyInt> data2({10, 20, 30, 40});
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1
         (
             std::make_move_iterator(data1.begin()),
             std::make_move_iterator(data1.end())
@@ -1697,7 +1698,7 @@ int main()
         cout << "<" << endl;
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2
         (
             std::make_move_iterator(data2.begin()),
             std::make_move_iterator(data2.end()),
@@ -1734,14 +1735,14 @@ int main()
 
     cout << "Test constructor(std::initializer_list)." << endl;
     {
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40});
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1({10, 20, 30, 40});
         cout << "<" << endl;
 
         cout << ">" << endl;
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2({10, 20, 30, 40}, alloc);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2({10, 20, 30, 40}, alloc);
         cout << "<" << endl;
 
         assert(v1.size() == 4);
@@ -1763,11 +1764,11 @@ int main()
 
     cout << "Test constructor(const small_vector&) (N > 0)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1({10, 20, 30, 40, 50});
 
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2(v1);
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2(v1);
 
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v3(v1, SFL_TEST_ALLOCATOR<MyInt>());
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v3(v1, TP_ALLOC<MyInt>());
 
         assert(v1.size() == 5);
         assert(v1.capacity() == 10);
@@ -1796,11 +1797,11 @@ int main()
 
     cout << "Test constructor(const small_vector&) (N == 0)." << endl;
     {
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v1({10, 20, 30, 40, 50});
 
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v2(v1);
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v2(v1);
 
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v3(v1, SFL_TEST_ALLOCATOR<MyInt>());
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v3(v1, TP_ALLOC<MyInt>());
 
         assert(v1.size() == 5);
         assert(v1.capacity() == 5);
@@ -1829,9 +1830,9 @@ int main()
 
     cout << "Test constructor(small_vector&&) (N > 0)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1({10, 20, 30, 40, 50});
 
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v2(std::move(v1));
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2(std::move(v1));
 
         assert(v1.size() == 0);
         assert(v1.capacity() == 10);
@@ -1844,7 +1845,7 @@ int main()
         assert(*v2.nth(3) == 40);
         assert(*v2.nth(4) == 50);
 
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v3(std::move(v2), SFL_TEST_ALLOCATOR<MyInt>());
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v3(std::move(v2), TP_ALLOC<MyInt>());
 
         assert(v2.size() == 0);
         assert(v2.capacity() == 10);
@@ -1860,9 +1861,9 @@ int main()
 
     cout << "Test constructor(small_vector&&) (N == 0)." << endl;
     {
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v1({10, 20, 30, 40, 50});
 
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v2(std::move(v1));
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v2(std::move(v1));
 
         assert(v1.size() == 0);
         assert(v1.capacity() == 0);
@@ -1875,7 +1876,7 @@ int main()
         assert(*v2.nth(3) == 40);
         assert(*v2.nth(4) == 50);
 
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v3(std::move(v2), SFL_TEST_ALLOCATOR<MyInt>());
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v3(std::move(v2), TP_ALLOC<MyInt>());
 
         assert(v2.size() == 0);
         assert(v2.capacity() == 0);
@@ -1891,7 +1892,7 @@ int main()
 
     cout << "Test assign(size_type, const T&)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v;
 
         // n <= capacity && n > size
         {
@@ -1960,7 +1961,7 @@ int main()
 
     cout << "Test assign(InputIt, InputIt)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v;
 
         {
             std::istringstream iss("11 12 13");
@@ -2055,7 +2056,7 @@ int main()
 
     cout << "Test assign(ForwardIt, ForwardIt)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v;
 
         // n <= capacity && n > size
         {
@@ -2134,7 +2135,7 @@ int main()
 
     cout << "Test assign(MoveIterator, MoveIterator)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v;
 
         // n <= capacity && n > size
         {
@@ -2233,7 +2234,7 @@ int main()
 
     cout << "Test assign(std::initializer_list)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v;
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v;
 
         // n <= capacity && n > size
         {
@@ -2304,8 +2305,8 @@ int main()
     {
         // n <= capacity && n <= size
         {
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({11, 12, 13});
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({21, 22});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({11, 12, 13});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({21, 22});
 
             assert(v1.size() == 3);
             assert(v1.capacity() == 5);
@@ -2330,8 +2331,8 @@ int main()
 
         // n <= capacity && n > size
         {
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({11, 12, 13});
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({21, 22, 23, 24, 25});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({11, 12, 13});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({21, 22, 23, 24, 25});
 
             assert(v1.size() == 3);
             assert(v1.capacity() == 5);
@@ -2362,8 +2363,8 @@ int main()
 
         // n > capacity
         {
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({11, 12, 13});
-            sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({21, 22, 23, 24, 25, 26});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({11, 12, 13});
+            sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({21, 22, 23, 24, 25, 26});
 
             assert(v1.size() == 3);
             assert(v1.capacity() == 5);
@@ -2397,12 +2398,12 @@ int main()
 
     cout << "Test operator=(small_vector&&) (N > 0)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({11, 12, 13});
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({11, 12, 13});
 
         assert(v1.size() == 3);
         assert(v1.capacity() == 5);
 
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({21, 22});
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({21, 22});
 
         assert(v2.size() == 2);
         assert(v2.capacity() == 5);
@@ -2434,7 +2435,7 @@ int main()
 
     cout << "Test operator=(small_vector&&) (N == 0)." << endl;
     {
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v1;
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v1;
 
         v1.reserve(3);
         v1.emplace_back(11);
@@ -2444,7 +2445,7 @@ int main()
         assert(v1.size() == 3);
         assert(v1.capacity() == 3);
 
-        sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v2;
+        sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v2;
 
         v2.reserve(2);
         v2.emplace_back(21);
@@ -2489,7 +2490,7 @@ int main()
 
     cout << "Test operator=(std::initializer_list)." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({11, 12, 13});
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({11, 12, 13});
         assert(v1.size() == 3);
         assert(v1.capacity() == 5);
 
@@ -2506,8 +2507,8 @@ int main()
 
     cout << "Test non-member comparison operators." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30});
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({10, 20, 30, 40});
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({10, 20, 30});
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({10, 20, 30, 40});
 
         assert(v1 == v1);
         assert(!(v1 != v1));
@@ -2525,8 +2526,8 @@ int main()
 
     cout << "Test non-member swap." << endl;
     {
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 11, 12});
-        sfl::small_vector<MyInt, 5, SFL_TEST_ALLOCATOR<MyInt>> v2({20, 21, 22});
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v1({10, 11, 12});
+        sfl::small_vector<MyInt, 5, TP_ALLOC<MyInt>> v2({20, 21, 22});
 
         using std::swap;
         swap(v1, v2);
@@ -2534,7 +2535,7 @@ int main()
 
     cout << "Test non-member erase(small_vector&, const U&)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 20, 30, 30, 30});
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1({10, 20, 20, 30, 30, 30});
 
         assert(v1.size() == 6);
         assert(v1[0] == 10);
@@ -2575,7 +2576,7 @@ int main()
 
     cout << "Test non-member erase_if(small_vector&, Predicate)." << endl;
     {
-        sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 20, 30, 30, 30});
+        sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v1({10, 20, 20, 30, 30, 30});
 
         assert(v1.size() == 6);
         assert(v1[0] == 10);

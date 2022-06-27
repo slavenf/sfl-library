@@ -13,17 +13,18 @@
 
 #include "MyInt.hpp"
 #include "Person.hpp"
-#include "test_allocator_1.hpp"
-#include "test_allocator_2.hpp"
-#include "test_allocator_3.hpp"
-#include "test_allocator_4.hpp"
 
-#ifndef SFL_TEST_ALLOCATOR
-#define SFL_TEST_ALLOCATOR std::allocator
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_1
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_2
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_3
-//#define SFL_TEST_ALLOCATOR sfl::test_allocator_4
+#include "statefull_alloc.hpp"
+#include "stateless_alloc.hpp"
+#include "stateless_alloc_no_prop.hpp"
+#include "stateless_fancy_alloc.hpp"
+
+#ifndef TP_ALLOC
+//#define TP_ALLOC std::allocator
+//#define TP_ALLOC sfl::statefull_alloc
+//#define TP_ALLOC sfl::stateless_alloc
+//#define TP_ALLOC sfl::stateless_alloc_no_prop
+#define TP_ALLOC sfl::stateless_fancy_alloc
 #endif
 
 int main()
@@ -35,19 +36,19 @@ int main()
             "member functions." << endl;
     {
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1;
 
         const sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2;
 
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s3;
 
         const sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s4;
 
         assert(s1.empty());
@@ -163,11 +164,11 @@ int main()
             "that support transparent lookup." << endl;
     {
         sfl::small_flat_multiset<Person, 0, PersonLess,
-            SFL_TEST_ALLOCATOR<Person>
+            TP_ALLOC<Person>
         > s1;
 
         const sfl::small_flat_multiset<Person, 0, PersonLess,
-            SFL_TEST_ALLOCATOR<Person>
+            TP_ALLOC<Person>
         > s2;
 
         Person p(42, "John");
@@ -212,7 +213,7 @@ int main()
     cout << "Test emplace(Args&&...) (N > 0, with reallocation)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 3, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -317,7 +318,7 @@ int main()
     cout << "Test emplace(Args&&...) (N == 0, with reallocation)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -422,7 +423,7 @@ int main()
     cout << "Test non-modifying member functions on non-empty container (1)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         s.emplace(10);
@@ -544,7 +545,7 @@ int main()
     cout << "Test non-modifying member functions on non-empty container (2)." << endl;
     {
         sfl::small_flat_multiset<Person, 10, PersonLess,
-            SFL_TEST_ALLOCATOR<Person>
+            TP_ALLOC<Person>
         > s;
 
         s.emplace(10, "Name 10");
@@ -698,7 +699,7 @@ int main()
     cout << "Test emplace(const_iterator, Args&&...)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -810,7 +811,7 @@ int main()
     cout << "Test insert(const value_type&)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -892,7 +893,7 @@ int main()
     cout << "Test insert(value_type&&)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -979,7 +980,7 @@ int main()
     cout << "Test insert(const_iterator, const value_type&)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -1105,7 +1106,7 @@ int main()
     cout << "Test insert(const_iterator, value_type&&)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -1240,7 +1241,7 @@ int main()
         const std::vector<MyInt> v({10, 30, 20, 20, 20});
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         cout << ">" << endl;
@@ -1259,7 +1260,7 @@ int main()
     cout << "Test insert(std::initializer_list)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         cout << ">" << endl;
@@ -1278,7 +1279,7 @@ int main()
     cout << "Test clear()." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -1327,7 +1328,7 @@ int main()
     cout << "Test erase(const_iterator)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -1391,7 +1392,7 @@ int main()
     cout << "Test erase(const_iterator, const_iterator)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -1499,7 +1500,7 @@ int main()
     cout << "Test erase(const Key&)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -1565,7 +1566,7 @@ int main()
     cout << "Test erase(K&&) (transparent erase)." << endl;
     {
         sfl::small_flat_multiset<Person, 10, PersonLess,
-            SFL_TEST_ALLOCATOR<Person>
+            TP_ALLOC<Person>
         > s;
 
         {
@@ -1614,11 +1615,11 @@ int main()
         // s1 uses internal storage, s2 uses internal storage
         {
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s1;
 
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s2;
 
             s1.emplace(10);
@@ -1675,11 +1676,11 @@ int main()
         // s1 uses internal storage, s2 uses external storage
         {
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s1;
 
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s2;
 
             s1.emplace(10);
@@ -1727,11 +1728,11 @@ int main()
         // a1 uses external storage, a2 uses internal storage
         {
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s1;
 
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s2;
 
             s1.emplace(10);
@@ -1779,11 +1780,11 @@ int main()
         // s1 uses external storage, s2 uses external storage
         {
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s1;
 
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s2;
 
             s1.emplace(10);
@@ -1841,7 +1842,7 @@ int main()
     cout << "Test reserve and shrink_to_fit (N > 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -1910,7 +1911,7 @@ int main()
     cout << "Test reserve and shrink_to_fit (N == 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s;
 
         {
@@ -2006,24 +2007,24 @@ int main()
     cout << "Test range constructors." << endl;
     {
         std::less<MyInt> comp;
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         const std::vector<MyInt> v({10, 30, 20, 10, 20, 20});
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1(v.begin(), v.end());
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2(v.begin(), v.end(), comp);
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s3(v.begin(), v.end(), alloc);
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s4(v.begin(), v.end(), comp, alloc);
 
         assert(s1.size() == 6);
@@ -2066,22 +2067,22 @@ int main()
     cout << "Test initializer_list constructors." << endl;
     {
         std::less<MyInt> comp;
-        SFL_TEST_ALLOCATOR<MyInt> alloc;
+        TP_ALLOC<MyInt> alloc;
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 30, 20, 10, 20, 20});
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2({10, 30, 20, 10, 20, 20}, comp);
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s3({10, 30, 20, 10, 20, 20}, alloc);
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s4({10, 30, 20, 10, 20, 20}, comp, alloc);
 
         assert(s1.size() == 6);
@@ -2124,16 +2125,16 @@ int main()
     cout << "Test copy constructors (N > 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 30, 20});
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2(s1);
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
-        > s3(s1, SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<MyInt>
+        > s3(s1, TP_ALLOC<MyInt>());
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 10);
@@ -2157,16 +2158,16 @@ int main()
     cout << "Test copy constructors (N == 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 30, 20});
 
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2(s1);
 
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
-        > s3(s1, SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<MyInt>
+        > s3(s1, TP_ALLOC<MyInt>());
 
         assert(s1.size() == 3);
         assert(s1.capacity() == 4);
@@ -2190,7 +2191,7 @@ int main()
     cout << "Test move constructors (N > 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 30, 20});
 
         assert(s1.size() == 3);
@@ -2200,7 +2201,7 @@ int main()
         assert(*s1.nth(2) == 30);
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2(std::move(s1));
 
         assert(s1.size() == 0);
@@ -2213,8 +2214,8 @@ int main()
         assert(*s2.nth(2) == 30);
 
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
-        > s3(std::move(s2), SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<MyInt>
+        > s3(std::move(s2), TP_ALLOC<MyInt>());
 
         assert(s2.size() == 0);
         assert(s2.capacity() == 10);
@@ -2229,7 +2230,7 @@ int main()
     cout << "Test move constructors (N == 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 30, 20});
 
         assert(s1.size() == 3);
@@ -2239,7 +2240,7 @@ int main()
         assert(*s1.nth(2) == 30);
 
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2(std::move(s1));
 
         assert(s1.size() == 0);
@@ -2252,8 +2253,8 @@ int main()
         assert(*s2.nth(2) == 30);
 
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
-        > s3(std::move(s2), SFL_TEST_ALLOCATOR<MyInt>());
+            TP_ALLOC<MyInt>
+        > s3(std::move(s2), TP_ALLOC<MyInt>());
 
         assert(s2.size() == 0);
         assert(s2.capacity() == 0);
@@ -2270,7 +2271,7 @@ int main()
         // n <= capacity && n <= size
         {
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s1({10, 11, 12});
 
             assert(s1.size() == 3);
@@ -2280,7 +2281,7 @@ int main()
             assert(*s1.nth(2) == 12);
 
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s2({20, 21});
 
             assert(s2.size() == 2);
@@ -2306,7 +2307,7 @@ int main()
         // n <= capacity && n > size
         {
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s1({10, 11, 12});
 
             assert(s1.size() == 3);
@@ -2316,7 +2317,7 @@ int main()
             assert(*s1.nth(2) == 12);
 
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s2({20, 21, 22, 23, 24});
 
             assert(s2.size() == 5);
@@ -2351,7 +2352,7 @@ int main()
         // n > capacity
         {
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s1({10, 11, 12});
 
             assert(s1.size() == 3);
@@ -2361,7 +2362,7 @@ int main()
             assert(*s1.nth(2) == 12);
 
             sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             > s2({20, 21, 22, 23, 24, 25});
 
             assert(s2.size() == 6);
@@ -2400,7 +2401,7 @@ int main()
     cout << "Test move assignment operator (N > 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 11, 12});
 
         assert(s1.size() == 3);
@@ -2410,7 +2411,7 @@ int main()
         assert(*s1.nth(2) == 12);
 
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2({20, 21});
 
         assert(s2.size() == 2);
@@ -2446,7 +2447,7 @@ int main()
     cout << "Test move assignment operator (N == 0)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 11, 12});
 
         assert(s1.size() == 3);
@@ -2456,7 +2457,7 @@ int main()
         assert(*s1.nth(2) == 12);
 
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2({20, 21});
 
         assert(s2.size() == 2);
@@ -2477,7 +2478,7 @@ int main()
         assert(s2.capacity() == 0);
 
         sfl::small_flat_multiset<MyInt, 0, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s3({30, 31});
 
         assert(s3.size() == 2);
@@ -2501,7 +2502,7 @@ int main()
     cout << "Test initializer_list assignment operator." << endl;
     {
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 11, 12});
 
         assert(s1.size() == 3);
@@ -2526,11 +2527,11 @@ int main()
     cout << "Test non-member comparison operators." << endl;
     {
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 20, 30});
 
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2({10, 20, 30, 40});
 
         assert(s1 == s1);
@@ -2546,11 +2547,11 @@ int main()
     cout << "Test non-member swap." << endl;
     {
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 11, 12});
 
         sfl::small_flat_multiset<MyInt, 5, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s2({20, 21, 22});
 
         using std::swap;
@@ -2560,12 +2561,12 @@ int main()
     cout << "Test non-member erase_if(small_flat_multiset&, Predicate)." << endl;
     {
         sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-            SFL_TEST_ALLOCATOR<MyInt>
+            TP_ALLOC<MyInt>
         > s1({10, 20, 20, 30});
 
         using const_reference =
             typename sfl::small_flat_multiset<MyInt, 10, std::less<MyInt>,
-                SFL_TEST_ALLOCATOR<MyInt>
+                TP_ALLOC<MyInt>
             >::const_reference;
 
         assert(s1.size() == 4);
