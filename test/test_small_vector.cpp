@@ -349,6 +349,17 @@ int main()
         }
 
         {
+            assert(v.nth(0) < v.nth(1));
+            assert(v.nth(0) < v.nth(2));
+            assert(v.nth(0) < v.nth(3));
+
+            assert(v.nth(1) < v.nth(2));
+            assert(v.nth(1) < v.nth(3));
+
+            assert(v.nth(2) < v.nth(3));
+        }
+
+        {
             assert(v.index_of(v.nth(0)) == 0);
             assert(v.index_of(v.nth(1)) == 1);
             assert(v.index_of(v.nth(2)) == 2);
@@ -358,13 +369,19 @@ int main()
             assert(v.at(0) == 10);
             assert(v.at(1) == 20);
             assert(v.at(2) == 30);
+        }
 
+        {
             assert(v[0] == 10);
             assert(v[1] == 20);
             assert(v[2] == 30);
+        }
 
+        {
             assert(v.front() == 10);
+        }
 
+        {
             assert(v.back() == 30);
         }
 
@@ -376,7 +393,7 @@ int main()
         }
     }
 
-    cout << "Test insert(const_iterator, const T& value)." << endl;
+    cout << "Test insert(const_iterator, const T&)." << endl;
     {
         sfl::small_vector<MyInt, 2, SFL_TEST_ALLOCATOR<MyInt>> v;
 
@@ -385,7 +402,7 @@ int main()
 
             cout << ">" << endl;
             // Insert at the end (no reallocation)
-            auto res = v.emplace(v.end(), i);
+            auto res = v.insert(v.end(), i);
             cout << "<" << endl;
 
             assert(res == v.nth(0));
@@ -395,7 +412,7 @@ int main()
         }
     }
 
-    cout << "Test insert(const_iterator, T&& value)." << endl;
+    cout << "Test insert(const_iterator, T&&)." << endl;
     {
         sfl::small_vector<MyInt, 2, SFL_TEST_ALLOCATOR<MyInt>> v;
 
@@ -404,7 +421,7 @@ int main()
 
             cout << ">" << endl;
             // Insert at the end (no reallocation)
-            auto res = v.emplace(v.end(), std::move(i));
+            auto res = v.insert(v.end(), std::move(i));
             cout << "<" << endl;
 
             assert(res == v.nth(0));
@@ -750,6 +767,23 @@ int main()
             assert(v.size() == 2);
             assert(v[0] == 10);
             assert(v[1] == 20);
+        }
+
+        {
+            cout << ">" << endl;
+            v.pop_back();
+            cout << "<" << endl;
+
+            assert(v.size() == 1);
+            assert(v[0] == 10);
+        }
+
+        {
+            cout << ">" << endl;
+            v.pop_back();
+            cout << "<" << endl;
+
+            assert(v.size() == 0);
         }
     }
 
@@ -1727,7 +1761,7 @@ int main()
         assert(v2[3] == 40);
     }
 
-    cout << "Test copy constructors (N > 0)." << endl;
+    cout << "Test constructor(const small_vector&) (N > 0)." << endl;
     {
         sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
 
@@ -1760,7 +1794,7 @@ int main()
         assert(*v3.nth(4) == 50);
     }
 
-    cout << "Test copy constructors (N == 0)." << endl;
+    cout << "Test constructor(const small_vector&) (N == 0)." << endl;
     {
         sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
 
@@ -1793,7 +1827,7 @@ int main()
         assert(*v3.nth(4) == 50);
     }
 
-    cout << "Test move constructors (N > 0)." << endl;
+    cout << "Test constructor(small_vector&&) (N > 0)." << endl;
     {
         sfl::small_vector<MyInt, 10, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
 
@@ -1824,7 +1858,7 @@ int main()
         assert(*v3.nth(4) == 50);
     }
 
-    cout << "Test move constructors (N == 0)." << endl;
+    cout << "Test constructor(small_vector&&) (N == 0)." << endl;
     {
         sfl::small_vector<MyInt, 0, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
 

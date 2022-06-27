@@ -780,6 +780,24 @@ int main()
             assert(v[2] == SFL_MY_INT_DEFAULT_VALUE);
             assert(v[3] == SFL_MY_INT_DEFAULT_VALUE);
         }
+
+        {
+            cout << ">" << endl;
+            v.resize(0);
+            cout << "<" << endl;
+
+            assert(v.size() == 0);
+        }
+
+        {
+            cout << ">" << endl;
+            v.resize(2);
+            cout << "<" << endl;
+
+            assert(v.size() == 2);
+            assert(v[0] == SFL_MY_INT_DEFAULT_VALUE);
+            assert(v[1] == SFL_MY_INT_DEFAULT_VALUE);
+        }
     }
 
     cout << "Test resize(size_type, const T&)." << endl;
@@ -844,6 +862,24 @@ int main()
             assert(v[1] == 20);
             assert(v[2] == 50);
             assert(v[3] == 50);
+        }
+
+        {
+            cout << ">" << endl;
+            v.resize(0, 60);
+            cout << "<" << endl;
+
+            assert(v.size() == 0);
+        }
+
+        {
+            cout << ">" << endl;
+            v.resize(2, 70);
+            cout << "<" << endl;
+
+            assert(v.size() == 2);
+            assert(v[0] == 70);
+            assert(v[1] == 70);
         }
     }
 
@@ -1181,7 +1217,7 @@ int main()
         assert(v2[3] == 40);
     }
 
-    cout << "Test copy constructors." << endl;
+    cout << "Test constructor(const compact_vector&)." << endl;
     {
         cout << ">" << endl;
         sfl::compact_vector<MyInt, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
@@ -1217,7 +1253,7 @@ int main()
         assert(v3[4] == 50);
     }
 
-    cout << "Test move constructors." << endl;
+    cout << "Test constructor(compact_vector&&)." << endl;
     {
         cout << ">" << endl;
         sfl::compact_vector<MyInt, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30, 40, 50});
@@ -1539,25 +1575,23 @@ int main()
 
     cout << "Test operator=(const compact_vector&)." << endl;
     {
-        {
-            sfl::compact_vector<MyInt, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30});
-            sfl::compact_vector<MyInt, SFL_TEST_ALLOCATOR<MyInt>> v2({40, 50});
+        sfl::compact_vector<MyInt, SFL_TEST_ALLOCATOR<MyInt>> v1({10, 20, 30});
+        sfl::compact_vector<MyInt, SFL_TEST_ALLOCATOR<MyInt>> v2({40, 50});
 
-            assert(v1.size() == 3);
-            assert(v2.size() == 2);
+        assert(v1.size() == 3);
+        assert(v2.size() == 2);
 
-            cout << ">" << endl;
-            v1 = v2;
-            cout << "<" << endl;
+        cout << ">" << endl;
+        v1 = v2;
+        cout << "<" << endl;
 
-            assert(v1.size() == 2);
-            assert(v1[0] == 40);
-            assert(v1[1] == 50);
+        assert(v1.size() == 2);
+        assert(v1[0] == 40);
+        assert(v1[1] == 50);
 
-            assert(v2.size() == 2);
-            assert(v2[0] == 40);
-            assert(v2[1] == 50);
-        }
+        assert(v2.size() == 2);
+        assert(v2[0] == 40);
+        assert(v2[1] == 50);
     }
 
     cout << "Test operator=(compact_vector&&)." << endl;
