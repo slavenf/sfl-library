@@ -33,11 +33,11 @@
 #include <type_traits>
 #include <utility>
 
-#define SFL_ASSERT(x) assert(x)
-
 #define SFL_DTL_BEGIN  namespace dtl { namespace small_vector_dtl {
 #define SFL_DTL_END    } }
-#define SFL_DTL        dtl::small_vector_dtl
+#define SFL_DTL        ::sfl::dtl::small_vector_dtl
+
+#define SFL_ASSERT(x) assert(x)
 
 #if __cplusplus >= 201402L
     #define SFL_CONSTEXPR_14 constexpr
@@ -91,6 +91,7 @@ void ignore_unused(Args&&...)
 /// Obtains a dereferenceable pointer to its argument.
 ///
 template <typename T>
+constexpr
 T* to_address(T* p) noexcept
 {
     static_assert(!std::is_function<T>::value, "not a function pointer");
@@ -101,10 +102,11 @@ T* to_address(T* p) noexcept
 /// Obtains a raw pointer from a fancy pointer.
 ///
 template <typename Pointer>
+constexpr
 auto to_address(const Pointer& p) noexcept
 -> typename std::pointer_traits<Pointer>::element_type*
 {
-    return p == nullptr ? nullptr : SFL_DTL::to_address(p.operator->());
+    return SFL_DTL::to_address(p.operator->());
 }
 
 //
@@ -112,7 +114,7 @@ auto to_address(const Pointer& p) noexcept
 //
 
 template <typename Allocator, typename Size>
-inline auto allocate(Allocator& a, Size n)
+auto allocate(Allocator& a, Size n)
 -> typename std::allocator_traits<Allocator>::pointer
 {
     if (n != 0)
@@ -123,7 +125,7 @@ inline auto allocate(Allocator& a, Size n)
 }
 
 template <typename Allocator, typename Pointer, typename Size>
-inline void deallocate(Allocator& a, Pointer p, Size n)
+void deallocate(Allocator& a, Pointer p, Size n) noexcept
 {
     if (p != nullptr)
     {
@@ -132,7 +134,7 @@ inline void deallocate(Allocator& a, Pointer p, Size n)
 }
 
 template <typename Allocator, typename Pointer, typename... Args>
-inline void construct_at(Allocator& a, Pointer p, Args&&... args)
+void construct_at(Allocator& a, Pointer p, Args&&... args)
 {
     std::allocator_traits<Allocator>::construct
     (
@@ -143,7 +145,7 @@ inline void construct_at(Allocator& a, Pointer p, Args&&... args)
 }
 
 template <typename Allocator, typename Pointer>
-inline void destroy_at(Allocator& a, Pointer p)
+void destroy_at(Allocator& a, Pointer p) noexcept
 {
     std::allocator_traits<Allocator>::destroy
     (
@@ -153,28 +155,28 @@ inline void destroy_at(Allocator& a, Pointer p)
 }
 
 template <typename Allocator, typename ForwardIt>
-inline void destroy(Allocator& a, ForwardIt first, ForwardIt last)
+void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 {
     while (first != last)
     {
-        destroy_at(a, std::addressof(*first));
+        SFL_DTL::destroy_at(a, std::addressof(*first));
         ++first;
     }
 }
 
 template <typename Allocator, typename ForwardIt, typename Size>
-inline void destroy_n(Allocator& a, ForwardIt first, Size n)
+void destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
 {
     while (n > 0)
     {
-        destroy_at(a, std::addressof(*first));
+        SFL_DTL::destroy_at(a, std::addressof(*first));
         ++first;
         --n;
     }
 }
 
 template <typename Allocator, typename ForwardIt, typename Size>
-inline ForwardIt uninitialized_default_construct_n
+ForwardIt uninitialized_default_construct_n
 (
     Allocator& a, ForwardIt first, Size n
 )
@@ -184,7 +186,7 @@ inline ForwardIt uninitialized_default_construct_n
     {
         while (n > 0)
         {
-            construct_at(a, std::addressof(*curr));
+            SFL_DTL::construct_at(a, std::addressof(*curr));
             ++curr;
             --n;
         }
@@ -192,13 +194,13 @@ inline ForwardIt uninitialized_default_construct_n
     }
     SFL_CATCH (...)
     {
-        destroy(a, first, curr);
+        SFL_DTL::destroy(a, first, curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename ForwardIt, typename Size, typename T>
-inline ForwardIt uninitialized_fill_n
+ForwardIt uninitialized_fill_n
 (
     Allocator& a, ForwardIt first, Size n, const T& value
 )
@@ -208,7 +210,7 @@ inline ForwardIt uninitialized_fill_n
     {
         while (n > 0)
         {
-            construct_at(a, std::addressof(*curr), value);
+            SFL_DTL::construct_at(a, std::addressof(*curr), value);
             ++curr;
             --n;
         }
@@ -216,13 +218,13 @@ inline ForwardIt uninitialized_fill_n
     }
     SFL_CATCH (...)
     {
-        destroy(a, first, curr);
+        SFL_DTL::destroy(a, first, curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename InputIt, typename ForwardIt>
-inline ForwardIt uninitialized_copy
+ForwardIt uninitialized_copy
 (
     Allocator& a, InputIt first, InputIt last, ForwardIt d_first
 )
@@ -232,7 +234,7 @@ inline ForwardIt uninitialized_copy
     {
         while (first != last)
         {
-            construct_at(a, std::addressof(*d_curr), *first);
+            SFL_DTL::construct_at(a, std::addressof(*d_curr), *first);
             ++d_curr;
             ++first;
         }
@@ -240,13 +242,13 @@ inline ForwardIt uninitialized_copy
     }
     SFL_CATCH (...)
     {
-        destroy(a, d_first, d_curr);
+        SFL_DTL::destroy(a, d_first, d_curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename InputIt, typename ForwardIt>
-inline ForwardIt uninitialized_move
+ForwardIt uninitialized_move
 (
     Allocator& a, InputIt first, InputIt last, ForwardIt d_first
 )
@@ -256,7 +258,7 @@ inline ForwardIt uninitialized_move
     {
         while (first != last)
         {
-            construct_at(a, std::addressof(*d_curr), std::move(*first));
+            SFL_DTL::construct_at(a, std::addressof(*d_curr), std::move(*first));
             ++d_curr;
             ++first;
         }
@@ -264,13 +266,13 @@ inline ForwardIt uninitialized_move
     }
     SFL_CATCH (...)
     {
-        destroy(a, d_first, d_curr);
+        SFL_DTL::destroy(a, d_first, d_curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename InputIt, typename ForwardIt>
-inline ForwardIt uninitialized_move_if_noexcept
+ForwardIt uninitialized_move_if_noexcept
 (
     Allocator& a, InputIt first, InputIt last, ForwardIt d_first
 )
@@ -280,7 +282,7 @@ inline ForwardIt uninitialized_move_if_noexcept
     {
         while (first != last)
         {
-            construct_at(a, std::addressof(*d_curr), std::move_if_noexcept(*first));
+            SFL_DTL::construct_at(a, std::addressof(*d_curr), std::move_if_noexcept(*first));
             ++d_curr;
             ++first;
         }
@@ -288,7 +290,7 @@ inline ForwardIt uninitialized_move_if_noexcept
     }
     SFL_CATCH (...)
     {
-        destroy(a, d_first, d_curr);
+        SFL_DTL::destroy(a, d_first, d_curr);
         SFL_RETHROW;
     }
 }
@@ -2806,10 +2808,11 @@ typename small_vector<T, N, A>::size_type
 
 } // namespace sfl
 
-#undef SFL_ASSERT
 #undef SFL_DTL_BEGIN
 #undef SFL_DTL_END
 #undef SFL_DTL
+#undef SFL_ASSERT
+#undef SFL_CONSTEXPR_14
 #undef SFL_NODISCARD
 #undef SFL_TRY
 #undef SFL_CATCH
