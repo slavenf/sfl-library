@@ -28,29 +28,30 @@ public:
 
 private:
 
-    fancy_ptr(T *ptr, bool) : ptr_(ptr)
+    fancy_ptr(T *ptr, bool /*dummy*/) noexcept
+        : ptr_(ptr)
     {};
 
 public:
 
-    static fancy_ptr pointer_to(element_type &r)
+    static fancy_ptr pointer_to(element_type &r) noexcept
     {
         return fancy_ptr(&r, false);
     }
 
-    fancy_ptr()
+    fancy_ptr() noexcept
     {}
 
-    fancy_ptr(std::nullptr_t)
+    fancy_ptr(std::nullptr_t) noexcept
         : ptr_(nullptr)
     {}
 
-    fancy_ptr(const fancy_ptr& other)
+    fancy_ptr(const fancy_ptr& other) noexcept
         : ptr_(other.ptr_)
     {}
 
     template <typename U = T, typename std::enable_if<std::is_const<U>::value>::type* = nullptr>
-    fancy_ptr(const fancy_ptr<typename std::remove_const<T>::type>& other)
+    fancy_ptr(const fancy_ptr<typename std::remove_const<T>::type>& other) noexcept
         : ptr_(other.operator->()  /* std::to_address(other) in C++20 */)
     {}
 
@@ -58,13 +59,13 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    fancy_ptr& operator=(std::nullptr_t)
+    fancy_ptr& operator=(std::nullptr_t) noexcept
     {
         ptr_ = nullptr;
         return *this;
     }
 
-    fancy_ptr& operator=(const fancy_ptr& other)
+    fancy_ptr& operator=(const fancy_ptr& other) noexcept
     {
         ptr_ = other.ptr_;
         return *this;
@@ -79,17 +80,17 @@ public:
         return ptr_ != nullptr;
     }
 
-    reference operator*() const
+    reference operator*() const noexcept
     {
         return *ptr_;
     }
 
-    reference operator[](size_t n) const
+    reference operator[](difference_type n) const noexcept
     {
         return *(ptr_ + n);
     }
 
-    pointer operator->() const
+    pointer operator->() const noexcept
     {
         return ptr_;
     }
@@ -104,7 +105,7 @@ public:
         return *this;
     }
 
-    fancy_ptr& operator++(int) noexcept
+    fancy_ptr operator++(int) noexcept
     {
         auto temp = *this;
         ++(*this);
@@ -117,7 +118,7 @@ public:
         return *this;
     }
 
-    fancy_ptr& operator--(int) noexcept
+    fancy_ptr operator--(int) noexcept
     {
         auto temp = *this;
         --(*this);
@@ -137,7 +138,7 @@ public:
     }
 
     friend
-    fancy_ptr operator+(const fancy_ptr& p, difference_type n)
+    fancy_ptr operator+(const fancy_ptr& p, difference_type n) noexcept
     {
         auto temp = p;
         temp += n;
@@ -145,7 +146,7 @@ public:
     }
 
     friend
-    fancy_ptr operator-(const fancy_ptr& p, difference_type n)
+    fancy_ptr operator-(const fancy_ptr& p, difference_type n) noexcept
     {
         auto temp = p;
         temp -= n;
@@ -153,7 +154,7 @@ public:
     }
 
     friend
-    difference_type operator-(const fancy_ptr& x, const fancy_ptr& y)
+    difference_type operator-(const fancy_ptr& x, const fancy_ptr& y) noexcept
     {
         return x.ptr_ - y.ptr_;
     }
