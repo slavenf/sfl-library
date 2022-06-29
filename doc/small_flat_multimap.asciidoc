@@ -216,6 +216,8 @@ small_flat_multimap(small_flat_multimap&& other, const Allocator& alloc);
 --
 *Effects:*
 Constructs the container with the contents of `other` using move semantics.
+`other` is not guaranteed to be empty after the move.
+`other` is in a valid but unspecified state after the move.
 
 *Complexity:*
 Constant in the best case. Linear in `N` in the worst case.
@@ -269,8 +271,10 @@ small_flat_multimap& operator=(small_flat_multimap&& other);
 +
 --
 *Effects:*
-Move assignment operator. Replaces the contents with those of `other` using
-move semantics. `other` is guaranteed to be `empty()` afterwards.
+Move assignment operator.
+Replaces the contents with those of `other` using move semantics.
+`other` is not guaranteed to be empty after the move.
+`other` is in a valid but unspecified state after the move.
 
 *Returns:*
 `*this()`.

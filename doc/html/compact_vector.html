@@ -482,6 +482,19 @@ compact_vector(compact_vector&amp;&amp; other, const Allocator&amp; alloc);</pre
 <p><strong>Effects:</strong>
 Constructs the container with the contents of <code>other</code> using move semantics.</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>First overload:
+<code>other</code> is guaranteed to be empty after the move.</p>
+</li>
+<li>
+<p>Second overload:
+<code>other</code> is not guaranteed to be empty after the move.
+<code>other</code> is in a valid but unspecified state after the move.</p>
+</li>
+</ul>
+</div>
 <div class="paragraph">
 <p><strong>Complexity:</strong>
 Constant in the best case. Linear in <code>other.size()</code> in the worst case.</p>
@@ -654,8 +667,10 @@ of <code>other</code>.</p>
 <div class="content">
 <div class="paragraph">
 <p><strong>Effects:</strong>
-Move assignment operator. Replaces the contents with those of <code>other</code> using
-move semantics. <code>other</code> is guaranteed to be <code>empty()</code> afterwards.</p>
+Move assignment operator.
+Replaces the contents with those of <code>other</code> using move semantics.
+<code>other</code> is not guaranteed to be empty after the move.
+<code>other</code> is in a valid but unspecified state after the move.</p>
 </div>
 <div class="paragraph">
 <p><strong>Returns:</strong>

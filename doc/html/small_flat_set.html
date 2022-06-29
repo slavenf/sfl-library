@@ -474,7 +474,9 @@ small_flat_set(small_flat_set&amp;&amp; other, const Allocator&amp; alloc);</pre
 <div class="content">
 <div class="paragraph">
 <p><strong>Effects:</strong>
-Constructs the container with the contents of <code>other</code> using move semantics.</p>
+Constructs the container with the contents of <code>other</code> using move semantics.
+<code>other</code> is not guaranteed to be empty after the move.
+<code>other</code> is in a valid but unspecified state after the move.</p>
 </div>
 <div class="paragraph">
 <p><strong>Complexity:</strong>
@@ -567,8 +569,10 @@ Linear in <code>this-&gt;size()</code> plus linear in <code>other.size()</code>.
 <div class="content">
 <div class="paragraph">
 <p><strong>Effects:</strong>
-Move assignment operator. Replaces the contents with those of <code>other</code> using
-move semantics. <code>other</code> is guaranteed to be <code>empty()</code> afterwards.</p>
+Move assignment operator.
+Replaces the contents with those of <code>other</code> using move semantics.
+<code>other</code> is not guaranteed to be empty after the move.
+<code>other</code> is in a valid but unspecified state after the move.</p>
 </div>
 <div class="paragraph">
 <p><strong>Returns:</strong>

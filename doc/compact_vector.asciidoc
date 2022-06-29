@@ -193,6 +193,13 @@ compact_vector(compact_vector&& other, const Allocator& alloc);
 *Effects:*
 Constructs the container with the contents of `other` using move semantics.
 
+* First overload:
+`other` is guaranteed to be empty after the move.
+
+* Second overload:
+`other` is not guaranteed to be empty after the move.
+`other` is in a valid but unspecified state after the move.
+
 *Complexity:*
 Constant in the best case. Linear in `other.size()` in the worst case.
 --
@@ -291,8 +298,10 @@ compact_vector& operator=(compact_vector&& other);
 +
 --
 *Effects:*
-Move assignment operator. Replaces the contents with those of `other` using
-move semantics. `other` is guaranteed to be `empty()` afterwards.
+Move assignment operator.
+Replaces the contents with those of `other` using move semantics.
+`other` is not guaranteed to be empty after the move.
+`other` is in a valid but unspecified state after the move.
 
 *Returns:*
 `*this()`.
