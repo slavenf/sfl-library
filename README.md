@@ -12,8 +12,13 @@ This is header-only C++11 library that offers several new containers:
   * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.asciidoc)
   * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.asciidoc)
   * [`compact_vector`](doc/compact_vector.asciidoc)
+  * [`segmented_vector`](doc/segmented_vector.asciidoc)
 
 All containers are defined in namespace `sfl`.
+
+Click on the container name to see detailed documentation.
+For more information about documentation please scroll down to the
+section [Detailed documentation](#detailed-documentation).
 
 ## About small vector
 
@@ -116,6 +121,22 @@ for (std::size_t i = 0; i < N; ++i)
 // Now use vector vv but never change its contents.
 ```
 
+## About segmented vector
+
+`sfl::segmented_vector` is a sequence container similar to `std::vector` but
+with the different storage model.
+The storage of `sfl::segmented_vector` consists of a sequence of individually
+allocated arrays of size `N` which are called *segments*.
+The size `N` is specified at the compile time as a template parameter.
+Elements of `sfl::segmented_vector` are not stored contiguously in the memory,
+but they are stored contiguously within a segment.
+This is very similar to the storage model of `std::deque`.
+Unlike `std::deque`, `sfl::segmented_vector` allows fast insertion only at
+its end.
+`sfl::segmented_vector` does not have interface compatible with `std::deque`.
+Interface of `sfl::segmented_vector` is compatible with `std::vector`, except
+the `data()` member function, which does not exist.
+
 # Requirements
 
 The only requirement is C++11 compiler or newer.
@@ -148,7 +169,7 @@ and `throw` statements, and in case of error library calls `std::abort`.
 The library does not automatically detect whether the compiler is invoked
 with appropriate flag, like `-fno-exceptions` in GCC and Clang.
 
-# Detailed documentation
+# Detailed documentation {#detailed-documentation}
 
 The detailed documentation is located in `doc` directory.
 It is written in asciidoc format and then converted to html file format.
