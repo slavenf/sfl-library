@@ -472,7 +472,7 @@ public:
         : Allocator(alloc)
     {}
 
-    explicit small_vector(size_type n)
+    small_vector(size_type n)
         : Allocator()
     {
         initialize_default_n(n);

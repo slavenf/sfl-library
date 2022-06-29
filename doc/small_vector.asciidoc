@@ -106,7 +106,7 @@ Constant.
 {empty} +
 
 ----
-explicit small_vector(size_type n);
+small_vector(size_type n);
 explicit small_vector(size_type n, const Allocator& alloc);
 ----
 {empty} ::
