@@ -976,7 +976,13 @@ public:
     iterator insert(const_iterator pos, std::initializer_list<T> ilist)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-        return insert(pos, ilist.begin(), ilist.end());
+        return insert_range
+        (
+            pos,
+            ilist.begin(),
+            ilist.end(),
+            std::random_access_iterator_tag()
+        );
     }
 
     template <typename... Args>
