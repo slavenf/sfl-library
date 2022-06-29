@@ -23,3 +23,5 @@ asciidoctor small_unordered_flat_multiset.asciidoc -o html/small_unordered_flat_
 asciidoctor small_vector.asciidoc -o html/small_vector.html
 
 asciidoctor compact_vector.asciidoc -o html/compact_vector.html
+
+asciidoctor segmented_vector.asciidoc -o html/segmented_vector.html
