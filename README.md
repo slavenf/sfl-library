@@ -169,7 +169,7 @@ and `throw` statements, and in case of error library calls `std::abort`.
 The library does not automatically detect whether the compiler is invoked
 with appropriate flag, like `-fno-exceptions` in GCC and Clang.
 
-# Detailed documentation {#detailed-documentation}
+# Detailed documentation
 
 The detailed documentation is located in `doc` directory.
 It is written in asciidoc format and then converted to html file format.
