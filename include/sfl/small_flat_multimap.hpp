@@ -1972,8 +1972,6 @@ private:
                 SFL_RETHROW;
             }
         }
-
-        other.reset();
     }
 
     template <typename ForwardIt>
@@ -2101,8 +2099,6 @@ private:
                 std::make_move_iterator(other.data_.last_)
             );
         }
-
-        other.reset();
     }
 
     template <typename... Args>

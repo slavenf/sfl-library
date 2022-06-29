@@ -1264,7 +1264,7 @@ int main()
         sfl::compact_vector<MyInt, TP_ALLOC<MyInt>> v2(std::move(v1));
         cout << "<" << endl;
 
-        assert(v1.size() == 0);
+        // v1 is in a valid but unspecified state
 
         assert(v2.size() == 5);
         assert(v2[0] == 10);
@@ -1277,7 +1277,7 @@ int main()
         sfl::compact_vector<MyInt, TP_ALLOC<MyInt>> v3(std::move(v2), TP_ALLOC<MyInt>());
         cout << "<" << endl;
 
-        assert(v2.size() == 0);
+        // v2 is in a valid but unspecified state
 
         assert(v3.size() == 5);
         assert(v3[0] == 10);
@@ -1611,13 +1611,13 @@ int main()
         assert(v1[0] == 40);
         assert(v1[1] == 50);
 
-        assert(v2.size() == 0);
+        // v2 is in a valid but unspecified state
 
         cout << ">" << endl;
         v2 = std::move(v1);
         cout << "<" << endl;
 
-        assert(v1.size() == 0);
+        // v1 is in a valid but unspecified state
 
         assert(v2.size() == 2);
         assert(v2[0] == 40);

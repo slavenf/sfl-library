@@ -1908,8 +1908,6 @@ private:
                 destroy_storage();
                 SFL_RETHROW;
             }
-
-            other.clear();
         }
     }
 
@@ -2131,8 +2129,6 @@ private:
                 std::random_access_iterator_tag()
             );
         }
-
-        other.clear();
     }
 
     iterator insert_fill_n(const_iterator pos, size_type n, const T& value)

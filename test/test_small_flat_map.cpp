@@ -3418,8 +3418,7 @@ int main()
             TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(std::move(m1));
 
-        assert(m1.size() == 0);
-        assert(m1.capacity() == 10);
+        // m1 is in a valid but unspecified state
 
         assert(m2.size() == 3);
         assert(m2.capacity() == 10);
@@ -3431,8 +3430,7 @@ int main()
             TP_ALLOC<std::pair<MyInt, MyString>>
         > m3(std::move(m2), TP_ALLOC<MyInt>());
 
-        assert(m2.size() == 0);
-        assert(m2.capacity() == 10);
+        // m2 is in a valid but unspecified state
 
         assert(m3.size() == 3);
         assert(m3.capacity() == 10);
@@ -3466,8 +3464,7 @@ int main()
             TP_ALLOC<std::pair<MyInt, MyString>>
         > m2(std::move(m1));
 
-        assert(m1.size() == 0);
-        assert(m1.capacity() == 0);
+        // m1 is in a valid but unspecified state
 
         assert(m2.size() == 3);
         assert(m2.capacity() == 3 || m2.capacity() == 4); // Capacity depends on allocators.
@@ -3479,8 +3476,7 @@ int main()
             TP_ALLOC<std::pair<MyInt, MyString>>
         > m3(std::move(m2), TP_ALLOC<MyInt>());
 
-        assert(m2.size() == 0);
-        assert(m2.capacity() == 0);
+        // m2 is in a valid but unspecified state
 
         assert(m3.size() == 3);
         assert(m3.capacity() == 3 || m3.capacity() == 4); // Capacity depends on allocators.
@@ -3710,15 +3706,13 @@ int main()
         assert(m1.nth(0)->first == 20 && m1.nth(0)->second == "/20/");
         assert(m1.nth(1)->first == 21 && m1.nth(1)->second == "/21/");
 
-        assert(m2.size() == 0);
-        assert(m2.capacity() == 5);
+        // m2 is in a valid but unspecified state
 
         cout << ">" << endl;
         m2 = std::move(m1);
         cout << "<" << endl;
 
-        assert(m1.size() == 0);
-        assert(m1.capacity() == 5);
+        // m1 is in a valid but unspecified state
 
         assert(m2.size() == 2);
         assert(m2.capacity() == 5);
@@ -3769,8 +3763,7 @@ int main()
         assert(m1.nth(0)->first == 20 && m1.nth(0)->second == "/20/");
         assert(m1.nth(1)->first == 21 && m1.nth(1)->second == "/21/");
 
-        assert(m2.size() == 0);
-        assert(m2.capacity() == 0);
+        // m2 is in a valid but unspecified state
 
         sfl::small_flat_map<MyInt, MyString, 0, std::less<MyInt>,
             TP_ALLOC<std::pair<MyInt, MyString>>
@@ -3791,8 +3784,7 @@ int main()
         m3 = std::move(m1);
         cout << "<" << endl;
 
-        assert(m1.size() == 0);
-        assert(m1.capacity() == 0);
+        // m1 is in a valid but unspecified state
 
         assert(m3.size() == 2);
         assert(m3.capacity() == 2);

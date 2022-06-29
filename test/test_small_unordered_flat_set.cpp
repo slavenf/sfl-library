@@ -1685,8 +1685,7 @@ int main()
             TP_ALLOC<MyInt>
         > s2(std::move(s1));
 
-        assert(s1.size() == 0);
-        assert(s1.capacity() == 10);
+        // s1 is in a valid but unspecified state
 
         assert(s2.size() == 3);
         assert(s2.capacity() == 10);
@@ -1698,8 +1697,7 @@ int main()
             TP_ALLOC<MyInt>
         > s3(std::move(s2), TP_ALLOC<MyInt>());
 
-        assert(s2.size() == 0);
-        assert(s2.capacity() == 10);
+        // s2 is in a valid but unspecified state
 
         assert(s3.size() == 3);
         assert(s3.capacity() == 10);
@@ -1724,8 +1722,7 @@ int main()
             TP_ALLOC<MyInt>
         > s2(std::move(s1));
 
-        assert(s1.size() == 0);
-        assert(s1.capacity() == 0);
+        // s1 is in a valid but unspecified state
 
         assert(s2.size() == 3);
         assert(s2.capacity() == 3 || s2.capacity() == 4); // Capacity depends on allocators.
@@ -1737,8 +1734,7 @@ int main()
             TP_ALLOC<MyInt>
         > s3(std::move(s2), TP_ALLOC<MyInt>());
 
-        assert(s2.size() == 0);
-        assert(s2.capacity() == 0);
+        // s2 is in a valid but unspecified state
 
         assert(s3.size() == 3);
         assert(s3.capacity() == 3 || s3.capacity() == 4); // Capacity depends on allocators.
@@ -1909,15 +1905,13 @@ int main()
         assert(*s1.nth(0) == 20);
         assert(*s1.nth(1) == 21);
 
-        assert(s2.size() == 0);
-        assert(s2.capacity() == 5);
+        // s2 is in a valid but unspecified state
 
         cout << ">" << endl;
         s2 = std::move(s1);
         cout << "<" << endl;
 
-        assert(s1.size() == 0);
-        assert(s1.capacity() == 5);
+        // s1 is in a valid but unspecified state
 
         assert(s2.size() == 2);
         assert(s2.capacity() == 5);
@@ -1955,8 +1949,7 @@ int main()
         assert(*s1.nth(0) == 21);
         assert(*s1.nth(1) == 20);
 
-        assert(s2.size() == 0);
-        assert(s2.capacity() == 0);
+        // s2 is in a valid but unspecified state
 
         sfl::small_unordered_flat_set<MyInt, 0, std::equal_to<MyInt>,
             TP_ALLOC<MyInt>
@@ -1971,8 +1964,7 @@ int main()
         s3 = std::move(s1);
         cout << "<" << endl;
 
-        assert(s1.size() == 0);
-        assert(s1.capacity() == 0);
+        // s1 is in a valid but unspecified state
 
         assert(s3.size() == 2);
         assert(s3.capacity() == 2);

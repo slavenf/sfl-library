@@ -1512,8 +1512,6 @@ private:
 
                 SFL_RETHROW;
             }
-
-            other.clear();
         }
     }
 
@@ -1673,8 +1671,6 @@ private:
                 std::make_move_iterator(other.data_.last_),
                 std::random_access_iterator_tag()
             );
-
-            other.clear();
         }
     }
 

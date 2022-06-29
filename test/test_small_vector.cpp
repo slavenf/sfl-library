@@ -1834,8 +1834,7 @@ int main()
 
         sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v2(std::move(v1));
 
-        assert(v1.size() == 0);
-        assert(v1.capacity() == 10);
+        // v1 is in a valid but unspecified state
 
         assert(v2.size() == 5);
         assert(v2.capacity() == 10);
@@ -1847,8 +1846,7 @@ int main()
 
         sfl::small_vector<MyInt, 10, TP_ALLOC<MyInt>> v3(std::move(v2), TP_ALLOC<MyInt>());
 
-        assert(v2.size() == 0);
-        assert(v2.capacity() == 10);
+        // v2 is in a valid but unspecified state
 
         assert(v3.size() == 5);
         assert(v3.capacity() == 10);
@@ -1865,8 +1863,7 @@ int main()
 
         sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v2(std::move(v1));
 
-        assert(v1.size() == 0);
-        assert(v1.capacity() == 0);
+        // v1 is in a valid but unspecified state
 
         assert(v2.size() == 5);
         assert(v2.capacity() == 5);
@@ -1878,8 +1875,7 @@ int main()
 
         sfl::small_vector<MyInt, 0, TP_ALLOC<MyInt>> v3(std::move(v2), TP_ALLOC<MyInt>());
 
-        assert(v2.size() == 0);
-        assert(v2.capacity() == 0);
+        // v2 is in a valid but unspecified state
 
         assert(v3.size() == 5);
         assert(v3.capacity() == 5);
@@ -2417,15 +2413,13 @@ int main()
         assert(*v1.nth(0) == 21);
         assert(*v1.nth(1) == 22);
 
-        assert(v2.size() == 0);
-        assert(v2.capacity() == 5);
+        // v2 is in a valid but unspecified state
 
         cout << ">" << endl;
         v2 = std::move(v1);
         cout << "<" << endl;
 
-        assert(v1.size() == 0);
-        assert(v1.capacity() == 5);
+        // v1 is in a valid but unspecified state
 
         assert(v2.size() == 2);
         assert(v2.capacity() == 5);
@@ -2463,9 +2457,10 @@ int main()
         assert(*v1.nth(0) == 21);
         assert(*v1.nth(1) == 22);
 
-        assert(v2.size() == 0);
-        assert(v2.capacity() == 0);
+        // v2 is in a valid but unspecified state
 
+        v2.clear();
+        v2.shrink_to_fit();
         v2.reserve(2);
         v2.emplace_back(31);
         v2.emplace_back(32);
@@ -2479,8 +2474,7 @@ int main()
         v2 = std::move(v1);
         cout << "<" << endl;
 
-        assert(v1.size() == 0);
-        assert(v1.capacity() == 0);
+        // v1 is in a valid but unspecified state
 
         assert(v2.size() == 2);
         assert(v2.capacity() == 2);

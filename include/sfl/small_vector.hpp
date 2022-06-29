@@ -2115,8 +2115,6 @@ private:
                 SFL_RETHROW;
             }
         }
-
-        other.reset();
     }
 
     void assign_fill_n(size_type n, const T& value)
@@ -2333,8 +2331,6 @@ private:
                 std::random_access_iterator_tag()
             );
         }
-
-        other.reset();
     }
 
     iterator insert_fill_n(const_iterator pos, size_type n, const T& value)
