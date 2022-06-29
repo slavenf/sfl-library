@@ -1,3 +1,14 @@
+1.2.0 (2022-06-29)
+* New container `segmented_vector`.
+* Move constructors and move assignment operators no longer implicitly call
+  `other.clear()`. This behavior applies to ALL containers.
+  In other words, `other` is not guaranteed to be empty after the move.
+  `other` is in a valid but unspecified state after the move.
+* Bug fix: `small_vector` constructor taking only size is no longer `explicit`.
+* Improved common functions and macros (`constexpr`, `noexcept`, all calls to
+  functions in `SFL_DTL` namespace are fully qualified).
+* Improved allocators for tests.
+
 1.1.0 (2022-05-11)
 * Added option to avoid exception handling. If `SFL_NO_EXCEPTIONS` is defined,
   the library avoids using try/catch/throw statements. In case of error
