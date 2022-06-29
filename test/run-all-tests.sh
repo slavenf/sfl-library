@@ -41,7 +41,7 @@ for IN_FILE in ${INPUT_FILES[@]}; do
     for ALLOC in ${TEST_ALLOCATORS[@]}; do
 
         # Store build command in string:
-        BUILD_COMMAND="$CXX $CXXFLAGS -D SFL_TEST_ALLOCATOR=$ALLOC -I ../include -o $OUT_FILE $IN_FILE"
+        BUILD_COMMAND="$CXX $CXXFLAGS -D TP_ALLOC=$ALLOC -I ../include -o $OUT_FILE $IN_FILE"
 
         # Execute build command:
         $BUILD_COMMAND
@@ -86,7 +86,7 @@ for SEG_SZ in ${SEGMENT_SIZES[@]}; do
     for ALLOC in ${TEST_ALLOCATORS[@]}; do
 
         # Store build command in string:
-        BUILD_COMMAND="$CXX $CXXFLAGS -D SFL_TEST_ALLOCATOR=$ALLOC -I ../include -o $OUT_FILE $IN_FILE -D TP_N=$SEG_SZ"
+        BUILD_COMMAND="$CXX $CXXFLAGS -D TP_ALLOC=$ALLOC -D TP_N=$SEG_SZ -I ../include -o $OUT_FILE $IN_FILE"
 
         # Execute build command:
         $BUILD_COMMAND
