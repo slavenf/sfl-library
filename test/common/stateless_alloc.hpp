@@ -1,24 +1,17 @@
-#ifndef SFL_STATEFULL_ALLOC_HPP
-#define SFL_STATEFULL_ALLOC_HPP
+#ifndef SFL_STATELESS_ALLOC_HPP
+#define SFL_STATELESS_ALLOC_HPP
 
 #include <cstddef>
 #include <type_traits>
 
 namespace sfl
 {
-
-std::size_t statefull_alloc_counter = 0;
-
-template <typename T>
-class statefull_alloc
+namespace test
 {
-private:
 
-    template <typename>
-    friend class statefull_alloc;
-
-    std::size_t id_;
-
+template<typename T>
+class stateless_alloc
+{
 public:
 
     using value_type      = T;
@@ -36,51 +29,44 @@ public:
     template <typename U>
     struct rebind
     {
-        using other = statefull_alloc<U>;
+        using other = stateless_alloc<U>;
     };
 
     //
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    statefull_alloc() noexcept
-        : id_(++statefull_alloc_counter)
+    stateless_alloc() noexcept
     {}
 
-    statefull_alloc(const statefull_alloc& other) noexcept
-        : id_(other.id_)
-    {}
-
-    template <typename U>
-    statefull_alloc(const statefull_alloc<U>& other) noexcept
-        : id_(other.id_)
-    {}
-
-    statefull_alloc(statefull_alloc&& other) noexcept
-        : id_(other.id_)
+    stateless_alloc(const stateless_alloc& /*other*/) noexcept
     {}
 
     template <typename U>
-    statefull_alloc(statefull_alloc<U>&& other) noexcept
-        : id_(other.id_)
+    stateless_alloc(const stateless_alloc<U>& /*other*/) noexcept
     {}
 
-    ~statefull_alloc() noexcept
+    stateless_alloc(stateless_alloc&& /*other*/) noexcept
+    {}
+
+    template <typename U>
+    stateless_alloc(stateless_alloc<U>&& /*other*/) noexcept
+    {}
+
+    ~stateless_alloc() noexcept
     {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    statefull_alloc& operator=(const statefull_alloc& other) noexcept
+    stateless_alloc& operator=(const stateless_alloc& /*other*/) noexcept
     {
-        id_ = other.id_;
         return *this;
     }
 
-    statefull_alloc& operator=(statefull_alloc&& other) noexcept
+    stateless_alloc& operator=(stateless_alloc&& /*other*/) noexcept
     {
-        id_ = other.id_;
         return *this;
     }
 
@@ -156,38 +142,39 @@ public:
     template <typename T1, typename T2>
     friend bool operator==
     (
-        const statefull_alloc<T1>& x,
-        const statefull_alloc<T2>& y
+        const stateless_alloc<T1>& /*x*/,
+        const stateless_alloc<T2>& /*y*/
     ) noexcept;
 
     template <typename T1, typename T2>
     friend bool operator!=
     (
-        const statefull_alloc<T1>& x,
-        const statefull_alloc<T2>& y
+        const stateless_alloc<T1>& /*x*/,
+        const stateless_alloc<T2>& /*y*/
     ) noexcept;
 };
 
 template <typename T1, typename T2>
 bool operator==
 (
-    const statefull_alloc<T1>& x,
-    const statefull_alloc<T2>& y
+    const stateless_alloc<T1>& /*x*/,
+    const stateless_alloc<T2>& /*y*/
 ) noexcept
 {
-    return x.id_ == y.id_;
+    return true;
 }
 
 template <typename T1, typename T2>
 bool operator!=
 (
-    const statefull_alloc<T1>& x,
-    const statefull_alloc<T2>& y
+    const stateless_alloc<T1>& /*x*/,
+    const stateless_alloc<T2>& /*y*/
 ) noexcept
 {
-    return !(x == y);
+    return false;
 }
 
+} // namespace test
 } // namespace sfl
 
-#endif // SFL_STATEFULL_ALLOC_HPP
+#endif // SFL_STATELESS_ALLOC_HPP

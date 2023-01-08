@@ -5,6 +5,8 @@
 
 namespace sfl
 {
+namespace test
+{
 
 template <typename T>
 class fancy_ptr
@@ -200,6 +202,7 @@ public:
     }
 };
 
+} // namespace test
 } // namespace sfl
 
 #endif // SFL_FANCY_PTR_HPP
