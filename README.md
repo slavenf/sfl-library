@@ -69,8 +69,8 @@ If available, the library uses the features of the newer C++ standards.
 Tested compilers:
 * GCC 4.8.5 on CentOS 7 (C++11)
 * Clang 3.4.2 on CentOS 7 (C++11)
-* GCC 13.2.1 on Arch Linux (C++11...C++23)
-* Clang 15.0.7 on Arch Linux (C++11...C++23)
+* GCC 13.2.1 on Arch Linux (C++11, 14, 17, 20, 23)
+* Clang 15.0.7 on Arch Linux (C++11, 14, 17, 20)
 
 
 
