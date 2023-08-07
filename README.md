@@ -2,160 +2,126 @@
 
 This is header-only C++11 library that offers several new containers:
 
-  * [`small_vector`](doc/small_vector.asciidoc)
-  * [`small_flat_set`](doc/small_flat_set.asciidoc)
-  * [`small_flat_map`](doc/small_flat_map.asciidoc)
-  * [`small_flat_multiset`](doc/small_flat_multiset.asciidoc)
-  * [`small_flat_multimap`](doc/small_flat_multimap.asciidoc)
-  * [`small_unordered_flat_set`](doc/small_unordered_flat_set.asciidoc)
-  * [`small_unordered_flat_map`](doc/small_unordered_flat_map.asciidoc)
-  * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.asciidoc)
-  * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.asciidoc)
-  * [`compact_vector`](doc/compact_vector.asciidoc)
-  * [`segmented_vector`](doc/segmented_vector.asciidoc)
+  * [`small_vector`](doc/small_vector.md)
+  * [`small_flat_set`](doc/small_flat_set.md)
+  * [`small_flat_map`](doc/small_flat_map.md)
+  * [`small_flat_multiset`](doc/small_flat_multiset.md)
+  * [`small_flat_multimap`](doc/small_flat_multimap.md)
+  * [`small_unordered_flat_set`](doc/small_unordered_flat_set.md)
+  * [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
+  * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.md)
+  * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
+  * [`compact_vector`](doc/compact_vector.md)
+  * [`segmented_vector`](doc/segmented_vector.md)
 
 All containers are defined in namespace `sfl`.
 
+
+
 ## About small vector
 
-`sfl::small_vector` is a sequence container similar to `std::vector`,
-but with a different storage model.
+`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model.
 
-`sfl::small_vector` holds statically allocated array of size `N` in
-the object itself.
-The container stores elements into this array until number of elements is not
-greater than `N`, which avoids dynamic memory allocation and deallocation.
-The dynamic memory management is used when the number of elements has to be
-greater than `N`.
+`sfl::small_vector` holds statically allocated array of size `N` in the object itself. The container stores elements into this array until number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
-The size `N` is specified at the compile time as a template parameter.
-In case when `N` is equal to zero the container does not hold any statically
-allocated array and uses only dynamic memory management.
-In case when `N` is equal to zero `sfl::small_vector` behaves just like
-`std::vector`.
+Size `N` is specified at the compile time as a template parameter.
 
-Unlike standard vector, `sfl::small_vector` is not specialized for `bool`.
 
-## About small maps and sets
 
-Small maps and sets from namespace `sfl` are associative containers similar to
-standard maps and sets from namespace `std`, but with a different storage model.
+## About small flat maps and sets
 
-The storage model of small maps and sets from namespace `sfl` is identical
-to the storage model of `sfl::small_vector`.
-Small maps and sets from namespace `sfl` hold statically allocated array of
-size `N` in the object itself, just like `sfl::small_vector`.
-Elements are stored into this array until number of elements is not
-greater than `N`, which avoids dynamic memory allocation and deallocation.
-The dynamic memory management is used when the number of elements has to be
-greater than `N`.
+Small flat maps and sets from namespace `sfl` are associative containers similar to standard maps and sets, but with the different storage model.
 
-The size `N` is specified at the compile time as a template parameter.
-In case when `N` is equal to zero the container does not hold any statically
-allocated array and uses only dynamic memory management.
+The storage model of small flat maps and sets is identical to the storage model of `sfl::small_vector`, that is, each of them holds statically allocated array of size `N` in the object itself. Elements are stored into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
-Small maps and sets from namespace `sfl` always store elements contiguously
-in the memory, even when dynamic memory management is used.
-Iterators to the elements are random access iterators.
+Size `N` is specified at the compile time as a template parameter.
+
+
 
 ## About compact vector
 
-`sfl::compact_vector` is a sequence container similar to `std::vector`.
-The key difference is that `capacity()` and `size()` of `sfl::compact_vector`
-are always equal.
-This container reallocates storage every time when element is inserted or
-removed in order to keep `capacity()` and `size()` equal.
-That means insertion and removal are very inefficient.
+`sfl::compact_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the key difference that `capacity()` and `size()` are always equal.
 
-In general it is not recommended to use `sfl::compact_vector` instead of
-`std::vector` because of its inefficient memory management, but there are
-some situations when `sfl::compact_vector` is better choice than `std::vector`.
-For example, consider using `std::vector<sfl::compact_vector<T>>` instead
-of `std::vector<std::vector<T>>` when there is huge number of subvectors.
-If `std::vector` is used as subvector then there is a high probability that
-there will be unused capacity because `std::vector` does not guarantee that
-`capacity()` and `size()` are equal.
-`std::vector` does not guarantee that `capacity()` and `size()` are equal
-even though `shrink_to_fit()` is invoked.
-On the other hand, using `sfl::compact_vector` as subvector guarantees that
-there are no unused capacity.
+`sfl::compact_vector` reallocates storage every time when element is inserted or removed in order to keep `capacity()` and `size()` equal. That means insertions and removals are very inefficient.
+
+This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
+
+
 
 ## About segmented vector
 
-`sfl::segmented_vector` is a sequence container similar to `std::vector` but
-with the different storage model.
+`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model.
 
-The storage of `sfl::segmented_vector` consists of a sequence of individually
-allocated arrays of size `N` which are called *segments*.
-The size `N` is specified at the compile time as a template parameter.
+The storage of `sfl::segmented_vector` consists of a sequence of individually allocated arrays of size `N` which are called *segments*. Size `N` is specified at the compile time as a template parameter.
 
-Elements of `sfl::segmented_vector` are not stored contiguously in the memory,
-but they are stored contiguously within a segment.
+Elements of `sfl::segmented_vector` are not stored contiguously in the memory, but they are stored contiguously within a segment.
 
-The storage model of `sfl::segmented_vector` is similar to storage models of
-most implementations of `std::deque` but the behavior and API of
-`sfl::segmented_vector` is not compatible with `std::deque`.
-`sfl::segmented_vector` has the same set of member functions as `std::vector`,
-except the `data()` member function, which does not exist.
+This container is inspired by `std::deque`, but the behavior and API is different than `std::deque`. Segmented vector has the same set of public member functions as `std::vector`, except the `data()` member function, which does not exist.
 
-## Detailed documentation
 
-The detailed documentation is located in `doc` directory.
-It is written in asciidoc format and then converted to html file format.
-Generated html files are located in `doc/html` directory.
-I recommend reading documentation from html files because html files are
-rendered much better than asciidoc files.
-Unfortunately, github can render only asciidoc files.
-To view html files, first download them onto your computer and then open
-using your favorite web browser.
 
-## Requirements
+# Requirements
 
-The only requirement is C++11 compiler or newer.
+This library requires C++11 compiler or newer.
 
-Tested with GCC 4.8.5 on CentOS 7.
+If available, the library uses the features of the newer C++ standards.
 
-Tested with Clang 3.4.2 on CentOS 7.
+Tested compilers:
+* GCC 4.8.5 on CentOS 7 (C++11)
+* Clang 3.4.2 on CentOS 7 (C++11)
+* GCC 13.2.1 on Arch Linux (C++11...C++23)
+* Clang 15.0.7 on Arch Linux (C++11...C++23)
 
-## Installation and usage
 
-Copy `include/sfl` directory into your project and `#include` what you need.
 
-The header files in `include/sfl` are not mutually dependent.
-That means you can copy into your project directory only what you need.
-For example, if you need `sfl::small_vector` container then copy only
-`small_vector.hpp` into your project directory.
+# Installation and usage
 
-## Exceptions
+Copy the contents of directory `include/sfl` into your project and `#include` what you need.
+
+The header files in `include/sfl` are not mutually dependent. That means you can copy into your project directory only what you need. For example, if you need only `sfl::small_vector` then copy only `small_vector.hpp` into your project directory.
+
+
+
+# Exceptions
 
 This library by default throw exceptions in case of error.
 
-If macro `SFL_NO_EXCEPTIONS` is defined then library avoids using exceptions
-and calls `std::abort` in case of error.
+If macro `SFL_NO_EXCEPTIONS` is defined then library avoids using exceptions and calls `std::abort` in case of error.
 
-This library does not automatically detect whether the compiler is invoked
-with appropriate flag, like `-fno-exceptions` in GCC and Clang.
+This library does not automatically detect whether the compiler is invoked with appropriate flag or not, like `-fno-exceptions` in GCC and Clang.
 
-## Debugging
 
-This library uses macro `assert` from header `<cassert>`.
 
-The definition of the macro `assert` depends on another macro, `NDEBUG`,
-which is not defined by the standard library.
+# Debugging
+
+This library extensively uses macro `assert` from header `<cassert>`.
+
+The definition of the macro `assert` depends on another macro, `NDEBUG`, which is not defined by the standard library.
 
 If macro `NDEBUG` is defined then `assert` does nothing.
 
-If macro `NDEBUG` is not defined then `assert` performs check.
-If check fails, `assert` outputs implementation-specific diagnostic
-information on the standard error output and calls `std::abort`.
+If macro `NDEBUG` is not defined then `assert` performs check. If check fails, `assert` outputs implementation-specific diagnostic information on the standard error output and calls `std::abort`.
 
-## Tests
 
-Directory `test` contains test programs.
-Script `test_all.sh` builds and runs all test programs.
-Each test program is checked with `valgrind` tool.
 
-## License
+# Detailed documentation
 
-Licensed under zlib license.
-The license text is in [`LICENSE.txt`](LICENSE.txt) file.
+The detailed documentation is located in directory `doc`.
+
+The detailed documentation is handwritten in Markdown format, it is not automatically generated with tools like Doxygen, so there may be some errors or mistakes. If you find one, please report it.
+
+
+
+# Tests
+
+Test programs and scripts are located in directory `test`.
+
+Tested compilers are listed in section [Requirements](#requirements).
+
+Each test program is checked with Valgrind tool.
+
+
+
+# License
+
+Licensed under zlib license. The license text is in file [`LICENSE.txt`](LICENSE.txt).

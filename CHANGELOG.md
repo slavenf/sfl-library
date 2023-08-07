@@ -1,8 +1,12 @@
-1.2.1 (2023-02-23)
+# 1.2.1 (2023-02-23)
+
 * Reorganized tests.
 * Updated README file.
 
-1.2.0 (2022-06-29)
+
+
+# 1.2.0 (2022-06-29)
+
 * New container `segmented_vector`.
 * Move constructors and move assignment operators no longer implicitly call
   `other.clear()`. This behavior applies to ALL containers.
@@ -13,14 +17,20 @@
   functions in `SFL_DTL` namespace are fully qualified).
 * Improved allocators for tests.
 
-1.1.0 (2022-05-11)
+
+
+# 1.1.0 (2022-05-11)
+
 * Added option to avoid exception handling. If `SFL_NO_EXCEPTIONS` is defined,
   the library avoids using try/catch/throw statements. In case of error
   `std::abort` is called.
 * Internal changes: Removed macro `SFL_UNUSED`. Added function `ignore_unused`.
   Added macro `SFL_CONSTEXPR_14`.
 
-1.0.1 (2022-03-24)
+
+
+# 1.0.1 (2022-03-24)
+
 * Fixed compile error regarding function `to_pointer` when C++20 is used.
   Call to `to_address` must be fully qualified, i.e. `SFL_DTL::to_address`.
   If call is not fully qualified then compiler somehow cannot decide between
@@ -28,19 +38,31 @@
 * Improved tests. Testing with different allocators. Several allocators are
   designed specially for tests. One of allocators uses fancy pointers.
 
-1.0.0 (2022-03-17)
+
+
+# 1.0.0 (2022-03-17)
+
 * Fancy pointers revisited. Using pointer traits `to_address` and `to_pointer`.
 * Started semantic versioning (see https://semver.org).
 * Added file VERSION.txt.
 
-2022-03-13-1
+
+
+# 2022-03-13-1
+
 * `static_assert` must have message in C++11.
 
-2022-03-13
+
+
+# 2022-03-13
+
 * Added pointer trait `to_address`. Added support for fancy pointers.
 * Updating tests.
 * Added file CHANGELOG.txt.
 
-2022-02-24
+
+
+# 2022-02-24
+
 * Fixed `swap` member functions. Old member functions could create memory leaks
   in case of exceptions.
