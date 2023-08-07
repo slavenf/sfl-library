@@ -1,3 +1,14 @@
+# 1.2.2 (2023-08-07)
+
+* New test script. Added test scripts for CentOS 7 and Arch Linux to test all
+  possible combinations of compiler flags.
+* Converted detailed documentation from AsciiDoc to Markdown format. Markdown
+  is simpler and easier to read and maintain.
+* Updated README file.
+* Converted CHANGELOG file to Markdown format.
+
+
+
 # 1.2.1 (2023-02-23)
 
 * Reorganized tests.
