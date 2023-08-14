@@ -1,3 +1,15 @@
+# 1.2.3 (2023-08-14)
+
+* Refactoring - inheritance. Containers no longer inherit directly from
+  `Allocator`, `Compare` or `KeyEqual`. This solves some rare and obscure
+  problems and errors (for example, `Allocator` with `virtual` member
+  function that has the same name as container's member function).
+  Every container from now has private member class `data` that contains
+  pointers and inherits directly from `Allocator`, `Compare` or `KeyEqual`.
+  Empty base optimization is also used in this case.
+
+
+
 # 1.2.2 (2023-08-07)
 
 * New test script. Added test scripts for CentOS 7 and Arch Linux to test all
