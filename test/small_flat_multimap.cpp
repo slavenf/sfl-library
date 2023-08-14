@@ -29,6 +29,21 @@
 
 #define CHECK(expr) assert(expr)
 
+static_assert
+(
+    sizeof(sfl::small_flat_multimap<double, double, 0>) ==
+        3 * sizeof(sfl::small_flat_multimap<double, double, 0>::pointer),
+    "Invalid size"
+);
+
+static_assert
+(
+    sizeof(sfl::small_flat_multimap<double, double, 5>) ==
+        3 * sizeof(sfl::small_flat_multimap<double, double, 5>::pointer) +
+        5 * sizeof(sfl::small_flat_multimap<double, double, 5>::value_type),
+    "Invalid size"
+);
+
 int main()
 {
     using std::cout;

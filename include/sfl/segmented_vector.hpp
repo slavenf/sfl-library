@@ -645,7 +645,7 @@ private:
 template < typename T,
            std::size_t N,
            typename Allocator = std::allocator<T> >
-class segmented_vector : private Allocator
+class segmented_vector
 {
     static_assert(N > 0, "N must be greater than zero.");
 
@@ -707,7 +707,7 @@ public:
 
 private:
 
-    class segmented_vector_data
+    class data_base
     {
     public:
 
@@ -720,7 +720,45 @@ private:
         iterator end_;
     };
 
-    segmented_vector_data data_;
+    class data
+        : public data_base
+        , public allocator_type
+    {
+    public:
+
+        data() noexcept
+        (
+            std::is_nothrow_default_constructible<allocator_type>::value
+        )
+            : allocator_type()
+        {}
+
+        data(const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value
+        )
+            : allocator_type(alloc)
+        {}
+
+        data(allocator_type&& other) noexcept
+        (
+            std::is_nothrow_move_constructible<allocator_type>::value
+        )
+            : allocator_type(std::move(other))
+        {}
+
+        allocator_type& ref_to_alloc() noexcept
+        {
+            return *this;
+        }
+
+        const allocator_type& ref_to_alloc() const noexcept
+        {
+            return *this;
+        }
+    };
+
+    data data_;
 
 public:
 
@@ -729,37 +767,37 @@ public:
     //
 
     segmented_vector()
-        : Allocator()
+        : data_()
     {
         initialize_empty();
     }
 
     explicit segmented_vector(const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_empty();
     }
 
     segmented_vector(size_type n)
-        : Allocator()
+        : data_()
     {
         initialize_default_n(n);
     }
 
     explicit segmented_vector(size_type n, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_default_n(n);
     }
 
     segmented_vector(size_type n, const T& value)
-        : Allocator()
+        : data_()
     {
         initialize_fill_n(n, value);
     }
 
     segmented_vector(size_type n, const T& value, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_fill_n(n, value);
     }
@@ -771,7 +809,7 @@ public:
         >::type* = nullptr
     >
     segmented_vector(InputIt first, InputIt last)
-        : Allocator()
+        : data_()
     {
         initialize_range
         (
@@ -788,7 +826,7 @@ public:
         >::type* = nullptr
     >
     segmented_vector(InputIt first, InputIt last, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_range
         (
@@ -799,33 +837,19 @@ public:
     }
 
     segmented_vector(std::initializer_list<T> ilist)
-        : Allocator()
-    {
-        initialize_range
-        (
-            ilist.begin(),
-            ilist.end(),
-            std::random_access_iterator_tag()
-        );
-    }
+        : segmented_vector(ilist.begin(), ilist.end())
+    {}
 
     segmented_vector(std::initializer_list<T> ilist, const Allocator& alloc)
-        : Allocator(alloc)
-    {
-        initialize_range
-        (
-            ilist.begin(),
-            ilist.end(),
-            std::random_access_iterator_tag()
-        );
-    }
+        : segmented_vector(ilist.begin(), ilist.end(), alloc)
+    {}
 
     segmented_vector(const segmented_vector& other)
-        : Allocator
+        : data_
         (
             allocator_traits::select_on_container_copy_construction
             (
-                other.ref_to_alloc()
+                other.data_.ref_to_alloc()
             )
         )
     {
@@ -833,19 +857,19 @@ public:
     }
 
     segmented_vector(const segmented_vector& other, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_copy(other);
     }
 
     segmented_vector(segmented_vector&& other)
-        : Allocator(std::move(other.ref_to_alloc()))
+        : data_(std::move(other.data_.ref_to_alloc()))
     {
         initialize_move(other);
     }
 
     segmented_vector(segmented_vector&& other, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_move(other);
     }
@@ -854,7 +878,7 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -927,7 +951,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return ref_to_alloc();
+        return data_.ref_to_alloc();
     }
 
     //
@@ -1062,7 +1086,7 @@ public:
     {
         return std::min<size_type>
         (
-            allocator_traits::max_size(ref_to_alloc()),
+            allocator_traits::max_size(data_.ref_to_alloc()),
             std::numeric_limits<difference_type>::max() / sizeof(value_type)
         );
     }
@@ -1182,7 +1206,7 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -1210,7 +1234,7 @@ public:
         {
             SFL_DTL::construct_at
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_.elem_,
                 std::forward<Args>(args)...
             );
@@ -1224,11 +1248,11 @@ public:
             // reference to element in this container and after that
             // we will move elements and insert new element.
 
-            temporary_value temp(ref_to_alloc(), std::forward<Args>(args)...);
+            temporary_value temp(data_.ref_to_alloc(), std::forward<Args>(args)...);
 
             SFL_DTL::construct_at
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_.elem_,
                 std::move(*(data_.last_ - 1))
             );
@@ -1318,7 +1342,7 @@ public:
 
         --data_.last_;
 
-        SFL_DTL::destroy_at(ref_to_alloc(), data_.last_.elem_);
+        SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_.elem_);
     }
 
     iterator erase(const_iterator pos)
@@ -1334,7 +1358,7 @@ public:
 
         --data_.last_;
 
-        SFL_DTL::destroy_at(ref_to_alloc(), data_.last_.elem_);
+        SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_.elem_);
 
         return p;
     }
@@ -1359,7 +1383,7 @@ public:
 
         iterator new_last = data_.last_ - n;
 
-        SFL_DTL::destroy(ref_to_alloc(), new_last, data_.last_);
+        SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
@@ -1383,7 +1407,7 @@ public:
 
             data_.last_ = SFL_DTL::uninitialized_default_construct_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_,
                 delta
             );
@@ -1394,7 +1418,7 @@ public:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_last,
                 data_.last_
             );
@@ -1420,7 +1444,7 @@ public:
 
             data_.last_ = SFL_DTL::uninitialized_fill_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_,
                 delta,
                 value
@@ -1432,7 +1456,7 @@ public:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_last,
                 data_.last_
             );
@@ -1446,7 +1470,7 @@ public:
         SFL_ASSERT
         (
             allocator_traits::propagate_on_container_swap::value ||
-            ref_to_alloc() == other.ref_to_alloc()
+            data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
         if (this == &other)
@@ -1458,7 +1482,7 @@ public:
 
         if (allocator_traits::propagate_on_container_swap::value)
         {
-            swap(ref_to_alloc(), other.ref_to_alloc());
+            swap(data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
 
         swap(data_, other.data_);
@@ -1466,21 +1490,11 @@ public:
 
 private:
 
-    Allocator& ref_to_alloc() noexcept
-    {
-        return *this;
-    }
-
-    const Allocator& ref_to_alloc() const noexcept
-    {
-        return *this;
-    }
-
     class temporary_value
     {
     private:
 
-        Allocator& alloc_;
+        allocator_type& alloc_;
 
         alignas(value_type) unsigned char buffer_[sizeof(value_type)];
 
@@ -1492,7 +1506,7 @@ private:
     public:
 
         template <typename... Args>
-        explicit temporary_value(Allocator& a, Args&&... args) : alloc_(a)
+        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
         {
             SFL_DTL::construct_at
             (
@@ -1519,7 +1533,7 @@ private:
     ///
     segment_pointer allocate_table(size_type n)
     {
-        segment_allocator seg_alloc(ref_to_alloc());
+        segment_allocator seg_alloc(data_.ref_to_alloc());
         return SFL_DTL::allocate(seg_alloc, n);
     }
 
@@ -1528,7 +1542,7 @@ private:
     ///
     void deallocate_table(segment_pointer p, size_type n) noexcept
     {
-        segment_allocator seg_alloc(ref_to_alloc());
+        segment_allocator seg_alloc(data_.ref_to_alloc());
         SFL_DTL::deallocate(seg_alloc, p, n);
     }
 
@@ -1537,7 +1551,7 @@ private:
     ///
     pointer allocate_segment()
     {
-        return SFL_DTL::allocate(ref_to_alloc(), N);
+        return SFL_DTL::allocate(data_.ref_to_alloc(), N);
     }
 
     /// Deallocates segments at `p`.
@@ -1545,7 +1559,7 @@ private:
     ///
     void deallocate_segment(pointer p) noexcept
     {
-        SFL_DTL::deallocate(ref_to_alloc(), p, N);
+        SFL_DTL::deallocate(data_.ref_to_alloc(), p, N);
     }
 
     /// Allocates segments in table in range [first, last).
@@ -1784,7 +1798,7 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_default_construct_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n
             );
@@ -1804,7 +1818,7 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_fill_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n,
                 value
@@ -1847,7 +1861,7 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 first,
                 last,
                 data_.first_
@@ -1868,7 +1882,7 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 data_.first_
@@ -1883,7 +1897,7 @@ private:
 
     void initialize_move(segmented_vector& other)
     {
-        if (ref_to_alloc() == other.ref_to_alloc())
+        if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             construct_storage(0);
             using std::swap;
@@ -1897,7 +1911,7 @@ private:
             {
                 data_.last_ = SFL_DTL::uninitialized_move
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     other.data_.first_,
                     other.data_.last_,
                     data_.first_
@@ -1933,7 +1947,7 @@ private:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_last,
                 data_.last_
             );
@@ -1951,7 +1965,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_fill_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_,
                 n - s,
                 value
@@ -1982,7 +1996,7 @@ private:
         }
         else if (curr < data_.last_)
         {
-            SFL_DTL::destroy(ref_to_alloc(), curr, data_.last_);
+            SFL_DTL::destroy(data_.ref_to_alloc(), curr, data_.last_);
             data_.last_ = curr;
         }
     }
@@ -2012,7 +2026,7 @@ private:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_last,
                 data_.last_
             );
@@ -2032,7 +2046,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 mid,
                 last,
                 data_.last_
@@ -2046,11 +2060,11 @@ private:
         {
             if (allocator_traits::propagate_on_container_copy_assignment::value)
             {
-                if (ref_to_alloc() != other.ref_to_alloc())
+                if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
                 {
                     // Create temporary vector using other allocator.
                     // There are no effects if allocation fails.
-                    segmented_vector temp(other.ref_to_alloc());
+                    segmented_vector temp(other.data_.ref_to_alloc());
 
                     // Clear and destroy current storage (noexcept).
                     clear();
@@ -2071,7 +2085,7 @@ private:
                 }
 
                 // Propagate allocator (noexcept).
-                ref_to_alloc() = other.ref_to_alloc();
+                data_.ref_to_alloc() = other.data_.ref_to_alloc();
             }
 
             assign_range
@@ -2087,11 +2101,11 @@ private:
     {
         if (allocator_traits::propagate_on_container_move_assignment::value)
         {
-            if (ref_to_alloc() != other.ref_to_alloc())
+            if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
             {
                 // Create temporary vector using other allocator.
                 // There are no effects if allocation fails.
-                segmented_vector temp(other.ref_to_alloc());
+                segmented_vector temp(other.data_.ref_to_alloc());
 
                 // Clear and destroy current storage (noexcept).
                 clear();
@@ -2112,10 +2126,10 @@ private:
             }
 
             // Propagate allocator (noexcept).
-            ref_to_alloc() = std::move(other.ref_to_alloc());
+            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
         }
 
-        if (ref_to_alloc() == other.ref_to_alloc())
+        if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             using std::swap;
             swap(data_, other.data_);
@@ -2156,7 +2170,7 @@ private:
         // in this container and after that we will move elements and
         // insert new element.
 
-        temporary_value temp(ref_to_alloc(), value);
+        temporary_value temp(data_.ref_to_alloc(), value);
 
         const size_type num_elems_after = data_.last_ - p;
 
@@ -2166,7 +2180,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_ - n,
                 data_.last_,
                 data_.last_
@@ -2192,7 +2206,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_fill_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_,
                 n - num_elems_after,
                 temp.value()
@@ -2200,7 +2214,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 p,
                 old_last,
                 data_.last_
@@ -2265,7 +2279,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_ - n,
                 data_.last_,
                 data_.last_
@@ -2293,7 +2307,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 mid,
                 last,
                 data_.last_
@@ -2301,7 +2315,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 p,
                 old_last,
                 data_.last_

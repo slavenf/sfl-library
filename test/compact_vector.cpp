@@ -29,6 +29,13 @@
 
 #define CHECK(expr) assert(expr)
 
+static_assert
+(
+    sizeof(sfl::compact_vector<int>) ==
+        2 * sizeof(sfl::compact_vector<int>::pointer),
+    "Invalid size"
+);
+
 int main()
 {
     using std::cout;

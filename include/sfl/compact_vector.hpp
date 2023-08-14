@@ -363,7 +363,7 @@ SFL_DTL_END ///////////////////////////////////////////////////////////////////
 //
 
 template <typename T, typename Allocator = std::allocator<T>>
-class compact_vector : private Allocator
+class compact_vector
 {
 public:
 
@@ -389,18 +389,58 @@ public:
 
 private:
 
-    class compact_vector_data
+    class data_base
     {
     public:
 
         pointer first_;
         pointer last_;
 
-        compact_vector_data() noexcept : first_(nullptr), last_(nullptr)
+        data_base() noexcept
+            : first_(nullptr)
+            , last_(nullptr)
         {}
     };
 
-    compact_vector_data data_;
+    class data
+        : public data_base
+        , public allocator_type
+    {
+    public:
+
+        data() noexcept
+        (
+            std::is_nothrow_default_constructible<allocator_type>::value
+        )
+            : allocator_type()
+        {}
+
+        data(const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value
+        )
+            : allocator_type(alloc)
+        {}
+
+        data(allocator_type&& other) noexcept
+        (
+            std::is_nothrow_move_constructible<allocator_type>::value
+        )
+            : allocator_type(std::move(other))
+        {}
+
+        allocator_type& ref_to_alloc() noexcept
+        {
+            return *this;
+        }
+
+        const allocator_type& ref_to_alloc() const noexcept
+        {
+            return *this;
+        }
+    };
+
+    data data_;
 
 public:
 
@@ -412,36 +452,36 @@ public:
     (
         std::is_nothrow_default_constructible<Allocator>::value
     )
-        : Allocator()
+        : data_()
     {}
 
     explicit compact_vector(const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value
     )
-        : Allocator(alloc)
+        : data_(alloc)
     {}
 
     explicit compact_vector(size_type n)
-        : Allocator()
+        : data_()
     {
         initialize_default_n(n);
     }
 
     explicit compact_vector(size_type n, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_default_n(n);
     }
 
     compact_vector(size_type n, const T& value)
-        : Allocator()
+        : data_()
     {
         initialize_fill_n(n, value);
     }
 
     compact_vector(size_type n, const T& value, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_fill_n(n, value);
     }
@@ -453,7 +493,7 @@ public:
         >::type* = nullptr
     >
     compact_vector(InputIt first, InputIt last)
-        : Allocator()
+        : data_()
     {
         initialize_range
         (
@@ -470,7 +510,7 @@ public:
         >::type* = nullptr
     >
     compact_vector(InputIt first, InputIt last, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_range
         (
@@ -489,11 +529,11 @@ public:
     {}
 
     compact_vector(const compact_vector& other)
-        : Allocator
+        : data_
         (
             allocator_traits::select_on_container_copy_construction
             (
-                other.ref_to_alloc()
+                other.data_.ref_to_alloc()
             )
         )
     {
@@ -501,19 +541,19 @@ public:
     }
 
     compact_vector(const compact_vector& other, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_copy(other);
     }
 
     compact_vector(compact_vector&& other)
-        : Allocator(std::move(other.ref_to_alloc()))
+        : data_(std::move(other.data_.ref_to_alloc()))
     {
         initialize_move(other);
     }
 
     compact_vector(compact_vector&& other, const Allocator& alloc)
-        : Allocator(alloc)
+        : data_(alloc)
     {
         initialize_move(other);
     }
@@ -522,14 +562,14 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
 
         SFL_DTL::deallocate
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_ - data_.first_
         );
@@ -600,7 +640,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return ref_to_alloc();
+        return data_.ref_to_alloc();
     }
 
     //
@@ -721,7 +761,7 @@ public:
     {
         return std::min<size_type>
         (
-            allocator_traits::max_size(ref_to_alloc()),
+            allocator_traits::max_size(data_.ref_to_alloc()),
             std::numeric_limits<difference_type>::max() / sizeof(value_type)
         );
     }
@@ -820,14 +860,14 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
 
         SFL_DTL::deallocate
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_ - data_.first_
         );
@@ -850,7 +890,7 @@ public:
             SFL_DTL::throw_length_error("sfl::compact_vector::emplace");
         }
 
-        pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_size);
+        pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_size);
         pointer new_last  = new_first;
 
         SFL_TRY
@@ -862,7 +902,7 @@ public:
 
             SFL_DTL::construct_at
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first + offset,
                 std::forward<Args>(args)...
             );
@@ -871,7 +911,7 @@ public:
 
             new_last = SFL_DTL::uninitialized_move_if_noexcept
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.first_ + offset,
                 new_first
@@ -881,7 +921,7 @@ public:
 
             new_last = SFL_DTL::uninitialized_move_if_noexcept
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_ + offset,
                 data_.last_,
                 new_last
@@ -893,7 +933,7 @@ public:
             {
                 SFL_DTL::destroy_at
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first + offset
                 );
             }
@@ -901,7 +941,7 @@ public:
             {
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first,
                     new_last
                 );
@@ -909,7 +949,7 @@ public:
 
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first,
                 new_size
             );
@@ -919,14 +959,14 @@ public:
 
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
 
         SFL_DTL::deallocate
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_ - data_.first_
         );
@@ -1027,14 +1067,14 @@ public:
 
         const size_type new_size = size() - std::distance(first, last);
 
-        pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_size);
+        pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_size);
         pointer new_last  = new_first;
 
         SFL_TRY
         {
             new_last = SFL_DTL::uninitialized_move_if_noexcept
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.first_ + offset1,
                 new_first
@@ -1042,7 +1082,7 @@ public:
 
             new_last = SFL_DTL::uninitialized_move_if_noexcept
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_ + offset2,
                 data_.last_,
                 new_last
@@ -1052,14 +1092,14 @@ public:
         {
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first,
                 new_last
             );
 
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first,
                 new_size
             );
@@ -1069,14 +1109,14 @@ public:
 
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
 
         SFL_DTL::deallocate
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_ - data_.first_
         );
@@ -1099,7 +1139,7 @@ public:
             SFL_DTL::throw_length_error("sfl::compact_vector::resize");
         }
 
-        pointer new_first = SFL_DTL::allocate(ref_to_alloc(), n);
+        pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), n);
         pointer new_last  = new_first;
 
         SFL_TRY
@@ -1108,7 +1148,7 @@ public:
             {
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_,
                     new_first
@@ -1116,7 +1156,7 @@ public:
 
                 new_last = SFL_DTL::uninitialized_default_construct_n
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_last,
                     n - size()
                 );
@@ -1125,7 +1165,7 @@ public:
             {
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.first_ + n,
                     new_first
@@ -1136,14 +1176,14 @@ public:
         {
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first,
                 new_last
             );
 
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first,
                 n
             );
@@ -1153,14 +1193,14 @@ public:
 
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
 
         SFL_DTL::deallocate
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_ - data_.first_
         );
@@ -1181,7 +1221,7 @@ public:
             SFL_DTL::throw_length_error("sfl::compact_vector::resize");
         }
 
-        pointer new_first = SFL_DTL::allocate(ref_to_alloc(), n);
+        pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), n);
         pointer new_last  = new_first;
 
         SFL_TRY
@@ -1190,7 +1230,7 @@ public:
             {
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_,
                     new_first
@@ -1198,7 +1238,7 @@ public:
 
                 new_last = SFL_DTL::uninitialized_fill_n
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_last,
                     n - size(),
                     value
@@ -1208,7 +1248,7 @@ public:
             {
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.first_ + n,
                     new_first
@@ -1219,14 +1259,14 @@ public:
         {
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first,
                 new_last
             );
 
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 new_first,
                 n
             );
@@ -1236,14 +1276,14 @@ public:
 
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
 
         SFL_DTL::deallocate
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_ - data_.first_
         );
@@ -1264,7 +1304,7 @@ public:
         SFL_ASSERT
         (
             allocator_traits::propagate_on_container_swap::value ||
-            ref_to_alloc() == other.ref_to_alloc()
+            data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
         // If this and other allocator compares equal then one allocator
@@ -1274,7 +1314,7 @@ public:
 
         if (allocator_traits::propagate_on_container_swap::value)
         {
-            swap(ref_to_alloc(), other.ref_to_alloc());
+            swap(data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
 
         swap(data_.first_, other.data_.first_);
@@ -1282,16 +1322,6 @@ public:
     }
 
 private:
-
-    Allocator& ref_to_alloc() noexcept
-    {
-        return *this;
-    }
-
-    const Allocator& ref_to_alloc() const noexcept
-    {
-        return *this;
-    }
 
     void initialize_default_n(size_type n)
     {
@@ -1303,14 +1333,14 @@ private:
             );
         }
 
-        data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+        data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
         data_.last_  = data_.first_;
 
         SFL_TRY
         {
             data_.last_ = SFL_DTL::uninitialized_default_construct_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n
             );
@@ -1319,7 +1349,7 @@ private:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n
             );
@@ -1338,14 +1368,14 @@ private:
             );
         }
 
-        data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+        data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
         data_.last_  = data_.first_;
 
         SFL_TRY
         {
             data_.last_ = SFL_DTL::uninitialized_fill_n
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n,
                 value
@@ -1355,7 +1385,7 @@ private:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n
             );
@@ -1379,14 +1409,14 @@ private:
         {
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_
             );
 
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_ - data_.first_
             );
@@ -1408,14 +1438,14 @@ private:
             );
         }
 
-        data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+        data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
         data_.last_  = data_.first_;
 
         SFL_TRY
         {
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 first,
                 last,
                 data_.first_
@@ -1425,7 +1455,7 @@ private:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n
             );
@@ -1446,14 +1476,14 @@ private:
             );
         }
 
-        data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+        data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
         data_.last_  = data_.first_;
 
         SFL_TRY
         {
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 data_.first_
@@ -1463,7 +1493,7 @@ private:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 n
             );
@@ -1474,7 +1504,7 @@ private:
 
     void initialize_move(compact_vector& other)
     {
-        if (ref_to_alloc() == other.ref_to_alloc())
+        if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             data_.first_ = other.data_.first_;
             data_.last_  = other.data_.last_;
@@ -1494,14 +1524,14 @@ private:
                 );
             }
 
-            data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
             data_.last_  = data_.first_;
 
             SFL_TRY
             {
                 data_.last_ = SFL_DTL::uninitialized_move
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     other.data_.first_,
                     other.data_.last_,
                     data_.first_
@@ -1511,7 +1541,7 @@ private:
             {
                 SFL_DTL::deallocate
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     n
                 );
@@ -1544,14 +1574,14 @@ private:
         {
             clear();
 
-            data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
             data_.last_  = data_.first_;
 
             SFL_TRY
             {
                 data_.last_ = SFL_DTL::uninitialized_fill_n
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     n,
                     value
@@ -1603,14 +1633,14 @@ private:
         {
             clear();
 
-            data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
             data_.last_  = data_.first_;
 
             SFL_TRY
             {
                 data_.last_ = SFL_DTL::uninitialized_copy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     first,
                     last,
                     data_.first_
@@ -1630,12 +1660,12 @@ private:
         {
             if (allocator_traits::propagate_on_container_copy_assignment::value)
             {
-                if (ref_to_alloc() != other.ref_to_alloc())
+                if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
                 {
                     clear();
                 }
 
-                ref_to_alloc() = other.ref_to_alloc();
+                data_.ref_to_alloc() = other.data_.ref_to_alloc();
             }
 
             assign_range
@@ -1651,15 +1681,15 @@ private:
     {
         if (allocator_traits::propagate_on_container_move_assignment::value)
         {
-            if (ref_to_alloc() != other.ref_to_alloc())
+            if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
             {
                 clear();
             }
 
-            ref_to_alloc() = std::move(other.ref_to_alloc());
+            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
         }
 
-        if (ref_to_alloc() == other.ref_to_alloc())
+        if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             clear();
 
@@ -1696,7 +1726,7 @@ private:
                 );
             }
 
-            pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_size);
+            pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_size);
             pointer new_last  = new_first;
 
             SFL_TRY
@@ -1707,7 +1737,7 @@ private:
 
                 SFL_DTL::uninitialized_fill_n
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first + offset,
                     n,
                     value
@@ -1717,7 +1747,7 @@ private:
 
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.first_ + offset,
                     new_first
@@ -1727,7 +1757,7 @@ private:
 
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_ + offset,
                     data_.last_,
                     new_last
@@ -1739,7 +1769,7 @@ private:
                 {
                     SFL_DTL::destroy_n
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first + offset,
                         n
                     );
@@ -1748,7 +1778,7 @@ private:
                 {
                     SFL_DTL::destroy
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_last
                     );
@@ -1756,7 +1786,7 @@ private:
 
                 SFL_DTL::deallocate
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first,
                     new_size
                 );
@@ -1766,14 +1796,14 @@ private:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_
             );
 
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_ - data_.first_
             );
@@ -1819,14 +1849,14 @@ private:
                 );
             }
 
-            pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_size);
+            pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_size);
             pointer new_last  = new_first;
 
             SFL_TRY
             {
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.first_ + offset,
                     new_first
@@ -1834,7 +1864,7 @@ private:
 
                 new_last = SFL_DTL::uninitialized_copy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     first,
                     last,
                     new_last
@@ -1842,7 +1872,7 @@ private:
 
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_ + offset,
                     data_.last_,
                     new_last
@@ -1852,14 +1882,14 @@ private:
             {
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first,
                     new_last
                 );
 
                 SFL_DTL::deallocate
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first,
                     new_size
                 );
@@ -1869,14 +1899,14 @@ private:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_
             );
 
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_ - data_.first_
             );

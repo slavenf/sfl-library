@@ -352,101 +352,6 @@ inline void throw_out_of_range(const char* msg)
     #endif
 }
 
-//
-// ---- SMALL UNORDERED FLAT MAP ----------------------------------------------
-//
-
-template <typename T, typename Pointer, std::size_t N>
-class small_unordered_flat_map_data
-{
-private:
-
-    alignas(T) unsigned char internal_storage_[N * sizeof(T)];
-
-public:
-
-    Pointer first_;
-    Pointer last_;
-    Pointer end_;
-
-    small_unordered_flat_map_data() noexcept
-        : first_
-        (
-            std::pointer_traits<Pointer>::pointer_to
-            (
-                *reinterpret_cast<T*>(internal_storage_)
-            )
-        )
-        , last_(first_)
-        , end_(first_ + N)
-    {}
-
-    Pointer internal_storage() noexcept
-    {
-        return std::pointer_traits<Pointer>::pointer_to
-        (
-            *reinterpret_cast<T*>(internal_storage_)
-        );
-    }
-};
-
-template <typename T, typename Pointer>
-class small_unordered_flat_map_data<T, Pointer, 0>
-{
-public:
-
-    Pointer first_;
-    Pointer last_;
-    Pointer end_;
-
-    small_unordered_flat_map_data() noexcept
-        : first_(nullptr)
-        , last_(nullptr)
-        , end_(nullptr)
-    {}
-
-    Pointer internal_storage() noexcept
-    {
-        return nullptr;
-    }
-};
-
-template <typename Key, typename T, typename KeyEqual>
-class small_unordered_flat_map_equal : public KeyEqual
-{
-public:
-
-    small_unordered_flat_map_equal() noexcept
-    (
-        std::is_nothrow_default_constructible<KeyEqual>::value
-    )
-    {}
-
-    small_unordered_flat_map_equal(const KeyEqual& e) noexcept
-    (
-        std::is_nothrow_copy_constructible<KeyEqual>::value
-    )
-        : KeyEqual(e)
-    {}
-
-    bool operator()(const std::pair<Key, T>& x, const std::pair<Key, T>& y) const
-    {
-        return KeyEqual::operator()(x.first, y.first);
-    }
-
-    template <typename K>
-    bool operator()(const std::pair<Key, T>& x, const K& y) const
-    {
-        return KeyEqual::operator()(x.first, y);
-    }
-
-    template <typename K>
-    bool operator()(const K& x, const std::pair<Key, T>& y) const
-    {
-        return KeyEqual::operator()(x, y.first);
-    }
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 SFL_DTL_END ///////////////////////////////////////////////////////////////////
@@ -463,13 +368,7 @@ template < typename Key,
            typename KeyEqual = std::equal_to<Key>,
            typename Allocator = std::allocator<std::pair<Key, T>> >
 class small_unordered_flat_map
-    : private Allocator
-    , private SFL_DTL::small_unordered_flat_map_equal<Key, T, KeyEqual>
 {
-private:
-
-    using MyEqual = SFL_DTL::small_unordered_flat_map_equal<Key, T, KeyEqual>;
-
 public:
 
     using allocator_type   = Allocator;
@@ -487,7 +386,7 @@ public:
     using iterator         = pointer;
     using const_iterator   = const_pointer;
 
-    class value_equal : private key_equal
+    class value_equal : protected key_equal
     {
         friend class small_unordered_flat_map;
 
@@ -512,7 +411,188 @@ public:
 
 private:
 
-    SFL_DTL::small_unordered_flat_map_data<value_type, pointer, N> data_;
+    // Like `value_equal` but with additional operators.
+    // For internal use only.
+    class ultra_equal : public key_equal
+    {
+    public:
+
+        ultra_equal() noexcept
+        (
+            std::is_nothrow_default_constructible<key_equal>::value
+        )
+        {}
+
+        ultra_equal(const key_equal& e) noexcept
+        (
+            std::is_nothrow_copy_constructible<key_equal>::value
+        )
+            : key_equal(e)
+        {}
+
+        ultra_equal(key_equal&& e) noexcept
+        (
+            std::is_nothrow_move_constructible<key_equal>::value
+        )
+            : key_equal(std::move(e))
+        {}
+
+        bool operator()(const value_type& x, const value_type& y) const
+        {
+            return key_equal::operator()(x.first, y.first);
+        }
+
+        template <typename K>
+        bool operator()(const value_type& x, const K& y) const
+        {
+            return key_equal::operator()(x.first, y);
+        }
+
+        template <typename K>
+        bool operator()(const K& x, const value_type& y) const
+        {
+            return key_equal::operator()(x, y.first);
+        }
+    };
+
+    template <bool WithInternalStorage = true, typename = void>
+    class data_base
+    {
+    private:
+
+        alignas(value_type) unsigned char internal_storage_[N * sizeof(value_type)];
+
+    public:
+
+        pointer first_;
+        pointer last_;
+        pointer end_;
+
+        data_base() noexcept
+            : first_
+            (
+                std::pointer_traits<pointer>::pointer_to
+                (
+                    *reinterpret_cast<value_type*>(internal_storage_)
+                )
+            )
+            , last_(first_)
+            , end_(first_ + N)
+        {}
+
+        pointer internal_storage() noexcept
+        {
+            return std::pointer_traits<pointer>::pointer_to
+            (
+                *reinterpret_cast<value_type*>(internal_storage_)
+            );
+        }
+    };
+
+    template <typename Dummy>
+    class data_base<false, Dummy>
+    {
+    public:
+
+        pointer first_;
+        pointer last_;
+        pointer end_;
+
+        data_base() noexcept
+            : first_(nullptr)
+            , last_(nullptr)
+            , end_(nullptr)
+        {}
+
+        pointer internal_storage() noexcept
+        {
+            return nullptr;
+        }
+    };
+
+    class data
+        : public data_base<(N > 0)>
+        , public allocator_type
+        , public ultra_equal
+    {
+    public:
+
+        data() noexcept
+        (
+            std::is_nothrow_default_constructible<allocator_type>::value &&
+            std::is_nothrow_default_constructible<ultra_equal>::value
+        )
+            : allocator_type()
+            , ultra_equal()
+        {}
+
+        data(const ultra_equal& equal) noexcept
+        (
+            std::is_nothrow_default_constructible<allocator_type>::value &&
+            std::is_nothrow_copy_constructible<ultra_equal>::value
+        )
+            : allocator_type()
+            , ultra_equal(equal)
+        {}
+
+        data(const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value &&
+            std::is_nothrow_default_constructible<ultra_equal>::value
+        )
+            : allocator_type(alloc)
+            , ultra_equal()
+        {}
+
+        data(const ultra_equal& equal, const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value &&
+            std::is_nothrow_copy_constructible<ultra_equal>::value
+        )
+            : allocator_type(alloc)
+            , ultra_equal(equal)
+        {}
+
+        data(ultra_equal&& equal, allocator_type&& alloc) noexcept
+        (
+            std::is_nothrow_move_constructible<allocator_type>::value &&
+            std::is_nothrow_move_constructible<ultra_equal>::value
+        )
+            : allocator_type(std::move(alloc))
+            , ultra_equal(std::move(equal))
+        {}
+
+        data(ultra_equal&& equal, const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value &&
+            std::is_nothrow_move_constructible<ultra_equal>::value
+        )
+            : allocator_type(alloc)
+            , ultra_equal(std::move(equal))
+        {}
+
+        allocator_type& ref_to_alloc() noexcept
+        {
+            return *this;
+        }
+
+        const allocator_type& ref_to_alloc() const noexcept
+        {
+            return *this;
+        }
+
+        ultra_equal& ref_to_equal() noexcept
+        {
+            return *this;
+        }
+
+        const ultra_equal& ref_to_equal() const noexcept
+        {
+            return *this;
+        }
+    };
+
+    data data_;
 
 public:
 
@@ -525,8 +605,7 @@ public:
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     )
-        : Allocator()
-        , MyEqual()
+        : data_()
     {}
 
     explicit small_unordered_flat_map(const KeyEqual& equal) noexcept
@@ -534,8 +613,7 @@ public:
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     )
-        : Allocator()
-        , MyEqual(equal)
+        : data_(equal)
     {}
 
     explicit small_unordered_flat_map(const Allocator& alloc) noexcept
@@ -543,8 +621,7 @@ public:
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     )
-        : Allocator(alloc)
-        , MyEqual()
+        : data_(alloc)
     {}
 
     explicit small_unordered_flat_map(const KeyEqual& equal,
@@ -553,8 +630,7 @@ public:
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     )
-        : Allocator(alloc)
-        , MyEqual(equal)
+        : data_(equal, alloc)
     {}
 
     template <typename InputIt,
@@ -564,8 +640,7 @@ public:
         >::type* = nullptr
     >
     small_unordered_flat_map(InputIt first, InputIt last)
-        : Allocator()
-        , MyEqual()
+        : data_()
     {
         initialize_range(first, last);
     }
@@ -578,8 +653,7 @@ public:
     >
     small_unordered_flat_map(InputIt first, InputIt last,
                              const KeyEqual& equal)
-        : Allocator()
-        , MyEqual(equal)
+        : data_(equal)
     {
         initialize_range(first, last);
     }
@@ -592,8 +666,7 @@ public:
     >
     small_unordered_flat_map(InputIt first, InputIt last,
                              const Allocator& alloc)
-        : Allocator(alloc)
-        , MyEqual()
+        : data_(alloc)
     {
         initialize_range(first, last);
     }
@@ -607,8 +680,7 @@ public:
     small_unordered_flat_map(InputIt first, InputIt last,
                              const KeyEqual& equal,
                              const Allocator& alloc)
-        : Allocator(alloc)
-        , MyEqual(equal)
+        : data_(equal, alloc)
     {
         initialize_range(first, last);
     }
@@ -634,37 +706,46 @@ public:
     {}
 
     small_unordered_flat_map(const small_unordered_flat_map& other)
-        : Allocator
+        : data_
         (
+            other.data_.ref_to_equal(),
             allocator_traits::select_on_container_copy_construction
             (
-                other.ref_to_alloc()
+                other.data_.ref_to_alloc()
             )
         )
-        , MyEqual(other.ref_to_equal())
     {
         initialize_copy(other);
     }
 
     small_unordered_flat_map(const small_unordered_flat_map& other,
                              const Allocator& alloc)
-        : Allocator(alloc)
-        , MyEqual(other.ref_to_equal())
+        : data_
+        (
+            other.data_.ref_to_equal(),
+            alloc
+        )
     {
         initialize_copy(other);
     }
 
     small_unordered_flat_map(small_unordered_flat_map&& other)
-        : Allocator(std::move(other.ref_to_alloc()))
-        , MyEqual(std::move(other.ref_to_equal()))
+        : data_
+        (
+            std::move(other.data_.ref_to_equal()),
+            std::move(other.data_.ref_to_alloc())
+        )
     {
         initialize_move(other);
     }
 
     small_unordered_flat_map(small_unordered_flat_map&& other,
                              const Allocator& alloc)
-        : Allocator(alloc)
-        , MyEqual(std::move(other.ref_to_equal()))
+        : data_
+        (
+            std::move(other.data_.ref_to_equal()),
+            alloc
+        )
     {
         initialize_move(other);
     }
@@ -673,7 +754,7 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -682,7 +763,7 @@ public:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.end_ - data_.first_
             );
@@ -719,7 +800,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return ref_to_alloc();
+        return data_.ref_to_alloc();
     }
 
     //
@@ -729,7 +810,7 @@ public:
     SFL_NODISCARD
     key_equal key_eq() const
     {
-        return ref_to_equal();
+        return data_.ref_to_equal();
     }
 
     //
@@ -739,7 +820,7 @@ public:
     SFL_NODISCARD
     value_equal value_eq() const
     {
-        return value_equal(ref_to_equal());
+        return value_equal(data_.ref_to_equal());
     }
 
     //
@@ -824,7 +905,7 @@ public:
     {
         return std::min<size_type>
         (
-            allocator_traits::max_size(ref_to_alloc()),
+            allocator_traits::max_size(data_.ref_to_alloc()),
             std::numeric_limits<difference_type>::max() / sizeof(value_type)
         );
     }
@@ -858,7 +939,7 @@ public:
 
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -866,14 +947,14 @@ public:
 
                     SFL_DTL::destroy
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_
                     );
 
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -885,7 +966,7 @@ public:
             }
             else
             {
-                pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+                pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
@@ -893,7 +974,7 @@ public:
                 {
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -903,7 +984,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_cap
                     );
@@ -913,7 +994,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_
                 );
@@ -922,7 +1003,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -958,7 +1039,7 @@ public:
 
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -966,14 +1047,14 @@ public:
 
                     SFL_DTL::destroy
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_
                     );
 
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -985,7 +1066,7 @@ public:
             }
             else
             {
-                pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+                pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
@@ -993,7 +1074,7 @@ public:
                 {
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -1003,7 +1084,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_cap
                     );
@@ -1013,7 +1094,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_
                 );
@@ -1022,7 +1103,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -1043,7 +1124,7 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -1054,7 +1135,7 @@ public:
     template <typename... Args>
     std::pair<iterator, bool> emplace(Args&&... args)
     {
-        temporary_value tmp(ref_to_alloc(), std::forward<Args>(args)...);
+        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
 
         auto it = find(tmp.value().first);
 
@@ -1105,7 +1186,7 @@ public:
     >
     std::pair<iterator, bool> insert(P&& value)
     {
-        temporary_value tmp(ref_to_alloc(), std::forward<P>(value));
+        temporary_value tmp(data_.ref_to_alloc(), std::forward<P>(value));
 
         auto it = find(tmp.value().first);
 
@@ -1319,7 +1400,7 @@ public:
 
         --data_.last_;
 
-        SFL_DTL::destroy_at(ref_to_alloc(), data_.last_);
+        SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_);
 
         return p;
     }
@@ -1351,7 +1432,7 @@ public:
 
         pointer new_last = data_.last_ - num_elems_remove;
 
-        SFL_DTL::destroy(ref_to_alloc(), new_last, data_.last_);
+        SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
@@ -1402,7 +1483,7 @@ public:
         SFL_ASSERT
         (
             allocator_traits::propagate_on_container_swap::value ||
-            this->ref_to_alloc() == other.ref_to_alloc()
+            this->data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
         // If this and other allocator compares equal then one allocator
@@ -1412,10 +1493,10 @@ public:
 
         if (allocator_traits::propagate_on_container_swap::value)
         {
-            swap(this->ref_to_alloc(), other.ref_to_alloc());
+            swap(this->data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
 
-        swap(this->ref_to_equal(), other.ref_to_equal());
+        swap(this->data_.ref_to_equal(), other.data_.ref_to_equal());
 
         if
         (
@@ -1437,7 +1518,7 @@ public:
 
                 SFL_DTL::uninitialized_move
                 (
-                    this->ref_to_alloc(),
+                    this->data_.ref_to_alloc(),
                     other.data_.first_ + this_size,
                     other.data_.first_ + other_size,
                     this->data_.first_ + this_size
@@ -1445,7 +1526,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    other.ref_to_alloc(),
+                    other.data_.ref_to_alloc(),
                     other.data_.first_ + this_size,
                     other.data_.first_ + other_size
                 );
@@ -1461,7 +1542,7 @@ public:
 
                 SFL_DTL::uninitialized_move
                 (
-                    other.ref_to_alloc(),
+                    other.data_.ref_to_alloc(),
                     this->data_.first_ + other_size,
                     this->data_.first_ + this_size,
                     other.data_.first_ + other_size
@@ -1469,7 +1550,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    this->ref_to_alloc(),
+                    this->data_.ref_to_alloc(),
                     this->data_.first_ + other_size,
                     this->data_.first_ + this_size
                 );
@@ -1490,7 +1571,7 @@ public:
 
             new_other_last = SFL_DTL::uninitialized_move
             (
-                other.ref_to_alloc(),
+                other.data_.ref_to_alloc(),
                 this->data_.first_,
                 this->data_.last_,
                 new_other_first
@@ -1498,7 +1579,7 @@ public:
 
             SFL_DTL::destroy
             (
-                this->ref_to_alloc(),
+                this->data_.ref_to_alloc(),
                 this->data_.first_,
                 this->data_.last_
             );
@@ -1523,7 +1604,7 @@ public:
 
             new_this_last = SFL_DTL::uninitialized_move
             (
-                this->ref_to_alloc(),
+                this->data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 new_this_first
@@ -1531,7 +1612,7 @@ public:
 
             SFL_DTL::destroy
             (
-                other.ref_to_alloc(),
+                other.data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_
             );
@@ -1561,7 +1642,7 @@ public:
     {
         for (auto it = begin(); it != end(); ++it)
         {
-            if (ref_to_equal()(*it, key))
+            if (data_.ref_to_equal()(*it, key))
             {
                 return it;
             }
@@ -1575,7 +1656,7 @@ public:
     {
         for (auto it = begin(); it != end(); ++it)
         {
-            if (ref_to_equal()(*it, key))
+            if (data_.ref_to_equal()(*it, key))
             {
                 return it;
             }
@@ -1595,7 +1676,7 @@ public:
     {
         for (auto it = begin(); it != end(); ++it)
         {
-            if (ref_to_equal()(*it, x))
+            if (data_.ref_to_equal()(*it, x))
             {
                 return it;
             }
@@ -1615,7 +1696,7 @@ public:
     {
         for (auto it = begin(); it != end(); ++it)
         {
-            if (ref_to_equal()(*it, x))
+            if (data_.ref_to_equal()(*it, x))
             {
                 return it;
             }
@@ -1716,26 +1797,6 @@ public:
 
 private:
 
-    Allocator& ref_to_alloc() noexcept
-    {
-        return *this;
-    }
-
-    const Allocator& ref_to_alloc() const noexcept
-    {
-        return *this;
-    }
-
-    MyEqual& ref_to_equal() noexcept
-    {
-        return *this;
-    }
-
-    const MyEqual& ref_to_equal() const noexcept
-    {
-        return *this;
-    }
-
     void check_size(size_type n, const char* msg)
     {
         if (n > max_size())
@@ -1768,7 +1829,7 @@ private:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -1777,7 +1838,7 @@ private:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.end_ - data_.first_
             );
@@ -1789,7 +1850,7 @@ private:
 
         if (new_cap > N)
         {
-            data_.first_ = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
             data_.last_  = data_.first_;
             data_.end_   = data_.first_ + new_cap;
 
@@ -1802,7 +1863,7 @@ private:
     {
     private:
 
-        Allocator& alloc_;
+        allocator_type& alloc_;
 
         alignas(value_type) unsigned char buffer_[sizeof(value_type)];
 
@@ -1814,7 +1875,7 @@ private:
     public:
 
         template <typename... Args>
-        explicit temporary_value(Allocator& a, Args&&... args) : alloc_(a)
+        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
         {
             SFL_DTL::construct_at
             (
@@ -1850,7 +1911,7 @@ private:
         {
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_
             );
@@ -1859,7 +1920,7 @@ private:
             {
                 SFL_DTL::deallocate
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.end_ - data_.first_
                 );
@@ -1877,7 +1938,7 @@ private:
 
         if (n > N)
         {
-            data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
             data_.last_  = data_.first_;
             data_.end_   = data_.first_ + n;
         }
@@ -1886,7 +1947,7 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 data_.first_
@@ -1896,7 +1957,7 @@ private:
         {
             if (n > N)
             {
-                SFL_DTL::deallocate(ref_to_alloc(), data_.first_, n);
+                SFL_DTL::deallocate(data_.ref_to_alloc(), data_.first_, n);
             }
 
             SFL_RETHROW;
@@ -1909,13 +1970,13 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_move
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 data_.first_
             );
         }
-        else if (ref_to_alloc() == other.ref_to_alloc())
+        else if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             data_.first_ = other.data_.first_;
             data_.last_  = other.data_.last_;
@@ -1933,7 +1994,7 @@ private:
 
             if (n > N)
             {
-                data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+                data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
                 data_.last_  = data_.first_;
                 data_.end_   = data_.first_ + n;
             }
@@ -1942,7 +2003,7 @@ private:
             {
                 data_.last_ = SFL_DTL::uninitialized_move
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     other.data_.first_,
                     other.data_.last_,
                     data_.first_
@@ -1952,7 +2013,7 @@ private:
             {
                 if (n > N)
                 {
-                    SFL_DTL::deallocate(ref_to_alloc(), data_.first_, n);
+                    SFL_DTL::deallocate(data_.ref_to_alloc(), data_.first_, n);
                 }
 
                 SFL_RETHROW;
@@ -1982,7 +2043,7 @@ private:
 
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_last,
                     data_.last_
                 );
@@ -2002,7 +2063,7 @@ private:
 
                 data_.last_ = SFL_DTL::uninitialized_copy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     mid,
                     last,
                     data_.last_
@@ -2015,7 +2076,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 first,
                 last,
                 data_.first_
@@ -2029,15 +2090,15 @@ private:
         {
             if (allocator_traits::propagate_on_container_copy_assignment::value)
             {
-                if (ref_to_alloc() != other.ref_to_alloc())
+                if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
                 {
                     reset();
                 }
 
-                ref_to_alloc() = other.ref_to_alloc();
+                data_.ref_to_alloc() = other.data_.ref_to_alloc();
             }
 
-            ref_to_equal() = other.ref_to_equal();
+            data_.ref_to_equal() = other.data_.ref_to_equal();
 
             assign_range(other.data_.first_, other.data_.last_);
         }
@@ -2047,15 +2108,15 @@ private:
     {
         if (allocator_traits::propagate_on_container_move_assignment::value)
         {
-            if (ref_to_alloc() != other.ref_to_alloc())
+            if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
             {
                 reset();
             }
 
-            ref_to_alloc() = std::move(other.ref_to_alloc());
+            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
         }
 
-        ref_to_equal() = other.ref_to_equal();
+        data_.ref_to_equal() = other.data_.ref_to_equal();
 
         if (other.data_.first_ == other.data_.internal_storage())
         {
@@ -2065,7 +2126,7 @@ private:
                 std::make_move_iterator(other.data_.last_)
             );
         }
-        else if (ref_to_alloc() == other.ref_to_alloc())
+        else if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             reset();
 
@@ -2096,7 +2157,7 @@ private:
         {
             SFL_DTL::construct_at
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.last_,
                 std::forward<Args>(args)...
             );
@@ -2122,7 +2183,7 @@ private:
             }
             else
             {
-                new_first = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+                new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
                 new_last  = new_first;
                 new_end   = new_first + new_cap;
             }
@@ -2135,7 +2196,7 @@ private:
 
                 SFL_DTL::construct_at
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_last,
                     std::forward<Args>(args)...
                 );
@@ -2146,7 +2207,7 @@ private:
 
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_,
                     new_last
@@ -2156,7 +2217,7 @@ private:
             {
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first,
                     new_last
                 );
@@ -2165,7 +2226,7 @@ private:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_cap
                     );
@@ -2176,7 +2237,7 @@ private:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_
             );
@@ -2185,7 +2246,7 @@ private:
             {
                 SFL_DTL::deallocate
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.end_ - data_.first_
                 );

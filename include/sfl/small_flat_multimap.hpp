@@ -352,101 +352,6 @@ inline void throw_out_of_range(const char* msg)
     #endif
 }
 
-//
-// ---- SMALL FLAT MULTIMAP ---------------------------------------------------
-//
-
-template <typename T, typename Pointer, std::size_t N>
-class small_flat_multimap_data
-{
-private:
-
-    alignas(T) unsigned char internal_storage_[N * sizeof(T)];
-
-public:
-
-    Pointer first_;
-    Pointer last_;
-    Pointer end_;
-
-    small_flat_multimap_data() noexcept
-        : first_
-        (
-            std::pointer_traits<Pointer>::pointer_to
-            (
-                *reinterpret_cast<T*>(internal_storage_)
-            )
-        )
-        , last_(first_)
-        , end_(first_ + N)
-    {}
-
-    Pointer internal_storage() noexcept
-    {
-        return std::pointer_traits<Pointer>::pointer_to
-        (
-            *reinterpret_cast<T*>(internal_storage_)
-        );
-    }
-};
-
-template <typename T, typename Pointer>
-class small_flat_multimap_data<T, Pointer, 0>
-{
-public:
-
-    Pointer first_;
-    Pointer last_;
-    Pointer end_;
-
-    small_flat_multimap_data() noexcept
-        : first_(nullptr)
-        , last_(nullptr)
-        , end_(nullptr)
-    {}
-
-    Pointer internal_storage() noexcept
-    {
-        return nullptr;
-    }
-};
-
-template <typename Key, typename T, typename Compare>
-class small_flat_multimap_compare : public Compare
-{
-public:
-
-    small_flat_multimap_compare() noexcept
-    (
-        std::is_nothrow_default_constructible<Compare>::value
-    )
-    {}
-
-    small_flat_multimap_compare(const Compare& c) noexcept
-    (
-        std::is_nothrow_copy_constructible<Compare>::value
-    )
-        : Compare(c)
-    {}
-
-    bool operator()(const std::pair<Key, T>& x, const std::pair<Key, T>& y) const
-    {
-        return Compare::operator()(x.first, y.first);
-    }
-
-    template <typename K>
-    bool operator()(const std::pair<Key, T>& x, const K& y) const
-    {
-        return Compare::operator()(x.first, y);
-    }
-
-    template <typename K>
-    bool operator()(const K& x, const std::pair<Key, T>& y) const
-    {
-        return Compare::operator()(x, y.first);
-    }
-};
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 SFL_DTL_END ///////////////////////////////////////////////////////////////////
@@ -463,13 +368,7 @@ template < typename Key,
            typename Compare = std::less<Key>,
            typename Allocator = std::allocator<std::pair<Key, T>> >
 class small_flat_multimap
-    : private Allocator
-    , private SFL_DTL::small_flat_multimap_compare<Key, T, Compare>
 {
-private:
-
-    using MyCompare = SFL_DTL::small_flat_multimap_compare<Key, T, Compare>;
-
 public:
 
     using allocator_type         = Allocator;
@@ -489,7 +388,7 @@ public:
     using reverse_iterator       = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
-    class value_compare : private key_compare
+    class value_compare : protected key_compare
     {
         friend class small_flat_multimap;
 
@@ -514,7 +413,188 @@ public:
 
 private:
 
-    SFL_DTL::small_flat_multimap_data<value_type, pointer, N> data_;
+    // Like `value_compare` but with additional operators.
+    // For internal use only.
+    class ultra_compare : public key_compare
+    {
+    public:
+
+        ultra_compare() noexcept
+        (
+            std::is_nothrow_default_constructible<key_compare>::value
+        )
+        {}
+
+        ultra_compare(const key_compare& c) noexcept
+        (
+            std::is_nothrow_copy_constructible<key_compare>::value
+        )
+            : key_compare(c)
+        {}
+
+        ultra_compare(key_compare&& c) noexcept
+        (
+            std::is_nothrow_move_constructible<key_compare>::value
+        )
+            : key_compare(std::move(c))
+        {}
+
+        bool operator()(const value_type& x, const value_type& y) const
+        {
+            return key_compare::operator()(x.first, y.first);
+        }
+
+        template <typename K>
+        bool operator()(const value_type& x, const K& y) const
+        {
+            return key_compare::operator()(x.first, y);
+        }
+
+        template <typename K>
+        bool operator()(const K& x, const value_type& y) const
+        {
+            return key_compare::operator()(x, y.first);
+        }
+    };
+
+    template <bool WithInternalStorage = true, typename = void>
+    class data_base
+    {
+    private:
+
+        alignas(value_type) unsigned char internal_storage_[N * sizeof(value_type)];
+
+    public:
+
+        pointer first_;
+        pointer last_;
+        pointer end_;
+
+        data_base() noexcept
+            : first_
+            (
+                std::pointer_traits<pointer>::pointer_to
+                (
+                    *reinterpret_cast<value_type*>(internal_storage_)
+                )
+            )
+            , last_(first_)
+            , end_(first_ + N)
+        {}
+
+        pointer internal_storage() noexcept
+        {
+            return std::pointer_traits<pointer>::pointer_to
+            (
+                *reinterpret_cast<value_type*>(internal_storage_)
+            );
+        }
+    };
+
+    template <typename Dummy>
+    class data_base<false, Dummy>
+    {
+    public:
+
+        pointer first_;
+        pointer last_;
+        pointer end_;
+
+        data_base() noexcept
+            : first_(nullptr)
+            , last_(nullptr)
+            , end_(nullptr)
+        {}
+
+        pointer internal_storage() noexcept
+        {
+            return nullptr;
+        }
+    };
+
+    class data
+        : public data_base<(N > 0)>
+        , public allocator_type
+        , public ultra_compare
+    {
+    public:
+
+        data() noexcept
+        (
+            std::is_nothrow_default_constructible<allocator_type>::value &&
+            std::is_nothrow_default_constructible<ultra_compare>::value
+        )
+            : allocator_type()
+            , ultra_compare()
+        {}
+
+        data(const ultra_compare& comp) noexcept
+        (
+            std::is_nothrow_default_constructible<allocator_type>::value &&
+            std::is_nothrow_copy_constructible<ultra_compare>::value
+        )
+            : allocator_type()
+            , ultra_compare(comp)
+        {}
+
+        data(const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value &&
+            std::is_nothrow_default_constructible<ultra_compare>::value
+        )
+            : allocator_type(alloc)
+            , ultra_compare()
+        {}
+
+        data(const ultra_compare& comp, const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value &&
+            std::is_nothrow_copy_constructible<ultra_compare>::value
+        )
+            : allocator_type(alloc)
+            , ultra_compare(comp)
+        {}
+
+        data(ultra_compare&& comp, allocator_type&& alloc) noexcept
+        (
+            std::is_nothrow_move_constructible<allocator_type>::value &&
+            std::is_nothrow_move_constructible<ultra_compare>::value
+        )
+            : allocator_type(std::move(alloc))
+            , ultra_compare(std::move(comp))
+        {}
+
+        data(ultra_compare&& comp, const allocator_type& alloc) noexcept
+        (
+            std::is_nothrow_copy_constructible<allocator_type>::value &&
+            std::is_nothrow_move_constructible<ultra_compare>::value
+        )
+            : allocator_type(alloc)
+            , ultra_compare(std::move(comp))
+        {}
+
+        allocator_type& ref_to_alloc() noexcept
+        {
+            return *this;
+        }
+
+        const allocator_type& ref_to_alloc() const noexcept
+        {
+            return *this;
+        }
+
+        ultra_compare& ref_to_comp() noexcept
+        {
+            return *this;
+        }
+
+        const ultra_compare& ref_to_comp() const noexcept
+        {
+            return *this;
+        }
+    };
+
+    data data_;
 
 public:
 
@@ -527,8 +607,7 @@ public:
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<Compare>::value
     )
-        : Allocator()
-        , MyCompare()
+        : data_()
     {}
 
     explicit small_flat_multimap(const Compare& comp) noexcept
@@ -536,8 +615,7 @@ public:
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<Compare>::value
     )
-        : Allocator()
-        , MyCompare(comp)
+        : data_(comp)
     {}
 
     explicit small_flat_multimap(const Allocator& alloc) noexcept
@@ -545,8 +623,7 @@ public:
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<Compare>::value
     )
-        : Allocator(alloc)
-        , MyCompare()
+        : data_(alloc)
     {}
 
     explicit small_flat_multimap(const Compare& comp, const Allocator& alloc) noexcept
@@ -554,8 +631,7 @@ public:
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<Compare>::value
     )
-        : Allocator(alloc)
-        , MyCompare(comp)
+        : data_(comp, alloc)
     {}
 
     template <typename InputIt,
@@ -565,8 +641,7 @@ public:
         >::type* = nullptr
     >
     small_flat_multimap(InputIt first, InputIt last)
-        : Allocator()
-        , MyCompare()
+        : data_()
     {
         initialize_range(first, last);
     }
@@ -578,8 +653,7 @@ public:
         >::type* = nullptr
     >
     small_flat_multimap(InputIt first, InputIt last, const Compare& comp)
-        : Allocator()
-        , MyCompare(comp)
+        : data_(comp)
     {
         initialize_range(first, last);
     }
@@ -591,8 +665,7 @@ public:
         >::type* = nullptr
     >
     small_flat_multimap(InputIt first, InputIt last, const Allocator& alloc)
-        : Allocator(alloc)
-        , MyCompare()
+        : data_(alloc)
     {
         initialize_range(first, last);
     }
@@ -605,8 +678,7 @@ public:
     >
     small_flat_multimap(InputIt first, InputIt last, const Compare& comp,
                                                      const Allocator& alloc)
-        : Allocator(alloc)
-        , MyCompare(comp)
+        : data_(comp, alloc)
     {
         initialize_range(first, last);
     }
@@ -631,35 +703,44 @@ public:
     {}
 
     small_flat_multimap(const small_flat_multimap& other)
-        : Allocator
+        : data_
         (
+            other.data_.ref_to_comp(),
             allocator_traits::select_on_container_copy_construction
             (
-                other.ref_to_alloc()
+                other.data_.ref_to_alloc()
             )
         )
-        , MyCompare(other.ref_to_comp())
     {
         initialize_copy(other);
     }
 
     small_flat_multimap(const small_flat_multimap& other, const Allocator& alloc)
-        : Allocator(alloc)
-        , MyCompare(other.ref_to_comp())
+        : data_
+        (
+            other.data_.ref_to_comp(),
+            alloc
+        )
     {
         initialize_copy(other);
     }
 
     small_flat_multimap(small_flat_multimap&& other)
-        : Allocator(std::move(other.ref_to_alloc()))
-        , MyCompare(std::move(other.ref_to_comp()))
+        : data_
+        (
+            std::move(other.data_.ref_to_comp()),
+            std::move(other.data_.ref_to_alloc())
+        )
     {
         initialize_move(other);
     }
 
     small_flat_multimap(small_flat_multimap&& other, const Allocator& alloc)
-        : Allocator(alloc)
-        , MyCompare(std::move(other.ref_to_comp()))
+        : data_
+        (
+            std::move(other.data_.ref_to_comp()),
+            alloc
+        )
     {
         initialize_move(other);
     }
@@ -668,7 +749,7 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -677,7 +758,7 @@ public:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.end_ - data_.first_
             );
@@ -714,7 +795,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return ref_to_alloc();
+        return data_.ref_to_alloc();
     }
 
     //
@@ -724,7 +805,7 @@ public:
     SFL_NODISCARD
     key_compare key_comp() const
     {
-        return ref_to_comp();
+        return data_.ref_to_comp();
     }
 
     //
@@ -734,7 +815,7 @@ public:
     SFL_NODISCARD
     value_compare value_comp() const
     {
-        return value_compare(ref_to_comp());
+        return value_compare(data_.ref_to_comp());
     }
 
     //
@@ -855,7 +936,7 @@ public:
     {
         return std::min<size_type>
         (
-            allocator_traits::max_size(ref_to_alloc()),
+            allocator_traits::max_size(data_.ref_to_alloc()),
             std::numeric_limits<difference_type>::max() / sizeof(value_type)
         );
     }
@@ -889,7 +970,7 @@ public:
 
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -897,14 +978,14 @@ public:
 
                     SFL_DTL::destroy
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_
                     );
 
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -916,7 +997,7 @@ public:
             }
             else
             {
-                pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+                pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
@@ -924,7 +1005,7 @@ public:
                 {
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -934,7 +1015,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_cap
                     );
@@ -944,7 +1025,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_
                 );
@@ -953,7 +1034,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -989,7 +1070,7 @@ public:
 
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -997,14 +1078,14 @@ public:
 
                     SFL_DTL::destroy
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_
                     );
 
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -1016,7 +1097,7 @@ public:
             }
             else
             {
-                pointer new_first = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+                pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
@@ -1024,7 +1105,7 @@ public:
                 {
                     new_last = SFL_DTL::uninitialized_move_if_noexcept
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_,
                         new_first
@@ -1034,7 +1115,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_cap
                     );
@@ -1044,7 +1125,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_
                 );
@@ -1053,7 +1134,7 @@ public:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         data_.first_,
                         data_.end_ - data_.first_
                     );
@@ -1074,7 +1155,7 @@ public:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -1085,7 +1166,7 @@ public:
     template <typename... Args>
     iterator emplace(Args&&... args)
     {
-        temporary_value tmp(ref_to_alloc(), std::forward<Args>(args)...);
+        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
 
         auto it = lower_bound(tmp.value().first);
 
@@ -1097,28 +1178,28 @@ public:
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
 
-        temporary_value tmp(ref_to_alloc(), std::forward<Args>(args)...);
+        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
 
         if
         (
             // If `hint` == `value`
             (
                 hint != end() &&
-                !ref_to_comp()(*hint, tmp.value()) &&
-                !ref_to_comp()(tmp.value(), *hint)
+                !data_.ref_to_comp()(*hint, tmp.value()) &&
+                !data_.ref_to_comp()(tmp.value(), *hint)
             )
             ||
             // If `hint - 1` == `value`
             (
                 hint != begin() &&
-                !ref_to_comp()(*(hint - 1), tmp.value()) &&
-                !ref_to_comp()(tmp.value(), *(hint - 1))
+                !data_.ref_to_comp()(*(hint - 1), tmp.value()) &&
+                !data_.ref_to_comp()(tmp.value(), *(hint - 1))
             )
             ||
             // If `hint - 1` < `value` and `value` < `hint`
             (
-                (hint == begin() || ref_to_comp()(*(hint - 1), tmp.value())) &&
-                (hint == end()   || ref_to_comp()(tmp.value(), *hint))
+                (hint == begin() || data_.ref_to_comp()(*(hint - 1), tmp.value())) &&
+                (hint == end()   || data_.ref_to_comp()(tmp.value(), *hint))
             )
         )
         {
@@ -1152,7 +1233,7 @@ public:
     >
     iterator insert(P&& value)
     {
-        temporary_value tmp(ref_to_alloc(), std::forward<P>(value));
+        temporary_value tmp(data_.ref_to_alloc(), std::forward<P>(value));
 
         auto it = lower_bound(tmp.value().first);
 
@@ -1168,21 +1249,21 @@ public:
             // If `hint` == `value`
             (
                 hint != end() &&
-                !ref_to_comp()(*hint, value) &&
-                !ref_to_comp()(value, *hint)
+                !data_.ref_to_comp()(*hint, value) &&
+                !data_.ref_to_comp()(value, *hint)
             )
             ||
             // If `hint - 1` == `value`
             (
                 hint != begin() &&
-                !ref_to_comp()(*(hint - 1), value) &&
-                !ref_to_comp()(value, *(hint - 1))
+                !data_.ref_to_comp()(*(hint - 1), value) &&
+                !data_.ref_to_comp()(value, *(hint - 1))
             )
             ||
             // If `hint - 1` < `value` and `value` < `hint`
             (
-                (hint == begin() || ref_to_comp()(*(hint - 1), value)) &&
-                (hint == end()   || ref_to_comp()(value, *hint))
+                (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
+                (hint == end()   || data_.ref_to_comp()(value, *hint))
             )
         )
         {
@@ -1203,21 +1284,21 @@ public:
             // If `hint` == `value`
             (
                 hint != end() &&
-                !ref_to_comp()(*hint, value) &&
-                !ref_to_comp()(value, *hint)
+                !data_.ref_to_comp()(*hint, value) &&
+                !data_.ref_to_comp()(value, *hint)
             )
             ||
             // If `hint - 1` == `value`
             (
                 hint != begin() &&
-                !ref_to_comp()(*(hint - 1), value) &&
-                !ref_to_comp()(value, *(hint - 1))
+                !data_.ref_to_comp()(*(hint - 1), value) &&
+                !data_.ref_to_comp()(value, *(hint - 1))
             )
             ||
             // If `hint - 1` < `value` and `value` < `hint`
             (
-                (hint == begin() || ref_to_comp()(*(hint - 1), value)) &&
-                (hint == end()   || ref_to_comp()(value, *hint))
+                (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
+                (hint == end()   || data_.ref_to_comp()(value, *hint))
             )
         )
         {
@@ -1280,7 +1361,7 @@ public:
 
         --data_.last_;
 
-        SFL_DTL::destroy_at(ref_to_alloc(), data_.last_);
+        SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_);
 
         return p;
     }
@@ -1307,7 +1388,7 @@ public:
 
         pointer new_last = data_.last_ - n;
 
-        SFL_DTL::destroy(ref_to_alloc(), new_last, data_.last_);
+        SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
@@ -1348,7 +1429,7 @@ public:
         SFL_ASSERT
         (
             allocator_traits::propagate_on_container_swap::value ||
-            this->ref_to_alloc() == other.ref_to_alloc()
+            this->data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
         // If this and other allocator compares equal then one allocator
@@ -1358,10 +1439,10 @@ public:
 
         if (allocator_traits::propagate_on_container_swap::value)
         {
-            swap(this->ref_to_alloc(), other.ref_to_alloc());
+            swap(this->data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
 
-        swap(this->ref_to_comp(), other.ref_to_comp());
+        swap(this->data_.ref_to_comp(), other.data_.ref_to_comp());
 
         if
         (
@@ -1383,7 +1464,7 @@ public:
 
                 SFL_DTL::uninitialized_move
                 (
-                    this->ref_to_alloc(),
+                    this->data_.ref_to_alloc(),
                     other.data_.first_ + this_size,
                     other.data_.first_ + other_size,
                     this->data_.first_ + this_size
@@ -1391,7 +1472,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    other.ref_to_alloc(),
+                    other.data_.ref_to_alloc(),
                     other.data_.first_ + this_size,
                     other.data_.first_ + other_size
                 );
@@ -1407,7 +1488,7 @@ public:
 
                 SFL_DTL::uninitialized_move
                 (
-                    other.ref_to_alloc(),
+                    other.data_.ref_to_alloc(),
                     this->data_.first_ + other_size,
                     this->data_.first_ + this_size,
                     other.data_.first_ + other_size
@@ -1415,7 +1496,7 @@ public:
 
                 SFL_DTL::destroy
                 (
-                    this->ref_to_alloc(),
+                    this->data_.ref_to_alloc(),
                     this->data_.first_ + other_size,
                     this->data_.first_ + this_size
                 );
@@ -1436,7 +1517,7 @@ public:
 
             new_other_last = SFL_DTL::uninitialized_move
             (
-                other.ref_to_alloc(),
+                other.data_.ref_to_alloc(),
                 this->data_.first_,
                 this->data_.last_,
                 new_other_first
@@ -1444,7 +1525,7 @@ public:
 
             SFL_DTL::destroy
             (
-                this->ref_to_alloc(),
+                this->data_.ref_to_alloc(),
                 this->data_.first_,
                 this->data_.last_
             );
@@ -1469,7 +1550,7 @@ public:
 
             new_this_last = SFL_DTL::uninitialized_move
             (
-                this->ref_to_alloc(),
+                this->data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 new_this_first
@@ -1477,7 +1558,7 @@ public:
 
             SFL_DTL::destroy
             (
-                other.ref_to_alloc(),
+                other.data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_
             );
@@ -1505,13 +1586,13 @@ public:
     SFL_NODISCARD
     iterator lower_bound(const Key& key)
     {
-        return std::lower_bound(begin(), end(), key, ref_to_comp());
+        return std::lower_bound(begin(), end(), key, data_.ref_to_comp());
     }
 
     SFL_NODISCARD
     const_iterator lower_bound(const Key& key) const
     {
-        return std::lower_bound(begin(), end(), key, ref_to_comp());
+        return std::lower_bound(begin(), end(), key, data_.ref_to_comp());
     }
 
     template <typename K,
@@ -1523,7 +1604,7 @@ public:
     SFL_NODISCARD
     iterator lower_bound(const K& x)
     {
-        return std::lower_bound(begin(), end(), x, ref_to_comp());
+        return std::lower_bound(begin(), end(), x, data_.ref_to_comp());
     }
 
     template <typename K,
@@ -1535,19 +1616,19 @@ public:
     SFL_NODISCARD
     const_iterator lower_bound(const K& x) const
     {
-        return std::lower_bound(begin(), end(), x, ref_to_comp());
+        return std::lower_bound(begin(), end(), x, data_.ref_to_comp());
     }
 
     SFL_NODISCARD
     iterator upper_bound(const Key& key)
     {
-        return std::upper_bound(begin(), end(), key, ref_to_comp());
+        return std::upper_bound(begin(), end(), key, data_.ref_to_comp());
     }
 
     SFL_NODISCARD
     const_iterator upper_bound(const Key& key) const
     {
-        return std::upper_bound(begin(), end(), key, ref_to_comp());
+        return std::upper_bound(begin(), end(), key, data_.ref_to_comp());
     }
 
     template <typename K,
@@ -1559,7 +1640,7 @@ public:
     SFL_NODISCARD
     iterator upper_bound(const K& x)
     {
-        return std::upper_bound(begin(), end(), x, ref_to_comp());
+        return std::upper_bound(begin(), end(), x, data_.ref_to_comp());
     }
 
     template <typename K,
@@ -1571,19 +1652,19 @@ public:
     SFL_NODISCARD
     const_iterator upper_bound(const K& x) const
     {
-        return std::upper_bound(begin(), end(), x, ref_to_comp());
+        return std::upper_bound(begin(), end(), x, data_.ref_to_comp());
     }
 
     SFL_NODISCARD
     std::pair<iterator, iterator> equal_range(const Key& key)
     {
-        return std::equal_range(begin(), end(), key, ref_to_comp());
+        return std::equal_range(begin(), end(), key, data_.ref_to_comp());
     }
 
     SFL_NODISCARD
     std::pair<const_iterator, const_iterator> equal_range(const Key& key) const
     {
-        return std::equal_range(begin(), end(), key, ref_to_comp());
+        return std::equal_range(begin(), end(), key, data_.ref_to_comp());
     }
 
     template <typename K,
@@ -1595,7 +1676,7 @@ public:
     SFL_NODISCARD
     std::pair<iterator, iterator> equal_range(const K& x)
     {
-        return std::equal_range(begin(), end(), x, ref_to_comp());
+        return std::equal_range(begin(), end(), x, data_.ref_to_comp());
     }
 
     template <typename K,
@@ -1607,7 +1688,7 @@ public:
     SFL_NODISCARD
     std::pair<const_iterator, const_iterator> equal_range(const K& x) const
     {
-        return std::equal_range(begin(), end(), x, ref_to_comp());
+        return std::equal_range(begin(), end(), x, data_.ref_to_comp());
     }
 
     SFL_NODISCARD
@@ -1615,7 +1696,7 @@ public:
     {
         auto it = lower_bound(key);
 
-        if (it != end() && ref_to_comp()(key, *it))
+        if (it != end() && data_.ref_to_comp()(key, *it))
         {
             it = end();
         }
@@ -1628,7 +1709,7 @@ public:
     {
         auto it = lower_bound(key);
 
-        if (it != end() && ref_to_comp()(key, *it))
+        if (it != end() && data_.ref_to_comp()(key, *it))
         {
             it = end();
         }
@@ -1647,7 +1728,7 @@ public:
     {
         auto it = lower_bound(x);
 
-        if (it != end() && ref_to_comp()(x, *it))
+        if (it != end() && data_.ref_to_comp()(x, *it))
         {
             it = end();
         }
@@ -1666,7 +1747,7 @@ public:
     {
         auto it = lower_bound(x);
 
-        if (it != end() && ref_to_comp()(x, *it))
+        if (it != end() && data_.ref_to_comp()(x, *it))
         {
             it = end();
         }
@@ -1730,26 +1811,6 @@ public:
 
 private:
 
-    Allocator& ref_to_alloc() noexcept
-    {
-        return *this;
-    }
-
-    const Allocator& ref_to_alloc() const noexcept
-    {
-        return *this;
-    }
-
-    MyCompare& ref_to_comp() noexcept
-    {
-        return *this;
-    }
-
-    const MyCompare& ref_to_comp() const noexcept
-    {
-        return *this;
-    }
-
     void check_size(size_type n, const char* msg)
     {
         if (n > max_size())
@@ -1782,7 +1843,7 @@ private:
     {
         SFL_DTL::destroy
         (
-            ref_to_alloc(),
+            data_.ref_to_alloc(),
             data_.first_,
             data_.last_
         );
@@ -1791,7 +1852,7 @@ private:
         {
             SFL_DTL::deallocate
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.end_ - data_.first_
             );
@@ -1803,7 +1864,7 @@ private:
 
         if (new_cap > N)
         {
-            data_.first_ = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
             data_.last_  = data_.first_;
             data_.end_   = data_.first_ + new_cap;
 
@@ -1816,7 +1877,7 @@ private:
     {
     private:
 
-        Allocator& alloc_;
+        allocator_type& alloc_;
 
         alignas(value_type) unsigned char buffer_[sizeof(value_type)];
 
@@ -1828,7 +1889,7 @@ private:
     public:
 
         template <typename... Args>
-        explicit temporary_value(Allocator& a, Args&&... args) : alloc_(a)
+        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
         {
             SFL_DTL::construct_at
             (
@@ -1864,7 +1925,7 @@ private:
         {
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_
             );
@@ -1873,7 +1934,7 @@ private:
             {
                 SFL_DTL::deallocate
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.end_ - data_.first_
                 );
@@ -1891,7 +1952,7 @@ private:
 
         if (n > N)
         {
-            data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
             data_.last_  = data_.first_;
             data_.end_   = data_.first_ + n;
         }
@@ -1900,7 +1961,7 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 data_.first_
@@ -1910,7 +1971,7 @@ private:
         {
             if (n > N)
             {
-                SFL_DTL::deallocate(ref_to_alloc(), data_.first_, n);
+                SFL_DTL::deallocate(data_.ref_to_alloc(), data_.first_, n);
             }
 
             SFL_RETHROW;
@@ -1923,13 +1984,13 @@ private:
         {
             data_.last_ = SFL_DTL::uninitialized_move
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 other.data_.first_,
                 other.data_.last_,
                 data_.first_
             );
         }
-        else if (ref_to_alloc() == other.ref_to_alloc())
+        else if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             data_.first_ = other.data_.first_;
             data_.last_  = other.data_.last_;
@@ -1947,7 +2008,7 @@ private:
 
             if (n > N)
             {
-                data_.first_ = SFL_DTL::allocate(ref_to_alloc(), n);
+                data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
                 data_.last_  = data_.first_;
                 data_.end_   = data_.first_ + n;
             }
@@ -1956,7 +2017,7 @@ private:
             {
                 data_.last_ = SFL_DTL::uninitialized_move
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     other.data_.first_,
                     other.data_.last_,
                     data_.first_
@@ -1966,7 +2027,7 @@ private:
             {
                 if (n > N)
                 {
-                    SFL_DTL::deallocate(ref_to_alloc(), data_.first_, n);
+                    SFL_DTL::deallocate(data_.ref_to_alloc(), data_.first_, n);
                 }
 
                 SFL_RETHROW;
@@ -1996,7 +2057,7 @@ private:
 
                 SFL_DTL::destroy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_last,
                     data_.last_
                 );
@@ -2016,7 +2077,7 @@ private:
 
                 data_.last_ = SFL_DTL::uninitialized_copy
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     mid,
                     last,
                     data_.last_
@@ -2029,7 +2090,7 @@ private:
 
             data_.last_ = SFL_DTL::uninitialized_copy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 first,
                 last,
                 data_.first_
@@ -2043,15 +2104,15 @@ private:
         {
             if (allocator_traits::propagate_on_container_copy_assignment::value)
             {
-                if (ref_to_alloc() != other.ref_to_alloc())
+                if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
                 {
                     reset();
                 }
 
-                ref_to_alloc() = other.ref_to_alloc();
+                data_.ref_to_alloc() = other.data_.ref_to_alloc();
             }
 
-            ref_to_comp() = other.ref_to_comp();
+            data_.ref_to_comp() = other.data_.ref_to_comp();
 
             assign_range(other.data_.first_, other.data_.last_);
         }
@@ -2061,15 +2122,15 @@ private:
     {
         if (allocator_traits::propagate_on_container_move_assignment::value)
         {
-            if (ref_to_alloc() != other.ref_to_alloc())
+            if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
             {
                 reset();
             }
 
-            ref_to_alloc() = std::move(other.ref_to_alloc());
+            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
         }
 
-        ref_to_comp() = other.ref_to_comp();
+        data_.ref_to_comp() = other.data_.ref_to_comp();
 
         if (other.data_.first_ == other.data_.internal_storage())
         {
@@ -2079,7 +2140,7 @@ private:
                 std::make_move_iterator(other.data_.last_)
             );
         }
-        else if (ref_to_alloc() == other.ref_to_alloc())
+        else if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
             reset();
 
@@ -2114,7 +2175,7 @@ private:
             {
                 SFL_DTL::construct_at
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     p,
                     std::forward<Args>(args)...
                 );
@@ -2128,11 +2189,11 @@ private:
                 // reference to element in this container and after that
                 // we will move elements and insert new element.
 
-                temporary_value tmp(ref_to_alloc(), std::forward<Args>(args)...);
+                temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
 
                 SFL_DTL::construct_at
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.last_,
                     std::move(*(data_.last_ - 1))
                 );
@@ -2166,7 +2227,7 @@ private:
             }
             else
             {
-                new_first = SFL_DTL::allocate(ref_to_alloc(), new_cap);
+                new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
                 new_last  = new_first;
                 new_end   = new_first + new_cap;
             }
@@ -2180,7 +2241,7 @@ private:
 
                 SFL_DTL::construct_at
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     new_first + offset,
                     std::forward<Args>(args)...
                 );
@@ -2189,7 +2250,7 @@ private:
 
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.first_ + offset,
                     new_first
@@ -2199,7 +2260,7 @@ private:
 
                 new_last = SFL_DTL::uninitialized_move_if_noexcept
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_ + offset,
                     data_.last_,
                     new_last
@@ -2211,7 +2272,7 @@ private:
                 {
                     SFL_DTL::destroy_at
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first + offset
                     );
                 }
@@ -2219,7 +2280,7 @@ private:
                 {
                     SFL_DTL::destroy
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_last
                     );
@@ -2229,7 +2290,7 @@ private:
                 {
                     SFL_DTL::deallocate
                     (
-                        ref_to_alloc(),
+                        data_.ref_to_alloc(),
                         new_first,
                         new_cap
                     );
@@ -2240,7 +2301,7 @@ private:
 
             SFL_DTL::destroy
             (
-                ref_to_alloc(),
+                data_.ref_to_alloc(),
                 data_.first_,
                 data_.last_
             );
@@ -2249,7 +2310,7 @@ private:
             {
                 SFL_DTL::deallocate
                 (
-                    ref_to_alloc(),
+                    data_.ref_to_alloc(),
                     data_.first_,
                     data_.end_ - data_.first_
                 );
