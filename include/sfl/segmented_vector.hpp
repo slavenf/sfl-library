@@ -1248,7 +1248,7 @@ public:
             // reference to element in this container and after that
             // we will move elements and insert new element.
 
-            temporary_value temp(data_.ref_to_alloc(), std::forward<Args>(args)...);
+            value_type tmp(std::forward<Args>(args)...);
 
             SFL_DTL::construct_at
             (
@@ -1266,7 +1266,7 @@ public:
                 data_.last_ - 1
             );
 
-            *p = std::move(temp.value());
+            *p = std::move(tmp);
         }
 
         return p;
@@ -1489,43 +1489,6 @@ public:
     }
 
 private:
-
-    class temporary_value
-    {
-    private:
-
-        allocator_type& alloc_;
-
-        alignas(value_type) unsigned char buffer_[sizeof(value_type)];
-
-        value_type* buffer()
-        {
-            return reinterpret_cast<value_type*>(buffer_);
-        }
-
-    public:
-
-        template <typename... Args>
-        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
-        {
-            SFL_DTL::construct_at
-            (
-                alloc_,
-                buffer(),
-                std::forward<Args>(args)...
-            );
-        }
-
-        ~temporary_value()
-        {
-            SFL_DTL::destroy_at(alloc_, buffer());
-        }
-
-        value_type& value()
-        {
-            return *buffer();
-        }
-    };
 
     /// Alocates table for `n` segments.
     /// Does not allocate segments, it only allocates memory for table.
@@ -2170,7 +2133,7 @@ private:
         // in this container and after that we will move elements and
         // insert new element.
 
-        temporary_value temp(data_.ref_to_alloc(), value);
+        value_type tmp(value);
 
         const size_type num_elems_after = data_.last_ - p;
 
@@ -2197,7 +2160,7 @@ private:
             (
                 p,
                 n,
-                temp.value()
+                tmp
             );
         }
         else
@@ -2209,7 +2172,7 @@ private:
                 data_.ref_to_alloc(),
                 data_.last_,
                 n - num_elems_after,
-                temp.value()
+                tmp
             );
 
             data_.last_ = SFL_DTL::uninitialized_move
@@ -2224,7 +2187,7 @@ private:
             (
                 p,
                 old_last,
-                temp.value()
+                tmp
             );
         }
 
