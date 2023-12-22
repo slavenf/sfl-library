@@ -1060,59 +1060,36 @@ public:
     template <typename... Args>
     std::pair<iterator, bool> emplace(Args&&... args)
     {
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        auto it = find(tmp.value());
-
-        if (it == end())
-        {
-            return std::make_pair(insert_aux(std::move(tmp.value())), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value_type(std::forward<Args>(args)...));
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
-        SFL_DTL::ignore_unused(hint);
-        return emplace(std::forward<Args>(args)...).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
     {
-        auto it = find(value);
-
-        if (it == end())
-        {
-            return std::make_pair(insert_aux(value), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value);
     }
 
     std::pair<iterator, bool> insert(value_type&& value)
     {
-        auto it = find(value);
-
-        if (it == end())
-        {
-            return std::make_pair(insert_aux(std::move(value)), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(std::move(value));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
-        SFL_DTL::ignore_unused(hint);
-        return insert(value).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
-        SFL_DTL::ignore_unused(hint);
-        return insert(std::move(value)).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, std::move(value));
     }
 
     template <typename InputIt,
@@ -1860,8 +1837,28 @@ private:
         }
     }
 
+    template <typename Value>
+    std::pair<iterator, bool> insert_aux(Value&& value)
+    {
+        auto it = find(value);
+
+        if (it == end())
+        {
+            return std::make_pair(insert_unordered(std::forward<Value>(value)), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        SFL_DTL::ignore_unused(hint);
+        return insert_aux(std::forward<Value>(value)).first;
+    }
+
     template <typename... Args>
-    iterator insert_aux(Args&&... args)
+    iterator insert_unordered(Args&&... args)
     {
         iterator result;
 
@@ -1881,7 +1878,7 @@ private:
         else
         {
             const size_type new_cap =
-                recommend_size(1, "sfl::small_unordered_flat_set::insert_aux");
+                recommend_size(1, "sfl::small_unordered_flat_set::insert_unordered");
 
             pointer new_first;
             pointer new_last;

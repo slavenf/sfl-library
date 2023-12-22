@@ -1166,63 +1166,24 @@ public:
     template <typename... Args>
     iterator emplace(Args&&... args)
     {
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        auto it = lower_bound(tmp.value().first);
-
-        return insert_aux(it, std::move(tmp.value()));
+        return insert_aux(value_type(std::forward<Args>(args)...));
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        if
-        (
-            // If `hint` == `value`
-            (
-                hint != end() &&
-                !data_.ref_to_comp()(*hint, tmp.value()) &&
-                !data_.ref_to_comp()(tmp.value(), *hint)
-            )
-            ||
-            // If `hint - 1` == `value`
-            (
-                hint != begin() &&
-                !data_.ref_to_comp()(*(hint - 1), tmp.value()) &&
-                !data_.ref_to_comp()(tmp.value(), *(hint - 1))
-            )
-            ||
-            // If `hint - 1` < `value` and `value` < `hint`
-            (
-                (hint == begin() || data_.ref_to_comp()(*(hint - 1), tmp.value())) &&
-                (hint == end()   || data_.ref_to_comp()(tmp.value(), *hint))
-            )
-        )
-        {
-            return insert_aux(hint, std::move(tmp.value()));
-        }
-
-        auto it = lower_bound(tmp.value().first);
-
-        return insert_aux(it, std::move(tmp.value()));
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
     iterator insert(const value_type& value)
     {
-        auto it = lower_bound(value.first);
-
-        return insert_aux(it, value);
+        return insert_aux(value);
     }
 
     iterator insert(value_type&& value)
     {
-        auto it = lower_bound(value.first);
-
-        return insert_aux(it, std::move(value));
+        return insert_aux(std::move(value));
     }
 
     template <typename P,
@@ -1233,81 +1194,19 @@ public:
     >
     iterator insert(P&& value)
     {
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<P>(value));
-
-        auto it = lower_bound(tmp.value().first);
-
-        return insert_aux(it, std::move(tmp.value()));
+        return insert_aux(value_type(std::forward<P>(value)));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            // If `hint` == `value`
-            (
-                hint != end() &&
-                !data_.ref_to_comp()(*hint, value) &&
-                !data_.ref_to_comp()(value, *hint)
-            )
-            ||
-            // If `hint - 1` == `value`
-            (
-                hint != begin() &&
-                !data_.ref_to_comp()(*(hint - 1), value) &&
-                !data_.ref_to_comp()(value, *(hint - 1))
-            )
-            ||
-            // If `hint - 1` < `value` and `value` < `hint`
-            (
-                (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
-                (hint == end()   || data_.ref_to_comp()(value, *hint))
-            )
-        )
-        {
-            return insert_aux(hint, value);
-        }
-
-        auto it = lower_bound(value.first);
-
-        return insert_aux(it, value);
+        return insert_aux(hint, value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            // If `hint` == `value`
-            (
-                hint != end() &&
-                !data_.ref_to_comp()(*hint, value) &&
-                !data_.ref_to_comp()(value, *hint)
-            )
-            ||
-            // If `hint - 1` == `value`
-            (
-                hint != begin() &&
-                !data_.ref_to_comp()(*(hint - 1), value) &&
-                !data_.ref_to_comp()(value, *(hint - 1))
-            )
-            ||
-            // If `hint - 1` < `value` and `value` < `hint`
-            (
-                (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
-                (hint == end()   || data_.ref_to_comp()(value, *hint))
-            )
-        )
-        {
-            return insert_aux(hint, std::move(value));
-        }
-
-        auto it = lower_bound(value.first);
-
-        return insert_aux(it, std::move(value));
+        return insert_aux(hint, std::move(value));
     }
 
     template <typename P,
@@ -1318,7 +1217,8 @@ public:
     >
     iterator insert(const_iterator hint, P&& value)
     {
-        return emplace_hint(hint, std::forward<P>(value));
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<P>(value)));
     }
 
     template <typename InputIt,
@@ -2162,8 +2062,26 @@ private:
         }
     }
 
+    template <typename Value>
+    iterator insert_aux(Value&& value)
+    {
+        return insert_exactly_at(lower_bound(value.first), std::forward<Value>(value));
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        if (is_insert_hint_good(hint, value))
+        {
+            return insert_exactly_at(hint, std::forward<Value>(value));
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return insert_aux(std::forward<Value>(value));
+    }
+
     template <typename... Args>
-    iterator insert_aux(const_iterator pos, Args&&... args)
+    iterator insert_exactly_at(const_iterator pos, Args&&... args)
     {
         const difference_type offset = std::distance(cbegin(), pos);
 
@@ -2213,7 +2131,7 @@ private:
         else
         {
             const size_type new_cap =
-                recommend_size(1, "sfl::small_flat_multimap::insert_aux");
+                recommend_size(1, "sfl::small_flat_multimap::insert_exactly_at");
 
             pointer new_first;
             pointer new_last;
@@ -2322,6 +2240,31 @@ private:
         }
 
         return begin() + offset;
+    }
+
+    template <typename Value>
+    bool is_insert_hint_good(const_iterator hint, const Value& value)
+    {
+        return
+            // If `hint` == `value`
+            (
+                hint != end() &&
+                !data_.ref_to_comp()(*hint, value) &&
+                !data_.ref_to_comp()(value, *hint)
+            )
+            ||
+            // If `hint - 1` == `value`
+            (
+                hint != begin() &&
+                !data_.ref_to_comp()(*(hint - 1), value) &&
+                !data_.ref_to_comp()(value, *(hint - 1))
+            )
+            ||
+            // If `hint - 1` < `value` and `value` < `hint`
+            (
+                (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
+                (hint == end()   || data_.ref_to_comp()(value, *hint))
+            );
     }
 };
 

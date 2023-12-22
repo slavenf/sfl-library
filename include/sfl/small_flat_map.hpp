@@ -1166,66 +1166,24 @@ public:
     template <typename... Args>
     std::pair<iterator, bool> emplace(Args&&... args)
     {
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        auto it = lower_bound(tmp.value().first);
-
-        if (it == end() || data_.ref_to_comp()(tmp.value(), *it))
-        {
-            return std::make_pair(insert_aux(it, std::move(tmp.value())), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value_type(std::forward<Args>(args)...));
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), tmp.value())) &&
-            (hint == end()   || data_.ref_to_comp()(tmp.value(), *hint))
-        )
-        {
-            return insert_aux(hint, std::move(tmp.value()));
-        }
-
-        auto it = lower_bound(tmp.value().first);
-
-        if (it == end() || data_.ref_to_comp()(tmp.value(), *it))
-        {
-            return insert_aux(it, std::move(tmp.value()));
-        }
-
-        return it;
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
     {
-        auto it = lower_bound(value.first);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return std::make_pair(insert_aux(it, value), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value);
     }
 
     std::pair<iterator, bool> insert(value_type&& value)
     {
-        auto it = lower_bound(value.first);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return std::make_pair(insert_aux(it, std::move(value)), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(std::move(value));
     }
 
     template <typename P,
@@ -1236,64 +1194,31 @@ public:
     >
     std::pair<iterator, bool> insert(P&& value)
     {
-        return emplace(std::forward<P>(value));
+        return insert_aux(value_type(std::forward<P>(value)));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
-            (hint == end()   || data_.ref_to_comp()(value, *hint))
-        )
-        {
-            return insert_aux(hint, value);
-        }
-
-        auto it = lower_bound(value.first);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return insert_aux(it, value);
-        }
-
-        return it;
+        return insert_aux(hint, value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
-            (hint == end()   || data_.ref_to_comp()(value, *hint))
-        )
-        {
-            return insert_aux(hint, std::move(value));
-        }
-
-        auto it = lower_bound(value.first);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return insert_aux(it, std::move(value));
-        }
-
-        return it;
+        return insert_aux(hint, std::move(value));
     }
 
     template <typename P,
         typename std::enable_if
         <
-            std::is_constructible<value_type, P&&>::value
+            std::is_constructible<value_type, P>::value
         >::type* = nullptr
     >
     iterator insert(const_iterator hint, P&& value)
     {
-        return emplace_hint(hint, std::forward<P>(value));
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<P>(value)));
     }
 
     template <typename InputIt,
@@ -1324,25 +1249,7 @@ public:
     >
     std::pair<iterator, bool> insert_or_assign(const Key& key, M&& obj)
     {
-        auto it = lower_bound(key);
-
-        if (it == end() || data_.ref_to_comp()(key, *it))
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    it,
-                    std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<M>(obj))
-                ),
-                true
-            );
-        }
-
-        it->second = std::forward<M>(obj);
-        return std::make_pair(it, false);
+        return insert_or_assign_aux(key, std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1353,25 +1260,7 @@ public:
     >
     std::pair<iterator, bool> insert_or_assign(Key&& key, M&& obj)
     {
-        auto it = lower_bound(key);
-
-        if (it == end() || data_.ref_to_comp()(key, *it))
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    it,
-                    std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<M>(obj))
-                ),
-                true
-            );
-        }
-
-        it->second = std::forward<M>(obj);
-        return std::make_pair(it, false);
+        return insert_or_assign_aux(std::move(key), std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1383,23 +1272,7 @@ public:
     iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), key)) &&
-            (hint == end()   || data_.ref_to_comp()(key, *hint))
-        )
-        {
-            return insert_aux
-            (
-                hint,
-                std::piecewise_construct,
-                std::forward_as_tuple(key),
-                std::forward_as_tuple(std::forward<M>(obj))
-            );
-        }
-
-        return insert_or_assign(key, std::forward<M>(obj)).first;
+        return insert_or_assign_aux(hint, key, std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1411,115 +1284,33 @@ public:
     iterator insert_or_assign(const_iterator hint, Key&& key, M&& obj)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), key)) &&
-            (hint == end()   || data_.ref_to_comp()(key, *hint))
-        )
-        {
-            return insert_aux
-            (
-                hint,
-                std::piecewise_construct,
-                std::forward_as_tuple(std::move(key)),
-                std::forward_as_tuple(std::forward<M>(obj))
-            );
-        }
-
-        return insert_or_assign(std::move(key), std::forward<M>(obj)).first;
+        return insert_or_assign_aux(hint, std::move(key), std::forward<M>(obj));
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(const Key& key, Args&&... args)
     {
-        auto it = lower_bound(key);
-
-        if (it == end() || data_.ref_to_comp()(key, *it))
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    it,
-                    std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<Args>(args)...)
-                ),
-                true
-            );
-        }
-
-        return std::make_pair(it, false);
+        return try_emplace_aux(key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(Key&& key, Args&&... args)
     {
-        auto it = lower_bound(key);
-
-        if (it == end() || data_.ref_to_comp()(key, *it))
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    it,
-                    std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<Args>(args)...)
-                ),
-                true
-            );
-        }
-
-        return std::make_pair(it, false);
+        return try_emplace_aux(std::move(key), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, const Key& key, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), key)) &&
-            (hint == end()   || data_.ref_to_comp()(key, *hint))
-        )
-        {
-            return insert_aux
-            (
-                hint,
-                std::piecewise_construct,
-                std::forward_as_tuple(key),
-                std::forward_as_tuple(std::forward<Args>(args)...)
-            );
-        }
-
-        return try_emplace(key, std::forward<Args>(args)...).first;
+        return try_emplace_aux(hint, key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, Key&& key, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), key)) &&
-            (hint == end()   || data_.ref_to_comp()(key, *hint))
-        )
-        {
-            return insert_aux
-            (
-                hint,
-                std::piecewise_construct,
-                std::forward_as_tuple(std::move(key)),
-                std::forward_as_tuple(std::forward<Args>(args)...)
-            );
-        }
-
-        return try_emplace(std::move(key), std::forward<Args>(args)...).first;
+        return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
     }
 
     iterator erase(iterator pos)
@@ -2385,8 +2176,116 @@ private:
         }
     }
 
+    template <typename Value>
+    std::pair<iterator, bool> insert_aux(Value&& value)
+    {
+        auto it = lower_bound(value.first);
+
+        if (it == end() || data_.ref_to_comp()(value, *it))
+        {
+            return std::make_pair(insert_exactly_at(it, std::forward<Value>(value)), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        if (is_insert_hint_good(hint, value))
+        {
+            return insert_exactly_at(hint, std::forward<Value>(value));
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return insert_aux(std::forward<Value>(value)).first;
+    }
+
+    template <typename K, typename M>
+    std::pair<iterator, bool> insert_or_assign_aux(K&& key, M&& obj)
+    {
+        auto it = lower_bound(key);
+
+        if (it == end() || data_.ref_to_comp()(key, *it))
+        {
+            return std::make_pair
+            (
+                insert_exactly_at
+                (
+                    it,
+                    std::piecewise_construct,
+                    std::forward_as_tuple(std::forward<K>(key)),
+                    std::forward_as_tuple(std::forward<M>(obj))
+                ),
+                true
+            );
+        }
+
+        it->second = std::forward<M>(obj);
+        return std::make_pair(it, false);
+    }
+
+    template <typename K, typename M>
+    iterator insert_or_assign_aux(const_iterator hint, K&& key, M&& obj)
+    {
+        if (is_insert_hint_good(hint, key))
+        {
+            return insert_exactly_at
+            (
+                hint,
+                std::piecewise_construct,
+                std::forward_as_tuple(std::forward<K>(key)),
+                std::forward_as_tuple(std::forward<M>(obj))
+            );
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj)).first;
+    }
+
+    template <typename K, typename... Args>
+    std::pair<iterator, bool> try_emplace_aux(K&& key, Args&&... args)
+    {
+        auto it = lower_bound(key);
+
+        if (it == end() || data_.ref_to_comp()(key, *it))
+        {
+            return std::make_pair
+            (
+                insert_exactly_at
+                (
+                    it,
+                    std::piecewise_construct,
+                    std::forward_as_tuple(std::forward<K>(key)),
+                    std::forward_as_tuple(std::forward<Args>(args)...)
+                ),
+                true
+            );
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename K, typename... Args>
+    iterator try_emplace_aux(const_iterator hint, K&& key, Args&&... args)
+    {
+        if (is_insert_hint_good(hint, key))
+        {
+            return insert_exactly_at
+            (
+                hint,
+                std::piecewise_construct,
+                std::forward_as_tuple(std::forward<K>(key)),
+                std::forward_as_tuple(std::forward<Args>(args)...)
+            );
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...).first;
+    }
+
     template <typename... Args>
-    iterator insert_aux(const_iterator pos, Args&&... args)
+    iterator insert_exactly_at(const_iterator pos, Args&&... args)
     {
         const difference_type offset = std::distance(cbegin(), pos);
 
@@ -2443,7 +2342,7 @@ private:
         else
         {
             const size_type new_cap =
-                recommend_size(1, "sfl::small_flat_map::insert_aux");
+                recommend_size(1, "sfl::small_flat_map::insert_exactly_at");
 
             pointer new_first;
             pointer new_last;
@@ -2544,6 +2443,13 @@ private:
         }
 
         return begin() + offset;
+    }
+
+    template <typename Value>
+    bool is_insert_hint_good(const_iterator hint, const Value& value)
+    {
+        return (hint == begin() || data_.ref_to_comp()(*(hint - 1), value))
+            && (hint == end()   || data_.ref_to_comp()(value, *hint));
     }
 };
 

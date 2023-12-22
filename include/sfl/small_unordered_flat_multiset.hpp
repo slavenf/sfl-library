@@ -1060,36 +1060,39 @@ public:
     template <typename... Args>
     iterator emplace(Args&&... args)
     {
-        return insert_aux(std::forward<Args>(args)...);
+        return insert_unordered(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
         SFL_DTL::ignore_unused(hint);
-        return emplace(std::forward<Args>(args)...);
+        return insert_unordered(std::forward<Args>(args)...);
     }
 
     iterator insert(const value_type& value)
     {
-        return insert_aux(value);
+        return insert_unordered(value);
     }
 
     iterator insert(value_type&& value)
     {
-        return insert_aux(std::move(value));
+        return insert_unordered(std::move(value));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
         SFL_DTL::ignore_unused(hint);
-        return insert(value);
+        return insert_unordered(value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
         SFL_DTL::ignore_unused(hint);
-        return insert(std::move(value));
+        return insert_unordered(std::move(value));
     }
 
     template <typename InputIt,
@@ -1872,7 +1875,7 @@ private:
     }
 
     template <typename... Args>
-    iterator insert_aux(Args&&... args)
+    iterator insert_unordered(Args&&... args)
     {
         iterator result;
 
@@ -1892,7 +1895,7 @@ private:
         else
         {
             const size_type new_cap =
-                recommend_size(1, "sfl::small_unordered_flat_map::insert_aux");
+                recommend_size(1, "sfl::small_unordered_flat_map::insert_unordered");
 
             pointer new_first;
             pointer new_last;
