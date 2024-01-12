@@ -38,6 +38,13 @@ static_assert
 
 static_assert
 (
+    sizeof(sfl::small_unordered_flat_map<double, double, 0>) ==
+        3 * sizeof(sfl::small_unordered_flat_map<double, double, 0>::pointer),
+    "Invalid size"
+);
+
+static_assert
+(
     sizeof(sfl::small_unordered_flat_map<double, double, 5>) ==
         3 * sizeof(sfl::small_unordered_flat_map<double, double, 5>::pointer) +
         5 * sizeof(sfl::small_unordered_flat_map<double, double, 5>::value_type),
