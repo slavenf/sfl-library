@@ -27,7 +27,7 @@ check:
 .PHONY: clean
 clean:
 
-# This function generates "check" rule for given source file.
+# This function generates "check" and "clean" rules for given source file.
 # Usage: $(call generate_rules,source_file)
 define generate_rules
 
