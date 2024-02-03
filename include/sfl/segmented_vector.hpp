@@ -2062,43 +2062,105 @@ private:
 
     void assign_move(segmented_vector& other)
     {
-        if (allocator_traits::propagate_on_container_move_assignment::value)
-        {
-            if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
-            {
-                // Create temporary vector using other allocator.
-                // There are no effects if allocation fails.
-                segmented_vector temp(other.data_.ref_to_alloc());
-
-                // Clear and destroy current storage (noexcept).
-                clear();
-                destroy_storage();
-
-                // Set pointers to null (noexcept).
-                data_.seg_first_ = nullptr;
-                data_.seg_last_  = nullptr;
-                data_.seg_end_   = nullptr;
-
-                // Swap storage of this and temporary vector (noexcept).
-                using std::swap;
-                swap(data_, temp.data_);
-
-                // Temporary vector has no allocated storage (pointers
-                // are set to null) so destructor of temporary vector
-                // has nothing to do.
-            }
-
-            // Propagate allocator (noexcept).
-            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
-        }
+        using std::swap;
 
         if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
-            using std::swap;
+            // Create temporary container using allocator of "this".
+            // There are no effects if allocation fails.
+            // NOTE: We could also use allocator of "other". There are no
+            // difference since both allocators compare equal.
+            segmented_vector temp(data_.ref_to_alloc());
+
+            // Clear storage of "this" (noexcept).
+            clear();
+
+            // Destroy storage of "this" (noexcept).
+            // NOTE: This does not set pointers to null.
+            destroy_storage();
+
+            // Set pointers of "this" to null pointers (noexcept).
+            data_.seg_first_ = nullptr;
+            data_.seg_last_  = nullptr;
+            data_.seg_end_   = nullptr;
+
+            // Current state:
+            //  - "this" has no allocated storage (pointers are null).
+
+            // Swap storage of "this" and "other" (noexcept)
             swap(data_, other.data_);
+
+            // After swap:
+            //  - "this" owns storage previously owned by "other".
+            //  - "other" has no allocated storage (pointers are null).
+
+            // Swap storage of "other" and "temp" (noexcept)
+            swap(other.data_, temp.data_);
+
+            // After swap:
+            //  - "other" owns storage previously owned by "temp".
+            //  - "temp" has no allocated storage (pointers are null).
+            //    This is OK in this case. Destructor of "temp" has
+            //    nothing to do.
+
+            if (allocator_traits::propagate_on_container_move_assignment::value)
+            {
+                // Propagate allocator (noexcept).
+                data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
+            }
+        }
+        else if (allocator_traits::propagate_on_container_move_assignment::value)
+        {
+            // Create temporary container using allocator of "other".
+            // There are no effects if allocation fails.
+            segmented_vector temp(other.data_.ref_to_alloc());
+
+            // Clear storage of "this" (noexcept).
+            clear();
+
+            // Destroy storage of "this" (noexcept).
+            // NOTE: This does not set pointers to null.
+            destroy_storage();
+
+            // Set pointers of "this" to null pointers (noexcept).
+            data_.seg_first_ = nullptr;
+            data_.seg_last_  = nullptr;
+            data_.seg_end_   = nullptr;
+
+            // Current state:
+            //  - "this" has no allocated storage (pointers are null).
+
+            // Swap storage of "this" and "temp" (noexcept)
+            swap(data_, temp.data_);
+
+            // After swap:
+            //  - "this" owns storage previously owned by "temp".
+            //    That storage was allocated by allocator of "temp"
+            //    (i.e. copy of allocator of "other").
+            //    "this" cannot deallocate that storage because allocators
+            //    of "this" and "other" does not compare equal.
+            //  - "temp" has no allocated storage (pointers are null).
+            //    This is OK in this case. Destructor of "temp" has
+            //    nothing to do.
+
+            // Propagate allocator (noexcept).
+            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
+
+            // After propagation:
+            //  - "this" owns storage previously owned by "temp", but now
+            //    "this" can deallocate that storage.
+
+            // Move elements one-by-one from "other" to "this" (can throw)
+            assign_range
+            (
+                std::make_move_iterator(other.data_.first_),
+                std::make_move_iterator(other.data_.last_),
+                std::random_access_iterator_tag()
+            );
         }
         else
         {
+            // Move elements one-by-one from "other" to "this" (can throw)
             assign_range
             (
                 std::make_move_iterator(other.data_.first_),
