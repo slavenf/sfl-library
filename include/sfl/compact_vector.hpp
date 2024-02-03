@@ -61,10 +61,6 @@
     #define SFL_RETHROW  throw
 #endif
 
-#ifdef SFL_TEST_COMPACT_VECTOR
-void test_compact_vector();
-#endif
-
 namespace sfl
 {
 
@@ -369,10 +365,6 @@ SFL_DTL_END ///////////////////////////////////////////////////////////////////
 template <typename T, typename Allocator = std::allocator<T>>
 class compact_vector
 {
-    #ifdef SFL_TEST_COMPACT_VECTOR
-    friend void ::test_compact_vector();
-    #endif
-
 public:
 
     using allocator_type         = Allocator;

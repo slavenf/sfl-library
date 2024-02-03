@@ -61,10 +61,6 @@
     #define SFL_RETHROW  throw
 #endif
 
-#ifdef SFL_TEST_SEGMENTED_VECTOR
-void test_segmented_vector();
-#endif
-
 namespace sfl
 {
 
@@ -651,10 +647,6 @@ template < typename T,
            typename Allocator = std::allocator<T> >
 class segmented_vector
 {
-    #ifdef SFL_TEST_SEGMENTED_VECTOR
-    friend void ::test_segmented_vector();
-    #endif
-
     static_assert(N > 0, "N must be greater than zero.");
 
 public:

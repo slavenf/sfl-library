@@ -5,7 +5,6 @@
 
 #undef NDEBUG // This is very important. Must be in the first line.
 
-#define SFL_TEST_SMALL_VECTOR
 #include "sfl/small_vector.hpp"
 
 #include "check.hpp"
