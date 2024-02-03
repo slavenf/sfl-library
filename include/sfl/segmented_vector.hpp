@@ -1644,7 +1644,7 @@ private:
 
             const size_type new_table_capacity = std::max<size_type>
             (
-                table_capacity * table_grow_factor(),
+                size_type(double(table_capacity) * table_grow_factor()),
                 table_size + num_additional_segments
             );
 
