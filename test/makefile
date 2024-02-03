@@ -1,7 +1,7 @@
 CXX      = g++ -std=c++11
 CXXFLAGS = -Wall -Wextra -Wpedantic -Werror -Wfatal-errors -I ../include -g -O0
 
-VALGRIND = valgrind --leak-check=full
+VALGRIND = valgrind --leak-check=full --error-exitcode=1
 
 RM_RF    = rm -rf
 
