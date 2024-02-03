@@ -1,11 +1,8 @@
-#ifndef SFL_STATELESS_FANCY_ALLOC_HPP
-#define SFL_STATELESS_FANCY_ALLOC_HPP
+#ifndef SFL_TEST_STATELESS_ALLOC_HPP
+#define SFL_TEST_STATELESS_ALLOC_HPP
 
 #include <cstddef>
-#include <memory>
 #include <type_traits>
-
-#include "fancy_ptr.hpp"
 
 namespace sfl
 {
@@ -13,13 +10,13 @@ namespace test
 {
 
 template<typename T>
-class stateless_fancy_alloc
+class stateless_alloc
 {
 public:
 
     using value_type      = T;
-    using pointer         = fancy_ptr<T>;
-    using const_pointer   = fancy_ptr<const T>;
+    using pointer         = T*;
+    using const_pointer   = const T*;
     using reference       = T&;
     using const_reference = const T&;
     using size_type       = std::size_t;
@@ -32,43 +29,43 @@ public:
     template <typename U>
     struct rebind
     {
-        using other = stateless_fancy_alloc<U>;
+        using other = stateless_alloc<U>;
     };
 
     //
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    stateless_fancy_alloc() noexcept
+    stateless_alloc() noexcept
     {}
 
-    stateless_fancy_alloc(const stateless_fancy_alloc& /*other*/) noexcept
-    {}
-
-    template <typename U>
-    stateless_fancy_alloc(const stateless_fancy_alloc<U>& /*other*/) noexcept
-    {}
-
-    stateless_fancy_alloc(stateless_fancy_alloc&& /*other*/) noexcept
+    stateless_alloc(const stateless_alloc& /*other*/) noexcept
     {}
 
     template <typename U>
-    stateless_fancy_alloc(stateless_fancy_alloc<U>&& /*other*/) noexcept
+    stateless_alloc(const stateless_alloc<U>& /*other*/) noexcept
     {}
 
-    ~stateless_fancy_alloc() noexcept
+    stateless_alloc(stateless_alloc&& /*other*/) noexcept
+    {}
+
+    template <typename U>
+    stateless_alloc(stateless_alloc<U>&& /*other*/) noexcept
+    {}
+
+    ~stateless_alloc() noexcept
     {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    stateless_fancy_alloc& operator=(const stateless_fancy_alloc& /*other*/) noexcept
+    stateless_alloc& operator=(const stateless_alloc& /*other*/) noexcept
     {
         return *this;
     }
 
-    stateless_fancy_alloc& operator=(stateless_fancy_alloc&& /*other*/) noexcept
+    stateless_alloc& operator=(stateless_alloc&& /*other*/) noexcept
     {
         return *this;
     }
@@ -77,7 +74,7 @@ public:
     // ---- ALLOCATE AND DEALLOACTE -------------------------------------------
     //
 
-    pointer allocate(size_type n, const void* = nullptr)
+    T* allocate(size_type n, const void* = nullptr)
     {
         if (n > max_size())
         {
@@ -89,15 +86,12 @@ public:
             #endif
         }
 
-        return std::pointer_traits<pointer>::pointer_to
-        (
-            *static_cast<T*>(::operator new(n * sizeof(T)))
-        );
+        return static_cast<T*>(::operator new(n * sizeof(T)));
     }
 
-    void deallocate(pointer p, size_type)
+    void deallocate(T* p, size_type)
     {
-        ::operator delete(std::addressof(*p));
+        ::operator delete(p);
     }
 
     //
@@ -148,23 +142,23 @@ public:
     template <typename T1, typename T2>
     friend bool operator==
     (
-        const stateless_fancy_alloc<T1>& /*x*/,
-        const stateless_fancy_alloc<T2>& /*y*/
+        const stateless_alloc<T1>& /*x*/,
+        const stateless_alloc<T2>& /*y*/
     ) noexcept;
 
     template <typename T1, typename T2>
     friend bool operator!=
     (
-        const stateless_fancy_alloc<T1>& /*x*/,
-        const stateless_fancy_alloc<T2>& /*y*/
+        const stateless_alloc<T1>& /*x*/,
+        const stateless_alloc<T2>& /*y*/
     ) noexcept;
 };
 
 template <typename T1, typename T2>
 bool operator==
 (
-    const stateless_fancy_alloc<T1>& /*x*/,
-    const stateless_fancy_alloc<T2>& /*y*/
+    const stateless_alloc<T1>& /*x*/,
+    const stateless_alloc<T2>& /*y*/
 ) noexcept
 {
     return true;
@@ -173,8 +167,8 @@ bool operator==
 template <typename T1, typename T2>
 bool operator!=
 (
-    const stateless_fancy_alloc<T1>& /*x*/,
-    const stateless_fancy_alloc<T2>& /*y*/
+    const stateless_alloc<T1>& /*x*/,
+    const stateless_alloc<T2>& /*y*/
 ) noexcept
 {
     return false;
@@ -183,4 +177,4 @@ bool operator!=
 } // namespace test
 } // namespace sfl
 
-#endif // SFL_STATELESS_FANCY_ALLOC_HPP
+#endif // SFL_TEST_STATELESS_ALLOC_HPP

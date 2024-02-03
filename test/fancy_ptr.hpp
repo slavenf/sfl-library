@@ -1,5 +1,5 @@
-#ifndef SFL_FANCY_PTR_HPP
-#define SFL_FANCY_PTR_HPP
+#ifndef SFL_TEST_FANCY_PTR_HPP
+#define SFL_TEST_FANCY_PTR_HPP
 
 #include <cstddef>
 
@@ -205,4 +205,4 @@ public:
 } // namespace test
 } // namespace sfl
 
-#endif // SFL_FANCY_PTR_HPP
+#endif // SFL_TEST_FANCY_PTR_HPP

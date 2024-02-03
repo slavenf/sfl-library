@@ -61,6 +61,10 @@
     #define SFL_RETHROW  throw
 #endif
 
+#ifdef SFL_TEST_SMALL_FLAT_MULTIMAP
+void test_small_flat_multimap();
+#endif
+
 namespace sfl
 {
 
@@ -369,6 +373,10 @@ template < typename Key,
            typename Allocator = std::allocator<std::pair<Key, T>> >
 class small_flat_multimap
 {
+    #ifdef SFL_TEST_SMALL_FLAT_MULTIMAP
+    friend void ::test_small_flat_multimap();
+    #endif
+
 public:
 
     using allocator_type         = Allocator;

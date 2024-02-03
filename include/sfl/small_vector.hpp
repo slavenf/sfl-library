@@ -61,6 +61,10 @@
     #define SFL_RETHROW  throw
 #endif
 
+#ifdef SFL_TEST_SMALL_VECTOR
+void test_small_vector();
+#endif
+
 namespace sfl
 {
 
@@ -367,6 +371,10 @@ template < typename T,
            typename Allocator = std::allocator<T> >
 class small_vector
 {
+    #ifdef SFL_TEST_SMALL_VECTOR
+    friend void ::test_small_vector();
+    #endif
+
 public:
 
     using allocator_type         = Allocator;

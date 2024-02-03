@@ -1,5 +1,5 @@
-#ifndef SFL_STATELESS_ALLOC_NO_PROP_HPP
-#define SFL_STATELESS_ALLOC_NO_PROP_HPP
+#ifndef SFL_TEST_STATEFULL_ALLOC_HPP
+#define SFL_TEST_STATEFULL_ALLOC_HPP
 
 #include <cstddef>
 #include <type_traits>
@@ -9,9 +9,18 @@ namespace sfl
 namespace test
 {
 
-template<typename T>
-class stateless_alloc_no_prop
+std::size_t statefull_alloc_counter = 0;
+
+template <typename T>
+class statefull_alloc
 {
+private:
+
+    template <typename>
+    friend class statefull_alloc;
+
+    std::size_t id_;
+
 public:
 
     using value_type      = T;
@@ -22,51 +31,58 @@ public:
     using size_type       = std::size_t;
     using difference_type = std::ptrdiff_t;
 
-    using propagate_on_container_copy_assignment = std::false_type;
-    using propagate_on_container_move_assignment = std::false_type;
-    using propagate_on_container_swap            = std::false_type;
+    using propagate_on_container_copy_assignment = std::true_type;
+    using propagate_on_container_move_assignment = std::true_type;
+    using propagate_on_container_swap            = std::true_type;
 
     template <typename U>
     struct rebind
     {
-        using other = stateless_alloc_no_prop<U>;
+        using other = statefull_alloc<U>;
     };
 
     //
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    stateless_alloc_no_prop() noexcept
+    statefull_alloc() noexcept
+        : id_(++statefull_alloc_counter)
     {}
 
-    stateless_alloc_no_prop(const stateless_alloc_no_prop& /*other*/) noexcept
-    {}
-
-    template <typename U>
-    stateless_alloc_no_prop(const stateless_alloc_no_prop<U>& /*other*/) noexcept
-    {}
-
-    stateless_alloc_no_prop(stateless_alloc_no_prop&& /*other*/) noexcept
+    statefull_alloc(const statefull_alloc& other) noexcept
+        : id_(other.id_)
     {}
 
     template <typename U>
-    stateless_alloc_no_prop(stateless_alloc_no_prop<U>&& /*other*/) noexcept
+    statefull_alloc(const statefull_alloc<U>& other) noexcept
+        : id_(other.id_)
     {}
 
-    ~stateless_alloc_no_prop() noexcept
+    statefull_alloc(statefull_alloc&& other) noexcept
+        : id_(other.id_)
+    {}
+
+    template <typename U>
+    statefull_alloc(statefull_alloc<U>&& other) noexcept
+        : id_(other.id_)
+    {}
+
+    ~statefull_alloc() noexcept
     {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    stateless_alloc_no_prop& operator=(const stateless_alloc_no_prop& /*other*/) noexcept
+    statefull_alloc& operator=(const statefull_alloc& other) noexcept
     {
+        id_ = other.id_;
         return *this;
     }
 
-    stateless_alloc_no_prop& operator=(stateless_alloc_no_prop&& /*other*/) noexcept
+    statefull_alloc& operator=(statefull_alloc&& other) noexcept
     {
+        id_ = other.id_;
         return *this;
     }
 
@@ -142,39 +158,39 @@ public:
     template <typename T1, typename T2>
     friend bool operator==
     (
-        const stateless_alloc_no_prop<T1>& /*x*/,
-        const stateless_alloc_no_prop<T2>& /*y*/
+        const statefull_alloc<T1>& x,
+        const statefull_alloc<T2>& y
     ) noexcept;
 
     template <typename T1, typename T2>
     friend bool operator!=
     (
-        const stateless_alloc_no_prop<T1>& /*x*/,
-        const stateless_alloc_no_prop<T2>& /*y*/
+        const statefull_alloc<T1>& x,
+        const statefull_alloc<T2>& y
     ) noexcept;
 };
 
 template <typename T1, typename T2>
 bool operator==
 (
-    const stateless_alloc_no_prop<T1>& /*x*/,
-    const stateless_alloc_no_prop<T2>& /*y*/
+    const statefull_alloc<T1>& x,
+    const statefull_alloc<T2>& y
 ) noexcept
 {
-    return true;
+    return x.id_ == y.id_;
 }
 
 template <typename T1, typename T2>
 bool operator!=
 (
-    const stateless_alloc_no_prop<T1>& /*x*/,
-    const stateless_alloc_no_prop<T2>& /*y*/
+    const statefull_alloc<T1>& x,
+    const statefull_alloc<T2>& y
 ) noexcept
 {
-    return false;
+    return !(x == y);
 }
 
 } // namespace test
 } // namespace sfl
 
-#endif // SFL_STATELESS_ALLOC_NO_PROP_HPP
+#endif // SFL_TEST_STATEFULL_ALLOC_HPP

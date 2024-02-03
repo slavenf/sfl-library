@@ -61,6 +61,10 @@
     #define SFL_RETHROW  throw
 #endif
 
+#ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MAP
+void test_small_unordered_flat_map();
+#endif
+
 namespace sfl
 {
 
@@ -369,6 +373,10 @@ template < typename Key,
            typename Allocator = std::allocator<std::pair<Key, T>> >
 class small_unordered_flat_map
 {
+    #ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MAP
+    friend void ::test_small_unordered_flat_map();
+    #endif
+
 public:
 
     using allocator_type   = Allocator;

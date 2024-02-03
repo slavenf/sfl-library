@@ -1,5 +1,5 @@
-#ifndef SFL_STATELESS_ALLOC_HPP
-#define SFL_STATELESS_ALLOC_HPP
+#ifndef SFL_TEST_STATELESS_ALLOC_NO_PROP_HPP
+#define SFL_TEST_STATELESS_ALLOC_NO_PROP_HPP
 
 #include <cstddef>
 #include <type_traits>
@@ -10,7 +10,7 @@ namespace test
 {
 
 template<typename T>
-class stateless_alloc
+class stateless_alloc_no_prop
 {
 public:
 
@@ -22,50 +22,50 @@ public:
     using size_type       = std::size_t;
     using difference_type = std::ptrdiff_t;
 
-    using propagate_on_container_copy_assignment = std::true_type;
-    using propagate_on_container_move_assignment = std::true_type;
-    using propagate_on_container_swap            = std::true_type;
+    using propagate_on_container_copy_assignment = std::false_type;
+    using propagate_on_container_move_assignment = std::false_type;
+    using propagate_on_container_swap            = std::false_type;
 
     template <typename U>
     struct rebind
     {
-        using other = stateless_alloc<U>;
+        using other = stateless_alloc_no_prop<U>;
     };
 
     //
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    stateless_alloc() noexcept
+    stateless_alloc_no_prop() noexcept
     {}
 
-    stateless_alloc(const stateless_alloc& /*other*/) noexcept
-    {}
-
-    template <typename U>
-    stateless_alloc(const stateless_alloc<U>& /*other*/) noexcept
-    {}
-
-    stateless_alloc(stateless_alloc&& /*other*/) noexcept
+    stateless_alloc_no_prop(const stateless_alloc_no_prop& /*other*/) noexcept
     {}
 
     template <typename U>
-    stateless_alloc(stateless_alloc<U>&& /*other*/) noexcept
+    stateless_alloc_no_prop(const stateless_alloc_no_prop<U>& /*other*/) noexcept
     {}
 
-    ~stateless_alloc() noexcept
+    stateless_alloc_no_prop(stateless_alloc_no_prop&& /*other*/) noexcept
+    {}
+
+    template <typename U>
+    stateless_alloc_no_prop(stateless_alloc_no_prop<U>&& /*other*/) noexcept
+    {}
+
+    ~stateless_alloc_no_prop() noexcept
     {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    stateless_alloc& operator=(const stateless_alloc& /*other*/) noexcept
+    stateless_alloc_no_prop& operator=(const stateless_alloc_no_prop& /*other*/) noexcept
     {
         return *this;
     }
 
-    stateless_alloc& operator=(stateless_alloc&& /*other*/) noexcept
+    stateless_alloc_no_prop& operator=(stateless_alloc_no_prop&& /*other*/) noexcept
     {
         return *this;
     }
@@ -142,23 +142,23 @@ public:
     template <typename T1, typename T2>
     friend bool operator==
     (
-        const stateless_alloc<T1>& /*x*/,
-        const stateless_alloc<T2>& /*y*/
+        const stateless_alloc_no_prop<T1>& /*x*/,
+        const stateless_alloc_no_prop<T2>& /*y*/
     ) noexcept;
 
     template <typename T1, typename T2>
     friend bool operator!=
     (
-        const stateless_alloc<T1>& /*x*/,
-        const stateless_alloc<T2>& /*y*/
+        const stateless_alloc_no_prop<T1>& /*x*/,
+        const stateless_alloc_no_prop<T2>& /*y*/
     ) noexcept;
 };
 
 template <typename T1, typename T2>
 bool operator==
 (
-    const stateless_alloc<T1>& /*x*/,
-    const stateless_alloc<T2>& /*y*/
+    const stateless_alloc_no_prop<T1>& /*x*/,
+    const stateless_alloc_no_prop<T2>& /*y*/
 ) noexcept
 {
     return true;
@@ -167,8 +167,8 @@ bool operator==
 template <typename T1, typename T2>
 bool operator!=
 (
-    const stateless_alloc<T1>& /*x*/,
-    const stateless_alloc<T2>& /*y*/
+    const stateless_alloc_no_prop<T1>& /*x*/,
+    const stateless_alloc_no_prop<T2>& /*y*/
 ) noexcept
 {
     return false;
@@ -177,4 +177,4 @@ bool operator!=
 } // namespace test
 } // namespace sfl
 
-#endif // SFL_STATELESS_ALLOC_HPP
+#endif // SFL_TEST_STATELESS_ALLOC_NO_PROP_HPP

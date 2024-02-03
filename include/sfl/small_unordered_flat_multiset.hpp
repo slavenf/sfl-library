@@ -61,6 +61,10 @@
     #define SFL_RETHROW  throw
 #endif
 
+#ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MULTISET
+void test_small_unordered_flat_multiset();
+#endif
+
 namespace sfl
 {
 
@@ -368,6 +372,10 @@ template < typename Key,
            typename Allocator = std::allocator<Key> >
 class small_unordered_flat_multiset
 {
+    #ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MULTISET
+    friend void ::test_small_unordered_flat_multiset();
+    #endif
+
 public:
 
     using allocator_type   = Allocator;
