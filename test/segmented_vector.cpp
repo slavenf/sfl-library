@@ -21,7 +21,7 @@
 #include <sstream>
 #include <vector>
 
-void test_segmented_vector()
+void test_segmented_vector_N_1()
 {
     #undef   TPARAM_N
     #define  TPARAM_N 1
@@ -45,9 +45,10 @@ void test_segmented_vector()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
+}
 
-    ///////////////////////////////////////////////////////////////////////////
-
+void test_segmented_vector_N_2()
+{
     #undef   TPARAM_N
     #define  TPARAM_N 2
 
@@ -70,9 +71,10 @@ void test_segmented_vector()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
+}
 
-    ///////////////////////////////////////////////////////////////////////////
-
+void test_segmented_vector_N_3()
+{
     #undef   TPARAM_N
     #define  TPARAM_N 3
 
@@ -95,9 +97,10 @@ void test_segmented_vector()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
+}
 
-    ///////////////////////////////////////////////////////////////////////////
-
+void test_segmented_vector_N_4()
+{
     #undef   TPARAM_N
     #define  TPARAM_N 4
 
@@ -120,9 +123,10 @@ void test_segmented_vector()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
+}
 
-    ///////////////////////////////////////////////////////////////////////////
-
+void test_segmented_vector_N_100()
+{
     #undef   TPARAM_N
     #define  TPARAM_N 100
 
@@ -149,5 +153,9 @@ void test_segmented_vector()
 
 int main()
 {
-    test_segmented_vector();
+    test_segmented_vector_N_1();
+    test_segmented_vector_N_2();
+    test_segmented_vector_N_3();
+    test_segmented_vector_N_4();
+    test_segmented_vector_N_100();
 }
