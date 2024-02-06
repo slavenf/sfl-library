@@ -1185,29 +1185,19 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        const difference_type offset = std::distance(cbegin(), first);
+        const difference_type offset1 = std::distance(cbegin(), first);
+        const difference_type offset2 = std::distance(cbegin(), last);
 
-        if (first == last)
-        {
-            return begin() + offset;
-        }
+        pointer p1 = data_.first_ + offset1;
+        pointer p2 = data_.first_ + offset2;
 
-        const difference_type n = std::distance(first, last);
-
-        pointer p = data_.first_ + offset;
-
-        if (p + n < data_.last_)
-        {
-            std::move(p + n, data_.last_, p);
-        }
-
-        pointer new_last = data_.last_ - n;
+        pointer new_last = std::move(p2, data_.last_, p1);
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
-        return p;
+        return p1;
     }
 
     size_type erase(const Key& key)

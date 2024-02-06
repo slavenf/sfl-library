@@ -1364,27 +1364,16 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        iterator p(first.seg_, first.elem_);
+        iterator p1(first.seg_, first.elem_);
+        iterator p2(last.seg_, last.elem_);
 
-        if (first == last)
-        {
-            return p;
-        }
-
-        const difference_type n = std::distance(first, last);
-
-        if (p + n < data_.last_)
-        {
-            std::move(p + n, data_.last_, p);
-        }
-
-        iterator new_last = data_.last_ - n;
+        iterator new_last = std::move(p2, data_.last_, p1);
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
-        return p;
+        return p1;
     }
 
     void resize(size_type n)
