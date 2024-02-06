@@ -1262,10 +1262,7 @@ public:
 
         pointer p = data_.first_ + offset;
 
-        if (p < data_.last_ - 1)
-        {
-            std::move(p + 1, data_.last_, p);
-        }
+        std::move(p + 1, data_.last_, p);
 
         --data_.last_;
 
