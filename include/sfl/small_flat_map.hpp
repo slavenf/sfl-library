@@ -1345,6 +1345,11 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
+        if (first == last)
+        {
+            return begin() + std::distance(cbegin(), first);
+        }
+
         const difference_type offset1 = std::distance(cbegin(), first);
         const difference_type offset2 = std::distance(cbegin(), last);
 

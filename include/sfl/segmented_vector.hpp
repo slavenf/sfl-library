@@ -1362,6 +1362,11 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
+        if (first == last)
+        {
+            return begin() + std::distance(cbegin(), first);
+        }
+
         const iterator p1(first.seg_, first.elem_);
         const iterator p2(last.seg_, last.elem_);
 
