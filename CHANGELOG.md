@@ -11,7 +11,7 @@
 * Reworked scripts for testing on Arch Linux and CentOS 7.
 * Added script for testing on Windows.
 * Reworked and improved `erase(iterator)` and `erase(iterator, iterator)`
-  member functions of `segmented_vector`, `small_vector` and `small_flat_XXX`.
+  member functions.
 
 
 
