@@ -1351,9 +1351,7 @@ public:
 
         iterator p(pos.seg_, pos.elem_);
 
-        std::move(p + 1, data_.last_, p);
-
-        --data_.last_;
+        data_.last_ = std::move(p + 1, data_.last_, p);
 
         SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_.elem_);
 
