@@ -1250,34 +1250,42 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        const difference_type offset = std::distance(cbegin(), first);
-
         if (first == last)
         {
-            return begin() + offset;
+            return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type num_elems_remove = last - first;
-        const difference_type num_elems_after = cend() - last;
+        const difference_type count1 = std::distance(first, last);
+        const difference_type count2 = std::distance(last, cend());
 
-        const pointer p = data_.first_ + offset;
+        const difference_type offset = std::distance(cbegin(), first);
 
-        if (num_elems_after >= num_elems_remove)
+        const pointer p1 = data_.first_ + offset;
+
+        if (count1 >= count2)
         {
-            std::move(data_.last_ - num_elems_remove, data_.last_, p);
+            const pointer p2 = p1 + count1;
+
+            const pointer new_last = std::move(p2, data_.last_, p1);
+
+            SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+
+            data_.last_ = new_last;
         }
         else
         {
-            std::move(data_.last_ - num_elems_after, data_.last_, p);
+            const pointer p2 = p1 + count2;
+
+            std::move(p2, data_.last_, p1);
+
+            const pointer new_last = p2;
+
+            SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+
+            data_.last_ = new_last;
         }
 
-        const pointer new_last = data_.last_ - num_elems_remove;
-
-        SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
-
-        data_.last_ = new_last;
-
-        return p;
+        return p1;
     }
 
     size_type erase(const Key& key)
