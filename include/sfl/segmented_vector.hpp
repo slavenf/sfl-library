@@ -1349,7 +1349,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        iterator p(pos.seg_, pos.elem_);
+        const iterator p(pos.seg_, pos.elem_);
 
         data_.last_ = std::move(p + 1, data_.last_, p);
 
@@ -1362,10 +1362,10 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        iterator p1(first.seg_, first.elem_);
-        iterator p2(last.seg_, last.elem_);
+        const iterator p1(first.seg_, first.elem_);
+        const iterator p2(last.seg_, last.elem_);
 
-        iterator new_last = std::move(p2, data_.last_, p1);
+        const iterator new_last = std::move(p2, data_.last_, p1);
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 

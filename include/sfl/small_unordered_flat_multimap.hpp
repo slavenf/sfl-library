@@ -1232,7 +1232,7 @@ public:
 
         const difference_type offset = std::distance(cbegin(), pos);
 
-        pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + offset;
 
         if (p < data_.last_ - 1)
         {
@@ -1260,7 +1260,7 @@ public:
         const difference_type num_elems_remove = last - first;
         const difference_type num_elems_after = cend() - last;
 
-        pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + offset;
 
         if (num_elems_after >= num_elems_remove)
         {
@@ -1271,7 +1271,7 @@ public:
             std::move(data_.last_ - num_elems_after, data_.last_, p);
         }
 
-        pointer new_last = data_.last_ - num_elems_remove;
+        const pointer new_last = data_.last_ - num_elems_remove;
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 

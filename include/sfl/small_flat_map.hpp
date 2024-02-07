@@ -1332,7 +1332,7 @@ public:
 
         const difference_type offset = std::distance(cbegin(), pos);
 
-        pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + offset;
 
         data_.last_ = std::move(p + 1, data_.last_, p);
 
@@ -1348,10 +1348,10 @@ public:
         const difference_type offset1 = std::distance(cbegin(), first);
         const difference_type offset2 = std::distance(cbegin(), last);
 
-        pointer p1 = data_.first_ + offset1;
-        pointer p2 = data_.first_ + offset2;
+        const pointer p1 = data_.first_ + offset1;
+        const pointer p2 = data_.first_ + offset2;
 
-        pointer new_last = std::move(p2, data_.last_, p1);
+        const pointer new_last = std::move(p2, data_.last_, p1);
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
