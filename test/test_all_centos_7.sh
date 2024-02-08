@@ -10,6 +10,7 @@ run()
 
     if [ $? -ne 0 ] ; then
         echo :::: ERROR. Test failed \[$1\]
+        echo :::: ALL STOP.
         exit 1
     fi
 
