@@ -17,9 +17,6 @@ RM_RF = rm -rf
 # List of all source files that must be compiled and tested
 SRCS := $(wildcard *.cpp)
 
-# List of all executable files
-EXES :=
-
 # First rule
 .PHONY: check
 check:
