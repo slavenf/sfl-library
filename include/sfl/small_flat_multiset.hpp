@@ -62,6 +62,7 @@
 #endif
 
 #ifdef SFL_TEST_SMALL_FLAT_MULTISET
+template <int>
 void test_small_flat_multiset();
 #endif
 
@@ -373,6 +374,7 @@ template < typename Key,
 class small_flat_multiset
 {
     #ifdef SFL_TEST_SMALL_FLAT_MULTISET
+    template <int>
     friend void ::test_small_flat_multiset();
     #endif
 

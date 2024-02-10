@@ -62,6 +62,7 @@
 #endif
 
 #ifdef SFL_TEST_SMALL_FLAT_MAP
+template <int>
 void test_small_flat_map();
 #endif
 
@@ -374,6 +375,7 @@ template < typename Key,
 class small_flat_map
 {
     #ifdef SFL_TEST_SMALL_FLAT_MAP
+    template <int>
     friend void ::test_small_flat_map();
     #endif
 

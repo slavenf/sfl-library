@@ -62,6 +62,7 @@
 #endif
 
 #ifdef SFL_TEST_SMALL_UNORDERED_FLAT_SET
+template <int>
 void test_small_unordered_flat_set();
 #endif
 
@@ -373,6 +374,7 @@ template < typename Key,
 class small_unordered_flat_set
 {
     #ifdef SFL_TEST_SMALL_UNORDERED_FLAT_SET
+    template <int>
     friend void ::test_small_unordered_flat_set();
     #endif
 

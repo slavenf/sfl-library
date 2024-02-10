@@ -20,7 +20,7 @@
 #include <sstream>
 #include <vector>
 
-void test_segmented_vector_N_1()
+void test_segmented_vector_N_1_A_1()
 {
     #undef   TPARAM_N
     #define  TPARAM_N 1
@@ -28,25 +28,49 @@ void test_segmented_vector_N_1()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_1_A_2()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 1
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_1_A_3()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 1
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_1_A_4()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 1
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_1_A_5()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 1
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
 }
 
-void test_segmented_vector_N_2()
+void test_segmented_vector_N_2_A_1()
 {
     #undef   TPARAM_N
     #define  TPARAM_N 2
@@ -54,25 +78,49 @@ void test_segmented_vector_N_2()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_2_A_2()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 2
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_2_A_3()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 2
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_2_A_4()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 2
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_2_A_5()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 2
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
 }
 
-void test_segmented_vector_N_3()
+void test_segmented_vector_N_3_A_1()
 {
     #undef   TPARAM_N
     #define  TPARAM_N 3
@@ -80,25 +128,49 @@ void test_segmented_vector_N_3()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_3_A_2()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 3
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_3_A_3()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 3
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_3_A_4()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 3
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_3_A_5()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 3
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
 }
 
-void test_segmented_vector_N_4()
+void test_segmented_vector_N_4_A_1()
 {
     #undef   TPARAM_N
     #define  TPARAM_N 4
@@ -106,25 +178,49 @@ void test_segmented_vector_N_4()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_4_A_2()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 4
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_4_A_3()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 4
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_4_A_4()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 4
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_4_A_5()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 4
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "segmented_vector.inc"
 }
 
-void test_segmented_vector_N_100()
+void test_segmented_vector_N_100_A_1()
 {
     #undef   TPARAM_N
     #define  TPARAM_N 100
@@ -132,18 +228,42 @@ void test_segmented_vector_N_100()
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_100_A_2()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 100
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_100_A_3()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 100
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_100_A_4()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 100
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "segmented_vector.inc"
+}
+
+void test_segmented_vector_N_100_A_5()
+{
+    #undef   TPARAM_N
+    #define  TPARAM_N 100
 
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
@@ -152,9 +272,33 @@ void test_segmented_vector_N_100()
 
 int main()
 {
-    test_segmented_vector_N_1();
-    test_segmented_vector_N_2();
-    test_segmented_vector_N_3();
-    test_segmented_vector_N_4();
-    test_segmented_vector_N_100();
+    test_segmented_vector_N_1_A_1();
+    test_segmented_vector_N_1_A_2();
+    test_segmented_vector_N_1_A_3();
+    test_segmented_vector_N_1_A_4();
+    test_segmented_vector_N_1_A_5();
+
+    test_segmented_vector_N_2_A_1();
+    test_segmented_vector_N_2_A_2();
+    test_segmented_vector_N_2_A_3();
+    test_segmented_vector_N_2_A_4();
+    test_segmented_vector_N_2_A_5();
+
+    test_segmented_vector_N_3_A_1();
+    test_segmented_vector_N_3_A_2();
+    test_segmented_vector_N_3_A_3();
+    test_segmented_vector_N_3_A_4();
+    test_segmented_vector_N_3_A_5();
+
+    test_segmented_vector_N_4_A_1();
+    test_segmented_vector_N_4_A_2();
+    test_segmented_vector_N_4_A_3();
+    test_segmented_vector_N_4_A_4();
+    test_segmented_vector_N_4_A_5();
+
+    test_segmented_vector_N_100_A_1();
+    test_segmented_vector_N_100_A_2();
+    test_segmented_vector_N_100_A_3();
+    test_segmented_vector_N_100_A_4();
+    test_segmented_vector_N_100_A_5();
 }

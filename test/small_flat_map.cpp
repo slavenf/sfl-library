@@ -38,24 +38,41 @@ static_assert
 );
 #endif
 
-void test_small_flat_map()
+template <>
+void test_small_flat_map<1>()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "small_flat_map.inc"
+}
 
+template <>
+void test_small_flat_map<2>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "small_flat_map.inc"
+}
 
+template <>
+void test_small_flat_map<3>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "small_flat_map.inc"
+}
 
+template <>
+void test_small_flat_map<4>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "small_flat_map.inc"
+}
 
+template <>
+void test_small_flat_map<5>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "small_flat_map.inc"
@@ -63,5 +80,9 @@ void test_small_flat_map()
 
 int main()
 {
-    test_small_flat_map();
+    test_small_flat_map<1>();
+    test_small_flat_map<2>();
+    test_small_flat_map<3>();
+    test_small_flat_map<4>();
+    test_small_flat_map<5>();
 }

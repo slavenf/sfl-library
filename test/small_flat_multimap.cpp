@@ -38,24 +38,41 @@ static_assert
 );
 #endif
 
-void test_small_flat_multimap()
+template <>
+void test_small_flat_multimap<1>()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "small_flat_multimap.inc"
+}
 
+template <>
+void test_small_flat_multimap<2>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "small_flat_multimap.inc"
+}
 
+template <>
+void test_small_flat_multimap<3>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "small_flat_multimap.inc"
+}
 
+template <>
+void test_small_flat_multimap<4>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "small_flat_multimap.inc"
+}
 
+template <>
+void test_small_flat_multimap<5>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "small_flat_multimap.inc"
@@ -63,5 +80,9 @@ void test_small_flat_multimap()
 
 int main()
 {
-    test_small_flat_multimap();
+    test_small_flat_multimap<1>();
+    test_small_flat_multimap<2>();
+    test_small_flat_multimap<3>();
+    test_small_flat_multimap<4>();
+    test_small_flat_multimap<5>();
 }

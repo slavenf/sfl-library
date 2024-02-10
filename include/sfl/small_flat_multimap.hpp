@@ -62,6 +62,7 @@
 #endif
 
 #ifdef SFL_TEST_SMALL_FLAT_MULTIMAP
+template <int>
 void test_small_flat_multimap();
 #endif
 
@@ -374,6 +375,7 @@ template < typename Key,
 class small_flat_multimap
 {
     #ifdef SFL_TEST_SMALL_FLAT_MULTIMAP
+    template <int>
     friend void ::test_small_flat_multimap();
     #endif
 

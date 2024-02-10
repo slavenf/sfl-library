@@ -39,24 +39,41 @@ static_assert
 );
 #endif
 
-void test_small_flat_set()
+template <>
+void test_small_flat_set<1>()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "small_flat_set.inc"
+}
 
+template <>
+void test_small_flat_set<2>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "small_flat_set.inc"
+}
 
+template <>
+void test_small_flat_set<3>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "small_flat_set.inc"
+}
 
+template <>
+void test_small_flat_set<4>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "small_flat_set.inc"
+}
 
+template <>
+void test_small_flat_set<5>()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "small_flat_set.inc"
@@ -64,5 +81,9 @@ void test_small_flat_set()
 
 int main()
 {
-    test_small_flat_set();
+    test_small_flat_set<1>();
+    test_small_flat_set<2>();
+    test_small_flat_set<3>();
+    test_small_flat_set<4>();
+    test_small_flat_set<5>();
 }

@@ -37,24 +37,36 @@ static_assert
 );
 #endif
 
-void test_small_vector()
+void test_small_vector_1()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "small_vector.inc"
+}
 
+void test_small_vector_2()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "small_vector.inc"
+}
 
+void test_small_vector_3()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "small_vector.inc"
+}
 
+void test_small_vector_4()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "small_vector.inc"
+}
 
+void test_small_vector_5()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "small_vector.inc"
@@ -62,5 +74,9 @@ void test_small_vector()
 
 int main()
 {
-    test_small_vector();
+    test_small_vector_1();
+    test_small_vector_2();
+    test_small_vector_3();
+    test_small_vector_4();
+    test_small_vector_5();
 }

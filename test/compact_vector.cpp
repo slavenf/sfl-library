@@ -29,24 +29,36 @@ static_assert
 );
 #endif
 
-void test_compact_vector()
+void test_compact_vector_1()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "compact_vector.inc"
+}
 
+void test_compact_vector_2()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "compact_vector.inc"
+}
 
+void test_compact_vector_3()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "compact_vector.inc"
+}
 
+void test_compact_vector_4()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "compact_vector.inc"
+}
 
+void test_compact_vector_5()
+{
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
     #include "compact_vector.inc"
@@ -54,5 +66,9 @@ void test_compact_vector()
 
 int main()
 {
-    test_compact_vector();
+    test_compact_vector_1();
+    test_compact_vector_2();
+    test_compact_vector_3();
+    test_compact_vector_4();
+    test_compact_vector_5();
 }
