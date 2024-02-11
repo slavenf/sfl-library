@@ -1,3 +1,10 @@
 .vscode/*
+
+test/*.out
+
+test/*.exe
+test/*.ilk
+test/*.obj
+test/*.pdb
+
 workspace.code-workspace
-test/a.out
