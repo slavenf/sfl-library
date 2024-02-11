@@ -21,9 +21,6 @@ SRCS := $(wildcard *.cpp)
 .PHONY: check
 check:
 
-.PHONY: clean
-clean:
-
 # This function generates "check" and "clean" rules for given source file.
 # Usage: $(call generate_rules,source_file)
 define generate_rules
@@ -31,15 +28,14 @@ define generate_rules
 .PHONY: check_$(basename $(1))
 check:  check_$(basename $(1))
 check_$(basename $(1)):
-	$(CXX) $(CXXFLAGS) $(1) -o $(basename $(1))
-	$(VALGRIND) ./$(basename $(1))
-
-.PHONY: clean_$(basename $(1))
-clean:  clean_$(basename $(1))
-clean_$(basename $(1)):
-	$(RM_RF) $(basename $(1))
+	$(CXX) $(CXXFLAGS) $(1) -o $(basename $(1)).out
+	$(VALGRIND) ./$(basename $(1)).out
 
 endef
 
 # Generate rules for all source files
 $(foreach file,$(SRCS),$(eval $(call generate_rules,$(file))))
+
+.PHONY: clean
+clean:
+	$(RM_RF) *.out
