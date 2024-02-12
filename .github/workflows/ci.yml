@@ -1,0 +1,13 @@
+name: CI
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  ubuntu:
+    name: Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Test all
+        run: |
+            cd test
+            make -j
