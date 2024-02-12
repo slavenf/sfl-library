@@ -1,8 +1,10 @@
 name: CI
+
 on: [push, pull_request, workflow_dispatch]
+
 jobs:
   ubuntu:
-    name: Ubuntu
+    name: Test all on Ubuntu (GCC and Clang)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -11,13 +13,13 @@ jobs:
         run: |
           sudo apt update && sudo apt install -y valgrind
 
-      - name: Test all
+      - name: Run all tests
         run: |
           cd test
-          make -j
+          ./test_all_ubuntu_22.04.sh
 
   windows:
-    name: Windows
+    name: Test all on Windows (Visual C++)
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,7 +30,7 @@ jobs:
         run: |
           choco install make
 
-      - name: Test all
+      - name: Run all tests
         run: |
           cd test
-          make -f makefile.msvc
+          test_all_msvc.bat
