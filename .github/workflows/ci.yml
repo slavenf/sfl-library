@@ -33,4 +33,4 @@ jobs:
       - name: Run all tests
         run: |
           cd test
-          test_all_msvc.bat
+          ./test_all_msvc.bat
