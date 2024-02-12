@@ -5,26 +5,30 @@ jobs:
     name: Ubuntu
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Install Valgrind
         run: |
           sudo apt update && sudo apt install -y valgrind
-      - name: Checkout
-        uses: actions/checkout@v4
+
       - name: Test all
         run: |
           cd test
           make -j
+
   windows:
     name: Windows
     runs-on: windows-latest
     steps:
+      - uses: actions/checkout@v4
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
       - name: Install GNU Make
         run: |
           choco install make
-      - name: Checkout
-        uses: actions/checkout@v4
+
       - name: Test all
-        uses: ilammy/msvc-dev-cmd@v1
         run: |
           dir
           cd test
