@@ -29,3 +29,4 @@ jobs:
           cd test
           dir
           make --version
+          make -f makefile.msvc
