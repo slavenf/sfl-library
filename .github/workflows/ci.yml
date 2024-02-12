@@ -24,6 +24,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Test all
+        uses: ilammy/msvc-dev-cmd@v1
         run: |
           dir
           cd test
