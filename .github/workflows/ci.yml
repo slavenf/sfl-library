@@ -7,10 +7,23 @@ jobs:
     steps:
       - name: Install Valgrind
         run: |
-            sudo apt update && sudo apt install -y valgrind
+          sudo apt update && sudo apt install -y valgrind
       - name: Checkout
         uses: actions/checkout@v4
       - name: Test all
         run: |
-            cd test
-            make -j
+          cd test
+          make -j
+  windows:
+    name: Windows
+    runs-on: windows-latest
+    steps:
+      - name: Install GNU Make
+        run: |
+          choco install make
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Test all
+        run: |
+          cd test
+          make -f makefile.msvc
