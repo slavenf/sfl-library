@@ -25,5 +25,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Test all
         run: |
+          dir
           cd test
-          make -f makefile.msvc
+          dir
+          make --version
