@@ -13,3 +13,10 @@ target_include_directories(sfl INTERFACE
 )
 
 set_property(TARGET sfl PROPERTY CXX_STANDARD 11)
+
+install(
+	DIRECTORY
+		include/sfl
+	DESTINATION
+		include
+)
