@@ -5,6 +5,9 @@ jobs:
     name: Ubuntu
     runs-on: ubuntu-latest
     steps:
+      - name: Install Valgrind
+        run: |
+            sudo apt update && sudo apt install -y valgrind
       - name: Checkout
         uses: actions/checkout@v4
       - name: Test all
