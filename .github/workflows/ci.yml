@@ -30,8 +30,5 @@ jobs:
 
       - name: Test all
         run: |
-          dir
           cd test
-          dir
-          make --version
           make -f makefile.msvc
