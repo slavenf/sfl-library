@@ -32,6 +32,5 @@ jobs:
 
       - name: Run all tests
         shell: cmd
-        working-directory: ./test
-        run: |
-          make CXX="cl /std:c++14" SILENT=1 -f makefile.msvc
+        working-directory: .\test
+        run: .\test_all_msvc.bat
