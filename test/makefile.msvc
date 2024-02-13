@@ -2,6 +2,7 @@
 # This is GNU makefile for Windows OS and Visual C++ compiler
 #
 
+# Default shell used by GNU Make on Windows
 SHELL = cmd
 
 # C++ compiler
