@@ -37,7 +37,7 @@ jobs:
 
       - name: Test test test
         shell: cmd
-        run:
+        run: |
           ls
           ls > nul
           ls > nul 2>&1
