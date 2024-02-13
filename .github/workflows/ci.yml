@@ -32,6 +32,5 @@ jobs:
 
       - name: Run all tests
         shell: cmd
-        run: |
-          cd test
-          .\test_all_msvc.bat
+        working-directory: ./test
+        run: .\test_all_msvc.bat
