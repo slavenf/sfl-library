@@ -17,7 +17,7 @@ SILENT = 0
 ifeq ($(SILENT),0)
 	TO_NULL_IF_SILENT =
 else
-	TO_NULL_IF_SILENT = > nul
+	TO_NULL_IF_SILENT = > log.txt
 endif
 
 # List of all source files that must be compiled and tested
@@ -35,7 +35,7 @@ define generate_rules
 check:  check_$(basename $(1))
 check_$(basename $(1)):
 	$(CXX) $(CXXFLAGS) $(1)
-	./$(basename $(1)).exe $(TO_NULL_IF_SILENT)
+	.\$(basename $(1)).exe $(TO_NULL_IF_SILENT)
 
 endef
 
