@@ -35,7 +35,7 @@ define generate_rules
 check:  check_$(basename $(1))
 check_$(basename $(1)):
 	$(CXX) $(CXXFLAGS) $(1)
-	.\$(basename $(1)).exe $(TO_NULL_IF_SILENT)
+	./$(basename $(1)).exe $(TO_NULL_IF_SILENT)
 
 endef
 
