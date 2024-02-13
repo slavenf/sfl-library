@@ -3,10 +3,10 @@
 setlocal EnableDelayedExpansion
 
 :: List of commands to execute
-set commands[0]=make CXX="cl /std:c++14" -f makefile.msvc
-set commands[1]=make CXX="cl /std:c++17" -f makefile.msvc
-set commands[2]=make CXX="cl /std:c++20" -f makefile.msvc
-set commands[3]=make CXX="cl /std:c++latest" -f makefile.msvc
+set commands[0]=make CXX="cl /std:c++14" SILENT=1 -f makefile.msvc
+set commands[1]=make CXX="cl /std:c++17" SILENT=1 -f makefile.msvc
+set commands[2]=make CXX="cl /std:c++20" SILENT=1 -f makefile.msvc
+set commands[3]=make CXX="cl /std:c++latest" SILENT=1 -f makefile.msvc
 
 :: Loop counter
 set /a i=0

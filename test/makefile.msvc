@@ -6,10 +6,19 @@
 CXX = cl /std:c++14
 
 # C++ compiler flags
-CXXFLAGS = /nologo /EHsc /W4 /WX /I ../include /Od /Zi
+CXXFLAGS = /nologo /EHsc /W4 /WX /I ..\include /Od /Zi
 
 # Command for removing all files and directories
 RM_RF = del /f /s /q
+
+# Set to 1 to execute (run) tests silently
+SILENT = 0
+
+ifeq ($(SILENT),0)
+	TO_NULL_IF_SILENT =
+else
+	TO_NULL_IF_SILENT = > nul 2>&1
+endif
 
 # List of all source files that must be compiled and tested
 SRCS := $(wildcard *.cpp)
@@ -26,7 +35,7 @@ define generate_rules
 check:  check_$(basename $(1))
 check_$(basename $(1)):
 	$(CXX) $(CXXFLAGS) $(1)
-	./$(basename $(1)).exe
+	.\$(basename $(1)).exe $(TO_NULL_IF_SILENT)
 
 endef
 
