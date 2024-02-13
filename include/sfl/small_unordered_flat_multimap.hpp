@@ -61,6 +61,11 @@
     #define SFL_RETHROW  throw
 #endif
 
+#ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MULTIMAP
+template <int>
+void test_small_unordered_flat_multimap();
+#endif
+
 namespace sfl
 {
 
@@ -369,6 +374,11 @@ template < typename Key,
            typename Allocator = std::allocator<std::pair<Key, T>> >
 class small_unordered_flat_multimap
 {
+    #ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MULTIMAP
+    template <int>
+    friend void ::test_small_unordered_flat_multimap();
+    #endif
+
 public:
 
     using allocator_type   = Allocator;
@@ -1134,24 +1144,25 @@ public:
     template <typename... Args>
     iterator emplace(Args&&... args)
     {
-        return insert_aux(std::forward<Args>(args)...);
+        return insert_unordered(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
         SFL_DTL::ignore_unused(hint);
-        return emplace(std::forward<Args>(args)...);
+        return insert_unordered(std::forward<Args>(args)...);
     }
 
     iterator insert(const value_type& value)
     {
-        return insert_aux(value);
+        return insert_unordered(value);
     }
 
     iterator insert(value_type&& value)
     {
-        return insert_aux(std::move(value));
+        return insert_unordered(std::move(value));
     }
 
     template <typename P,
@@ -1162,19 +1173,21 @@ public:
     >
     iterator insert(P&& value)
     {
-        return insert_aux(std::forward<P>(value));
+        return insert_unordered(std::forward<P>(value));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
         SFL_DTL::ignore_unused(hint);
-        return insert(value);
+        return insert_unordered(value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
         SFL_DTL::ignore_unused(hint);
-        return insert(std::move(value));
+        return insert_unordered(std::move(value));
     }
 
     template <typename P,
@@ -1185,8 +1198,9 @@ public:
     >
     iterator insert(const_iterator hint, P&& value)
     {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
         SFL_DTL::ignore_unused(hint);
-        return insert(std::forward<P>(value));
+        return insert_unordered(std::forward<P>(value));
     }
 
     template <typename InputIt,
@@ -1220,7 +1234,7 @@ public:
 
         const difference_type offset = std::distance(cbegin(), pos);
 
-        pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + offset;
 
         if (p < data_.last_ - 1)
         {
@@ -1238,34 +1252,42 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        const difference_type offset = std::distance(cbegin(), first);
-
         if (first == last)
         {
-            return begin() + offset;
+            return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type num_elems_remove = last - first;
-        const difference_type num_elems_after = cend() - last;
+        const difference_type count1 = std::distance(first, last);
+        const difference_type count2 = std::distance(last, cend());
 
-        pointer p = data_.first_ + offset;
+        const difference_type offset = std::distance(cbegin(), first);
 
-        if (num_elems_after >= num_elems_remove)
+        const pointer p1 = data_.first_ + offset;
+
+        if (count1 >= count2)
         {
-            std::move(data_.last_ - num_elems_remove, data_.last_, p);
+            const pointer p2 = p1 + count1;
+
+            const pointer new_last = std::move(p2, data_.last_, p1);
+
+            SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+
+            data_.last_ = new_last;
         }
         else
         {
-            std::move(data_.last_ - num_elems_after, data_.last_, p);
+            const pointer p2 = p1 + count2;
+
+            std::move(p2, data_.last_, p1);
+
+            const pointer new_last = p2;
+
+            SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+
+            data_.last_ = new_last;
         }
 
-        pointer new_last = data_.last_ - num_elems_remove;
-
-        SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
-
-        data_.last_ = new_last;
-
-        return p;
+        return p1;
     }
 
     size_type erase(const Key& key)
@@ -1684,43 +1706,6 @@ private:
         }
     }
 
-    class temporary_value
-    {
-    private:
-
-        allocator_type& alloc_;
-
-        alignas(value_type) unsigned char buffer_[sizeof(value_type)];
-
-        value_type* buffer()
-        {
-            return reinterpret_cast<value_type*>(buffer_);
-        }
-
-    public:
-
-        template <typename... Args>
-        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
-        {
-            SFL_DTL::construct_at
-            (
-                alloc_,
-                buffer(),
-                std::forward<Args>(args)...
-            );
-        }
-
-        ~temporary_value()
-        {
-            SFL_DTL::destroy_at(alloc_, buffer());
-        }
-
-        value_type& value()
-        {
-            return *buffer();
-        }
-    };
-
     template <typename InputIt>
     void initialize_range(InputIt first, InputIt last)
     {
@@ -1974,7 +1959,7 @@ private:
     }
 
     template <typename... Args>
-    iterator insert_aux(Args&&... args)
+    iterator insert_unordered(Args&&... args)
     {
         iterator result;
 
@@ -1994,7 +1979,7 @@ private:
         else
         {
             const size_type new_cap =
-                recommend_size(1, "sfl::small_unordered_flat_multimap::insert_aux");
+                recommend_size(1, "sfl::small_unordered_flat_multimap::insert_unordered");
 
             pointer new_first;
             pointer new_last;

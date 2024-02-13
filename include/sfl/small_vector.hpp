@@ -1144,7 +1144,7 @@ public:
                 // reference to element in this container and after that
                 // we will move elements and insert new element.
 
-                temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
+                value_type tmp(std::forward<Args>(args)...);
 
                 SFL_DTL::construct_at
                 (
@@ -1162,7 +1162,7 @@ public:
                     data_.last_ - 1
                 );
 
-                *p = std::move(tmp.value());
+                *p = std::move(tmp);
             }
         }
         else
@@ -1358,14 +1358,9 @@ public:
 
         const difference_type offset = std::distance(cbegin(), pos);
 
-        pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + offset;
 
-        if (p < data_.last_ - 1)
-        {
-            std::move(p + 1, data_.last_, p);
-        }
-
-        --data_.last_;
+        data_.last_ = std::move(p + 1, data_.last_, p);
 
         SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_);
 
@@ -1376,29 +1371,24 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        const difference_type offset = std::distance(cbegin(), first);
-
         if (first == last)
         {
-            return begin() + offset;
+            return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type n = std::distance(first, last);
+        const difference_type offset1 = std::distance(cbegin(), first);
+        const difference_type offset2 = std::distance(cbegin(), last);
 
-        pointer p = data_.first_ + offset;
+        const pointer p1 = data_.first_ + offset1;
+        const pointer p2 = data_.first_ + offset2;
 
-        if (p + n < data_.last_)
-        {
-            std::move(p + n, data_.last_, p);
-        }
-
-        pointer new_last = data_.last_ - n;
+        const pointer new_last = std::move(p2, data_.last_, p1);
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
-        return p;
+        return p1;
     }
 
     void resize(size_type n)
@@ -1887,43 +1877,6 @@ private:
         }
     }
 
-    class temporary_value
-    {
-    private:
-
-        allocator_type& alloc_;
-
-        alignas(value_type) unsigned char buffer_[sizeof(value_type)];
-
-        value_type* buffer()
-        {
-            return reinterpret_cast<value_type*>(buffer_);
-        }
-
-    public:
-
-        template <typename... Args>
-        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
-        {
-            SFL_DTL::construct_at
-            (
-                alloc_,
-                buffer(),
-                std::forward<Args>(args)...
-            );
-        }
-
-        ~temporary_value()
-        {
-            SFL_DTL::destroy_at(alloc_, buffer());
-        }
-
-        value_type& value()
-        {
-            return *buffer();
-        }
-    };
-
     void initialize_default_n(size_type n)
     {
         check_size(n, "sfl::small_vector::initialize_default_n");
@@ -2375,7 +2328,7 @@ private:
                 // First we will create temporary value and after that we can
                 // safely move elements.
 
-                temporary_value tmp(data_.ref_to_alloc(), value);
+                value_type tmp(value);
 
                 const size_type num_elems_after = cend() - pos;
 
@@ -2402,7 +2355,7 @@ private:
                     (
                         data_.first_ + offset,
                         n,
-                        tmp.value()
+                        tmp
                     );
                 }
                 else
@@ -2414,7 +2367,7 @@ private:
                         data_.ref_to_alloc(),
                         data_.last_,
                         n - num_elems_after,
-                        tmp.value()
+                        tmp
                     );
 
                     data_.last_ = SFL_DTL::uninitialized_move
@@ -2429,7 +2382,7 @@ private:
                     (
                         data_.first_ + offset,
                         old_last,
-                        tmp.value()
+                        tmp
                     );
                 }
             }

@@ -1248,7 +1248,7 @@ public:
             // reference to element in this container and after that
             // we will move elements and insert new element.
 
-            temporary_value temp(data_.ref_to_alloc(), std::forward<Args>(args)...);
+            value_type tmp(std::forward<Args>(args)...);
 
             SFL_DTL::construct_at
             (
@@ -1266,7 +1266,7 @@ public:
                 data_.last_ - 1
             );
 
-            *p = std::move(temp.value());
+            *p = std::move(tmp);
         }
 
         return p;
@@ -1349,14 +1349,9 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        iterator p(pos.seg_, pos.elem_);
+        const iterator p(pos.seg_, pos.elem_);
 
-        if (p < data_.last_ - 1)
-        {
-            std::move(p + 1, data_.last_, p);
-        }
-
-        --data_.last_;
+        data_.last_ = std::move(p + 1, data_.last_, p);
 
         SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_.elem_);
 
@@ -1367,27 +1362,21 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        iterator p(first.seg_, first.elem_);
-
         if (first == last)
         {
-            return p;
+            return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type n = std::distance(first, last);
+        const iterator p1(first.seg_, first.elem_);
+        const iterator p2(last.seg_, last.elem_);
 
-        if (p + n < data_.last_)
-        {
-            std::move(p + n, data_.last_, p);
-        }
-
-        iterator new_last = data_.last_ - n;
+        const iterator new_last = std::move(p2, data_.last_, p1);
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
-        return p;
+        return p1;
     }
 
     void resize(size_type n)
@@ -1489,43 +1478,6 @@ public:
     }
 
 private:
-
-    class temporary_value
-    {
-    private:
-
-        allocator_type& alloc_;
-
-        alignas(value_type) unsigned char buffer_[sizeof(value_type)];
-
-        value_type* buffer()
-        {
-            return reinterpret_cast<value_type*>(buffer_);
-        }
-
-    public:
-
-        template <typename... Args>
-        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
-        {
-            SFL_DTL::construct_at
-            (
-                alloc_,
-                buffer(),
-                std::forward<Args>(args)...
-            );
-        }
-
-        ~temporary_value()
-        {
-            SFL_DTL::destroy_at(alloc_, buffer());
-        }
-
-        value_type& value()
-        {
-            return *buffer();
-        }
-    };
 
     /// Alocates table for `n` segments.
     /// Does not allocate segments, it only allocates memory for table.
@@ -1681,7 +1633,7 @@ private:
 
             const size_type new_table_capacity = std::max<size_type>
             (
-                table_capacity * table_grow_factor(),
+                size_type(double(table_capacity) * table_grow_factor()),
                 table_size + num_additional_segments
             );
 
@@ -2099,43 +2051,105 @@ private:
 
     void assign_move(segmented_vector& other)
     {
-        if (allocator_traits::propagate_on_container_move_assignment::value)
-        {
-            if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
-            {
-                // Create temporary vector using other allocator.
-                // There are no effects if allocation fails.
-                segmented_vector temp(other.data_.ref_to_alloc());
-
-                // Clear and destroy current storage (noexcept).
-                clear();
-                destroy_storage();
-
-                // Set pointers to null (noexcept).
-                data_.seg_first_ = nullptr;
-                data_.seg_last_  = nullptr;
-                data_.seg_end_   = nullptr;
-
-                // Swap storage of this and temporary vector (noexcept).
-                using std::swap;
-                swap(data_, temp.data_);
-
-                // Temporary vector has no allocated storage (pointers
-                // are set to null) so destructor of temporary vector
-                // has nothing to do.
-            }
-
-            // Propagate allocator (noexcept).
-            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
-        }
+        using std::swap;
 
         if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
-            using std::swap;
+            // Create temporary container using allocator of "this".
+            // There are no effects if allocation fails.
+            // NOTE: We could also use allocator of "other". There are no
+            // difference since both allocators compare equal.
+            segmented_vector temp(data_.ref_to_alloc());
+
+            // Clear storage of "this" (noexcept).
+            clear();
+
+            // Destroy storage of "this" (noexcept).
+            // NOTE: This does not set pointers to null.
+            destroy_storage();
+
+            // Set pointers of "this" to null pointers (noexcept).
+            data_.seg_first_ = nullptr;
+            data_.seg_last_  = nullptr;
+            data_.seg_end_   = nullptr;
+
+            // Current state:
+            //  - "this" has no allocated storage (pointers are null).
+
+            // Swap storage of "this" and "other" (noexcept)
             swap(data_, other.data_);
+
+            // After swap:
+            //  - "this" owns storage previously owned by "other".
+            //  - "other" has no allocated storage (pointers are null).
+
+            // Swap storage of "other" and "temp" (noexcept)
+            swap(other.data_, temp.data_);
+
+            // After swap:
+            //  - "other" owns storage previously owned by "temp".
+            //  - "temp" has no allocated storage (pointers are null).
+            //    This is OK in this case. Destructor of "temp" has
+            //    nothing to do.
+
+            if (allocator_traits::propagate_on_container_move_assignment::value)
+            {
+                // Propagate allocator (noexcept).
+                data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
+            }
+        }
+        else if (allocator_traits::propagate_on_container_move_assignment::value)
+        {
+            // Create temporary container using allocator of "other".
+            // There are no effects if allocation fails.
+            segmented_vector temp(other.data_.ref_to_alloc());
+
+            // Clear storage of "this" (noexcept).
+            clear();
+
+            // Destroy storage of "this" (noexcept).
+            // NOTE: This does not set pointers to null.
+            destroy_storage();
+
+            // Set pointers of "this" to null pointers (noexcept).
+            data_.seg_first_ = nullptr;
+            data_.seg_last_  = nullptr;
+            data_.seg_end_   = nullptr;
+
+            // Current state:
+            //  - "this" has no allocated storage (pointers are null).
+
+            // Swap storage of "this" and "temp" (noexcept)
+            swap(data_, temp.data_);
+
+            // After swap:
+            //  - "this" owns storage previously owned by "temp".
+            //    That storage was allocated by allocator of "temp"
+            //    (i.e. copy of allocator of "other").
+            //    "this" cannot deallocate that storage because allocators
+            //    of "this" and "other" does not compare equal.
+            //  - "temp" has no allocated storage (pointers are null).
+            //    This is OK in this case. Destructor of "temp" has
+            //    nothing to do.
+
+            // Propagate allocator (noexcept).
+            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
+
+            // After propagation:
+            //  - "this" owns storage previously owned by "temp", but now
+            //    "this" can deallocate that storage.
+
+            // Move elements one-by-one from "other" to "this" (can throw)
+            assign_range
+            (
+                std::make_move_iterator(other.data_.first_),
+                std::make_move_iterator(other.data_.last_),
+                std::random_access_iterator_tag()
+            );
         }
         else
         {
+            // Move elements one-by-one from "other" to "this" (can throw)
             assign_range
             (
                 std::make_move_iterator(other.data_.first_),
@@ -2170,7 +2184,7 @@ private:
         // in this container and after that we will move elements and
         // insert new element.
 
-        temporary_value temp(data_.ref_to_alloc(), value);
+        value_type tmp(value);
 
         const size_type num_elems_after = data_.last_ - p;
 
@@ -2197,7 +2211,7 @@ private:
             (
                 p,
                 n,
-                temp.value()
+                tmp
             );
         }
         else
@@ -2209,7 +2223,7 @@ private:
                 data_.ref_to_alloc(),
                 data_.last_,
                 n - num_elems_after,
-                temp.value()
+                tmp
             );
 
             data_.last_ = SFL_DTL::uninitialized_move
@@ -2224,7 +2238,7 @@ private:
             (
                 p,
                 old_last,
-                temp.value()
+                tmp
             );
         }
 

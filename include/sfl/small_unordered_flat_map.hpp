@@ -61,6 +61,11 @@
     #define SFL_RETHROW  throw
 #endif
 
+#ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MAP
+template <int>
+void test_small_unordered_flat_map();
+#endif
+
 namespace sfl
 {
 
@@ -369,6 +374,11 @@ template < typename Key,
            typename Allocator = std::allocator<std::pair<Key, T>> >
 class small_unordered_flat_map
 {
+    #ifdef SFL_TEST_SMALL_UNORDERED_FLAT_MAP
+    template <int>
+    friend void ::test_small_unordered_flat_map();
+    #endif
+
 public:
 
     using allocator_type   = Allocator;
@@ -1135,47 +1145,24 @@ public:
     template <typename... Args>
     std::pair<iterator, bool> emplace(Args&&... args)
     {
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        auto it = find(tmp.value().first);
-
-        if (it == end())
-        {
-            return std::make_pair(insert_aux(std::move(tmp.value())), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value_type(std::forward<Args>(args)...));
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
-        SFL_DTL::ignore_unused(hint);
-        return emplace(std::forward<Args>(args)...).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
     {
-        auto it = find(value.first);
-
-        if (it == end())
-        {
-            return std::make_pair(insert_aux(value), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value);
     }
 
     std::pair<iterator, bool> insert(value_type&& value)
     {
-        auto it = find(value.first);
-
-        if (it == end())
-        {
-            return std::make_pair(insert_aux(std::move(value)), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(std::move(value));
     }
 
     template <typename P,
@@ -1186,28 +1173,19 @@ public:
     >
     std::pair<iterator, bool> insert(P&& value)
     {
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<P>(value));
-
-        auto it = find(tmp.value().first);
-
-        if (it == end())
-        {
-            return std::make_pair(insert_aux(std::move(tmp.value())), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value_type(std::forward<P>(value)));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
-        SFL_DTL::ignore_unused(hint);
-        return insert(value).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
-        SFL_DTL::ignore_unused(hint);
-        return insert(std::move(value)).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, std::move(value));
     }
 
     template <typename P,
@@ -1218,8 +1196,8 @@ public:
     >
     iterator insert(const_iterator hint, P&& value)
     {
-        SFL_DTL::ignore_unused(hint);
-        return insert(std::forward<P>(value)).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<P>(value)));
     }
 
     template <typename InputIt,
@@ -1250,24 +1228,7 @@ public:
     >
     std::pair<iterator, bool> insert_or_assign(const Key& key, M&& obj)
     {
-        auto it = find(key);
-
-        if (it == end())
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<M>(obj))
-                ),
-                true
-            );
-        }
-
-        it->second = std::forward<M>(obj);
-        return std::make_pair(it, false);
+        return insert_or_assign_aux(key, std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1278,24 +1239,7 @@ public:
     >
     std::pair<iterator, bool> insert_or_assign(Key&& key, M&& obj)
     {
-        auto it = find(key);
-
-        if (it == end())
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<M>(obj))
-                ),
-                true
-            );
-        }
-
-        it->second = std::forward<M>(obj);
-        return std::make_pair(it, false);
+        return insert_or_assign_aux(std::move(key), std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1306,8 +1250,8 @@ public:
     >
     iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj)
     {
-        SFL_DTL::ignore_unused(hint);
-        return insert_or_assign(key, std::forward<M>(obj)).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_or_assign_aux(hint, key, std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1318,66 +1262,34 @@ public:
     >
     iterator insert_or_assign(const_iterator hint, Key&& key, M&& obj)
     {
-        SFL_DTL::ignore_unused(hint);
-        return insert_or_assign(std::move(key), std::forward<M>(obj)).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_or_assign_aux(hint, std::move(key), std::forward<M>(obj));
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(const Key& key, Args&&... args)
     {
-        auto it = find(key);
-
-        if (it == end())
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<Args>(args)...)
-                ),
-                true
-            );
-        }
-
-        return std::make_pair(it, false);
+        return try_emplace_aux(key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(Key&& key, Args&&... args)
     {
-        auto it = find(key);
-
-        if (it == end())
-        {
-            return std::make_pair
-            (
-                insert_aux
-                (
-                    std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<Args>(args)...)
-                ),
-                true
-            );
-        }
-
-        return std::make_pair(it, false);
+        return try_emplace_aux(std::move(key), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, const Key& key, Args&&... args)
     {
-        SFL_DTL::ignore_unused(hint);
-        return try_emplace(key, std::forward<Args>(args)...).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return try_emplace_aux(hint, key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, Key&& key, Args&&... args)
     {
-        SFL_DTL::ignore_unused(hint);
-        return try_emplace(std::move(key), std::forward<Args>(args)...).first;
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
     }
 
     iterator erase(iterator pos)
@@ -1391,7 +1303,7 @@ public:
 
         const difference_type offset = std::distance(cbegin(), pos);
 
-        pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + offset;
 
         if (p < data_.last_ - 1)
         {
@@ -1409,34 +1321,42 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        const difference_type offset = std::distance(cbegin(), first);
-
         if (first == last)
         {
-            return begin() + offset;
+            return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type num_elems_remove = last - first;
-        const difference_type num_elems_after = cend() - last;
+        const difference_type count1 = std::distance(first, last);
+        const difference_type count2 = std::distance(last, cend());
 
-        pointer p = data_.first_ + offset;
+        const difference_type offset = std::distance(cbegin(), first);
 
-        if (num_elems_after >= num_elems_remove)
+        const pointer p1 = data_.first_ + offset;
+
+        if (count1 >= count2)
         {
-            std::move(data_.last_ - num_elems_remove, data_.last_, p);
+            const pointer p2 = p1 + count1;
+
+            const pointer new_last = std::move(p2, data_.last_, p1);
+
+            SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+
+            data_.last_ = new_last;
         }
         else
         {
-            std::move(data_.last_ - num_elems_after, data_.last_, p);
+            const pointer p2 = p1 + count2;
+
+            std::move(p2, data_.last_, p1);
+
+            const pointer new_last = p2;
+
+            SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+
+            data_.last_ = new_last;
         }
 
-        pointer new_last = data_.last_ - num_elems_remove;
-
-        SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
-
-        data_.last_ = new_last;
-
-        return p;
+        return p1;
     }
 
     size_type erase(const Key& key)
@@ -1859,43 +1779,6 @@ private:
         }
     }
 
-    class temporary_value
-    {
-    private:
-
-        allocator_type& alloc_;
-
-        alignas(value_type) unsigned char buffer_[sizeof(value_type)];
-
-        value_type* buffer()
-        {
-            return reinterpret_cast<value_type*>(buffer_);
-        }
-
-    public:
-
-        template <typename... Args>
-        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
-        {
-            SFL_DTL::construct_at
-            (
-                alloc_,
-                buffer(),
-                std::forward<Args>(args)...
-            );
-        }
-
-        ~temporary_value()
-        {
-            SFL_DTL::destroy_at(alloc_, buffer());
-        }
-
-        value_type& value()
-        {
-            return *buffer();
-        }
-    };
-
     template <typename InputIt>
     void initialize_range(InputIt first, InputIt last)
     {
@@ -2148,8 +2031,87 @@ private:
         }
     }
 
+    template <typename Value>
+    std::pair<iterator, bool> insert_aux(Value&& value)
+    {
+        auto it = find(value.first);
+
+        if (it == end())
+        {
+            return std::make_pair(insert_unordered(std::forward<Value>(value)), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        SFL_DTL::ignore_unused(hint);
+        return insert_aux(std::forward<Value>(value)).first;
+    }
+
+    template <typename K, typename M>
+    std::pair<iterator, bool> insert_or_assign_aux(K&& key, M&& obj)
+    {
+        auto it = find(key);
+
+        if (it == end())
+        {
+            return std::make_pair
+            (
+                insert_unordered
+                (
+                    std::piecewise_construct,
+                    std::forward_as_tuple(std::forward<K>(key)),
+                    std::forward_as_tuple(std::forward<M>(obj))
+                ),
+                true
+            );
+        }
+
+        it->second = std::forward<M>(obj);
+        return std::make_pair(it, false);
+    }
+
+    template <typename K, typename M>
+    iterator insert_or_assign_aux(const_iterator hint, K&& key, M&& obj)
+    {
+        SFL_DTL::ignore_unused(hint);
+        return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj)).first;
+    }
+
+    template <typename K, typename... Args>
+    std::pair<iterator, bool> try_emplace_aux(K&& key, Args&&... args)
+    {
+        auto it = find(key);
+
+        if (it == end())
+        {
+            return std::make_pair
+            (
+                insert_unordered
+                (
+                    std::piecewise_construct,
+                    std::forward_as_tuple(std::forward<K>(key)),
+                    std::forward_as_tuple(std::forward<Args>(args)...)
+                ),
+                true
+            );
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename K, typename... Args>
+    iterator try_emplace_aux(const_iterator hint, K&& key, Args&&... args)
+    {
+        SFL_DTL::ignore_unused(hint);
+        return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...).first;
+    }
+
     template <typename... Args>
-    iterator insert_aux(Args&&... args)
+    iterator insert_unordered(Args&&... args)
     {
         iterator result;
 
@@ -2169,7 +2131,7 @@ private:
         else
         {
             const size_type new_cap =
-                recommend_size(1, "sfl::small_unordered_flat_map::insert_aux");
+                recommend_size(1, "sfl::small_unordered_flat_map::insert_unordered");
 
             pointer new_first;
             pointer new_last;

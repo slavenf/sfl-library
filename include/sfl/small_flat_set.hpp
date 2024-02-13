@@ -61,6 +61,11 @@
     #define SFL_RETHROW  throw
 #endif
 
+#ifdef SFL_TEST_SMALL_FLAT_SET
+template <int>
+void test_small_flat_set();
+#endif
+
 namespace sfl
 {
 
@@ -368,6 +373,11 @@ template < typename Key,
            typename Allocator = std::allocator<Key> >
 class small_flat_set
 {
+    #ifdef SFL_TEST_SMALL_FLAT_SET
+    template <int>
+    friend void ::test_small_flat_set();
+    #endif
+
 public:
 
     using allocator_type         = Allocator;
@@ -1104,112 +1114,36 @@ public:
     template <typename... Args>
     std::pair<iterator, bool> emplace(Args&&... args)
     {
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        auto it = lower_bound(tmp.value());
-
-        if (it == end() || data_.ref_to_comp()(tmp.value(), *it))
-        {
-            return std::make_pair(insert_aux(it, std::move(tmp.value())), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value_type(std::forward<Args>(args)...));
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        temporary_value tmp(data_.ref_to_alloc(), std::forward<Args>(args)...);
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), tmp.value())) &&
-            (hint == end()   || data_.ref_to_comp()(tmp.value(), *hint))
-        )
-        {
-            return insert_aux(hint, std::move(tmp.value()));
-        }
-
-        auto it = lower_bound(tmp.value());
-
-        if (it == end() || data_.ref_to_comp()(tmp.value(), *it))
-        {
-            return insert_aux(it, std::move(tmp.value()));
-        }
-
-        return it;
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
     {
-        auto it = lower_bound(value);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return std::make_pair(insert_aux(it, value), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(value);
     }
 
     std::pair<iterator, bool> insert(value_type&& value)
     {
-        auto it = lower_bound(value);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return std::make_pair(insert_aux(it, std::move(value)), true);
-        }
-
-        return std::make_pair(it, false);
+        return insert_aux(std::move(value));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
-            (hint == end()   || data_.ref_to_comp()(value, *hint))
-        )
-        {
-            return insert_aux(hint, value);
-        }
-
-        auto it = lower_bound(value);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return insert_aux(it, value);
-        }
-
-        return it;
+        return insert_aux(hint, value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-
-        if
-        (
-            (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
-            (hint == end()   || data_.ref_to_comp()(value, *hint))
-        )
-        {
-            return insert_aux(hint, std::move(value));
-        }
-
-        auto it = lower_bound(value);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return insert_aux(it, std::move(value));
-        }
-
-        return it;
+        return insert_aux(hint, std::move(value));
     }
 
     template <typename InputIt,
@@ -1238,14 +1172,9 @@ public:
 
         const difference_type offset = std::distance(cbegin(), pos);
 
-        pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + offset;
 
-        if (p < data_.last_ - 1)
-        {
-            std::move(p + 1, data_.last_, p);
-        }
-
-        --data_.last_;
+        data_.last_ = std::move(p + 1, data_.last_, p);
 
         SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_);
 
@@ -1256,29 +1185,24 @@ public:
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
 
-        const difference_type offset = std::distance(cbegin(), first);
-
         if (first == last)
         {
-            return begin() + offset;
+            return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type n = std::distance(first, last);
+        const difference_type offset1 = std::distance(cbegin(), first);
+        const difference_type offset2 = std::distance(cbegin(), last);
 
-        pointer p = data_.first_ + offset;
+        const pointer p1 = data_.first_ + offset1;
+        const pointer p2 = data_.first_ + offset2;
 
-        if (p + n < data_.last_)
-        {
-            std::move(p + n, data_.last_, p);
-        }
-
-        pointer new_last = data_.last_ - n;
+        const pointer new_last = std::move(p2, data_.last_, p1);
 
         SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
-        return p;
+        return p1;
     }
 
     size_type erase(const Key& key)
@@ -1763,43 +1687,6 @@ private:
         }
     }
 
-    class temporary_value
-    {
-    private:
-
-        allocator_type& alloc_;
-
-        alignas(value_type) unsigned char buffer_[sizeof(value_type)];
-
-        value_type* buffer()
-        {
-            return reinterpret_cast<value_type*>(buffer_);
-        }
-
-    public:
-
-        template <typename... Args>
-        explicit temporary_value(allocator_type& a, Args&&... args) : alloc_(a)
-        {
-            SFL_DTL::construct_at
-            (
-                alloc_,
-                buffer(),
-                std::forward<Args>(args)...
-            );
-        }
-
-        ~temporary_value()
-        {
-            SFL_DTL::destroy_at(alloc_, buffer());
-        }
-
-        value_type& value()
-        {
-            return *buffer();
-        }
-    };
-
     template <typename InputIt>
     void initialize_range(InputIt first, InputIt last)
     {
@@ -2052,8 +1939,33 @@ private:
         }
     }
 
+    template <typename Value>
+    std::pair<iterator, bool> insert_aux(Value&& value)
+    {
+        auto it = lower_bound(value);
+
+        if (it == end() || data_.ref_to_comp()(value, *it))
+        {
+            return std::make_pair(insert_exactly_at(it, std::forward<Value>(value)), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        if (is_insert_hint_good(hint, value))
+        {
+            return insert_exactly_at(hint, std::forward<Value>(value));
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return insert_aux(std::forward<Value>(value)).first;
+    }
+
     template <typename... Args>
-    iterator insert_aux(const_iterator pos, Args&&... args)
+    iterator insert_exactly_at(const_iterator pos, Args&&... args)
     {
         const difference_type offset = std::distance(cbegin(), pos);
 
@@ -2110,7 +2022,7 @@ private:
         else
         {
             const size_type new_cap =
-                recommend_size(1, "sfl::small_flat_set::insert_aux");
+                recommend_size(1, "sfl::small_flat_set::insert_exactly_at");
 
             pointer new_first;
             pointer new_last;
@@ -2211,6 +2123,13 @@ private:
         }
 
         return begin() + offset;
+    }
+
+    template <typename Value>
+    bool is_insert_hint_good(const_iterator hint, const Value& value)
+    {
+        return (hint == begin() || data_.ref_to_comp()(*(hint - 1), value))
+            && (hint == end()   || data_.ref_to_comp()(value, *hint));
     }
 };
 

@@ -1,3 +1,21 @@
+# Next Release
+
+* Refactoring insert functions in small maps and sets. Removed duplicated code.
+  Added private member function for checking `hint` iterator.
+* Removed private nested class `temporary_value` from all containers.
+  That class was actually was unnecessary. Just use `value_type` instead of.
+* Reworked move assignment operator of `segmented_vector`. Old move assignment
+  operator had unusual behavior: in some situations it behaved like `swap`.
+* Reworked and improved all tests.
+* Added GNU makefiles for test for GCC/Clang and Visual C++ compilers.
+* Reworked scripts for testing on Arch Linux and CentOS 7.
+* Added script for testing on Windows.
+* Reworked and improved `erase(iterator)` and `erase(iterator, iterator)`
+  member functions.
+* Added GitHub actions for automated testing.
+
+
+
 # 1.2.3 (2023-08-14)
 
 * Refactoring - inheritance. Containers no longer inherit directly from
