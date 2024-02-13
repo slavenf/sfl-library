@@ -22,22 +22,17 @@ jobs:
     name: Test all on Windows (Visual C++)
     runs-on: windows-latest
     steps:
-      # - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # - uses: ilammy/msvc-dev-cmd@v1
+      - uses: ilammy/msvc-dev-cmd@v1
 
       # - name: Install GNU Make
       #   run: |
       #     choco install make
 
-      # - name: Run all tests
-      #   shell: cmd
-      #   working-directory: ./test
-      #   run: .\test_all_msvc.bat
-
-      - name: Test test test
+      - name: Run all tests
         shell: cmd
+        working-directory: ./test
         run: |
-          ls
-          ls > nul
-          ls > nul 2>&1
+          cl /std:c++14 /nologo /EHsc /W4 /WX /I ..\include /Od /Zi compact_vector.cpp
+          .\compact_vector.exe
