@@ -1,4 +1,4 @@
-# Next Release
+# 1.2.4 (2024-02-13)
 
 * Refactoring insert functions in small maps and sets. Removed duplicated code.
   Added private member function for checking `hint` iterator.
@@ -13,6 +13,7 @@
 * Reworked and improved `erase(iterator)` and `erase(iterator, iterator)`
   member functions.
 * Added GitHub actions for automated testing.
+* Added CMake support. Thanks to @ZehMatt and @johannes-wolf.
 
 
 
