@@ -12,6 +12,7 @@
 * Added script for testing on Windows.
 * Reworked and improved `erase(iterator)` and `erase(iterator, iterator)`
   member functions.
+* Added GitHub actions for automated testing.
 
 
 
