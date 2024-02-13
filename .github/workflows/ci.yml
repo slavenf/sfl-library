@@ -36,3 +36,4 @@ jobs:
         run: |
           make --version
           make --version > nul
+          make --version > nul 2>&1
