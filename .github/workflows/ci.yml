@@ -27,6 +27,7 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
 
       - name: Install GNU Make
+        shell: cmd
         run: |
           choco install make
 
