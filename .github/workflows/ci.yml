@@ -3,20 +3,19 @@ name: CI
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  # ubuntu:
-  #   name: Test all on Ubuntu (GCC and Clang)
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
+  ubuntu:
+    name: Test all on Ubuntu (GCC and Clang)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-  #     - name: Install Valgrind
-  #       run: |
-  #         sudo apt update && sudo apt install -y valgrind
+      - name: Install Valgrind
+        run: |
+          sudo apt update && sudo apt install -y valgrind
 
-  #     - name: Run all tests
-  #       run: |
-  #         cd test
-  #         ./test_all_ubuntu_22.04.sh
+      - name: Run all tests
+        working-directory: ./test
+        run: ./test_all_ubuntu_22.04.sh
 
   windows:
     name: Test all on Windows (Visual C++)
