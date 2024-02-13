@@ -20,7 +20,7 @@ SILENT = 0
 ifeq ($(SILENT),0)
 	TO_NULL_IF_SILENT =
 else
-	TO_NULL_IF_SILENT = > nul
+	TO_NULL_IF_SILENT = > nul 2>&1
 endif
 
 # List of all source files that must be compiled and tested
