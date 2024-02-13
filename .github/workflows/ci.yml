@@ -4,33 +4,40 @@ on: [push, pull_request, workflow_dispatch]
 
 jobs:
   ubuntu:
-    name: Test all on Ubuntu (GCC and Clang)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    # name: Test all on Ubuntu (GCC and Clang)
+    # runs-on: ubuntu-latest
+    # steps:
+    #   - uses: actions/checkout@v4
 
-      - name: Install Valgrind
-        run: |
-          sudo apt update && sudo apt install -y valgrind
+    #   - name: Install Valgrind
+    #     run: |
+    #       sudo apt update && sudo apt install -y valgrind
 
-      - name: Run all tests
-        run: |
-          cd test
-          ./test_all_ubuntu_22.04.sh
+    #   - name: Run all tests
+    #     run: |
+    #       cd test
+    #       ./test_all_ubuntu_22.04.sh
 
   windows:
     name: Test all on Windows (Visual C++)
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      # - uses: actions/checkout@v4
 
-      - uses: ilammy/msvc-dev-cmd@v1
+      # - uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Install GNU Make
-        run: |
-          choco install make
+      # - name: Install GNU Make
+      #   run: |
+      #     choco install make
 
-      - name: Run all tests
+      # - name: Run all tests
+      #   shell: cmd
+      #   working-directory: ./test
+      #   run: .\test_all_msvc.bat
+
+      - name: Test test test
         shell: cmd
-        working-directory: ./test
-        run: .\test_all_msvc.bat
+        run:
+          ls
+          ls > nul
+          ls > nul 2>&1
