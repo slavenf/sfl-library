@@ -34,4 +34,5 @@ jobs:
         shell: cmd
         working-directory: ./test
         run: |
+          set SHELL=cmd
           make CXX="cl /std:c++14"     SILENT=1 -f makefile.msvc
