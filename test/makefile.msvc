@@ -2,6 +2,8 @@
 # This is GNU makefile for Windows OS and Visual C++ compiler
 #
 
+SHELL = cmd
+
 # C++ compiler
 CXX = cl /std:c++14
 

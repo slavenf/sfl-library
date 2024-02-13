@@ -26,13 +26,12 @@ jobs:
 
       - uses: ilammy/msvc-dev-cmd@v1
 
-      # - name: Install GNU Make
-      #   run: |
-      #     choco install make
+      - name: Install GNU Make
+        run: |
+          choco install make
 
       - name: Run all tests
         shell: cmd
         working-directory: ./test
         run: |
-          choco install make
-          make CXX="cl /std:c++14"     SILENT=1 -f makefile.msvc
+          make CXX="cl /std:c++14" SILENT=1 -f makefile.msvc
