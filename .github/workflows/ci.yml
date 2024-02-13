@@ -33,7 +33,4 @@ jobs:
       - name: Run all tests
         shell: cmd
         working-directory: ./test
-        run: |
-          make --version
-          make --version > nul
-          make --version > nul 2>&1
+        run: make SILENT=1 -f makefile.msvc
