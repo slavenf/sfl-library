@@ -19,6 +19,7 @@
   * [size](#size)
   * [max\_size](#max_size)
   * [capacity](#capacity)
+  * [available](#available)
   * [reserve](#reserve)
   * [shrink\_to\_fit](#shrink_to_fit)
   * [at](#at)
@@ -59,21 +60,21 @@ namespace sfl
 }
 ```
 
-`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model.
+`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that allows fast insertion at its end.
 
-The storage of `sfl::segmented_vector` consists of a sequence of individually allocated arrays of size `N` which are called *segments*. Size `N` is specified at the compile time as a template parameter.
+The storage of segmented vector consists of a sequence of individually allocated arrays of size `N` which are called *segments*. Elements of segmented vector are not stored contiguously in the memory, but they are stored contiguously within a segment. Size `N` is specified at the compile time as a template parameter.
 
-Elements of `sfl::segmented_vector` are not stored contiguously in the memory, but they are stored contiguously within a segment.
-
-This container is inspired by `std::deque`, but the behavior and API is different than `std::deque`. Segmented vector has the same set of public member functions as `std::vector`, except the `data()` member function, which does not exist.
+This container is very similar to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque), but with the slightly different set of public member functions. Segmented vector has the same public member functions as `std::vector`, except the `data()` member function, plus some additional public member functions not found in `std::vector`.
 
 Iterators to elements are random access iterators and they meet the requirements of [`LegacyRandomAccessIterator`](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
 Indexed access to elements (`operator[]` and `at`) must perform two pointer dereferences.
 
-Unlike standard vector, `sfl::segmented_vector` is not specialized for `bool`.
+`sfl::segmented_vector` is **not** specialized for `bool`.
 
 `sfl::segmented_vector` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [`ReversibleContainer`](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [`SequenceContainer`](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
+
+<br><br>
 
 
 
@@ -89,7 +90,8 @@ Unlike standard vector, `sfl::segmented_vector` is not specialized for `bool`.
     std::size_t N
     ```
 
-    The size of the segments.
+    The size of the segments, i.e. the maximal number of elements that can fit into a segment.
+
     Must be greater than zero.
 
 3.  ```
@@ -101,6 +103,8 @@ Unlike standard vector, `sfl::segmented_vector` is not specialized for `bool`.
     This type must meet the requirements of [`Allocator`](https://en.cppreference.com/w/cpp/named_req/Allocator).
 
     The program is ill-formed if `Allocator::value_type` is not the same as `T`.
+
+<br><br>
 
 
 
@@ -121,6 +125,8 @@ using const_iterator         = /* Random access iterator to const value_type */
 using reverse_iterator       = std::reverse_iterator<iterator>;
 using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 ```
+
+<br><br>
 
 
 
@@ -599,16 +605,32 @@ Constant.
 
 
 
+### available
+
+```
+size_type available() const noexcept;
+```
+
+**Effects:**
+Returns the number of elements that can be inserted into the container without requiring allocation of additional memory.
+
+**Complexity:**
+Constant.
+
+<br><br>
+
+
+
 ### reserve
 
 ```
-void reserve(size_type new_cap);
+void reserve(size_type new_capacity);
 ```
 
 **Effects:**
 Tries to increase capacity by allocating additional memory.
 
-If `new_cap > capacity()`, the function allocates additional memory such that capacity becomes greater than or equal to `new_cap`. Otherwise, the function does nothing.
+If `new_capacity > capacity()`, the function allocates additional memory such that capacity becomes greater than or equal to `new_capacity`. Otherwise, the function does nothing.
 
 This function does not change size of the container.
 
