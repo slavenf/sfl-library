@@ -199,6 +199,29 @@ ForwardIt uninitialized_default_construct_n
     }
 }
 
+template <typename Allocator, typename ForwardIt, typename T>
+ForwardIt uninitialized_fill
+(
+    Allocator& a, ForwardIt first, ForwardIt last, const T& value
+)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (curr != last)
+        {
+            SFL_DTL::construct_at(a, std::addressof(*curr), value);
+            ++curr;
+        }
+        return curr;
+    }
+    SFL_CATCH (...)
+    {
+        SFL_DTL::destroy(a, first, curr);
+        SFL_RETHROW;
+    }
+}
+
 template <typename Allocator, typename ForwardIt, typename Size, typename T>
 ForwardIt uninitialized_fill_n
 (
@@ -711,13 +734,17 @@ private:
     {
     public:
 
-        segment_pointer seg_first_;
-        segment_pointer seg_last_;
-        segment_pointer seg_end_;
+        // ---- TABLE (OF SEGMENTS) ----
 
-        iterator first_;
-        iterator last_;
-        iterator end_;
+        segment_pointer table_first_; // First element in table
+        segment_pointer table_last_;  // One-past-last element in table
+        segment_pointer table_eos_;   // End of storage
+
+        // ---- ELEMENTS IN VECTOR ----
+
+        iterator first_; // First element in vector
+        iterator last_;  // One-past-last element in vector
+        iterator eos_;   // End of storage
     };
 
     class data
@@ -883,7 +910,7 @@ public:
             data_.last_
         );
 
-        destroy_storage();
+        deallocate_storage();
     }
 
     //
@@ -1038,7 +1065,7 @@ public:
         const auto i = pos / N;
         const auto j = pos - i * N;
 
-        const auto seg = data_.seg_first_ + i;
+        const auto seg = data_.table_first_ + i;
         const auto elem = *seg + j;
 
         return iterator(seg, elem);
@@ -1052,7 +1079,7 @@ public:
         const auto i = pos / N;
         const auto j = pos - i * N;
 
-        const auto seg = data_.seg_first_ + i;
+        const auto seg = data_.table_first_ + i;
         const auto elem = *seg + j;
 
         return iterator(seg, elem);
@@ -1062,7 +1089,7 @@ public:
     size_type index_of(const_iterator pos) const noexcept
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-        return pos - cbegin();
+        return std::distance(cbegin(), pos);
     }
 
     //
@@ -1078,7 +1105,7 @@ public:
     SFL_NODISCARD
     size_type size() const noexcept
     {
-        return data_.last_ - data_.first_;
+        return std::distance(data_.first_, data_.last_);
     }
 
     SFL_NODISCARD
@@ -1094,16 +1121,22 @@ public:
     SFL_NODISCARD
     size_type capacity() const noexcept
     {
-        return data_.end_ - data_.first_;
+        return std::distance(data_.first_, data_.eos_);
     }
 
-    void reserve(size_type new_cap)
+    SFL_NODISCARD
+    size_type available() const noexcept
     {
-        const size_type cap = capacity();
+        return std::distance(data_.last_, data_.eos_);
+    }
 
-        if (new_cap > cap)
+    void reserve(size_type new_capacity)
+    {
+        const size_type capacity = this->capacity();
+
+        if (new_capacity > capacity)
         {
-            grow_storage(new_cap - cap);
+            grow_storage(new_capacity - capacity);
         }
     }
 
@@ -1127,7 +1160,7 @@ public:
         const auto i = pos / N;
         const auto j = pos - i * N;
 
-        return *(*(data_.seg_first_ + i) + j);
+        return *(*(data_.table_first_ + i) + j);
     }
 
     SFL_NODISCARD
@@ -1141,7 +1174,7 @@ public:
         const auto i = pos / N;
         const auto j = pos - i * N;
 
-        return *(*(data_.seg_first_ + i) + j);
+        return *(*(data_.table_first_ + i) + j);
     }
 
     SFL_NODISCARD
@@ -1152,7 +1185,7 @@ public:
         const auto i = pos / N;
         const auto j = pos - i * N;
 
-        return *(*(data_.seg_first_ + i) + j);
+        return *(*(data_.table_first_ + i) + j);
     }
 
     SFL_NODISCARD
@@ -1163,7 +1196,7 @@ public:
         const auto i = pos / N;
         const auto j = pos - i * N;
 
-        return *(*(data_.seg_first_ + i) + j);
+        return *(*(data_.table_first_ + i) + j);
     }
 
     SFL_NODISCARD
@@ -1184,18 +1217,14 @@ public:
     reference back() noexcept
     {
         SFL_ASSERT(!empty());
-        auto temp = data_.last_;
-        --temp;
-        return *temp;
+        return *(--iterator(data_.last_));
     }
 
     SFL_NODISCARD
     const_reference back() const noexcept
     {
         SFL_ASSERT(!empty());
-        auto temp = data_.last_;
-        --temp;
-        return *temp;
+        return *(--iterator(data_.last_));
     }
 
     //
@@ -1219,23 +1248,21 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
 
-        iterator p(pos.seg_, pos.elem_);
+        iterator p1(pos.seg_, pos.elem_);
 
-        if (data_.last_ == data_.end_)
+        if (!available())
         {
-            const size_type offset = pos - cbegin();
-
+            const size_type offset = std::distance(cbegin(), pos);
             grow_storage(1);
-
-            p = nth(offset);
+            p1 = nth(offset);
         }
 
-        if (p == data_.last_)
+        if (p1 == data_.last_)
         {
             SFL_DTL::construct_at
             (
                 data_.ref_to_alloc(),
-                data_.last_.elem_,
+                std::addressof(*data_.last_),
                 std::forward<Args>(args)...
             );
 
@@ -1243,6 +1270,10 @@ public:
         }
         else
         {
+            const iterator p2 = --iterator(data_.last_);
+
+            const iterator old_last = data_.last_;
+
             // The order of operations is critical. First we will construct
             // temporary value because arguments `args...` can contain
             // reference to element in this container and after that
@@ -1253,23 +1284,23 @@ public:
             SFL_DTL::construct_at
             (
                 data_.ref_to_alloc(),
-                data_.last_.elem_,
-                std::move(*(data_.last_ - 1))
+                std::addressof(*old_last),
+                std::move(*p2)
             );
 
             ++data_.last_;
 
             std::move_backward
             (
-                p,
-                data_.last_ - 2,
-                data_.last_ - 1
+                p1,
+                p2,
+                old_last
             );
 
-            *p = std::move(tmp);
+            *p1 = std::move(tmp);
         }
 
-        return p;
+        return p1;
     }
 
     iterator insert(const_iterator pos, const T& value)
@@ -1323,17 +1354,31 @@ public:
     template <typename... Args>
     reference emplace_back(Args&&... args)
     {
-        return *emplace(cend(), std::forward<Args>(args)...);
+        if (!available())
+        {
+            grow_storage(1);
+        }
+
+        SFL_DTL::construct_at
+        (
+            data_.ref_to_alloc(),
+            std::addressof(*data_.last_),
+            std::forward<Args>(args)...
+        );
+
+        ++data_.last_;
+
+        return back();
     }
 
     void push_back(const T& value)
     {
-        emplace(cend(), value);
+        emplace_back(value);
     }
 
     void push_back(T&& value)
     {
-        emplace(cend(), std::move(value));
+        emplace_back(std::move(value));
     }
 
     void pop_back()
@@ -1342,7 +1387,7 @@ public:
 
         --data_.last_;
 
-        SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_.elem_);
+        SFL_DTL::destroy_at(data_.ref_to_alloc(), std::addressof(*data_.last_));
     }
 
     iterator erase(const_iterator pos)
@@ -1353,7 +1398,7 @@ public:
 
         data_.last_ = std::move(p + 1, data_.last_, p);
 
-        SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_.elem_);
+        SFL_DTL::destroy_at(data_.ref_to_alloc(), std::addressof(*data_.last_));
 
         return p;
     }
@@ -1364,7 +1409,7 @@ public:
 
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), first);
+            return iterator(first.seg_, first.elem_);
         }
 
         const iterator p1(first.seg_, first.elem_);
@@ -1381,29 +1426,46 @@ public:
 
     void resize(size_type n)
     {
-        const size_type s = size();
+        const size_type size = this->size();
 
-        if (n > s)
+        if (n <= size)
         {
-            const size_type delta = n - s;
+            const iterator new_last = nth(n);
 
-            const size_type c = capacity();
+            SFL_DTL::destroy
+            (
+                data_.ref_to_alloc(),
+                new_last,
+                data_.last_
+            );
 
-            if (n > c)
+            data_.last_ = new_last;
+        }
+        else
+        {
+            const size_type capacity = this->capacity();
+
+            if (n > capacity)
             {
-                grow_storage(n - c);
+                grow_storage(n - capacity);
             }
 
             data_.last_ = SFL_DTL::uninitialized_default_construct_n
             (
                 data_.ref_to_alloc(),
                 data_.last_,
-                delta
+                n - size
             );
         }
-        else if (n < s)
+    }
+
+    void resize(size_type n, const T& value)
+    {
+        const size_type size = this->size();
+
+        if (n <= size)
         {
-            iterator new_last = nth(n);
+            const iterator new_last = nth(n);
 
             SFL_DTL::destroy
             (
@@ -1414,43 +1476,22 @@ public:
 
             data_.last_ = new_last;
         }
-    }
-
-    void resize(size_type n, const T& value)
-    {
-        const size_type s = size();
-
-        if (n > s)
+        else
         {
-            const size_type delta = n - s;
+            const size_type capacity = this->capacity();
 
-            const size_type c = capacity();
-
-            if (n > c)
+            if (n > capacity)
             {
-                grow_storage(n - c);
+                grow_storage(n - capacity);
             }
 
             data_.last_ = SFL_DTL::uninitialized_fill_n
             (
                 data_.ref_to_alloc(),
                 data_.last_,
-                delta,
+                n - size,
                 value
             );
-        }
-        else if (n < s)
-        {
-            iterator new_last = nth(n);
-
-            SFL_DTL::destroy
-            (
-                data_.ref_to_alloc(),
-                new_last,
-                data_.last_
-            );
-
-            data_.last_ = new_last;
         }
     }
 
@@ -1479,45 +1520,49 @@ public:
 
 private:
 
-    /// Alocates table for `n` segments.
-    /// Does not allocate segments, it only allocates memory for table.
-    /// Returns pointer to the table.
-    ///
+    // Allocates table for given number of elements (segments).
+    // It does not construct any element (segment).
+    // It only allocates memory for table.
+    //
     segment_pointer allocate_table(size_type n)
     {
         segment_allocator seg_alloc(data_.ref_to_alloc());
         return SFL_DTL::allocate(seg_alloc, n);
     }
 
-    /// Deallocates table at `p`.
-    /// Does not deallocates segments, it only deallocates memory used by table.
-    ///
+    // Deallocates table.
+    // It does not destroy any element (segment).
+    // It only deallocates memory used by table.
+    //
     void deallocate_table(segment_pointer p, size_type n) noexcept
     {
         segment_allocator seg_alloc(data_.ref_to_alloc());
         SFL_DTL::deallocate(seg_alloc, p, n);
     }
 
-    /// Allocates a segment and returns pointer to it.
-    /// Does not construct elements, it only allocates memory for segment.
-    ///
+    // Allocates memory for single segment.
+    // It does not construct any element.
+    // It only allocates memory for segment.
+    //
     pointer allocate_segment()
     {
         return SFL_DTL::allocate(data_.ref_to_alloc(), N);
     }
 
-    /// Deallocates segments at `p`.
-    /// Does not destroy elements, it only deallocates memory used by segment.
-    ///
+    // Deallocates memory used by single segment.
+    // It does not destroy any element.
+    // It only deallocates memory used by segment.
+    //
     void deallocate_segment(pointer p) noexcept
     {
         SFL_DTL::deallocate(data_.ref_to_alloc(), p, N);
     }
 
-    /// Allocates segments in table in range [first, last).
-    /// Does not construct elements, it only allocates memory for segments.
-    ///
-    void construct_segments(segment_pointer first, segment_pointer last)
+    // Allocates memory for multiple segments.
+    // It does not construct any element.
+    // It only allocates memory for segments.
+    //
+    void allocate_segments(segment_pointer first, segment_pointer last)
     {
         segment_pointer curr = first;
 
@@ -1531,15 +1576,16 @@ private:
         }
         SFL_CATCH (...)
         {
-            destroy_segments(first, curr);
+            deallocate_segments(first, curr);
             SFL_RETHROW;
         }
     }
 
-    /// Destroys segments in table in range [first, last).
-    /// Does not destroy elements, it only deallocates memory used by segments.
-    ///
-    void destroy_segments(segment_pointer first, segment_pointer last) noexcept
+    // Deallocates memory used by multiple segments.
+    // It does not destroy any element.
+    // It only deallocates memory used by segments.
+    //
+    void deallocate_segments(segment_pointer first, segment_pointer last) noexcept
     {
         while (first != last)
         {
@@ -1553,64 +1599,70 @@ private:
         return 8;
     }
 
-    static constexpr double table_grow_factor() noexcept
-    {
-        return 1.5;
-    }
-
-    /// Allocates storage large enough for given number of elements.
-    /// Does not construct elements, it only allocates memory.
-    ///
-    void construct_storage(size_type num_elements)
+    // Allocates storage big enough to keep given number of elements.
+    // It does not construct any element.
+    // It only allocates memory.
+    //
+    void allocate_storage(size_type num_elements)
     {
         if (num_elements > max_size())
         {
-            SFL_DTL::throw_length_error("sfl::segmented_vector::construct_storage");
+            SFL_DTL::throw_length_error("sfl::segmented_vector::allocate_storage");
         }
 
-        const size_type num_segments = num_elements / N + 1;
+        // Required capacity of table
+        const size_type table_required =
+            num_elements / N + 1;
 
-        const size_type table_capacity = std::max
-        (
-            min_table_capacity(),
-            num_segments
-        );
+        const size_type table_capacity =
+            std::max(table_required, min_table_capacity());
 
-        data_.seg_first_ = allocate_table(table_capacity);
-        data_.seg_last_  = data_.seg_first_ + num_segments;
-        data_.seg_end_   = data_.seg_first_ + table_capacity;
+        data_.table_first_ = allocate_table(table_capacity);
+        data_.table_last_  = data_.table_first_ + table_required;
+        data_.table_eos_   = data_.table_first_ + table_capacity;
 
         SFL_TRY
         {
-            construct_segments(data_.seg_first_, data_.seg_last_);
+            allocate_segments(data_.table_first_, data_.table_last_);
 
-            data_.first_.seg_  = data_.seg_first_;
-            data_.first_.elem_ = *data_.seg_first_;
+            data_.first_.seg_  =  data_.table_first_;
+            data_.first_.elem_ = *data_.table_first_;
 
             data_.last_ = data_.first_;
 
-            data_.end_.seg_  = data_.seg_last_ - 1;
-            data_.end_.elem_ = *(data_.seg_last_ - 1) + (N - 1);
+            data_.eos_.seg_  =  (data_.table_last_ - 1);
+            data_.eos_.elem_ = *(data_.table_last_ - 1) + (N - 1);
         }
         SFL_CATCH (...)
         {
-            deallocate_table(data_.seg_first_, table_capacity);
+            deallocate_table(data_.table_first_, table_capacity);
             SFL_RETHROW;
         }
     }
 
-    /// Deallocates storage.
-    /// Does not destroy elements, it only deallocates memory.
-    ///
-    void destroy_storage() noexcept
+    // Deallocates storage.
+    // It does not destroy any element.
+    // It only deallocates memory.
+    //
+    void deallocate_storage() noexcept
     {
-        destroy_segments(data_.seg_first_, data_.seg_last_);
-        deallocate_table(data_.seg_first_, data_.seg_end_ - data_.seg_first_);
+        deallocate_segments
+        (
+            data_.table_first_,
+            data_.table_last_
+        );
+
+        deallocate_table
+        (
+            data_.table_first_,
+            std::distance(data_.table_first_, data_.table_eos_)
+        );
     }
 
-    /// Increases storage capacity for given number of elements.
-    /// Does not construct elements, it only allocates additional memory.
-    ///
+    // Increases capacity for given number of elements.
+    // It does not construct any element.
+    // It only allocates memory.
+    //
     void grow_storage(size_type num_additional_elements)
     {
         if (max_size() - capacity() < num_additional_elements)
@@ -1618,133 +1670,148 @@ private:
             SFL_DTL::throw_length_error("sfl::segmented_vector::grow_storage");
         }
 
-        const size_type num_additional_segments =
+        // Required capacity of table
+        const size_type table_required =
             num_additional_elements / N + 1;
 
-        const size_type available_table_capacity =
-            data_.seg_end_ - data_.seg_last_;
+        // Available capacity of table
+        const size_type table_available =
+            std::distance(data_.table_last_, data_.table_eos_);
 
-        // Grow table if neccessary.
-        if (num_additional_segments > available_table_capacity)
+        // Increase table capacity if neccessary
+        if (table_required > table_available)
         {
-            const size_type table_capacity = data_.seg_end_ - data_.seg_first_;
+            const size_type table_capacity =
+                std::distance(data_.table_first_, data_.table_eos_);
 
-            const size_type table_size = data_.seg_last_ - data_.seg_first_;
-
-            const size_type new_table_capacity = std::max<size_type>
+            const size_type new_table_capacity = std::max
             (
-                size_type(double(table_capacity) * table_grow_factor()),
-                table_size + num_additional_segments
+                table_capacity + table_capacity / 2,
+                table_capacity - table_available + table_required
             );
 
-            const size_type n = data_.last_.seg_ - data_.first_.seg_;
-            const size_type m = data_.end_.seg_ - data_.first_.seg_;
+            // Distance (in segments) from FIRST element to LAST element.
+            const size_type dist1 =
+                std::distance(data_.first_.seg_, data_.last_.seg_);
+
+            // Distance (in segments) from FIRST element to END OF STORAGE.
+            const size_type dist2 =
+                std::distance(data_.first_.seg_, data_.eos_.seg_);
 
             // Allocate new table. No effects if allocation fails.
-            segment_pointer new_seg_first = allocate_table(new_table_capacity);
-            segment_pointer new_seg_last  = new_seg_first;
-            segment_pointer new_seg_end   = new_seg_first + new_table_capacity;
+            const segment_pointer new_table_first =
+                allocate_table(new_table_capacity);
 
-            // Copy pointers (noexcept).
-            new_seg_last = std::copy
+            const segment_pointer new_table_eos =
+                new_table_first + new_table_capacity;
+
+            // Initialize LAST element in new table (noexecept).
+            const segment_pointer new_table_last = std::copy
             (
-                data_.seg_first_,
-                data_.seg_last_,
-                new_seg_first
+                data_.table_first_,
+                data_.table_last_,
+                new_table_first
             );
 
             // Deallocate old table (noexcept).
-            deallocate_table(data_.seg_first_, table_capacity);
+            deallocate_table(data_.table_first_, table_capacity);
 
             // Update pointers (noexcept).
-            data_.seg_first_ = new_seg_first;
-            data_.seg_last_  = new_seg_last;
-            data_.seg_end_   = new_seg_end;
+            data_.table_first_ = new_table_first;
+            data_.table_last_  = new_table_last;
+            data_.table_eos_   = new_table_eos;
 
             // Update iterators (noexcept).
-            data_.first_.seg_ = new_seg_first;
-            data_.last_.seg_ = new_seg_first + n;
-            data_.end_.seg_ = new_seg_first + m;
+            data_.first_.seg_ = new_table_first;
+            data_.last_.seg_  = new_table_first + dist1;
+            data_.eos_.seg_   = new_table_first + dist2;
         }
 
-        auto new_seg_last = data_.seg_last_ + num_additional_segments;
+        const segment_pointer new_table_last =
+            data_.table_last_ + table_required;
 
-        // No effects in allocation fails.
-        construct_segments(data_.seg_last_, new_seg_last);
+        // Allocate additional segments. No effects if allocation fails.
+        allocate_segments(data_.table_last_, new_table_last);
 
-        data_.seg_last_ = new_seg_last;
+        // Update table (noexcept).
+        data_.table_last_ = new_table_last;
 
-        data_.end_.seg_  = data_.seg_last_ - 1;
-        data_.end_.elem_ = *(data_.seg_last_ - 1) + (N - 1);
+        // Update iterators (noexcept).
+        data_.eos_.seg_  =   data_.table_last_ - 1;
+        data_.eos_.elem_ = *(data_.table_last_ - 1) + (N - 1);
     }
 
-    /// Removes unused capacity.
-    ///
+    // Removes unused capacity.
+    // It does not destroy any element.
+    // It only deallocates memory.
+    //
     void shrink_storage()
     {
         // Destroy empty segments.
         {
-            auto new_seg_last = data_.last_.seg_ + 1;
+            const segment_pointer new_table_last = data_.last_.seg_ + 1;
 
-            destroy_segments(new_seg_last, data_.seg_last_);
+            deallocate_segments(new_table_last, data_.table_last_);
 
-            data_.seg_last_ = new_seg_last;
+            data_.table_last_ = new_table_last;
 
-            data_.end_.seg_  = data_.seg_last_ - 1;
-            data_.end_.elem_ = *(data_.seg_last_ - 1) + (N - 1);
+            data_.eos_.seg_  =  (data_.table_last_ - 1);
+            data_.eos_.elem_ = *(data_.table_last_ - 1) + (N - 1);
         }
 
         // Shrink table.
         {
-            const size_type table_capacity = data_.seg_end_ - data_.seg_first_;
+            const size_type table_capacity =
+                std::distance(data_.table_first_, data_.table_eos_);
 
-            const size_type table_size = data_.seg_last_ - data_.seg_first_;
+            const size_type table_size =
+                std::distance(data_.table_first_, data_.table_last_);
 
-            const size_type new_table_capacity = std::max
-            (
-                min_table_capacity(),
-                table_size
-            );
+            const size_type new_table_capacity =
+                std::max(table_size, min_table_capacity());
 
-            const size_type n = data_.last_.seg_ - data_.first_.seg_;
-            const size_type m = data_.end_.seg_ - data_.first_.seg_;
+            // Distance (in segments) from FIRST element to LAST element.
+            const size_type dist =
+                std::distance(data_.first_.seg_, data_.last_.seg_);
 
             // Allocate new table. No effects if allocation fails.
-            segment_pointer new_seg_first = allocate_table(new_table_capacity);
-            segment_pointer new_seg_last  = new_seg_first;
-            segment_pointer new_seg_end   = new_seg_first + new_table_capacity;
+            const segment_pointer new_table_first =
+                allocate_table(new_table_capacity);
 
-            // Copy pointers (noexcept).
-            new_seg_last = std::copy
+            const segment_pointer new_table_eos =
+                new_table_first + new_table_capacity;
+
+            // Initialize LAST element in new table (noexecept).
+            const segment_pointer new_table_last = std::copy
             (
-                data_.seg_first_,
-                data_.seg_last_,
-                new_seg_first
+                data_.table_first_,
+                data_.table_last_,
+                new_table_first
             );
 
             // Deallocate old table (noexcept).
-            deallocate_table(data_.seg_first_, table_capacity);
+            deallocate_table(data_.table_first_, table_capacity);
 
             // Update pointers (noexcept).
-            data_.seg_first_ = new_seg_first;
-            data_.seg_last_  = new_seg_last;
-            data_.seg_end_   = new_seg_end;
+            data_.table_first_ = new_table_first;
+            data_.table_last_  = new_table_last;
+            data_.table_eos_   = new_table_eos;
 
             // Update iterators (noexcept).
-            data_.first_.seg_ = new_seg_first;
-            data_.last_.seg_ = new_seg_first + n;
-            data_.end_.seg_ = new_seg_first + m;
+            data_.first_.seg_ = data_.table_first_;
+            data_.last_.seg_  = data_.table_first_ + dist;
+            data_.eos_.seg_   = data_.table_last_ - 1;
         }
     }
 
     void initialize_empty()
     {
-        construct_storage(0);
+        allocate_storage(0);
     }
 
     void initialize_default_n(size_type n)
     {
-        construct_storage(n);
+        allocate_storage(n);
 
         SFL_TRY
         {
@@ -1757,14 +1824,14 @@ private:
         }
         SFL_CATCH (...)
         {
-            destroy_storage();
+            deallocate_storage();
             SFL_RETHROW;
         }
     }
 
     void initialize_fill_n(size_type n, const T& value)
     {
-        construct_storage(n);
+        allocate_storage(n);
 
         SFL_TRY
         {
@@ -1778,7 +1845,7 @@ private:
         }
         SFL_CATCH (...)
         {
-            destroy_storage();
+            deallocate_storage();
             SFL_RETHROW;
         }
     }
@@ -1786,7 +1853,7 @@ private:
     template <typename InputIt>
     void initialize_range(InputIt first, InputIt last, std::input_iterator_tag)
     {
-        construct_storage(0);
+        allocate_storage(0);
 
         SFL_TRY
         {
@@ -1799,7 +1866,7 @@ private:
         SFL_CATCH (...)
         {
             clear();
-            destroy_storage();
+            deallocate_storage();
             SFL_RETHROW;
         }
     }
@@ -1807,7 +1874,7 @@ private:
     template <typename ForwardIt>
     void initialize_range(ForwardIt first, ForwardIt last, std::forward_iterator_tag)
     {
-        construct_storage(std::distance(first, last));
+        allocate_storage(std::distance(first, last));
 
         SFL_TRY
         {
@@ -1821,14 +1888,14 @@ private:
         }
         SFL_CATCH (...)
         {
-            destroy_storage();
+            deallocate_storage();
             SFL_RETHROW;
         }
     }
 
     void initialize_copy(const segmented_vector& other)
     {
-        construct_storage(other.size());
+        allocate_storage(other.size());
 
         SFL_TRY
         {
@@ -1842,7 +1909,7 @@ private:
         }
         SFL_CATCH (...)
         {
-            destroy_storage();
+            deallocate_storage();
             SFL_RETHROW;
         }
     }
@@ -1851,13 +1918,13 @@ private:
     {
         if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
         {
-            construct_storage(0);
+            allocate_storage(0);
             using std::swap;
             swap(data_, other.data_);
         }
         else
         {
-            construct_storage(other.size());
+            allocate_storage(other.size());
 
             SFL_TRY
             {
@@ -1871,7 +1938,7 @@ private:
             }
             SFL_CATCH (...)
             {
-                destroy_storage();
+                deallocate_storage();
                 SFL_RETHROW;
             }
         }
@@ -1879,18 +1946,11 @@ private:
 
     void assign_fill_n(size_type n, const T& value)
     {
-        const size_type c = capacity();
+        const size_type size = this->size();
 
-        if (n > c)
+        if (n <= size)
         {
-            grow_storage(n - c);
-        }
-
-        const size_type s = size();
-
-        if (n <= s)
-        {
-            iterator new_last = std::fill_n
+            const iterator new_last = std::fill_n
             (
                 data_.first_,
                 n,
@@ -1908,10 +1968,17 @@ private:
         }
         else
         {
+            const size_type capacity = this->capacity();
+
+            if (n > capacity)
+            {
+                grow_storage(n - capacity);
+            }
+
             std::fill_n
             (
                 data_.first_,
-                s,
+                size,
                 value
             );
 
@@ -1919,7 +1986,7 @@ private:
             (
                 data_.ref_to_alloc(),
                 data_.last_,
-                n - s,
+                n - size,
                 value
             );
         }
@@ -1958,18 +2025,11 @@ private:
     {
         const size_type n = std::distance(first, last);
 
-        const size_type c = capacity();
+        const size_type size = this->size();
 
-        if (n > c)
+        if (n <= size)
         {
-            grow_storage(n - c);
-        }
-
-        const size_type s = size();
-
-        if (n <= s)
-        {
-            iterator new_last = std::copy
+            const iterator new_last = std::copy
             (
                 first,
                 last,
@@ -1987,7 +2047,14 @@ private:
         }
         else
         {
-            ForwardIt mid = std::next(first, s);
+            const size_type capacity = this->capacity();
+
+            if (n > capacity)
+            {
+                grow_storage(n - capacity);
+            }
+
+            const ForwardIt mid = std::next(first, size);
 
             std::copy
             (
@@ -2020,12 +2087,12 @@ private:
 
                     // Clear and destroy current storage (noexcept).
                     clear();
-                    destroy_storage();
+                    deallocate_storage();
 
                     // Set pointers to null (noexcept).
-                    data_.seg_first_ = nullptr;
-                    data_.seg_last_  = nullptr;
-                    data_.seg_end_   = nullptr;
+                    data_.table_first_ = nullptr;
+                    data_.table_last_  = nullptr;
+                    data_.table_eos_   = nullptr;
 
                     // Swap storage of this and temporary vector (noexcept).
                     using std::swap;
@@ -2066,12 +2133,12 @@ private:
 
             // Destroy storage of "this" (noexcept).
             // NOTE: This does not set pointers to null.
-            destroy_storage();
+            deallocate_storage();
 
             // Set pointers of "this" to null pointers (noexcept).
-            data_.seg_first_ = nullptr;
-            data_.seg_last_  = nullptr;
-            data_.seg_end_   = nullptr;
+            data_.table_first_ = nullptr;
+            data_.table_last_  = nullptr;
+            data_.table_eos_   = nullptr;
 
             // Current state:
             //  - "this" has no allocated storage (pointers are null).
@@ -2109,12 +2176,12 @@ private:
 
             // Destroy storage of "this" (noexcept).
             // NOTE: This does not set pointers to null.
-            destroy_storage();
+            deallocate_storage();
 
             // Set pointers of "this" to null pointers (noexcept).
-            data_.seg_first_ = nullptr;
-            data_.seg_last_  = nullptr;
-            data_.seg_end_   = nullptr;
+            data_.table_first_ = nullptr;
+            data_.table_last_  = nullptr;
+            data_.table_eos_   = nullptr;
 
             // Current state:
             //  - "this" has no allocated storage (pointers are null).
@@ -2161,95 +2228,94 @@ private:
 
     iterator insert_fill_n(const_iterator pos, size_type n, const T& value)
     {
-        iterator p(pos.seg_, pos.elem_);
-
         if (n == 0)
         {
-            return p;
+            return iterator(pos.seg_, pos.elem_);
         }
 
-        const size_type available = data_.end_ - data_.last_;
+        const value_type tmp(value);
 
-        if (n > available)
+        const size_type dist_to_begin = std::distance(cbegin(), pos);
+        const size_type dist_to_end   = std::distance(pos, cend());
+
+        const size_type available = this->available();
+
+        if (available < n)
         {
-            const size_type offset = pos - cbegin();
-
             grow_storage(n - available);
-
-            p = nth(offset);
         }
 
-        // The order of operations is critical. First we will construct
-        // temporary value because `value` can be a reference to element
-        // in this container and after that we will move elements and
-        // insert new element.
-
-        value_type tmp(value);
-
-        const size_type num_elems_after = data_.last_ - p;
-
-        if (num_elems_after > n)
+        if (dist_to_end > n)
         {
-            iterator old_last = data_.last_;
+            const iterator p1 = data_.first_ + dist_to_begin;
+            const iterator p2 = p1 + n;
+            const iterator p3 = data_.last_ - n;
+
+            const iterator old_last = data_.last_;
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
                 data_.ref_to_alloc(),
-                data_.last_ - n,
-                data_.last_,
-                data_.last_
+                p3,
+                old_last,
+                old_last
             );
 
             std::move_backward
             (
-                p,
-                old_last - n,
+                p1,
+                p3,
                 old_last
             );
 
-            std::fill_n
+            std::fill
             (
-                p,
-                n,
+                p1,
+                p2,
                 tmp
             );
+
+            return p1;
         }
         else
         {
-            iterator old_last = data_.last_;
+            const iterator p1 = data_.first_ + dist_to_begin;
+            const iterator p2 = p1 + n;
 
-            data_.last_ = SFL_DTL::uninitialized_fill_n
+            const iterator old_last = data_.last_;
+
+            data_.last_ = SFL_DTL::uninitialized_fill
             (
                 data_.ref_to_alloc(),
-                data_.last_,
-                n - num_elems_after,
+                old_last,
+                p2,
                 tmp
             );
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
                 data_.ref_to_alloc(),
-                p,
+                p1,
                 old_last,
                 data_.last_
             );
 
             std::fill
             (
-                p,
+                p1,
                 old_last,
                 tmp
             );
-        }
 
-        return p;
+            return p1;
+        }
     }
 
     template <typename InputIt>
     iterator insert_range(const_iterator pos, InputIt first, InputIt last,
                           std::input_iterator_tag)
     {
-        const size_type offset = pos - cbegin();
+        const size_type offset = std::distance(cbegin(), pos);
 
         while (first != last)
         {
@@ -2265,44 +2331,42 @@ private:
     iterator insert_range(const_iterator pos, ForwardIt first, ForwardIt last,
                           std::forward_iterator_tag)
     {
-        iterator p(pos.seg_, pos.elem_);
-
         if (first == last)
         {
-            return p;
+            return iterator(pos.seg_, pos.elem_);
         }
 
         const size_type n = std::distance(first, last);
 
-        const size_type available = data_.end_ - data_.last_;
+        const size_type dist_to_begin = std::distance(cbegin(), pos);
+        const size_type dist_to_end   = std::distance(pos, cend());
 
-        if (n > available)
+        const size_type available = this->available();
+
+        if (available < n)
         {
-            const size_type offset = pos - cbegin();
-
             grow_storage(n - available);
-
-            p = nth(offset);
         }
 
-        const size_type num_elems_after = data_.last_ - p;
-
-        if (num_elems_after > n)
+        if (dist_to_end > n)
         {
-            iterator old_last = data_.last_;
+            const iterator p1 = data_.first_ + dist_to_begin;
+            const iterator p2 = data_.last_ - n;
+
+            const iterator old_last = data_.last_;
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
                 data_.ref_to_alloc(),
-                data_.last_ - n,
-                data_.last_,
-                data_.last_
+                p2,
+                old_last,
+                old_last
             );
 
             std::move_backward
             (
-                p,
-                old_last - n,
+                p1,
+                p2,
                 old_last
             );
 
@@ -2310,27 +2374,31 @@ private:
             (
                 first,
                 last,
-                p
+                p1
             );
+
+            return p1;
         }
         else
         {
-            iterator old_last = data_.last_;
+            const iterator p1 = data_.first_ + dist_to_begin;
 
-            ForwardIt mid = std::next(first, num_elems_after);
+            const iterator old_last = data_.last_;
+
+            const ForwardIt mid = std::next(first, dist_to_end);
 
             data_.last_ = SFL_DTL::uninitialized_copy
             (
                 data_.ref_to_alloc(),
                 mid,
                 last,
-                data_.last_
+                old_last
             );
 
             data_.last_ = SFL_DTL::uninitialized_move
             (
                 data_.ref_to_alloc(),
-                p,
+                p1,
                 old_last,
                 data_.last_
             );
@@ -2339,11 +2407,11 @@ private:
             (
                 first,
                 mid,
-                p
+                p1
             );
-        }
 
-        return p;
+            return p1;
+        }
     }
 };
 
