@@ -1395,11 +1395,24 @@ public:
     {
         check_size(n, "sfl::small_vector::resize");
 
-        const size_type s = size();
+        const size_type size = this->size();
 
-        if (n > s)
+        if (n < size)
         {
-            const size_type delta = n - s;
+            const pointer new_last = data_.first_ + n;
+
+            SFL_DTL::destroy
+            (
+                data_.ref_to_alloc(),
+                new_last,
+                data_.last_
+            );
+
+            data_.last_ = new_last;
+        }
+        else if (n > size)
+        {
+            const size_type delta = n - size;
 
             if (n > capacity())
             {
@@ -1425,7 +1438,7 @@ public:
                     SFL_DTL::uninitialized_default_construct_n
                     (
                         data_.ref_to_alloc(),
-                        new_first + s,
+                        new_first + size,
                         delta
                     );
 
@@ -1448,7 +1461,7 @@ public:
                         SFL_DTL::destroy_n
                         (
                             data_.ref_to_alloc(),
-                            new_first + s,
+                            new_first + size,
                             delta
                         );
                     }
@@ -1506,9 +1519,17 @@ public:
                 );
             }
         }
-        else if (n < s)
+    }
+
+    void resize(size_type n, const T& value)
+    {
+        check_size(n, "sfl::small_vector::resize");
+
+        const size_type size = this->size();
+
+        if (n < size)
         {
-            pointer new_last = data_.first_ + n;
+            const pointer new_last = data_.first_ + n;
 
             SFL_DTL::destroy
             (
@@ -1519,17 +1540,9 @@ public:
 
             data_.last_ = new_last;
         }
-    }
-
-    void resize(size_type n, const T& value)
-    {
-        check_size(n, "sfl::small_vector::resize");
-
-        const size_type s = size();
-
-        if (n > s)
+        else if (n > size)
         {
-            const size_type delta = n - s;
+            const size_type delta = n - size;
 
             if (n > capacity())
             {
@@ -1555,7 +1568,7 @@ public:
                     SFL_DTL::uninitialized_fill_n
                     (
                         data_.ref_to_alloc(),
-                        new_first + s,
+                        new_first + size,
                         delta,
                         value
                     );
@@ -1579,7 +1592,7 @@ public:
                         SFL_DTL::destroy_n
                         (
                             data_.ref_to_alloc(),
-                            new_first + s,
+                            new_first + size,
                             delta
                         );
                     }
@@ -1637,19 +1650,6 @@ public:
                     value
                 );
             }
-        }
-        else if (n < s)
-        {
-            pointer new_last = data_.first_ + n;
-
-            SFL_DTL::destroy
-            (
-                data_.ref_to_alloc(),
-                new_last,
-                data_.last_
-            );
-
-            data_.last_ = new_last;
         }
     }
 
