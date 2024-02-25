@@ -1,3 +1,26 @@
+# Next release
+
+* New container `segmented_devector` (segmented double-ended vector).
+* Segmented vector: Added member function `available`.
+* Segmented vector: Reworked member function `emplace`.
+* Segmented vector: Reworked member function `emplace_back`.
+* Segmented vector: Reworked member function `resize`.
+* Segmented vector: Reworked private member function `grow_storage`.
+* Segmented vector: Reworked private member function `shrink_storage`.
+* Segmented vector: Reworked private member function `assign_fill_n`.
+* Segmented vector: Reworked private member function `assign_range`.
+* Segmented vector: Reworked private member function `insert_fill_n`.
+* Segmented vector: Reworked private member function `insert_range`.
+* Segmented vector: Various small improvements (added comments, added `const`
+  qualifiers, renamed function and variables, use `std::addressof` and other
+  minor changes that make code more readable).
+* Segmented vector: Added missing tests for `reserve` and `shrink_to_fit`.
+* Segmented vector: Improved tests for `resize`.
+* Small vector: Renamed variables and exchanged first and second case in
+  member function `resize` for better readability.
+
+
+
 # 1.2.4 (2024-02-13)
 
 * Refactoring insert functions in small maps and sets. Removed duplicated code.
