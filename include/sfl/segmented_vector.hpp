@@ -1250,7 +1250,7 @@ public:
 
         iterator p1(pos.seg_, pos.elem_);
 
-        if (!available())
+        if (data_.last_ == data_.eos_)
         {
             const size_type offset = std::distance(cbegin(), pos);
             grow_storage(1);
@@ -1354,7 +1354,7 @@ public:
     template <typename... Args>
     reference emplace_back(Args&&... args)
     {
-        if (!available())
+        if (data_.last_ == data_.eos_)
         {
             grow_storage(1);
         }

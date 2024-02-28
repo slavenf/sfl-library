@@ -1268,7 +1268,7 @@ public:
 
         if (dist_to_begin < dist_to_end)
         {
-            if (!available_front())
+            if (data_.first_ == data_.bos_)
             {
                 grow_storage_front(1);
                 p1 = nth(dist_to_begin);
@@ -1327,7 +1327,7 @@ public:
         }
         else
         {
-            if (!available_back())
+            if (data_.last_ == data_.eos_)
             {
                 grow_storage_back(1);
                 p1 = nth(dist_to_begin);
@@ -1433,7 +1433,7 @@ public:
     template <typename... Args>
     reference emplace_front(Args&&... args)
     {
-        if (!available_front())
+        if (data_.first_ == data_.bos_)
         {
             grow_storage_front(1);
         }
@@ -1455,7 +1455,7 @@ public:
     template <typename... Args>
     reference emplace_back(Args&&... args)
     {
-        if (!available_back())
+        if (data_.last_ == data_.eos_)
         {
             grow_storage_back(1);
         }
