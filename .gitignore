@@ -1,5 +1,12 @@
 .vscode/*
 
+benchmark/*.out
+
+benchmark/*.exe
+benchmark/*.ilk
+benchmark/*.obj
+benchmark/*.pdb
+
 test/*.out
 
 test/*.exe
