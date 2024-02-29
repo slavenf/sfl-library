@@ -38,7 +38,7 @@ int main()
     constexpr int num_elements = 10'000;
 
     ankerl::nanobench::Bench bench;
-    bench.title("emplace random");
+    bench.title("emplace random (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
     bench.epochs(100);
 

@@ -36,7 +36,7 @@ int main()
     const int num_elements = 10'000'000;
 
     ankerl::nanobench::Bench bench;
-    bench.title("emplace_front");
+    bench.title("emplace_front (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
     bench.epochs(100);
 

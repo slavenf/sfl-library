@@ -45,7 +45,7 @@ int main()
     constexpr int num_elements = 100'000'000;
 
     ankerl::nanobench::Bench bench;
-    bench.title("iterate all");
+    bench.title("iterate all (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
     bench.epochs(50);
 

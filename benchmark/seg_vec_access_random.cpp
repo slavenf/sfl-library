@@ -113,21 +113,21 @@ int main()
     bench.performanceCounters(false);
     bench.epochs(100);
 
-    bench.title("operator[]");
+    bench.title("operator[] (" + std::to_string(num_elements) + " elements)");
 
     access_random_array<std::deque<int>>(bench, num_elements);
     access_random_array<sfl::segmented_devector<int, 1024>>(bench, num_elements);
     access_random_array<sfl::segmented_vector<int, 1024>>(bench, num_elements);
     access_random_array<std::vector<int>>(bench, num_elements);
 
-    bench.title("at()");
+    bench.title("at() (" + std::to_string(num_elements) + " elements)");
 
     access_random_at<std::deque<int>>(bench, num_elements);
     access_random_at<sfl::segmented_devector<int, 1024>>(bench, num_elements);
     access_random_at<sfl::segmented_vector<int, 1024>>(bench, num_elements);
     access_random_at<std::vector<int>>(bench, num_elements);
 
-    bench.title("nth()");
+    bench.title("nth() (" + std::to_string(num_elements) + " elements)");
 
     access_random_nth<sfl::segmented_devector<int, 1024>>(bench, num_elements);
     access_random_nth<sfl::segmented_vector<int, 1024>>(bench, num_elements);

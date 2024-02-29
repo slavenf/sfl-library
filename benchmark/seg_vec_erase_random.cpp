@@ -46,7 +46,7 @@ int main()
     constexpr int num_elements = 100'000;
 
     ankerl::nanobench::Bench bench;
-    bench.title("erase random");
+    bench.title("erase random (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
     bench.epochs(50);
 
