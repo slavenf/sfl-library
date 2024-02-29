@@ -9,8 +9,6 @@
 #include <deque>
 #include <vector>
 
-using namespace std::literals;
-
 template <typename Vector>
 void iterate(ankerl::nanobench::Bench& bench, int num_elements)
 {

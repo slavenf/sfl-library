@@ -9,8 +9,6 @@
 #include <deque>
 #include <vector>
 
-using namespace std::literals;
-
 template <typename Vector>
 void access_random_array(ankerl::nanobench::Bench& bench, int num_elements)
 {

@@ -9,8 +9,6 @@
 #include <deque>
 #include <vector>
 
-using namespace std::literals;
-
 template <typename Vector>
 void emplace_random(ankerl::nanobench::Bench& bench, const int num_elements)
 {
@@ -33,10 +31,6 @@ void emplace_random(ankerl::nanobench::Bench& bench, const int num_elements)
             ankerl::nanobench::doNotOptimizeAway(vec.size());
         }
     );
-}
-
-void foo(std::random_access_iterator_tag)
-{
 }
 
 int main()

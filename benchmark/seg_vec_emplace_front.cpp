@@ -9,8 +9,6 @@
 #include <deque>
 #include <vector>
 
-using namespace std::literals;
-
 template <typename Vector>
 void emplace_front(ankerl::nanobench::Bench& bench, int num_elements)
 {

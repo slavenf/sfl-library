@@ -9,8 +9,6 @@
 #include <deque>
 #include <vector>
 
-using namespace std::literals;
-
 template <typename Vector>
 void erase_random(ankerl::nanobench::Bench& bench, const int num_elements)
 {
