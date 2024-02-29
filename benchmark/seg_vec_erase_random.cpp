@@ -27,7 +27,7 @@ void erase_random(ankerl::nanobench::Bench& bench, const int num_elements)
 
             for (int i = 0; i < num_elements; ++i)
             {
-                vec.emplace_back();
+                vec.emplace_back(int(rng()));
             }
 
             // Randomly erase half of elements

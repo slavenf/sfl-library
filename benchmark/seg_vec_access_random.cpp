@@ -14,14 +14,14 @@ void access_random_array(ankerl::nanobench::Bench& bench, int num_elements)
 {
     const std::string title(name_of_type<Vector>());
 
+    ankerl::nanobench::Rng rng;
+
     Vector vec;
 
     for (int i = 0; i < num_elements; ++i)
     {
-        vec.emplace_back();
+        vec.emplace_back(int(rng()));
     }
-
-    ankerl::nanobench::Rng rng;
 
     bench.warmup(10).batch(num_elements).unit("operator[]").run
     (
@@ -46,14 +46,14 @@ void access_random_at(ankerl::nanobench::Bench& bench, int num_elements)
 {
     const std::string title(name_of_type<Vector>());
 
+    ankerl::nanobench::Rng rng;
+
     Vector vec;
 
     for (int i = 0; i < num_elements; ++i)
     {
-        vec.emplace_back();
+        vec.emplace_back(int(rng()));
     }
-
-    ankerl::nanobench::Rng rng;
 
     bench.warmup(10).batch(num_elements).unit("at()").run
     (
@@ -78,14 +78,14 @@ void access_random_nth(ankerl::nanobench::Bench& bench, int num_elements)
 {
     const std::string title(name_of_type<Vector>());
 
+    ankerl::nanobench::Rng rng;
+
     Vector vec;
 
     for (int i = 0; i < num_elements; ++i)
     {
-        vec.emplace_back();
+        vec.emplace_back(int(rng()));
     }
-
-    ankerl::nanobench::Rng rng;
 
     bench.warmup(10).batch(num_elements).unit("nth()").run
     (

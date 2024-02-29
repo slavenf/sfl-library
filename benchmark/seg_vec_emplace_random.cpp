@@ -25,7 +25,7 @@ void emplace_random(ankerl::nanobench::Bench& bench, const int num_elements)
 
             for (int i = 0; i < num_elements; ++i)
             {
-                vec.emplace(vec.begin() + rng.bounded(i), i);
+                vec.emplace(vec.begin() + rng.bounded(i), int(rng()));
             }
 
             ankerl::nanobench::doNotOptimizeAway(vec.size());

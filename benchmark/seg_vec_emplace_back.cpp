@@ -14,6 +14,8 @@ void emplace_back(ankerl::nanobench::Bench& bench, int num_elements)
 {
     const std::string title(name_of_type<Vector>());
 
+    ankerl::nanobench::Rng rng;
+
     bench.warmup(10).batch(num_elements).unit("emplace_back").run
     (
         title,
@@ -23,7 +25,7 @@ void emplace_back(ankerl::nanobench::Bench& bench, int num_elements)
 
             for (int i = 0; i < num_elements; ++i)
             {
-                vec.emplace_back(i);
+                vec.emplace_back(int(rng()));
             }
 
             ankerl::nanobench::doNotOptimizeAway(vec.size());
