@@ -177,6 +177,26 @@ void destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
     }
 }
 
+template <typename Allocator, typename ForwardIt>
+ForwardIt uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt last)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (curr != last)
+        {
+            sfl::dtl::construct_at(a, std::addressof(*curr));
+            ++curr;
+        }
+        return curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(a, first, curr);
+        SFL_RETHROW;
+    }
+}
+
 template <typename Allocator, typename ForwardIt, typename Size>
 ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size n)
 {
@@ -188,6 +208,26 @@ ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size 
             sfl::dtl::construct_at(a, std::addressof(*curr));
             ++curr;
             --n;
+        }
+        return curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(a, first, curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename Allocator, typename ForwardIt, typename T>
+ForwardIt uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& value)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (curr != last)
+        {
+            sfl::dtl::construct_at(a, std::addressof(*curr), value);
+            ++curr;
         }
         return curr;
     }
