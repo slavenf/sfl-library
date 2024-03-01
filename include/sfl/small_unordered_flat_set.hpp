@@ -23,17 +23,15 @@
 
 #include "private.hpp"
 
-#include <algorithm>
-#include <cassert>
-#include <cstddef>
-#include <functional>
-#include <initializer_list>
-#include <iterator>
-#include <limits>
-#include <memory>
-#include <stdexcept>
-#include <type_traits>
-#include <utility>
+#include <algorithm>        // copy, move, lower_bound, swap, swap_ranges
+#include <cstddef>          // size_t
+#include <functional>       // equal_to, less
+#include <initializer_list> // initializer_list
+#include <iterator>         // distance, next, reverse_iterator
+#include <limits>           // numeric_limits
+#include <memory>           // allocator, allocator_traits, pointer_traits
+#include <type_traits>      // is_same, is_nothrow_xxxxx
+#include <utility>          // forward, move, pair
 
 #ifdef SFL_TEST_SMALL_UNORDERED_FLAT_SET
 template <int>
