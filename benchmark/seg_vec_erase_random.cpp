@@ -10,7 +10,7 @@
 #include <vector>
 
 template <typename Vector>
-void erase_random(ankerl::nanobench::Bench& bench, const int num_elements)
+void erase_random(ankerl::nanobench::Bench& bench, int num_elements)
 {
     const std::string title(name_of_type<Vector>());
 
@@ -18,7 +18,7 @@ void erase_random(ankerl::nanobench::Bench& bench, const int num_elements)
 
     const int num_elements_to_erase = num_elements / 2;
 
-    bench.warmup(10).batch(num_elements_to_erase).unit("erase").run
+    bench.batch(num_elements_to_erase).unit("erase").run
     (
         title,
         [&]
@@ -48,7 +48,8 @@ int main()
     ankerl::nanobench::Bench bench;
     bench.title("erase random (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
-    bench.epochs(50);
+    bench.warmup(10);
+    bench.epochs(100);
 
     erase_random<std::deque<int>>(bench, num_elements);
     erase_random<sfl::segmented_devector<int, 1024>>(bench, num_elements);

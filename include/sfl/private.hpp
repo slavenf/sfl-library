@@ -21,6 +21,7 @@
 #ifndef SFL_PRIVATE_HPP_INCLUDED
 #define SFL_PRIVATE_HPP_INCLUDED
 
+#include <algorithm>    // move, copy, etc.
 #include <cassert>      // assert
 #include <cstdlib>      // abort
 #include <iterator>     // iterator_traits, xxxxx_iterator_tag
@@ -83,6 +84,81 @@ void ignore_unused(Args&&...)
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+// TYPE TRAITS
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename...>
+using void_t = void;
+
+template <bool B, typename T = void>
+using enable_if_t = typename std::enable_if<B, T>::type;
+
+//
+// This struct provides information about segmented iterators.
+//
+// The architecture about segmented iterator traits is based on this article:
+// "Segmented Iterators and Hierarchical Algorithms", Matthew H. Austern.
+//
+template <typename T>
+struct segmented_iterator_traits
+{
+    using is_segmented_iterator = std::false_type;
+
+    //
+    // Specialized struct must define the following types and functions:
+    //
+    // using iterator         = xxxxx; (it is usually `T`)
+    // using segment_iterator = xxxxx;
+    // using local_iterator   = xxxxx;
+    //
+    // static segment_iterator segment(iterator);
+    // static local_iterator   local(iterator);
+    //
+    // static local_iterator begin(segment_iterator);
+    // static local_iterator end(segment_iterator);
+    //
+    // static iterator compose(segment_iterator, local_iterator);
+    //
+};
+
+//
+// Checks if `T` is segmented iterator.
+//
+template <typename T>
+struct is_segmented_iterator :
+    sfl::dtl::segmented_iterator_traits<T>::is_segmented_iterator {};
+
+//
+// Checks if `T` is input iterator.
+//
+template <typename Iterator, typename = void>
+struct is_input_iterator : std::false_type {};
+
+template <typename Iterator>
+struct is_input_iterator<
+    Iterator,
+    sfl::dtl::enable_if_t<
+        std::is_convertible<
+            typename std::iterator_traits<Iterator>::iterator_category,
+            std::input_iterator_tag
+        >::value
+    >
+> : std::true_type {};
+
+//
+// Checks if `Type` has member `is_transparent`.
+//
+template <typename Type, typename SfinaeType, typename = void>
+struct has_is_transparent : std::false_type {};
+
+template <typename Type, typename SfinaeType>
+struct has_is_transparent<
+    Type, SfinaeType, void_t<typename Type::is_transparent>
+> : std::true_type {};
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // POINTER TRAITS
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -108,6 +184,232 @@ constexpr
 auto to_address(const Pointer& p) noexcept -> typename std::pointer_traits<Pointer>::element_type*
 {
     return sfl::dtl::to_address(p.operator->());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// INITIALIZED MEMORY ALGORITHMS
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename InputIt, typename OutputIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                 !sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+OutputIt move(InputIt first, InputIt last, OutputIt d_first)
+{
+    return std::move(first, last, d_first);
+}
+
+template <typename InputIt, typename OutputIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+OutputIt move(InputIt first, InputIt last, OutputIt d_first)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<OutputIt>;
+
+    if (first == last)
+    {
+        return d_first;
+    }
+    else
+    {
+        auto curr = first;
+
+        auto d_local = traits::local(d_first);
+        auto d_seg   = traits::segment(d_first);
+
+        while (true)
+        {
+            const auto n =
+                std::min<typename std::iterator_traits<InputIt>::difference_type>
+                (
+                    std::distance(curr, last),
+                    std::distance(d_local, traits::end(d_seg))
+                );
+
+            const auto next = curr + n;
+
+            d_local = sfl::dtl::move
+            (
+                curr,
+                next,
+                d_local
+            );
+
+            curr = next;
+
+            if (curr == last)
+            {
+                return traits::compose(d_seg, d_local);
+            }
+
+            ++d_seg;
+
+            d_local = traits::begin(d_seg);
+        }
+    }
+}
+
+template <typename InputIt, typename OutputIt,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
+OutputIt move(InputIt first, InputIt last, OutputIt d_first)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
+
+    auto sfirst = traits::segment(first);
+    auto slast  = traits::segment(last);
+
+    if (sfirst == slast)
+    {
+        return sfl::dtl::move
+        (
+            traits::local(first),
+            traits::local(last),
+            d_first
+        );
+    }
+    else
+    {
+        d_first = sfl::dtl::move
+        (
+            traits::local(first),
+            traits::end(sfirst),
+            d_first
+        );
+
+        ++sfirst;
+
+        while (sfirst != slast)
+        {
+            d_first = sfl::dtl::move
+            (
+                traits::begin(sfirst),
+                traits::end(sfirst),
+                d_first
+            );
+
+            ++sfirst;
+        }
+
+        d_first = sfl::dtl::move
+        (
+            traits::begin(slast),
+            traits::local(last),
+            d_first
+        );
+
+        return d_first;
+    }
+}
+
+template <typename BidirIt1, typename BidirIt2,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                 !sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
+{
+    return std::move_backward(first, last, d_last);
+}
+
+template <typename BidirIt1, typename BidirIt2,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                  sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<BidirIt2>;
+
+    if (first == last)
+    {
+        return d_last;
+    }
+    else
+    {
+        auto curr = last;
+
+        auto d_local = traits::local(d_last);
+        auto d_seg   = traits::segment(d_last);
+
+        while (true)
+        {
+            const auto n =
+                std::min<typename std::iterator_traits<BidirIt1>::difference_type>
+                (
+                    std::distance(first, curr),
+                    std::distance(traits::begin(d_seg), d_local)
+                );
+
+            const auto prev = curr - n;
+
+            d_local = sfl::dtl::move_backward
+            (
+                prev,
+                curr,
+                d_local
+            );
+
+            curr = prev;
+
+            if (curr == first)
+            {
+                return traits::compose(d_seg, d_local);
+            }
+
+            --d_seg;
+
+            d_local = traits::end(d_seg);
+        }
+    }
+}
+
+template <typename BidirIt1, typename BidirIt2,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<BidirIt1>::value >* = nullptr>
+BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<BidirIt1>;
+
+    auto sfirst = traits::segment(first);
+    auto slast  = traits::segment(last);
+
+    if (sfirst == slast)
+    {
+        return sfl::dtl::move_backward
+        (
+            traits::local(first),
+            traits::local(last),
+            d_last
+        );
+    }
+    else
+    {
+        d_last = sfl::dtl::move_backward
+        (
+            traits::begin(slast),
+            traits::local(last),
+            d_last
+        );
+
+        --slast;
+
+        while (sfirst != slast)
+        {
+            d_last = sfl::dtl::move_backward
+            (
+                traits::begin(slast),
+                traits::end(slast),
+                d_last
+            );
+
+            --slast;
+        }
+
+        d_last = sfl::dtl::move_backward
+        (
+            traits::local(first),
+            traits::end(slast),
+            d_last
+        );
+
+        return d_last;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -321,37 +623,6 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
         SFL_RETHROW;
     }
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// TYPE TRAITS
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-template <typename Iterator, typename = void>
-struct is_input_iterator : std::false_type {};
-
-template <typename Iterator>
-struct is_input_iterator<
-    Iterator,
-    typename std::enable_if<
-        std::is_convertible<
-            typename std::iterator_traits<Iterator>::iterator_category,
-            std::input_iterator_tag
-        >::value
-    >::type
-> : std::true_type {};
-
-template <typename...>
-using void_t = void;
-
-template <typename Type, typename SfinaeType, typename = void>
-struct has_is_transparent : std::false_type {};
-
-template <typename Type, typename SfinaeType>
-struct has_is_transparent<
-    Type, SfinaeType, void_t<typename Type::is_transparent>
-> : std::true_type {};
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

@@ -23,7 +23,7 @@ void access_random_array(ankerl::nanobench::Bench& bench, int num_elements)
         vec.emplace_back(int(rng()));
     }
 
-    bench.warmup(10).batch(num_elements).unit("operator[]").run
+    bench.batch(num_elements).unit("operator[]").run
     (
         title,
         [&]
@@ -55,7 +55,7 @@ void access_random_at(ankerl::nanobench::Bench& bench, int num_elements)
         vec.emplace_back(int(rng()));
     }
 
-    bench.warmup(10).batch(num_elements).unit("at()").run
+    bench.batch(num_elements).unit("at()").run
     (
         title,
         [&]
@@ -87,7 +87,7 @@ void access_random_nth(ankerl::nanobench::Bench& bench, int num_elements)
         vec.emplace_back(int(rng()));
     }
 
-    bench.warmup(10).batch(num_elements).unit("nth()").run
+    bench.batch(num_elements).unit("nth()").run
     (
         title,
         [&]
@@ -111,7 +111,8 @@ int main()
 
     ankerl::nanobench::Bench bench;
     bench.performanceCounters(false);
-    bench.epochs(100);
+    bench.warmup(3);
+    bench.epochs(10);
 
     bench.title("operator[] (" + std::to_string(num_elements) + " elements)");
 

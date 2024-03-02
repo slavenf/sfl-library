@@ -317,6 +317,59 @@ private:
             elem_ = *seg_ + (offset - seg_offset * difference_type(N));
         }
     }
+
+    template <typename>
+    friend struct sfl::dtl::segmented_iterator_traits;
+};
+
+template < typename ValueType,
+           typename Pointer,
+           typename Reference,
+           typename DifferenceType,
+           typename SegmentPointer,
+           typename ElementPointer,
+           std::size_t N >
+struct sfl::dtl::segmented_iterator_traits< segmented_devector_iterator<
+    ValueType, Pointer, Reference, DifferenceType, SegmentPointer, ElementPointer, N > >
+{
+    using is_segmented_iterator = std::true_type;
+
+    using iterator = segmented_devector_iterator< ValueType, Pointer,
+        Reference, DifferenceType, SegmentPointer, ElementPointer, N >;
+
+    using segment_iterator = SegmentPointer;
+    using local_iterator   = ElementPointer;
+
+    static segment_iterator segment(iterator it) noexcept
+    {
+        return it.seg_;
+    }
+
+    static local_iterator local(iterator it) noexcept
+    {
+        return it.elem_;
+    }
+
+    static local_iterator begin(segment_iterator it) noexcept
+    {
+        return *it;
+    }
+
+    static local_iterator end(segment_iterator it) noexcept
+    {
+        return *it + N;
+    }
+
+    static iterator compose(segment_iterator seg, local_iterator elem) noexcept
+    {
+        if (elem == *seg + N)
+        {
+            ++seg;
+            elem = *seg;
+        }
+
+        return iterator(seg, elem);
+    }
 };
 
 template < typename T,
@@ -944,7 +997,7 @@ public:
 
                 data_.first_ = p4;
 
-                std::move
+                sfl::dtl::move
                 (
                     p3,
                     p1,
@@ -999,7 +1052,7 @@ public:
 
                 ++data_.last_;
 
-                std::move_backward
+                sfl::dtl::move_backward
                 (
                     p1,
                     p2,
@@ -1155,7 +1208,7 @@ public:
         {
             const iterator old_first = data_.first_;
 
-            data_.first_ = std::move_backward(data_.first_, p1, p2);
+            data_.first_ = sfl::dtl::move_backward(data_.first_, p1, p2);
 
             sfl::dtl::destroy_at(data_.ref_to_alloc(), std::addressof(*old_first));
 
@@ -1163,7 +1216,7 @@ public:
         }
         else
         {
-            data_.last_ = std::move(p2, data_.last_, p1);
+            data_.last_ = sfl::dtl::move(p2, data_.last_, p1);
 
             sfl::dtl::destroy_at(data_.ref_to_alloc(), std::addressof(*data_.last_));
 

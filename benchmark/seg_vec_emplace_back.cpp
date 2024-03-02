@@ -16,7 +16,7 @@ void emplace_back(ankerl::nanobench::Bench& bench, int num_elements)
 
     ankerl::nanobench::Rng rng;
 
-    bench.warmup(10).batch(num_elements).unit("emplace_back").run
+    bench.batch(num_elements).unit("emplace_back").run
     (
         title,
         [&]
@@ -40,7 +40,8 @@ int main()
     ankerl::nanobench::Bench bench;
     bench.title("emplace_back (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
-    bench.epochs(100);
+    bench.warmup(3);
+    bench.epochs(10);
 
     emplace_back<std::deque<int>>(bench, num_elements);
     emplace_back<sfl::segmented_devector<int, 1024>>(bench, num_elements);

@@ -47,7 +47,8 @@ int main()
     ankerl::nanobench::Bench bench;
     bench.title("iterate all (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
-    bench.epochs(50);
+    bench.warmup(3);
+    bench.epochs(10);
 
     iterate<std::deque<int>>(bench, num_elements);
     iterate<sfl::segmented_devector<int, 1024>>(bench, num_elements);
