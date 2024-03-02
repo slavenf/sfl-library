@@ -45,4 +45,5 @@ int main()
 
     emplace_front<std::deque<int>>(bench, num_elements);
     emplace_front<sfl::segmented_devector<int, 1024>>(bench, num_elements);
+    emplace_front<sfl::segmented_devector<int, 256*1024>>(bench, num_elements);
 }

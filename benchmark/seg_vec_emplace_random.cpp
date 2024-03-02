@@ -45,6 +45,8 @@ int main()
 
     emplace_random<std::deque<int>>(bench, num_elements);
     emplace_random<sfl::segmented_devector<int, 1024>>(bench, num_elements);
+    emplace_random<sfl::segmented_devector<int, 256*1024>>(bench, num_elements);
     emplace_random<sfl::segmented_vector<int, 1024>>(bench, num_elements);
+    emplace_random<sfl::segmented_vector<int, 256*1024>>(bench, num_elements);
     emplace_random<std::vector<int>>(bench, num_elements);
 }
