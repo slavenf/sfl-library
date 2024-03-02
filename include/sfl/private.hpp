@@ -195,6 +195,226 @@ auto to_address(const Pointer& p) noexcept -> typename std::pointer_traits<Point
 template <typename InputIt, typename OutputIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                  !sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
+{
+    return std::copy(first, last, d_first);
+}
+
+template <typename InputIt, typename OutputIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<OutputIt>;
+
+    if (first == last)
+    {
+        return d_first;
+    }
+    else
+    {
+        auto curr = first;
+
+        auto d_local = traits::local(d_first);
+        auto d_seg   = traits::segment(d_first);
+
+        while (true)
+        {
+            const auto n =
+                std::min<typename std::iterator_traits<InputIt>::difference_type>
+                (
+                    std::distance(curr, last),
+                    std::distance(d_local, traits::end(d_seg))
+                );
+
+            const auto next = curr + n;
+
+            d_local = sfl::dtl::copy
+            (
+                curr,
+                next,
+                d_local
+            );
+
+            curr = next;
+
+            if (curr == last)
+            {
+                return traits::compose(d_seg, d_local);
+            }
+
+            ++d_seg;
+
+            d_local = traits::begin(d_seg);
+        }
+    }
+}
+
+template <typename InputIt, typename OutputIt,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
+OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
+
+    auto sfirst = traits::segment(first);
+    auto slast  = traits::segment(last);
+
+    if (sfirst == slast)
+    {
+        return sfl::dtl::copy
+        (
+            traits::local(first),
+            traits::local(last),
+            d_first
+        );
+    }
+    else
+    {
+        d_first = sfl::dtl::copy
+        (
+            traits::local(first),
+            traits::end(sfirst),
+            d_first
+        );
+
+        ++sfirst;
+
+        while (sfirst != slast)
+        {
+            d_first = sfl::dtl::copy
+            (
+                traits::begin(sfirst),
+                traits::end(sfirst),
+                d_first
+            );
+
+            ++sfirst;
+        }
+
+        d_first = sfl::dtl::copy
+        (
+            traits::begin(slast),
+            traits::local(last),
+            d_first
+        );
+
+        return d_first;
+    }
+}
+
+template <typename BidirIt1, typename BidirIt2,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                 !sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
+{
+    return std::copy_backward(first, last, d_last);
+}
+
+template <typename BidirIt1, typename BidirIt2,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                  sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<BidirIt2>;
+
+    if (first == last)
+    {
+        return d_last;
+    }
+    else
+    {
+        auto curr = last;
+
+        auto d_local = traits::local(d_last);
+        auto d_seg   = traits::segment(d_last);
+
+        while (true)
+        {
+            const auto n =
+                std::min<typename std::iterator_traits<BidirIt1>::difference_type>
+                (
+                    std::distance(first, curr),
+                    std::distance(traits::begin(d_seg), d_local)
+                );
+
+            const auto prev = curr - n;
+
+            d_local = sfl::dtl::copy_backward
+            (
+                prev,
+                curr,
+                d_local
+            );
+
+            curr = prev;
+
+            if (curr == first)
+            {
+                return traits::compose(d_seg, d_local);
+            }
+
+            --d_seg;
+
+            d_local = traits::end(d_seg);
+        }
+    }
+}
+
+template <typename BidirIt1, typename BidirIt2,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<BidirIt1>::value >* = nullptr>
+BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<BidirIt1>;
+
+    auto sfirst = traits::segment(first);
+    auto slast  = traits::segment(last);
+
+    if (sfirst == slast)
+    {
+        return sfl::dtl::copy_backward
+        (
+            traits::local(first),
+            traits::local(last),
+            d_last
+        );
+    }
+    else
+    {
+        d_last = sfl::dtl::copy_backward
+        (
+            traits::begin(slast),
+            traits::local(last),
+            d_last
+        );
+
+        --slast;
+
+        while (sfirst != slast)
+        {
+            d_last = sfl::dtl::copy_backward
+            (
+                traits::begin(slast),
+                traits::end(slast),
+                d_last
+            );
+
+            --slast;
+        }
+
+        d_last = sfl::dtl::copy_backward
+        (
+            traits::local(first),
+            traits::end(slast),
+            d_last
+        );
+
+        return d_last;
+    }
+}
+
+template <typename InputIt, typename OutputIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                 !sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
 OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
     return std::move(first, last, d_first);
@@ -409,6 +629,63 @@ BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
         );
 
         return d_last;
+    }
+}
+
+template <typename ForwardIt, typename T,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+void fill(ForwardIt first, ForwardIt last, const T& value)
+{
+    std::fill(first, last, value);
+}
+
+template <typename ForwardIt, typename T,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+void fill(ForwardIt first, ForwardIt last, const T& value)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
+
+    auto sfirst = traits::segment(first);
+    auto slast  = traits::segment(last);
+
+    if (sfirst == slast)
+    {
+        sfl::dtl::fill
+        (
+            traits::local(first),
+            traits::local(last),
+            value
+        );
+    }
+    else
+    {
+        sfl::dtl::fill
+        (
+            traits::local(first),
+            traits::end(sfirst),
+            value
+        );
+
+        ++sfirst;
+
+        while (sfirst != slast)
+        {
+            sfl::dtl::fill
+            (
+                traits::begin(sfirst),
+                traits::end(sfirst),
+                value
+            );
+
+            ++sfirst;
+        }
+
+        sfl::dtl::fill
+        (
+            traits::begin(slast),
+            traits::local(last),
+            value
+        );
     }
 }
 
