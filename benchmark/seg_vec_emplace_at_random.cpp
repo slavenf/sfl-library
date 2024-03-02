@@ -10,7 +10,7 @@
 #include <vector>
 
 template <typename Vector>
-void emplace_random(ankerl::nanobench::Bench& bench, int num_elements)
+void emplace_at_random(ankerl::nanobench::Bench& bench, int num_elements)
 {
     const std::string title(name_of_type<Vector>());
 
@@ -38,15 +38,15 @@ int main()
     constexpr int num_elements = 100'000;
 
     ankerl::nanobench::Bench bench;
-    bench.title("emplace random (" + std::to_string(num_elements) + " elements)");
+    bench.title("emplace @ random position (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
     bench.warmup(3);
     bench.epochs(10);
 
-    emplace_random<std::deque<int>>(bench, num_elements);
-    emplace_random<sfl::segmented_devector<int, 1024>>(bench, num_elements);
-    emplace_random<sfl::segmented_devector<int, 256*1024>>(bench, num_elements);
-    emplace_random<sfl::segmented_vector<int, 1024>>(bench, num_elements);
-    emplace_random<sfl::segmented_vector<int, 256*1024>>(bench, num_elements);
-    emplace_random<std::vector<int>>(bench, num_elements);
+    emplace_at_random<std::deque<int>>(bench, num_elements);
+    emplace_at_random<sfl::segmented_devector<int, 1024>>(bench, num_elements);
+    emplace_at_random<sfl::segmented_devector<int, 256*1024>>(bench, num_elements);
+    emplace_at_random<sfl::segmented_vector<int, 1024>>(bench, num_elements);
+    emplace_at_random<sfl::segmented_vector<int, 256*1024>>(bench, num_elements);
+    emplace_at_random<std::vector<int>>(bench, num_elements);
 }
