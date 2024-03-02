@@ -1138,7 +1138,7 @@ public:
 
         data_.first_ = new_first;
 
-        return front();
+        return *new_first;
     }
 
     template <typename... Args>
@@ -1149,6 +1149,8 @@ public:
             grow_storage_back(1);
         }
 
+        const iterator old_last = data_.last_;
+
         sfl::dtl::construct_at
         (
             data_.ref_to_alloc(),
@@ -1158,7 +1160,7 @@ public:
 
         ++data_.last_;
 
-        return back();
+        return *old_last;
     }
 
     void push_front(const T& value)
