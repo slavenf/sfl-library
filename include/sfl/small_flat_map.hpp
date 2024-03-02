@@ -21,45 +21,17 @@
 #ifndef SFL_SMALL_FLAT_MAP_HPP
 #define SFL_SMALL_FLAT_MAP_HPP
 
-#include <algorithm>
-#include <cassert>
-#include <cstddef>
-#include <functional>
-#include <initializer_list>
-#include <iterator>
-#include <limits>
-#include <memory>
-#include <stdexcept>
-#include <type_traits>
-#include <utility>
+#include "private.hpp"
 
-#define SFL_DTL_BEGIN  namespace dtl { namespace small_flat_map_dtl {
-#define SFL_DTL_END    } }
-#define SFL_DTL        ::sfl::dtl::small_flat_map_dtl
-
-#define SFL_ASSERT(x) assert(x)
-
-#if __cplusplus >= 201402L
-    #define SFL_CONSTEXPR_14 constexpr
-#else
-    #define SFL_CONSTEXPR_14
-#endif
-
-#if __cplusplus >= 201703L
-    #define SFL_NODISCARD [[nodiscard]]
-#else
-    #define SFL_NODISCARD
-#endif
-
-#ifdef SFL_NO_EXCEPTIONS
-    #define SFL_TRY      if (true)
-    #define SFL_CATCH(x) if (false)
-    #define SFL_RETHROW
-#else
-    #define SFL_TRY      try
-    #define SFL_CATCH(x) catch (x)
-    #define SFL_RETHROW  throw
-#endif
+#include <algorithm>        // copy, move, lower_bound, swap, swap_ranges
+#include <cstddef>          // size_t
+#include <functional>       // equal_to, less
+#include <initializer_list> // initializer_list
+#include <iterator>         // distance, next, reverse_iterator
+#include <limits>           // numeric_limits
+#include <memory>           // allocator, allocator_traits, pointer_traits
+#include <type_traits>      // is_same, is_nothrow_xxxxx
+#include <utility>          // forward, move, pair
 
 #ifdef SFL_TEST_SMALL_FLAT_MAP
 template <int>
@@ -68,300 +40,6 @@ void test_small_flat_map();
 
 namespace sfl
 {
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-SFL_DTL_BEGIN /////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-//
-// ---- UTILITY FUNCTIONS -----------------------------------------------------
-//
-
-/// This function is used for silencing warnings about unused variables.
-///
-template <typename... Args>
-SFL_CONSTEXPR_14
-void ignore_unused(Args&&...)
-{
-    // Do nothing.
-}
-
-//
-// ---- POINTER TRAITS --------------------------------------------------------
-//
-
-/// Raw pointer overload.
-/// Obtains a dereferenceable pointer to its argument.
-///
-template <typename T>
-constexpr
-T* to_address(T* p) noexcept
-{
-    static_assert(!std::is_function<T>::value, "not a function pointer");
-    return p;
-}
-
-/// Fancy pointer overload.
-/// Obtains a raw pointer from a fancy pointer.
-///
-template <typename Pointer>
-constexpr
-auto to_address(const Pointer& p) noexcept
--> typename std::pointer_traits<Pointer>::element_type*
-{
-    return SFL_DTL::to_address(p.operator->());
-}
-
-//
-// ---- UNINITIALIZED MEMORY ALGORITHMS ---------------------------------------
-//
-
-template <typename Allocator, typename Size>
-auto allocate(Allocator& a, Size n)
--> typename std::allocator_traits<Allocator>::pointer
-{
-    if (n != 0)
-    {
-        return std::allocator_traits<Allocator>::allocate(a, n);
-    }
-    return nullptr;
-}
-
-template <typename Allocator, typename Pointer, typename Size>
-void deallocate(Allocator& a, Pointer p, Size n) noexcept
-{
-    if (p != nullptr)
-    {
-        std::allocator_traits<Allocator>::deallocate(a, p, n);
-    }
-}
-
-template <typename Allocator, typename Pointer, typename... Args>
-void construct_at(Allocator& a, Pointer p, Args&&... args)
-{
-    std::allocator_traits<Allocator>::construct
-    (
-        a,
-        SFL_DTL::to_address(p),
-        std::forward<Args>(args)...
-    );
-}
-
-template <typename Allocator, typename Pointer>
-void destroy_at(Allocator& a, Pointer p) noexcept
-{
-    std::allocator_traits<Allocator>::destroy
-    (
-        a,
-        SFL_DTL::to_address(p)
-    );
-}
-
-template <typename Allocator, typename ForwardIt>
-void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
-{
-    while (first != last)
-    {
-        SFL_DTL::destroy_at(a, std::addressof(*first));
-        ++first;
-    }
-}
-
-template <typename Allocator, typename ForwardIt, typename Size>
-void destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
-{
-    while (n > 0)
-    {
-        SFL_DTL::destroy_at(a, std::addressof(*first));
-        ++first;
-        --n;
-    }
-}
-
-template <typename Allocator, typename ForwardIt, typename Size>
-ForwardIt uninitialized_default_construct_n
-(
-    Allocator& a, ForwardIt first, Size n
-)
-{
-    ForwardIt curr = first;
-    SFL_TRY
-    {
-        while (n > 0)
-        {
-            SFL_DTL::construct_at(a, std::addressof(*curr));
-            ++curr;
-            --n;
-        }
-        return curr;
-    }
-    SFL_CATCH (...)
-    {
-        SFL_DTL::destroy(a, first, curr);
-        SFL_RETHROW;
-    }
-}
-
-template <typename Allocator, typename ForwardIt, typename Size, typename T>
-ForwardIt uninitialized_fill_n
-(
-    Allocator& a, ForwardIt first, Size n, const T& value
-)
-{
-    ForwardIt curr = first;
-    SFL_TRY
-    {
-        while (n > 0)
-        {
-            SFL_DTL::construct_at(a, std::addressof(*curr), value);
-            ++curr;
-            --n;
-        }
-        return curr;
-    }
-    SFL_CATCH (...)
-    {
-        SFL_DTL::destroy(a, first, curr);
-        SFL_RETHROW;
-    }
-}
-
-template <typename Allocator, typename InputIt, typename ForwardIt>
-ForwardIt uninitialized_copy
-(
-    Allocator& a, InputIt first, InputIt last, ForwardIt d_first
-)
-{
-    ForwardIt d_curr = d_first;
-    SFL_TRY
-    {
-        while (first != last)
-        {
-            SFL_DTL::construct_at(a, std::addressof(*d_curr), *first);
-            ++d_curr;
-            ++first;
-        }
-        return d_curr;
-    }
-    SFL_CATCH (...)
-    {
-        SFL_DTL::destroy(a, d_first, d_curr);
-        SFL_RETHROW;
-    }
-}
-
-template <typename Allocator, typename InputIt, typename ForwardIt>
-ForwardIt uninitialized_move
-(
-    Allocator& a, InputIt first, InputIt last, ForwardIt d_first
-)
-{
-    ForwardIt d_curr = d_first;
-    SFL_TRY
-    {
-        while (first != last)
-        {
-            SFL_DTL::construct_at(a, std::addressof(*d_curr), std::move(*first));
-            ++d_curr;
-            ++first;
-        }
-        return d_curr;
-    }
-    SFL_CATCH (...)
-    {
-        SFL_DTL::destroy(a, d_first, d_curr);
-        SFL_RETHROW;
-    }
-}
-
-template <typename Allocator, typename InputIt, typename ForwardIt>
-ForwardIt uninitialized_move_if_noexcept
-(
-    Allocator& a, InputIt first, InputIt last, ForwardIt d_first
-)
-{
-    ForwardIt d_curr = d_first;
-    SFL_TRY
-    {
-        while (first != last)
-        {
-            SFL_DTL::construct_at(a, std::addressof(*d_curr), std::move_if_noexcept(*first));
-            ++d_curr;
-            ++first;
-        }
-        return d_curr;
-    }
-    SFL_CATCH (...)
-    {
-        SFL_DTL::destroy(a, d_first, d_curr);
-        SFL_RETHROW;
-    }
-}
-
-//
-// ---- TYPE TRAITS -----------------------------------------------------------
-//
-
-template <typename Iterator, typename = void>
-struct is_input_iterator : std::false_type {};
-
-template <typename Iterator>
-struct is_input_iterator<
-    Iterator,
-    typename std::enable_if<
-        std::is_convertible<
-            typename std::iterator_traits<Iterator>::iterator_category,
-            std::input_iterator_tag
-        >::value
-    >::type
-> : std::true_type {};
-
-template <typename...>
-using void_t = void;
-
-template <typename Type, typename SfinaeType, typename = void>
-struct has_is_transparent : std::false_type {};
-
-template <typename Type, typename SfinaeType>
-struct has_is_transparent<
-    Type, SfinaeType, void_t<typename Type::is_transparent>
-> : std::true_type {};
-
-//
-// ---- EXCEPTIONS ------------------------------------------------------------
-//
-
-[[noreturn]]
-inline void throw_length_error(const char* msg)
-{
-    #ifdef SFL_NO_EXCEPTIONS
-    SFL_DTL::ignore_unused(msg);
-    SFL_ASSERT(!"std::length_error thrown");
-    std::abort();
-    #else
-    throw std::length_error(msg);
-    #endif
-}
-
-[[noreturn]]
-inline void throw_out_of_range(const char* msg)
-{
-    #ifdef SFL_NO_EXCEPTIONS
-    SFL_DTL::ignore_unused(msg);
-    SFL_ASSERT(!"std::out_of_range thrown");
-    std::abort();
-    #else
-    throw std::out_of_range(msg);
-    #endif
-}
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-SFL_DTL_END ///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
 
 //
 // ---- SMALL FLAT MAP --------------------------------------------------------
@@ -647,7 +325,7 @@ public:
     template <typename InputIt,
         typename std::enable_if
         <
-            SFL_DTL::is_input_iterator<InputIt>::value
+            sfl::dtl::is_input_iterator<InputIt>::value
         >::type* = nullptr
     >
     small_flat_map(InputIt first, InputIt last)
@@ -659,7 +337,7 @@ public:
     template <typename InputIt,
         typename std::enable_if
         <
-            SFL_DTL::is_input_iterator<InputIt>::value
+            sfl::dtl::is_input_iterator<InputIt>::value
         >::type* = nullptr
     >
     small_flat_map(InputIt first, InputIt last, const Compare& comp)
@@ -671,7 +349,7 @@ public:
     template <typename InputIt,
         typename std::enable_if
         <
-            SFL_DTL::is_input_iterator<InputIt>::value
+            sfl::dtl::is_input_iterator<InputIt>::value
         >::type* = nullptr
     >
     small_flat_map(InputIt first, InputIt last, const Allocator& alloc)
@@ -683,7 +361,7 @@ public:
     template <typename InputIt,
         typename std::enable_if
         <
-            SFL_DTL::is_input_iterator<InputIt>::value
+            sfl::dtl::is_input_iterator<InputIt>::value
         >::type* = nullptr
     >
     small_flat_map(InputIt first, InputIt last, const Compare& comp,
@@ -757,7 +435,7 @@ public:
 
     ~small_flat_map()
     {
-        SFL_DTL::destroy
+        sfl::dtl::destroy
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -766,7 +444,7 @@ public:
 
         if (data_.first_ != data_.internal_storage())
         {
-            SFL_DTL::deallocate
+            sfl::dtl::deallocate
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -978,7 +656,7 @@ public:
                     pointer new_last  = new_first;
                     pointer new_end   = new_first + N;
 
-                    new_last = SFL_DTL::uninitialized_move_if_noexcept
+                    new_last = sfl::dtl::uninitialized_move_if_noexcept
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -986,14 +664,14 @@ public:
                         new_first
                     );
 
-                    SFL_DTL::destroy
+                    sfl::dtl::destroy
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_
                     );
 
-                    SFL_DTL::deallocate
+                    sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -1007,13 +685,13 @@ public:
             }
             else
             {
-                pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
+                pointer new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
                 SFL_TRY
                 {
-                    new_last = SFL_DTL::uninitialized_move_if_noexcept
+                    new_last = sfl::dtl::uninitialized_move_if_noexcept
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -1023,7 +701,7 @@ public:
                 }
                 SFL_CATCH (...)
                 {
-                    SFL_DTL::deallocate
+                    sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
                         new_first,
@@ -1033,7 +711,7 @@ public:
                     SFL_RETHROW;
                 }
 
-                SFL_DTL::destroy
+                sfl::dtl::destroy
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -1042,7 +720,7 @@ public:
 
                 if (data_.first_ != data_.internal_storage())
                 {
-                    SFL_DTL::deallocate
+                    sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -1078,7 +756,7 @@ public:
                     pointer new_last  = new_first;
                     pointer new_end   = new_first + N;
 
-                    new_last = SFL_DTL::uninitialized_move_if_noexcept
+                    new_last = sfl::dtl::uninitialized_move_if_noexcept
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -1086,14 +764,14 @@ public:
                         new_first
                     );
 
-                    SFL_DTL::destroy
+                    sfl::dtl::destroy
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
                         data_.last_
                     );
 
-                    SFL_DTL::deallocate
+                    sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -1107,13 +785,13 @@ public:
             }
             else
             {
-                pointer new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
+                pointer new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
                 pointer new_end   = new_first + new_cap;
 
                 SFL_TRY
                 {
-                    new_last = SFL_DTL::uninitialized_move_if_noexcept
+                    new_last = sfl::dtl::uninitialized_move_if_noexcept
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -1123,7 +801,7 @@ public:
                 }
                 SFL_CATCH (...)
                 {
-                    SFL_DTL::deallocate
+                    sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
                         new_first,
@@ -1133,7 +811,7 @@ public:
                     SFL_RETHROW;
                 }
 
-                SFL_DTL::destroy
+                sfl::dtl::destroy
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -1142,7 +820,7 @@ public:
 
                 if (data_.first_ != data_.internal_storage())
                 {
-                    SFL_DTL::deallocate
+                    sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
@@ -1163,7 +841,7 @@ public:
 
     void clear() noexcept
     {
-        SFL_DTL::destroy
+        sfl::dtl::destroy
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -1234,7 +912,7 @@ public:
     template <typename InputIt,
         typename std::enable_if
         <
-            SFL_DTL::is_input_iterator<InputIt>::value
+            sfl::dtl::is_input_iterator<InputIt>::value
         >::type* = nullptr
     >
     void insert(InputIt first, InputIt last)
@@ -1338,7 +1016,7 @@ public:
 
         data_.last_ = std::move(p + 1, data_.last_, p);
 
-        SFL_DTL::destroy_at(data_.ref_to_alloc(), data_.last_);
+        sfl::dtl::destroy_at(data_.ref_to_alloc(), data_.last_);
 
         return p;
     }
@@ -1360,7 +1038,7 @@ public:
 
         const pointer new_last = std::move(p2, data_.last_, p1);
 
-        SFL_DTL::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+        sfl::dtl::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
         data_.last_ = new_last;
 
@@ -1381,7 +1059,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     size_type erase(K&& x)
@@ -1440,7 +1118,7 @@ public:
                     other.data_.first_
                 );
 
-                SFL_DTL::uninitialized_move
+                sfl::dtl::uninitialized_move
                 (
                     this->data_.ref_to_alloc(),
                     other.data_.first_ + this_size,
@@ -1448,7 +1126,7 @@ public:
                     this->data_.first_ + this_size
                 );
 
-                SFL_DTL::destroy
+                sfl::dtl::destroy
                 (
                     other.data_.ref_to_alloc(),
                     other.data_.first_ + this_size,
@@ -1464,7 +1142,7 @@ public:
                     this->data_.first_
                 );
 
-                SFL_DTL::uninitialized_move
+                sfl::dtl::uninitialized_move
                 (
                     other.data_.ref_to_alloc(),
                     this->data_.first_ + other_size,
@@ -1472,7 +1150,7 @@ public:
                     other.data_.first_ + other_size
                 );
 
-                SFL_DTL::destroy
+                sfl::dtl::destroy
                 (
                     this->data_.ref_to_alloc(),
                     this->data_.first_ + other_size,
@@ -1493,7 +1171,7 @@ public:
             pointer new_other_last  = new_other_first;
             pointer new_other_end   = new_other_first + N;
 
-            new_other_last = SFL_DTL::uninitialized_move
+            new_other_last = sfl::dtl::uninitialized_move
             (
                 other.data_.ref_to_alloc(),
                 this->data_.first_,
@@ -1501,7 +1179,7 @@ public:
                 new_other_first
             );
 
-            SFL_DTL::destroy
+            sfl::dtl::destroy
             (
                 this->data_.ref_to_alloc(),
                 this->data_.first_,
@@ -1526,7 +1204,7 @@ public:
             pointer new_this_last  = new_this_first;
             pointer new_this_end   = new_this_first + N;
 
-            new_this_last = SFL_DTL::uninitialized_move
+            new_this_last = sfl::dtl::uninitialized_move
             (
                 this->data_.ref_to_alloc(),
                 other.data_.first_,
@@ -1534,7 +1212,7 @@ public:
                 new_this_first
             );
 
-            SFL_DTL::destroy
+            sfl::dtl::destroy
             (
                 other.data_.ref_to_alloc(),
                 other.data_.first_,
@@ -1576,7 +1254,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1588,7 +1266,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1612,7 +1290,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1624,7 +1302,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1648,7 +1326,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1660,7 +1338,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1698,7 +1376,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1717,7 +1395,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1742,7 +1420,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1760,7 +1438,7 @@ public:
     template <typename K,
         typename std::enable_if
         <
-            SFL_DTL::has_is_transparent<Compare, K>::value
+            sfl::dtl::has_is_transparent<Compare, K>::value
         >::type* = nullptr
     >
     SFL_NODISCARD
@@ -1780,7 +1458,7 @@ public:
 
         if (it == end())
         {
-            SFL_DTL::throw_out_of_range("sfl::small_flat_map::at");
+            sfl::dtl::throw_out_of_range("sfl::small_flat_map::at");
         }
 
         return it->second;
@@ -1793,7 +1471,7 @@ public:
 
         if (it == end())
         {
-            SFL_DTL::throw_out_of_range("sfl::small_flat_map::at");
+            sfl::dtl::throw_out_of_range("sfl::small_flat_map::at");
         }
 
         return it->second;
@@ -1814,13 +1492,13 @@ public:
     SFL_NODISCARD
     value_type* data() noexcept
     {
-        return SFL_DTL::to_address(data_.first_);
+        return sfl::dtl::to_address(data_.first_);
     }
 
     SFL_NODISCARD
     const value_type* data() const noexcept
     {
-        return SFL_DTL::to_address(data_.first_);
+        return sfl::dtl::to_address(data_.first_);
     }
 
 private:
@@ -1829,7 +1507,7 @@ private:
     {
         if (n > max_size())
         {
-            SFL_DTL::throw_length_error(msg);
+            sfl::dtl::throw_length_error(msg);
         }
     }
 
@@ -1840,7 +1518,7 @@ private:
 
         if (max_size - size < n)
         {
-            SFL_DTL::throw_length_error(msg);
+            sfl::dtl::throw_length_error(msg);
         }
 
         const size_type new_size = std::max(N, size + std::max(size, n));
@@ -1855,7 +1533,7 @@ private:
 
     void reset(size_type new_cap = N)
     {
-        SFL_DTL::destroy
+        sfl::dtl::destroy
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -1864,7 +1542,7 @@ private:
 
         if (data_.first_ != data_.internal_storage())
         {
-            SFL_DTL::deallocate
+            sfl::dtl::deallocate
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1878,7 +1556,7 @@ private:
 
         if (new_cap > N)
         {
-            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
+            data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
             data_.last_  = data_.first_;
             data_.end_   = data_.first_ + new_cap;
 
@@ -1900,7 +1578,7 @@ private:
         }
         SFL_CATCH (...)
         {
-            SFL_DTL::destroy
+            sfl::dtl::destroy
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1909,7 +1587,7 @@ private:
 
             if (data_.first_ != data_.internal_storage())
             {
-                SFL_DTL::deallocate
+                sfl::dtl::deallocate
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -1929,14 +1607,14 @@ private:
 
         if (n > N)
         {
-            data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
+            data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), n);
             data_.last_  = data_.first_;
             data_.end_   = data_.first_ + n;
         }
 
         SFL_TRY
         {
-            data_.last_ = SFL_DTL::uninitialized_copy
+            data_.last_ = sfl::dtl::uninitialized_copy
             (
                 data_.ref_to_alloc(),
                 other.data_.first_,
@@ -1948,7 +1626,7 @@ private:
         {
             if (n > N)
             {
-                SFL_DTL::deallocate(data_.ref_to_alloc(), data_.first_, n);
+                sfl::dtl::deallocate(data_.ref_to_alloc(), data_.first_, n);
             }
 
             SFL_RETHROW;
@@ -1959,7 +1637,7 @@ private:
     {
         if (other.data_.first_ == other.data_.internal_storage())
         {
-            data_.last_ = SFL_DTL::uninitialized_move
+            data_.last_ = sfl::dtl::uninitialized_move
             (
                 data_.ref_to_alloc(),
                 other.data_.first_,
@@ -1985,14 +1663,14 @@ private:
 
             if (n > N)
             {
-                data_.first_ = SFL_DTL::allocate(data_.ref_to_alloc(), n);
+                data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), n);
                 data_.last_  = data_.first_;
                 data_.end_   = data_.first_ + n;
             }
 
             SFL_TRY
             {
-                data_.last_ = SFL_DTL::uninitialized_move
+                data_.last_ = sfl::dtl::uninitialized_move
                 (
                     data_.ref_to_alloc(),
                     other.data_.first_,
@@ -2004,7 +1682,7 @@ private:
             {
                 if (n > N)
                 {
-                    SFL_DTL::deallocate(data_.ref_to_alloc(), data_.first_, n);
+                    sfl::dtl::deallocate(data_.ref_to_alloc(), data_.first_, n);
                 }
 
                 SFL_RETHROW;
@@ -2032,7 +1710,7 @@ private:
                     data_.first_
                 );
 
-                SFL_DTL::destroy
+                sfl::dtl::destroy
                 (
                     data_.ref_to_alloc(),
                     new_last,
@@ -2052,7 +1730,7 @@ private:
                     data_.first_
                 );
 
-                data_.last_ = SFL_DTL::uninitialized_copy
+                data_.last_ = sfl::dtl::uninitialized_copy
                 (
                     data_.ref_to_alloc(),
                     mid,
@@ -2065,7 +1743,7 @@ private:
         {
             reset(n);
 
-            data_.last_ = SFL_DTL::uninitialized_copy
+            data_.last_ = sfl::dtl::uninitialized_copy
             (
                 data_.ref_to_alloc(),
                 first,
@@ -2258,7 +1936,7 @@ private:
 
             if (p == data_.last_)
             {
-                SFL_DTL::construct_at
+                sfl::dtl::construct_at
                 (
                     data_.ref_to_alloc(),
                     p,
@@ -2277,7 +1955,7 @@ private:
                 // First we will move elements one place to the right and
                 // after that we will construct new element.
 
-                SFL_DTL::construct_at
+                sfl::dtl::construct_at
                 (
                     data_.ref_to_alloc(),
                     data_.last_,
@@ -2288,13 +1966,13 @@ private:
 
                 std::move_backward(p, data_.last_ - 2, data_.last_ - 1);
 
-                SFL_DTL::destroy_at
+                sfl::dtl::destroy_at
                 (
                     data_.ref_to_alloc(),
                     p
                 );
 
-                SFL_DTL::construct_at
+                sfl::dtl::construct_at
                 (
                     data_.ref_to_alloc(),
                     p,
@@ -2319,7 +1997,7 @@ private:
             }
             else
             {
-                new_first = SFL_DTL::allocate(data_.ref_to_alloc(), new_cap);
+                new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
                 new_last  = new_first;
                 new_end   = new_first + new_cap;
             }
@@ -2336,7 +2014,7 @@ private:
                 // storage and finally move second chunk of elements from old
                 // to new storage.
 
-                new_last = SFL_DTL::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -2344,7 +2022,7 @@ private:
                     new_first
                 );
 
-                SFL_DTL::construct_at
+                sfl::dtl::construct_at
                 (
                     data_.ref_to_alloc(),
                     new_last,
@@ -2353,7 +2031,7 @@ private:
 
                 ++new_last;
 
-                new_last = SFL_DTL::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept
                 (
                     data_.ref_to_alloc(),
                     data_.first_ + offset,
@@ -2363,7 +2041,7 @@ private:
             }
             SFL_CATCH (...)
             {
-                SFL_DTL::destroy
+                sfl::dtl::destroy
                 (
                     data_.ref_to_alloc(),
                     new_first,
@@ -2372,7 +2050,7 @@ private:
 
                 if (new_first != data_.internal_storage())
                 {
-                    SFL_DTL::deallocate
+                    sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
                         new_first,
@@ -2383,7 +2061,7 @@ private:
                 SFL_RETHROW;
             }
 
-            SFL_DTL::destroy
+            sfl::dtl::destroy
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -2392,7 +2070,7 @@ private:
 
             if (data_.first_ != data_.internal_storage())
             {
-                SFL_DTL::deallocate
+                sfl::dtl::deallocate
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -2519,15 +2197,5 @@ typename small_flat_map<K, T, N, C, A>::size_type
 }
 
 } // namespace sfl
-
-#undef SFL_DTL_BEGIN
-#undef SFL_DTL_END
-#undef SFL_DTL
-#undef SFL_ASSERT
-#undef SFL_CONSTEXPR_14
-#undef SFL_NODISCARD
-#undef SFL_TRY
-#undef SFL_CATCH
-#undef SFL_RETHROW
 
 #endif // SFL_SMALL_FLAT_MAP_HPP
