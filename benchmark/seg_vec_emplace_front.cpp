@@ -35,7 +35,7 @@ void emplace_front(ankerl::nanobench::Bench& bench, int num_elements)
 
 int main()
 {
-    const int num_elements = 10'000'000;
+    const int num_elements = 100'000'000;
 
     ankerl::nanobench::Bench bench;
     bench.title("emplace_front (" + std::to_string(num_elements) + " elements)");
