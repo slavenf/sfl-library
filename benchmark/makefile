@@ -3,7 +3,7 @@
 #
 
 # C++ compiler
-CXX = clang++
+CXX = g++
 
 # C++ compiler flags
 CXXFLAGS = -std=c++20 -Wall -Wextra -Wfatal-errors -I ../include -DNDEBUG -O3
