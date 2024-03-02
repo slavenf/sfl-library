@@ -1246,7 +1246,7 @@ public:
             const iterator p1(first.seg_, first.elem_);
             const iterator p2(last.seg_, last.elem_);
 
-            const iterator new_first = std::move_backward(data_.first_, p1, p2);
+            const iterator new_first = sfl::dtl::move_backward(data_.first_, p1, p2);
 
             sfl::dtl::destroy(data_.ref_to_alloc(), data_.first_, new_first);
 
@@ -1259,7 +1259,7 @@ public:
             const iterator p1(first.seg_, first.elem_);
             const iterator p2(last.seg_, last.elem_);
 
-            const iterator new_last = std::move(p2, data_.last_, p1);
+            const iterator new_last = sfl::dtl::move(p2, data_.last_, p1);
 
             sfl::dtl::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
@@ -1798,7 +1798,7 @@ private:
                 new_table_eos - std::distance(data_.table_last_, data_.table_eos_);
 
             // Initialize FIRST element in new table (noexecept).
-            const segment_pointer new_table_first = std::copy_backward
+            const segment_pointer new_table_first = sfl::dtl::copy_backward
             (
                 data_.table_first_,
                 data_.table_last_,
@@ -1887,7 +1887,7 @@ private:
                     std::distance(data_.table_bos_, data_.table_first_);
 
             // Initialize LAST element in new table (noexecept).
-            const segment_pointer new_table_last = std::copy
+            const segment_pointer new_table_last = sfl::dtl::copy
             (
                 data_.table_first_,
                 data_.table_last_,
@@ -1980,7 +1980,7 @@ private:
             const segment_pointer new_table_first = new_table_bos;
 
             // Initialize LAST element in new table (noexecept).
-            const segment_pointer new_table_last = std::copy
+            const segment_pointer new_table_last = sfl::dtl::copy
             (
                 data_.table_first_,
                 data_.table_last_,
@@ -2150,10 +2150,12 @@ private:
 
         if (n <= size)
         {
-            const iterator new_last = std::fill_n
+            const iterator new_last = data_.first_ + n;
+
+            sfl::dtl::fill
             (
                 data_.first_,
-                n,
+                new_last,
                 value
             );
 
@@ -2172,7 +2174,7 @@ private:
 
             if (n <= size + available_back)
             {
-                std::fill
+                sfl::dtl::fill
                 (
                     data_.first_,
                     data_.last_,
@@ -2193,7 +2195,7 @@ private:
 
                 if (n <= available_front + size + available_back)
                 {
-                    std::fill
+                    sfl::dtl::fill
                     (
                         data_.first_,
                         data_.last_,
@@ -2224,7 +2226,7 @@ private:
                 {
                     grow_storage_back(n - (available_front + size + available_back));
 
-                    std::fill
+                    sfl::dtl::fill
                     (
                         data_.first_,
                         data_.last_,
@@ -2290,7 +2292,7 @@ private:
 
         if (n <= size)
         {
-            const iterator new_last = std::copy
+            const iterator new_last = sfl::dtl::copy
             (
                 first,
                 last,
@@ -2314,7 +2316,7 @@ private:
             {
                 const ForwardIt mid = std::next(first, size);
 
-                std::copy
+                sfl::dtl::copy
                 (
                     first,
                     mid,
@@ -2338,7 +2340,7 @@ private:
                     const ForwardIt mid1 = std::next(first, n - (size + available_back));
                     const ForwardIt mid2 = std::next(mid1, size);
 
-                    std::copy
+                    sfl::dtl::copy
                     (
                         mid1,
                         mid2,
@@ -2372,7 +2374,7 @@ private:
                     const ForwardIt mid1 = std::next(first, available_front);
                     const ForwardIt mid2 = std::next(mid1, size);
 
-                    std::copy
+                    sfl::dtl::copy
                     (
                         mid1,
                         mid2,
@@ -2597,14 +2599,14 @@ private:
 
                 data_.first_ = p4;
 
-                std::move
+                sfl::dtl::move
                 (
                     p3,
                     p1,
                     old_first
                 );
 
-                std::fill
+                sfl::dtl::fill
                 (
                     p2,
                     p1,
@@ -2641,7 +2643,7 @@ private:
 
                 data_.first_ = p3;
 
-                std::fill
+                sfl::dtl::fill
                 (
                     old_first,
                     p1,
@@ -2676,14 +2678,14 @@ private:
                     old_last
                 );
 
-                std::move_backward
+                sfl::dtl::move_backward
                 (
                     p1,
                     p3,
                     old_last
                 );
 
-                std::fill
+                sfl::dtl::fill
                 (
                     p1,
                     p2,
@@ -2715,7 +2717,7 @@ private:
                     data_.last_
                 );
 
-                std::fill
+                sfl::dtl::fill
                 (
                     p1,
                     old_last,
@@ -2785,14 +2787,14 @@ private:
 
                 data_.first_ = p4;
 
-                std::move
+                sfl::dtl::move
                 (
                     p3,
                     p1,
                     old_first
                 );
 
-                std::copy
+                sfl::dtl::copy
                 (
                     first,
                     last,
@@ -2831,7 +2833,7 @@ private:
 
                 data_.first_ = p3;
 
-                std::copy
+                sfl::dtl::copy
                 (
                     mid,
                     last,
@@ -2865,14 +2867,14 @@ private:
                     old_last
                 );
 
-                std::move_backward
+                sfl::dtl::move_backward
                 (
                     p1,
                     p2,
                     old_last
                 );
 
-                std::copy
+                sfl::dtl::copy
                 (
                     first,
                     last,
@@ -2905,7 +2907,7 @@ private:
                     data_.last_
                 );
 
-                std::copy
+                sfl::dtl::copy
                 (
                     first,
                     mid,
