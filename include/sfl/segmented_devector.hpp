@@ -322,6 +322,9 @@ private:
     friend struct sfl::dtl::segmented_iterator_traits;
 };
 
+namespace dtl
+{
+
 template < typename ValueType,
            typename Pointer,
            typename Reference,
@@ -329,7 +332,7 @@ template < typename ValueType,
            typename SegmentPointer,
            typename ElementPointer,
            std::size_t N >
-struct sfl::dtl::segmented_iterator_traits< segmented_devector_iterator<
+struct segmented_iterator_traits< segmented_devector_iterator<
     ValueType, Pointer, Reference, DifferenceType, SegmentPointer, ElementPointer, N > >
 {
     using is_segmented_iterator = std::true_type;
@@ -371,6 +374,8 @@ struct sfl::dtl::segmented_iterator_traits< segmented_devector_iterator<
         return iterator(seg, elem);
     }
 };
+
+} // namespace dtl
 
 template < typename T,
            std::size_t N,
