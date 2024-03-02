@@ -48,8 +48,8 @@ int main()
     ankerl::nanobench::Bench bench;
     bench.title("erase random (" + std::to_string(num_elements) + " elements)");
     bench.performanceCounters(false);
-    bench.warmup(10);
-    bench.epochs(100);
+    bench.warmup(3);
+    bench.epochs(10);
 
     erase_random<std::deque<int>>(bench, num_elements);
     erase_random<sfl::segmented_devector<int, 1024>>(bench, num_elements);
