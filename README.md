@@ -41,7 +41,7 @@ This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`Li
 
 This container is almost identical to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque), but with the slightly different set of public member functions.
 
-<br>
+
 
 # Requirements
 
@@ -56,21 +56,19 @@ Tested compilers:
 * Clang 15.0.7 on Arch Linux (C++11, 14, 17, 20)
 * MSVC 19.38 (C++14, 17, 20, latest)
 
-<br>
+
 
 # Installation and usage
 
-## Copy-paste method
+## Manual method
 
-Copy the contents of directory `include/sfl` into your project and `#include` what you need.
+Copy directory `include/sfl` into your project and `#include` what you need.
 
-The header files in `include/sfl` are not mutually dependent. That means you can copy into your project directory only what you need. For example, if you need only `sfl::small_vector` then copy only `small_vector.hpp` into your project directory.
-
-## CMake
+## CMake integration
 
 There is `CMakeLists.txt` file in the root directory. You know what to do if you use CMake.
 
-<br>
+
 
 # Exceptions
 
@@ -80,7 +78,7 @@ If macro `SFL_NO_EXCEPTIONS` is defined then library avoids using exceptions and
 
 This library does not automatically detect whether the compiler is invoked with appropriate flag or not, like `-fno-exceptions` in GCC and Clang.
 
-<br>
+
 
 # Debugging
 
@@ -92,7 +90,7 @@ If macro `NDEBUG` is defined then `assert` does nothing.
 
 If macro `NDEBUG` is not defined then `assert` performs check. If check fails, `assert` outputs implementation-specific diagnostic information on the standard error output and calls `std::abort`.
 
-<br>
+
 
 # Detailed documentation
 
@@ -100,7 +98,7 @@ The detailed documentation is located in directory `doc`.
 
 The detailed documentation is handwritten in Markdown format, it is not automatically generated with tools like Doxygen, so there may be some errors or mistakes. If you find one, please report it.
 
-<br>
+
 
 # Tests
 
@@ -110,7 +108,7 @@ Tested compilers are listed in section [Requirements](#requirements).
 
 Each test program is checked with Valgrind tool.
 
-<br>
+
 
 # License
 
