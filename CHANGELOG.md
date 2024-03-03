@@ -1,6 +1,11 @@
 # Next release
 
 * New container `segmented_devector` (segmented double-ended vector).
+* All containers: Moved common private functions into new header `private.hpp`.
+* Implemented custom hierarchical algorithms `copy`, `move`, `fill`, etc. that
+  are aware of segmented iterators.
+* Segmented vector: Using custom hierarchical algorithms everywhere. Performance
+  improvements are significant.
 * Segmented vector: Added member function `available`.
 * Segmented vector: Reworked member function `emplace`.
 * Segmented vector: Reworked member function `emplace_back`.
