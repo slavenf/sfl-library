@@ -168,12 +168,7 @@ public:
     compact_vector(InputIt first, InputIt last)
         : data_()
     {
-        initialize_range
-        (
-            first,
-            last,
-            typename std::iterator_traits<InputIt>::iterator_category()
-        );
+        initialize_range(first, last);
     }
 
     template <typename InputIt,
@@ -181,12 +176,7 @@ public:
     compact_vector(InputIt first, InputIt last, const Allocator& alloc)
         : data_(alloc)
     {
-        initialize_range
-        (
-            first,
-            last,
-            typename std::iterator_traits<InputIt>::iterator_category()
-        );
+        initialize_range(first, last);
     }
 
     compact_vector(std::initializer_list<T> ilist)
@@ -257,22 +247,12 @@ public:
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     void assign(InputIt first, InputIt last)
     {
-        assign_range
-        (
-            first,
-            last,
-            typename std::iterator_traits<InputIt>::iterator_category()
-        );
+        assign_range(first, last);
     }
 
     void assign(std::initializer_list<T> ilist)
     {
-        assign_range
-        (
-            ilist.begin(),
-            ilist.end(),
-            std::random_access_iterator_tag()
-        );
+        assign_range(ilist.begin(), ilist.end());
     }
 
     compact_vector& operator=(const compact_vector& other)
@@ -289,12 +269,7 @@ public:
 
     compact_vector& operator=(std::initializer_list<T> ilist)
     {
-        assign_range
-        (
-            ilist.begin(),
-            ilist.end(),
-            std::random_access_iterator_tag()
-        );
+        assign_range(ilist.begin(), ilist.end());
         return *this;
     }
 
@@ -665,25 +640,13 @@ public:
     iterator insert(const_iterator pos, InputIt first, InputIt last)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-        return insert_range
-        (
-            pos,
-            first,
-            last,
-            typename std::iterator_traits<InputIt>::iterator_category()
-        );
+        return insert_range(pos, first, last);
     }
 
     iterator insert(const_iterator pos, std::initializer_list<T> ilist)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-        return insert_range
-        (
-            pos,
-            ilist.begin(),
-            ilist.end(),
-            std::random_access_iterator_tag()
-        );
+        return insert_range(pos, ilist.begin(), ilist.end());
     }
 
     template <typename... Args>
@@ -1055,8 +1018,9 @@ private:
         }
     }
 
-    template <typename InputIt>
-    void initialize_range(InputIt first, InputIt last, std::input_iterator_tag)
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_exactly_input_iterator<InputIt>::value>* = nullptr>
+    void initialize_range(InputIt first, InputIt last)
     {
         SFL_TRY
         {
@@ -1086,8 +1050,9 @@ private:
         }
     }
 
-    template <typename ForwardIt>
-    void initialize_range(ForwardIt first, ForwardIt last, std::forward_iterator_tag)
+    template <typename ForwardIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_forward_iterator<ForwardIt>::value>* = nullptr>
+    void initialize_range(ForwardIt first, ForwardIt last)
     {
         const size_type n = std::distance(first, last);
 
@@ -1256,8 +1221,9 @@ private:
         }
     }
 
-    template <typename InputIt>
-    void assign_range(InputIt first, InputIt last, std::input_iterator_tag)
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_exactly_input_iterator<InputIt>::value>* = nullptr>
+    void assign_range(InputIt first, InputIt last)
     {
         clear();
 
@@ -1268,8 +1234,9 @@ private:
         }
     }
 
-    template <typename ForwardIt>
-    void assign_range(ForwardIt first, ForwardIt last, std::forward_iterator_tag)
+    template <typename ForwardIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_forward_iterator<ForwardIt>::value>* = nullptr>
+    void assign_range(ForwardIt first, ForwardIt last)
     {
         const size_type n = std::distance(first, last);
 
@@ -1332,8 +1299,7 @@ private:
             assign_range
             (
                 other.data_.first_,
-                other.data_.last_,
-                std::random_access_iterator_tag()
+                other.data_.last_
             );
         }
     }
@@ -1365,8 +1331,7 @@ private:
             assign_range
             (
                 std::make_move_iterator(other.data_.first_),
-                std::make_move_iterator(other.data_.last_),
-                std::random_access_iterator_tag()
+                std::make_move_iterator(other.data_.last_)
             );
         }
     }
@@ -1476,9 +1441,9 @@ private:
         return begin() + offset;
     }
 
-    template <typename InputIt>
-    iterator insert_range(const_iterator pos, InputIt first, InputIt last,
-                          std::input_iterator_tag)
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_exactly_input_iterator<InputIt>::value>* = nullptr>
+    iterator insert_range(const_iterator pos, InputIt first, InputIt last)
     {
         const difference_type offset = std::distance(cbegin(), pos);
 
@@ -1492,9 +1457,9 @@ private:
         return begin() + offset;
     }
 
-    template <typename ForwardIt>
-    iterator insert_range(const_iterator pos, ForwardIt first, ForwardIt last,
-                          std::forward_iterator_tag)
+    template <typename ForwardIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_forward_iterator<ForwardIt>::value>* = nullptr>
+    iterator insert_range(const_iterator pos, ForwardIt first, ForwardIt last)
     {
         const difference_type offset = std::distance(cbegin(), pos);
 
