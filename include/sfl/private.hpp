@@ -147,6 +147,45 @@ struct is_input_iterator<
 > : std::true_type {};
 
 //
+// Checks if `T` is exactly input iterator.
+//
+template <typename T, typename = void>
+struct is_exactly_input_iterator : std::false_type {};
+
+template <typename T>
+struct is_exactly_input_iterator<
+    T,
+    sfl::dtl::enable_if_t<
+        std::is_convertible<
+            typename std::iterator_traits<T>::iterator_category,
+            std::input_iterator_tag
+        >::value
+        &&
+       !std::is_convertible<
+            typename std::iterator_traits<T>::iterator_category,
+            std::forward_iterator_tag
+        >::value
+    >
+> : std::true_type {};
+
+//
+// Checks if `T` is forward iterator.
+//
+template <typename T, typename = void>
+struct is_forward_iterator : std::false_type {};
+
+template <typename T>
+struct is_forward_iterator<
+    T,
+    sfl::dtl::enable_if_t<
+        std::is_convertible<
+            typename std::iterator_traits<T>::iterator_category,
+            std::forward_iterator_tag
+        >::value
+    >
+> : std::true_type {};
+
+//
 // Checks if `Type` has member `is_transparent`.
 //
 template <typename Type, typename SfinaeType, typename = void>
