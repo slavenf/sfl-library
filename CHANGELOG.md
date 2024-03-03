@@ -23,7 +23,11 @@
 * Segmented vector: Improved tests for `resize`.
 * Small vector: Renamed variables and exchanged first and second case in
   member function `resize` for better readability.
-* All containers: Use `sfl::dtl::enable_if_t` for better readability.
+* All containers: Use `sfl::dtl::enable_if_t` instead of `std::enable_if`
+  for better readability.
+* All containers: Use SFINAE instead of iterator tag dispatching to select the
+  most appropriate private member functions `initialize_range`, `assign_range`,
+  `insert_range` and similar.
 
 
 
