@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_SMALL_FLAT_MULTISET_HPP
-#define SFL_SMALL_FLAT_MULTISET_HPP
+#ifndef SFL_SMALL_FLAT_MULTISET_HPP_INCLUDED
+#define SFL_SMALL_FLAT_MULTISET_HPP_INCLUDED
 
 #include "private.hpp"
 
@@ -1858,4 +1858,4 @@ erase_if(small_flat_multiset<K, N, C, A>& c, Predicate pred)
 
 } // namespace sfl
 
-#endif // SFL_SMALL_FLAT_MULTISET_HPP
+#endif // SFL_SMALL_FLAT_MULTISET_HPP_INCLUDED

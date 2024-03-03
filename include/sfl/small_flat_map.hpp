@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_SMALL_FLAT_MAP_HPP
-#define SFL_SMALL_FLAT_MAP_HPP
+#ifndef SFL_SMALL_FLAT_MAP_HPP_INCLUDED
+#define SFL_SMALL_FLAT_MAP_HPP_INCLUDED
 
 #include "private.hpp"
 
@@ -2110,4 +2110,4 @@ typename small_flat_map<K, T, N, C, A>::size_type
 
 } // namespace sfl
 
-#endif // SFL_SMALL_FLAT_MAP_HPP
+#endif // SFL_SMALL_FLAT_MAP_HPP_INCLUDED

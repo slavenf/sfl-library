@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_SEGMENTED_DEVECTOR_HPP
-#define SFL_SEGMENTED_DEVECTOR_HPP
+#ifndef SFL_SEGMENTED_DEVECTOR_HPP_INCLUDED
+#define SFL_SEGMENTED_DEVECTOR_HPP_INCLUDED
 
 #include "private.hpp"
 
@@ -2968,4 +2968,4 @@ typename segmented_devector<T, N, A>::size_type
 
 } // namespace sfl
 
-#endif // SFL_SEGMENTED_DEVECTOR_HPP
+#endif // SFL_SEGMENTED_DEVECTOR_HPP_INCLUDED

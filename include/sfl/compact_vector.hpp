@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_COMPACT_VECTOR_HPP
-#define SFL_COMPACT_VECTOR_HPP
+#ifndef SFL_COMPACT_VECTOR_HPP_INCLUDED
+#define SFL_COMPACT_VECTOR_HPP_INCLUDED
 
 #include "private.hpp"
 
@@ -1647,4 +1647,4 @@ typename compact_vector<T, A>::size_type
 
 } // namespace sfl
 
-#endif // SFL_COMPACT_VECTOR_HPP
+#endif // SFL_COMPACT_VECTOR_HPP_INCLUDED

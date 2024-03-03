@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP
-#define SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP
+#ifndef SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
+#define SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
 
 #include "private.hpp"
 
@@ -1761,4 +1761,4 @@ typename small_unordered_flat_multimap<K, T, N, E, A>::size_type
 
 } // namespace sfl
 
-#endif // SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP
+#endif // SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
