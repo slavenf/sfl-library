@@ -322,11 +322,7 @@ public:
     {}
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_unordered_flat_multimap(InputIt first, InputIt last)
         : data_()
     {
@@ -334,11 +330,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_unordered_flat_multimap(InputIt first, InputIt last,
                                   const KeyEqual& equal)
         : data_(equal)
@@ -347,11 +339,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_unordered_flat_multimap(InputIt first, InputIt last,
                                   const Allocator& alloc)
         : data_(alloc)
@@ -360,11 +348,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_unordered_flat_multimap(InputIt first, InputIt last,
                                   const KeyEqual& equal,
                                   const Allocator& alloc)
@@ -844,11 +828,7 @@ public:
     }
 
     template <typename P,
-        typename std::enable_if
-        <
-            std::is_constructible<value_type, P&&>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
     iterator insert(P&& value)
     {
         return insert_unordered(std::forward<P>(value));
@@ -869,11 +849,7 @@ public:
     }
 
     template <typename P,
-        typename std::enable_if
-        <
-            std::is_constructible<value_type, P&&>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
     iterator insert(const_iterator hint, P&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
@@ -882,11 +858,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     void insert(InputIt first, InputIt last)
     {
         while (first != last)
@@ -989,11 +961,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<KeyEqual, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
     size_type erase(K&& x)
     {
         size_type n = 0;
@@ -1209,11 +1177,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<KeyEqual, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
     SFL_NODISCARD
     iterator find(const K& x)
     {
@@ -1229,11 +1193,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<KeyEqual, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
     SFL_NODISCARD
     const_iterator find(const K& x) const
     {
@@ -1265,11 +1225,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<KeyEqual, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
     SFL_NODISCARD
     size_type count(const K& x) const
     {
@@ -1293,11 +1249,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<KeyEqual, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
     SFL_NODISCARD
     bool contains(const K& x) const
     {

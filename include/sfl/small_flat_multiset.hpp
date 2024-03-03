@@ -261,11 +261,7 @@ public:
     {}
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_flat_multiset(InputIt first, InputIt last)
         : data_()
     {
@@ -273,11 +269,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_flat_multiset(InputIt first, InputIt last, const Compare& comp)
         : data_(comp)
     {
@@ -285,11 +277,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_flat_multiset(InputIt first, InputIt last, const Allocator& alloc)
         : data_(alloc)
     {
@@ -297,11 +285,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_flat_multiset(InputIt first, InputIt last, const Compare& comp,
                                                      const Allocator& alloc)
         : data_(comp, alloc)
@@ -825,11 +809,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     void insert(InputIt first, InputIt last)
     {
         while (first != last)
@@ -892,11 +872,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     size_type erase(K&& x)
     {
         const auto er = equal_range(x);
@@ -1084,11 +1060,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     iterator lower_bound(const K& x)
     {
@@ -1096,11 +1068,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     const_iterator lower_bound(const K& x) const
     {
@@ -1120,11 +1088,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     iterator upper_bound(const K& x)
     {
@@ -1132,11 +1096,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     const_iterator upper_bound(const K& x) const
     {
@@ -1156,11 +1116,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     std::pair<iterator, iterator> equal_range(const K& x)
     {
@@ -1168,11 +1124,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     std::pair<const_iterator, const_iterator> equal_range(const K& x) const
     {
@@ -1206,11 +1158,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     iterator find(const K& x)
     {
@@ -1225,11 +1173,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     const_iterator find(const K& x) const
     {
@@ -1251,11 +1195,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     size_type count(const K& x) const
     {
@@ -1270,11 +1210,7 @@ public:
     }
 
     template <typename K,
-        typename std::enable_if
-        <
-            sfl::dtl::has_is_transparent<Compare, K>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
     bool contains(const K& x) const
     {

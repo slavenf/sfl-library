@@ -23,6 +23,7 @@
 * Segmented vector: Improved tests for `resize`.
 * Small vector: Renamed variables and exchanged first and second case in
   member function `resize` for better readability.
+* All containers: Use `sfl::dtl::enable_if_t` for better readability.
 
 
 

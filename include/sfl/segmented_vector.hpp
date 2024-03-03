@@ -83,13 +83,9 @@ public:
     {}
 
     /// Converting constructor (from iterator to const_iterator).
-    template <
-        typename OtherPointer,
-        typename OtherReference,
-        typename std::enable_if<
-            std::is_convertible<OtherPointer, Pointer>::value
-        >::type* = nullptr
-    >
+    template <typename OtherPointer,
+              typename OtherReference,
+              sfl::dtl::enable_if_t<std::is_convertible<OtherPointer, Pointer>::value>* = nullptr>
     segmented_vector_iterator
     (
         const segmented_vector_iterator<
@@ -542,11 +538,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     segmented_vector(InputIt first, InputIt last)
         : data_()
     {
@@ -559,11 +551,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     segmented_vector(InputIt first, InputIt last, const Allocator& alloc)
         : data_(alloc)
     {
@@ -635,11 +623,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     void assign(InputIt first, InputIt last)
     {
         assign_range
@@ -1034,11 +1018,7 @@ public:
     }
 
     template <typename InputIt,
-        typename std::enable_if
-        <
-            sfl::dtl::is_input_iterator<InputIt>::value
-        >::type* = nullptr
-    >
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     iterator insert(const_iterator pos, InputIt first, InputIt last)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
