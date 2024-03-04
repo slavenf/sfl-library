@@ -54,17 +54,17 @@ Tested compilers:
 * Clang 3.4.2 on CentOS 7 (C++11)
 * GCC 13.2.1 on Arch Linux (C++11, 14, 17, 20, 23)
 * Clang 16.0.6 on Arch Linux (C++11, 14, 17, 20)
-* Visual Studio 2022 - MSVC 19.38 (C++14, 17, 20, latest)
+* MSVC 19.38 (C++14, 17, 20, latest)
 
 
 
 # Installation and usage
 
-## Manual method
+## Method 1: Manual copy-paste
 
-Copy directory `include/sfl` into your project and `#include` what you need.
+Copy subdirectory `sfl` from directory `include` into your project and `#include` what you need.
 
-## CMake integration
+## Method 2: CMake integration
 
 There is `CMakeLists.txt` file in the root directory. You know what to do if you use CMake.
 
