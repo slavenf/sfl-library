@@ -883,7 +883,7 @@ ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
 
         if (remainining == 0)
         {
-            return traits::compose(curr_local, curr_seg);
+            return traits::compose(curr_seg, curr_local);
         }
 
         ++curr_seg;
