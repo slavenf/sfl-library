@@ -892,7 +892,8 @@ ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
     }
 }
 
-template <typename Allocator, typename ForwardIt>
+template <typename Allocator, typename ForwardIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
 void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt last)
 {
     ForwardIt curr = first;
@@ -908,6 +909,70 @@ void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt la
     {
         sfl::dtl::destroy(a, first, curr);
         SFL_RETHROW;
+    }
+}
+
+template <typename Allocator, typename ForwardIt,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt last)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
+
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
+
+    if (first_seg == last_seg)
+    {
+        sfl::dtl::uninitialized_default_construct
+        (
+            a,
+            traits::local(first),
+            traits::local(last)
+        );
+    }
+    else
+    {
+        sfl::dtl::uninitialized_default_construct
+        (
+            a,
+            traits::local(first),
+            traits::end(first_seg)
+        );
+
+        ++first_seg;
+
+        SFL_TRY
+        {
+            while (first_seg != last_seg)
+            {
+                sfl::dtl::uninitialized_default_construct
+                (
+                    a,
+                    traits::begin(first_seg),
+                    traits::end(first_seg)
+                );
+
+                ++first_seg;
+            }
+
+            sfl::dtl::uninitialized_default_construct
+            (
+                a,
+                traits::begin(last_seg),
+                traits::local(last)
+            );
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy
+            (
+                a,
+                first,
+                traits::compose(first_seg, traits::begin(first_seg))
+            );
+
+            SFL_RETHROW;
+        }
     }
 }
 
