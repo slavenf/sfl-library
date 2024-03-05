@@ -785,7 +785,7 @@ void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 }
 
 template <typename Allocator, typename ForwardIt, typename Size>
-void destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
+ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
 {
     while (n > 0)
     {
@@ -793,6 +793,7 @@ void destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
         ++first;
         --n;
     }
+    return first;
 }
 
 template <typename Allocator, typename ForwardIt>
