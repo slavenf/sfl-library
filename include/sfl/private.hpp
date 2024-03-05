@@ -774,13 +774,64 @@ void destroy_at(Allocator& a, Pointer p) noexcept
     );
 }
 
-template <typename Allocator, typename ForwardIt>
+template <typename Allocator, typename ForwardIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
 void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 {
     while (first != last)
     {
         sfl::dtl::destroy_at(a, std::addressof(*first));
         ++first;
+    }
+}
+
+template <typename Allocator, typename ForwardIt,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
+{
+    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
+
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
+
+    if (first_seg == last_seg)
+    {
+        sfl::dtl::destroy
+        (
+            a,
+            traits::local(first),
+            traits::local(last)
+        );
+    }
+    else
+    {
+        sfl::dtl::destroy
+        (
+            a,
+            traits::local(first),
+            traits::end(first_seg)
+        );
+
+        ++first_seg;
+
+        while (first_seg != last_seg)
+        {
+            sfl::dtl::destroy
+            (
+                a,
+                traits::begin(first_seg),
+                traits::end(first_seg)
+            );
+
+            ++first_seg;
+        }
+
+        sfl::dtl::destroy
+        (
+            a,
+            traits::begin(last_seg),
+            traits::local(last)
+        );
     }
 }
 
