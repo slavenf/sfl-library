@@ -1944,13 +1944,15 @@ private:
 
             const iterator old_last = data_.last_;
 
-            data_.last_ = sfl::dtl::uninitialized_fill
+            sfl::dtl::uninitialized_fill
             (
                 data_.ref_to_alloc(),
                 old_last,
                 p2,
                 tmp
             );
+
+            data_.last_ = p2;
 
             data_.last_ = sfl::dtl::uninitialized_move
             (

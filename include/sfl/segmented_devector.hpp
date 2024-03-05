@@ -1331,13 +1331,15 @@ public:
 
                 if (n <= available_front + size + available_back)
                 {
-                    data_.last_ = sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
                         data_.eos_,
                         value
                     );
+
+                    data_.last_ = data_.eos_;
 
                     const iterator new_first = data_.first_ - (n - (size + available_back));
 
@@ -2151,13 +2153,15 @@ private:
                         value
                     );
 
-                    data_.last_ = sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
                         data_.eos_,
                         value
                     );
+
+                    data_.last_ = data_.eos_;
 
                     const iterator new_first = data_.first_ - (n - (size + available_back));
 
@@ -2649,13 +2653,15 @@ private:
 
                 const iterator old_last = data_.last_;
 
-                data_.last_ = sfl::dtl::uninitialized_fill
+                sfl::dtl::uninitialized_fill
                 (
                     data_.ref_to_alloc(),
                     old_last,
                     p2,
                     tmp
                 );
+
+                data_.last_ = p2;
 
                 data_.last_ = sfl::dtl::uninitialized_move
                 (

@@ -836,7 +836,7 @@ ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size 
 }
 
 template <typename Allocator, typename ForwardIt, typename T>
-ForwardIt uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& value)
+void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& value)
 {
     ForwardIt curr = first;
     SFL_TRY
@@ -846,7 +846,6 @@ ForwardIt uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, cons
             sfl::dtl::construct_at(a, std::addressof(*curr), value);
             ++curr;
         }
-        return curr;
     }
     SFL_CATCH (...)
     {
