@@ -361,6 +361,8 @@ struct segmented_iterator_traits< segmented_devector_iterator<
 
     static iterator compose(segment_iterator seg, local_iterator elem) noexcept
     {
+        SFL_ASSERT(*seg <= elem && elem <= *seg + N);
+
         if (elem == *seg + N)
         {
             ++seg;
