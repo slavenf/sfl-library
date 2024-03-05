@@ -1250,12 +1250,14 @@ public:
 
                 if (n <= available_front + size + available_back)
                 {
-                    data_.last_ = sfl::dtl::uninitialized_default_construct
+                    sfl::dtl::uninitialized_default_construct
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
                         data_.eos_
                     );
+
+                    data_.last_ = data_.eos_;
 
                     const iterator new_first = data_.first_ - (n - (size + available_back));
 

@@ -796,7 +796,7 @@ void destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
 }
 
 template <typename Allocator, typename ForwardIt>
-ForwardIt uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt last)
+void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt last)
 {
     ForwardIt curr = first;
     SFL_TRY
@@ -806,7 +806,6 @@ ForwardIt uninitialized_default_construct(Allocator& a, ForwardIt first, Forward
             sfl::dtl::construct_at(a, std::addressof(*curr));
             ++curr;
         }
-        return curr;
     }
     SFL_CATCH (...)
     {
