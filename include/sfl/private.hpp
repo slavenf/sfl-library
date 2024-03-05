@@ -835,7 +835,8 @@ void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
     }
 }
 
-template <typename Allocator, typename ForwardIt, typename Size>
+template <typename Allocator, typename ForwardIt, typename Size,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
 ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
 {
     while (n > 0)
@@ -845,6 +846,50 @@ ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
         --n;
     }
     return first;
+}
+
+template <typename Allocator, typename ForwardIt, typename Size,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
+{
+    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
+
+    auto curr_local = traits::local(first);
+    auto curr_seg   = traits::segment(first);
+
+    auto remainining = n;
+
+    while (true)
+    {
+        using difference_type =
+            typename std::iterator_traits<typename traits::local_iterator>::difference_type;
+
+        const auto count = std::min<difference_type>
+        (
+            remainining,
+            std::distance(curr_local, traits::end(curr_seg))
+        );
+
+        curr_local = sfl::dtl::destroy_n
+        (
+            a,
+            curr_local,
+            count
+        );
+
+        remainining -= count;
+
+        SFL_ASSERT(remainining <= n && "Bug in algorithm. Please report it.");
+
+        if (remainining == 0)
+        {
+            return traits::compose(curr_local, curr_seg);
+        }
+
+        ++curr_seg;
+
+        curr_local = traits::begin(curr_seg);
+    }
 }
 
 template <typename Allocator, typename ForwardIt>
