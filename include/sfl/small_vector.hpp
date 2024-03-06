@@ -1736,10 +1736,12 @@ private:
 
             if (n <= s)
             {
-                pointer new_last = std::fill_n
+                const pointer new_last = data_.first_ + n;
+
+                sfl::dtl::fill
                 (
                     data_.first_,
-                    n,
+                    new_last,
                     value
                 );
 
@@ -1754,10 +1756,10 @@ private:
             }
             else
             {
-                std::fill_n
+                sfl::dtl::fill
                 (
                     data_.first_,
-                    s,
+                    data_.last_,
                     value
                 );
 
@@ -1976,10 +1978,10 @@ private:
                         old_last
                     );
 
-                    std::fill_n
+                    sfl::dtl::fill
                     (
                         data_.first_ + offset,
-                        n,
+                        data_.first_ + offset + n,
                         tmp
                     );
                 }
@@ -2003,7 +2005,7 @@ private:
                         data_.last_
                     );
 
-                    std::fill
+                    sfl::dtl::fill
                     (
                         data_.first_ + offset,
                         old_last,

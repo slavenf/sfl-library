@@ -1189,7 +1189,7 @@ private:
 
         if (n == size())
         {
-            std::fill
+            sfl::dtl::fill
             (
                 data_.first_,
                 data_.last_,
