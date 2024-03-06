@@ -832,7 +832,7 @@ public:
 
         const pointer p = data_.first_ + offset;
 
-        data_.last_ = std::move(p + 1, data_.last_, p);
+        data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
         sfl::dtl::destroy_at(data_.ref_to_alloc(), data_.last_);
 
@@ -854,7 +854,7 @@ public:
         const pointer p1 = data_.first_ + offset1;
         const pointer p2 = data_.first_ + offset2;
 
-        const pointer new_last = std::move(p2, data_.last_, p1);
+        const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
 
         sfl::dtl::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 

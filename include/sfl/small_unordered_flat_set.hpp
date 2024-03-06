@@ -820,7 +820,7 @@ public:
         {
             const pointer p2 = p1 + count1;
 
-            const pointer new_last = std::move(p2, data_.last_, p1);
+            const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
 
             sfl::dtl::destroy(data_.ref_to_alloc(), new_last, data_.last_);
 
@@ -830,7 +830,7 @@ public:
         {
             const pointer p2 = p1 + count2;
 
-            std::move(p2, data_.last_, p1);
+            sfl::dtl::move(p2, data_.last_, p1);
 
             const pointer new_last = p2;
 
