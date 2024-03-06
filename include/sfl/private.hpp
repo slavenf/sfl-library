@@ -1213,7 +1213,9 @@ ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& v
     }
 }
 
-template <typename Allocator, typename InputIt, typename ForwardIt>
+template <typename Allocator, typename InputIt, typename ForwardIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                 !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
 ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
@@ -1231,6 +1233,143 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
     {
         sfl::dtl::destroy(a, d_first, d_curr);
         SFL_RETHROW;
+    }
+}
+
+template <typename Allocator, typename InputIt, typename ForwardIt,
+          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
+
+    if (first == last)
+    {
+        return d_first;
+    }
+    else
+    {
+        auto curr = first;
+
+        auto d_local = traits::local(d_first);
+        auto d_seg   = traits::segment(d_first);
+
+        SFL_TRY
+        {
+            while (true)
+            {
+                using difference_type =
+                    typename std::iterator_traits<InputIt>::difference_type;
+
+                const auto count = std::min<difference_type>
+                (
+                    std::distance(curr, last),
+                    std::distance(d_local, traits::end(d_seg))
+                );
+
+                const auto next = curr + count;
+
+                d_local = sfl::dtl::uninitialized_copy
+                (
+                    a,
+                    curr,
+                    next,
+                    d_local
+                );
+
+                curr = next;
+
+                if (curr == last)
+                {
+                    return traits::compose(d_seg, d_local);
+                }
+
+                ++d_seg;
+
+                d_local = traits::begin(d_seg);
+            }
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy
+            (
+                a,
+                d_first,
+                traits::compose(d_seg, d_local)
+            );
+            SFL_RETHROW;
+        }
+    }
+}
+
+template <typename Allocator, typename InputIt, typename ForwardIt,
+          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
+ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+{
+    using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
+
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
+
+    if (first_seg == last_seg)
+    {
+        return sfl::dtl::uninitialized_copy
+        (
+            a,
+            traits::local(first),
+            traits::local(last),
+            d_first
+        );
+    }
+    else
+    {
+        auto d_curr = d_first;
+
+        d_curr = sfl::dtl::uninitialized_copy
+        (
+            a,
+            traits::local(first),
+            traits::end(first_seg),
+            d_curr
+        );
+
+        ++first_seg;
+
+        SFL_TRY
+        {
+            while (first_seg != last_seg)
+            {
+                d_curr = sfl::dtl::uninitialized_copy
+                (
+                    a,
+                    traits::begin(first_seg),
+                    traits::end(first_seg),
+                    d_curr
+                );
+
+                ++first_seg;
+            }
+
+            d_curr = sfl::dtl::uninitialized_copy
+            (
+                a,
+                traits::begin(last_seg),
+                traits::local(last),
+                d_curr
+            );
+
+            return d_curr;
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy
+            (
+                a,
+                d_first,
+                d_curr
+            );
+            SFL_RETHROW;
+        }
     }
 }
 
