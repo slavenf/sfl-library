@@ -262,13 +262,13 @@ OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
             using difference_type =
                 typename std::iterator_traits<InputIt>::difference_type;
 
-            const auto n = std::min<difference_type>
+            const auto count = std::min<difference_type>
             (
                 std::distance(curr, last),
                 std::distance(d_local, traits::end(d_seg))
             );
 
-            const auto next = curr + n;
+            const auto next = curr + count;
 
             d_local = sfl::dtl::copy
             (
@@ -374,13 +374,13 @@ BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
             using difference_type =
                 typename std::iterator_traits<BidirIt1>::difference_type;
 
-            const auto n = std::min<difference_type>
+            const auto count = std::min<difference_type>
             (
                 std::distance(first, curr),
                 std::distance(traits::begin(d_seg), d_local)
             );
 
-            const auto prev = curr - n;
+            const auto prev = curr - count;
 
             d_local = sfl::dtl::copy_backward
             (
@@ -486,13 +486,13 @@ OutputIt move(InputIt first, InputIt last, OutputIt d_first)
             using difference_type =
                 typename std::iterator_traits<InputIt>::difference_type;
 
-            const auto n = std::min<difference_type>
+            const auto count = std::min<difference_type>
             (
                 std::distance(curr, last),
                 std::distance(d_local, traits::end(d_seg))
             );
 
-            const auto next = curr + n;
+            const auto next = curr + count;
 
             d_local = sfl::dtl::move
             (
@@ -598,13 +598,13 @@ BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
             using difference_type =
                 typename std::iterator_traits<BidirIt1>::difference_type;
 
-            const auto n = std::min<difference_type>
+            const auto count = std::min<difference_type>
             (
                 std::distance(first, curr),
                 std::distance(traits::begin(d_seg), d_local)
             );
 
-            const auto prev = curr - n;
+            const auto prev = curr - count;
 
             d_local = sfl::dtl::move_backward
             (
