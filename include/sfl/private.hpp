@@ -295,10 +295,10 @@ OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
 
-    auto sfirst = traits::segment(first);
-    auto slast  = traits::segment(last);
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
 
-    if (sfirst == slast)
+    if (first_seg == last_seg)
     {
         return sfl::dtl::copy
         (
@@ -312,27 +312,27 @@ OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
         d_first = sfl::dtl::copy
         (
             traits::local(first),
-            traits::end(sfirst),
+            traits::end(first_seg),
             d_first
         );
 
-        ++sfirst;
+        ++first_seg;
 
-        while (sfirst != slast)
+        while (first_seg != last_seg)
         {
             d_first = sfl::dtl::copy
             (
-                traits::begin(sfirst),
-                traits::end(sfirst),
+                traits::begin(first_seg),
+                traits::end(first_seg),
                 d_first
             );
 
-            ++sfirst;
+            ++first_seg;
         }
 
         d_first = sfl::dtl::copy
         (
-            traits::begin(slast),
+            traits::begin(last_seg),
             traits::local(last),
             d_first
         );
@@ -405,10 +405,10 @@ BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<BidirIt1>;
 
-    auto sfirst = traits::segment(first);
-    auto slast  = traits::segment(last);
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
 
-    if (sfirst == slast)
+    if (first_seg == last_seg)
     {
         return sfl::dtl::copy_backward
         (
@@ -421,29 +421,29 @@ BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
     {
         d_last = sfl::dtl::copy_backward
         (
-            traits::begin(slast),
+            traits::begin(last_seg),
             traits::local(last),
             d_last
         );
 
-        --slast;
+        --last_seg;
 
-        while (sfirst != slast)
+        while (first_seg != last_seg)
         {
             d_last = sfl::dtl::copy_backward
             (
-                traits::begin(slast),
-                traits::end(slast),
+                traits::begin(last_seg),
+                traits::end(last_seg),
                 d_last
             );
 
-            --slast;
+            --last_seg;
         }
 
         d_last = sfl::dtl::copy_backward
         (
             traits::local(first),
-            traits::end(slast),
+            traits::end(last_seg),
             d_last
         );
 
@@ -515,10 +515,10 @@ OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
 
-    auto sfirst = traits::segment(first);
-    auto slast  = traits::segment(last);
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
 
-    if (sfirst == slast)
+    if (first_seg == last_seg)
     {
         return sfl::dtl::move
         (
@@ -532,27 +532,27 @@ OutputIt move(InputIt first, InputIt last, OutputIt d_first)
         d_first = sfl::dtl::move
         (
             traits::local(first),
-            traits::end(sfirst),
+            traits::end(first_seg),
             d_first
         );
 
-        ++sfirst;
+        ++first_seg;
 
-        while (sfirst != slast)
+        while (first_seg != last_seg)
         {
             d_first = sfl::dtl::move
             (
-                traits::begin(sfirst),
-                traits::end(sfirst),
+                traits::begin(first_seg),
+                traits::end(first_seg),
                 d_first
             );
 
-            ++sfirst;
+            ++first_seg;
         }
 
         d_first = sfl::dtl::move
         (
-            traits::begin(slast),
+            traits::begin(last_seg),
             traits::local(last),
             d_first
         );
@@ -625,10 +625,10 @@ BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<BidirIt1>;
 
-    auto sfirst = traits::segment(first);
-    auto slast  = traits::segment(last);
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
 
-    if (sfirst == slast)
+    if (first_seg == last_seg)
     {
         return sfl::dtl::move_backward
         (
@@ -641,29 +641,29 @@ BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
     {
         d_last = sfl::dtl::move_backward
         (
-            traits::begin(slast),
+            traits::begin(last_seg),
             traits::local(last),
             d_last
         );
 
-        --slast;
+        --last_seg;
 
-        while (sfirst != slast)
+        while (first_seg != last_seg)
         {
             d_last = sfl::dtl::move_backward
             (
-                traits::begin(slast),
-                traits::end(slast),
+                traits::begin(last_seg),
+                traits::end(last_seg),
                 d_last
             );
 
-            --slast;
+            --last_seg;
         }
 
         d_last = sfl::dtl::move_backward
         (
             traits::local(first),
-            traits::end(slast),
+            traits::end(last_seg),
             d_last
         );
 
@@ -684,10 +684,10 @@ void fill(ForwardIt first, ForwardIt last, const T& value)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
-    auto sfirst = traits::segment(first);
-    auto slast  = traits::segment(last);
+    auto first_seg = traits::segment(first);
+    auto last_seg  = traits::segment(last);
 
-    if (sfirst == slast)
+    if (first_seg == last_seg)
     {
         sfl::dtl::fill
         (
@@ -701,27 +701,27 @@ void fill(ForwardIt first, ForwardIt last, const T& value)
         sfl::dtl::fill
         (
             traits::local(first),
-            traits::end(sfirst),
+            traits::end(first_seg),
             value
         );
 
-        ++sfirst;
+        ++first_seg;
 
-        while (sfirst != slast)
+        while (first_seg != last_seg)
         {
             sfl::dtl::fill
             (
-                traits::begin(sfirst),
-                traits::end(sfirst),
+                traits::begin(first_seg),
+                traits::end(first_seg),
                 value
             );
 
-            ++sfirst;
+            ++first_seg;
         }
 
         sfl::dtl::fill
         (
-            traits::begin(slast),
+            traits::begin(last_seg),
             traits::local(last),
             value
         );
