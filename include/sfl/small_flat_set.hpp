@@ -1439,7 +1439,7 @@ private:
 
             if (n <= s)
             {
-                pointer new_last = std::copy
+                pointer new_last = sfl::dtl::copy
                 (
                     first,
                     last,
@@ -1459,7 +1459,7 @@ private:
             {
                 ForwardIt mid = std::next(first, s);
 
-                std::copy
+                sfl::dtl::copy
                 (
                     first,
                     mid,
@@ -1617,7 +1617,12 @@ private:
 
                 ++data_.last_;
 
-                std::move_backward(p, data_.last_ - 2, data_.last_ - 1);
+                sfl::dtl::move_backward
+                (
+                    p,
+                    data_.last_ - 2,
+                    data_.last_ - 1
+                );
 
                 sfl::dtl::destroy_at
                 (

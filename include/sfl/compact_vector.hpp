@@ -1250,7 +1250,7 @@ private:
 
         if (n == size())
         {
-            std::copy
+            sfl::dtl::copy
             (
                 first,
                 last,

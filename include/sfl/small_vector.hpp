@@ -795,7 +795,7 @@ public:
 
                 ++data_.last_;
 
-                std::move_backward
+                sfl::dtl::move_backward
                 (
                     p,
                     data_.last_ - 2,
@@ -1827,7 +1827,7 @@ private:
 
             if (n <= s)
             {
-                pointer new_last = std::copy
+                pointer new_last = sfl::dtl::copy
                 (
                     first,
                     last,
@@ -1847,7 +1847,7 @@ private:
             {
                 ForwardIt mid = std::next(first, s);
 
-                std::copy
+                sfl::dtl::copy
                 (
                     first,
                     mid,
@@ -1969,7 +1969,7 @@ private:
                         data_.last_
                     );
 
-                    std::move_backward
+                    sfl::dtl::move_backward
                     (
                         data_.first_ + offset,
                         old_last - n,
@@ -2169,14 +2169,14 @@ private:
                         data_.last_
                     );
 
-                    std::move_backward
+                    sfl::dtl::move_backward
                     (
                         data_.first_ + offset,
                         old_last - n,
                         old_last
                     );
 
-                    std::copy
+                    sfl::dtl::copy
                     (
                         first,
                         last,
@@ -2205,7 +2205,7 @@ private:
                         data_.last_
                     );
 
-                    std::copy
+                    sfl::dtl::copy
                     (
                         first,
                         mid,
