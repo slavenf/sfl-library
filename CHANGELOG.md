@@ -28,6 +28,7 @@
 * All containers: Use SFINAE instead of iterator tag dispatching to select the
   most appropriate private member functions `initialize_range`, `assign_range`,
   `insert_range` and similar.
+* All containers: Use algorithms from namespace `sfl::dtl` whenever possible.
 
 
 
