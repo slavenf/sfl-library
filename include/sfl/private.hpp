@@ -193,7 +193,7 @@ struct has_is_transparent : std::false_type {};
 
 template <typename Type, typename SfinaeType>
 struct has_is_transparent<
-    Type, SfinaeType, void_t<typename Type::is_transparent>
+    Type, SfinaeType, sfl::dtl::void_t<typename Type::is_transparent>
 > : std::true_type {};
 
 ///////////////////////////////////////////////////////////////////////////////
