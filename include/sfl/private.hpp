@@ -259,12 +259,14 @@ OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
 
         while (true)
         {
-            const auto n =
-                std::min<typename std::iterator_traits<InputIt>::difference_type>
-                (
-                    std::distance(curr, last),
-                    std::distance(d_local, traits::end(d_seg))
-                );
+            using difference_type =
+                typename std::iterator_traits<InputIt>::difference_type;
+
+            const auto n = std::min<difference_type>
+            (
+                std::distance(curr, last),
+                std::distance(d_local, traits::end(d_seg))
+            );
 
             const auto next = curr + n;
 
@@ -369,12 +371,14 @@ BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 
         while (true)
         {
-            const auto n =
-                std::min<typename std::iterator_traits<BidirIt1>::difference_type>
-                (
-                    std::distance(first, curr),
-                    std::distance(traits::begin(d_seg), d_local)
-                );
+            using difference_type =
+                typename std::iterator_traits<BidirIt1>::difference_type;
+
+            const auto n = std::min<difference_type>
+            (
+                std::distance(first, curr),
+                std::distance(traits::begin(d_seg), d_local)
+            );
 
             const auto prev = curr - n;
 
@@ -479,12 +483,14 @@ OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 
         while (true)
         {
-            const auto n =
-                std::min<typename std::iterator_traits<InputIt>::difference_type>
-                (
-                    std::distance(curr, last),
-                    std::distance(d_local, traits::end(d_seg))
-                );
+            using difference_type =
+                typename std::iterator_traits<InputIt>::difference_type;
+
+            const auto n = std::min<difference_type>
+            (
+                std::distance(curr, last),
+                std::distance(d_local, traits::end(d_seg))
+            );
 
             const auto next = curr + n;
 
@@ -589,12 +595,14 @@ BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 
         while (true)
         {
-            const auto n =
-                std::min<typename std::iterator_traits<BidirIt1>::difference_type>
-                (
-                    std::distance(first, curr),
-                    std::distance(traits::begin(d_seg), d_local)
-                );
+            using difference_type =
+                typename std::iterator_traits<BidirIt1>::difference_type;
+
+            const auto n = std::min<difference_type>
+            (
+                std::distance(first, curr),
+                std::distance(traits::begin(d_seg), d_local)
+            );
 
             const auto prev = curr - n;
 
