@@ -64,6 +64,8 @@ Iterators to elements are random access iterators and they meet the requirements
 
 `sfl::small_unordered_flat_multimap` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer) and [`ContiguousContainer`](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [`UnorderedAssociativeContainer`](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met.
 
+<br><br>
+
 
 
 ## Template Parameters
@@ -103,6 +105,8 @@ Iterators to elements are random access iterators and they meet the requirements
 
     The program is ill-formed if `Allocator::value_type` is not the same as `std::pair<Key, T>`.
 
+<br><br>
+
 
 
 ## Public Member Types
@@ -123,6 +127,8 @@ using const_pointer    = typename allocator_traits::const_pointer;
 using iterator         = pointer;
 using const_iterator   = const_pointer;
 ```
+
+<br><br>
 
 
 

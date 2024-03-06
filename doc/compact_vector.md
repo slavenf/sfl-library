@@ -67,6 +67,8 @@ Unlike standard vector, `sfl::compact_vector` is not specialized for `bool`.
 
 `sfl::compact_vector` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [`ReversibleContainer`](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [`ContiguousContainer`](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [`SequenceContainer`](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
 
+<br><br>
+
 
 
 ## Template Parameters
@@ -87,6 +89,8 @@ Unlike standard vector, `sfl::compact_vector` is not specialized for `bool`.
 
     The program is ill-formed if `Allocator::value_type` is not the same as `T`.
 
+<br><br>
+
 
 
 ## Public Member Types
@@ -106,6 +110,8 @@ using const_iterator         = const_pointer;
 using reverse_iterator       = std::reverse_iterator<iterator>;
 using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 ```
+
+<br><br>
 
 
 
