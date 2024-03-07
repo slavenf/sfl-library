@@ -412,6 +412,12 @@ public:
         return size();
     }
 
+    SFL_NODISCARD
+    size_type available() const noexcept
+    {
+        return 0;
+    }
+
     //
     // ---- ELEMENT ACCESS ----------------------------------------------------
     //

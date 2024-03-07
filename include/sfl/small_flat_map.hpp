@@ -619,6 +619,12 @@ public:
         return data_.end_ - data_.first_;
     }
 
+    SFL_NODISCARD
+    size_type available() const noexcept
+    {
+        return std::distance(data_.last_, data_.end_);
+    }
+
     void reserve(size_type new_cap)
     {
         check_size(new_cap, "sfl::small_flat_map::reserve");
