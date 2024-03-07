@@ -824,7 +824,7 @@ New element is constructed as `value_type(std::forward<Args>(args)...)`.
 Iterator to the inserted element.
 
 **Complexity:**
-Constant plus linear in `std::distance(pos, end())`.
+Constant plus linear in `std::min(std::distance(begin(), pos), std::distance(pos, end()))`.
 
 <br><br>
 
@@ -846,7 +846,7 @@ Inserts copy of `value` at position `pos`.
 Iterator to the inserted element.
 
 **Complexity:**
-Constant plus linear in `std::distance(pos, end())`.
+Constant plus linear in `std::min(std::distance(begin(), pos), std::distance(pos, end()))`.
 
 <br><br>
 
@@ -866,7 +866,7 @@ Inserts `value` using move semantics at position `pos`.
 Iterator to the inserted element.
 
 **Complexity:**
-Constant plus linear in `std::distance(pos, end())`.
+Constant plus linear in `std::min(std::distance(begin(), pos), std::distance(pos, end()))`.
 
 <br><br>
 
@@ -886,7 +886,7 @@ Inserts `n` copies of `value` before position `pos`.
 Iterator to the first element inserted, or `pos` if `n == 0`.
 
 **Complexity:**
-Linear in `n` plus linear in `std::distance(pos, end())`.
+Linear in `n` plus linear in `std::min(std::distance(begin(), pos), std::distance(pos, end()))`.
 
 <br><br>
 
@@ -913,7 +913,7 @@ The behavior is undefined if either `first` or `last` is an iterator into `*this
 Iterator to the first element inserted, or `pos` if `first == last`.
 
 **Complexity:**
-Linear in `std::distance(first, last)` plus linear in `std::distance(pos, end())`.
+Linear in `std::distance(first, last)` plus linear in `std::min(std::distance(begin(), pos), std::distance(pos, end()))`.
 
 <br><br>
 
@@ -933,7 +933,7 @@ Inserts elements from initializer list `ilist` before position `pos`.
 Iterator to the first element inserted, or `pos` if `ilist` is empty.
 
 **Complexity:**
-Linear in `ilist.size()` plus linear in `std::distance(pos, end())`.
+Linear in `ilist.size()` plus linear in `std::min(std::distance(begin(), pos), std::distance(pos, end()))`.
 
 <br><br>
 
