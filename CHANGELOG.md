@@ -1,12 +1,13 @@
 # Next release
 
 * New container `segmented_devector` (segmented double-ended vector).
+* All containers: Added member function `available`.
 * All containers: Moved common private functions into new header `private.hpp`.
-* Implemented custom hierarchical algorithms `copy`, `move`, `fill`, etc. that
-  are aware of segmented iterators.
-* Segmented vector: Using custom hierarchical algorithms everywhere. Performance
-  improvements are significant.
-* Segmented vector: Added member function `available`.
+* Implemented custom hierarchical algorithms `copy`, `move`, `fill`, etc. in
+  header `private.hpp` that are aware of segmented iterators.
+* All containers: Use algorithms from header `private.hpp` whenever possible.
+* Segmented vector: Significantly improved performances by using algorithms
+  from header `private.hpp`.
 * Segmented vector: Reworked member function `emplace`.
 * Segmented vector: Reworked member function `emplace_back`.
 * Segmented vector: Reworked member function `resize`.
@@ -28,7 +29,6 @@
 * All containers: Use SFINAE instead of iterator tag dispatching to select the
   most appropriate private member functions `initialize_range`, `assign_range`,
   `insert_range` and similar.
-* All containers: Use algorithms from namespace `sfl::dtl` whenever possible.
 
 
 
