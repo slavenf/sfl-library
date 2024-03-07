@@ -27,21 +27,19 @@ Small flat maps and sets from namespace `sfl` are associative containers similar
 
 ## About compact vector
 
-`sfl::compact_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) with the key difference that `capacity()` and `size()` are always equal. Compact vector reallocates storage every time when element is inserted or removed in order to keep capacity and size equal. That means insertions and removals are very inefficient.
+`sfl::compact_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that always has `capacity()` equal to `size()`. Compact vector reallocates storage every time when element is inserted or removed in order to keep capacity and size equal. That means insertions and removals are very inefficient.
 
 This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
 
 ## About segmented vector
 
-`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that allows fast insertion at its end. The storage of segmented vector consists of a sequence of individually allocated arrays of size `N` which are called *segments*. Size `N` is specified at the compile time as a template parameter. Expansion of a segmented vector is very cheap compared to the expansion of a `std::vector` because it does not involve copying of the existing elements to a new memory location.
+`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that allows fast insertion its end. The storage of segmented vector consists of a sequence of individually allocated arrays of size `N` which are referred to as *segments*. Size `N` is specified at the compile time as a template parameter.
 
 ## About segmented double-ended vector
 
-`sfl::segmented_devector` is a sequence container similar to `sfl::segmented_vector` that allows fast insertion and deletion at both its beginning and its end.
+`sfl::segmented_devector` is a sequence container similar to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque) that allows fast insertion and deletion at both its beginning and its end. The storage of segmented double-ended vector consists of a sequence of individually allocated arrays of size `N` which are referred to as *segments*. Size `N` is specified at the compile time as a template parameter.
 
-This container is almost identical to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque), but with the slightly different set of public member functions.
-
-
+<br>
 
 # Requirements
 
@@ -56,7 +54,7 @@ Tested compilers:
 * Clang 16.0.6 on Arch Linux (C++11, 14, 17, 20)
 * MSVC 19.38 (C++14, 17, 20, latest)
 
-
+<br>
 
 # Installation and usage
 
@@ -68,7 +66,7 @@ Copy subdirectory `sfl` from directory `include` into your project and `#include
 
 There is `CMakeLists.txt` file in the root directory. You know what to do if you use CMake.
 
-
+<br>
 
 # Exceptions
 
@@ -78,7 +76,7 @@ If macro `SFL_NO_EXCEPTIONS` is defined then library avoids using exceptions and
 
 This library does not automatically detect whether the compiler is invoked with appropriate flag or not, like `-fno-exceptions` in GCC and Clang.
 
-
+<br>
 
 # Debugging
 
@@ -90,15 +88,13 @@ If macro `NDEBUG` is defined then `assert` does nothing.
 
 If macro `NDEBUG` is not defined then `assert` performs check. If check fails, `assert` outputs implementation-specific diagnostic information on the standard error output and calls `std::abort`.
 
-
+<br>
 
 # Detailed documentation
 
-The detailed documentation is located in directory `doc`.
+The detailed documentation is located in directory `doc`. The detailed documentation is handwritten in Markdown format, it is not automatically generated with tools like Doxygen, so there may be some errors or mistakes. If you find one, please report it.
 
-The detailed documentation is handwritten in Markdown format, it is not automatically generated with tools like Doxygen, so there may be some errors or mistakes. If you find one, please report it.
-
-
+<br>
 
 # Tests
 
@@ -108,7 +104,7 @@ Tested compilers are listed in section [Requirements](#requirements).
 
 Each test program is checked with Valgrind tool.
 
-
+<br>
 
 # License
 
