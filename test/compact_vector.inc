@@ -2283,6 +2283,8 @@ PRINT("Test container()");
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
     CHECK(vec.size() == 0);
+    CHECK(vec.capacity() == 0);
+    CHECK(vec.available() == 0);
 }
 
 PRINT("Test container(const Allocator&)");
@@ -2292,6 +2294,8 @@ PRINT("Test container(const Allocator&)");
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec(alloc);
 
     CHECK(vec.size() == 0);
+    CHECK(vec.capacity() == 0);
+    CHECK(vec.available() == 0);
 }
 
 PRINT("Test container(size_type)");

@@ -4067,6 +4067,8 @@ PRINT("Test container()");
     sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
 
     CHECK(vec.size() == 0);
+    CHECK(vec.capacity() == 100);
+    CHECK(vec.available() == 100);
 }
 
 PRINT("Test container(const Allocator&)");
@@ -4076,6 +4078,8 @@ PRINT("Test container(const Allocator&)");
     sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec(alloc);
 
     CHECK(vec.size() == 0);
+    CHECK(vec.capacity() == 100);
+    CHECK(vec.available() == 100);
 }
 
 PRINT("Test container(size_type)");

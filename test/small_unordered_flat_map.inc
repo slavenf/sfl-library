@@ -2331,6 +2331,8 @@ PRINT("Test container()");
                                    TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
     CHECK(map.size() == 0);
+    CHECK(map.capacity() == 100);
+    CHECK(map.available() == 100);
 }
 
 PRINT("Test container(const KeyEqual&)");
@@ -2344,6 +2346,8 @@ PRINT("Test container(const KeyEqual&)");
                                    TPARAM_ALLOCATOR<std::pair<xint, xint>> > map(equal);
 
     CHECK(map.size() == 0);
+    CHECK(map.capacity() == 100);
+    CHECK(map.available() == 100);
 }
 
 PRINT("Test container(const Allocator&)");
@@ -2357,6 +2361,8 @@ PRINT("Test container(const Allocator&)");
                                    TPARAM_ALLOCATOR<std::pair<xint, xint>> > map(alloc);
 
     CHECK(map.size() == 0);
+    CHECK(map.capacity() == 100);
+    CHECK(map.available() == 100);
 }
 
 PRINT("Test container(const KeyEqual&, const Allocator&)");
@@ -2372,6 +2378,8 @@ PRINT("Test container(const KeyEqual&, const Allocator&)");
                                    TPARAM_ALLOCATOR<std::pair<xint, xint>> > map(equal, alloc);
 
     CHECK(map.size() == 0);
+    CHECK(map.capacity() == 100);
+    CHECK(map.available() == 100);
 }
 
 PRINT("Test container(InputIt, InputIt)");

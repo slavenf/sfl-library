@@ -2978,6 +2978,8 @@ PRINT("Test container()");
                          TPARAM_ALLOCATOR<xint_xint> > set;
 
     CHECK(set.size() == 0);
+    CHECK(set.capacity() == 100);
+    CHECK(set.available() == 100);
 }
 
 PRINT("Test container(const Compare&)");
@@ -2990,6 +2992,8 @@ PRINT("Test container(const Compare&)");
                          TPARAM_ALLOCATOR<xint_xint> > set(comp);
 
     CHECK(set.size() == 0);
+    CHECK(set.capacity() == 100);
+    CHECK(set.available() == 100);
 }
 
 PRINT("Test container(const Allocator&)");
@@ -3002,6 +3006,8 @@ PRINT("Test container(const Allocator&)");
                          TPARAM_ALLOCATOR<xint_xint> > set(alloc);
 
     CHECK(set.size() == 0);
+    CHECK(set.capacity() == 100);
+    CHECK(set.available() == 100);
 }
 
 PRINT("Test container(const Compare&, const Allocator&)");
@@ -3016,6 +3022,8 @@ PRINT("Test container(const Compare&, const Allocator&)");
                          TPARAM_ALLOCATOR<xint_xint> > set(comp, alloc);
 
     CHECK(set.size() == 0);
+    CHECK(set.capacity() == 100);
+    CHECK(set.available() == 100);
 }
 
 PRINT("Test container(InputIt, InputIt)");
