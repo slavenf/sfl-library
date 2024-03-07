@@ -20,6 +20,7 @@
   * [size](#size)
   * [max\_size](#max_size)
   * [capacity](#capacity)
+  * [available](#available)
   * [reserve](#reserve)
   * [shrink\_to\_fit](#shrink_to_fit)
   * [clear](#clear)
@@ -610,6 +611,22 @@ size_type capacity() const noexcept;
 
 **Effects:**
 Returns the number of elements that the container has currently allocated space for.
+
+**Complexity:**
+Constant.
+
+<br><br>
+
+
+
+### available
+
+```
+size_type available() const noexcept;
+```
+
+**Effects:**
+Returns the number of elements that can be inserted into the container without requiring allocation of additional memory.
 
 **Complexity:**
 Constant.

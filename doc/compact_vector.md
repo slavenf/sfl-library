@@ -19,6 +19,7 @@
   * [size](#size)
   * [max\_size](#max_size)
   * [capacity](#capacity)
+  * [available](#available)
   * [at](#at)
   * [operator\[\]](#operator-1)
   * [front](#front)
@@ -577,6 +578,22 @@ Returns the number of elements that the container has currently allocated space 
 **Note:**
 The call to this function is equivalent to `return size();`.
 The equality `capacity() == size()` is always `true` for this container.
+
+**Complexity:**
+Constant.
+
+<br><br>
+
+
+
+### available
+
+```
+size_type available() const noexcept;
+```
+
+**Effects:**
+Returns the number of elements that can be inserted into the container without requiring allocation of additional memory. It always returns zero.
 
 **Complexity:**
 Constant.
