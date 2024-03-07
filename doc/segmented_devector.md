@@ -1133,7 +1133,7 @@ void resize(size_type n);
 Resizes the container to contain `n` elements.
 
 1. If the `size() > n`, the last `size() - n` elements are removed.
-2. If the `size() < n`, additional default-constructed elements are inserted into container.
+2. If the `size() < n`, additional default-constructed elements are inserted into container. Additional elements could be inserted both at the beginning and at the end of container.
 
 <br><br>
 
@@ -1147,7 +1147,7 @@ void resize(size_type n, const T& value);
 Resizes the container to contain `n` elements.
 
 1. If the `size() > n`, the last `size() - n` elements are removed.
-2. If the `size() < n`, additional copies of `value` are inserted into container.
+2. If the `size() < n`, additional copies of `value` are inserted into container. Additional elements could be inserted both at the beginning and at the end of container.
 
 <br><br>
 
