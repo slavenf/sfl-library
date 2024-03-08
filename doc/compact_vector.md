@@ -58,13 +58,11 @@ namespace sfl
 }
 ```
 
-`sfl::compact_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the key difference that `capacity()` and `size()` are always equal.
-
-`sfl::compact_vector` reallocates storage every time when element is inserted or removed in order to keep `capacity()` and `size()` equal. That means insertions and removals are very inefficient.
+`sfl::compact_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that always has `capacity()` equal to `size()`. Compact vector reallocates storage every time when element is inserted or removed in order to keep capacity and size equal. That means insertions and removals are very inefficient.
 
 This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
 
-Unlike standard vector, `sfl::compact_vector` is not specialized for `bool`.
+`sfl::compact_vector` is not specialized for `bool`.
 
 `sfl::compact_vector` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [`ReversibleContainer`](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [`ContiguousContainer`](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [`SequenceContainer`](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
 

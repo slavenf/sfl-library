@@ -67,11 +67,9 @@ namespace sfl
 }
 ```
 
-`sfl::segmented_devector` (segmented double-ended vector) is a sequence container similar to [`sfl::segmented_vector`](segmented_vector.md) that allows fast insertion and deletion at both its beginning and its end.
+`sfl::segmented_devector` is a sequence container similar to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque) that allows fast insertion and deletion at both its beginning and its end.
 
-The storage of segmented double-ended vector consists of a sequence of individually allocated arrays of size `N` which are called *segments*. Elements of segmented double-ended vector are not stored contiguously in the memory, but they are stored contiguously within a segment. Size `N` is specified at the compile time as a template parameter.
-
-This container is almost identical to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque), but with the slightly different set of public member functions.
+The storage of segmented double-ended vector consists of a sequence of individually allocated arrays of size `N` which are referred to as *segments*. Elements of segmented double-ended vector are not stored contiguously in the memory, but they are stored contiguously within a segment. Size `N` is specified at the compile time as a template parameter.
 
 Iterators to elements are random access iterators and they meet the requirements of [`LegacyRandomAccessIterator`](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
