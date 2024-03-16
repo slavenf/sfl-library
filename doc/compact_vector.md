@@ -62,7 +62,7 @@ namespace sfl
 
 This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
 
-`sfl::compact_vector` is not specialized for `bool`.
+`sfl::compact_vector` is **not** specialized for `bool`.
 
 `sfl::compact_vector` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [`ReversibleContainer`](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [`ContiguousContainer`](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [`SequenceContainer`](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
 

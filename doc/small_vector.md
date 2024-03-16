@@ -61,13 +61,11 @@ namespace sfl
 }
 ```
 
-`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model.
+`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model. Small vector internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
-`sfl::small_vector` holds statically allocated array of size `N` in the object itself. The container stores elements into this array until number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+Size `N` is specified at the compile time as a template parameter. In case when `N` is equal to zero the container does not hold any statically allocated array and uses only dynamic memory management.
 
-Size `N` is specified at the compile time as a template parameter. In case when `N` is equal to zero the container does not hold any statically allocated array and uses only dynamic memory management. In case when `N` is equal to zero `sfl::small_vector` behaves just like `std::vector`.
-
-Unlike standard vector, `sfl::small_vector` is not specialized for `bool`.
+`sfl::small_vector` is **not** specialized for `bool`.
 
 `sfl::small_vector` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [`ReversibleContainer`](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [`ContiguousContainer`](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [`SequenceContainer`](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
 

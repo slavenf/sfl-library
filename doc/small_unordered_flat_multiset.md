@@ -51,9 +51,7 @@ namespace sfl
 }
 ```
 
-`sfl::small_unordered_flat_multiset` is a associative container similar to [`std::unordered_multiset`](https://en.cppreference.com/w/cpp/container/unordered_multiset), but with the different storage model.
-
-The storage model of `sfl::small_unordered_flat_multiset` is identical to the storage model of [`sfl::small_vector`](doc/small_vector.md), that is, this container holds statically allocated array of size `N` in the object itself. Elements are stored into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+`sfl::small_unordered_flat_multiset` is a associative container similar to [`std::unordered_multiset`](https://en.cppreference.com/w/cpp/container/unordered_multiset), but with the different storage model. The storage model of small unordered flat multiset is identical to the storage model of [`sfl::small_vector`](doc/small_vector.md), that is, small unordered flat multiset also internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
 Size `N` is specified at the compile time as a template parameter. In case when `N` is equal to zero the container does not hold any statically allocated array and uses only dynamic memory management.
 

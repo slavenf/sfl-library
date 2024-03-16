@@ -51,13 +51,11 @@ namespace sfl
 }
 ```
 
-`sfl::small_unordered_flat_set` is a associative container similar to [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set), but with the different storage model.
-
-The storage model of `sfl::small_unordered_flat_set` is identical to the storage model of [`sfl::small_vector`](doc/small_vector.md), that is, this container holds statically allocated array of size `N` in the object itself. Elements are stored into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
-
-Unlike `std::unordered_set`, the elements of `sfl::small_unordered_flat_set` are stored contiguously in the memory (even when dynamic memory management is used).
+`sfl::small_unordered_flat_set` is a associative container similar to [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set), but with the different storage model. The storage model of small unordered flat set is identical to the storage model of [`sfl::small_vector`](doc/small_vector.md), that is, small unordered flat set also internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
 Size `N` is specified at the compile time as a template parameter. In case when `N` is equal to zero the container does not hold any statically allocated array and uses only dynamic memory management.
+
+Unlike `std::unordered_set`, the elements of `sfl::small_unordered_flat_set` are stored contiguously in the memory (even when dynamic memory management is used).
 
 Iterators to elements are random access iterators and they meet the requirements of [`LegacyRandomAccessIterator`](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
