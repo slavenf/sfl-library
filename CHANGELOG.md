@@ -1,4 +1,4 @@
-# Next release
+# 1.3.0 (2024-03-16)
 
 * New container `segmented_devector` (segmented double-ended vector).
 * All containers: Added member function `available`.
