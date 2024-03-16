@@ -60,11 +60,31 @@ Tested compilers:
 
 ## Method 1: Manual copy-paste
 
-Copy subdirectory `sfl` from directory `include` into your project and `#include` what you need.
+Copy subdirectory `sfl` from directory `include` into your project directory and `#include` what you need.
 
 ## Method 2: CMake integration
 
-There is `CMakeLists.txt` file in the root directory. You know what to do if you use CMake.
+This library can be integrated into CMake project using CMake module [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html).
+
+**Step 1:** Add the following lines into your `CMakeLists.txt`:
+
+```
+include(FetchContent)
+
+FetchContent_Declare(
+    sfl
+    GIT_REPOSITORY https://github.com/slavenf/sfl-library)
+
+FetchContent_MakeAvailable(sfl)
+```
+
+**Step 2:** Add this library as a dependency to your executable or library:
+
+```
+target_link_libraries(your_target_name PRIVATE sfl)
+```
+
+**Step 3:** `#include` what you need.
 
 
 
