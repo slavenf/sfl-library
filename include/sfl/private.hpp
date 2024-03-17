@@ -343,6 +343,12 @@ OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
     }
 }
 
+template <typename InputIt, typename Size, typename OutputIt>
+OutputIt copy_n(InputIt first, Size count, OutputIt d_first)
+{
+    return std::copy_n(first, count, d_first);
+}
+
 template <typename BidirIt1, typename BidirIt2,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
                                  !sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
@@ -734,6 +740,12 @@ void fill(ForwardIt first, ForwardIt last, const T& value)
             value
         );
     }
+}
+
+template <typename OutputIt, typename Size, typename T>
+OutputIt fill_n(OutputIt first, Size count, const T& value)
+{
+    return std::fill_n(first, count, value);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1698,6 +1710,188 @@ ForwardIt uninitialized_move_if_noexcept_a(Allocator& a, InputIt first, InputIt 
             );
             SFL_RETHROW;
         }
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T, typename... Args>
+void construct_at(T* p, Args&&... args)
+{
+    ::new (static_cast<void*>(p)) T(std::forward<Args>(args)...);
+}
+
+template <typename T>
+void destroy_at(T* p) noexcept
+{
+    p->~T();
+}
+
+template <typename ForwardIt>
+void destroy(ForwardIt first, ForwardIt last) noexcept
+{
+    while (first != last)
+    {
+        sfl::dtl::destroy_at(std::addressof(*first));
+        ++first;
+    }
+}
+
+template <typename ForwardIt, typename Size>
+ForwardIt destroy_n(ForwardIt first, Size n) noexcept
+{
+    while (n > 0)
+    {
+        sfl::dtl::destroy_at(std::addressof(*first));
+        ++first;
+        --n;
+    }
+    return first;
+}
+
+template <typename ForwardIt>
+void uninitialized_default_construct(ForwardIt first, ForwardIt last)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (curr != last)
+        {
+            sfl::dtl::construct_at(std::addressof(*curr));
+            ++curr;
+        }
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(first, curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename ForwardIt, typename Size>
+ForwardIt uninitialized_default_construct_n(ForwardIt first, Size n)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (n > 0)
+        {
+            sfl::dtl::construct_at(std::addressof(*curr));
+            ++curr;
+            --n;
+        }
+        return curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(first, curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename ForwardIt, typename T>
+void uninitialized_fill(ForwardIt first, ForwardIt last, const T& value)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (curr != last)
+        {
+            sfl::dtl::construct_at(std::addressof(*curr), value);
+            ++curr;
+        }
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(first, curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename ForwardIt, typename Size, typename T>
+ForwardIt uninitialized_fill_n(ForwardIt first, Size n, const T& value)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (n > 0)
+        {
+            sfl::dtl::construct_at(std::addressof(*curr), value);
+            ++curr;
+            --n;
+        }
+        return curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(first, curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename InputIt, typename ForwardIt>
+ForwardIt uninitialized_copy(InputIt first, InputIt last, ForwardIt d_first)
+{
+    ForwardIt d_curr = d_first;
+    SFL_TRY
+    {
+        while (first != last)
+        {
+            sfl::dtl::construct_at(std::addressof(*d_curr), *first);
+            ++d_curr;
+            ++first;
+        }
+        return d_curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(d_first, d_curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename InputIt, typename Size, typename ForwardIt>
+ForwardIt uninitialized_copy_n(InputIt first, Size n, ForwardIt d_first)
+{
+    ForwardIt d_curr = d_first;
+    SFL_TRY
+    {
+        while (n > 0)
+        {
+            sfl::dtl::construct_at(std::addressof(*d_curr), *first);
+            ++d_curr;
+            ++first;
+            --n;
+        }
+        return d_curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(d_first, d_curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename InputIt, typename Size, typename ForwardIt>
+ForwardIt uninitialized_move_n(InputIt first, Size n, ForwardIt d_first)
+{
+    ForwardIt d_curr = d_first;
+    SFL_TRY
+    {
+        while (n > 0)
+        {
+            sfl::dtl::construct_at(std::addressof(*d_curr), std::move(*first));
+            ++d_curr;
+            ++first;
+            --n;
+        }
+        return d_curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(d_first, d_curr);
+        SFL_RETHROW;
     }
 }
 
