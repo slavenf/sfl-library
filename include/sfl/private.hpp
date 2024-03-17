@@ -762,7 +762,7 @@ void deallocate(Allocator& a, Pointer p, Size n) noexcept
 }
 
 template <typename Allocator, typename Pointer, typename... Args>
-void construct_at(Allocator& a, Pointer p, Args&&... args)
+void construct_at_a(Allocator& a, Pointer p, Args&&... args)
 {
     std::allocator_traits<Allocator>::construct
     (
@@ -773,7 +773,7 @@ void construct_at(Allocator& a, Pointer p, Args&&... args)
 }
 
 template <typename Allocator, typename Pointer>
-void destroy_at(Allocator& a, Pointer p) noexcept
+void destroy_at_a(Allocator& a, Pointer p) noexcept
 {
     std::allocator_traits<Allocator>::destroy
     (
@@ -784,18 +784,18 @@ void destroy_at(Allocator& a, Pointer p) noexcept
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
+void destroy_a(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 {
     while (first != last)
     {
-        sfl::dtl::destroy_at(a, std::addressof(*first));
+        sfl::dtl::destroy_at_a(a, std::addressof(*first));
         ++first;
     }
 }
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
+void destroy_a(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -804,7 +804,7 @@ void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 
     if (first_seg == last_seg)
     {
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             a,
             traits::local(first),
@@ -813,7 +813,7 @@ void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
     }
     else
     {
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             a,
             traits::local(first),
@@ -824,7 +824,7 @@ void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 
         while (first_seg != last_seg)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 traits::begin(first_seg),
@@ -834,7 +834,7 @@ void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
             ++first_seg;
         }
 
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             a,
             traits::begin(last_seg),
@@ -845,11 +845,11 @@ void destroy(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 
 template <typename Allocator, typename ForwardIt, typename Size,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
+ForwardIt destroy_n_a(Allocator& a, ForwardIt first, Size n) noexcept
 {
     while (n > 0)
     {
-        sfl::dtl::destroy_at(a, std::addressof(*first));
+        sfl::dtl::destroy_at_a(a, std::addressof(*first));
         ++first;
         --n;
     }
@@ -858,7 +858,7 @@ ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
 
 template <typename Allocator, typename ForwardIt, typename Size,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
+ForwardIt destroy_n_a(Allocator& a, ForwardIt first, Size n) noexcept
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -878,7 +878,7 @@ ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
             std::distance(curr_local, traits::end(curr_seg))
         );
 
-        curr_local = sfl::dtl::destroy_n
+        curr_local = sfl::dtl::destroy_n_a
         (
             a,
             curr_local,
@@ -902,27 +902,27 @@ ForwardIt destroy_n(Allocator& a, ForwardIt first, Size n) noexcept
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt last)
+void uninitialized_default_construct_a(Allocator& a, ForwardIt first, ForwardIt last)
 {
     ForwardIt curr = first;
     SFL_TRY
     {
         while (curr != last)
         {
-            sfl::dtl::construct_at(a, std::addressof(*curr));
+            sfl::dtl::construct_at_a(a, std::addressof(*curr));
             ++curr;
         }
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy(a, first, curr);
+        sfl::dtl::destroy_a(a, first, curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt last)
+void uninitialized_default_construct_a(Allocator& a, ForwardIt first, ForwardIt last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -931,7 +931,7 @@ void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt la
 
     if (first_seg == last_seg)
     {
-        sfl::dtl::uninitialized_default_construct
+        sfl::dtl::uninitialized_default_construct_a
         (
             a,
             traits::local(first),
@@ -940,7 +940,7 @@ void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt la
     }
     else
     {
-        sfl::dtl::uninitialized_default_construct
+        sfl::dtl::uninitialized_default_construct_a
         (
             a,
             traits::local(first),
@@ -953,7 +953,7 @@ void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt la
         {
             while (first_seg != last_seg)
             {
-                sfl::dtl::uninitialized_default_construct
+                sfl::dtl::uninitialized_default_construct_a
                 (
                     a,
                     traits::begin(first_seg),
@@ -963,7 +963,7 @@ void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt la
                 ++first_seg;
             }
 
-            sfl::dtl::uninitialized_default_construct
+            sfl::dtl::uninitialized_default_construct_a
             (
                 a,
                 traits::begin(last_seg),
@@ -972,7 +972,7 @@ void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt la
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 first,
@@ -986,14 +986,14 @@ void uninitialized_default_construct(Allocator& a, ForwardIt first, ForwardIt la
 
 template <typename Allocator, typename ForwardIt, typename Size,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size n)
+ForwardIt uninitialized_default_construct_n_a(Allocator& a, ForwardIt first, Size n)
 {
     ForwardIt curr = first;
     SFL_TRY
     {
         while (n > 0)
         {
-            sfl::dtl::construct_at(a, std::addressof(*curr));
+            sfl::dtl::construct_at_a(a, std::addressof(*curr));
             ++curr;
             --n;
         }
@@ -1001,14 +1001,14 @@ ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size 
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy(a, first, curr);
+        sfl::dtl::destroy_a(a, first, curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename ForwardIt, typename Size,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size n)
+ForwardIt uninitialized_default_construct_n_a(Allocator& a, ForwardIt first, Size n)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -1030,7 +1030,7 @@ ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size 
                 std::distance(curr_local, traits::end(curr_seg))
             );
 
-            curr_local = sfl::dtl::uninitialized_default_construct_n
+            curr_local = sfl::dtl::uninitialized_default_construct_n_a
             (
                 a,
                 curr_local,
@@ -1053,34 +1053,34 @@ ForwardIt uninitialized_default_construct_n(Allocator& a, ForwardIt first, Size 
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy_n(a, first, n - remainining);
+        sfl::dtl::destroy_n_a(a, first, n - remainining);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename ForwardIt, typename T,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& value)
+void uninitialized_fill_a(Allocator& a, ForwardIt first, ForwardIt last, const T& value)
 {
     ForwardIt curr = first;
     SFL_TRY
     {
         while (curr != last)
         {
-            sfl::dtl::construct_at(a, std::addressof(*curr), value);
+            sfl::dtl::construct_at_a(a, std::addressof(*curr), value);
             ++curr;
         }
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy(a, first, curr);
+        sfl::dtl::destroy_a(a, first, curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename ForwardIt, typename T,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& value)
+void uninitialized_fill_a(Allocator& a, ForwardIt first, ForwardIt last, const T& value)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -1089,7 +1089,7 @@ void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& 
 
     if (first_seg == last_seg)
     {
-        sfl::dtl::uninitialized_fill
+        sfl::dtl::uninitialized_fill_a
         (
             a,
             traits::local(first),
@@ -1099,7 +1099,7 @@ void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& 
     }
     else
     {
-        sfl::dtl::uninitialized_fill
+        sfl::dtl::uninitialized_fill_a
         (
             a,
             traits::local(first),
@@ -1113,7 +1113,7 @@ void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& 
         {
             while (first_seg != last_seg)
             {
-                sfl::dtl::uninitialized_fill
+                sfl::dtl::uninitialized_fill_a
                 (
                     a,
                     traits::begin(first_seg),
@@ -1124,7 +1124,7 @@ void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& 
                 ++first_seg;
             }
 
-            sfl::dtl::uninitialized_fill
+            sfl::dtl::uninitialized_fill_a
             (
                 a,
                 traits::begin(last_seg),
@@ -1134,7 +1134,7 @@ void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& 
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 first,
@@ -1148,14 +1148,14 @@ void uninitialized_fill(Allocator& a, ForwardIt first, ForwardIt last, const T& 
 
 template <typename Allocator, typename ForwardIt, typename Size, typename T,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& value)
+ForwardIt uninitialized_fill_n_a(Allocator& a, ForwardIt first, Size n, const T& value)
 {
     ForwardIt curr = first;
     SFL_TRY
     {
         while (n > 0)
         {
-            sfl::dtl::construct_at(a, std::addressof(*curr), value);
+            sfl::dtl::construct_at_a(a, std::addressof(*curr), value);
             ++curr;
             --n;
         }
@@ -1163,14 +1163,14 @@ ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& v
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy(a, first, curr);
+        sfl::dtl::destroy_a(a, first, curr);
         SFL_RETHROW;
     }
 }
 
 template <typename Allocator, typename ForwardIt, typename Size, typename T,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& value)
+ForwardIt uninitialized_fill_n_a(Allocator& a, ForwardIt first, Size n, const T& value)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -1192,7 +1192,7 @@ ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& v
                 std::distance(curr_local, traits::end(curr_seg))
             );
 
-            curr_local = sfl::dtl::uninitialized_fill_n
+            curr_local = sfl::dtl::uninitialized_fill_n_a
             (
                 a,
                 curr_local,
@@ -1216,7 +1216,7 @@ ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& v
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy_n(a, first, n - remainining);
+        sfl::dtl::destroy_n_a(a, first, n - remainining);
         SFL_RETHROW;
     }
 }
@@ -1224,14 +1224,14 @@ ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& v
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                  !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_copy_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
     SFL_TRY
     {
         while (first != last)
         {
-            sfl::dtl::construct_at(a, std::addressof(*d_curr), *first);
+            sfl::dtl::construct_at_a(a, std::addressof(*d_curr), *first);
             ++d_curr;
             ++first;
         }
@@ -1239,7 +1239,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy(a, d_first, d_curr);
+        sfl::dtl::destroy_a(a, d_first, d_curr);
         SFL_RETHROW;
     }
 }
@@ -1247,7 +1247,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                   sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_copy_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -1277,7 +1277,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
 
                 const auto next = curr + count;
 
-                d_local = sfl::dtl::uninitialized_copy
+                d_local = sfl::dtl::uninitialized_copy_a
                 (
                     a,
                     curr,
@@ -1299,7 +1299,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 d_first,
@@ -1312,7 +1312,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
-ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_copy_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
 
@@ -1321,7 +1321,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
 
     if (first_seg == last_seg)
     {
-        return sfl::dtl::uninitialized_copy
+        return sfl::dtl::uninitialized_copy_a
         (
             a,
             traits::local(first),
@@ -1333,7 +1333,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
     {
         auto d_curr = d_first;
 
-        d_curr = sfl::dtl::uninitialized_copy
+        d_curr = sfl::dtl::uninitialized_copy_a
         (
             a,
             traits::local(first),
@@ -1347,7 +1347,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
         {
             while (first_seg != last_seg)
             {
-                d_curr = sfl::dtl::uninitialized_copy
+                d_curr = sfl::dtl::uninitialized_copy_a
                 (
                     a,
                     traits::begin(first_seg),
@@ -1358,7 +1358,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
                 ++first_seg;
             }
 
-            d_curr = sfl::dtl::uninitialized_copy
+            d_curr = sfl::dtl::uninitialized_copy_a
             (
                 a,
                 traits::begin(last_seg),
@@ -1370,7 +1370,7 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 d_first,
@@ -1384,14 +1384,14 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                  !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_move_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
     SFL_TRY
     {
         while (first != last)
         {
-            sfl::dtl::construct_at(a, std::addressof(*d_curr), std::move(*first));
+            sfl::dtl::construct_at_a(a, std::addressof(*d_curr), std::move(*first));
             ++d_curr;
             ++first;
         }
@@ -1399,7 +1399,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy(a, d_first, d_curr);
+        sfl::dtl::destroy_a(a, d_first, d_curr);
         SFL_RETHROW;
     }
 }
@@ -1407,7 +1407,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                   sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_move_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -1437,7 +1437,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
 
                 const auto next = curr + count;
 
-                d_local = sfl::dtl::uninitialized_move
+                d_local = sfl::dtl::uninitialized_move_a
                 (
                     a,
                     curr,
@@ -1459,7 +1459,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 d_first,
@@ -1472,7 +1472,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
-ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_move_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
 
@@ -1481,7 +1481,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
 
     if (first_seg == last_seg)
     {
-        return sfl::dtl::uninitialized_move
+        return sfl::dtl::uninitialized_move_a
         (
             a,
             traits::local(first),
@@ -1493,7 +1493,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
     {
         auto d_curr = d_first;
 
-        d_curr = sfl::dtl::uninitialized_move
+        d_curr = sfl::dtl::uninitialized_move_a
         (
             a,
             traits::local(first),
@@ -1507,7 +1507,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
         {
             while (first_seg != last_seg)
             {
-                d_curr = sfl::dtl::uninitialized_move
+                d_curr = sfl::dtl::uninitialized_move_a
                 (
                     a,
                     traits::begin(first_seg),
@@ -1518,7 +1518,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
                 ++first_seg;
             }
 
-            d_curr = sfl::dtl::uninitialized_move
+            d_curr = sfl::dtl::uninitialized_move_a
             (
                 a,
                 traits::begin(last_seg),
@@ -1530,7 +1530,7 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 d_first,
@@ -1544,14 +1544,14 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                  !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_move_if_noexcept_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
     SFL_TRY
     {
         while (first != last)
         {
-            sfl::dtl::construct_at(a, std::addressof(*d_curr), std::move_if_noexcept(*first));
+            sfl::dtl::construct_at_a(a, std::addressof(*d_curr), std::move_if_noexcept(*first));
             ++d_curr;
             ++first;
         }
@@ -1559,7 +1559,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
     }
     SFL_CATCH (...)
     {
-        sfl::dtl::destroy(a, d_first, d_curr);
+        sfl::dtl::destroy_a(a, d_first, d_curr);
         SFL_RETHROW;
     }
 }
@@ -1567,7 +1567,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                   sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_move_if_noexcept_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
 
@@ -1597,7 +1597,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
 
                 const auto next = curr + count;
 
-                d_local = sfl::dtl::uninitialized_move_if_noexcept
+                d_local = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     a,
                     curr,
@@ -1619,7 +1619,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 d_first,
@@ -1632,7 +1632,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
-ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_move_if_noexcept_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<InputIt>;
 
@@ -1641,7 +1641,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
 
     if (first_seg == last_seg)
     {
-        return sfl::dtl::uninitialized_move_if_noexcept
+        return sfl::dtl::uninitialized_move_if_noexcept_a
         (
             a,
             traits::local(first),
@@ -1653,7 +1653,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
     {
         auto d_curr = d_first;
 
-        d_curr = sfl::dtl::uninitialized_move_if_noexcept
+        d_curr = sfl::dtl::uninitialized_move_if_noexcept_a
         (
             a,
             traits::local(first),
@@ -1667,7 +1667,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
         {
             while (first_seg != last_seg)
             {
-                d_curr = sfl::dtl::uninitialized_move_if_noexcept
+                d_curr = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     a,
                     traits::begin(first_seg),
@@ -1678,7 +1678,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
                 ++first_seg;
             }
 
-            d_curr = sfl::dtl::uninitialized_move_if_noexcept
+            d_curr = sfl::dtl::uninitialized_move_if_noexcept_a
             (
                 a,
                 traits::begin(last_seg),
@@ -1690,7 +1690,7 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 a,
                 d_first,

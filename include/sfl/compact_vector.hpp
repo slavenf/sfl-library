@@ -219,7 +219,7 @@ public:
 
     ~compact_vector()
     {
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -504,7 +504,7 @@ public:
 
     void clear() noexcept
     {
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -546,7 +546,7 @@ public:
             // contain reference to element in this container and after
             // that we will move elements from old to new storage.
 
-            sfl::dtl::construct_at
+            sfl::dtl::construct_at_a
             (
                 data_.ref_to_alloc(),
                 new_first + offset,
@@ -555,7 +555,7 @@ public:
 
             new_last = nullptr;
 
-            new_last = sfl::dtl::uninitialized_move_if_noexcept
+            new_last = sfl::dtl::uninitialized_move_if_noexcept_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -565,7 +565,7 @@ public:
 
             ++new_last;
 
-            new_last = sfl::dtl::uninitialized_move_if_noexcept
+            new_last = sfl::dtl::uninitialized_move_if_noexcept_a
             (
                 data_.ref_to_alloc(),
                 data_.first_ + offset,
@@ -577,7 +577,7 @@ public:
         {
             if (new_last == nullptr)
             {
-                sfl::dtl::destroy_at
+                sfl::dtl::destroy_at_a
                 (
                     data_.ref_to_alloc(),
                     new_first + offset
@@ -585,7 +585,7 @@ public:
             }
             else
             {
-                sfl::dtl::destroy
+                sfl::dtl::destroy_a
                 (
                     data_.ref_to_alloc(),
                     new_first,
@@ -603,7 +603,7 @@ public:
             SFL_RETHROW;
         }
 
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -702,7 +702,7 @@ public:
 
         SFL_TRY
         {
-            new_last = sfl::dtl::uninitialized_move_if_noexcept
+            new_last = sfl::dtl::uninitialized_move_if_noexcept_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -710,7 +710,7 @@ public:
                 new_first
             );
 
-            new_last = sfl::dtl::uninitialized_move_if_noexcept
+            new_last = sfl::dtl::uninitialized_move_if_noexcept_a
             (
                 data_.ref_to_alloc(),
                 data_.first_ + offset2,
@@ -720,7 +720,7 @@ public:
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_first,
@@ -737,7 +737,7 @@ public:
             SFL_RETHROW;
         }
 
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -776,7 +776,7 @@ public:
         {
             if (n > size())
             {
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -784,7 +784,7 @@ public:
                     new_first
                 );
 
-                new_last = sfl::dtl::uninitialized_default_construct_n
+                new_last = sfl::dtl::uninitialized_default_construct_n_a
                 (
                     data_.ref_to_alloc(),
                     new_last,
@@ -793,7 +793,7 @@ public:
             }
             else if (n < size())
             {
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -804,7 +804,7 @@ public:
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_first,
@@ -821,7 +821,7 @@ public:
             SFL_RETHROW;
         }
 
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -858,7 +858,7 @@ public:
         {
             if (n > size())
             {
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -866,7 +866,7 @@ public:
                     new_first
                 );
 
-                new_last = sfl::dtl::uninitialized_fill_n
+                new_last = sfl::dtl::uninitialized_fill_n_a
                 (
                     data_.ref_to_alloc(),
                     new_last,
@@ -876,7 +876,7 @@ public:
             }
             else if (n < size())
             {
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -887,7 +887,7 @@ public:
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_first,
@@ -904,7 +904,7 @@ public:
             SFL_RETHROW;
         }
 
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -939,7 +939,7 @@ public:
 
         // If this and other allocator compares equal then one allocator
         // can deallocate memory allocated by another allocator.
-        // One allocator can safely destroy elements constructed by other
+        // One allocator can safely destroy_a elements constructed by other
         // allocator regardless the two allocators compare equal or not.
 
         if (allocator_traits::propagate_on_container_swap::value)
@@ -968,7 +968,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_default_construct_n
+            data_.last_ = sfl::dtl::uninitialized_default_construct_n_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1003,7 +1003,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_fill_n
+            data_.last_ = sfl::dtl::uninitialized_fill_n_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1038,7 +1038,7 @@ private:
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1075,7 +1075,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_copy
+            data_.last_ = sfl::dtl::uninitialized_copy_a
             (
                 data_.ref_to_alloc(),
                 first,
@@ -1113,7 +1113,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_copy
+            data_.last_ = sfl::dtl::uninitialized_copy_a
             (
                 data_.ref_to_alloc(),
                 other.data_.first_,
@@ -1161,7 +1161,7 @@ private:
 
             SFL_TRY
             {
-                data_.last_ = sfl::dtl::uninitialized_move
+                data_.last_ = sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     other.data_.first_,
@@ -1211,7 +1211,7 @@ private:
 
             SFL_TRY
             {
-                data_.last_ = sfl::dtl::uninitialized_fill_n
+                data_.last_ = sfl::dtl::uninitialized_fill_n_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -1272,7 +1272,7 @@ private:
 
             SFL_TRY
             {
-                data_.last_ = sfl::dtl::uninitialized_copy
+                data_.last_ = sfl::dtl::uninitialized_copy_a
                 (
                     data_.ref_to_alloc(),
                     first,
@@ -1367,7 +1367,7 @@ private:
                 // container. First we will create `n` copies of `value`
                 // and after that we can move elements.
 
-                sfl::dtl::uninitialized_fill_n
+                sfl::dtl::uninitialized_fill_n_a
                 (
                     data_.ref_to_alloc(),
                     new_first + offset,
@@ -1377,7 +1377,7 @@ private:
 
                 new_last = nullptr;
 
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -1387,7 +1387,7 @@ private:
 
                 new_last += n;
 
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_ + offset,
@@ -1399,7 +1399,7 @@ private:
             {
                 if (new_last == nullptr)
                 {
-                    sfl::dtl::destroy_n
+                    sfl::dtl::destroy_n_a
                     (
                         data_.ref_to_alloc(),
                         new_first + offset,
@@ -1408,7 +1408,7 @@ private:
                 }
                 else
                 {
-                    sfl::dtl::destroy
+                    sfl::dtl::destroy_a
                     (
                         data_.ref_to_alloc(),
                         new_first,
@@ -1426,7 +1426,7 @@ private:
                 SFL_RETHROW;
             }
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1486,7 +1486,7 @@ private:
 
             SFL_TRY
             {
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
@@ -1494,7 +1494,7 @@ private:
                     new_first
                 );
 
-                new_last = sfl::dtl::uninitialized_copy
+                new_last = sfl::dtl::uninitialized_copy_a
                 (
                     data_.ref_to_alloc(),
                     first,
@@ -1502,7 +1502,7 @@ private:
                     new_last
                 );
 
-                new_last = sfl::dtl::uninitialized_move_if_noexcept
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_ + offset,
@@ -1512,7 +1512,7 @@ private:
             }
             SFL_CATCH (...)
             {
-                sfl::dtl::destroy
+                sfl::dtl::destroy_a
                 (
                     data_.ref_to_alloc(),
                     new_first,
@@ -1529,7 +1529,7 @@ private:
                 SFL_RETHROW;
             }
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,

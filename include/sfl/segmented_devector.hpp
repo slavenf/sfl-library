@@ -597,7 +597,7 @@ public:
 
     ~segmented_devector()
     {
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -896,7 +896,7 @@ public:
 
     void clear() noexcept
     {
-        sfl::dtl::destroy
+        sfl::dtl::destroy_a
         (
             data_.ref_to_alloc(),
             data_.first_,
@@ -928,7 +928,7 @@ public:
             {
                 const iterator p2 = --iterator(p1);
 
-                sfl::dtl::construct_at
+                sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
                     std::addressof(*p2),
@@ -954,7 +954,7 @@ public:
 
                 value_type tmp(std::forward<Args>(args)...);
 
-                sfl::dtl::construct_at
+                sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
                     std::addressof(*p4),
@@ -985,7 +985,7 @@ public:
 
             if (dist_to_end == 0)
             {
-                sfl::dtl::construct_at
+                sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
                     std::addressof(*data_.last_),
@@ -1009,7 +1009,7 @@ public:
 
                 value_type tmp(std::forward<Args>(args)...);
 
-                sfl::dtl::construct_at
+                sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
                     std::addressof(*old_last),
@@ -1074,7 +1074,7 @@ public:
 
         const iterator new_first = --iterator(data_.first_);
 
-        sfl::dtl::construct_at
+        sfl::dtl::construct_at_a
         (
             data_.ref_to_alloc(),
             std::addressof(*new_first),
@@ -1096,7 +1096,7 @@ public:
 
         const iterator old_last = data_.last_;
 
-        sfl::dtl::construct_at
+        sfl::dtl::construct_at_a
         (
             data_.ref_to_alloc(),
             std::addressof(*data_.last_),
@@ -1132,7 +1132,7 @@ public:
     {
         SFL_ASSERT(!empty());
 
-        sfl::dtl::destroy_at(data_.ref_to_alloc(), std::addressof(*data_.first_));
+        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*data_.first_));
 
         ++data_.first_;
     }
@@ -1143,7 +1143,7 @@ public:
 
         --data_.last_;
 
-        sfl::dtl::destroy_at(data_.ref_to_alloc(), std::addressof(*data_.last_));
+        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*data_.last_));
     }
 
     iterator erase(const_iterator pos)
@@ -1162,7 +1162,7 @@ public:
 
             data_.first_ = sfl::dtl::move_backward(data_.first_, p1, p2);
 
-            sfl::dtl::destroy_at(data_.ref_to_alloc(), std::addressof(*old_first));
+            sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*old_first));
 
             return p2;
         }
@@ -1170,7 +1170,7 @@ public:
         {
             data_.last_ = sfl::dtl::move(p2, data_.last_, p1);
 
-            sfl::dtl::destroy_at(data_.ref_to_alloc(), std::addressof(*data_.last_));
+            sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*data_.last_));
 
             return p1;
         }
@@ -1195,7 +1195,7 @@ public:
 
             const iterator new_first = sfl::dtl::move_backward(data_.first_, p1, p2);
 
-            sfl::dtl::destroy(data_.ref_to_alloc(), data_.first_, new_first);
+            sfl::dtl::destroy_a(data_.ref_to_alloc(), data_.first_, new_first);
 
             data_.first_ = new_first;
 
@@ -1208,7 +1208,7 @@ public:
 
             const iterator new_last = sfl::dtl::move(p2, data_.last_, p1);
 
-            sfl::dtl::destroy(data_.ref_to_alloc(), new_last, data_.last_);
+            sfl::dtl::destroy_a(data_.ref_to_alloc(), new_last, data_.last_);
 
             data_.last_ = new_last;
 
@@ -1224,7 +1224,7 @@ public:
         {
             const iterator new_last = nth(n);
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_last,
@@ -1239,7 +1239,7 @@ public:
 
             if (n <= size + available_back)
             {
-                data_.last_ = sfl::dtl::uninitialized_default_construct_n
+                data_.last_ = sfl::dtl::uninitialized_default_construct_n_a
                 (
                     data_.ref_to_alloc(),
                     data_.last_,
@@ -1252,7 +1252,7 @@ public:
 
                 if (n <= available_front + size + available_back)
                 {
-                    sfl::dtl::uninitialized_default_construct
+                    sfl::dtl::uninitialized_default_construct_a
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
@@ -1263,7 +1263,7 @@ public:
 
                     const iterator new_first = data_.first_ - (n - (size + available_back));
 
-                    sfl::dtl::uninitialized_default_construct
+                    sfl::dtl::uninitialized_default_construct_a
                     (
                         data_.ref_to_alloc(),
                         new_first,
@@ -1276,14 +1276,14 @@ public:
                 {
                     grow_storage_back(n - (available_front + size + available_back));
 
-                    data_.last_ = sfl::dtl::uninitialized_default_construct_n
+                    data_.last_ = sfl::dtl::uninitialized_default_construct_n_a
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
                         n - (size + available_front)
                     );
 
-                    sfl::dtl::uninitialized_default_construct
+                    sfl::dtl::uninitialized_default_construct_a
                     (
                         data_.ref_to_alloc(),
                         data_.bos_,
@@ -1304,7 +1304,7 @@ public:
         {
             const iterator new_last = nth(n);
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_last,
@@ -1319,7 +1319,7 @@ public:
 
             if (n <= size + available_back)
             {
-                data_.last_ = sfl::dtl::uninitialized_fill_n
+                data_.last_ = sfl::dtl::uninitialized_fill_n_a
                 (
                     data_.ref_to_alloc(),
                     data_.last_,
@@ -1333,7 +1333,7 @@ public:
 
                 if (n <= available_front + size + available_back)
                 {
-                    sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill_a
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
@@ -1345,7 +1345,7 @@ public:
 
                     const iterator new_first = data_.first_ - (n - (size + available_back));
 
-                    sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill_a
                     (
                         data_.ref_to_alloc(),
                         new_first,
@@ -1359,7 +1359,7 @@ public:
                 {
                     grow_storage_back(n - (available_front + size + available_back));
 
-                    data_.last_ = sfl::dtl::uninitialized_fill_n
+                    data_.last_ = sfl::dtl::uninitialized_fill_n_a
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
@@ -1367,7 +1367,7 @@ public:
                         value
                     );
 
-                    sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill_a
                     (
                         data_.ref_to_alloc(),
                         data_.bos_,
@@ -1389,7 +1389,7 @@ public:
         {
             const iterator new_first = nth(size - n);
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1409,7 +1409,7 @@ public:
 
             const iterator new_first = data_.first_ - (n - size);
 
-            sfl::dtl::uninitialized_default_construct
+            sfl::dtl::uninitialized_default_construct_a
             (
                 data_.ref_to_alloc(),
                 new_first,
@@ -1428,7 +1428,7 @@ public:
         {
             const iterator new_first = nth(size - n);
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1448,7 +1448,7 @@ public:
 
             const iterator new_first = data_.first_ - (n - size);
 
-            sfl::dtl::uninitialized_fill
+            sfl::dtl::uninitialized_fill_a
             (
                 data_.ref_to_alloc(),
                 new_first,
@@ -1468,7 +1468,7 @@ public:
         {
             const iterator new_last = nth(n);
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_last,
@@ -1486,7 +1486,7 @@ public:
                 grow_storage_back(n - (size + available_back));
             }
 
-            data_.last_ = sfl::dtl::uninitialized_default_construct_n
+            data_.last_ = sfl::dtl::uninitialized_default_construct_n_a
             (
                 data_.ref_to_alloc(),
                 data_.last_,
@@ -1503,7 +1503,7 @@ public:
         {
             const iterator new_last = nth(n);
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_last,
@@ -1521,7 +1521,7 @@ public:
                 grow_storage_back(n - (size + available_back));
             }
 
-            data_.last_ = sfl::dtl::uninitialized_fill_n
+            data_.last_ = sfl::dtl::uninitialized_fill_n_a
             (
                 data_.ref_to_alloc(),
                 data_.last_,
@@ -1567,7 +1567,7 @@ private:
     }
 
     // Deallocates table.
-    // It does not destroy any element (segment).
+    // It does not destroy_a any element (segment).
     // It only deallocates memory used by table.
     //
     void deallocate_table(segment_pointer p, size_type n) noexcept
@@ -1586,7 +1586,7 @@ private:
     }
 
     // Deallocates memory used by single segment.
-    // It does not destroy any element.
+    // It does not destroy_a any element.
     // It only deallocates memory used by segment.
     //
     void deallocate_segment(pointer p) noexcept
@@ -1618,7 +1618,7 @@ private:
     }
 
     // Deallocates memory used by multiple segments.
-    // It does not destroy any element.
+    // It does not destroy_a any element.
     // It only deallocates memory used by segments.
     //
     void deallocate_segments(segment_pointer first, segment_pointer last) noexcept
@@ -1680,7 +1680,7 @@ private:
     }
 
     // Deallocates storage.
-    // It does not destroy any element.
+    // It does not destroy_a any element.
     // It only deallocates memory.
     //
     void deallocate_storage() noexcept
@@ -1876,7 +1876,7 @@ private:
     }
 
     // Removes unused capacity.
-    // It does not destroy any element.
+    // It does not destroy_a any element.
     // It only deallocates memory.
     //
     void shrink_storage()
@@ -1966,7 +1966,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_default_construct_n
+            data_.last_ = sfl::dtl::uninitialized_default_construct_n_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -1986,7 +1986,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_fill_n
+            data_.last_ = sfl::dtl::uninitialized_fill_n_a
             (
                 data_.ref_to_alloc(),
                 data_.first_,
@@ -2031,7 +2031,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_copy
+            data_.last_ = sfl::dtl::uninitialized_copy_a
             (
                 data_.ref_to_alloc(),
                 first,
@@ -2052,7 +2052,7 @@ private:
 
         SFL_TRY
         {
-            data_.last_ = sfl::dtl::uninitialized_copy
+            data_.last_ = sfl::dtl::uninitialized_copy_a
             (
                 data_.ref_to_alloc(),
                 other.data_.first_,
@@ -2081,7 +2081,7 @@ private:
 
             SFL_TRY
             {
-                data_.last_ = sfl::dtl::uninitialized_move
+                data_.last_ = sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     other.data_.first_,
@@ -2112,7 +2112,7 @@ private:
                 value
             );
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_last,
@@ -2134,7 +2134,7 @@ private:
                     value
                 );
 
-                data_.last_ = sfl::dtl::uninitialized_fill_n
+                data_.last_ = sfl::dtl::uninitialized_fill_n_a
                 (
                     data_.ref_to_alloc(),
                     data_.last_,
@@ -2155,7 +2155,7 @@ private:
                         value
                     );
 
-                    sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill_a
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
@@ -2167,7 +2167,7 @@ private:
 
                     const iterator new_first = data_.first_ - (n - (size + available_back));
 
-                    sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill_a
                     (
                         data_.ref_to_alloc(),
                         new_first,
@@ -2188,7 +2188,7 @@ private:
                         value
                     );
 
-                    data_.last_ = sfl::dtl::uninitialized_fill_n
+                    data_.last_ = sfl::dtl::uninitialized_fill_n_a
                     (
                         data_.ref_to_alloc(),
                         data_.last_,
@@ -2196,7 +2196,7 @@ private:
                         value
                     );
 
-                    sfl::dtl::uninitialized_fill
+                    sfl::dtl::uninitialized_fill_a
                     (
                         data_.ref_to_alloc(),
                         data_.bos_,
@@ -2234,7 +2234,7 @@ private:
         }
         else if (curr < data_.last_)
         {
-            sfl::dtl::destroy(data_.ref_to_alloc(), curr, data_.last_);
+            sfl::dtl::destroy_a(data_.ref_to_alloc(), curr, data_.last_);
             data_.last_ = curr;
         }
     }
@@ -2256,7 +2256,7 @@ private:
                 data_.first_
             );
 
-            sfl::dtl::destroy
+            sfl::dtl::destroy_a
             (
                 data_.ref_to_alloc(),
                 new_last,
@@ -2280,7 +2280,7 @@ private:
                     data_.first_
                 );
 
-                data_.last_ = sfl::dtl::uninitialized_copy
+                data_.last_ = sfl::dtl::uninitialized_copy_a
                 (
                     data_.ref_to_alloc(),
                     mid,
@@ -2304,7 +2304,7 @@ private:
                         data_.first_
                     );
 
-                    data_.last_ = sfl::dtl::uninitialized_copy
+                    data_.last_ = sfl::dtl::uninitialized_copy_a
                     (
                         data_.ref_to_alloc(),
                         mid2,
@@ -2314,7 +2314,7 @@ private:
 
                     const iterator new_first = data_.first_ - (n - (size + available_back));
 
-                    sfl::dtl::uninitialized_copy
+                    sfl::dtl::uninitialized_copy_a
                     (
                         data_.ref_to_alloc(),
                         first,
@@ -2338,7 +2338,7 @@ private:
                         data_.first_
                     );
 
-                    data_.last_ = sfl::dtl::uninitialized_copy
+                    data_.last_ = sfl::dtl::uninitialized_copy_a
                     (
                         data_.ref_to_alloc(),
                         mid2,
@@ -2346,7 +2346,7 @@ private:
                         data_.last_
                     );
 
-                    sfl::dtl::uninitialized_copy
+                    sfl::dtl::uninitialized_copy_a
                     (
                         data_.ref_to_alloc(),
                         first,
@@ -2372,7 +2372,7 @@ private:
                     // There are no effects if allocation fails.
                     segmented_devector temp(other.data_.ref_to_alloc());
 
-                    // Clear and destroy current storage (noexcept).
+                    // Clear and destroy_a current storage (noexcept).
                     clear();
                     deallocate_storage();
 
@@ -2543,7 +2543,7 @@ private:
 
                 const iterator old_first = data_.first_;
 
-                sfl::dtl::uninitialized_move
+                sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     old_first,
@@ -2577,7 +2577,7 @@ private:
 
                 const iterator old_first = data_.first_;
 
-                sfl::dtl::uninitialized_fill
+                sfl::dtl::uninitialized_fill_a
                 (
                     data_.ref_to_alloc(),
                     p2,
@@ -2587,7 +2587,7 @@ private:
 
                 data_.first_ = p2;
 
-                sfl::dtl::uninitialized_move
+                sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     old_first,
@@ -2624,7 +2624,7 @@ private:
 
                 const iterator old_last = data_.last_;
 
-                data_.last_ = sfl::dtl::uninitialized_move
+                data_.last_ = sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     p3,
@@ -2655,7 +2655,7 @@ private:
 
                 const iterator old_last = data_.last_;
 
-                sfl::dtl::uninitialized_fill
+                sfl::dtl::uninitialized_fill_a
                 (
                     data_.ref_to_alloc(),
                     old_last,
@@ -2665,7 +2665,7 @@ private:
 
                 data_.last_ = p2;
 
-                data_.last_ = sfl::dtl::uninitialized_move
+                data_.last_ = sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     p1,
@@ -2733,7 +2733,7 @@ private:
 
                 const iterator old_first = data_.first_;
 
-                sfl::dtl::uninitialized_move
+                sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     old_first,
@@ -2769,7 +2769,7 @@ private:
 
                 const ForwardIt mid = std::next(first, n - dist_to_begin);
 
-                sfl::dtl::uninitialized_copy
+                sfl::dtl::uninitialized_copy_a
                 (
                     data_.ref_to_alloc(),
                     first,
@@ -2779,7 +2779,7 @@ private:
 
                 data_.first_ = p2;
 
-                sfl::dtl::uninitialized_move
+                sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     old_first,
@@ -2815,7 +2815,7 @@ private:
 
                 const iterator old_last = data_.last_;
 
-                data_.last_ = sfl::dtl::uninitialized_move
+                data_.last_ = sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     p2,
@@ -2847,7 +2847,7 @@ private:
 
                 const ForwardIt mid = std::next(first, dist_to_end);
 
-                data_.last_ = sfl::dtl::uninitialized_copy
+                data_.last_ = sfl::dtl::uninitialized_copy_a
                 (
                     data_.ref_to_alloc(),
                     mid,
@@ -2855,7 +2855,7 @@ private:
                     old_last
                 );
 
-                data_.last_ = sfl::dtl::uninitialized_move
+                data_.last_ = sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
                     p1,
