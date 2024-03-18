@@ -4679,6 +4679,13 @@ PRINT("Test resize_back(size_type)");
         vec.pop_back();
         vec.pop_back();
 
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
         const size_type n = vec.size() - 1;
 
         CHECK(CONDITION);
@@ -4709,6 +4716,13 @@ PRINT("Test resize_back(size_type)");
 
         vec.pop_back();
         vec.pop_back();
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
 
         const size_type n = vec.size();
 
@@ -4741,6 +4755,13 @@ PRINT("Test resize_back(size_type)");
 
         vec.pop_back();
         vec.pop_back();
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
 
         const size_type size = vec.size();
 
@@ -4782,6 +4803,13 @@ PRINT("Test resize_back(size_type)");
         vec.pop_back();
         vec.pop_back();
 
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
         const size_type size = vec.size();
 
         const size_type available_back = vec.available_back();
@@ -4821,6 +4849,13 @@ PRINT("Test resize_back(size_type)");
 
         vec.pop_back();
         vec.pop_back();
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
 
         const size_type size = vec.size();
 
@@ -4865,6 +4900,13 @@ PRINT("Test resize_back(size_type, const T&)");
         vec.pop_back();
         vec.pop_back();
 
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
         const size_type n = vec.size() - 1;
 
         CHECK(CONDITION);
@@ -4897,6 +4939,13 @@ PRINT("Test resize_back(size_type, const T&)");
 
         vec.pop_back();
         vec.pop_back();
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
 
         const size_type n = vec.size();
 
@@ -4931,6 +4980,13 @@ PRINT("Test resize_back(size_type, const T&)");
 
         vec.pop_back();
         vec.pop_back();
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
 
         const size_type size = vec.size();
 
@@ -4974,6 +5030,13 @@ PRINT("Test resize_back(size_type, const T&)");
         vec.pop_back();
         vec.pop_back();
 
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
         const size_type size = vec.size();
 
         const size_type available_back = vec.available_back();
@@ -5015,6 +5078,13 @@ PRINT("Test resize_back(size_type, const T&)");
 
         vec.pop_back();
         vec.pop_back();
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
 
         const size_type size = vec.size();
 
