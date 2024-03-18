@@ -2360,6 +2360,126 @@ int main()
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test at(size_type)");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec.at(0) == 10);
+        CHECK(vec.at(1) == 20);
+        CHECK(vec.at(2) == 30);
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+
+        vec.at(0) = 40;
+        vec.at(1) = 50;
+        vec.at(2) = 60;
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 40);
+        CHECK(*vec.nth(1) == 50);
+        CHECK(*vec.nth(2) == 60);
+
+        #if !defined(SFL_NO_EXCEPTIONS)
+        bool caught_exception = false;
+
+        try
+        {
+            vec.at(3) = 1;
+        }
+        catch (...)
+        {
+            caught_exception = true;
+        }
+
+        CHECK(caught_exception == true);
+        #endif
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 40);
+        CHECK(*vec.nth(1) == 50);
+        CHECK(*vec.nth(2) == 60);
+    }
+
+    PRINT("Test operator[](size_type)");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec[0] == 10);
+        CHECK(vec[1] == 20);
+        CHECK(vec[2] == 30);
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+
+        vec[0] = 40;
+        vec[1] = 50;
+        vec[2] = 60;
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 40);
+        CHECK(*vec.nth(1) == 50);
+        CHECK(*vec.nth(2) == 60);
+    }
+
+    PRINT("Test front() and back()");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec.front() == 10);
+        CHECK(vec.back()  == 30);
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+
+        vec.front() = 40;
+        vec.back()  = 60;
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 40);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 60);
+    }
+
+    PRINT("Test data()");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+
+        auto data = vec.data();
+        CHECK(*data == 10); ++data;
+        CHECK(*data == 20); ++data;
+        CHECK(*data == 30); ++data;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
