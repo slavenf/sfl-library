@@ -592,6 +592,34 @@ int main()
         CHECK(vec.size() == 0);
     }
 
+    PRINT("Test insert(const_iterator, const T&)");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        xint value_10(10);
+
+        auto res = vec.insert(vec.nth(0), value_10);
+
+        CHECK(res == vec.nth(0));
+        CHECK(vec.size() == 1);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(value_10 == 10);
+    }
+
+    PRINT("Test insert(const_iterator, T&&)");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        xint value_10(10);
+
+        auto res = vec.insert(vec.nth(0), std::move(value_10));
+
+        CHECK(res == vec.nth(0));
+        CHECK(vec.size() == 1);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(value_10 == -10);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
