@@ -1298,6 +1298,225 @@ int main()
         }
     }
 
+    PRINT("Test insert(const_iterator, std::initializer_list");
+    {
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            std::initializer_list<xint> ilist{1, 2, 3};
+
+            auto res = vec.insert(vec.nth(0), ilist);
+
+            CHECK(res == vec.nth(0));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) ==  1);
+            CHECK(*vec.nth(1) ==  2);
+            CHECK(*vec.nth(2) ==  3);
+            CHECK(*vec.nth(3) == 10);
+            CHECK(*vec.nth(4) == 20);
+            CHECK(*vec.nth(5) == 30);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            std::initializer_list<xint> ilist{11, 12, 13};
+
+            auto res = vec.insert(vec.nth(1), ilist);
+
+            CHECK(res == vec.nth(1));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 11);
+            CHECK(*vec.nth(2) == 12);
+            CHECK(*vec.nth(3) == 13);
+            CHECK(*vec.nth(4) == 20);
+            CHECK(*vec.nth(5) == 30);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            std::initializer_list<xint> ilist{21, 22, 23};
+
+            auto res = vec.insert(vec.nth(2), ilist);
+
+            CHECK(res == vec.nth(2));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 21);
+            CHECK(*vec.nth(3) == 22);
+            CHECK(*vec.nth(4) == 23);
+            CHECK(*vec.nth(5) == 30);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            std::initializer_list<xint> ilist{31, 32, 33};
+
+            auto res = vec.insert(vec.nth(3), ilist);
+
+            CHECK(res == vec.nth(3));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 31);
+            CHECK(*vec.nth(4) == 32);
+            CHECK(*vec.nth(5) == 33);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            std::initializer_list<xint> ilist{41, 42, 43};
+
+            auto res = vec.insert(vec.nth(4), ilist);
+
+            CHECK(res == vec.nth(4));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 41);
+            CHECK(*vec.nth(5) == 42);
+            CHECK(*vec.nth(6) == 43);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            std::initializer_list<xint> ilist{51, 52, 53};
+
+            auto res = vec.insert(vec.nth(5), ilist);
+
+            CHECK(res == vec.nth(5));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 51);
+            CHECK(*vec.nth(6) == 52);
+            CHECK(*vec.nth(7) == 53);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
