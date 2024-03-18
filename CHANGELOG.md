@@ -1,6 +1,7 @@
 # Next release
 
 * New container `static_vector`.
+* Segmented devector: Improved tests for `assign`.
 * Segmented devector: Improved tests for `resize`.
 * Segmented devector: Improved tests for `resize_front`.
 * Segmented devector: Improved tests for `resize_back`.
