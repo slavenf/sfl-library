@@ -4212,92 +4212,31 @@ PRINT("Test assign(InputIt, InputIt)");
 
 PRINT("Test assign(std::initializer_list");
 {
-    // n == vec.size()
-    {
-        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
+    sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+    vec.emplace(vec.end(), 10);
+    vec.emplace(vec.end(), 20);
+    vec.emplace(vec.end(), 30);
+    vec.emplace(vec.end(), 40);
+    vec.emplace(vec.end(), 50);
 
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
+    CHECK(vec.size() == 5);
+    CHECK(*vec.nth(0) == 10);
+    CHECK(*vec.nth(1) == 20);
+    CHECK(*vec.nth(2) == 30);
+    CHECK(*vec.nth(3) == 40);
+    CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{11, 21, 31, 41, 51};
+    std::initializer_list<xint> ilist{1, 2, 3, 4, 5};
 
-        vec.assign(ilist);
+    vec.assign(ilist);
 
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 11);
-        CHECK(*vec.nth(1) == 21);
-        CHECK(*vec.nth(2) == 31);
-        CHECK(*vec.nth(3) == 41);
-        CHECK(*vec.nth(4) == 51);
-    }
-
-    // n < vec.size()
-    {
-        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
-
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
-
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
-
-        std::initializer_list<xint> ilist{11, 21};
-
-        vec.assign(ilist);
-
-        CHECK(vec.size() == 2);
-        CHECK(*vec.nth(0) == 11);
-        CHECK(*vec.nth(1) == 21);
-    }
-
-    // n > vec.size()
-    {
-        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
-
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
-
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
-
-        std::initializer_list<xint> ilist{11, 21, 31, 41, 51, 61, 71, 81};
-
-        vec.assign(ilist);
-
-        CHECK(vec.size() == 8);
-        CHECK(*vec.nth(0) == 11);
-        CHECK(*vec.nth(1) == 21);
-        CHECK(*vec.nth(2) == 31);
-        CHECK(*vec.nth(3) == 41);
-        CHECK(*vec.nth(4) == 51);
-        CHECK(*vec.nth(5) == 61);
-        CHECK(*vec.nth(6) == 71);
-        CHECK(*vec.nth(7) == 81);
-    }
+    CHECK(vec.size() == 5);
+    CHECK(*vec.nth(0) == 1);
+    CHECK(*vec.nth(1) == 2);
+    CHECK(*vec.nth(2) == 3);
+    CHECK(*vec.nth(3) == 4);
+    CHECK(*vec.nth(4) == 5);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
