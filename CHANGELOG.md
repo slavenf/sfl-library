@@ -1,3 +1,10 @@
+# Next release
+
+* New container `static_vector`.
+* Segmented vector: Improved test for `emplace_back`.
+
+
+
 # 1.3.0 (2024-03-16)
 
 * New container `segmented_devector` (segmented double-ended vector).
