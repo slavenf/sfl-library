@@ -467,6 +467,93 @@ int main()
     }
 
     ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of");
+    {
+        sfl::static_vector<xint, 5> vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto it = vec.begin();
+        CHECK(*it == 10); ++it;
+        CHECK(*it == 20); ++it;
+        CHECK(*it == 30); ++it;
+        CHECK(it == vec.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto cit = vec.cbegin();
+        CHECK(*cit == 10); ++cit;
+        CHECK(*cit == 20); ++cit;
+        CHECK(*cit == 30); ++cit;
+        CHECK(cit == vec.cend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto rit = vec.rbegin();
+        CHECK(*rit == 30); ++rit;
+        CHECK(*rit == 20); ++rit;
+        CHECK(*rit == 10); ++rit;
+        CHECK(rit == vec.rend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto crit = vec.crbegin();
+        CHECK(*crit == 30); ++crit;
+        CHECK(*crit == 20); ++crit;
+        CHECK(*crit == 10); ++crit;
+        CHECK(crit == vec.crend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(vec.nth(3) == vec.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(vec.begin(), 0) == vec.nth(0));
+        CHECK(std::next(vec.begin(), 1) == vec.nth(1));
+        CHECK(std::next(vec.begin(), 2) == vec.nth(2));
+        CHECK(std::next(vec.begin(), 3) == vec.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(vec.cbegin(), 0) == vec.nth(0));
+        CHECK(std::next(vec.cbegin(), 1) == vec.nth(1));
+        CHECK(std::next(vec.cbegin(), 2) == vec.nth(2));
+        CHECK(std::next(vec.cbegin(), 3) == vec.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(vec.nth(0) < vec.nth(1));
+        CHECK(vec.nth(0) < vec.nth(2));
+        CHECK(vec.nth(0) < vec.nth(3));
+
+        CHECK(vec.nth(1) < vec.nth(2));
+        CHECK(vec.nth(1) < vec.nth(3));
+
+        CHECK(vec.nth(2) < vec.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(vec.index_of(vec.nth(0)) == 0);
+        CHECK(vec.index_of(vec.nth(1)) == 1);
+        CHECK(vec.index_of(vec.nth(2)) == 2);
+        CHECK(vec.index_of(vec.nth(3)) == 3);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
 
