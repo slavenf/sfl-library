@@ -8,6 +8,28 @@
 
 using sfl::test::xint;
 
+PRINT("Test emplace_back(Args&&...)");
+{
+    sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
+
+    constexpr int n = 100;
+
+    for (int i = 0; i < n; ++i)
+    {
+        PRINT(">");
+        const auto res = vec.emplace_back(i);
+        PRINT("<");
+
+        CHECK(res == i);
+        CHECK(int(vec.size()) == i + 1);
+
+        for (int j = 0; j < int(vec.size()); ++j)
+        {
+            CHECK(*vec.nth(j) == j);
+        }
+    }
+}
+
 PRINT("Test emplace(const_iterator, Args&&...)");
 {
     // Insert at the end
@@ -1656,15 +1678,6 @@ PRINT("Test insert(const_iterator, std::initializer_list");
         CHECK(*vec.nth(6) == 52);
         CHECK(*vec.nth(7) == 53);
     }
-}
-
-PRINT("Test emplace_back(Args&&...)");
-{
-    sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
-
-    CHECK(vec.emplace_back(10) == 10);
-    CHECK(vec.size() == 1);
-    CHECK(*vec.nth(0) == 10);
 }
 
 PRINT("Test push_back(const T&)");
