@@ -19,6 +19,103 @@ int main()
 {
     using sfl::test::xint;
 
+    PRINT("Test emplace_back(Args&&...)");
+    {
+        sfl::static_vector<xint, 5> vec;
+
+        {
+            CHECK(vec.empty() == true);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 0);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 5);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(10);
+            PRINT("<");
+
+            CHECK(res == 10);
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 1);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 4);
+            CHECK(*vec.nth(0) == 10);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(20);
+            PRINT("<");
+
+            CHECK(res == 20);
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 2);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 3);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(30);
+            PRINT("<");
+
+            CHECK(res == 30);
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 3);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 2);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(40);
+            PRINT("<");
+
+            CHECK(res == 40);
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 1);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(50);
+            PRINT("<");
+
+            CHECK(res == 50);
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == true);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 0);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
     PRINT("Test non-modifying member functions (empty container)");
     {
         // Non-const container
