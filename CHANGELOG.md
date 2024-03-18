@@ -2,6 +2,7 @@
 
 * New container `static_vector`.
 * Segmented vector: Improved test for `emplace_back`.
+* Segmented vector: Improved test for `emplace`.
 
 
 

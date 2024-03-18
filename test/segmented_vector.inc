@@ -294,266 +294,404 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
     }
 
-    // Insert near the end
     {
         sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end(), 90);
-            PRINT("<");
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
 
-            CHECK(res == vec.nth(0));
-            CHECK(vec.size() == 1);
-            CHECK(*vec.nth(0) == 90);
-        }
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 10);
-            PRINT("<");
+        auto res = vec.emplace(vec.nth(0), 5);
 
-            CHECK(res == vec.nth(0));
-            CHECK(vec.size() == 2);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 90);
-        }
-
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 20);
-            PRINT("<");
-
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 3);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 90);
-        }
-
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 30);
-            PRINT("<");
-
-            CHECK(res == vec.nth(2));
-            CHECK(vec.size() == 4);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 30);
-            CHECK(*vec.nth(3) == 90);
-        }
-
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 40);
-            PRINT("<");
-
-            CHECK(res == vec.nth(3));
-            CHECK(vec.size() == 5);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 30);
-            CHECK(*vec.nth(3) == 40);
-            CHECK(*vec.nth(4) == 90);
-        }
-
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 50);
-            PRINT("<");
-
-            CHECK(res == vec.nth(4));
-            CHECK(vec.size() == 6);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 30);
-            CHECK(*vec.nth(3) == 40);
-            CHECK(*vec.nth(4) == 50);
-            CHECK(*vec.nth(5) == 90);
-        }
-
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 60);
-            PRINT("<");
-
-            CHECK(res == vec.nth(5));
-            CHECK(vec.size() == 7);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 30);
-            CHECK(*vec.nth(3) == 40);
-            CHECK(*vec.nth(4) == 50);
-            CHECK(*vec.nth(5) == 60);
-            CHECK(*vec.nth(6) == 90);
-        }
-
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 70);
-            PRINT("<");
-
-            CHECK(res == vec.nth(6));
-            CHECK(vec.size() == 8);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 30);
-            CHECK(*vec.nth(3) == 40);
-            CHECK(*vec.nth(4) == 50);
-            CHECK(*vec.nth(5) == 60);
-            CHECK(*vec.nth(6) == 70);
-            CHECK(*vec.nth(7) == 90);
-        }
-
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end() - 1, 80);
-            PRINT("<");
-
-            CHECK(res == vec.nth(7));
-            CHECK(vec.size() == 9);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 30);
-            CHECK(*vec.nth(3) == 40);
-            CHECK(*vec.nth(4) == 50);
-            CHECK(*vec.nth(5) == 60);
-            CHECK(*vec.nth(6) == 70);
-            CHECK(*vec.nth(7) == 80);
-            CHECK(*vec.nth(8) == 90);
-        }
+        CHECK(res == vec.nth(0));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) ==  5);
+        CHECK(*vec.nth(1) == 10);
+        CHECK(*vec.nth(2) == 20);
+        CHECK(*vec.nth(3) == 30);
+        CHECK(*vec.nth(4) == 40);
+        CHECK(*vec.nth(5) == 50);
+        CHECK(*vec.nth(6) == 60);
+        CHECK(*vec.nth(7) == 70);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
     }
 
-    // Insert near the begin
     {
         sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end(), 10);
-            PRINT("<");
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
 
-            CHECK(res == vec.nth(0));
-            CHECK(vec.size() == 1);
-            CHECK(*vec.nth(0) == 10);
-        }
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.end(), 90);
-            PRINT("<");
+        auto res = vec.emplace(vec.nth(1), 15);
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 2);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 90);
-        }
+        CHECK(res == vec.nth(1));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 15);
+        CHECK(*vec.nth(2) == 20);
+        CHECK(*vec.nth(3) == 30);
+        CHECK(*vec.nth(4) == 40);
+        CHECK(*vec.nth(5) == 50);
+        CHECK(*vec.nth(6) == 60);
+        CHECK(*vec.nth(7) == 70);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
+    }
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.nth(1), 80);
-            PRINT("<");
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 3);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 80);
-            CHECK(*vec.nth(2) == 90);
-        }
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.nth(1), 70);
-            PRINT("<");
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 4);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 70);
-            CHECK(*vec.nth(2) == 80);
-            CHECK(*vec.nth(3) == 90);
-        }
+        auto res = vec.emplace(vec.nth(2), 25);
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.nth(1), 60);
-            PRINT("<");
+        CHECK(res == vec.nth(2));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 25);
+        CHECK(*vec.nth(3) == 30);
+        CHECK(*vec.nth(4) == 40);
+        CHECK(*vec.nth(5) == 50);
+        CHECK(*vec.nth(6) == 60);
+        CHECK(*vec.nth(7) == 70);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
+    }
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 5);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 60);
-            CHECK(*vec.nth(2) == 70);
-            CHECK(*vec.nth(3) == 80);
-            CHECK(*vec.nth(4) == 90);
-        }
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.nth(1), 50);
-            PRINT("<");
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 6);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 50);
-            CHECK(*vec.nth(2) == 60);
-            CHECK(*vec.nth(3) == 70);
-            CHECK(*vec.nth(4) == 80);
-            CHECK(*vec.nth(5) == 90);
-        }
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.nth(1), 40);
-            PRINT("<");
+        auto res = vec.emplace(vec.nth(3), 35);
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 7);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 40);
-            CHECK(*vec.nth(2) == 50);
-            CHECK(*vec.nth(3) == 60);
-            CHECK(*vec.nth(4) == 70);
-            CHECK(*vec.nth(5) == 80);
-            CHECK(*vec.nth(6) == 90);
-        }
+        CHECK(res == vec.nth(3));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 35);
+        CHECK(*vec.nth(4) == 40);
+        CHECK(*vec.nth(5) == 50);
+        CHECK(*vec.nth(6) == 60);
+        CHECK(*vec.nth(7) == 70);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
+    }
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.nth(1), 30);
-            PRINT("<");
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 8);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 30);
-            CHECK(*vec.nth(2) == 40);
-            CHECK(*vec.nth(3) == 50);
-            CHECK(*vec.nth(4) == 60);
-            CHECK(*vec.nth(5) == 70);
-            CHECK(*vec.nth(6) == 80);
-            CHECK(*vec.nth(7) == 90);
-        }
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
 
-        {
-            PRINT(">");
-            const auto res = vec.emplace(vec.nth(1), 20);
-            PRINT("<");
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
 
-            CHECK(res == vec.nth(1));
-            CHECK(vec.size() == 9);
-            CHECK(*vec.nth(0) == 10);
-            CHECK(*vec.nth(1) == 20);
-            CHECK(*vec.nth(2) == 30);
-            CHECK(*vec.nth(3) == 40);
-            CHECK(*vec.nth(4) == 50);
-            CHECK(*vec.nth(5) == 60);
-            CHECK(*vec.nth(6) == 70);
-            CHECK(*vec.nth(7) == 80);
-            CHECK(*vec.nth(8) == 90);
-        }
+        auto res = vec.emplace(vec.nth(4), 45);
+
+        CHECK(res == vec.nth(4));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 45);
+        CHECK(*vec.nth(5) == 50);
+        CHECK(*vec.nth(6) == 60);
+        CHECK(*vec.nth(7) == 70);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
+    }
+
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
+
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
+
+        auto res = vec.emplace(vec.nth(5), 55);
+
+        CHECK(res == vec.nth(5));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 55);
+        CHECK(*vec.nth(6) == 60);
+        CHECK(*vec.nth(7) == 70);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
+    }
+
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
+
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
+
+        auto res = vec.emplace(vec.nth(6), 65);
+
+        CHECK(res == vec.nth(6));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 65);
+        CHECK(*vec.nth(7) == 70);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
+    }
+
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
+
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
+
+        auto res = vec.emplace(vec.nth(7), 75);
+
+        CHECK(res == vec.nth(7));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 75);
+        CHECK(*vec.nth(8) == 80);
+        CHECK(*vec.nth(9) == 90);
+    }
+
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
+
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
+
+        auto res = vec.emplace(vec.nth(8), 85);
+
+        CHECK(res == vec.nth(8));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 85);
+        CHECK(*vec.nth(9) == 90);
+    }
+
+    {
+        sfl::segmented_vector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+        vec.emplace_back(60);
+        vec.emplace_back(70);
+        vec.emplace_back(80);
+        vec.emplace_back(90);
+
+        CHECK(vec.size() == 9);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
+
+        auto res = vec.emplace(vec.nth(9), 95);
+
+        CHECK(res == vec.nth(9));
+        CHECK(vec.size() == 10);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+        CHECK(*vec.nth(5) == 60);
+        CHECK(*vec.nth(6) == 70);
+        CHECK(*vec.nth(7) == 80);
+        CHECK(*vec.nth(8) == 90);
+        CHECK(*vec.nth(9) == 95);
     }
 }
 
