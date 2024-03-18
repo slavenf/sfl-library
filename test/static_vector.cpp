@@ -112,6 +112,360 @@ int main()
         }
     }
 
+    PRINT("Test emplace(const_iterator, Args&&...)");
+    {
+        // Insert at the end
+        {
+            sfl::static_vector<xint, 5> vec;
+
+            {
+                CHECK(vec.empty() == true);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 0);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 5);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.end(), 10);
+                PRINT("<");
+
+                CHECK(res == vec.nth(0));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 1);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 4);
+                CHECK(*vec.nth(0) == 10);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.end(), 20);
+                PRINT("<");
+
+                CHECK(res == vec.nth(1));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 2);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 3);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.end(), 30);
+                PRINT("<");
+
+                CHECK(res == vec.nth(2));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 3);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 2);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.end(), 40);
+                PRINT("<");
+
+                CHECK(res == vec.nth(3));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 4);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 1);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.end(), 50);
+                PRINT("<");
+
+                CHECK(res == vec.nth(4));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == true);
+                CHECK(vec.size() == 5);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 0);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+            }
+        }
+
+        // Insert at the begin
+        {
+            sfl::static_vector<xint, 5> vec;
+
+            {
+                CHECK(vec.empty() == true);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 0);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 5);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.begin(), 50);
+                PRINT("<");
+
+                CHECK(res == vec.nth(0));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 1);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 4);
+                CHECK(*vec.nth(0) == 50);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.begin(), 40);
+                PRINT("<");
+
+                CHECK(res == vec.nth(0));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 2);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 3);
+                CHECK(*vec.nth(0) == 40);
+                CHECK(*vec.nth(1) == 50);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.begin(), 30);
+                PRINT("<");
+
+                CHECK(res == vec.nth(0));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 3);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 2);
+                CHECK(*vec.nth(0) == 30);
+                CHECK(*vec.nth(1) == 40);
+                CHECK(*vec.nth(2) == 50);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.begin(), 20);
+                PRINT("<");
+
+                CHECK(res == vec.nth(0));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == false);
+                CHECK(vec.size() == 4);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 1);
+                CHECK(*vec.nth(0) == 20);
+                CHECK(*vec.nth(1) == 30);
+                CHECK(*vec.nth(2) == 40);
+                CHECK(*vec.nth(3) == 50);
+            }
+
+            {
+                PRINT(">");
+                const auto res = vec.emplace(vec.begin(), 10);
+                PRINT("<");
+
+                CHECK(res == vec.nth(0));
+                CHECK(vec.empty() == false);
+                CHECK(vec.full() == true);
+                CHECK(vec.size() == 5);
+                CHECK(vec.capacity() == 5);
+                CHECK(vec.available() == 0);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+            }
+        }
+
+        {
+            sfl::static_vector<xint, 5> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 1);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+
+            const auto res = vec.emplace(vec.nth(0), 5);
+
+            CHECK(res == vec.nth(0));
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == true);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 0);
+            CHECK(*vec.nth(0) ==  5);
+            CHECK(*vec.nth(1) == 10);
+            CHECK(*vec.nth(2) == 20);
+            CHECK(*vec.nth(3) == 30);
+            CHECK(*vec.nth(4) == 40);
+        }
+
+        {
+            sfl::static_vector<xint, 5> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 1);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+
+            const auto res = vec.emplace(vec.nth(1), 15);
+
+            CHECK(res == vec.nth(1));
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == true);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 0);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 15);
+            CHECK(*vec.nth(2) == 20);
+            CHECK(*vec.nth(3) == 30);
+            CHECK(*vec.nth(4) == 40);
+        }
+
+        {
+            sfl::static_vector<xint, 5> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 1);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+
+            const auto res = vec.emplace(vec.nth(2), 25);
+
+            CHECK(res == vec.nth(2));
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == true);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 0);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 25);
+            CHECK(*vec.nth(3) == 30);
+            CHECK(*vec.nth(4) == 40);
+        }
+
+        {
+            sfl::static_vector<xint, 5> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 1);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+
+            const auto res = vec.emplace(vec.nth(3), 35);
+
+            CHECK(res == vec.nth(3));
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == true);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 0);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 35);
+            CHECK(*vec.nth(4) == 40);
+        }
+
+        {
+            sfl::static_vector<xint, 5> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == false);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 1);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+
+            const auto res = vec.emplace(vec.nth(4), 45);
+
+            CHECK(res == vec.nth(4));
+            CHECK(vec.empty() == false);
+            CHECK(vec.full() == true);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 5);
+            CHECK(vec.available() == 0);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 45);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
