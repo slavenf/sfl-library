@@ -470,7 +470,7 @@ int main()
 
     PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of");
     {
-        sfl::static_vector<xint, 5> vec;
+        sfl::static_vector<xint, 100> vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -551,6 +551,45 @@ int main()
         CHECK(vec.index_of(vec.nth(1)) == 1);
         CHECK(vec.index_of(vec.nth(2)) == 2);
         CHECK(vec.index_of(vec.nth(3)) == 3);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test clear()");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        CHECK(vec.size() == 0);
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+        vec.emplace(vec.end(), 40);
+        vec.emplace(vec.end(), 50);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
+        vec.clear();
+
+        CHECK(vec.size() == 0);
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec.size() == 3);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+
+        vec.clear();
+
+        CHECK(vec.size() == 0);
     }
 
     ///////////////////////////////////////////////////////////////////////////
