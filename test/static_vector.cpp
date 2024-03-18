@@ -2224,6 +2224,142 @@ int main()
         #undef CONDITION
     }
 
+    PRINT("Test swap(static_vector&)");
+    {
+        // Swap with self
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+
+            CHECK(vec.size() == 3);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+
+            ///////////////////////////////////////////////////////////////////
+
+            vec.swap(vec);
+
+            CHECK(vec.size() == 3);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+        }
+
+        // vec1.size() == vec2.size()
+        {
+            sfl::static_vector<xint, 100> vec1, vec2;
+
+            vec1.emplace_back(10);
+            vec1.emplace_back(20);
+            vec1.emplace_back(30);
+
+            vec2.emplace_back(40);
+            vec2.emplace_back(50);
+            vec2.emplace_back(60);
+
+            CHECK(vec1.size() == 3);
+            CHECK(*vec1.nth(0) == 10);
+            CHECK(*vec1.nth(1) == 20);
+            CHECK(*vec1.nth(2) == 30);
+
+            CHECK(vec2.size() == 3);
+            CHECK(*vec2.nth(0) == 40);
+            CHECK(*vec2.nth(1) == 50);
+            CHECK(*vec2.nth(2) == 60);
+
+            ///////////////////////////////////////////////////////////////////
+
+            vec1.swap(vec2);
+
+            CHECK(vec1.size() == 3);
+            CHECK(*vec1.nth(0) == 40);
+            CHECK(*vec1.nth(1) == 50);
+            CHECK(*vec1.nth(2) == 60);
+
+            CHECK(vec2.size() == 3);
+            CHECK(*vec2.nth(0) == 10);
+            CHECK(*vec2.nth(1) == 20);
+            CHECK(*vec2.nth(2) == 30);
+
+            ///////////////////////////////////////////////////////////////////
+
+            vec1.swap(vec2);
+
+            CHECK(vec1.size() == 3);
+            CHECK(*vec1.nth(0) == 10);
+            CHECK(*vec1.nth(1) == 20);
+            CHECK(*vec1.nth(2) == 30);
+
+            CHECK(vec2.size() == 3);
+            CHECK(*vec2.nth(0) == 40);
+            CHECK(*vec2.nth(1) == 50);
+            CHECK(*vec2.nth(2) == 60);
+        }
+
+        // vec1.size() != vec2.size()
+        {
+            sfl::static_vector<xint, 100> vec1, vec2;
+
+            vec1.emplace_back(10);
+            vec1.emplace_back(20);
+            vec1.emplace_back(30);
+
+            vec2.emplace_back(40);
+            vec2.emplace_back(50);
+            vec2.emplace_back(60);
+            vec2.emplace_back(70);
+            vec2.emplace_back(80);
+
+            CHECK(vec1.size() == 3);
+            CHECK(*vec1.nth(0) == 10);
+            CHECK(*vec1.nth(1) == 20);
+            CHECK(*vec1.nth(2) == 30);
+
+            CHECK(vec2.size() == 5);
+            CHECK(*vec2.nth(0) == 40);
+            CHECK(*vec2.nth(1) == 50);
+            CHECK(*vec2.nth(2) == 60);
+            CHECK(*vec2.nth(3) == 70);
+            CHECK(*vec2.nth(4) == 80);
+
+            ///////////////////////////////////////////////////////////////////
+
+            vec1.swap(vec2);
+
+            CHECK(vec1.size() == 5);
+            CHECK(*vec1.nth(0) == 40);
+            CHECK(*vec1.nth(1) == 50);
+            CHECK(*vec1.nth(2) == 60);
+            CHECK(*vec1.nth(3) == 70);
+            CHECK(*vec1.nth(4) == 80);
+
+            CHECK(vec2.size() == 3);
+            CHECK(*vec2.nth(0) == 10);
+            CHECK(*vec2.nth(1) == 20);
+            CHECK(*vec2.nth(2) == 30);
+
+            ///////////////////////////////////////////////////////////////////
+
+            vec1.swap(vec2);
+
+            CHECK(vec1.size() == 3);
+            CHECK(*vec1.nth(0) == 10);
+            CHECK(*vec1.nth(1) == 20);
+            CHECK(*vec1.nth(2) == 30);
+
+            CHECK(vec2.size() == 5);
+            CHECK(*vec2.nth(0) == 40);
+            CHECK(*vec2.nth(1) == 50);
+            CHECK(*vec2.nth(2) == 60);
+            CHECK(*vec2.nth(3) == 70);
+            CHECK(*vec2.nth(4) == 80);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
