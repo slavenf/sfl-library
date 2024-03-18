@@ -1,8 +1,9 @@
 # Next release
 
 * New container `static_vector`.
-* Segmented vector: Improved test for `emplace_back`.
-* Segmented vector: Improved test for `emplace`.
+* Segmented vector: Improved tests for `emplace_back`.
+* Segmented vector: Improved tests for `emplace`.
+* Small vector: Improved tests for `resize`.
 
 
 
