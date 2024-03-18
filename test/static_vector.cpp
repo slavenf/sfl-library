@@ -1517,6 +1517,32 @@ int main()
         }
     }
 
+    PRINT("Test push_back(const T&)");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        xint value_10(10);
+
+        vec.push_back(value_10);
+
+        CHECK(vec.size() == 1);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(value_10 == 10);
+    }
+
+    PRINT("Test push_back(T&&)");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        xint value_10(10);
+
+        vec.push_back(std::move(value_10));
+
+        CHECK(vec.size() == 1);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(value_10 == -10);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
