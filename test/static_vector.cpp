@@ -620,6 +620,213 @@ int main()
         CHECK(value_10 == -10);
     }
 
+    PRINT("Test insert(const_iterator, size_type, const T&)");
+    {
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            auto res = vec.insert(vec.nth(0), 3, 5);
+
+            CHECK(res == vec.nth(0));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) ==  5);
+            CHECK(*vec.nth(1) ==  5);
+            CHECK(*vec.nth(2) ==  5);
+            CHECK(*vec.nth(3) == 10);
+            CHECK(*vec.nth(4) == 20);
+            CHECK(*vec.nth(5) == 30);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            auto res = vec.insert(vec.nth(1), 3, 15);
+
+            CHECK(res == vec.nth(1));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 15);
+            CHECK(*vec.nth(2) == 15);
+            CHECK(*vec.nth(3) == 15);
+            CHECK(*vec.nth(4) == 20);
+            CHECK(*vec.nth(5) == 30);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            auto res = vec.insert(vec.nth(2), 3, 25);
+
+            CHECK(res == vec.nth(2));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 25);
+            CHECK(*vec.nth(3) == 25);
+            CHECK(*vec.nth(4) == 25);
+            CHECK(*vec.nth(5) == 30);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            auto res = vec.insert(vec.nth(3), 3, 35);
+
+            CHECK(res == vec.nth(3));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 35);
+            CHECK(*vec.nth(4) == 35);
+            CHECK(*vec.nth(5) == 35);
+            CHECK(*vec.nth(6) == 40);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            auto res = vec.insert(vec.nth(4), 3, 45);
+
+            CHECK(res == vec.nth(4));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 45);
+            CHECK(*vec.nth(5) == 45);
+            CHECK(*vec.nth(6) == 45);
+            CHECK(*vec.nth(7) == 50);
+        }
+
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.emplace(vec.end(), 10);
+            vec.emplace(vec.end(), 20);
+            vec.emplace(vec.end(), 30);
+            vec.emplace(vec.end(), 40);
+            vec.emplace(vec.end(), 50);
+
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 95);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            auto res = vec.insert(vec.nth(5), 3, 55);
+
+            CHECK(res == vec.nth(5));
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 100);
+            CHECK(vec.available() == 92);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 55);
+            CHECK(*vec.nth(6) == 55);
+            CHECK(*vec.nth(7) == 55);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
