@@ -2480,6 +2480,136 @@ int main()
         CHECK(*data == 30); ++data;
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test container()");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        CHECK(vec.size() == 0);
+    }
+
+    PRINT("Test container(size_type)");
+    {
+        sfl::static_vector<xint, 100> vec(4);
+
+        CHECK(vec.size() == 4);
+        CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
+        CHECK(*vec.nth(1) == SFL_TEST_XINT_DEFAULT_VALUE);
+        CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
+        CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
+    }
+
+    PRINT("Test container(size_type, const T&)");
+    {
+        xint value_99(99);
+
+        sfl::static_vector<xint, 100> vec(4, value_99);
+
+        CHECK(vec.size() == 4);
+        CHECK(*vec.nth(0) == value_99);
+        CHECK(*vec.nth(1) == value_99);
+        CHECK(*vec.nth(2) == value_99);
+        CHECK(*vec.nth(3) == value_99);
+    }
+
+    PRINT("Test container(InputIt, InputIt)");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 20 30 40");
+
+            sfl::static_vector<xint, 100> vec
+            (
+                (std::istream_iterator<int>(iss)),
+                (std::istream_iterator<int>())
+            );
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+
+        // Forward iterator
+        {
+            std::vector<xint> data({10, 20, 30, 40});
+
+            sfl::static_vector<xint, 100> vec(data.begin(), data.end());
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+    }
+
+    PRINT("Test container(std::initializer_list)");
+    {
+        std::initializer_list<xint> ilist{10, 20, 30, 40};
+
+        sfl::static_vector<xint, 100> vec(ilist);
+
+        CHECK(vec.size() == 4);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+    }
+
+    PRINT("Test container(const container&)");
+    {
+        sfl::static_vector<xint, 100> vec1;
+
+        vec1.emplace(vec1.end(), 10);
+        vec1.emplace(vec1.end(), 20);
+        vec1.emplace(vec1.end(), 30);
+
+        CHECK(vec1.size() == 3);
+        CHECK(*vec1.nth(0) == 10);
+        CHECK(*vec1.nth(1) == 20);
+        CHECK(*vec1.nth(2) == 30);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        sfl::static_vector<xint, 100> vec2(vec1);
+
+        CHECK(vec2.size() == 3);
+        CHECK(*vec2.nth(0) == 10);
+        CHECK(*vec2.nth(1) == 20);
+        CHECK(*vec2.nth(2) == 30);
+    }
+
+    PRINT("Test container(container&&)");
+    {
+        sfl::static_vector<xint, 100> vec1;
+
+        vec1.emplace(vec1.end(), 10);
+        vec1.emplace(vec1.end(), 20);
+        vec1.emplace(vec1.end(), 30);
+
+        CHECK(vec1.size() == 3);
+        CHECK(*vec1.nth(0) == 10);
+        CHECK(*vec1.nth(1) == 20);
+        CHECK(*vec1.nth(2) == 30);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        sfl::static_vector<xint, 100> vec2(std::move(vec1));
+
+        CHECK(vec2.size() == 3);
+        CHECK(*vec2.nth(0) == 10);
+        CHECK(*vec2.nth(1) == 20);
+        CHECK(*vec2.nth(2) == 30);
+
+        CHECK(vec1.size() == 3);
+        CHECK(*vec1.nth(0) == -10);
+        CHECK(*vec1.nth(1) == -20);
+        CHECK(*vec1.nth(2) == -30);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
