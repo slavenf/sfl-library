@@ -1,4 +1,4 @@
-# Next release
+# 1.3.1 (2024-03-20)
 
 * Bug fix: If iterator is segmented iterator but not random access iterator then
   compiler must select the most basic algorithm (that is not specialized for
