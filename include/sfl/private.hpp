@@ -186,6 +186,23 @@ struct is_forward_iterator<
 > : std::true_type {};
 
 //
+// Checks if `T` is random access iterator.
+//
+template <typename T, typename = void>
+struct is_random_access_iterator : std::false_type {};
+
+template <typename T>
+struct is_random_access_iterator<
+    T,
+    sfl::dtl::enable_if_t<
+        std::is_convertible<
+            typename std::iterator_traits<T>::iterator_category,
+            std::random_access_iterator_tag
+        >::value
+    >
+> : std::true_type {};
+
+//
 // Checks if `Type` has member `is_transparent`.
 //
 template <typename Type, typename SfinaeType, typename = void>
@@ -232,8 +249,11 @@ auto to_address(const Pointer& p) noexcept -> typename std::pointer_traits<Point
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename InputIt, typename OutputIt,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                 !sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+          sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  !sfl::dtl::is_segmented_iterator<OutputIt>::value) ||
+                                 (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                   sfl::dtl::is_segmented_iterator<OutputIt>::value &&
+                                  !sfl::dtl::is_random_access_iterator<InputIt>::value) >* = nullptr>
 OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
 {
     return std::copy(first, last, d_first);
@@ -241,7 +261,8 @@ OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
 
 template <typename InputIt, typename OutputIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                  sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+                                  sfl::dtl::is_segmented_iterator<OutputIt>::value &&
+                                  sfl::dtl::is_random_access_iterator<InputIt>::value >* = nullptr>
 OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<OutputIt>;
@@ -344,8 +365,11 @@ OutputIt copy(InputIt first, InputIt last, OutputIt d_first)
 }
 
 template <typename BidirIt1, typename BidirIt2,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
-                                 !sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+          sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                  !sfl::dtl::is_segmented_iterator<BidirIt2>::value) ||
+                                 (!sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                   sfl::dtl::is_segmented_iterator<BidirIt2>::value &&
+                                  !sfl::dtl::is_random_access_iterator<BidirIt1>::value) >* = nullptr>
 BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     return std::copy_backward(first, last, d_last);
@@ -353,7 +377,8 @@ BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 
 template <typename BidirIt1, typename BidirIt2,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
-                                  sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+                                  sfl::dtl::is_segmented_iterator<BidirIt2>::value &&
+                                  sfl::dtl::is_random_access_iterator<BidirIt1>::value>* = nullptr>
 BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<BidirIt2>;
@@ -456,8 +481,11 @@ BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 }
 
 template <typename InputIt, typename OutputIt,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                 !sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+          sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  !sfl::dtl::is_segmented_iterator<OutputIt>::value) ||
+                                 (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                   sfl::dtl::is_segmented_iterator<OutputIt>::value &&
+                                  !sfl::dtl::is_random_access_iterator<InputIt>::value) >* = nullptr>
 OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
     return std::move(first, last, d_first);
@@ -465,7 +493,8 @@ OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 
 template <typename InputIt, typename OutputIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                  sfl::dtl::is_segmented_iterator<OutputIt>::value >* = nullptr>
+                                  sfl::dtl::is_segmented_iterator<OutputIt>::value &&
+                                  sfl::dtl::is_random_access_iterator<InputIt>::value >* = nullptr>
 OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<OutputIt>;
@@ -568,8 +597,11 @@ OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 }
 
 template <typename BidirIt1, typename BidirIt2,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
-                                 !sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+          sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                  !sfl::dtl::is_segmented_iterator<BidirIt2>::value) ||
+                                 (!sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
+                                   sfl::dtl::is_segmented_iterator<BidirIt2>::value &&
+                                  !sfl::dtl::is_random_access_iterator<BidirIt1>::value) >* = nullptr>
 BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     return std::move_backward(first, last, d_last);
@@ -577,7 +609,8 @@ BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 
 template <typename BidirIt1, typename BidirIt2,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
-                                  sfl::dtl::is_segmented_iterator<BidirIt2>::value >* = nullptr>
+                                  sfl::dtl::is_segmented_iterator<BidirIt2>::value &&
+                                  sfl::dtl::is_random_access_iterator<BidirIt1>::value >* = nullptr>
 BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<BidirIt2>;
@@ -1222,8 +1255,11 @@ ForwardIt uninitialized_fill_n(Allocator& a, ForwardIt first, Size n, const T& v
 }
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                 !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+          sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  !sfl::dtl::is_segmented_iterator<ForwardIt>::value) ||
+                                 (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                   sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
+                                  !sfl::dtl::is_random_access_iterator<InputIt>::value) >* = nullptr>
 ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
@@ -1246,7 +1282,8 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                  sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+                                  sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
+                                  sfl::dtl::is_random_access_iterator<InputIt>::value >* = nullptr>
 ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
@@ -1382,8 +1419,11 @@ ForwardIt uninitialized_copy(Allocator& a, InputIt first, InputIt last, ForwardI
 }
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                 !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+          sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  !sfl::dtl::is_segmented_iterator<ForwardIt>::value) ||
+                                 (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                   sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
+                                  !sfl::dtl::is_random_access_iterator<InputIt>::value) >* = nullptr>
 ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
@@ -1406,7 +1446,8 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                  sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+                                  sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
+                                  sfl::dtl::is_random_access_iterator<InputIt>::value >* = nullptr>
 ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
@@ -1542,8 +1583,11 @@ ForwardIt uninitialized_move(Allocator& a, InputIt first, InputIt last, ForwardI
 }
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                 !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+          sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                  !sfl::dtl::is_segmented_iterator<ForwardIt>::value) ||
+                                 (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
+                                   sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
+                                  !sfl::dtl::is_random_access_iterator<InputIt>::value) >* = nullptr>
 ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
@@ -1566,7 +1610,8 @@ ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt la
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
-                                  sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+                                  sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
+                                  sfl::dtl::is_random_access_iterator<InputIt>::value >* = nullptr>
 ForwardIt uninitialized_move_if_noexcept(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
