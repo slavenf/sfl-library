@@ -1556,7 +1556,7 @@ int main()
         CHECK(*vec.nth(1) == 20);
         CHECK(*vec.nth(2) == 30);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         vec.pop_back();
 
@@ -1564,14 +1564,14 @@ int main()
         CHECK(*vec.nth(0) == 10);
         CHECK(*vec.nth(1) == 20);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         vec.pop_back();
 
         CHECK(vec.size() == 1);
         CHECK(*vec.nth(0) == 10);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         vec.pop_back();
 
@@ -2572,7 +2572,7 @@ int main()
         CHECK(*vec1.nth(1) == 20);
         CHECK(*vec1.nth(2) == 30);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         sfl::static_vector<xint, 100> vec2(vec1);
 
@@ -2595,7 +2595,7 @@ int main()
         CHECK(*vec1.nth(1) == 20);
         CHECK(*vec1.nth(2) == 30);
 
-        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
         sfl::static_vector<xint, 100> vec2(std::move(vec1));
 
@@ -2680,7 +2680,7 @@ int main()
             CHECK(*vec2.nth(3) == 70);
             CHECK(*vec2.nth(4) == 80);
 
-            ///////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////
 
             CHECK(CONDITION);
 
@@ -3488,6 +3488,166 @@ int main()
         CHECK(*vec.nth(2) == 3);
         CHECK(*vec.nth(3) == 4);
         CHECK(*vec.nth(4) == 5);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test NON-MEMBER comparison operators");
+    {
+        sfl::static_vector<xint, 100> vec1, vec2;
+
+        vec1.emplace(vec1.end(), 10);
+        vec1.emplace(vec1.end(), 20);
+        vec1.emplace(vec1.end(), 30);
+
+        vec2.emplace(vec2.end(), 10);
+        vec2.emplace(vec2.end(), 20);
+        vec2.emplace(vec2.end(), 30);
+        vec2.emplace(vec2.end(), 40);
+        vec2.emplace(vec2.end(), 50);
+
+        CHECK((vec1 == vec1) == true);
+        CHECK((vec1 == vec2) == false);
+        CHECK((vec2 == vec1) == false);
+        CHECK((vec2 == vec2) == true);
+
+        CHECK((vec1 != vec1) == false);
+        CHECK((vec1 != vec2) == true);
+        CHECK((vec2 != vec1) == true);
+        CHECK((vec2 != vec2) == false);
+
+        CHECK((vec1 < vec1) == false);
+        CHECK((vec1 < vec2) == true);
+        CHECK((vec2 < vec1) == false);
+        CHECK((vec2 < vec2) == false);
+
+        CHECK((vec1 > vec1) == false);
+        CHECK((vec1 > vec2) == false);
+        CHECK((vec2 > vec1) == true);
+        CHECK((vec2 > vec2) == false);
+
+        CHECK((vec1 <= vec1) == true);
+        CHECK((vec1 <= vec2) == true);
+        CHECK((vec2 <= vec1) == false);
+        CHECK((vec2 <= vec2) == true);
+
+        CHECK((vec1 >= vec1) == true);
+        CHECK((vec1 >= vec2) == false);
+        CHECK((vec2 >= vec1) == true);
+        CHECK((vec2 >= vec2) == true);
+    }
+
+    PRINT("Test NON-MEMBER swap(container&)");
+    {
+        sfl::static_vector<xint, 100> vec1, vec2;
+
+        vec1.emplace(vec1.end(), 10);
+        vec1.emplace(vec1.end(), 20);
+        vec1.emplace(vec1.end(), 30);
+
+        vec2.emplace(vec2.end(), 40);
+        vec2.emplace(vec2.end(), 50);
+        vec2.emplace(vec2.end(), 60);
+        vec2.emplace(vec2.end(), 70);
+        vec2.emplace(vec2.end(), 80);
+
+        CHECK(vec1.size() == 3);
+        CHECK(*vec1.nth(0) == 10);
+        CHECK(*vec1.nth(1) == 20);
+        CHECK(*vec1.nth(2) == 30);
+
+        CHECK(vec2.size() == 5);
+        CHECK(*vec2.nth(0) == 40);
+        CHECK(*vec2.nth(1) == 50);
+        CHECK(*vec2.nth(2) == 60);
+        CHECK(*vec2.nth(3) == 70);
+        CHECK(*vec2.nth(4) == 80);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        swap(vec1, vec2);
+
+        CHECK(vec1.size() == 5);
+        CHECK(*vec1.nth(0) == 40);
+        CHECK(*vec1.nth(1) == 50);
+        CHECK(*vec1.nth(2) == 60);
+        CHECK(*vec1.nth(3) == 70);
+        CHECK(*vec1.nth(4) == 80);
+
+        CHECK(vec2.size() == 3);
+        CHECK(*vec2.nth(0) == 10);
+        CHECK(*vec2.nth(1) == 20);
+        CHECK(*vec2.nth(2) == 30);
+    }
+
+    PRINT("Test NON-MEMBER erase(container&, const U&)");
+    {
+        sfl::static_vector<xint, 100> vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 20);
+        CHECK(*vec.nth(3) == 20);
+        CHECK(*vec.nth(4) == 30);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(erase(vec, 20) == 3);
+        CHECK(vec.size() == 2);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 30);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(erase(vec, 20) == 0);
+        CHECK(vec.size() == 2);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 30);
+    }
+
+    PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+    {
+        using container_type = sfl::static_vector<xint, 100>;
+
+        using const_reference = typename container_type::const_reference;
+
+        ///////////////////////////////////////////////////////////////////////
+
+        container_type vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 20);
+        CHECK(*vec.nth(3) == 20);
+        CHECK(*vec.nth(4) == 30);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(erase_if(vec, [](const_reference& value){ return value == 20; }) == 3);
+        CHECK(vec.size() == 2);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 30);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(erase_if(vec, [](const_reference& value){ return value == 20; }) == 0);
+        CHECK(vec.size() == 2);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 30);
     }
 
     ///////////////////////////////////////////////////////////////////////////
