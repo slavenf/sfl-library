@@ -5892,15 +5892,17 @@ PRINT("Test operator=(std::initializer_list)");
 
 PRINT("Test assign(size_type, const T&)");
 {
-    // n == vec.size()
+    #define CONDITION n < vec.size()
     {
-        sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+        sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -5909,27 +5911,33 @@ PRINT("Test assign(size_type, const T&)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        xint value_99(99);
+        const size_type n = vec.size() - 1;
 
-        vec.assign(5, value_99);
+        CHECK(CONDITION);
 
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == value_99);
-        CHECK(*vec.nth(1) == value_99);
-        CHECK(*vec.nth(2) == value_99);
-        CHECK(*vec.nth(3) == value_99);
-        CHECK(*vec.nth(4) == value_99);
+        xint value(987654);
+
+        vec.assign(n, value);
+
+        CHECK(vec.size() == 4);
+        for (const auto& elem : vec)
+        {
+            CHECK(elem == value);
+        }
     }
+    #undef CONDITION
 
-    // n < vec.size()
+    #define CONDITION n == vec.size()
     {
-        sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+        sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -5938,24 +5946,33 @@ PRINT("Test assign(size_type, const T&)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        xint value_99(99);
+        const size_type n = vec.size();
 
-        vec.assign(2, value_99);
+        CHECK(CONDITION);
 
-        CHECK(vec.size() == 2);
-        CHECK(*vec.nth(0) == value_99);
-        CHECK(*vec.nth(1) == value_99);
+        xint value(987654);
+
+        vec.assign(n, value);
+
+        CHECK(vec.size() == 5);
+        for (const auto& elem : vec)
+        {
+            CHECK(elem == value);
+        }
     }
+    #undef CONDITION
 
-    // n > vec.size()  &&  n < vec.capacity()  (without storage reallocation)
+    #define CONDITION n > vec.size() && n < vec.capacity()
     {
-        sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+        sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -5964,69 +5981,108 @@ PRINT("Test assign(size_type, const T&)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        xint value_99(99);
+        const size_type n = vec.capacity() - 1;
 
-        vec.assign(8, value_99);
+        CHECK(CONDITION);
 
-        CHECK(vec.size() == 8);
-        CHECK(*vec.nth(0) == value_99);
-        CHECK(*vec.nth(1) == value_99);
-        CHECK(*vec.nth(2) == value_99);
-        CHECK(*vec.nth(3) == value_99);
-        CHECK(*vec.nth(4) == value_99);
-        CHECK(*vec.nth(5) == value_99);
-        CHECK(*vec.nth(6) == value_99);
-        CHECK(*vec.nth(7) == value_99);
+        xint value(987654);
+
+        vec.assign(n, value);
+
+        CHECK(vec.size() == n);
+        for (const auto& elem : vec)
+        {
+            CHECK(elem == value);
+        }
     }
+    #undef CONDITION
 
-    // n > vec.size()  &&  n > vec.capacity()  (with storage reallocation)
+    #define CONDITION n > vec.size() && n == vec.capacity()
     {
-        sfl::small_vector<xint, 5, TPARAM_ALLOCATOR<xint>> vec;
+        sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
-        CHECK(vec.capacity() == 5);
         CHECK(*vec.nth(0) == 10);
         CHECK(*vec.nth(1) == 20);
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        xint value_99(99);
+        const size_type n = vec.capacity();
 
-        vec.assign(8, value_99);
+        CHECK(CONDITION);
 
-        CHECK(vec.size() == 8);
-        CHECK(vec.capacity() > 5);
-        CHECK(*vec.nth(0) == value_99);
-        CHECK(*vec.nth(1) == value_99);
-        CHECK(*vec.nth(2) == value_99);
-        CHECK(*vec.nth(3) == value_99);
-        CHECK(*vec.nth(4) == value_99);
-        CHECK(*vec.nth(5) == value_99);
-        CHECK(*vec.nth(6) == value_99);
-        CHECK(*vec.nth(7) == value_99);
+        xint value(987654);
+
+        vec.assign(n, value);
+
+        CHECK(vec.size() == n);
+        for (const auto& elem : vec)
+        {
+            CHECK(elem == value);
+        }
     }
+    #undef CONDITION
+
+    #define CONDITION n > vec.size() && n > vec.capacity()
+    {
+        sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
+
+        using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
+        const size_type n = vec.capacity() + 1;
+
+        CHECK(CONDITION);
+
+        xint value(987654);
+
+        vec.assign(n, value);
+
+        CHECK(vec.size() == n);
+        for (const auto& elem : vec)
+        {
+            CHECK(elem == value);
+        }
+    }
+    #undef CONDITION
 }
 
 PRINT("Test assign(InputIt, InputIt)");
 {
     // Input iterator (exactly)
     {
-        // n == vec.size()
+        #define CONDITION n < vec.size()
         {
-            sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
             CHECK(*vec.nth(0) == 10);
@@ -6035,31 +6091,41 @@ PRINT("Test assign(InputIt, InputIt)");
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::istringstream iss("11 21 31 41 51");
+            const size_type n = vec.size() - 1;
+
+            CHECK(CONDITION);
+
+            std::stringstream ss;
+            for (int i = 0; i < int(n); ++i)
+            {
+                ss << i << " ";
+            }
 
             vec.assign
             (
-                (std::istream_iterator<int>(iss)),
+                (std::istream_iterator<int>(ss)),
                 (std::istream_iterator<int>())
             );
 
-            CHECK(vec.size() == 5);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
-            CHECK(*vec.nth(2) == 31);
-            CHECK(*vec.nth(3) == 41);
-            CHECK(*vec.nth(4) == 51);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
 
-        // n < vec.size()
+        #define CONDITION n == vec.size()
         {
-            sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
             CHECK(*vec.nth(0) == 10);
@@ -6068,28 +6134,41 @@ PRINT("Test assign(InputIt, InputIt)");
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::istringstream iss("11 21");
+            const size_type n = vec.size();
+
+            CHECK(CONDITION);
+
+            std::stringstream ss;
+            for (int i = 0; i < int(n); ++i)
+            {
+                ss << i << " ";
+            }
 
             vec.assign
             (
-                (std::istream_iterator<int>(iss)),
+                (std::istream_iterator<int>(ss)),
                 (std::istream_iterator<int>())
             );
 
-            CHECK(vec.size() == 2);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
 
-        // n > vec.size()  &&  n < vec.capacity()  (without storage reallocation)
+        #define CONDITION n > vec.size() && n < vec.capacity()
         {
-            sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
             CHECK(*vec.nth(0) == 10);
@@ -6098,75 +6177,130 @@ PRINT("Test assign(InputIt, InputIt)");
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::istringstream iss("11 21 31 41 51 61 71 81");
+            const size_type n = vec.capacity() - 1;
+
+            CHECK(CONDITION);
+
+            std::stringstream ss;
+            for (int i = 0; i < int(n); ++i)
+            {
+                ss << i << " ";
+            }
 
             vec.assign
             (
-                (std::istream_iterator<int>(iss)),
+                (std::istream_iterator<int>(ss)),
                 (std::istream_iterator<int>())
             );
 
-            CHECK(vec.size() == 8);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
-            CHECK(*vec.nth(2) == 31);
-            CHECK(*vec.nth(3) == 41);
-            CHECK(*vec.nth(4) == 51);
-            CHECK(*vec.nth(5) == 61);
-            CHECK(*vec.nth(6) == 71);
-            CHECK(*vec.nth(7) == 81);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
 
-        // n > vec.size()  &&  n > vec.capacity()  (with storage reallocation)
+        #define CONDITION n > vec.size() && n == vec.capacity()
         {
-            sfl::small_vector<xint, 5, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
-            CHECK(vec.capacity() == 5);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::istringstream iss("11 21 31 41 51 61 71 81");
+            const size_type n = vec.capacity();
+
+            CHECK(CONDITION);
+
+            std::stringstream ss;
+            for (int i = 0; i < int(n); ++i)
+            {
+                ss << i << " ";
+            }
 
             vec.assign
             (
-                (std::istream_iterator<int>(iss)),
+                (std::istream_iterator<int>(ss)),
                 (std::istream_iterator<int>())
             );
 
-            CHECK(vec.size() == 8);
-            CHECK(vec.capacity() > 5);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
-            CHECK(*vec.nth(2) == 31);
-            CHECK(*vec.nth(3) == 41);
-            CHECK(*vec.nth(4) == 51);
-            CHECK(*vec.nth(5) == 61);
-            CHECK(*vec.nth(6) == 71);
-            CHECK(*vec.nth(7) == 81);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
+
+        #define CONDITION n > vec.size() && n > vec.capacity()
+        {
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
+
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
+
+            CHECK(vec.size() == 5);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            const size_type n = vec.capacity() + 1;
+
+            CHECK(CONDITION);
+
+            std::stringstream ss;
+            for (int i = 0; i < int(n); ++i)
+            {
+                ss << i << " ";
+            }
+
+            vec.assign
+            (
+                (std::istream_iterator<int>(ss)),
+                (std::istream_iterator<int>())
+            );
+
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
+        }
+        #undef CONDITION
     }
 
     // Forward iterator
     {
-        // n == vec.size()
+        #define CONDITION n < vec.size()
         {
-            sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
             CHECK(*vec.nth(0) == 10);
@@ -6175,27 +6309,38 @@ PRINT("Test assign(InputIt, InputIt)");
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::vector<xint> data({11, 21, 31, 41, 51});
+            const size_type n = vec.size() - 1;
+
+            CHECK(CONDITION);
+
+            std::vector<xint> data;
+            data.reserve(n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                data.emplace_back(i);
+            }
 
             vec.assign(data.begin(), data.end());
 
-            CHECK(vec.size() == 5);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
-            CHECK(*vec.nth(2) == 31);
-            CHECK(*vec.nth(3) == 41);
-            CHECK(*vec.nth(4) == 51);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
 
-        // n < vec.size()
+        #define CONDITION n == vec.size()
         {
-            sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
             CHECK(*vec.nth(0) == 10);
@@ -6204,24 +6349,38 @@ PRINT("Test assign(InputIt, InputIt)");
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::vector<xint> data({11, 21});
+            const size_type n = vec.size();
+
+            CHECK(CONDITION);
+
+            std::vector<xint> data;
+            data.reserve(n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                data.emplace_back(i);
+            }
 
             vec.assign(data.begin(), data.end());
 
-            CHECK(vec.size() == 2);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
 
-        // n > vec.size()  &&  n < vec.capacity()  (without storage reallocation)
+        #define CONDITION n > vec.size() && n < vec.capacity()
         {
-            sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
             CHECK(*vec.nth(0) == 10);
@@ -6230,179 +6389,136 @@ PRINT("Test assign(InputIt, InputIt)");
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::vector<xint> data({11, 21, 31, 41, 51, 61, 71, 81});
+            const size_type n = vec.capacity() - 1;
+
+            CHECK(CONDITION);
+
+            std::vector<xint> data;
+            data.reserve(n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                data.emplace_back(i);
+            }
 
             vec.assign(data.begin(), data.end());
 
-            CHECK(vec.size() == 8);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
-            CHECK(*vec.nth(2) == 31);
-            CHECK(*vec.nth(3) == 41);
-            CHECK(*vec.nth(4) == 51);
-            CHECK(*vec.nth(5) == 61);
-            CHECK(*vec.nth(6) == 71);
-            CHECK(*vec.nth(7) == 81);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
 
-        // n > vec.size()  &&  n > vec.capacity()  (with storage reallocation)
+        #define CONDITION n > vec.size() && n == vec.capacity()
         {
-            sfl::small_vector<xint, 5, TPARAM_ALLOCATOR<xint>> vec;
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-            vec.emplace(vec.end(), 10);
-            vec.emplace(vec.end(), 20);
-            vec.emplace(vec.end(), 30);
-            vec.emplace(vec.end(), 40);
-            vec.emplace(vec.end(), 50);
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
 
             CHECK(vec.size() == 5);
-            CHECK(vec.capacity() == 5);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
             CHECK(*vec.nth(3) == 40);
             CHECK(*vec.nth(4) == 50);
 
-            std::vector<xint> data({11, 21, 31, 41, 51, 61, 71, 81});
+            const size_type n = vec.capacity();
+
+            CHECK(CONDITION);
+
+            std::vector<xint> data;
+            data.reserve(n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                data.emplace_back(i);
+            }
 
             vec.assign(data.begin(), data.end());
 
-            CHECK(vec.size() == 8);
-            CHECK(vec.capacity() > 5);
-            CHECK(*vec.nth(0) == 11);
-            CHECK(*vec.nth(1) == 21);
-            CHECK(*vec.nth(2) == 31);
-            CHECK(*vec.nth(3) == 41);
-            CHECK(*vec.nth(4) == 51);
-            CHECK(*vec.nth(5) == 61);
-            CHECK(*vec.nth(6) == 71);
-            CHECK(*vec.nth(7) == 81);
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
         }
+        #undef CONDITION
+
+        #define CONDITION n > vec.size() && n > vec.capacity()
+        {
+            sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
+
+            using size_type = typename sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
+
+            CHECK(vec.size() == 5);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            const size_type n = vec.capacity() + 1;
+
+            CHECK(CONDITION);
+
+            std::vector<xint> data;
+            data.reserve(n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                data.emplace_back(i);
+            }
+
+            vec.assign(data.begin(), data.end());
+
+            CHECK(vec.size() == n);
+            for (int i = 0; i < int(n); ++i)
+            {
+                CHECK(*vec.nth(i) == i);
+            }
+        }
+        #undef CONDITION
     }
 }
 
 PRINT("Test assign(std::initializer_list");
 {
-    // n == vec.size()
-    {
-        sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
+    sfl::small_vector<xint, 10, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+    vec.emplace(vec.end(), 10);
+    vec.emplace(vec.end(), 20);
+    vec.emplace(vec.end(), 30);
+    vec.emplace(vec.end(), 40);
+    vec.emplace(vec.end(), 50);
 
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
+    CHECK(vec.size() == 5);
+    CHECK(*vec.nth(0) == 10);
+    CHECK(*vec.nth(1) == 20);
+    CHECK(*vec.nth(2) == 30);
+    CHECK(*vec.nth(3) == 40);
+    CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{11, 21, 31, 41, 51};
+    std::initializer_list<xint> ilist{1, 2, 3, 4, 5};
 
-        vec.assign(ilist);
+    vec.assign(ilist);
 
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 11);
-        CHECK(*vec.nth(1) == 21);
-        CHECK(*vec.nth(2) == 31);
-        CHECK(*vec.nth(3) == 41);
-        CHECK(*vec.nth(4) == 51);
-    }
-
-    // n < vec.size()
-    {
-        sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
-
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
-
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
-
-        std::initializer_list<xint> ilist{11, 21};
-
-        vec.assign(ilist);
-
-        CHECK(vec.size() == 2);
-        CHECK(*vec.nth(0) == 11);
-        CHECK(*vec.nth(1) == 21);
-    }
-
-    // n > vec.size()  &&  n < vec.capacity()  (without storage reallocation)
-    {
-        sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
-
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
-
-        CHECK(vec.size() == 5);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
-
-        std::initializer_list<xint> ilist{11, 21, 31, 41, 51, 61, 71, 81};
-
-        vec.assign(ilist);
-
-        CHECK(vec.size() == 8);
-        CHECK(*vec.nth(0) == 11);
-        CHECK(*vec.nth(1) == 21);
-        CHECK(*vec.nth(2) == 31);
-        CHECK(*vec.nth(3) == 41);
-        CHECK(*vec.nth(4) == 51);
-        CHECK(*vec.nth(5) == 61);
-        CHECK(*vec.nth(6) == 71);
-        CHECK(*vec.nth(7) == 81);
-    }
-
-    // n > vec.size()  &&  n > vec.capacity()  (with storage reallocation)
-    {
-        sfl::small_vector<xint, 5, TPARAM_ALLOCATOR<xint>> vec;
-
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
-
-        CHECK(vec.size() == 5);
-        CHECK(vec.capacity() == 5);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
-
-        std::initializer_list<xint> ilist{11, 21, 31, 41, 51, 61, 71, 81};
-
-        vec.assign(ilist);
-
-        CHECK(vec.size() == 8);
-        CHECK(vec.capacity() > 5);
-        CHECK(*vec.nth(0) == 11);
-        CHECK(*vec.nth(1) == 21);
-        CHECK(*vec.nth(2) == 31);
-        CHECK(*vec.nth(3) == 41);
-        CHECK(*vec.nth(4) == 51);
-        CHECK(*vec.nth(5) == 61);
-        CHECK(*vec.nth(6) == 71);
-        CHECK(*vec.nth(7) == 81);
-    }
+    CHECK(vec.size() == 5);
+    CHECK(*vec.nth(0) == 1);
+    CHECK(*vec.nth(1) == 2);
+    CHECK(*vec.nth(2) == 3);
+    CHECK(*vec.nth(3) == 4);
+    CHECK(*vec.nth(4) == 5);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
