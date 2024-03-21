@@ -60,7 +60,6 @@ private:
     {
         union
         {
-            unsigned char dummy_;
             value_type first_[N];
         };
 
