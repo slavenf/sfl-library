@@ -15,7 +15,7 @@
 #include <sstream>
 #include <vector>
 
-int main()
+void test_static_vector()
 {
     using sfl::test::xint;
 
@@ -3649,4 +3649,9 @@ int main()
         CHECK(*vec.nth(0) == 10);
         CHECK(*vec.nth(1) == 30);
     }
+}
+
+int main()
+{
+    test_static_vector();
 }
