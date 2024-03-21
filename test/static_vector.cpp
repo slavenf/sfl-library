@@ -2976,6 +2976,524 @@ int main()
     }
 
     ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test assign(size_type, const T&)");
+    {
+        #define CONDITION n < vec.size()
+        {
+            sfl::static_vector<xint, 10> vec;
+
+            using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
+
+            CHECK(vec.size() == 5);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            const size_type n = vec.size() - 1;
+
+            CHECK(CONDITION);
+
+            xint value(987654);
+
+            vec.assign(n, value);
+
+            CHECK(vec.size() == 4);
+            for (const auto& elem : vec)
+            {
+                CHECK(elem == value);
+            }
+        }
+        #undef CONDITION
+
+        #define CONDITION n == vec.size()
+        {
+            sfl::static_vector<xint, 10> vec;
+
+            using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
+
+            CHECK(vec.size() == 5);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            const size_type n = vec.size();
+
+            CHECK(CONDITION);
+
+            xint value(987654);
+
+            vec.assign(n, value);
+
+            CHECK(vec.size() == 5);
+            for (const auto& elem : vec)
+            {
+                CHECK(elem == value);
+            }
+        }
+        #undef CONDITION
+
+        #define CONDITION n > vec.size() && n < vec.capacity()
+        {
+            sfl::static_vector<xint, 10> vec;
+
+            using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
+
+            CHECK(vec.size() == 5);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            const size_type n = vec.capacity() - 1;
+
+            CHECK(CONDITION);
+
+            xint value(987654);
+
+            vec.assign(n, value);
+
+            CHECK(vec.size() == n);
+            for (const auto& elem : vec)
+            {
+                CHECK(elem == value);
+            }
+        }
+        #undef CONDITION
+
+        #define CONDITION n > vec.size() && n == vec.capacity()
+        {
+            sfl::static_vector<xint, 10> vec;
+
+            using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+            vec.emplace_back(30);
+            vec.emplace_back(40);
+            vec.emplace_back(50);
+
+            CHECK(vec.size() == 5);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+
+            const size_type n = vec.capacity();
+
+            CHECK(CONDITION);
+
+            xint value(987654);
+
+            vec.assign(n, value);
+
+            CHECK(vec.size() == n);
+            for (const auto& elem : vec)
+            {
+                CHECK(elem == value);
+            }
+        }
+        #undef CONDITION
+    }
+
+    PRINT("Test assign(InputIt, InputIt)");
+    {
+        // Input iterator (exactly)
+        {
+            #define CONDITION n < vec.size()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.size() - 1;
+
+                CHECK(CONDITION);
+
+                std::stringstream ss;
+                for (int i = 0; i < int(n); ++i)
+                {
+                    ss << i << " ";
+                }
+
+                vec.assign
+                (
+                    (std::istream_iterator<int>(ss)),
+                    (std::istream_iterator<int>())
+                );
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+
+            #define CONDITION n == vec.size()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.size();
+
+                CHECK(CONDITION);
+
+                std::stringstream ss;
+                for (int i = 0; i < int(n); ++i)
+                {
+                    ss << i << " ";
+                }
+
+                vec.assign
+                (
+                    (std::istream_iterator<int>(ss)),
+                    (std::istream_iterator<int>())
+                );
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+
+            #define CONDITION n > vec.size() && n < vec.capacity()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.capacity() - 1;
+
+                CHECK(CONDITION);
+
+                std::stringstream ss;
+                for (int i = 0; i < int(n); ++i)
+                {
+                    ss << i << " ";
+                }
+
+                vec.assign
+                (
+                    (std::istream_iterator<int>(ss)),
+                    (std::istream_iterator<int>())
+                );
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+
+            #define CONDITION n > vec.size() && n == vec.capacity()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.capacity();
+
+                CHECK(CONDITION);
+
+                std::stringstream ss;
+                for (int i = 0; i < int(n); ++i)
+                {
+                    ss << i << " ";
+                }
+
+                vec.assign
+                (
+                    (std::istream_iterator<int>(ss)),
+                    (std::istream_iterator<int>())
+                );
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+        }
+
+        // Forward iterator
+        {
+            #define CONDITION n < vec.size()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.size() - 1;
+
+                CHECK(CONDITION);
+
+                std::vector<xint> data;
+                data.reserve(n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    data.emplace_back(i);
+                }
+
+                vec.assign(data.begin(), data.end());
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+
+            #define CONDITION n == vec.size()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.size();
+
+                CHECK(CONDITION);
+
+                std::vector<xint> data;
+                data.reserve(n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    data.emplace_back(i);
+                }
+
+                vec.assign(data.begin(), data.end());
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+
+            #define CONDITION n > vec.size() && n < vec.capacity()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.capacity() - 1;
+
+                CHECK(CONDITION);
+
+                std::vector<xint> data;
+                data.reserve(n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    data.emplace_back(i);
+                }
+
+                vec.assign(data.begin(), data.end());
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+
+            #define CONDITION n > vec.size() && n == vec.capacity()
+            {
+                sfl::static_vector<xint, 10> vec;
+
+                using size_type = typename sfl::static_vector<xint, 10>::size_type;
+
+                vec.emplace_back(10);
+                vec.emplace_back(20);
+                vec.emplace_back(30);
+                vec.emplace_back(40);
+                vec.emplace_back(50);
+
+                CHECK(vec.size() == 5);
+                CHECK(*vec.nth(0) == 10);
+                CHECK(*vec.nth(1) == 20);
+                CHECK(*vec.nth(2) == 30);
+                CHECK(*vec.nth(3) == 40);
+                CHECK(*vec.nth(4) == 50);
+
+                const size_type n = vec.capacity();
+
+                CHECK(CONDITION);
+
+                std::vector<xint> data;
+                data.reserve(n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    data.emplace_back(i);
+                }
+
+                vec.assign(data.begin(), data.end());
+
+                CHECK(vec.size() == n);
+                for (int i = 0; i < int(n); ++i)
+                {
+                    CHECK(*vec.nth(i) == i);
+                }
+            }
+            #undef CONDITION
+        }
+    }
+
+    PRINT("Test assign(std::initializer_list");
+    {
+        sfl::static_vector<xint, 10> vec;
+
+        vec.emplace(vec.end(), 10);
+        vec.emplace(vec.end(), 20);
+        vec.emplace(vec.end(), 30);
+        vec.emplace(vec.end(), 40);
+        vec.emplace(vec.end(), 50);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
+        std::initializer_list<xint> ilist{1, 2, 3, 4, 5};
+
+        vec.assign(ilist);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 1);
+        CHECK(*vec.nth(1) == 2);
+        CHECK(*vec.nth(2) == 3);
+        CHECK(*vec.nth(3) == 4);
+        CHECK(*vec.nth(4) == 5);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
 
