@@ -1929,15 +1929,17 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
 PRINT("Test resize(size_type)");
 {
-    // n == vec.size()
+    #define CONDITION n < vec.size()
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -1946,7 +1948,44 @@ PRINT("Test resize(size_type)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        vec.resize(5);
+        const size_type n = vec.size() - 1;
+
+        CHECK(CONDITION);
+
+        vec.resize(n);
+
+        CHECK(vec.size() == 4);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+    }
+    #undef CONDITION
+
+    #define CONDITION n == vec.size()
+    {
+        sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+
+        using size_type = typename sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
+        const size_type n = vec.size();
+
+        CHECK(CONDITION);
+
+        vec.resize(n);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -1955,16 +1994,19 @@ PRINT("Test resize(size_type)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
     }
+    #undef CONDITION
 
-    // n < vec.size()
+    #define CONDITION n > vec.size()
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -1973,55 +2015,39 @@ PRINT("Test resize(size_type)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        vec.resize(2);
+        const size_type n = vec.size() + 1;
 
-        CHECK(vec.size() == 2);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-    }
+        CHECK(CONDITION);
 
-    // n > vec.size()
-    {
-        sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vec.resize(n);
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
-
-        CHECK(vec.size() == 5);
+        CHECK(vec.size() == n);
         CHECK(*vec.nth(0) == 10);
         CHECK(*vec.nth(1) == 20);
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
-
-        vec.resize(8);
-
-        CHECK(vec.size() == 8);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
-        CHECK(*vec.nth(5) == SFL_TEST_XINT_DEFAULT_VALUE);
-        CHECK(*vec.nth(6) == SFL_TEST_XINT_DEFAULT_VALUE);
-        CHECK(*vec.nth(7) == SFL_TEST_XINT_DEFAULT_VALUE);
+        for (size_type i = 5; i < n; ++i)
+        {
+            CHECK(*vec.nth(i) == SFL_TEST_XINT_DEFAULT_VALUE);
+        }
     }
+    #undef CONDITION
 }
 
 PRINT("Test resize(size_type, const T&)");
 {
-    // n == vec.size()
+    #define CONDITION n < vec.size()
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -2030,9 +2056,48 @@ PRINT("Test resize(size_type, const T&)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        xint value_99(99);
+        const size_type n = vec.size() - 1;
 
-        vec.resize(5, value_99);
+        CHECK(CONDITION);
+
+        xint value(987654);
+
+        vec.resize(n, value);
+
+        CHECK(vec.size() == 4);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+    }
+    #undef CONDITION
+
+    #define CONDITION n == vec.size()
+    {
+        sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+
+        using size_type = typename sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
+
+        CHECK(vec.size() == 5);
+        CHECK(*vec.nth(0) == 10);
+        CHECK(*vec.nth(1) == 20);
+        CHECK(*vec.nth(2) == 30);
+        CHECK(*vec.nth(3) == 40);
+        CHECK(*vec.nth(4) == 50);
+
+        const size_type n = vec.size();
+
+        CHECK(CONDITION);
+
+        xint value(987654);
+
+        vec.resize(n, value);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -2041,16 +2106,19 @@ PRINT("Test resize(size_type, const T&)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
     }
+    #undef CONDITION
 
-    // n < vec.size()
+    #define CONDITION n > vec.size()
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
+        using size_type = typename sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+
+        vec.emplace_back(10);
+        vec.emplace_back(20);
+        vec.emplace_back(30);
+        vec.emplace_back(40);
+        vec.emplace_back(50);
 
         CHECK(vec.size() == 5);
         CHECK(*vec.nth(0) == 10);
@@ -2059,46 +2127,26 @@ PRINT("Test resize(size_type, const T&)");
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        xint value_99(99);
+        const size_type n = vec.size() + 1;
 
-        vec.resize(2, value_99);
+        CHECK(CONDITION);
 
-        CHECK(vec.size() == 2);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-    }
+        xint value(987654);
 
-    // n > vec.size()
-    {
-        sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vec.resize(n, value);
 
-        vec.emplace(vec.end(), 10);
-        vec.emplace(vec.end(), 20);
-        vec.emplace(vec.end(), 30);
-        vec.emplace(vec.end(), 40);
-        vec.emplace(vec.end(), 50);
-
-        CHECK(vec.size() == 5);
+        CHECK(vec.size() == n);
         CHECK(*vec.nth(0) == 10);
         CHECK(*vec.nth(1) == 20);
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
-
-        xint value_99(99);
-
-        vec.resize(8, value_99);
-
-        CHECK(vec.size() == 8);
-        CHECK(*vec.nth(0) == 10);
-        CHECK(*vec.nth(1) == 20);
-        CHECK(*vec.nth(2) == 30);
-        CHECK(*vec.nth(3) == 40);
-        CHECK(*vec.nth(4) == 50);
-        CHECK(*vec.nth(5) == value_99);
-        CHECK(*vec.nth(6) == value_99);
-        CHECK(*vec.nth(7) == value_99);
+        for (size_type i = 5; i < n; ++i)
+        {
+            CHECK(*vec.nth(i) == value);
+        }
     }
+    #undef CONDITION
 }
 
 PRINT("Test swap(container&)");
