@@ -2224,7 +2224,7 @@ void test_static_vector()
         #undef CONDITION
     }
 
-    PRINT("Test swap(static_vector&)");
+    PRINT("Test swap(container&)");
     {
         // Swap with self
         {
