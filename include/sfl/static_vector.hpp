@@ -63,12 +63,10 @@ private:
             value_type first_[N];
         };
 
-        size_type size_;
+        pointer last_;
 
-        data() noexcept : size_(0)
-        {}
-
-        data(size_type size) noexcept : size_(size)
+        data() noexcept
+            : last_(first_)
         {}
 
         ~data() noexcept
@@ -84,27 +82,34 @@ public:
     //
 
     static_vector() noexcept
-        : data_(0)
     {}
 
     static_vector(size_type n)
-        : data_(n)
     {
-        SFL_ASSERT(n <= capacity());
-        sfl::dtl::uninitialized_default_construct_n(data_.first_, n);
+        SFL_ASSERT(n <= N);
+
+        data_.last_ = sfl::dtl::uninitialized_default_construct_n
+        (
+            data_.first_,
+            n
+        );
     }
 
     static_vector(size_type n, const T& value)
-        : data_(n)
     {
-        SFL_ASSERT(n <= capacity());
-        sfl::dtl::uninitialized_fill_n(data_.first_, n, value);
+        SFL_ASSERT(n <= N);
+
+        data_.last_ = sfl::dtl::uninitialized_fill_n
+        (
+            data_.first_,
+            n,
+            value
+        );
     }
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_exactly_input_iterator<InputIt>::value>* = nullptr>
     static_vector(InputIt first, InputIt last)
-        : data_(0)
     {
         SFL_TRY
         {
@@ -116,7 +121,7 @@ public:
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy_n(data_.first_, data_.size_);
+            sfl::dtl::destroy(data_.first_, data_.last_);
             SFL_RETHROW;
         }
     }
@@ -124,10 +129,15 @@ public:
     template <typename ForwardIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_forward_iterator<ForwardIt>::value>* = nullptr>
     static_vector(ForwardIt first, ForwardIt last)
-        : data_(std::distance(first, last))
     {
-        SFL_ASSERT(size_type(std::distance(first, last)) <= capacity());
-        sfl::dtl::uninitialized_copy(first, last, data_.first_);
+        SFL_ASSERT(size_type(std::distance(first, last)) <= N);
+
+        data_.last_ = sfl::dtl::uninitialized_copy
+        (
+            first,
+            last,
+            data_.first_
+        );
     }
 
     static_vector(std::initializer_list<T> ilist)
@@ -135,20 +145,28 @@ public:
     {}
 
     static_vector(const static_vector& other)
-        : data_(other.data_.size_)
     {
-        sfl::dtl::uninitialized_copy_n(other.data_.first_, other.data_.size_, this->data_.first_);
+        data_.last_ = sfl::dtl::uninitialized_copy
+        (
+            other.begin(),
+            other.end(),
+            data_.first_
+        );
     }
 
     static_vector(static_vector&& other)
-        : data_(other.data_.size_)
     {
-        sfl::dtl::uninitialized_move_n(other.data_.first_, other.data_.size_, this->data_.first_);
+        data_.last_ = sfl::dtl::uninitialized_move
+        (
+            std::make_move_iterator(other.begin()),
+            std::make_move_iterator(other.end()),
+            data_.first_
+        );
     }
 
     ~static_vector() noexcept
     {
-        sfl::dtl::destroy_n(data_.first_, data_.size_);
+        sfl::dtl::destroy(data_.first_, data_.last_);
     }
 
     //
@@ -159,38 +177,57 @@ public:
     {
         SFL_ASSERT(n <= capacity());
 
-        if (n <= data_.size_)
+        const size_type size = this->size();
+
+        if (n <= size)
         {
+            const pointer new_last = data_.first_ + n;
+
+            sfl::dtl::fill
+            (
+                data_.first_,
+                new_last,
+                value
+            );
+
             sfl::dtl::destroy
             (
-                sfl::dtl::fill_n(data_.first_, n, value),
-                data_.first_ + data_.size_
+                new_last,
+                data_.last_
             );
+
+            data_.last_ = new_last;
         }
         else
         {
-            sfl::dtl::uninitialized_fill
+            const size_type delta = n - size;
+
+            sfl::dtl::fill
             (
-                sfl::dtl::fill_n(data_.first_, data_.size_, value),
-                data_.first_ + n,
+                data_.first_,
+                data_.last_,
+                value
+            );
+
+            data_.last_ = sfl::dtl::uninitialized_fill_n
+            (
+                data_.last_,
+                delta,
                 value
             );
         }
-
-        data_.size_ = n;
     }
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_exactly_input_iterator<InputIt>::value>* = nullptr>
     void assign(InputIt first, InputIt last)
     {
-        pointer ptr = data_.first_;
-        pointer end = data_.first_ + data_.size_;
+        pointer curr = data_.first_;
 
-        while (first != last && ptr != end)
+        while (first != last && curr != data_.last_)
         {
-            *ptr = *first;
-            ++ptr;
+            *curr = *first;
+            ++curr;
             ++first;
         }
 
@@ -203,10 +240,10 @@ public:
             }
             while (first != last);
         }
-        else if (ptr < end)
+        else if (curr < data_.last_)
         {
-            sfl::dtl::destroy(ptr, end);
-            data_.size_ = std::distance(data_.first_, ptr);
+            sfl::dtl::destroy(curr, data_.last_);
+            data_.last_ = curr;
         }
     }
 
@@ -218,26 +255,43 @@ public:
 
         const size_type n = std::distance(first, last);
 
-        if (n <= data_.size_)
+        const size_type size = this->size();
+
+        if (n <= size)
         {
+            const pointer new_last = sfl::dtl::copy
+            (
+                first,
+                last,
+                data_.first_
+            );
+
             sfl::dtl::destroy
             (
-                sfl::dtl::copy(first, last, data_.first_),
-                data_.first_ + data_.size_
+                new_last,
+                data_.last_
             );
+
+            data_.last_ = new_last;
         }
         else
         {
-            const auto mid = std::next(first, data_.size_);
-            sfl::dtl::uninitialized_copy
+            const ForwardIt mid = std::next(first, size);
+
+            sfl::dtl::copy
+            (
+                first,
+                mid,
+                data_.first_
+            );
+
+            data_.last_ = sfl::dtl::uninitialized_copy
             (
                 mid,
                 last,
-                sfl::dtl::copy(first, mid, data_.first_)
+                data_.last_
             );
         }
-
-        data_.size_ = n;
     }
 
     void assign(std::initializer_list<T> ilist)
@@ -295,19 +349,19 @@ public:
     SFL_NODISCARD
     iterator end() noexcept
     {
-        return data_.first_ + data_.size_;
+        return data_.last_;
     }
 
     SFL_NODISCARD
     const_iterator end() const noexcept
     {
-        return data_.first_ + data_.size_;
+        return data_.last_;
     }
 
     SFL_NODISCARD
     const_iterator cend() const noexcept
     {
-        return data_.first_ + data_.size_;
+        return data_.last_;
     }
 
     SFL_NODISCARD
@@ -374,19 +428,19 @@ public:
     SFL_NODISCARD
     bool empty() const noexcept
     {
-        return data_.size_ == 0;
+        return data_.first_ == data_.last_;
     }
 
     SFL_NODISCARD
     bool full() const noexcept
     {
-        return data_.size_ == N;
+        return std::distance(begin(), end()) == N;
     }
 
     SFL_NODISCARD
     size_type size() const noexcept
     {
-        return data_.size_;
+        return std::distance(begin(), end());
     }
 
     SFL_NODISCARD
@@ -404,7 +458,7 @@ public:
     SFL_NODISCARD
     size_type available() const noexcept
     {
-        return N - data_.size_;
+        return capacity() - size();
     }
 
     //
@@ -465,14 +519,14 @@ public:
     reference back() noexcept
     {
         SFL_ASSERT(!empty());
-        return *(data_.first_ + data_.size_ - 1);
+        return *(data_.last_ - 1);
     }
 
     SFL_NODISCARD
     const_reference back() const noexcept
     {
         SFL_ASSERT(!empty());
-        return *(data_.first_ + data_.size_ - 1);
+        return *(data_.last_ - 1);
     }
 
     SFL_NODISCARD
@@ -493,8 +547,8 @@ public:
 
     void clear() noexcept
     {
-        sfl::dtl::destroy_n(data_.first_, data_.size_);
-        data_.size_ = 0;
+        sfl::dtl::destroy(data_.first_, data_.last_);
+        data_.last_ = data_.first_;
     }
 
     template <typename... Args>
@@ -505,16 +559,17 @@ public:
 
         const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
 
-        if (p1 == end())
+        if (p1 == data_.last_)
         {
             sfl::dtl::construct_at(p1, std::forward<Args>(args)...);
 
-            ++data_.size_;
+            ++data_.last_;
         }
         else
         {
-            const pointer p3 = data_.first_ + data_.size_;
-            const pointer p2 = p3 - 1;
+            const pointer p2 = data_.last_ - 1;
+
+            const pointer old_last = data_.last_;
 
             // The order of operations is critical. First we will construct
             // temporary value because arguments `args...` can contain
@@ -523,11 +578,20 @@ public:
 
             value_type tmp(std::forward<Args>(args)...);
 
-            sfl::dtl::construct_at(p3, std::move(*p2));
+            sfl::dtl::construct_at
+            (
+                data_.last_,
+                std::move(*p2)
+            );
 
-            ++data_.size_;
+            ++data_.last_;
 
-            sfl::dtl::move_backward(p1, p2, p3);
+            sfl::dtl::move_backward
+            (
+                p1,
+                p2,
+                old_last
+            );
 
             *p1 = std::move(tmp);
         }
@@ -560,79 +624,55 @@ public:
 
             value_type tmp(value);
 
-            if (n > data_.size_ - offset)
+            const size_type num_elems_after = std::distance(pos, cend());
+
+            if (num_elems_after > n)
             {
-                // |<----------size----------->|
-                // |                           |
-                // |<-----offset----->|<--n1-->|<---------n2--------->|
-                // |                  |        |                      |
-                // [.........data..............]                      |
-                //                    [...........to insert...........]
-                //                    |                               |
-                //                    |<--------------n-------------->|
+                const pointer old_last = data_.last_;
 
-                const size_type n1 = data_.size_ - offset;
-                const size_type n2 = n - n1;
-
-                sfl::dtl::uninitialized_fill_n
+                data_.last_ = sfl::dtl::uninitialized_move
                 (
-                    data_.first_ + data_.size_,
-                    n2,
-                    tmp
+                    data_.last_ - n,
+                    data_.last_,
+                    data_.last_
                 );
 
-                data_.size_ += n2;
-
-                sfl::dtl::uninitialized_move_n
+                sfl::dtl::move_backward
                 (
                     data_.first_ + offset,
-                    n1,
-                    data_.first_ + data_.size_
+                    old_last - n,
+                    old_last
                 );
 
-                data_.size_ += n1;
-
-                sfl::dtl::fill_n
+                sfl::dtl::fill
                 (
                     data_.first_ + offset,
-                    n1,
+                    data_.first_ + offset + n,
                     tmp
                 );
             }
             else
             {
-                // |<----------------------size--------------------->|
-                // |                                                 |
-                // |<--offset-->|<--------n1-------->|<----n2=n----->|
-                // |            |                    |               |
-                // [.......................data......................]
-                //              [...to insert...]
-                //              |               |
-                //              |<------n------>|
+                const pointer old_last = data_.last_;
 
-                const size_type n1 = data_.size_ - offset - n;
-                const size_type n2 = n;
-
-                sfl::dtl::uninitialized_move_n
+                data_.last_ = sfl::dtl::uninitialized_fill_n
                 (
-                    data_.first_ + data_.size_ - n2,
-                    n2,
-                    data_.first_ + data_.size_
+                    data_.last_,
+                    n - num_elems_after,
+                    tmp
                 );
 
-                data_.size_ += n2;
-
-                sfl::dtl::move_backward
+                data_.last_ = sfl::dtl::uninitialized_move
                 (
                     data_.first_ + offset,
-                    data_.first_ + offset + n1,
-                    data_.first_ + offset + n1 + n2
+                    old_last,
+                    data_.last_
                 );
 
-                sfl::dtl::fill_n
+                sfl::dtl::fill
                 (
                     data_.first_ + offset,
-                    n,
+                    old_last,
                     tmp
                 );
             }
@@ -670,84 +710,59 @@ public:
         {
             const size_type n = std::distance(first, last);
 
-            if (n != 0)
+            const size_type num_elems_after = std::distance(pos, cend());
+
+            if (num_elems_after > n)
             {
-                if (n > data_.size_ - offset)
-                {
-                    // |<----------size----------->|
-                    // |                           |
-                    // |<-----offset----->|<--n1-->|<---------n2--------->|
-                    // |                  |        |                      |
-                    // [.........data..............]                      |
-                    //                    [...........to insert...........]
-                    //                    |                               |
-                    //                    |<--------------n-------------->|
+                const pointer old_last = data_.last_;
 
-                    const size_type n1 = data_.size_ - offset;
-                    const size_type n2 = n - n1;
+                data_.last_ = sfl::dtl::uninitialized_move
+                (
+                    data_.last_ - n,
+                    data_.last_,
+                    data_.last_
+                );
 
-                    sfl::dtl::uninitialized_copy_n
-                    (
-                        first + n1,
-                        n2,
-                        data_.first_ + data_.size_
-                    );
+                sfl::dtl::move_backward
+                (
+                    data_.first_ + offset,
+                    old_last - n,
+                    old_last
+                );
 
-                    data_.size_ += n2;
+                sfl::dtl::copy
+                (
+                    first,
+                    last,
+                    data_.first_ + offset
+                );
+            }
+            else
+            {
+                const pointer old_last = data_.last_;
 
-                    sfl::dtl::uninitialized_move_n
-                    (
-                        data_.first_ + offset,
-                        n1,
-                        data_.first_ + data_.size_
-                    );
+                const ForwardIt mid = std::next(first, num_elems_after);
 
-                    data_.size_ += n1;
+                data_.last_ = sfl::dtl::uninitialized_copy
+                (
+                    mid,
+                    last,
+                    data_.last_
+                );
 
-                    sfl::dtl::copy_n
-                    (
-                        first,
-                        n1,
-                        data_.first_ + offset
-                    );
-                }
-                else
-                {
-                    // |<----------------------size--------------------->|
-                    // |                                                 |
-                    // |<--offset-->|<--------n1-------->|<----n2=n----->|
-                    // |            |                    |               |
-                    // [.......................data......................]
-                    //              [...to insert...]
-                    //              |               |
-                    //              |<------n------>|
+                data_.last_ = sfl::dtl::uninitialized_move
+                (
+                    data_.first_ + offset,
+                    old_last,
+                    data_.last_
+                );
 
-                    const size_type n1 = data_.size_ - offset - n;
-                    const size_type n2 = n;
-
-                    sfl::dtl::uninitialized_move_n
-                    (
-                        data_.first_ + data_.size_ - n2,
-                        n2,
-                        data_.first_ + data_.size_
-                    );
-
-                    data_.size_ += n2;
-
-                    sfl::dtl::move_backward
-                    (
-                        data_.first_ + offset,
-                        data_.first_ + offset + n1,
-                        data_.first_ + offset + n1 + n2
-                    );
-
-                    sfl::dtl::copy
-                    (
-                        first,
-                        last,
-                        data_.first_ + offset
-                    );
-                }
+                sfl::dtl::copy
+                (
+                    first,
+                    mid,
+                    data_.first_ + offset
+                );
             }
         }
 
@@ -764,13 +779,13 @@ public:
     {
         SFL_ASSERT(!full());
 
-        const pointer p = data_.first_ + data_.size_;
+        const pointer old_last = data_.last_;
 
-        sfl::dtl::construct_at(p, std::forward<Args>(args)...);
+        sfl::dtl::construct_at(data_.last_, std::forward<Args>(args)...);
 
-        ++data_.size_;
+        ++data_.last_;
 
-        return *p;
+        return *old_last;
     }
 
     void push_back(const T& value)
@@ -786,24 +801,25 @@ public:
     void pop_back()
     {
         SFL_ASSERT(!empty());
-        --data_.size_;
-        sfl::dtl::destroy_at(data_.first_ + data_.size_);
+
+        --data_.last_;
+
+        sfl::dtl::destroy_at(data_.last_);
     }
 
     iterator erase(const_iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
-        const pointer p2 = p1 + 1;
+        const difference_type offset = std::distance(cbegin(), pos);
 
-        sfl::dtl::move(p2, data_.first_ + data_.size_, p1);
+        const pointer p = data_.first_ + offset;
 
-        --data_.size_;
+        data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
-        sfl::dtl::destroy_at(data_.first_ + data_.size_);
+        sfl::dtl::destroy_at(data_.last_);
 
-        return p1;
+        return p;
     }
 
     iterator erase(const_iterator first, const_iterator last)
@@ -815,16 +831,17 @@ public:
             return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type n = std::distance(first, last);
+        const difference_type offset1 = std::distance(cbegin(), first);
+        const difference_type offset2 = std::distance(cbegin(), last);
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), first);
-        const pointer p2 = p1 + n;
+        const pointer p1 = data_.first_ + offset1;
+        const pointer p2 = data_.first_ + offset2;
 
-        sfl::dtl::move(p2, data_.first_ + data_.size_, p1);
+        const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
 
-        data_.size_ -= n;
+        sfl::dtl::destroy(new_last, data_.last_);
 
-        sfl::dtl::destroy_n(data_.first_ + data_.size_, n);
+        data_.last_ = new_last;
 
         return p1;
     }
@@ -833,49 +850,61 @@ public:
     {
         SFL_ASSERT(n <= capacity());
 
-        if (n <= data_.size_)
+        const size_type size = this->size();
+
+        if (n < size)
         {
+            const pointer new_last = data_.first_ + n;
+
             sfl::dtl::destroy
             (
-                data_.first_ + n,
-                data_.first_ + data_.size_
+                new_last,
+                data_.last_
             );
-        }
-        else
-        {
-            sfl::dtl::uninitialized_default_construct
-            (
-                data_.first_ + data_.size_,
-                data_.first_ + n
-            );
-        }
 
-        data_.size_ = n;
+            data_.last_ = new_last;
+        }
+        else if (n > size)
+        {
+            const size_type delta = n - size;
+
+            data_.last_ = sfl::dtl::uninitialized_default_construct_n
+            (
+                data_.last_,
+                delta
+            );
+        }
     }
 
     void resize(size_type n, const T& value)
     {
         SFL_ASSERT(n <= capacity());
 
-        if (n <= data_.size_)
+        const size_type size = this->size();
+
+        if (n < size)
         {
+            const pointer new_last = data_.first_ + n;
+
             sfl::dtl::destroy
             (
-                data_.first_ + n,
-                data_.first_ + data_.size_
+                new_last,
+                data_.last_
             );
+
+            data_.last_ = new_last;
         }
-        else
+        else if (n > size)
         {
-            sfl::dtl::uninitialized_fill
+            const size_type delta = n - size;
+
+            data_.last_ = sfl::dtl::uninitialized_fill_n
             (
-                data_.first_ + data_.size_,
-                data_.first_ + n,
+                data_.last_,
+                delta,
                 value
             );
         }
-
-        data_.size_ = n;
     }
 
     void swap(static_vector& other)
@@ -885,52 +914,56 @@ public:
             return;
         }
 
-        if (this->data_.size_ <= other.data_.size_)
+        const size_type this_size  = this->size();
+        const size_type other_size = other.size();
+
+        if (this_size <= other_size)
         {
             std::swap_ranges
             (
                 this->data_.first_,
-                this->data_.first_ + this->data_.size_,
+                this->data_.first_ + this_size,
                 other.data_.first_
             );
 
-            sfl::dtl::uninitialized_move_n
+            sfl::dtl::uninitialized_move
             (
-                other.data_.first_ + this->data_.size_,
-                other.data_.size_ - this->data_.size_,
-                this->data_.first_ + this->data_.size_
+                other.data_.first_ + this_size,
+                other.data_.first_ + other_size,
+                this->data_.first_ + this_size
             );
 
             sfl::dtl::destroy
             (
-                other.data_.first_ + this->data_.size_,
-                other.data_.first_ + other.data_.size_
+                other.data_.first_ + this_size,
+                other.data_.first_ + other_size
             );
         }
         else
         {
             std::swap_ranges
             (
-                this->data_.first_,
-                this->data_.first_ + other.data_.size_,
-                other.data_.first_
+                other.data_.first_,
+                other.data_.first_ + other_size,
+                this->data_.first_
             );
 
-            sfl::dtl::uninitialized_move_n
+            sfl::dtl::uninitialized_move
             (
-                this->data_.first_ + other.data_.size_,
-                this->data_.size_ - other.data_.size_,
-                other.data_.first_ + other.data_.size_
+                this->data_.first_ + other_size,
+                this->data_.first_ + this_size,
+                other.data_.first_ + other_size
             );
 
             sfl::dtl::destroy
             (
-                this->data_.first_ + other.data_.size_,
-                this->data_.first_ + this->data_.size_
+                this->data_.first_ + other_size,
+                this->data_.first_ + this_size
             );
         }
 
-        std::swap(this->data_.size_, other.data_.size_);
+        data_.last_ = data_.first_ + other_size;
+        other.data_.last_ = other.data_.first_ + this_size;
     }
 };
 
