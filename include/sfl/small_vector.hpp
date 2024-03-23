@@ -1738,12 +1738,12 @@ private:
 
         if (n <= capacity())
         {
-            const size_type s = size();
+            const size_type size = this->size();
 
-            if (n <= s)
+            const pointer new_last = data_.first_ + n;
+
+            if (n <= size)
             {
-                const pointer new_last = data_.first_ + n;
-
                 sfl::dtl::fill
                 (
                     data_.first_,
@@ -1757,8 +1757,6 @@ private:
                     new_last,
                     data_.last_
                 );
-
-                data_.last_ = new_last;
             }
             else
             {
@@ -1769,14 +1767,16 @@ private:
                     value
                 );
 
-                data_.last_ = sfl::dtl::uninitialized_fill_n_a
+                sfl::dtl::uninitialized_fill_a
                 (
                     data_.ref_to_alloc(),
                     data_.last_,
-                    n - s,
+                    new_last,
                     value
                 );
             }
+
+            data_.last_ = new_last;
         }
         else
         {
