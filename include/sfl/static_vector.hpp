@@ -86,7 +86,7 @@ public:
 
     static_vector(size_type n)
     {
-        SFL_ASSERT(n <= N);
+        SFL_ASSERT(n <= capacity());
 
         data_.last_ = sfl::dtl::uninitialized_default_construct_n
         (
@@ -97,7 +97,7 @@ public:
 
     static_vector(size_type n, const T& value)
     {
-        SFL_ASSERT(n <= N);
+        SFL_ASSERT(n <= capacity());
 
         data_.last_ = sfl::dtl::uninitialized_fill_n
         (
@@ -130,7 +130,7 @@ public:
               sfl::dtl::enable_if_t<sfl::dtl::is_forward_iterator<ForwardIt>::value>* = nullptr>
     static_vector(ForwardIt first, ForwardIt last)
     {
-        SFL_ASSERT(size_type(std::distance(first, last)) <= N);
+        SFL_ASSERT(size_type(std::distance(first, last)) <= capacity());
 
         data_.last_ = sfl::dtl::uninitialized_copy
         (
