@@ -179,10 +179,10 @@ public:
 
         const size_type size = this->size();
 
+        const pointer new_last = data_.first_ + n;
+
         if (n <= size)
         {
-            const pointer new_last = data_.first_ + n;
-
             sfl::dtl::fill
             (
                 data_.first_,
@@ -195,13 +195,9 @@ public:
                 new_last,
                 data_.last_
             );
-
-            data_.last_ = new_last;
         }
         else
         {
-            const size_type delta = n - size;
-
             sfl::dtl::fill
             (
                 data_.first_,
@@ -209,13 +205,15 @@ public:
                 value
             );
 
-            data_.last_ = sfl::dtl::uninitialized_fill_n
+            sfl::dtl::uninitialized_fill
             (
                 data_.last_,
-                delta,
+                new_last,
                 value
             );
         }
+
+        data_.last_ = new_last;
     }
 
     template <typename InputIt,
