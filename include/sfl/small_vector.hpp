@@ -1831,11 +1831,11 @@ private:
 
         if (n <= capacity())
         {
-            const size_type s = size();
+            const size_type size = this->size();
 
-            if (n <= s)
+            if (n <= size)
             {
-                pointer new_last = sfl::dtl::copy
+                const pointer new_last = sfl::dtl::copy
                 (
                     first,
                     last,
@@ -1853,7 +1853,7 @@ private:
             }
             else
             {
-                ForwardIt mid = std::next(first, s);
+                const ForwardIt mid = std::next(first, size);
 
                 sfl::dtl::copy
                 (
