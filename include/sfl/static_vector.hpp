@@ -616,38 +616,35 @@ public:
             return begin() + std::distance(cbegin(), pos);
         }
 
-        const difference_type offset = std::distance(cbegin(), pos);
-
-        // `value` can be a reference to an element in this container.
-        // First we will create temporary value and after that we can
-        // safely move elements.
-
         const value_type tmp(value);
 
-        const size_type num_elems_after = std::distance(pos, cend());
+        const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p2 = p1 + n;
 
-        if (num_elems_after > n)
+        if (p2 <= data_.last_)
         {
+            const pointer p3 = data_.last_ - n;
+
             const pointer old_last = data_.last_;
 
             data_.last_ = sfl::dtl::uninitialized_move
             (
-                data_.last_ - n,
+                p3,
                 data_.last_,
                 data_.last_
             );
 
             sfl::dtl::move_backward
             (
-                data_.first_ + offset,
-                old_last - n,
+                p1,
+                p3,
                 old_last
             );
 
             sfl::dtl::fill
             (
-                data_.first_ + offset,
-                data_.first_ + offset + n,
+                p1,
+                p2,
                 tmp
             );
         }
@@ -655,29 +652,31 @@ public:
         {
             const pointer old_last = data_.last_;
 
-            data_.last_ = sfl::dtl::uninitialized_fill_n
+            sfl::dtl::uninitialized_fill
             (
                 data_.last_,
-                n - num_elems_after,
+                p2,
                 tmp
             );
 
+            data_.last_ = p2;
+
             data_.last_ = sfl::dtl::uninitialized_move
             (
-                data_.first_ + offset,
+                p1,
                 old_last,
                 data_.last_
             );
 
             sfl::dtl::fill
             (
-                data_.first_ + offset,
+                p1,
                 old_last,
                 tmp
             );
         }
 
-        return begin() + offset;
+        return p1;
     }
 
     template <typename InputIt,
