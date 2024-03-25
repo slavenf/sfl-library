@@ -986,9 +986,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        const difference_type offset = std::distance(cbegin(), pos);
-
-        const pointer p = data_.first_ + offset;
+        const pointer p = data_.first_ + std::distance(cbegin(), pos);
 
         data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
@@ -1006,11 +1004,8 @@ public:
             return begin() + std::distance(cbegin(), first);
         }
 
-        const difference_type offset1 = std::distance(cbegin(), first);
-        const difference_type offset2 = std::distance(cbegin(), last);
-
-        const pointer p1 = data_.first_ + offset1;
-        const pointer p2 = data_.first_ + offset2;
+        const pointer p1 = data_.first_ + std::distance(cbegin(), first);
+        const pointer p2 = data_.first_ + std::distance(cbegin(), last);
 
         const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
 

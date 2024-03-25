@@ -12,6 +12,7 @@
 * Segmented vector: Improved tests for `assign`.
 * Segmented vector: Improved tests for `emplace_back`.
 * Segmented vector: Improved tests for `emplace`.
+* Small vector: Refactored member function `erase`.
 * Small vector: Refactored private member function `assign_fill_n`.
 * Small vector: Refactored private member function `assign_range`.
 * Small vector: Refactored private member function `insert_fill_n`.
