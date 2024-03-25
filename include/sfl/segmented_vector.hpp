@@ -2007,25 +2007,27 @@ private:
             grow_storage(n - available);
         }
 
-        if (dist_to_end > n)
+        const iterator p1 = data_.first_ + dist_to_begin;
+        const iterator p2 = p1 + n;
+
+        if (p2 <= data_.last_)
         {
-            const iterator p1 = data_.first_ + dist_to_begin;
-            const iterator p2 = data_.last_ - n;
+            const iterator p3 = data_.last_ - n;
 
             const iterator old_last = data_.last_;
 
             data_.last_ = sfl::dtl::uninitialized_move_a
             (
                 data_.ref_to_alloc(),
-                p2,
-                old_last,
-                old_last
+                p3,
+                data_.last_,
+                data_.last_
             );
 
             sfl::dtl::move_backward
             (
                 p1,
-                p2,
+                p3,
                 old_last
             );
 
@@ -2035,13 +2037,9 @@ private:
                 last,
                 p1
             );
-
-            return p1;
         }
         else
         {
-            const iterator p1 = data_.first_ + dist_to_begin;
-
             const iterator old_last = data_.last_;
 
             const ForwardIt mid = std::next(first, dist_to_end);
@@ -2051,7 +2049,7 @@ private:
                 data_.ref_to_alloc(),
                 mid,
                 last,
-                old_last
+                data_.last_
             );
 
             data_.last_ = sfl::dtl::uninitialized_move_a
@@ -2068,9 +2066,9 @@ private:
                 mid,
                 p1
             );
-
-            return p1;
         }
+
+        return p1;
     }
 };
 
