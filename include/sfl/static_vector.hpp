@@ -702,69 +702,72 @@ public:
         SFL_ASSERT(size_type(std::distance(first, last)) <= available());
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
 
-        const difference_type offset = std::distance(cbegin(), pos);
-
-        if (first != last)
+        if (first == last)
         {
-            const size_type n = std::distance(first, last);
-
-            const size_type num_elems_after = std::distance(pos, cend());
-
-            if (num_elems_after > n)
-            {
-                const pointer old_last = data_.last_;
-
-                data_.last_ = sfl::dtl::uninitialized_move
-                (
-                    data_.last_ - n,
-                    data_.last_,
-                    data_.last_
-                );
-
-                sfl::dtl::move_backward
-                (
-                    data_.first_ + offset,
-                    old_last - n,
-                    old_last
-                );
-
-                sfl::dtl::copy
-                (
-                    first,
-                    last,
-                    data_.first_ + offset
-                );
-            }
-            else
-            {
-                const pointer old_last = data_.last_;
-
-                const ForwardIt mid = std::next(first, num_elems_after);
-
-                data_.last_ = sfl::dtl::uninitialized_copy
-                (
-                    mid,
-                    last,
-                    data_.last_
-                );
-
-                data_.last_ = sfl::dtl::uninitialized_move
-                (
-                    data_.first_ + offset,
-                    old_last,
-                    data_.last_
-                );
-
-                sfl::dtl::copy
-                (
-                    first,
-                    mid,
-                    data_.first_ + offset
-                );
-            }
+            return begin() + std::distance(cbegin(), pos);
         }
 
-        return begin() + offset;
+        const size_type n = std::distance(first, last);
+
+        const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p2 = p1 + n;
+
+        if (p2 <= data_.last_)
+        {
+            const pointer p3 = data_.last_ - n;
+
+            const pointer old_last = data_.last_;
+
+            data_.last_ = sfl::dtl::uninitialized_move
+            (
+                p3,
+                data_.last_,
+                data_.last_
+            );
+
+            sfl::dtl::move_backward
+            (
+                p1,
+                p3,
+                old_last
+            );
+
+            sfl::dtl::copy
+            (
+                first,
+                last,
+                p1
+            );
+        }
+        else
+        {
+            const pointer old_last = data_.last_;
+
+            const ForwardIt mid = std::next(first, std::distance(pos, cend()));
+
+            data_.last_ = sfl::dtl::uninitialized_copy
+            (
+                mid,
+                last,
+                data_.last_
+            );
+
+            data_.last_ = sfl::dtl::uninitialized_move
+            (
+                p1,
+                old_last,
+                data_.last_
+            );
+
+            sfl::dtl::copy
+            (
+                first,
+                mid,
+                p1
+            );
+        }
+
+        return p1;
     }
 
     iterator insert(const_iterator pos, std::initializer_list<T> ilist)
