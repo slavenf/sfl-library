@@ -611,68 +611,70 @@ public:
         SFL_ASSERT(n <= available());
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
 
+        if (n == 0)
+        {
+            return begin() + std::distance(cbegin(), pos);
+        }
+
         const difference_type offset = std::distance(cbegin(), pos);
 
-        if (n != 0)
+        // `value` can be a reference to an element in this container.
+        // First we will create temporary value and after that we can
+        // safely move elements.
+
+        const value_type tmp(value);
+
+        const size_type num_elems_after = std::distance(pos, cend());
+
+        if (num_elems_after > n)
         {
-            // `value` can be a reference to an element in this container.
-            // First we will create temporary value and after that we can
-            // safely move elements.
+            const pointer old_last = data_.last_;
 
-            value_type tmp(value);
+            data_.last_ = sfl::dtl::uninitialized_move
+            (
+                data_.last_ - n,
+                data_.last_,
+                data_.last_
+            );
 
-            const size_type num_elems_after = std::distance(pos, cend());
+            sfl::dtl::move_backward
+            (
+                data_.first_ + offset,
+                old_last - n,
+                old_last
+            );
 
-            if (num_elems_after > n)
-            {
-                const pointer old_last = data_.last_;
+            sfl::dtl::fill
+            (
+                data_.first_ + offset,
+                data_.first_ + offset + n,
+                tmp
+            );
+        }
+        else
+        {
+            const pointer old_last = data_.last_;
 
-                data_.last_ = sfl::dtl::uninitialized_move
-                (
-                    data_.last_ - n,
-                    data_.last_,
-                    data_.last_
-                );
+            data_.last_ = sfl::dtl::uninitialized_fill_n
+            (
+                data_.last_,
+                n - num_elems_after,
+                tmp
+            );
 
-                sfl::dtl::move_backward
-                (
-                    data_.first_ + offset,
-                    old_last - n,
-                    old_last
-                );
+            data_.last_ = sfl::dtl::uninitialized_move
+            (
+                data_.first_ + offset,
+                old_last,
+                data_.last_
+            );
 
-                sfl::dtl::fill
-                (
-                    data_.first_ + offset,
-                    data_.first_ + offset + n,
-                    tmp
-                );
-            }
-            else
-            {
-                const pointer old_last = data_.last_;
-
-                data_.last_ = sfl::dtl::uninitialized_fill_n
-                (
-                    data_.last_,
-                    n - num_elems_after,
-                    tmp
-                );
-
-                data_.last_ = sfl::dtl::uninitialized_move
-                (
-                    data_.first_ + offset,
-                    old_last,
-                    data_.last_
-                );
-
-                sfl::dtl::fill
-                (
-                    data_.first_ + offset,
-                    old_last,
-                    tmp
-                );
-            }
+            sfl::dtl::fill
+            (
+                data_.first_ + offset,
+                old_last,
+                tmp
+            );
         }
 
         return begin() + offset;
