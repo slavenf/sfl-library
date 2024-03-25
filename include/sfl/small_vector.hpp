@@ -1951,188 +1951,193 @@ private:
 
     iterator insert_fill_n(const_iterator pos, size_type n, const T& value)
     {
-        const difference_type offset = std::distance(cbegin(), pos);
-
-        if (n != 0)
+        if (n == 0)
         {
-            if (size_type(data_.end_ - data_.last_) >= n)
+            return begin() + std::distance(cbegin(), pos);
+        }
+
+        if (available() >= n)
+        {
+            const value_type tmp(value);
+
+            const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+            const pointer p2 = p1 + n;
+
+            if (p2 <= data_.last_)
             {
-                // `value` can be a reference to an element in this container.
-                // First we will create temporary value and after that we can
-                // safely move elements.
+                const pointer p3 = data_.last_ - n;
 
-                value_type tmp(value);
+                const pointer old_last = data_.last_;
 
-                const size_type num_elems_after = cend() - pos;
-
-                if (num_elems_after > n)
-                {
-                    pointer old_last = data_.last_;
-
-                    data_.last_ = sfl::dtl::uninitialized_move_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.last_ - n,
-                        data_.last_,
-                        data_.last_
-                    );
-
-                    sfl::dtl::move_backward
-                    (
-                        data_.first_ + offset,
-                        old_last - n,
-                        old_last
-                    );
-
-                    sfl::dtl::fill
-                    (
-                        data_.first_ + offset,
-                        data_.first_ + offset + n,
-                        tmp
-                    );
-                }
-                else
-                {
-                    pointer old_last = data_.last_;
-
-                    data_.last_ = sfl::dtl::uninitialized_fill_n_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.last_,
-                        n - num_elems_after,
-                        tmp
-                    );
-
-                    data_.last_ = sfl::dtl::uninitialized_move_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_ + offset,
-                        old_last,
-                        data_.last_
-                    );
-
-                    sfl::dtl::fill
-                    (
-                        data_.first_ + offset,
-                        old_last,
-                        tmp
-                    );
-                }
-            }
-            else
-            {
-                const size_type new_cap =
-                    recommend_size(n, "sfl::small_vector::insert_fill_n");
-
-                pointer new_first;
-                pointer new_last;
-                pointer new_end;
-
-                if (new_cap <= N && data_.first_ != data_.internal_storage())
-                {
-                    new_first = data_.internal_storage();
-                    new_last  = new_first;
-                    new_end   = new_first + N;
-                }
-                else
-                {
-                    new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
-                    new_last  = new_first;
-                    new_end   = new_first + new_cap;
-                }
-
-                SFL_TRY
-                {
-                    // `value` can be a reference to an element in this
-                    // container. First we will create `n` copies of `value`
-                    // and ffter that we can move elements.
-
-                    sfl::dtl::uninitialized_fill_n_a
-                    (
-                        data_.ref_to_alloc(),
-                        new_first + offset,
-                        n,
-                        value
-                    );
-
-                    new_last = nullptr;
-
-                    new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.first_ + offset,
-                        new_first
-                    );
-
-                    new_last += n;
-
-                    new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_ + offset,
-                        data_.last_,
-                        new_last
-                    );
-                }
-                SFL_CATCH (...)
-                {
-                    if (new_last == nullptr)
-                    {
-                        sfl::dtl::destroy_n_a
-                        (
-                            data_.ref_to_alloc(),
-                            new_first + offset,
-                            n
-                        );
-                    }
-                    else
-                    {
-                        sfl::dtl::destroy_a
-                        (
-                            data_.ref_to_alloc(),
-                            new_first,
-                            new_last
-                        );
-                    }
-
-                    if (new_first != data_.internal_storage())
-                    {
-                        sfl::dtl::deallocate
-                        (
-                            data_.ref_to_alloc(),
-                            new_first,
-                            new_cap
-                        );
-                    }
-
-                    SFL_RETHROW;
-                }
-
-                sfl::dtl::destroy_a
+                data_.last_ = sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
-                    data_.first_,
+                    p3,
+                    data_.last_,
                     data_.last_
                 );
 
-                if (data_.first_ != data_.internal_storage())
+                sfl::dtl::move_backward
+                (
+                    p1,
+                    p3,
+                    old_last
+                );
+
+                sfl::dtl::fill
+                (
+                    p1,
+                    p2,
+                    tmp
+                );
+            }
+            else
+            {
+                const pointer old_last = data_.last_;
+
+                sfl::dtl::uninitialized_fill_a
+                (
+                    data_.ref_to_alloc(),
+                    data_.last_,
+                    p2,
+                    tmp
+                );
+
+                data_.last_ = p2;
+
+                data_.last_ = sfl::dtl::uninitialized_move_a
+                (
+                    data_.ref_to_alloc(),
+                    p1,
+                    old_last,
+                    data_.last_
+                );
+
+                sfl::dtl::fill
+                (
+                    p1,
+                    old_last,
+                    tmp
+                );
+            }
+
+            return p1;
+        }
+        else
+        {
+            const difference_type offset = std::distance(cbegin(), pos);
+
+            const size_type new_cap =
+                recommend_size(n, "sfl::small_vector::insert_fill_n");
+
+            pointer new_first;
+            pointer new_last;
+            pointer new_end;
+
+            if (new_cap <= N && data_.first_ != data_.internal_storage())
+            {
+                new_first = data_.internal_storage();
+                new_last  = new_first;
+                new_end   = new_first + N;
+            }
+            else
+            {
+                new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
+                new_last  = new_first;
+                new_end   = new_first + new_cap;
+            }
+
+            SFL_TRY
+            {
+                // `value` can be a reference to an element in this
+                // container. First we will create `n` copies of `value`
+                // and ffter that we can move elements.
+
+                sfl::dtl::uninitialized_fill_n_a
+                (
+                    data_.ref_to_alloc(),
+                    new_first + offset,
+                    n,
+                    value
+                );
+
+                new_last = nullptr;
+
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
+                (
+                    data_.ref_to_alloc(),
+                    data_.first_,
+                    data_.first_ + offset,
+                    new_first
+                );
+
+                new_last += n;
+
+                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
+                (
+                    data_.ref_to_alloc(),
+                    data_.first_ + offset,
+                    data_.last_,
+                    new_last
+                );
+            }
+            SFL_CATCH (...)
+            {
+                if (new_last == nullptr)
+                {
+                    sfl::dtl::destroy_n_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first + offset,
+                        n
+                    );
+                }
+                else
+                {
+                    sfl::dtl::destroy_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first,
+                        new_last
+                    );
+                }
+
+                if (new_first != data_.internal_storage())
                 {
                     sfl::dtl::deallocate
                     (
                         data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.end_ - data_.first_
+                        new_first,
+                        new_cap
                     );
                 }
 
-                data_.first_ = new_first;
-                data_.last_  = new_last;
-                data_.end_   = new_end;
+                SFL_RETHROW;
             }
-        }
 
-        return begin() + offset;
+            sfl::dtl::destroy_a
+            (
+                data_.ref_to_alloc(),
+                data_.first_,
+                data_.last_
+            );
+
+            if (data_.first_ != data_.internal_storage())
+            {
+                sfl::dtl::deallocate
+                (
+                    data_.ref_to_alloc(),
+                    data_.first_,
+                    data_.end_ - data_.first_
+                );
+            }
+
+            data_.first_ = new_first;
+            data_.last_  = new_last;
+            data_.end_   = new_end;
+
+            return begin() + offset;
+        }
     }
 
     template <typename InputIt,

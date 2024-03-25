@@ -1898,7 +1898,6 @@ private:
         const value_type tmp(value);
 
         const size_type dist_to_begin = std::distance(cbegin(), pos);
-        const size_type dist_to_end   = std::distance(pos, cend());
 
         const size_type available = this->available();
 
@@ -1907,10 +1906,11 @@ private:
             grow_storage(n - available);
         }
 
-        if (dist_to_end > n)
+        const iterator p1 = data_.first_ + dist_to_begin;
+        const iterator p2 = p1 + n;
+
+        if (p2 <= data_.last_)
         {
-            const iterator p1 = data_.first_ + dist_to_begin;
-            const iterator p2 = p1 + n;
             const iterator p3 = data_.last_ - n;
 
             const iterator old_last = data_.last_;
@@ -1919,8 +1919,8 @@ private:
             (
                 data_.ref_to_alloc(),
                 p3,
-                old_last,
-                old_last
+                data_.last_,
+                data_.last_
             );
 
             sfl::dtl::move_backward
@@ -1936,20 +1936,15 @@ private:
                 p2,
                 tmp
             );
-
-            return p1;
         }
         else
         {
-            const iterator p1 = data_.first_ + dist_to_begin;
-            const iterator p2 = p1 + n;
-
             const iterator old_last = data_.last_;
 
             sfl::dtl::uninitialized_fill_a
             (
                 data_.ref_to_alloc(),
-                old_last,
+                data_.last_,
                 p2,
                 tmp
             );
@@ -1970,9 +1965,9 @@ private:
                 old_last,
                 tmp
             );
-
-            return p1;
         }
+
+        return p1;
     }
 
     template <typename InputIt,
