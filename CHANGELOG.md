@@ -4,6 +4,7 @@
 * Compact vector: Improved tests for `assign`.
 * Compact vector: Improved tests for `resize`.
 * Segmented devector: Refactored member function `emplace`.
+* Segmented devector: Refactored private member function `insert_fill_n`.
 * Segmented devector: Improved tests for `assign`.
 * Segmented devector: Improved tests for `resize`.
 * Segmented devector: Improved tests for `resize_front`.

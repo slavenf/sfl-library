@@ -2529,10 +2529,11 @@ private:
                 grow_storage_front(n - available_front);
             }
 
+            const iterator p1 = data_.first_ + dist_to_begin;
+            const iterator p2 = p1 - n;
+
             if (dist_to_begin > n)
             {
-                const iterator p1 = data_.first_ + dist_to_begin;
-                const iterator p2 = p1 - n;
                 const iterator p3 = data_.first_ + n;
                 const iterator p4 = data_.first_ - n;
 
@@ -2541,7 +2542,7 @@ private:
                 sfl::dtl::uninitialized_move_a
                 (
                     data_.ref_to_alloc(),
-                    old_first,
+                    data_.first_,
                     p3,
                     p4
                 );
@@ -2561,13 +2562,9 @@ private:
                     p1,
                     tmp
                 );
-
-                return p2;
             }
             else
             {
-                const iterator p1 = data_.first_ + dist_to_begin;
-                const iterator p2 = p1 - n;
                 const iterator p3 = data_.first_ - n;
 
                 const iterator old_first = data_.first_;
@@ -2576,7 +2573,7 @@ private:
                 (
                     data_.ref_to_alloc(),
                     p2,
-                    old_first,
+                    data_.first_,
                     tmp
                 );
 
@@ -2598,9 +2595,9 @@ private:
                     p1,
                     tmp
                 );
-
-                return p2;
             }
+
+            return p2;
         }
         else
         {
@@ -2611,10 +2608,11 @@ private:
                 grow_storage_back(n - available_back);
             }
 
+            const iterator p1 = data_.first_ + dist_to_begin;
+            const iterator p2 = p1 + n;
+
             if (dist_to_end > n)
             {
-                const iterator p1 = data_.first_ + dist_to_begin;
-                const iterator p2 = p1 + n;
                 const iterator p3 = data_.last_ - n;
 
                 const iterator old_last = data_.last_;
@@ -2623,8 +2621,8 @@ private:
                 (
                     data_.ref_to_alloc(),
                     p3,
-                    old_last,
-                    old_last
+                    data_.last_,
+                    data_.last_
                 );
 
                 sfl::dtl::move_backward
@@ -2640,20 +2638,15 @@ private:
                     p2,
                     tmp
                 );
-
-                return p1;
             }
             else
             {
-                const iterator p1 = data_.first_ + dist_to_begin;
-                const iterator p2 = p1 + n;
-
                 const iterator old_last = data_.last_;
 
                 sfl::dtl::uninitialized_fill_a
                 (
                     data_.ref_to_alloc(),
-                    old_last,
+                    data_.last_,
                     p2,
                     tmp
                 );
@@ -2674,9 +2667,9 @@ private:
                     old_last,
                     tmp
                 );
-
-                return p1;
             }
+
+            return p1;
         }
     }
 
