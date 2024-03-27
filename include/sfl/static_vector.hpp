@@ -88,7 +88,7 @@ public:
     {
         SFL_ASSERT(n <= capacity());
 
-        data_.last_ = sfl::dtl::uninitialized_default_construct_n
+        data_.last_ = sfl::dtl::uninitialized_value_construct_n
         (
             data_.first_,
             n
@@ -865,7 +865,7 @@ public:
         {
             const size_type delta = n - size;
 
-            data_.last_ = sfl::dtl::uninitialized_default_construct_n
+            data_.last_ = sfl::dtl::uninitialized_value_construct_n
             (
                 data_.last_,
                 delta

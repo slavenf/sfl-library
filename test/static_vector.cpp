@@ -2052,6 +2052,18 @@ void test_static_vector()
             }
         }
         #undef CONDITION
+
+        {
+            sfl::static_vector<int, 100> vec;
+
+            vec.resize(4);
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 0);
+            CHECK(*vec.nth(1) == 0);
+            CHECK(*vec.nth(2) == 0);
+            CHECK(*vec.nth(3) == 0);
+        }
     }
 
     PRINT("Test resize(size_type, const T&)");
@@ -2491,13 +2503,25 @@ void test_static_vector()
 
     PRINT("Test container(size_type)");
     {
-        sfl::static_vector<xint, 100> vec(4);
+        {
+            sfl::static_vector<xint, 100> vec(4);
 
-        CHECK(vec.size() == 4);
-        CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
-        CHECK(*vec.nth(1) == SFL_TEST_XINT_DEFAULT_VALUE);
-        CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
-        CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(1) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
+        }
+
+        {
+            sfl::static_vector<int, 100> vec(4);
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 0);
+            CHECK(*vec.nth(1) == 0);
+            CHECK(*vec.nth(2) == 0);
+            CHECK(*vec.nth(3) == 0);
+        }
     }
 
     PRINT("Test container(size_type, const T&)");
