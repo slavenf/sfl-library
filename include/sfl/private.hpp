@@ -1951,6 +1951,7 @@ inline void throw_out_of_range(const char* msg)
 
 } // namespace dtl
 
+// Type used to tag that the inserted values should be default initialized.
 struct default_init_t { };
 
 } // namespace sfl
