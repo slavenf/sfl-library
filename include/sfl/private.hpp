@@ -1951,6 +1951,8 @@ inline void throw_out_of_range(const char* msg)
 
 } // namespace dtl
 
+struct default_init_t { };
+
 } // namespace sfl
 
 #endif // SFL_PRIVATE_HPP_INCLUDED

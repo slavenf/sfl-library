@@ -2066,6 +2066,33 @@ void test_static_vector()
         }
     }
 
+    PRINT("Test resize(size_type, sfl::default_init_t)");
+    {
+        {
+            sfl::static_vector<xint, 100> vec;
+
+            vec.resize(4, sfl::default_init_t());
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(1) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
+        }
+
+        {
+            sfl::static_vector<int, 100> vec;
+
+            vec.resize(4, sfl::default_init_t());
+
+            CHECK(vec.size() == 4);
+            // *vec.nth(0) is undetermined
+            // *vec.nth(1) is undetermined
+            // *vec.nth(2) is undetermined
+            // *vec.nth(3) is undetermined
+        }
+    }
+
     PRINT("Test resize(size_type, const T&)");
     {
         #define CONDITION n < vec.size()
@@ -2521,6 +2548,29 @@ void test_static_vector()
             CHECK(*vec.nth(1) == 0);
             CHECK(*vec.nth(2) == 0);
             CHECK(*vec.nth(3) == 0);
+        }
+    }
+
+    PRINT("Test container(size_type, sfl::default_init_t)");
+    {
+        {
+            sfl::static_vector<xint, 100> vec(4, sfl::default_init_t());
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(1) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
+            CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
+        }
+
+        {
+            sfl::static_vector<int, 100> vec(4, sfl::default_init_t());
+
+            CHECK(vec.size() == 4);
+            // *vec.nth(0) is undetermined
+            // *vec.nth(1) is undetermined
+            // *vec.nth(2) is undetermined
+            // *vec.nth(3) is undetermined
         }
     }
 

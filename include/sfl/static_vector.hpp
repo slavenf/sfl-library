@@ -95,6 +95,17 @@ public:
         );
     }
 
+    static_vector(size_type n, sfl::default_init_t)
+    {
+        SFL_ASSERT(n <= capacity());
+
+        data_.last_ = sfl::dtl::uninitialized_default_construct_n
+        (
+            data_.first_,
+            n
+        );
+    }
+
     static_vector(size_type n, const T& value)
     {
         SFL_ASSERT(n <= capacity());
@@ -866,6 +877,36 @@ public:
             const size_type delta = n - size;
 
             data_.last_ = sfl::dtl::uninitialized_value_construct_n
+            (
+                data_.last_,
+                delta
+            );
+        }
+    }
+
+    void resize(size_type n, sfl::default_init_t)
+    {
+        SFL_ASSERT(n <= capacity());
+
+        const size_type size = this->size();
+
+        if (n < size)
+        {
+            const pointer new_last = data_.first_ + n;
+
+            sfl::dtl::destroy
+            (
+                new_last,
+                data_.last_
+            );
+
+            data_.last_ = new_last;
+        }
+        else if (n > size)
+        {
+            const size_type delta = n - size;
+
+            data_.last_ = sfl::dtl::uninitialized_default_construct_n
             (
                 data_.last_,
                 delta
