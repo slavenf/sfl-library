@@ -11,6 +11,7 @@ This is header-only C++11 library that offers several new containers:
   * [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
   * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.md)
   * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
+  * [`static_vector`](doc/static_vector.md)
   * [`compact_vector`](doc/compact_vector.md)
   * [`segmented_vector`](doc/segmented_vector.md)
   * [`segmented_devector`](doc/segmented_devector.md)
@@ -24,6 +25,9 @@ All containers are defined in namespace `sfl`.
 ## About small flat maps and sets
 
 Small flat maps and sets from namespace `sfl` are associative containers similar to standard maps and sets, but with the storage model identical to the storage model of `sfl::small_vector`, i.e. each of them internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`. Elements of these containers are always stored contiguously into the memory.
+
+## About static vector
+`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. The number of elements in static vector cannot be greater than `N` and dynamic memory management is never used. Size `N` is specified at the compile time as a template parameter.
 
 ## About compact vector
 
