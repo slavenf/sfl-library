@@ -784,7 +784,8 @@ public:
             else
             {
                 const pointer p2 = data_.last_ - 1;
-                const pointer p3 = data_.last_;
+
+                const pointer old_last = data_.last_;
 
                 // The order of operations is critical. First we will construct
                 // temporary value because arguments `args...` can contain
@@ -806,7 +807,7 @@ public:
                 (
                     p1,
                     p2,
-                    p3
+                    old_last
                 );
 
                 *p1 = std::move(tmp);
