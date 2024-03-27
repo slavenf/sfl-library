@@ -924,10 +924,10 @@ public:
                 p1 = nth(dist_to_begin);
             }
 
-            if (dist_to_begin == 0)
-            {
-                const iterator p2 = --iterator(p1);
+            const iterator p2 = --iterator(p1);
 
+            if (p1 == data_.first_)
+            {
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
@@ -936,12 +936,9 @@ public:
                 );
 
                 data_.first_ = p2;
-
-                return p2;
             }
             else
             {
-                const iterator p2 = --iterator(p1);
                 const iterator p3 = ++iterator(data_.first_);
                 const iterator p4 = --iterator(data_.first_);
 
@@ -958,7 +955,7 @@ public:
                 (
                     data_.ref_to_alloc(),
                     std::addressof(*p4),
-                    std::move(*old_first)
+                    std::move(*data_.first_)
                 );
 
                 data_.first_ = p4;
@@ -971,9 +968,9 @@ public:
                 );
 
                 *p2 = std::move(tmp);
-
-                return p2;
             }
+
+            return p2;
         }
         else
         {
@@ -983,7 +980,7 @@ public:
                 p1 = nth(dist_to_begin);
             }
 
-            if (dist_to_end == 0)
+            if (p1 == data_.last_)
             {
                 sfl::dtl::construct_at_a
                 (
@@ -993,8 +990,6 @@ public:
                 );
 
                 ++data_.last_;
-
-                return p1;
             }
             else
             {
@@ -1012,7 +1007,7 @@ public:
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
-                    std::addressof(*old_last),
+                    std::addressof(*data_.last_),
                     std::move(*p2)
                 );
 
@@ -1026,9 +1021,9 @@ public:
                 );
 
                 *p1 = std::move(tmp);
-
-                return p1;
             }
+
+            return p1;
         }
     }
 

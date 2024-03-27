@@ -3,6 +3,7 @@
 * New container `static_vector`.
 * Compact vector: Improved tests for `assign`.
 * Compact vector: Improved tests for `resize`.
+* Segmented devector: Refactored member function `emplace`.
 * Segmented devector: Improved tests for `assign`.
 * Segmented devector: Improved tests for `resize`.
 * Segmented devector: Improved tests for `resize_front`.
