@@ -1761,6 +1761,18 @@ ForwardIt uninitialized_move_if_noexcept_a(Allocator& a, InputIt first, InputIt 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+template <typename T>
+void default_construct_at(T* p)
+{
+    ::new (static_cast<void*>(p)) T;
+}
+
+template <typename T>
+void value_construct_at(T* p)
+{
+    ::new (static_cast<void*>(p)) T();
+}
+
 template <typename T, typename... Args>
 void construct_at(T* p, Args&&... args)
 {
@@ -1791,7 +1803,28 @@ ForwardIt uninitialized_default_construct_n(ForwardIt first, Size n)
     {
         while (n > 0)
         {
-            sfl::dtl::construct_at(std::addressof(*curr));
+            sfl::dtl::default_construct_at(std::addressof(*curr));
+            ++curr;
+            --n;
+        }
+        return curr;
+    }
+    SFL_CATCH (...)
+    {
+        sfl::dtl::destroy(first, curr);
+        SFL_RETHROW;
+    }
+}
+
+template <typename ForwardIt, typename Size>
+ForwardIt uninitialized_value_construct_n(ForwardIt first, Size n)
+{
+    ForwardIt curr = first;
+    SFL_TRY
+    {
+        while (n > 0)
+        {
+            sfl::dtl::value_construct_at(std::addressof(*curr));
             ++curr;
             --n;
         }
