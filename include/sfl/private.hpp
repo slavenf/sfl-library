@@ -1783,25 +1783,6 @@ void destroy(ForwardIt first, ForwardIt last) noexcept
     }
 }
 
-template <typename ForwardIt>
-void uninitialized_default_construct(ForwardIt first, ForwardIt last)
-{
-    ForwardIt curr = first;
-    SFL_TRY
-    {
-        while (curr != last)
-        {
-            sfl::dtl::construct_at(std::addressof(*curr));
-            ++curr;
-        }
-    }
-    SFL_CATCH (...)
-    {
-        sfl::dtl::destroy(first, curr);
-        SFL_RETHROW;
-    }
-}
-
 template <typename ForwardIt, typename Size>
 ForwardIt uninitialized_default_construct_n(ForwardIt first, Size n)
 {
