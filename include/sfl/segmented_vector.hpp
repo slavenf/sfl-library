@@ -1102,6 +1102,8 @@ public:
         }
         else
         {
+            const size_type delta = n - size;
+
             const size_type capacity = this->capacity();
 
             if (n > capacity)
@@ -1113,7 +1115,7 @@ public:
             (
                 data_.ref_to_alloc(),
                 data_.last_,
-                n - size
+                delta
             );
         }
     }
@@ -1137,6 +1139,8 @@ public:
         }
         else
         {
+            const size_type delta = n - size;
+
             const size_type capacity = this->capacity();
 
             if (n > capacity)
@@ -1148,7 +1152,7 @@ public:
             (
                 data_.ref_to_alloc(),
                 data_.last_,
-                n - size,
+                delta,
                 value
             );
         }

@@ -7,6 +7,7 @@
 * Segmented devector: Improved tests for `resize`.
 * Segmented devector: Improved tests for `resize_front`.
 * Segmented devector: Improved tests for `resize_back`.
+* Segmented vector: Refactored member function `resize`.
 * Segmented vector: Refactored private member function `insert_fill_n`.
 * Segmented vector: Refactored private member function `insert_range`.
 * Segmented vector: Improved tests for `assign`.
