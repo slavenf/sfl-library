@@ -52,12 +52,14 @@ Defined in header `sfl/static_vector.hpp`:
 ```
 namespace sfl
 {
-    template < typename T, std::size_t N>
+    template < typename T, std::size_t N >
     class static_vector;
 }
 ```
 
-`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. The number of elements in static vector cannot be greater than `N` and dynamic memory management is never used. Size `N` is specified at the compile time as a template parameter.
+`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management.
+
+The number of elements in static vector **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**. Size `N` is specified at the compile time as a template parameter.
 
 `sfl::static_vector` is **not** specialized for `bool`.
 
