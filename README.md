@@ -20,11 +20,11 @@ All containers are defined in namespace `sfl`.
 
 ## About small vector
 
-`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. Size `N` is is specified at the compile time as a template parameter.
+`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`. Size `N` is is specified at the compile time as a template parameter.
 
 ## About small flat maps and sets
 
-Small flat maps and sets from namespace `sfl` are associative containers similar to standard maps and sets, but with the storage model identical to the storage model of `sfl::small_vector`, i.e. each of them internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`. Elements of these containers are always stored contiguously into the memory.
+Small flat maps and sets from namespace `sfl` are associative containers similar to standard maps and sets, but with the storage model identical to the storage model of `sfl::small_vector`, i.e. all of them internally hold statically allocated array of size `N` and store elements into this array until the number of elements is not greater than `N`. Elements of these containers are **always** stored contiguously into the memory.
 
 ## About static vector
 
