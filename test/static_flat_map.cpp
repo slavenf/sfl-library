@@ -2676,6 +2676,96 @@ void test_static_flat_map()
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
         CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
     }
+
+    PRINT("Test operator[](const Key&)");
+    {
+        sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+        map.emplace(10, 1);
+        map.emplace(20, 1);
+        map.emplace(30, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        xint key_10 = 10;
+        xint key_20 = 20;
+        xint key_30 = 30;
+        xint key_40 = 40;
+        xint key_50 = 50;
+        xint key_60 = 60;
+
+        map[key_10] = 2;
+        map[key_20] = 2;
+        map[key_30] = 2;
+        map[key_40] = 2;
+        map[key_50] = 2;
+        map[key_60] = 2;
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 2);
+
+        CHECK(key_10 == 10);
+        CHECK(key_20 == 20);
+        CHECK(key_30 == 30);
+        CHECK(key_40 == 40);
+        CHECK(key_50 == 50);
+        CHECK(key_60 == 60);
+    }
+
+    PRINT("Test operator[](Key&&)");
+    {
+        sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+        map.emplace(10, 1);
+        map.emplace(20, 1);
+        map.emplace(30, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        xint key_10 = 10;
+        xint key_20 = 20;
+        xint key_30 = 30;
+        xint key_40 = 40;
+        xint key_50 = 50;
+        xint key_60 = 60;
+
+        map[std::move(key_10)] = 2;
+        map[std::move(key_20)] = 2;
+        map[std::move(key_30)] = 2;
+        map[std::move(key_40)] = 2;
+        map[std::move(key_50)] = 2;
+        map[std::move(key_60)] = 2;
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 2);
+
+        CHECK(key_10 == +10);
+        CHECK(key_20 == +20);
+        CHECK(key_30 == +30);
+        CHECK(key_40 == -40);
+        CHECK(key_50 == -50);
+        CHECK(key_60 == -60);
+    }
 }
 
 int main()

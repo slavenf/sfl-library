@@ -829,6 +829,18 @@ public:
         return it->second;
     }
 
+    SFL_NODISCARD
+    T& operator[](const Key& key)
+    {
+        return try_emplace(key).first->second;
+    }
+
+    SFL_NODISCARD
+    T& operator[](Key&& key)
+    {
+        return try_emplace(std::move(key)).first->second;
+    }
+
 private:
 
     template <typename Value>
