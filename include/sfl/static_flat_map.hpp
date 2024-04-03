@@ -500,6 +500,74 @@ public:
         return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
     }
 
+    iterator erase(iterator pos)
+    {
+        return erase(const_iterator(pos));
+    }
+
+    iterator erase(const_iterator pos)
+    {
+        SFL_ASSERT(cbegin() <= pos && pos < cend());
+
+        const difference_type offset = std::distance(cbegin(), pos);
+
+        const pointer p = data_.first_ + offset;
+
+        data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
+
+        sfl::dtl::destroy_at(data_.last_);
+
+        return p;
+    }
+
+    iterator erase(const_iterator first, const_iterator last)
+    {
+        SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
+
+        if (first == last)
+        {
+            return begin() + std::distance(cbegin(), first);
+        }
+
+        const difference_type offset1 = std::distance(cbegin(), first);
+        const difference_type offset2 = std::distance(cbegin(), last);
+
+        const pointer p1 = data_.first_ + offset1;
+        const pointer p2 = data_.first_ + offset2;
+
+        const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
+
+        sfl::dtl::destroy(new_last, data_.last_);
+
+        data_.last_ = new_last;
+
+        return p1;
+    }
+
+    size_type erase(const Key& key)
+    {
+        auto it = find(key);
+        if (it == cend())
+        {
+            return 0;
+        }
+        erase(it);
+        return 1;
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    size_type erase(K&& x)
+    {
+        auto it = find(x);
+        if (it == cend())
+        {
+            return 0;
+        }
+        erase(it);
+        return 1;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
