@@ -803,6 +803,32 @@ public:
     // ---- ELEMENT ACCESS ----------------------------------------------------
     //
 
+    SFL_NODISCARD
+    T& at(const Key& key)
+    {
+        auto it = find(key);
+
+        if (it == end())
+        {
+            sfl::dtl::throw_out_of_range("sfl::static_flat_map::at");
+        }
+
+        return it->second;
+    }
+
+    SFL_NODISCARD
+    const T& at(const Key& key) const
+    {
+        auto it = find(key);
+
+        if (it == end())
+        {
+            sfl::dtl::throw_out_of_range("sfl::static_flat_map::at");
+        }
+
+        return it->second;
+    }
+
 private:
 
     template <typename Value>
