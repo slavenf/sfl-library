@@ -362,6 +362,21 @@ public:
         data_.last_ = data_.first_;
     }
 
+    template <typename... Args>
+    std::pair<iterator, bool> emplace(Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(value_type(std::forward<Args>(args)...));
+    }
+
+    template <typename... Args>
+    iterator emplace_hint(const_iterator hint, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -539,6 +554,31 @@ public:
     //
 
 private:
+
+    template <typename Value>
+    std::pair<iterator, bool> insert_aux(Value&& value)
+    {
+        auto it = lower_bound(value.first);
+
+        if (it == end() || data_.ref_to_comp()(value, *it))
+        {
+            return std::make_pair(insert_exactly_at(it, std::forward<Value>(value)), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        if (is_insert_hint_good(hint, value))
+        {
+            return insert_exactly_at(hint, std::forward<Value>(value));
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return insert_aux(std::forward<Value>(value)).first;
+    }
 
     template <typename... Args>
     iterator insert_exactly_at(const_iterator pos, Args&&... args)
