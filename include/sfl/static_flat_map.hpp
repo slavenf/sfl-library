@@ -420,6 +420,22 @@ public:
         return insert_aux(hint, value_type(std::forward<P>(value)));
     }
 
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    void insert(InputIt first, InputIt last)
+    {
+        while (first != last)
+        {
+            insert(*first);
+            ++first;
+        }
+    }
+
+    void insert(std::initializer_list<value_type> ilist)
+    {
+        insert(ilist.begin(), ilist.end());
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //

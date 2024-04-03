@@ -1292,6 +1292,132 @@ void test_static_flat_map()
             CHECK(value_50_2.first == 50); CHECK(value_50_2.second == 2);
         }
     }
+
+    PRINT("Test insert(InputIt, InputIt)");
+    {
+        sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+        {
+            std::vector<std::pair<xint, xint>> data1
+            (
+                {
+                    {20, 1},
+                    {40, 1},
+                    {60, 1}
+                }
+            );
+
+            std::vector<std::pair<xint, xint>> data2
+            (
+                {
+                    {10, 1},
+                    {30, 1},
+                    {50, 1}
+                }
+            );
+
+            map.insert(data1.begin(), data1.end());
+            map.insert(data2.begin(), data2.end());
+
+            CHECK(map.size() == 6);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+            CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 1);
+        }
+
+        {
+            std::vector<std::pair<xint, xint>> data1
+            (
+                {
+                    {20, 2},
+                    {40, 2},
+                    {60, 2}
+                }
+            );
+
+            std::vector<std::pair<xint, xint>> data2
+            (
+                {
+                    {10, 2},
+                    {30, 2},
+                    {50, 2}
+                }
+            );
+
+            map.insert(data1.begin(), data1.end());
+            map.insert(data2.begin(), data2.end());
+
+            CHECK(map.size() == 6);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+            CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 1);
+        }
+    }
+
+    PRINT("Test insert(std::initializer_list)");
+    {
+        sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+        {
+            std::initializer_list<std::pair<xint, xint>> ilist1
+            {
+                {20, 1},
+                {40, 1},
+                {60, 1}
+            };
+
+            std::initializer_list<std::pair<xint, xint>> ilist2
+            {
+                {10, 1},
+                {30, 1},
+                {50, 1}
+            };
+
+            map.insert(ilist1);
+            map.insert(ilist2);
+
+            CHECK(map.size() == 6);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+            CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 1);
+        }
+
+        {
+            std::initializer_list<std::pair<xint, xint>> ilist1
+            {
+                {20, 2},
+                {40, 2},
+                {60, 2}
+            };
+
+            std::initializer_list<std::pair<xint, xint>> ilist2
+            {
+                {10, 2},
+                {30, 2},
+                {50, 2}
+            };
+
+            map.insert(ilist1);
+            map.insert(ilist2);
+
+            CHECK(map.size() == 6);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+            CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 1);
+        }
+    }
 }
 
 int main()
