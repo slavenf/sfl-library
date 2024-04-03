@@ -518,6 +518,60 @@ void test_static_flat_map()
         CHECK(map.index_of(map.nth(2)) == 2);
         CHECK(map.index_of(map.nth(3)) == 3);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test key_comp()");
+    {
+        {
+            sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+            auto key_comp = map.key_comp();
+
+            CHECK(key_comp(10, 10) == false);
+            CHECK(key_comp(10, 20) == true);
+            CHECK(key_comp(20, 10) == false);
+            CHECK(key_comp(20, 20) == false);
+        }
+
+        {
+            sfl::static_flat_map<xobj, xint, 100, xobj::less> map;
+
+            auto key_comp = map.key_comp();
+
+            CHECK(key_comp(xobj(10), 10) == false);
+            CHECK(key_comp(xobj(10), 20) == true);
+            CHECK(key_comp(xobj(20), 10) == false);
+            CHECK(key_comp(xobj(20), 20) == false);
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test value_comp()");
+    {
+        {
+            sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+            auto value_comp = map.value_comp();
+
+            CHECK(value_comp({10, 1}, {10, 2}) == false);
+            CHECK(value_comp({10, 1}, {20, 2}) == true);
+            CHECK(value_comp({20, 1}, {10, 2}) == false);
+            CHECK(value_comp({20, 1}, {20, 2}) == false);
+        }
+
+        {
+            sfl::static_flat_map<xobj, xint, 100, xobj::less> map;
+
+            auto value_comp = map.value_comp();
+
+            CHECK(value_comp({xobj(10), 1}, {xobj(10), 2}) == false);
+            CHECK(value_comp({xobj(10), 1}, {xobj(20), 2}) == true);
+            CHECK(value_comp({xobj(20), 1}, {xobj(10), 2}) == false);
+            CHECK(value_comp({xobj(20), 1}, {xobj(20), 2}) == false);
+        }
+    }
 }
 
 int main()
