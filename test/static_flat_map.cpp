@@ -572,6 +572,159 @@ void test_static_flat_map()
             CHECK(value_comp({xobj(20), 1}, {xobj(20), 2}) == false);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
+    {
+        // xint, xint
+        {
+            sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+            map.insert_exactly_at(map.end(), 20, 1);
+            map.insert_exactly_at(map.end(), 40, 1);
+            map.insert_exactly_at(map.end(), 60, 1);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.lower_bound(10) == map.nth(0));
+            CHECK(map.lower_bound(20) == map.nth(0));
+            CHECK(map.lower_bound(30) == map.nth(1));
+            CHECK(map.lower_bound(40) == map.nth(1));
+            CHECK(map.lower_bound(50) == map.nth(2));
+            CHECK(map.lower_bound(60) == map.nth(2));
+            CHECK(map.lower_bound(70) == map.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.upper_bound(10) == map.nth(0));
+            CHECK(map.upper_bound(20) == map.nth(1));
+            CHECK(map.upper_bound(30) == map.nth(1));
+            CHECK(map.upper_bound(40) == map.nth(2));
+            CHECK(map.upper_bound(50) == map.nth(2));
+            CHECK(map.upper_bound(60) == map.nth(3));
+            CHECK(map.upper_bound(70) == map.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.equal_range(10) == std::make_pair(map.nth(0), map.nth(0)));
+            CHECK(map.equal_range(20) == std::make_pair(map.nth(0), map.nth(1)));
+            CHECK(map.equal_range(30) == std::make_pair(map.nth(1), map.nth(1)));
+            CHECK(map.equal_range(40) == std::make_pair(map.nth(1), map.nth(2)));
+            CHECK(map.equal_range(50) == std::make_pair(map.nth(2), map.nth(2)));
+            CHECK(map.equal_range(60) == std::make_pair(map.nth(2), map.nth(3)));
+            CHECK(map.equal_range(70) == std::make_pair(map.nth(3), map.nth(3)));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.find(10) == map.end());
+            CHECK(map.find(20) == map.nth(0));
+            CHECK(map.find(30) == map.end());
+            CHECK(map.find(40) == map.nth(1));
+            CHECK(map.find(50) == map.end());
+            CHECK(map.find(60) == map.nth(2));
+            CHECK(map.find(70) == map.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.count(10) == 0);
+            CHECK(map.count(20) == 1);
+            CHECK(map.count(30) == 0);
+            CHECK(map.count(40) == 1);
+            CHECK(map.count(50) == 0);
+            CHECK(map.count(60) == 1);
+            CHECK(map.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.contains(10) == false);
+            CHECK(map.contains(20) == true);
+            CHECK(map.contains(30) == false);
+            CHECK(map.contains(40) == true);
+            CHECK(map.contains(50) == false);
+            CHECK(map.contains(60) == true);
+            CHECK(map.contains(70) == false);
+        }
+
+        // xobj, xint
+        {
+            sfl::static_flat_map<xobj, xint, 100, xobj::less> map;
+
+            map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+            map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
+            map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 20); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first.value() == 40); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first.value() == 60); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.lower_bound(10) == map.nth(0));
+            CHECK(map.lower_bound(20) == map.nth(0));
+            CHECK(map.lower_bound(30) == map.nth(1));
+            CHECK(map.lower_bound(40) == map.nth(1));
+            CHECK(map.lower_bound(50) == map.nth(2));
+            CHECK(map.lower_bound(60) == map.nth(2));
+            CHECK(map.lower_bound(70) == map.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.upper_bound(10) == map.nth(0));
+            CHECK(map.upper_bound(20) == map.nth(1));
+            CHECK(map.upper_bound(30) == map.nth(1));
+            CHECK(map.upper_bound(40) == map.nth(2));
+            CHECK(map.upper_bound(50) == map.nth(2));
+            CHECK(map.upper_bound(60) == map.nth(3));
+            CHECK(map.upper_bound(70) == map.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.equal_range(10) == std::make_pair(map.nth(0), map.nth(0)));
+            CHECK(map.equal_range(20) == std::make_pair(map.nth(0), map.nth(1)));
+            CHECK(map.equal_range(30) == std::make_pair(map.nth(1), map.nth(1)));
+            CHECK(map.equal_range(40) == std::make_pair(map.nth(1), map.nth(2)));
+            CHECK(map.equal_range(50) == std::make_pair(map.nth(2), map.nth(2)));
+            CHECK(map.equal_range(60) == std::make_pair(map.nth(2), map.nth(3)));
+            CHECK(map.equal_range(70) == std::make_pair(map.nth(3), map.nth(3)));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.find(10) == map.end());
+            CHECK(map.find(20) == map.nth(0));
+            CHECK(map.find(30) == map.end());
+            CHECK(map.find(40) == map.nth(1));
+            CHECK(map.find(50) == map.end());
+            CHECK(map.find(60) == map.nth(2));
+            CHECK(map.find(70) == map.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.count(10) == 0);
+            CHECK(map.count(20) == 1);
+            CHECK(map.count(30) == 0);
+            CHECK(map.count(40) == 1);
+            CHECK(map.count(50) == 0);
+            CHECK(map.count(60) == 1);
+            CHECK(map.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.contains(10) == false);
+            CHECK(map.contains(20) == true);
+            CHECK(map.contains(30) == false);
+            CHECK(map.contains(40) == true);
+            CHECK(map.contains(50) == false);
+            CHECK(map.contains(60) == true);
+            CHECK(map.contains(70) == false);
+        }
+    }
 }
 
 int main()
