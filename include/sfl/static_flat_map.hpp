@@ -245,6 +245,17 @@ public:
         );
     }
 
+    static_flat_map(static_flat_map&& other)
+        : data_(std::move(other.data_.ref_to_comp()))
+    {
+        data_.last_ = sfl::dtl::uninitialized_move
+        (
+            std::make_move_iterator(other.begin()),
+            std::make_move_iterator(other.end()),
+            data_.first_
+        );
+    }
+
     ~static_flat_map()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
