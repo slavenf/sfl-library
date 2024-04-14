@@ -234,6 +234,17 @@ public:
         : static_flat_map(ilist.begin(), ilist.end(), comp)
     {}
 
+    static_flat_map(const static_flat_map& other)
+        : data_(other.data_.ref_to_comp())
+    {
+        data_.last_ = sfl::dtl::uninitialized_copy
+        (
+            other.begin(),
+            other.end(),
+            data_.first_
+        );
+    }
+
     ~static_flat_map()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
