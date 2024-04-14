@@ -1,8 +1,9 @@
 # Next release
 
 * New container: `static_flat_map`.
-* Small flat map: Refactored and reworked private member function `insert_exactly_at`.
-  Fixed memory leak if exception is thrown during construction of new element.
+* Small flat map: Fixed memory leak in private member function `insert_exactly_at`
+  when exception is thrown during construction of new element.
+* Small flat map: Reworked private member function `insert_exactly_at`.
 
 
 
