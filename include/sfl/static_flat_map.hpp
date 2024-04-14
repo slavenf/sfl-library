@@ -274,6 +274,16 @@ public:
         return *this;
     }
 
+    static_flat_map& operator=(static_flat_map&& other)
+    {
+        assign_range
+        (
+            std::make_move_iterator(other.begin()),
+            std::make_move_iterator(other.end())
+        );
+        return *this;
+    }
+
     //
     // ---- KEY COMPARE -------------------------------------------------------
     //
