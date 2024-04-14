@@ -226,6 +226,14 @@ public:
         }
     }
 
+    static_flat_map(std::initializer_list<value_type> ilist)
+        : static_flat_map(ilist.begin(), ilist.end())
+    {}
+
+    static_flat_map(std::initializer_list<value_type> ilist, const Compare& comp)
+        : static_flat_map(ilist.begin(), ilist.end(), comp)
+    {}
+
     ~static_flat_map()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
