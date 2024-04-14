@@ -1,3 +1,11 @@
+# Next release
+
+* New container: `static_flat_map`.
+* Small flat map: Refactored and reworked private member function `insert_exactly_at`.
+  Fixed memory leak if exception is thrown during construction of new element.
+
+
+
 # 1.4.0 (2024-04-14)
 
 * New container `static_vector`.
