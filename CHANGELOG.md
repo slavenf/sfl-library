@@ -1,4 +1,4 @@
-# Next release
+# 1.4.0 (2024-04-14)
 
 * New container `static_vector`.
 * Compact vector: Improved tests for `assign`.
