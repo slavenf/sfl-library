@@ -186,6 +186,46 @@ public:
         : data_(comp)
     {}
 
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    static_flat_map(InputIt first, InputIt last)
+        : data_()
+    {
+        SFL_TRY
+        {
+            while (first != last)
+            {
+                emplace(*first);
+                ++first;
+            }
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy(data_.first_, data_.last_);
+            SFL_RETHROW;
+        }
+    }
+
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    static_flat_map(InputIt first, InputIt last, const Compare& comp)
+        : data_(comp)
+    {
+        SFL_TRY
+        {
+            while (first != last)
+            {
+                emplace(*first);
+                ++first;
+            }
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy(data_.first_, data_.last_);
+            SFL_RETHROW;
+        }
+    }
+
     ~static_flat_map()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
