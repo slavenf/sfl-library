@@ -3378,6 +3378,131 @@ void test_static_flat_map()
         }
         #undef CONDITION
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test NON-MEMBER comparison operators");
+    {
+        sfl::static_flat_map<xint, xint, 100, std::less<xint>> map1, map2;
+
+        map1.emplace(10, 1);
+        map1.emplace(20, 1);
+        map1.emplace(30, 1);
+
+        map2.emplace(10, 1);
+        map2.emplace(20, 1);
+        map2.emplace(30, 1);
+        map2.emplace(40, 1);
+        map2.emplace(50, 1);
+
+        CHECK((map1 == map1) == true);
+        CHECK((map1 == map2) == false);
+        CHECK((map2 == map1) == false);
+        CHECK((map2 == map2) == true);
+
+        CHECK((map1 != map1) == false);
+        CHECK((map1 != map2) == true);
+        CHECK((map2 != map1) == true);
+        CHECK((map2 != map2) == false);
+
+        CHECK((map1 < map1) == false);
+        CHECK((map1 < map2) == true);
+        CHECK((map2 < map1) == false);
+        CHECK((map2 < map2) == false);
+
+        CHECK((map1 > map1) == false);
+        CHECK((map1 > map2) == false);
+        CHECK((map2 > map1) == true);
+        CHECK((map2 > map2) == false);
+
+        CHECK((map1 <= map1) == true);
+        CHECK((map1 <= map2) == true);
+        CHECK((map2 <= map1) == false);
+        CHECK((map2 <= map2) == true);
+
+        CHECK((map1 >= map1) == true);
+        CHECK((map1 >= map2) == false);
+        CHECK((map2 >= map1) == true);
+        CHECK((map2 >= map2) == true);
+    }
+
+    PRINT("Test NON-MEMBER swap(container&)");
+    {
+        sfl::static_flat_map<xint, xint, 100, std::less<xint>> map1, map2;
+
+        map1.emplace(10, 1);
+        map1.emplace(20, 1);
+        map1.emplace(30, 1);
+
+        map2.emplace(40, 2);
+        map2.emplace(50, 2);
+        map2.emplace(60, 2);
+        map2.emplace(70, 2);
+        map2.emplace(80, 2);
+
+        CHECK(map1.size() == 3);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+
+        CHECK(map2.size() == 5);
+        CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
+        CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
+        CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+        CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
+        CHECK(map2.nth(4)->first == 80); CHECK(map2.nth(4)->second == 2);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        swap(map1, map2);
+
+        CHECK(map1.size() == 5);
+        CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
+        CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
+        CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
+        CHECK(map1.nth(3)->first == 70); CHECK(map1.nth(3)->second == 2);
+        CHECK(map1.nth(4)->first == 80); CHECK(map1.nth(4)->second == 2);
+
+        CHECK(map2.size() == 3);
+        CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
+        CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
+        CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
+    }
+
+    PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+    {
+        using container_type =
+            sfl::static_flat_map<xint, xint, 100, std::less<xint>>;
+
+        using const_reference = typename container_type::const_reference;
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        container_type map;
+
+        map.emplace(10, 1);
+        map.emplace(20, 1);
+        map.emplace(30, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(erase_if(map, [](const_reference& value){ return value.first == 20; }) == 1);
+        CHECK(map.size() == 2);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 30); CHECK(map.nth(1)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(erase_if(map, [](const_reference& value){ return value.first == 20; }) == 0);
+        CHECK(map.size() == 2);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 30); CHECK(map.nth(1)->second == 1);
+    }
 }
 
 int main()
