@@ -1587,18 +1587,16 @@ private:
     template <typename... Args>
     iterator insert_exactly_at(const_iterator pos, Args&&... args)
     {
-        const difference_type offset = std::distance(cbegin(), pos);
-
         if (data_.last_ != data_.end_)
         {
-            pointer p = data_.first_ + offset;
+            const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
 
-            if (p == data_.last_)
+            if (p1 == data_.last_)
             {
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
-                    p,
+                    p1,
                     std::forward<Args>(args)...
                 );
 
@@ -1606,46 +1604,37 @@ private:
             }
             else
             {
-                // This container cannot contains duplicates so we are sure
-                // that arguments `args...` do not contain reference to
-                // element in this container.
-                // Because of that, order of operations is not critical like
-                // in case of vectors and multimaps and multisets.
-                // First we will move elements one place to the right and
-                // after that we will construct new element.
+                const pointer p2 = data_.last_ - 1;
+
+                const pointer old_last = data_.last_;
 
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
                     data_.last_,
-                    std::move(*(data_.last_ - 1))
+                    std::move(*p2)
                 );
 
                 ++data_.last_;
 
                 sfl::dtl::move_backward
                 (
-                    p,
-                    data_.last_ - 2,
-                    data_.last_ - 1
+                    p1,
+                    p2,
+                    old_last
                 );
 
-                sfl::dtl::destroy_at_a
-                (
-                    data_.ref_to_alloc(),
-                    p
-                );
-
-                sfl::dtl::construct_at_a
-                (
-                    data_.ref_to_alloc(),
-                    p,
-                    std::forward<Args>(args)...
-                );
+                // This container cannot contain duplicates so we use can
+                // create new element at the end.
+                *p1 = value_type(std::forward<Args>(args)...);
             }
+
+            return p1;
         }
         else
         {
+            const difference_type offset = std::distance(cbegin(), pos);
+
             const size_type new_cap =
                 recommend_size(1, "sfl::small_flat_set::insert_exactly_at");
 
@@ -1745,9 +1734,9 @@ private:
             data_.first_ = new_first;
             data_.last_  = new_last;
             data_.end_   = new_end;
-        }
 
-        return begin() + offset;
+            return begin() + offset;
+        }
     }
 
     template <typename Value>
