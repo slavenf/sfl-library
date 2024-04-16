@@ -139,9 +139,21 @@ public:
     // ---- KEY COMPARE -------------------------------------------------------
     //
 
+    SFL_NODISCARD
+    key_compare key_comp() const
+    {
+        return data_.ref_to_comp();
+    }
+
     //
     // ---- VALUE COMPARE -----------------------------------------------------
     //
+
+    SFL_NODISCARD
+    value_compare value_comp() const
+    {
+        return data_.ref_to_comp();
+    }
 
     //
     // ---- ITERATORS ---------------------------------------------------------
