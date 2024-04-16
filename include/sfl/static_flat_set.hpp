@@ -338,6 +338,13 @@ private:
 
         return p1;
     }
+
+    template <typename Value>
+    bool is_insert_hint_good(const_iterator hint, const Value& value)
+    {
+        return (hint == begin() || data_.ref_to_comp()(*(hint - 1), value))
+            && (hint == end()   || data_.ref_to_comp()(value, *hint));
+    }
 };
 
 } // namespace sfl
