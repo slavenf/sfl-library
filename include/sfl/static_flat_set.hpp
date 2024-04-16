@@ -300,6 +300,174 @@ public:
     // ---- LOOKUP ------------------------------------------------------------
     //
 
+    SFL_NODISCARD
+    iterator lower_bound(const Key& key)
+    {
+        return std::lower_bound(begin(), end(), key, data_.ref_to_comp());
+    }
+
+    SFL_NODISCARD
+    const_iterator lower_bound(const Key& key) const
+    {
+        return std::lower_bound(begin(), end(), key, data_.ref_to_comp());
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    iterator lower_bound(const K& x)
+    {
+        return std::lower_bound(begin(), end(), x, data_.ref_to_comp());
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    const_iterator lower_bound(const K& x) const
+    {
+        return std::lower_bound(begin(), end(), x, data_.ref_to_comp());
+    }
+
+    SFL_NODISCARD
+    iterator upper_bound(const Key& key)
+    {
+        return std::upper_bound(begin(), end(), key, data_.ref_to_comp());
+    }
+
+    SFL_NODISCARD
+    const_iterator upper_bound(const Key& key) const
+    {
+        return std::upper_bound(begin(), end(), key, data_.ref_to_comp());
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    iterator upper_bound(const K& x)
+    {
+        return std::upper_bound(begin(), end(), x, data_.ref_to_comp());
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    const_iterator upper_bound(const K& x) const
+    {
+        return std::upper_bound(begin(), end(), x, data_.ref_to_comp());
+    }
+
+    SFL_NODISCARD
+    std::pair<iterator, iterator> equal_range(const Key& key)
+    {
+        return std::equal_range(begin(), end(), key, data_.ref_to_comp());
+    }
+
+    SFL_NODISCARD
+    std::pair<const_iterator, const_iterator> equal_range(const Key& key) const
+    {
+        return std::equal_range(begin(), end(), key, data_.ref_to_comp());
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    std::pair<iterator, iterator> equal_range(const K& x)
+    {
+        return std::equal_range(begin(), end(), x, data_.ref_to_comp());
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    std::pair<const_iterator, const_iterator> equal_range(const K& x) const
+    {
+        return std::equal_range(begin(), end(), x, data_.ref_to_comp());
+    }
+
+    SFL_NODISCARD
+    iterator find(const Key& key)
+    {
+        auto it = lower_bound(key);
+
+        if (it != end() && data_.ref_to_comp()(key, *it))
+        {
+            it = end();
+        }
+
+        return it;
+    }
+
+    SFL_NODISCARD
+    const_iterator find(const Key& key) const
+    {
+        auto it = lower_bound(key);
+
+        if (it != end() && data_.ref_to_comp()(key, *it))
+        {
+            it = end();
+        }
+
+        return it;
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    iterator find(const K& x)
+    {
+        auto it = lower_bound(x);
+
+        if (it != end() && data_.ref_to_comp()(x, *it))
+        {
+            it = end();
+        }
+
+        return it;
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    const_iterator find(const K& x) const
+    {
+        auto it = lower_bound(x);
+
+        if (it != end() && data_.ref_to_comp()(x, *it))
+        {
+            it = end();
+        }
+
+        return it;
+    }
+
+    SFL_NODISCARD
+    size_type count(const Key& key) const
+    {
+        return find(key) != end();
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    size_type count(const K& x) const
+    {
+        return find(x) != end();
+    }
+
+    SFL_NODISCARD
+    bool contains(const Key& key) const
+    {
+        return find(key) != end();
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    bool contains(const K& x) const
+    {
+        return find(x) != end();
+    }
+
     //
     // ---- ELEMENT ACCESS ----------------------------------------------------
     //
