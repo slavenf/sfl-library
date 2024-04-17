@@ -1928,6 +1928,76 @@ void test_static_flat_multimap()
             CHECK(map.size() == 0);
         }
     }
+
+    PRINT("Test erase(const Key&)");
+    {
+        sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+        map.emplace(10, 1);
+        map.emplace(20, 1);
+        map.emplace(20, 2);
+        map.emplace(20, 3);
+        map.emplace(30, 1);
+
+        CHECK(map.size() == 5);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 3);
+        CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 20); CHECK(map.nth(3)->second == 1);
+        CHECK(map.nth(4)->first == 30); CHECK(map.nth(4)->second == 1);
+
+        CHECK(map.erase(30) == 1);
+        CHECK(map.erase(30) == 0);
+        CHECK(map.size() == 4);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 3);
+        CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 20); CHECK(map.nth(3)->second == 1);
+
+        CHECK(map.erase(20) == 3);
+        CHECK(map.erase(20) == 0);
+        CHECK(map.size() == 1);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+
+        CHECK(map.erase(10) == 1);
+        CHECK(map.erase(10) == 0);
+        CHECK(map.size() == 0);
+    }
+
+    PRINT("Test erase(K&&)");
+    {
+        sfl::static_flat_multimap<xobj, xint, 100, xobj::less> map;
+
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(2));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(3));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
+
+        CHECK(map.size() == 5);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 3);
+        CHECK(map.nth(2)->first.value() == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first.value() == 20); CHECK(map.nth(3)->second == 1);
+        CHECK(map.nth(4)->first.value() == 30); CHECK(map.nth(4)->second == 1);
+
+        CHECK(map.erase(30) == 1);
+        CHECK(map.erase(30) == 0);
+        CHECK(map.size() == 4);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 3);
+        CHECK(map.nth(2)->first.value() == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first.value() == 20); CHECK(map.nth(3)->second == 1);
+
+        CHECK(map.erase(20) == 3);
+        CHECK(map.erase(20) == 0);
+        CHECK(map.size() == 1);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+
+        CHECK(map.erase(10) == 1);
+        CHECK(map.erase(10) == 0);
+        CHECK(map.size() == 0);
+    }
 }
 
 int main()
