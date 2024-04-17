@@ -354,6 +354,11 @@ public:
         }
     }
 
+    void insert(std::initializer_list<value_type> ilist)
+    {
+        insert(ilist.begin(), ilist.end());
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
