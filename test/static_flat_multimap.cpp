@@ -2157,6 +2157,28 @@ void test_static_flat_multimap()
         CHECK(data->first == 20); CHECK(data->second == 1); ++data;
         CHECK(data->first == 30); CHECK(data->second == 1); ++data;
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test container()");
+    {
+        sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+        CHECK(map.size() == 0);
+        CHECK(map.capacity() == 100);
+        CHECK(map.available() == 100);
+    }
+
+    PRINT("Test container(const Compare&)");
+    {
+        std::less<xint> comp;
+
+        sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map(comp);
+
+        CHECK(map.size() == 0);
+        CHECK(map.capacity() == 100);
+        CHECK(map.available() == 100);
+    }
 }
 
 int main()
