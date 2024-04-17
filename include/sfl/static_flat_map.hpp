@@ -239,8 +239,8 @@ public:
     {
         data_.last_ = sfl::dtl::uninitialized_copy
         (
-            other.begin(),
-            other.end(),
+            pointer(other.data_.first_),
+            pointer(other.data_.last_),
             data_.first_
         );
     }
@@ -250,8 +250,8 @@ public:
     {
         data_.last_ = sfl::dtl::uninitialized_move
         (
-            std::make_move_iterator(other.begin()),
-            std::make_move_iterator(other.end()),
+            std::make_move_iterator(pointer(other.data_.first_)),
+            std::make_move_iterator(pointer(other.data_.last_)),
             data_.first_
         );
     }
