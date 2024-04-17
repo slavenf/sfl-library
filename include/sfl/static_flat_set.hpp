@@ -218,6 +218,16 @@ public:
         return *this;
     }
 
+    static_flat_set& operator=(static_flat_set&& other)
+    {
+        assign_range
+        (
+            std::make_move_iterator(pointer(other.data_.first_)),
+            std::make_move_iterator(pointer(other.data_.last_))
+        );
+        return *this;
+    }
+
     //
     // ---- KEY COMPARE -------------------------------------------------------
     //
