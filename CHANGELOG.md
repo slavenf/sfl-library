@@ -24,6 +24,8 @@
 * Small flat multiset: Reworked private member function `insert_exactly_at`.
 * Static vector: Refactored copy and move constructors.
 * Static vector: Refactored copy and move assignment operators.
+* Static vector: Refactored member function `emplace`.
+
 
 
 # 1.4.0 (2024-04-14)
