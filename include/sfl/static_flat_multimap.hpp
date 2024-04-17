@@ -362,6 +362,13 @@ public:
         data_.last_ = data_.first_;
     }
 
+    template <typename... Args>
+    iterator emplace(Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(value_type(std::forward<Args>(args)...));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -541,6 +548,12 @@ public:
     //
 
 private:
+
+    template <typename Value>
+    iterator insert_aux(Value&& value)
+    {
+        return insert_exactly_at(lower_bound(value.first), std::forward<Value>(value));
+    }
 
     template <typename... Args>
     iterator insert_exactly_at(const_iterator pos, Args&&... args)
