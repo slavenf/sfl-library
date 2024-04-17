@@ -11,6 +11,9 @@
 * Bug fix in `small_flat_multimap`: Fixed memory leak in private member function
   `insert_exactly_at` that could happen in case of exception during construction
   of new element.
+* Bug fix in `small_flat_multiset`: Fixed memory leak in private member function
+  `insert_exactly_at` that could happen in case of exception during construction
+  of new element.
 * Small flat map: Refactored member functions `erase`.
 * Small flat map: Reworked private member function `insert_exactly_at`.
 * Small flat set: Refactored member functions `erase`.
@@ -18,6 +21,7 @@
 * Small flat multimap: Refactored member functions `erase`.
 * Small flat multimap: Reworked private member function `insert_exactly_at`.
 * Small flat multiset: Refactored member functions `erase`.
+* Small flat multiset: Reworked private member function `insert_exactly_at`.
 * Static vector: Refactored copy and move constructors.
 * Static vector: Refactored copy and move assignment operators.
 
