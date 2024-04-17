@@ -126,6 +126,10 @@ public:
         : data_()
     {}
 
+    explicit static_flat_set(const Compare& comp) noexcept(std::is_nothrow_copy_constructible<Compare>::value)
+        : data_(comp)
+    {}
+
     ~static_flat_set()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
