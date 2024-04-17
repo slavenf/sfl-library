@@ -359,6 +359,21 @@ public:
         insert(ilist.begin(), ilist.end());
     }
 
+    iterator erase(const_iterator pos)
+    {
+        SFL_ASSERT(cbegin() <= pos && pos < cend());
+
+        const difference_type offset = std::distance(cbegin(), pos);
+
+        const pointer p = data_.first_ + offset;
+
+        data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
+
+        sfl::dtl::destroy_at(data_.last_);
+
+        return p;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
