@@ -269,7 +269,7 @@ public:
     {
         if (this != &other)
         {
-            assign_range(other.begin(), other.end());
+            assign_range(pointer(other.data_.first_), pointer(other.data_.last_));
         }
         return *this;
     }
