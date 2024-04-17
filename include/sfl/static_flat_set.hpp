@@ -374,6 +374,30 @@ public:
         return p;
     }
 
+    iterator erase(const_iterator first, const_iterator last)
+    {
+        SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
+
+        if (first == last)
+        {
+            return begin() + std::distance(cbegin(), first);
+        }
+
+        const difference_type offset1 = std::distance(cbegin(), first);
+        const difference_type offset2 = std::distance(cbegin(), last);
+
+        const pointer p1 = data_.first_ + offset1;
+        const pointer p2 = data_.first_ + offset2;
+
+        const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
+
+        sfl::dtl::destroy(new_last, data_.last_);
+
+        data_.last_ = new_last;
+
+        return p1;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
