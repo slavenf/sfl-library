@@ -1,16 +1,19 @@
 # Next release
 
-* New container: `static_flat_map`.
-* Small flat map: Fixed memory leak in private member function `insert_exactly_at`
-  when exception is thrown during construction of new element.
-* Small flat set: Fixed memory leak in private member function `insert_exactly_at`
-  when exception is thrown during construction of new element.
-* Small flat map: Refactored member functions `erase`
+* New container `static_flat_map`.
+* New container `static_flat_set`.
+* Bug fix in `small_flat_map`: Fixed memory leak in private member function
+  `insert_exactly_at` that could happen in case of exception during construction
+  of new element.
+* Bug fix in `small_flat_set`: Fixed memory leak in private member function
+  `insert_exactly_at` that could happen in case of exception during construction
+  of new element.
+* Small flat map: Refactored member functions `erase`.
 * Small flat map: Reworked private member function `insert_exactly_at`.
-* Small flat set: Refactored member functions `erase`
+* Small flat set: Refactored member functions `erase`.
 * Small flat set: Reworked private member function `insert_exactly_at`.
-* Small flat multimap: Refactored member functions `erase`
-* Small flat multiset: Refactored member functions `erase`
+* Small flat multimap: Refactored member functions `erase`.
+* Small flat multiset: Refactored member functions `erase`.
 * Static vector: Refactored copy and move constructors.
 * Static vector: Refactored copy and move assignment operators.
 
