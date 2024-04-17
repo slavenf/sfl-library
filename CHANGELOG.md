@@ -12,6 +12,7 @@
 * Small flat multimap: Refactored member functions `erase`
 * Small flat multiset: Refactored member functions `erase`
 * Static vector: Refactored copy and move constructors.
+* Static vector: Refactored copy and move assignment operators.
 
 
 # 1.4.0 (2024-04-14)

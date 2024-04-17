@@ -312,7 +312,11 @@ public:
     {
         if (this != &other)
         {
-            assign(other.begin(), other.end());
+            assign
+            (
+                pointer(other.data_.first_),
+                pointer(other.data_.last_)
+            );
         }
         return *this;
     }
@@ -321,8 +325,8 @@ public:
     {
         assign
         (
-            std::make_move_iterator(other.begin()),
-            std::make_move_iterator(other.end())
+            std::make_move_iterator(pointer(other.data_.first_)),
+            std::make_move_iterator(pointer(other.data_.last_))
         );
         return *this;
     }
