@@ -317,6 +317,18 @@ public:
         return insert_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
+    std::pair<iterator, bool> insert(const value_type& value)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(value);
+    }
+
+    std::pair<iterator, bool> insert(value_type&& value)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(std::move(value));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
