@@ -369,6 +369,14 @@ public:
         return insert_aux(value_type(std::forward<Args>(args)...));
     }
 
+    template <typename... Args>
+    iterator emplace_hint(const_iterator hint, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -553,6 +561,18 @@ private:
     iterator insert_aux(Value&& value)
     {
         return insert_exactly_at(lower_bound(value.first), std::forward<Value>(value));
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        if (is_insert_hint_good(hint, value))
+        {
+            return insert_exactly_at(hint, std::forward<Value>(value));
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return insert_aux(std::forward<Value>(value));
     }
 
     template <typename... Args>
