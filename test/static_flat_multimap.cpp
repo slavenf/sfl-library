@@ -2362,6 +2362,34 @@ void test_static_flat_multimap()
         CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
         CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
     }
+
+    PRINT("Test container(container&&)");
+    {
+        sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map1;
+
+        map1.emplace(10, 1);
+        map1.emplace(20, 1);
+        map1.emplace(30, 1);
+
+        CHECK(map1.size() == 3);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map2(std::move(map1));
+
+        CHECK(map2.size() == 3);
+        CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
+        CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
+        CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
+
+        CHECK(map1.size() == 3);
+        CHECK(map1.nth(0)->first == -10); CHECK(map1.nth(0)->second == -1);
+        CHECK(map1.nth(1)->first == -20); CHECK(map1.nth(1)->second == -1);
+        CHECK(map1.nth(2)->first == -30); CHECK(map1.nth(2)->second == -1);
+    }
 }
 
 int main()
