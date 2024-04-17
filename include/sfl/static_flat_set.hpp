@@ -49,6 +49,8 @@ class static_flat_set
     friend void ::test_static_flat_set();
     #endif
 
+    static_assert(N > 0, "N must be greater than zero.");
+
 public:
 
     using key_type               = Key;
