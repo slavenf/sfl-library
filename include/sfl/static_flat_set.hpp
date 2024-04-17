@@ -880,6 +880,8 @@ private:
                 old_last
             );
 
+            // This container cannot contain duplicates so we use can
+            // create new element at the end.
             *p1 = value_type(std::forward<Args>(args)...);
         }
 
