@@ -11,7 +11,7 @@
 * Small flat set: Reworked private member function `insert_exactly_at`.
 * Small flat multimap: Refactored member functions `erase`
 * Small flat multiset: Refactored member functions `erase`
-
+* Static vector: Refactored copy and move constructors.
 
 
 # 1.4.0 (2024-04-14)
