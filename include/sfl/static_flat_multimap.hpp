@@ -234,6 +234,17 @@ public:
         : static_flat_multimap(ilist.begin(), ilist.end(), comp)
     {}
 
+    static_flat_multimap(const static_flat_multimap& other)
+        : data_(other.data_.ref_to_comp())
+    {
+        data_.last_ = sfl::dtl::uninitialized_copy
+        (
+            pointer(other.data_.first_),
+            pointer(other.data_.last_),
+            data_.first_
+        );
+    }
+
     ~static_flat_multimap()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
