@@ -189,6 +189,17 @@ public:
         );
     }
 
+    static_flat_set(static_flat_set&& other)
+        : data_(std::move(other.data_.ref_to_comp()))
+    {
+        data_.last_ = sfl::dtl::uninitialized_move
+        (
+            std::make_move_iterator(pointer(other.data_.first_)),
+            std::make_move_iterator(pointer(other.data_.last_)),
+            data_.first_
+        );
+    }
+
     ~static_flat_set()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
