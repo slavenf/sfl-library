@@ -183,8 +183,8 @@ public:
     {
         data_.last_ = sfl::dtl::uninitialized_copy
         (
-            other.begin(),
-            other.end(),
+            pointer(other.data_.first_),
+            pointer(other.data_.last_),
             data_.first_
         );
     }
@@ -213,7 +213,11 @@ public:
     {
         if (this != &other)
         {
-            assign_range(pointer(other.data_.first_), pointer(other.data_.last_));
+            assign_range
+            (
+                pointer(other.data_.first_),
+                pointer(other.data_.last_)
+            );
         }
         return *this;
     }
