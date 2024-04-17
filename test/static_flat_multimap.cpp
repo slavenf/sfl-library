@@ -1496,6 +1496,221 @@ void test_static_flat_multimap()
             CHECK(map.nth(11)->first == 60); CHECK(map.nth(11)->second == 1);
         }
     }
+
+    PRINT("Test erase(const_iterator)");
+    {
+        // Erase at the end
+        {
+            sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+            map.emplace(40, 1);
+            map.emplace(50, 1);
+
+            CHECK(map.size() == 5);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(4)) == map.nth(4));
+            CHECK(map.size() == 4);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(3)) == map.nth(3));
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(2)) == map.nth(2));
+            CHECK(map.size() == 2);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(1)) == map.nth(1));
+            CHECK(map.size() == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 0);
+        }
+
+        // Erase at the begin
+        {
+            sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+            map.emplace(40, 1);
+            map.emplace(50, 1);
+
+            CHECK(map.size() == 5);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 4);
+            CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 30); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 40); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 50); CHECK(map.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 30); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 50); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 2);
+            CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 50); CHECK(map.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 1);
+            CHECK(map.nth(0)->first == 50); CHECK(map.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 0);
+        }
+
+        // Erase near the end
+        {
+            sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+            map.emplace(40, 1);
+            map.emplace(50, 1);
+
+            CHECK(map.size() == 5);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(3)) == map.nth(3));
+            CHECK(map.size() == 4);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 50); CHECK(map.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(2)) == map.nth(2));
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 50); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(1)) == map.nth(1));
+            CHECK(map.size() == 2);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 50); CHECK(map.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 1);
+            CHECK(map.nth(0)->first == 50); CHECK(map.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 0);
+        }
+
+        // Erase near the begin
+        {
+            sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+            map.emplace(40, 1);
+            map.emplace(50, 1);
+
+            CHECK(map.size() == 5);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(1)) == map.nth(1));
+            CHECK(map.size() == 4);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 30); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 40); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 50); CHECK(map.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(1)) == map.nth(1));
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 50); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(1)) == map.nth(1));
+            CHECK(map.size() == 2);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 50); CHECK(map.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(1)) == map.nth(1));
+            CHECK(map.size() == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.erase(map.nth(0)) == map.nth(0));
+            CHECK(map.size() == 0);
+        }
+    }
 }
 
 int main()
