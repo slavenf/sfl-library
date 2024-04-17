@@ -727,6 +727,41 @@ void test_static_flat_set()
             CHECK(set.contains(70) == false);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test clear()");
+    {
+        sfl::static_flat_set<xint_xint, 100, std::less<xint_xint>> set;
+
+        CHECK(set.size() == 0);
+
+        set.insert_exactly_at(set.end(), 10, 1);
+        set.insert_exactly_at(set.end(), 20, 1);
+        set.insert_exactly_at(set.end(), 30, 1);
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+        set.clear();
+
+        CHECK(set.size() == 0);
+
+        set.insert_exactly_at(set.end(), 40, 2);
+        set.insert_exactly_at(set.end(), 50, 2);
+        set.insert_exactly_at(set.end(), 60, 2);
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 2);
+        CHECK(set.nth(1)->first == 50); CHECK(set.nth(1)->second == 2);
+        CHECK(set.nth(2)->first == 60); CHECK(set.nth(2)->second == 2);
+
+        set.clear();
+
+        CHECK(set.size() == 0);
+    }
 }
 
 int main()
