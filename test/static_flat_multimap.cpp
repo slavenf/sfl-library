@@ -374,6 +374,81 @@ void test_static_flat_multimap()
             CHECK(map.nth(4)->first == 45); CHECK(map.nth(4)->second == 1);
         }
     }
+
+    PRINT("Test PRIVATE member function is_insert_hint_good(const_iterator, const Value&)");
+    {
+        sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+        using value_type = std::pair<xint, xint>;
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        map.insert_exactly_at(map.end(), value_type(20, 1));
+        map.insert_exactly_at(map.end(), value_type(40, 1));
+        map.insert_exactly_at(map.end(), value_type(40, 2));
+        map.insert_exactly_at(map.end(), value_type(40, 3));
+        map.insert_exactly_at(map.end(), value_type(60, 1));
+
+        CHECK(map.size() == 5);
+        CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 40); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 3);
+        CHECK(map.nth(4)->first == 60); CHECK(map.nth(4)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(map.is_insert_hint_good(map.nth(0), value_type(20, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(1), value_type(20, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(2), value_type(20, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(3), value_type(20, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(4), value_type(20, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(5), value_type(20, 1)) == false);
+
+        CHECK(map.is_insert_hint_good(map.nth(0), value_type(40, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(1), value_type(40, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(2), value_type(40, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(3), value_type(40, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(4), value_type(40, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(5), value_type(40, 1)) == false);
+
+        CHECK(map.is_insert_hint_good(map.nth(0), value_type(60, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(1), value_type(60, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(2), value_type(60, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(3), value_type(60, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(4), value_type(60, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(5), value_type(60, 1)) == true);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(map.is_insert_hint_good(map.nth(0), value_type(10, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(1), value_type(10, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(2), value_type(10, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(3), value_type(10, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(4), value_type(10, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(5), value_type(10, 1)) == false);
+
+        CHECK(map.is_insert_hint_good(map.nth(0), value_type(30, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(1), value_type(30, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(2), value_type(30, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(3), value_type(30, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(4), value_type(30, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(5), value_type(30, 1)) == false);
+
+        CHECK(map.is_insert_hint_good(map.nth(0), value_type(50, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(1), value_type(50, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(2), value_type(50, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(3), value_type(50, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(4), value_type(50, 1)) == true);
+        CHECK(map.is_insert_hint_good(map.nth(5), value_type(50, 1)) == false);
+
+        CHECK(map.is_insert_hint_good(map.nth(0), value_type(70, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(1), value_type(70, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(2), value_type(70, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(3), value_type(70, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(4), value_type(70, 1)) == false);
+        CHECK(map.is_insert_hint_good(map.nth(5), value_type(70, 1)) == true);
+    }
 }
 
 int main()
