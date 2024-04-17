@@ -1653,18 +1653,16 @@ private:
     template <typename... Args>
     iterator insert_exactly_at(const_iterator pos, Args&&... args)
     {
-        const difference_type offset = std::distance(cbegin(), pos);
-
         if (data_.last_ != data_.end_)
         {
-            pointer p = data_.first_ + offset;
+            const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
 
-            if (p == data_.last_)
+            if (p1 == data_.last_)
             {
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
-                    p,
+                    p1,
                     std::forward<Args>(args)...
                 );
 
@@ -1672,34 +1670,39 @@ private:
             }
             else
             {
-                // The order of operations is critical. First we will construct
-                // temporary value because arguments `args...` can contain
-                // reference to element in this container and after that
-                // we will move elements and insert new element.
-
+                // This container can contain duplicates so we must
+                // create new element now as a temporary value.
                 value_type tmp(std::forward<Args>(args)...);
+
+                const pointer p2 = data_.last_ - 1;
+
+                const pointer old_last = data_.last_;
 
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
                     data_.last_,
-                    std::move(*(data_.last_ - 1))
+                    std::move(*p2)
                 );
 
                 ++data_.last_;
 
                 sfl::dtl::move_backward
                 (
-                    p,
-                    data_.last_ - 2,
-                    data_.last_ - 1
+                    p1,
+                    p2,
+                    old_last
                 );
 
-                *p = std::move(tmp);
+                *p1 = std::move(tmp);
             }
+
+            return p1;
         }
         else
         {
+            const difference_type offset = std::distance(cbegin(), pos);
+
             const size_type new_cap =
                 recommend_size(1, "sfl::small_flat_multimap::insert_exactly_at");
 
@@ -1807,9 +1810,9 @@ private:
             data_.first_ = new_first;
             data_.last_  = new_last;
             data_.end_   = new_end;
-        }
 
-        return begin() + offset;
+            return begin() + offset;
+        }
     }
 
     template <typename Value>
