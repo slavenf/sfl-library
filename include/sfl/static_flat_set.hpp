@@ -178,6 +178,17 @@ public:
         : static_flat_set(ilist.begin(), ilist.end(), comp)
     {}
 
+    static_flat_set(const static_flat_set& other)
+        : data_(other.data_.ref_to_comp())
+    {
+        data_.last_ = sfl::dtl::uninitialized_copy
+        (
+            other.begin(),
+            other.end(),
+            data_.first_
+        );
+    }
+
     ~static_flat_set()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
