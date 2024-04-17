@@ -288,6 +288,12 @@ public:
         return *this;
     }
 
+    static_flat_multimap& operator=(std::initializer_list<value_type> ilist)
+    {
+        assign_range(ilist.begin(), ilist.end());
+        return *this;
+    }
+
     //
     // ---- KEY COMPARE -------------------------------------------------------
     //
