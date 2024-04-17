@@ -449,6 +449,93 @@ void test_static_flat_multimap()
         CHECK(map.is_insert_hint_good(map.nth(4), value_type(70, 1)) == false);
         CHECK(map.is_insert_hint_good(map.nth(5), value_type(70, 1)) == true);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of");
+    {
+        sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
+
+        map.insert_exactly_at(map.end(), 20, 1);
+        map.insert_exactly_at(map.end(), 40, 1);
+        map.insert_exactly_at(map.end(), 60, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto it = map.begin();
+        CHECK(it->first == 20); CHECK(it->second == 1); ++it;
+        CHECK(it->first == 40); CHECK(it->second == 1); ++it;
+        CHECK(it->first == 60); CHECK(it->second == 1); ++it;
+        CHECK(it == map.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto cit = map.cbegin();
+        CHECK(cit->first == 20); CHECK(cit->second == 1); ++cit;
+        CHECK(cit->first == 40); CHECK(cit->second == 1); ++cit;
+        CHECK(cit->first == 60); CHECK(cit->second == 1); ++cit;
+        CHECK(cit == map.cend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto rit = map.rbegin();
+        CHECK(rit->first == 60); CHECK(rit->second == 1); ++rit;
+        CHECK(rit->first == 40); CHECK(rit->second == 1); ++rit;
+        CHECK(rit->first == 20); CHECK(rit->second == 1); ++rit;
+        CHECK(rit == map.rend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto crit = map.crbegin();
+        CHECK(crit->first == 60); CHECK(crit->second == 1); ++crit;
+        CHECK(crit->first == 40); CHECK(crit->second == 1); ++crit;
+        CHECK(crit->first == 20); CHECK(crit->second == 1); ++crit;
+        CHECK(crit == map.crend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3) == map.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(map.begin(), 0) == map.nth(0));
+        CHECK(std::next(map.begin(), 1) == map.nth(1));
+        CHECK(std::next(map.begin(), 2) == map.nth(2));
+        CHECK(std::next(map.begin(), 3) == map.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(map.cbegin(), 0) == map.nth(0));
+        CHECK(std::next(map.cbegin(), 1) == map.nth(1));
+        CHECK(std::next(map.cbegin(), 2) == map.nth(2));
+        CHECK(std::next(map.cbegin(), 3) == map.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.nth(0) < map.nth(1));
+        CHECK(map.nth(0) < map.nth(2));
+        CHECK(map.nth(0) < map.nth(3));
+
+        CHECK(map.nth(1) < map.nth(2));
+        CHECK(map.nth(1) < map.nth(3));
+
+        CHECK(map.nth(2) < map.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.index_of(map.nth(0)) == 0);
+        CHECK(map.index_of(map.nth(1)) == 1);
+        CHECK(map.index_of(map.nth(2)) == 2);
+        CHECK(map.index_of(map.nth(3)) == 3);
+    }
 }
 
 int main()
