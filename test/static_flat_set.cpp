@@ -762,6 +762,47 @@ void test_static_flat_set()
 
         CHECK(set.size() == 0);
     }
+
+    PRINT("Test emplace(Args&&...)");
+    {
+        sfl::static_flat_set<xint_xint, 100, std::less<xint_xint>> set;
+
+        {
+            CHECK(set.emplace(20, 1) == std::make_pair(set.nth(0), true));
+            CHECK(set.emplace(40, 1) == std::make_pair(set.nth(1), true));
+            CHECK(set.emplace(60, 1) == std::make_pair(set.nth(2), true));
+
+            CHECK(set.emplace(10, 1) == std::make_pair(set.nth(0), true));
+            CHECK(set.emplace(30, 1) == std::make_pair(set.nth(2), true));
+            CHECK(set.emplace(50, 1) == std::make_pair(set.nth(4), true));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
+        }
+
+        {
+            CHECK(set.emplace(20, 2) == std::make_pair(set.nth(1), false));
+            CHECK(set.emplace(40, 2) == std::make_pair(set.nth(3), false));
+            CHECK(set.emplace(60, 2) == std::make_pair(set.nth(5), false));
+
+            CHECK(set.emplace(10, 2) == std::make_pair(set.nth(0), false));
+            CHECK(set.emplace(30, 2) == std::make_pair(set.nth(2), false));
+            CHECK(set.emplace(50, 2) == std::make_pair(set.nth(4), false));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
+        }
+    }
 }
 
 int main()
