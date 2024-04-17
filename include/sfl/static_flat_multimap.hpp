@@ -377,6 +377,26 @@ public:
         return insert_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
+    iterator insert(const value_type& value)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(value);
+    }
+
+    iterator insert(value_type&& value)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(std::move(value));
+    }
+
+    template <typename P,
+              sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
+    iterator insert(P&& value)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(value_type(std::forward<P>(value)));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
