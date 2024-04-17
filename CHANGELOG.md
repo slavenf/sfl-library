@@ -5,8 +5,12 @@
   when exception is thrown during construction of new element.
 * Small flat set: Fixed memory leak in private member function `insert_exactly_at`
   when exception is thrown during construction of new element.
+* Small flat map: Refactored member functions `erase`
 * Small flat map: Reworked private member function `insert_exactly_at`.
+* Small flat set: Refactored member functions `erase`
 * Small flat set: Reworked private member function `insert_exactly_at`.
+* Small flat multimap: Refactored member functions `erase`
+* Small flat multiset: Refactored member functions `erase`
 
 
 
