@@ -907,6 +907,107 @@ private:
     }
 };
 
+//
+// ---- NON-MEMBER FUNCTIONS --------------------------------------------------
+//
+
+template <typename K, std::size_t N, typename C>
+SFL_NODISCARD
+bool operator==
+(
+    const static_flat_multiset<K, N, C>& x,
+    const static_flat_multiset<K, N, C>& y
+)
+{
+    return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
+}
+
+template <typename K, std::size_t N, typename C>
+SFL_NODISCARD
+bool operator!=
+(
+    const static_flat_multiset<K, N, C>& x,
+    const static_flat_multiset<K, N, C>& y
+)
+{
+    return !(x == y);
+}
+
+template <typename K, std::size_t N, typename C>
+SFL_NODISCARD
+bool operator<
+(
+    const static_flat_multiset<K, N, C>& x,
+    const static_flat_multiset<K, N, C>& y
+)
+{
+    return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+}
+
+template <typename K, std::size_t N, typename C>
+SFL_NODISCARD
+bool operator>
+(
+    const static_flat_multiset<K, N, C>& x,
+    const static_flat_multiset<K, N, C>& y
+)
+{
+    return y < x;
+}
+
+template <typename K, std::size_t N, typename C>
+SFL_NODISCARD
+bool operator<=
+(
+    const static_flat_multiset<K, N, C>& x,
+    const static_flat_multiset<K, N, C>& y
+)
+{
+    return !(y < x);
+}
+
+template <typename K, std::size_t N, typename C>
+SFL_NODISCARD
+bool operator>=
+(
+    const static_flat_multiset<K, N, C>& x,
+    const static_flat_multiset<K, N, C>& y
+)
+{
+    return !(x < y);
+}
+
+template <typename K, std::size_t N, typename C>
+void swap
+(
+    static_flat_multiset<K, N, C>& x,
+    static_flat_multiset<K, N, C>& y
+)
+{
+    x.swap(y);
+}
+
+template <typename K, std::size_t N, typename C, typename Predicate>
+typename static_flat_multiset<K, N, C>::size_type
+erase_if(static_flat_multiset<K, N, C>& c, Predicate pred)
+{
+    auto old_size = c.size();
+
+    for (auto it = c.begin(); it != c.end(); )
+    {
+        if (pred(*it))
+        {
+            it = c.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    return old_size - c.size();
+}
+
 } // namespace sfl
 
 #endif // SFL_STATIC_FLAT_MULTISET_HPP_INCLUDED
