@@ -2202,6 +2202,34 @@ void test_static_flat_multiset()
         CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
         CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
     }
+
+    PRINT("Test container(container&&)");
+    {
+        sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set1;
+
+        set1.emplace(10, 1);
+        set1.emplace(20, 1);
+        set1.emplace(30, 1);
+
+        CHECK(set1.size() == 3);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set2(std::move(set1));
+
+        CHECK(set2.size() == 3);
+        CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
+        CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
+        CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
+
+        CHECK(set1.size() == 3);
+        CHECK(set1.nth(0)->first == -10); CHECK(set1.nth(0)->second == -1);
+        CHECK(set1.nth(1)->first == -20); CHECK(set1.nth(1)->second == -1);
+        CHECK(set1.nth(2)->first == -30); CHECK(set1.nth(2)->second == -1);
+    }
 }
 
 int main()
