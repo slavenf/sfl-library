@@ -530,6 +530,31 @@ private:
 
         return p1;
     }
+
+    template <typename Value>
+    bool is_insert_hint_good(const_iterator hint, const Value& value)
+    {
+        return
+            // If `hint` == `value`
+            (
+                hint != end() &&
+                !data_.ref_to_comp()(*hint, value) &&
+                !data_.ref_to_comp()(value, *hint)
+            )
+            ||
+            // If `hint - 1` == `value`
+            (
+                hint != begin() &&
+                !data_.ref_to_comp()(*(hint - 1), value) &&
+                !data_.ref_to_comp()(value, *(hint - 1))
+            )
+            ||
+            // If `hint - 1` < `value` and `value` < `hint`
+            (
+                (hint == begin() || data_.ref_to_comp()(*(hint - 1), value)) &&
+                (hint == end()   || data_.ref_to_comp()(value, *hint))
+            );
+    }
 };
 
 } // namespace sfl

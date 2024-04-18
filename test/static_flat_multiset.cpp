@@ -376,6 +376,81 @@ void test_static_flat_multiset()
             CHECK(set.nth(4)->first == 45); CHECK(set.nth(4)->second == 1);
         }
     }
+
+    PRINT("Test PRIVATE member function is_insert_hint_good(const_iterator, const Value&)");
+    {
+        sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set;
+
+        using value_type = xint_xint;
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        set.insert_exactly_at(set.end(), value_type(20, 1));
+        set.insert_exactly_at(set.end(), value_type(40, 1));
+        set.insert_exactly_at(set.end(), value_type(40, 2));
+        set.insert_exactly_at(set.end(), value_type(40, 3));
+        set.insert_exactly_at(set.end(), value_type(60, 1));
+
+        CHECK(set.size() == 5);
+        CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 40); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 40); CHECK(set.nth(2)->second == 2);
+        CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 3);
+        CHECK(set.nth(4)->first == 60); CHECK(set.nth(4)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(set.is_insert_hint_good(set.nth(0), value_type(20, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(1), value_type(20, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(2), value_type(20, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(3), value_type(20, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(4), value_type(20, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(5), value_type(20, 1)) == false);
+
+        CHECK(set.is_insert_hint_good(set.nth(0), value_type(40, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(1), value_type(40, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(2), value_type(40, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(3), value_type(40, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(4), value_type(40, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(5), value_type(40, 1)) == false);
+
+        CHECK(set.is_insert_hint_good(set.nth(0), value_type(60, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(1), value_type(60, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(2), value_type(60, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(3), value_type(60, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(4), value_type(60, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(5), value_type(60, 1)) == true);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(set.is_insert_hint_good(set.nth(0), value_type(10, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(1), value_type(10, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(2), value_type(10, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(3), value_type(10, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(4), value_type(10, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(5), value_type(10, 1)) == false);
+
+        CHECK(set.is_insert_hint_good(set.nth(0), value_type(30, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(1), value_type(30, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(2), value_type(30, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(3), value_type(30, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(4), value_type(30, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(5), value_type(30, 1)) == false);
+
+        CHECK(set.is_insert_hint_good(set.nth(0), value_type(50, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(1), value_type(50, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(2), value_type(50, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(3), value_type(50, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(4), value_type(50, 1)) == true);
+        CHECK(set.is_insert_hint_good(set.nth(5), value_type(50, 1)) == false);
+
+        CHECK(set.is_insert_hint_good(set.nth(0), value_type(70, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(1), value_type(70, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(2), value_type(70, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(3), value_type(70, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(4), value_type(70, 1)) == false);
+        CHECK(set.is_insert_hint_good(set.nth(5), value_type(70, 1)) == true);
+    }
 }
 
 int main()
