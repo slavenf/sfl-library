@@ -172,6 +172,14 @@ public:
         }
     }
 
+    static_flat_multiset(std::initializer_list<value_type> ilist)
+        : static_flat_multiset(ilist.begin(), ilist.end())
+    {}
+
+    static_flat_multiset(std::initializer_list<value_type> ilist, const Compare& comp)
+        : static_flat_multiset(ilist.begin(), ilist.end(), comp)
+    {}
+
     ~static_flat_multiset()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
