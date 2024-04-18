@@ -211,6 +211,19 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
+    static_flat_multiset& operator=(const static_flat_multiset& other)
+    {
+        if (this != &other)
+        {
+            assign_range
+            (
+                pointer(other.data_.first_),
+                pointer(other.data_.last_)
+            );
+        }
+        return *this;
+    }
+
     //
     // ---- KEY COMPARE -------------------------------------------------------
     //
@@ -737,6 +750,53 @@ public:
     }
 
 private:
+
+    template <typename ForwardIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_forward_iterator<ForwardIt>::value>* = nullptr>
+    void assign_range(ForwardIt first, ForwardIt last)
+    {
+        SFL_ASSERT(size_type(std::distance(first, last)) <= capacity());
+
+        const size_type n = std::distance(first, last);
+
+        const size_type size = this->size();
+
+        if (n <= size)
+        {
+            const pointer new_last = sfl::dtl::copy
+            (
+                first,
+                last,
+                data_.first_
+            );
+
+            sfl::dtl::destroy
+            (
+                new_last,
+                data_.last_
+            );
+
+            data_.last_ = new_last;
+        }
+        else
+        {
+            const ForwardIt mid = std::next(first, size);
+
+            sfl::dtl::copy
+            (
+                first,
+                mid,
+                data_.first_
+            );
+
+            data_.last_ = sfl::dtl::uninitialized_copy
+            (
+                mid,
+                last,
+                data_.last_
+            );
+        }
+    }
 
     template <typename Value>
     iterator insert_aux(Value&& value)

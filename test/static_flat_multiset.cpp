@@ -2230,6 +2230,143 @@ void test_static_flat_multiset()
         CHECK(set1.nth(1)->first == -20); CHECK(set1.nth(1)->second == -1);
         CHECK(set1.nth(2)->first == -30); CHECK(set1.nth(2)->second == -1);
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test operator=(const container&)");
+    {
+        #define CONDITION set1.size() == set2.size()
+        {
+            sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set1, set2;
+
+            set1.emplace(10, 1);
+            set1.emplace(20, 1);
+            set1.emplace(30, 1);
+
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+            CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+            CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
+
+            set2.emplace(40, 2);
+            set2.emplace(50, 2);
+            set2.emplace(60, 2);
+
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+
+            ///////////////////////////////////////////////////////////////////
+
+            CHECK(CONDITION);
+
+            set1 = set2;
+
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
+            CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
+            CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
+
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+        }
+        #undef CONDITION
+
+        #define CONDITION set1.size() < set2.size()
+        {
+            sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set1, set2;
+
+            set1.emplace(10, 1);
+            set1.emplace(20, 1);
+            set1.emplace(30, 1);
+
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+            CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+            CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
+
+            set2.emplace(40, 2);
+            set2.emplace(50, 2);
+            set2.emplace(60, 2);
+            set2.emplace(70, 2);
+            set2.emplace(80, 2);
+
+            CHECK(set2.size() == 5);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+            CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
+            CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
+
+            ///////////////////////////////////////////////////////////////////
+
+            CHECK(CONDITION);
+
+            set1 = set2;
+
+            CHECK(set1.size() == 5);
+            CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
+            CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
+            CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
+            CHECK(set1.nth(3)->first == 70); CHECK(set1.nth(3)->second == 2);
+            CHECK(set1.nth(4)->first == 80); CHECK(set1.nth(4)->second == 2);
+
+            CHECK(set2.size() == 5);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+            CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
+            CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
+        }
+        #undef CONDITION
+
+        #define CONDITION set1.size() > set2.size()
+        {
+            sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set1, set2;
+
+            set1.emplace(10, 1);
+            set1.emplace(20, 1);
+            set1.emplace(30, 1);
+            set1.emplace(40, 1);
+            set1.emplace(50, 1);
+
+            CHECK(set1.size() == 5);
+            CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+            CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+            CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
+            CHECK(set1.nth(3)->first == 40); CHECK(set1.nth(3)->second == 1);
+            CHECK(set1.nth(4)->first == 50); CHECK(set1.nth(4)->second == 1);
+
+            set2.emplace(60, 2);
+            set2.emplace(70, 2);
+            set2.emplace(80, 2);
+
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 60); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 70); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 80); CHECK(set2.nth(2)->second == 2);
+
+            ///////////////////////////////////////////////////////////////////
+
+            CHECK(CONDITION);
+
+            set1 = set2;
+
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 60); CHECK(set1.nth(0)->second == 2);
+            CHECK(set1.nth(1)->first == 70); CHECK(set1.nth(1)->second == 2);
+            CHECK(set1.nth(2)->first == 80); CHECK(set1.nth(2)->second == 2);
+
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 60); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 70); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 80); CHECK(set2.nth(2)->second == 2);
+        }
+        #undef CONDITION
+    }
 }
 
 int main()
