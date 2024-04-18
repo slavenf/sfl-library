@@ -538,6 +538,60 @@ void test_static_flat_multiset()
         CHECK(set.index_of(set.nth(2)) == 2);
         CHECK(set.index_of(set.nth(3)) == 3);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test key_comp()");
+    {
+        {
+            sfl::static_flat_multiset<xint, 100, std::less<xint>> set;
+
+            auto key_comp = set.key_comp();
+
+            CHECK(key_comp(10, 10) == false);
+            CHECK(key_comp(10, 20) == true);
+            CHECK(key_comp(20, 10) == false);
+            CHECK(key_comp(20, 20) == false);
+        }
+
+        {
+            sfl::static_flat_multiset<xobj, 100, xobj::less> set;
+
+            auto key_comp = set.key_comp();
+
+            CHECK(key_comp(xobj(10), 10) == false);
+            CHECK(key_comp(xobj(10), 20) == true);
+            CHECK(key_comp(xobj(20), 10) == false);
+            CHECK(key_comp(xobj(20), 20) == false);
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test value_comp()");
+    {
+        {
+            sfl::static_flat_multiset<xint, 100, std::less<xint>> set;
+
+            auto value_comp = set.value_comp();
+
+            CHECK(value_comp(10, 10) == false);
+            CHECK(value_comp(10, 20) == true);
+            CHECK(value_comp(20, 10) == false);
+            CHECK(value_comp(20, 20) == false);
+        }
+
+        {
+            sfl::static_flat_multiset<xobj, 100, xobj::less> set;
+
+            auto value_comp = set.value_comp();
+
+            CHECK(value_comp(xobj(10), 10) == false);
+            CHECK(value_comp(xobj(10), 20) == true);
+            CHECK(value_comp(xobj(20), 10) == false);
+            CHECK(value_comp(xobj(20), 20) == false);
+        }
+    }
 }
 
 int main()
