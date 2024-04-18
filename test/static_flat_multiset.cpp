@@ -1551,6 +1551,223 @@ void test_static_flat_multiset()
             CHECK(set.size() == 0);
         }
     }
+
+    PRINT("Test erase(const_iterator, const_iterator)");
+    {
+        // Erase at the end
+        {
+            sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+            set.emplace(60, 1);
+            set.emplace(70, 1);
+            set.emplace(80, 1);
+            set.emplace(90, 1);
+
+            CHECK(set.size() == 9);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
+            CHECK(set.nth(6)->first == 70); CHECK(set.nth(6)->second == 1);
+            CHECK(set.nth(7)->first == 80); CHECK(set.nth(7)->second == 1);
+            CHECK(set.nth(8)->first == 90); CHECK(set.nth(8)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(6), set.nth(9)) == set.nth(6));
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(3), set.nth(6)) == set.nth(3));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0), set.nth(3)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+
+        // Erase at the begin
+        {
+            sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+            set.emplace(60, 1);
+            set.emplace(70, 1);
+            set.emplace(80, 1);
+            set.emplace(90, 1);
+
+            CHECK(set.size() == 9);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
+            CHECK(set.nth(6)->first == 70); CHECK(set.nth(6)->second == 1);
+            CHECK(set.nth(7)->first == 80); CHECK(set.nth(7)->second == 1);
+            CHECK(set.nth(8)->first == 90); CHECK(set.nth(8)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0), set.nth(3)) == set.nth(0));
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 50); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 60); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 70); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 80); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 90); CHECK(set.nth(5)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0), set.nth(3)) == set.nth(0));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 70); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 80); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 90); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0), set.nth(3)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+
+        // Erase near the end
+        {
+            sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+            set.emplace(60, 1);
+            set.emplace(70, 1);
+            set.emplace(80, 1);
+            set.emplace(90, 1);
+
+            CHECK(set.size() == 9);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
+            CHECK(set.nth(6)->first == 70); CHECK(set.nth(6)->second == 1);
+            CHECK(set.nth(7)->first == 80); CHECK(set.nth(7)->second == 1);
+            CHECK(set.nth(8)->first == 90); CHECK(set.nth(8)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(5), set.nth(8)) == set.nth(5));
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 90); CHECK(set.nth(5)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(2), set.nth(5)) == set.nth(2));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 90); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1), set.nth(2)) == set.nth(1));
+            CHECK(set.size() == 2);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 90); CHECK(set.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0), set.nth(2)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+
+        // Erase near the begin
+        {
+            sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+            set.emplace(60, 1);
+            set.emplace(70, 1);
+            set.emplace(80, 1);
+            set.emplace(90, 1);
+
+            CHECK(set.size() == 9);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
+            CHECK(set.nth(6)->first == 70); CHECK(set.nth(6)->second == 1);
+            CHECK(set.nth(7)->first == 80); CHECK(set.nth(7)->second == 1);
+            CHECK(set.nth(8)->first == 90); CHECK(set.nth(8)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1), set.nth(4)) == set.nth(1));
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 50); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 60); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 70); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 80); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(5)->first == 90); CHECK(set.nth(5)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1), set.nth(4)) == set.nth(1));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 80); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 90); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1), set.nth(2)) == set.nth(1));
+            CHECK(set.size() == 2);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 90); CHECK(set.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0), set.nth(2)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+    }
 }
 
 int main()
