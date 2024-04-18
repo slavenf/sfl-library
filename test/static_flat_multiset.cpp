@@ -1768,6 +1768,76 @@ void test_static_flat_multiset()
             CHECK(set.size() == 0);
         }
     }
+
+    PRINT("Test erase(const Key&)");
+    {
+        sfl::static_flat_multiset<xint, 100, std::less<xint>> set;
+
+        set.emplace(10);
+        set.emplace(20);
+        set.emplace(20);
+        set.emplace(20);
+        set.emplace(30);
+
+        CHECK(set.size() == 5);
+        CHECK(*set.nth(0) == 10);
+        CHECK(*set.nth(1) == 20);
+        CHECK(*set.nth(2) == 20);
+        CHECK(*set.nth(3) == 20);
+        CHECK(*set.nth(4) == 30);
+
+        CHECK(set.erase(30) == 1);
+        CHECK(set.erase(30) == 0);
+        CHECK(set.size() == 4);
+        CHECK(*set.nth(0) == 10);
+        CHECK(*set.nth(1) == 20);
+        CHECK(*set.nth(2) == 20);
+        CHECK(*set.nth(3) == 20);
+
+        CHECK(set.erase(20) == 3);
+        CHECK(set.erase(20) == 0);
+        CHECK(set.size() == 1);
+        CHECK(*set.nth(0) == 10);
+
+        CHECK(set.erase(10) == 1);
+        CHECK(set.erase(10) == 0);
+        CHECK(set.size() == 0);
+    }
+
+    PRINT("Test erase(K&&)");
+    {
+        sfl::static_flat_multiset<xobj, 100, xobj::less> set;
+
+        set.emplace(10);
+        set.emplace(20);
+        set.emplace(20);
+        set.emplace(20);
+        set.emplace(30);
+
+        CHECK(set.size() == 5);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+        CHECK(set.nth(2)->value() == 20);
+        CHECK(set.nth(3)->value() == 20);
+        CHECK(set.nth(4)->value() == 30);
+
+        CHECK(set.erase(30) == 1);
+        CHECK(set.erase(30) == 0);
+        CHECK(set.size() == 4);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+        CHECK(set.nth(2)->value() == 20);
+        CHECK(set.nth(3)->value() == 20);
+
+        CHECK(set.erase(20) == 3);
+        CHECK(set.erase(20) == 0);
+        CHECK(set.size() == 1);
+        CHECK(set.nth(0)->value() == 10);
+
+        CHECK(set.erase(10) == 1);
+        CHECK(set.erase(10) == 0);
+        CHECK(set.size() == 0);
+    }
 }
 
 int main()

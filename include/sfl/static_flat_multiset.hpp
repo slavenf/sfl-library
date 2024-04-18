@@ -399,6 +399,24 @@ public:
         return p1;
     }
 
+    size_type erase(const Key& key)
+    {
+        const auto er = equal_range(key);
+        const auto n = std::distance(er.first, er.second);
+        erase(er.first, er.second);
+        return n;
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    size_type erase(K&& x)
+    {
+        const auto er = equal_range(x);
+        const auto n = std::distance(er.first, er.second);
+        erase(er.first, er.second);
+        return n;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
