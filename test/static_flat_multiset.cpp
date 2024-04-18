@@ -1974,6 +1974,29 @@ void test_static_flat_multiset()
             CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test data()");
+    {
+        sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>> set;
+
+        set.emplace(10, 1);
+        set.emplace(20, 1);
+        set.emplace(30, 1);
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        auto data = set.data();
+        CHECK(data->first == 10); CHECK(data->second == 1); ++data;
+        CHECK(data->first == 20); CHECK(data->second == 1); ++data;
+        CHECK(data->first == 30); CHECK(data->second == 1); ++data;
+    }
 }
 
 int main()
