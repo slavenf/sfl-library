@@ -592,6 +592,159 @@ void test_static_flat_multiset()
             CHECK(value_comp(xobj(20), 20) == false);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
+    {
+        // xint
+        {
+            sfl::static_flat_multiset<xint, 100, std::less<xint>> set;
+
+            set.insert_exactly_at(set.end(), 20);
+            set.insert_exactly_at(set.end(), 40);
+            set.insert_exactly_at(set.end(), 60);
+
+            CHECK(set.size() == 3);
+            CHECK(*set.nth(0) == 20);
+            CHECK(*set.nth(1) == 40);
+            CHECK(*set.nth(2) == 60);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.lower_bound(10) == set.nth(0));
+            CHECK(set.lower_bound(20) == set.nth(0));
+            CHECK(set.lower_bound(30) == set.nth(1));
+            CHECK(set.lower_bound(40) == set.nth(1));
+            CHECK(set.lower_bound(50) == set.nth(2));
+            CHECK(set.lower_bound(60) == set.nth(2));
+            CHECK(set.lower_bound(70) == set.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.upper_bound(10) == set.nth(0));
+            CHECK(set.upper_bound(20) == set.nth(1));
+            CHECK(set.upper_bound(30) == set.nth(1));
+            CHECK(set.upper_bound(40) == set.nth(2));
+            CHECK(set.upper_bound(50) == set.nth(2));
+            CHECK(set.upper_bound(60) == set.nth(3));
+            CHECK(set.upper_bound(70) == set.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.equal_range(10) == std::make_pair(set.nth(0), set.nth(0)));
+            CHECK(set.equal_range(20) == std::make_pair(set.nth(0), set.nth(1)));
+            CHECK(set.equal_range(30) == std::make_pair(set.nth(1), set.nth(1)));
+            CHECK(set.equal_range(40) == std::make_pair(set.nth(1), set.nth(2)));
+            CHECK(set.equal_range(50) == std::make_pair(set.nth(2), set.nth(2)));
+            CHECK(set.equal_range(60) == std::make_pair(set.nth(2), set.nth(3)));
+            CHECK(set.equal_range(70) == std::make_pair(set.nth(3), set.nth(3)));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.find(10) == set.end());
+            CHECK(set.find(20) == set.nth(0));
+            CHECK(set.find(30) == set.end());
+            CHECK(set.find(40) == set.nth(1));
+            CHECK(set.find(50) == set.end());
+            CHECK(set.find(60) == set.nth(2));
+            CHECK(set.find(70) == set.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.count(10) == 0);
+            CHECK(set.count(20) == 1);
+            CHECK(set.count(30) == 0);
+            CHECK(set.count(40) == 1);
+            CHECK(set.count(50) == 0);
+            CHECK(set.count(60) == 1);
+            CHECK(set.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.contains(10) == false);
+            CHECK(set.contains(20) == true);
+            CHECK(set.contains(30) == false);
+            CHECK(set.contains(40) == true);
+            CHECK(set.contains(50) == false);
+            CHECK(set.contains(60) == true);
+            CHECK(set.contains(70) == false);
+        }
+
+        // xobj
+        {
+            sfl::static_flat_multiset<xobj, 100, xobj::less> set;
+
+            set.insert_exactly_at(set.end(), 20);
+            set.insert_exactly_at(set.end(), 40);
+            set.insert_exactly_at(set.end(), 60);
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->value() == 20);
+            CHECK(set.nth(1)->value() == 40);
+            CHECK(set.nth(2)->value() == 60);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.lower_bound(10) == set.nth(0));
+            CHECK(set.lower_bound(20) == set.nth(0));
+            CHECK(set.lower_bound(30) == set.nth(1));
+            CHECK(set.lower_bound(40) == set.nth(1));
+            CHECK(set.lower_bound(50) == set.nth(2));
+            CHECK(set.lower_bound(60) == set.nth(2));
+            CHECK(set.lower_bound(70) == set.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.upper_bound(10) == set.nth(0));
+            CHECK(set.upper_bound(20) == set.nth(1));
+            CHECK(set.upper_bound(30) == set.nth(1));
+            CHECK(set.upper_bound(40) == set.nth(2));
+            CHECK(set.upper_bound(50) == set.nth(2));
+            CHECK(set.upper_bound(60) == set.nth(3));
+            CHECK(set.upper_bound(70) == set.nth(3));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.equal_range(10) == std::make_pair(set.nth(0), set.nth(0)));
+            CHECK(set.equal_range(20) == std::make_pair(set.nth(0), set.nth(1)));
+            CHECK(set.equal_range(30) == std::make_pair(set.nth(1), set.nth(1)));
+            CHECK(set.equal_range(40) == std::make_pair(set.nth(1), set.nth(2)));
+            CHECK(set.equal_range(50) == std::make_pair(set.nth(2), set.nth(2)));
+            CHECK(set.equal_range(60) == std::make_pair(set.nth(2), set.nth(3)));
+            CHECK(set.equal_range(70) == std::make_pair(set.nth(3), set.nth(3)));
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.find(10) == set.end());
+            CHECK(set.find(20) == set.nth(0));
+            CHECK(set.find(30) == set.end());
+            CHECK(set.find(40) == set.nth(1));
+            CHECK(set.find(50) == set.end());
+            CHECK(set.find(60) == set.nth(2));
+            CHECK(set.find(70) == set.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.count(10) == 0);
+            CHECK(set.count(20) == 1);
+            CHECK(set.count(30) == 0);
+            CHECK(set.count(40) == 1);
+            CHECK(set.count(50) == 0);
+            CHECK(set.count(60) == 1);
+            CHECK(set.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.contains(10) == false);
+            CHECK(set.contains(20) == true);
+            CHECK(set.contains(30) == false);
+            CHECK(set.contains(40) == true);
+            CHECK(set.contains(50) == false);
+            CHECK(set.contains(60) == true);
+            CHECK(set.contains(70) == false);
+        }
+    }
 }
 
 int main()
