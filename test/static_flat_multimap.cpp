@@ -27,6 +27,8 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 5, std::less<xint>> map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 CHECK(map.empty() == true);
                 CHECK(map.full() == false);
@@ -37,7 +39,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 10, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -51,7 +53,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 20, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -66,7 +68,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 30, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(2));
@@ -82,7 +84,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 40, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(3));
@@ -99,7 +101,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 50, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(4));
@@ -120,6 +122,8 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 5, std::less<xint>> map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 CHECK(map.empty() == true);
                 CHECK(map.full() == false);
@@ -130,7 +134,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 50, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -144,7 +148,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 40, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -159,7 +163,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 30, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -175,7 +179,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 20, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -192,7 +196,7 @@ void test_static_flat_multimap()
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 10, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -212,10 +216,12 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 5, std::less<xint>> map;
 
-            map.insert_exactly_at(map.end(), 10, 1);
-            map.insert_exactly_at(map.end(), 20, 1);
-            map.insert_exactly_at(map.end(), 30, 1);
-            map.insert_exactly_at(map.end(), 40, 1);
+            using value_type = std::pair<xint, xint>;
+
+            map.insert_exactly_at(map.end(), value_type(10, 1));
+            map.insert_exactly_at(map.end(), value_type(20, 1));
+            map.insert_exactly_at(map.end(), value_type(30, 1));
+            map.insert_exactly_at(map.end(), value_type(40, 1));
 
             CHECK(map.empty() == false);
             CHECK(map.full() == false);
@@ -227,7 +233,7 @@ void test_static_flat_multimap()
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
             CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
 
-            const auto res = map.insert_exactly_at(map.nth(0), 5, 1);
+            const auto res = map.insert_exactly_at(map.nth(0), value_type(5, 1));
 
             CHECK(res == map.nth(0));
             CHECK(map.empty() == false);
@@ -245,10 +251,12 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 5, std::less<xint>> map;
 
-            map.insert_exactly_at(map.end(), 10, 1);
-            map.insert_exactly_at(map.end(), 20, 1);
-            map.insert_exactly_at(map.end(), 30, 1);
-            map.insert_exactly_at(map.end(), 40, 1);
+            using value_type = std::pair<xint, xint>;
+
+            map.insert_exactly_at(map.end(), value_type(10, 1));
+            map.insert_exactly_at(map.end(), value_type(20, 1));
+            map.insert_exactly_at(map.end(), value_type(30, 1));
+            map.insert_exactly_at(map.end(), value_type(40, 1));
 
             CHECK(map.empty() == false);
             CHECK(map.full() == false);
@@ -260,7 +268,7 @@ void test_static_flat_multimap()
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
             CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
 
-            const auto res = map.insert_exactly_at(map.nth(1), 15, 1);
+            const auto res = map.insert_exactly_at(map.nth(1), value_type(15, 1));
 
             CHECK(res == map.nth(1));
             CHECK(map.empty() == false);
@@ -278,10 +286,12 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 5, std::less<xint>> map;
 
-            map.insert_exactly_at(map.end(), 10, 1);
-            map.insert_exactly_at(map.end(), 20, 1);
-            map.insert_exactly_at(map.end(), 30, 1);
-            map.insert_exactly_at(map.end(), 40, 1);
+            using value_type = std::pair<xint, xint>;
+
+            map.insert_exactly_at(map.end(), value_type(10, 1));
+            map.insert_exactly_at(map.end(), value_type(20, 1));
+            map.insert_exactly_at(map.end(), value_type(30, 1));
+            map.insert_exactly_at(map.end(), value_type(40, 1));
 
             CHECK(map.empty() == false);
             CHECK(map.full() == false);
@@ -293,7 +303,7 @@ void test_static_flat_multimap()
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
             CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
 
-            const auto res = map.insert_exactly_at(map.nth(2), 25, 1);
+            const auto res = map.insert_exactly_at(map.nth(2), value_type(25, 1));
 
             CHECK(res == map.nth(2));
             CHECK(map.empty() == false);
@@ -311,10 +321,12 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 5, std::less<xint>> map;
 
-            map.insert_exactly_at(map.end(), 10, 1);
-            map.insert_exactly_at(map.end(), 20, 1);
-            map.insert_exactly_at(map.end(), 30, 1);
-            map.insert_exactly_at(map.end(), 40, 1);
+            using value_type = std::pair<xint, xint>;
+
+            map.insert_exactly_at(map.end(), value_type(10, 1));
+            map.insert_exactly_at(map.end(), value_type(20, 1));
+            map.insert_exactly_at(map.end(), value_type(30, 1));
+            map.insert_exactly_at(map.end(), value_type(40, 1));
 
             CHECK(map.empty() == false);
             CHECK(map.full() == false);
@@ -326,7 +338,7 @@ void test_static_flat_multimap()
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
             CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
 
-            const auto res = map.insert_exactly_at(map.nth(3), 35, 1);
+            const auto res = map.insert_exactly_at(map.nth(3), value_type(35, 1));
 
             CHECK(res == map.nth(3));
             CHECK(map.empty() == false);
@@ -344,10 +356,12 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 5, std::less<xint>> map;
 
-            map.insert_exactly_at(map.end(), 10, 1);
-            map.insert_exactly_at(map.end(), 20, 1);
-            map.insert_exactly_at(map.end(), 30, 1);
-            map.insert_exactly_at(map.end(), 40, 1);
+            using value_type = std::pair<xint, xint>;
+
+            map.insert_exactly_at(map.end(), value_type(10, 1));
+            map.insert_exactly_at(map.end(), value_type(20, 1));
+            map.insert_exactly_at(map.end(), value_type(30, 1));
+            map.insert_exactly_at(map.end(), value_type(40, 1));
 
             CHECK(map.empty() == false);
             CHECK(map.full() == false);
@@ -359,7 +373,7 @@ void test_static_flat_multimap()
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
             CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
 
-            const auto res = map.insert_exactly_at(map.nth(4), 45, 1);
+            const auto res = map.insert_exactly_at(map.nth(4), value_type(45, 1));
 
             CHECK(res == map.nth(4));
             CHECK(map.empty() == false);
@@ -456,9 +470,11 @@ void test_static_flat_multimap()
     {
         sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
 
-        map.insert_exactly_at(map.end(), 20, 1);
-        map.insert_exactly_at(map.end(), 40, 1);
-        map.insert_exactly_at(map.end(), 60, 1);
+        using value_type = std::pair<xint, xint>;
+
+        map.insert_exactly_at(map.end(), value_type(20, 1));
+        map.insert_exactly_at(map.end(), value_type(40, 1));
+        map.insert_exactly_at(map.end(), value_type(60, 1));
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -599,9 +615,11 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
 
-            map.insert_exactly_at(map.end(), 20, 1);
-            map.insert_exactly_at(map.end(), 40, 1);
-            map.insert_exactly_at(map.end(), 60, 1);
+            using value_type = std::pair<xint, xint>;
+
+            map.insert_exactly_at(map.end(), value_type(20, 1));
+            map.insert_exactly_at(map.end(), value_type(40, 1));
+            map.insert_exactly_at(map.end(), value_type(60, 1));
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -673,9 +691,11 @@ void test_static_flat_multimap()
         {
             sfl::static_flat_multimap<xobj, xint, 100, xobj::less> map;
 
-            map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
-            map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
-            map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
+            using value_type = std::pair<xobj, xint>;
+
+            map.insert_exactly_at(map.end(), value_type(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1)));
+            map.insert_exactly_at(map.end(), value_type(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1)));
+            map.insert_exactly_at(map.end(), value_type(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1)));
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first.value() == 20); CHECK(map.nth(0)->second == 1);
@@ -750,11 +770,13 @@ void test_static_flat_multimap()
     {
         sfl::static_flat_multimap<xint, xint, 100, std::less<xint>> map;
 
+        using value_type = std::pair<xint, xint>;
+
         CHECK(map.size() == 0);
 
-        map.insert_exactly_at(map.end(), 10, 1);
-        map.insert_exactly_at(map.end(), 20, 1);
-        map.insert_exactly_at(map.end(), 30, 1);
+        map.insert_exactly_at(map.end(), value_type(10, 1));
+        map.insert_exactly_at(map.end(), value_type(20, 1));
+        map.insert_exactly_at(map.end(), value_type(30, 1));
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -765,9 +787,9 @@ void test_static_flat_multimap()
 
         CHECK(map.size() == 0);
 
-        map.insert_exactly_at(map.end(), 40, 2);
-        map.insert_exactly_at(map.end(), 50, 2);
-        map.insert_exactly_at(map.end(), 60, 2);
+        map.insert_exactly_at(map.end(), value_type(40, 2));
+        map.insert_exactly_at(map.end(), value_type(50, 2));
+        map.insert_exactly_at(map.end(), value_type(60, 2));
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);

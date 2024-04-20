@@ -29,6 +29,8 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint_xint, 5, std::less<xint_xint>> set;
 
+            using value_type = xint_xint;
+
             {
                 CHECK(set.empty() == true);
                 CHECK(set.full() == false);
@@ -39,7 +41,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 10, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -53,7 +55,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 20, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -68,7 +70,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 30, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(2));
@@ -84,7 +86,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 40, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(3));
@@ -101,7 +103,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 50, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(4));
@@ -122,6 +124,8 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint_xint, 5, std::less<xint_xint>> set;
 
+            using value_type = xint_xint;
+
             {
                 CHECK(set.empty() == true);
                 CHECK(set.full() == false);
@@ -132,7 +136,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 50, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -146,7 +150,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 40, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -161,7 +165,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 30, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -177,7 +181,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 20, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -194,7 +198,7 @@ void test_static_flat_set()
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 10, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -214,10 +218,12 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint_xint, 5, std::less<xint_xint>> set;
 
-            set.insert_exactly_at(set.end(), 10, 1);
-            set.insert_exactly_at(set.end(), 20, 1);
-            set.insert_exactly_at(set.end(), 30, 1);
-            set.insert_exactly_at(set.end(), 40, 1);
+            using value_type = xint_xint;
+
+            set.insert_exactly_at(set.end(), value_type(10, 1));
+            set.insert_exactly_at(set.end(), value_type(20, 1));
+            set.insert_exactly_at(set.end(), value_type(30, 1));
+            set.insert_exactly_at(set.end(), value_type(40, 1));
 
             CHECK(set.empty() == false);
             CHECK(set.full() == false);
@@ -229,7 +235,7 @@ void test_static_flat_set()
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
             CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
 
-            const auto res = set.insert_exactly_at(set.nth(0), 5, 1);
+            const auto res = set.insert_exactly_at(set.nth(0), value_type(5, 1));
 
             CHECK(res == set.nth(0));
             CHECK(set.empty() == false);
@@ -247,10 +253,12 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint_xint, 5, std::less<xint_xint>> set;
 
-            set.insert_exactly_at(set.end(), 10, 1);
-            set.insert_exactly_at(set.end(), 20, 1);
-            set.insert_exactly_at(set.end(), 30, 1);
-            set.insert_exactly_at(set.end(), 40, 1);
+            using value_type = xint_xint;
+
+            set.insert_exactly_at(set.end(), value_type(10, 1));
+            set.insert_exactly_at(set.end(), value_type(20, 1));
+            set.insert_exactly_at(set.end(), value_type(30, 1));
+            set.insert_exactly_at(set.end(), value_type(40, 1));
 
             CHECK(set.empty() == false);
             CHECK(set.full() == false);
@@ -262,7 +270,7 @@ void test_static_flat_set()
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
             CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
 
-            const auto res = set.insert_exactly_at(set.nth(1), 15, 1);
+            const auto res = set.insert_exactly_at(set.nth(1), value_type(15, 1));
 
             CHECK(res == set.nth(1));
             CHECK(set.empty() == false);
@@ -280,10 +288,12 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint_xint, 5, std::less<xint_xint>> set;
 
-            set.insert_exactly_at(set.end(), 10, 1);
-            set.insert_exactly_at(set.end(), 20, 1);
-            set.insert_exactly_at(set.end(), 30, 1);
-            set.insert_exactly_at(set.end(), 40, 1);
+            using value_type = xint_xint;
+
+            set.insert_exactly_at(set.end(), value_type(10, 1));
+            set.insert_exactly_at(set.end(), value_type(20, 1));
+            set.insert_exactly_at(set.end(), value_type(30, 1));
+            set.insert_exactly_at(set.end(), value_type(40, 1));
 
             CHECK(set.empty() == false);
             CHECK(set.full() == false);
@@ -295,7 +305,7 @@ void test_static_flat_set()
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
             CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
 
-            const auto res = set.insert_exactly_at(set.nth(2), 25, 1);
+            const auto res = set.insert_exactly_at(set.nth(2), value_type(25, 1));
 
             CHECK(res == set.nth(2));
             CHECK(set.empty() == false);
@@ -313,10 +323,12 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint_xint, 5, std::less<xint_xint>> set;
 
-            set.insert_exactly_at(set.end(), 10, 1);
-            set.insert_exactly_at(set.end(), 20, 1);
-            set.insert_exactly_at(set.end(), 30, 1);
-            set.insert_exactly_at(set.end(), 40, 1);
+            using value_type = xint_xint;
+
+            set.insert_exactly_at(set.end(), value_type(10, 1));
+            set.insert_exactly_at(set.end(), value_type(20, 1));
+            set.insert_exactly_at(set.end(), value_type(30, 1));
+            set.insert_exactly_at(set.end(), value_type(40, 1));
 
             CHECK(set.empty() == false);
             CHECK(set.full() == false);
@@ -328,7 +340,7 @@ void test_static_flat_set()
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
             CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
 
-            const auto res = set.insert_exactly_at(set.nth(3), 35, 1);
+            const auto res = set.insert_exactly_at(set.nth(3), value_type(35, 1));
 
             CHECK(res == set.nth(3));
             CHECK(set.empty() == false);
@@ -346,10 +358,12 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint_xint, 5, std::less<xint_xint>> set;
 
-            set.insert_exactly_at(set.end(), 10, 1);
-            set.insert_exactly_at(set.end(), 20, 1);
-            set.insert_exactly_at(set.end(), 30, 1);
-            set.insert_exactly_at(set.end(), 40, 1);
+            using value_type = xint_xint;
+
+            set.insert_exactly_at(set.end(), value_type(10, 1));
+            set.insert_exactly_at(set.end(), value_type(20, 1));
+            set.insert_exactly_at(set.end(), value_type(30, 1));
+            set.insert_exactly_at(set.end(), value_type(40, 1));
 
             CHECK(set.empty() == false);
             CHECK(set.full() == false);
@@ -361,7 +375,7 @@ void test_static_flat_set()
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
             CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
 
-            const auto res = set.insert_exactly_at(set.nth(4), 45, 1);
+            const auto res = set.insert_exactly_at(set.nth(4), value_type(45, 1));
 
             CHECK(res == set.nth(4));
             CHECK(set.empty() == false);
@@ -440,9 +454,11 @@ void test_static_flat_set()
     {
         sfl::static_flat_set<xint_xint, 100, std::less<xint_xint>> set;
 
-        set.insert_exactly_at(set.end(), 20, 1);
-        set.insert_exactly_at(set.end(), 40, 1);
-        set.insert_exactly_at(set.end(), 60, 1);
+        using value_type = xint_xint;
+
+        set.insert_exactly_at(set.end(), value_type(20, 1));
+        set.insert_exactly_at(set.end(), value_type(40, 1));
+        set.insert_exactly_at(set.end(), value_type(60, 1));
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
@@ -583,9 +599,11 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xint, 100, std::less<xint>> set;
 
-            set.insert_exactly_at(set.end(), 20);
-            set.insert_exactly_at(set.end(), 40);
-            set.insert_exactly_at(set.end(), 60);
+            using value_type = xint;
+
+            set.insert_exactly_at(set.end(), value_type(20));
+            set.insert_exactly_at(set.end(), value_type(40));
+            set.insert_exactly_at(set.end(), value_type(60));
 
             CHECK(set.size() == 3);
             CHECK(*set.nth(0) == 20);
@@ -657,9 +675,11 @@ void test_static_flat_set()
         {
             sfl::static_flat_set<xobj, 100, xobj::less> set;
 
-            set.insert_exactly_at(set.end(), 20);
-            set.insert_exactly_at(set.end(), 40);
-            set.insert_exactly_at(set.end(), 60);
+            using value_type = xobj;
+
+            set.insert_exactly_at(set.end(), value_type(20));
+            set.insert_exactly_at(set.end(), value_type(40));
+            set.insert_exactly_at(set.end(), value_type(60));
 
             CHECK(set.size() == 3);
             CHECK(set.nth(0)->value() == 20);
@@ -734,11 +754,13 @@ void test_static_flat_set()
     {
         sfl::static_flat_set<xint_xint, 100, std::less<xint_xint>> set;
 
+        using value_type = xint_xint;
+
         CHECK(set.size() == 0);
 
-        set.insert_exactly_at(set.end(), 10, 1);
-        set.insert_exactly_at(set.end(), 20, 1);
-        set.insert_exactly_at(set.end(), 30, 1);
+        set.insert_exactly_at(set.end(), value_type(10, 1));
+        set.insert_exactly_at(set.end(), value_type(20, 1));
+        set.insert_exactly_at(set.end(), value_type(30, 1));
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -749,9 +771,9 @@ void test_static_flat_set()
 
         CHECK(set.size() == 0);
 
-        set.insert_exactly_at(set.end(), 40, 2);
-        set.insert_exactly_at(set.end(), 50, 2);
-        set.insert_exactly_at(set.end(), 60, 2);
+        set.insert_exactly_at(set.end(), value_type(40, 2));
+        set.insert_exactly_at(set.end(), value_type(50, 2));
+        set.insert_exactly_at(set.end(), value_type(60, 2));
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 2);
