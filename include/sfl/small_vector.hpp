@@ -783,16 +783,13 @@ public:
             }
             else
             {
+                // This container can contain duplicates so we must
+                // create new element now as a temporary value.
+                value_type tmp(std::forward<Args>(args)...);
+
                 const pointer p2 = data_.last_ - 1;
 
                 const pointer old_last = data_.last_;
-
-                // The order of operations is critical. First we will construct
-                // temporary value because arguments `args...` can contain
-                // reference to element in this container and after that
-                // we will move elements and insert new element.
-
-                value_type tmp(std::forward<Args>(args)...);
 
                 sfl::dtl::construct_at_a
                 (
@@ -841,11 +838,6 @@ public:
 
             SFL_TRY
             {
-                // The order of operations is critical. First we will construct
-                // new element in new storage because arguments `args...` can
-                // contain reference to element in this container and after
-                // that we will move elements from old to new storage.
-
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
