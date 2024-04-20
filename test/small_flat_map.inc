@@ -17,9 +17,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 10, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -30,7 +32,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 20, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -42,7 +44,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 30, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(2));
@@ -55,7 +57,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 40, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(3));
@@ -69,7 +71,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 50, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(4));
@@ -84,7 +86,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 60, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(5));
@@ -100,7 +102,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 70, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(6));
@@ -117,7 +119,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 80, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(7));
@@ -135,7 +137,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 90, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(8));
@@ -161,9 +163,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 90, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -174,7 +178,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 80, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -186,7 +190,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 70, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -199,7 +203,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 60, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -213,7 +217,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 50, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -228,7 +232,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 40, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -244,7 +248,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 30, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -261,7 +265,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 20, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -279,7 +283,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 10, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -305,9 +309,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 90, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -318,7 +324,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 10, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -330,7 +336,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 20, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -343,7 +349,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 30, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(2));
@@ -357,7 +363,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 40, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(3));
@@ -372,7 +378,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 50, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(4));
@@ -388,7 +394,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 60, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(5));
@@ -405,7 +411,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 70, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(6));
@@ -423,7 +429,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 80, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(7));
@@ -449,9 +455,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 10, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -462,7 +470,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 90, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -474,7 +482,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 80, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -487,7 +495,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 70, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -501,7 +509,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 60, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -516,7 +524,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 50, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -532,7 +540,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 40, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -549,7 +557,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 30, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -567,7 +575,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 20, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -596,9 +604,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 10, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -609,7 +619,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 20, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -621,7 +631,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 30, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(2));
@@ -634,7 +644,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 40, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(3));
@@ -648,7 +658,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 50, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(4));
@@ -663,7 +673,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 60, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(5));
@@ -679,7 +689,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 70, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(6));
@@ -696,7 +706,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 80, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(7));
@@ -714,7 +724,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 90, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(8));
@@ -740,9 +750,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 90, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -753,7 +765,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 80, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -765,7 +777,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 70, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -778,7 +790,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 60, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -792,7 +804,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 50, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -807,7 +819,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 40, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -823,7 +835,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 30, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -840,7 +852,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 20, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -858,7 +870,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.begin(), 10, 1);
+                const auto res = map.insert_exactly_at(map.begin(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -884,9 +896,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 90, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -897,7 +911,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 10, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -909,7 +923,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 20, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -922,7 +936,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 30, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(2));
@@ -936,7 +950,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 40, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(3));
@@ -951,7 +965,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 50, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(4));
@@ -967,7 +981,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 60, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(5));
@@ -984,7 +998,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 70, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(6));
@@ -1002,7 +1016,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end() - 1, 80, 1);
+                const auto res = map.insert_exactly_at(map.end() - 1, value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(7));
@@ -1028,9 +1042,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                  std::less<xint>,
                                  TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
+            using value_type = std::pair<xint, xint>;
+
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 10, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(0));
@@ -1041,7 +1057,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.end(), 90, 1);
+                const auto res = map.insert_exactly_at(map.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1053,7 +1069,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 80, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1066,7 +1082,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 70, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1080,7 +1096,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 60, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1095,7 +1111,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 50, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1111,7 +1127,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 40, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1128,7 +1144,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 30, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1146,7 +1162,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = map.insert_exactly_at(map.nth(1), 20, 1);
+                const auto res = map.insert_exactly_at(map.nth(1), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == map.nth(1));
@@ -1237,9 +1253,11 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
                          std::less<xint>,
                          TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
-    map.insert_exactly_at(map.end(), 20, 1);
-    map.insert_exactly_at(map.end(), 40, 1);
-    map.insert_exactly_at(map.end(), 60, 1);
+    using value_type = std::pair<xint, xint>;
+
+    map.insert_exactly_at(map.end(), value_type(20, 1));
+    map.insert_exactly_at(map.end(), value_type(40, 1));
+    map.insert_exactly_at(map.end(), value_type(60, 1));
 
     CHECK(map.size() == 3);
     CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -1415,9 +1433,11 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
                              std::less<xint>,
                              TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
-        map.insert_exactly_at(map.end(), 20, 1);
-        map.insert_exactly_at(map.end(), 40, 1);
-        map.insert_exactly_at(map.end(), 60, 1);
+        using value_type = std::pair<xint, xint>;
+
+        map.insert_exactly_at(map.end(), value_type(20, 1));
+        map.insert_exactly_at(map.end(), value_type(40, 1));
+        map.insert_exactly_at(map.end(), value_type(60, 1));
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -1493,9 +1513,11 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
                              xobj::less,
                              TPARAM_ALLOCATOR<std::pair<xobj, xint>> > map;
 
-        map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
-        map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
-        map.insert_exactly_at(map.end(), std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
+        using value_type = std::pair<xobj, xint>;
+
+        map.insert_exactly_at(map.end(), value_type(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1)));
+        map.insert_exactly_at(map.end(), value_type(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1)));
+        map.insert_exactly_at(map.end(), value_type(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1)));
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first.value() == 20); CHECK(map.nth(0)->second == 1);
@@ -1576,9 +1598,11 @@ PRINT("Test clear()");
 
     CHECK(map.size() == 0);
 
-    map.insert_exactly_at(map.end(), 10, 1);
-    map.insert_exactly_at(map.end(), 20, 1);
-    map.insert_exactly_at(map.end(), 30, 1);
+    using value_type = std::pair<xint, xint>;
+
+    map.insert_exactly_at(map.end(), value_type(10, 1));
+    map.insert_exactly_at(map.end(), value_type(20, 1));
+    map.insert_exactly_at(map.end(), value_type(30, 1));
 
     CHECK(map.size() == 3);
     CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -1589,9 +1613,9 @@ PRINT("Test clear()");
 
     CHECK(map.size() == 0);
 
-    map.insert_exactly_at(map.end(), 40, 2);
-    map.insert_exactly_at(map.end(), 50, 2);
-    map.insert_exactly_at(map.end(), 60, 2);
+    map.insert_exactly_at(map.end(), value_type(40, 2));
+    map.insert_exactly_at(map.end(), value_type(50, 2));
+    map.insert_exactly_at(map.end(), value_type(60, 2));
 
     CHECK(map.size() == 3);
     CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);

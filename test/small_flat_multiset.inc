@@ -17,9 +17,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 10, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -30,7 +32,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 20, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -42,7 +44,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 30, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(2));
@@ -55,7 +57,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 40, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(3));
@@ -69,7 +71,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 50, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(4));
@@ -84,7 +86,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 60, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(5));
@@ -100,7 +102,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 70, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(6));
@@ -117,7 +119,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 80, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(7));
@@ -135,7 +137,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 90, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(8));
@@ -160,9 +162,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 90, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -173,7 +177,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 80, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -185,7 +189,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 70, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -198,7 +202,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 60, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -212,7 +216,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 50, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -227,7 +231,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 40, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -243,7 +247,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 30, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -260,7 +264,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 20, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -278,7 +282,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 10, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -303,9 +307,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 90, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -316,7 +322,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 10, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -328,7 +334,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 20, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -341,7 +347,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 30, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(2));
@@ -355,7 +361,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 40, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(3));
@@ -370,7 +376,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 50, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(4));
@@ -386,7 +392,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 60, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(5));
@@ -403,7 +409,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 70, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(6));
@@ -421,7 +427,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 80, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(7));
@@ -446,9 +452,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 10, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -459,7 +467,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 90, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -471,7 +479,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 80, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -484,7 +492,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 70, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -498,7 +506,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 60, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -513,7 +521,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 50, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -529,7 +537,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 40, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -546,7 +554,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 30, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -564,7 +572,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 20, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -592,9 +600,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 10, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -605,7 +615,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 20, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -617,7 +627,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 30, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(2));
@@ -630,7 +640,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 40, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(3));
@@ -644,7 +654,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 50, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(4));
@@ -659,7 +669,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 60, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(5));
@@ -675,7 +685,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 70, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(6));
@@ -692,7 +702,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 80, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(7));
@@ -710,7 +720,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 90, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(8));
@@ -735,9 +745,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 90, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -748,7 +760,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 80, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -760,7 +772,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 70, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -773,7 +785,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 60, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -787,7 +799,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 50, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -802,7 +814,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 40, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -818,7 +830,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 30, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -835,7 +847,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 20, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -853,7 +865,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.begin(), 10, 1);
+                const auto res = set.insert_exactly_at(set.begin(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -878,9 +890,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 90, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -891,7 +905,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 10, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -903,7 +917,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 20, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -916,7 +930,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 30, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(2));
@@ -930,7 +944,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 40, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(3));
@@ -945,7 +959,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 50, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(4));
@@ -961,7 +975,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 60, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(5));
@@ -978,7 +992,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 70, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(6));
@@ -996,7 +1010,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end() - 1, 80, 1);
+                const auto res = set.insert_exactly_at(set.end() - 1, value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(7));
@@ -1021,9 +1035,11 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
                                       std::less<xint_xint>,
                                       TPARAM_ALLOCATOR<xint_xint> > set;
 
+            using value_type = xint_xint;
+
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 10, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(10, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(0));
@@ -1034,7 +1050,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.end(), 90, 1);
+                const auto res = set.insert_exactly_at(set.end(), value_type(90, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1046,7 +1062,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 80, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(80, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1059,7 +1075,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 70, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(70, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1073,7 +1089,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 60, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(60, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1088,7 +1104,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 50, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(50, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1104,7 +1120,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 40, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(40, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1121,7 +1137,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 30, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(30, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1139,7 +1155,7 @@ PRINT("Test PRIVATE member function insert_exactly_at(const_iterator, Args&&...)
 
             {
                 PRINT(">");
-                const auto res = set.insert_exactly_at(set.nth(1), 20, 1);
+                const auto res = set.insert_exactly_at(set.nth(1), value_type(20, 1));
                 PRINT("<");
 
                 CHECK(res == set.nth(1));
@@ -1246,9 +1262,11 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
                               std::less<xint_xint>,
                               TPARAM_ALLOCATOR<xint_xint> > set;
 
-    set.insert_exactly_at(set.end(), 20, 1);
-    set.insert_exactly_at(set.end(), 40, 1);
-    set.insert_exactly_at(set.end(), 60, 1);
+    using value_type = xint_xint;
+
+    set.insert_exactly_at(set.end(), value_type(20, 1));
+    set.insert_exactly_at(set.end(), value_type(40, 1));
+    set.insert_exactly_at(set.end(), value_type(60, 1));
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
@@ -1418,9 +1436,11 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
                                   std::less<xint>,
                                   TPARAM_ALLOCATOR<xint> > set;
 
-        set.insert_exactly_at(set.end(), 20);
-        set.insert_exactly_at(set.end(), 40);
-        set.insert_exactly_at(set.end(), 60);
+        using value_type = xint;
+
+        set.insert_exactly_at(set.end(), value_type(20));
+        set.insert_exactly_at(set.end(), value_type(40));
+        set.insert_exactly_at(set.end(), value_type(60));
 
         CHECK(set.size() == 3);
         CHECK(*set.nth(0) == 20);
@@ -1495,9 +1515,11 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
                                   xobj::less,
                                   TPARAM_ALLOCATOR<xobj> > set;
 
-        set.insert_exactly_at(set.end(), 20);
-        set.insert_exactly_at(set.end(), 40);
-        set.insert_exactly_at(set.end(), 60);
+        using value_type = xobj;
+
+        set.insert_exactly_at(set.end(), value_type(20));
+        set.insert_exactly_at(set.end(), value_type(40));
+        set.insert_exactly_at(set.end(), value_type(60));
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->value() == 20);
@@ -1575,11 +1597,13 @@ PRINT("Test clear()");
                               std::less<xint_xint>,
                               TPARAM_ALLOCATOR<xint_xint> > set;
 
+    using value_type = xint_xint;
+
     CHECK(set.size() == 0);
 
-    set.insert_exactly_at(set.end(), 10, 1);
-    set.insert_exactly_at(set.end(), 20, 1);
-    set.insert_exactly_at(set.end(), 30, 1);
+    set.insert_exactly_at(set.end(), value_type(10, 1));
+    set.insert_exactly_at(set.end(), value_type(20, 1));
+    set.insert_exactly_at(set.end(), value_type(30, 1));
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -1590,9 +1614,9 @@ PRINT("Test clear()");
 
     CHECK(set.size() == 0);
 
-    set.insert_exactly_at(set.end(), 40, 2);
-    set.insert_exactly_at(set.end(), 50, 2);
-    set.insert_exactly_at(set.end(), 60, 2);
+    set.insert_exactly_at(set.end(), value_type(40, 2));
+    set.insert_exactly_at(set.end(), value_type(50, 2));
+    set.insert_exactly_at(set.end(), value_type(60, 2));
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 2);

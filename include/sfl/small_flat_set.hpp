@@ -1579,8 +1579,8 @@ private:
         return insert_aux(std::forward<Value>(value)).first;
     }
 
-    template <typename... Args>
-    iterator insert_exactly_at(const_iterator pos, Args&&... args)
+    template <typename Value>
+    iterator insert_exactly_at(const_iterator pos, Value&& value)
     {
         if (data_.last_ != data_.end_)
         {
@@ -1592,7 +1592,7 @@ private:
                 (
                     data_.ref_to_alloc(),
                     p1,
-                    std::forward<Args>(args)...
+                    std::forward<Value>(value)
                 );
 
                 ++data_.last_;
@@ -1619,9 +1619,7 @@ private:
                     old_last
                 );
 
-                // This container cannot contain duplicates so we use can
-                // create new element at the end.
-                *p1 = value_type(std::forward<Args>(args)...);
+                *p1 = std::forward<Value>(value);
             }
 
             return p1;
@@ -1674,7 +1672,7 @@ private:
                 (
                     data_.ref_to_alloc(),
                     new_last,
-                    std::forward<Args>(args)...
+                    std::forward<Value>(value)
                 );
 
                 ++new_last;
