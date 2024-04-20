@@ -1650,15 +1650,14 @@ private:
 
             SFL_TRY
             {
-                // This container cannot contains duplicates so we are sure
-                // that arguments `args...` do not contain reference to
-                // element in this container.
-                // Because of that, order of operations is not critical like
-                // in case of vectors or multimaps or multisets.
-                // First we will move first chunk of elements from old to new
-                // storage, after that we will construct new element in new
-                // storage and finally move second chunk of elements from old
-                // to new storage.
+                sfl::dtl::construct_at_a
+                (
+                    data_.ref_to_alloc(),
+                    new_first + offset,
+                    std::forward<Value>(value)
+                );
+
+                new_last = nullptr;
 
                 new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
@@ -1666,13 +1665,6 @@ private:
                     data_.first_,
                     data_.first_ + offset,
                     new_first
-                );
-
-                sfl::dtl::construct_at_a
-                (
-                    data_.ref_to_alloc(),
-                    new_last,
-                    std::forward<Value>(value)
                 );
 
                 ++new_last;
@@ -1687,12 +1679,23 @@ private:
             }
             SFL_CATCH (...)
             {
-                sfl::dtl::destroy_a
-                (
-                    data_.ref_to_alloc(),
-                    new_first,
-                    new_last
-                );
+                if (new_last == nullptr)
+                {
+                    sfl::dtl::destroy_at_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first + offset
+                    );
+                }
+                else
+                {
+                    sfl::dtl::destroy_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first,
+                        new_last
+                    );
+                }
 
                 if (new_first != data_.internal_storage())
                 {

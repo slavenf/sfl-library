@@ -1721,11 +1721,6 @@ private:
 
             SFL_TRY
             {
-                // The order of operations is critical. First we will construct
-                // new element in new storage because arguments `args...` can
-                // contain reference to element in this container and after
-                // that we will move elements from old to new storage.
-
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
