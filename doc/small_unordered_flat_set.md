@@ -51,15 +51,17 @@ namespace sfl
 }
 ```
 
-`sfl::small_unordered_flat_set` is a associative container similar to [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set), but with the different storage model. The storage model of small unordered flat set is identical to the storage model of [`sfl::small_vector`](doc/small_vector.md), that is, small unordered flat set also internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+`sfl::small_unordered_flat_set` is an associative container similar to [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set) with the underlying storage implemented as an unsorted vector.
 
-Size `N` is specified at the compile time as a template parameter. In case when `N` is equal to zero the container does not hold any statically allocated array and uses only dynamic memory management.
+`sfl::small_unordered_flat_set` internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
-Unlike `std::unordered_set`, the elements of `sfl::small_unordered_flat_set` are stored contiguously in the memory (even when dynamic memory management is used).
+The complexity of insertion or removal of elements is O(1). The complexity of search is O(N).
 
-Iterators to elements are random access iterators and they meet the requirements of [`LegacyRandomAccessIterator`](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+The elements of `sfl::small_unordered_flat_set` are always stored contiguously in the memory.
 
-`sfl::small_unordered_flat_set` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer) and [`ContiguousContainer`](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [`UnorderedAssociativeContainer`](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met.
+Iterators to elements of `sfl::small_unordered_flat_set` are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+
+`sfl::small_unordered_flat_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met.
 
 <br><br>
 

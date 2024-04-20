@@ -66,15 +66,17 @@ namespace sfl
 }
 ```
 
-`sfl::small_flat_map` is a associative container similar to [`std::map`](https://en.cppreference.com/w/cpp/container/map), but with the different storage model. The storage model of small flat map is identical to the storage model of [`sfl::small_vector`](doc/small_vector.md), that is, small flat map also internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+`sfl::small_flat_map` is an associative container similar to [`std::map`](https://en.cppreference.com/w/cpp/container/map) with the underlying storage implemented as a sorted vector.
 
-Size `N` is specified at the compile time as a template parameter. In case when `N` is equal to zero the container does not hold any statically allocated array and uses only dynamic memory management.
+`sfl::small_flat_map` internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
-Unlike `std::map`, the elements of `sfl::small_flat_map` are stored contiguously in the memory (even when dynamic memory management is used).
+The complexity of insertion or removal of elements is O(N). The complexity of search is O(log N).
 
-Iterators to elements are random access iterators and they meet the requirements of [`LegacyRandomAccessIterator`](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+The elements of `sfl::small_flat_map` are always stored contiguously in the memory.
 
-`sfl::small_flat_map` meets the requirements of [`Container`](https://en.cppreference.com/w/cpp/named_req/Container), [`AllocatorAwareContainer`](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [`ReversibleContainer`](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [`ContiguousContainer`](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [`AssociativeContainer`](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
+Iterators to elements of `sfl::small_flat_map` are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+
+`sfl::small_flat_map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
 <br><br>
 
