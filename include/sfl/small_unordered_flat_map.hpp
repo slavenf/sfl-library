@@ -1733,10 +1733,10 @@ private:
     template <typename... Args>
     iterator insert_unordered(Args&&... args)
     {
-        iterator result;
-
         if (data_.last_ != data_.end_)
         {
+            const pointer old_last = data_.last_;
+
             sfl::dtl::construct_at_a
             (
                 data_.ref_to_alloc(),
@@ -1744,9 +1744,9 @@ private:
                 std::forward<Args>(args)...
             );
 
-            result = data_.last_;
-
             ++data_.last_;
+
+            return old_last;
         }
         else
         {
@@ -1772,18 +1772,12 @@ private:
 
             SFL_TRY
             {
-                // This is unordered container. We will first construct
-                // new element in new storage and after that we will move
-                // elements from old storage to new storage.
-
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
                     new_last,
                     std::forward<Args>(args)...
                 );
-
-                result = new_last;
 
                 ++new_last;
 
@@ -1837,9 +1831,9 @@ private:
             data_.first_ = new_first;
             data_.last_  = new_last;
             data_.end_   = new_end;
-        }
 
-        return result;
+            return data_.first_;
+        }
     }
 };
 
