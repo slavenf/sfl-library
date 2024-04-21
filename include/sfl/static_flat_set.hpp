@@ -85,8 +85,13 @@ private:
             : last_(first_)
         {}
 
+        #if defined(__clang__) && (__clang_major__ == 3) // For CentOS 7
+        ~data_base()
+        {}
+        #else
         ~data_base() noexcept
         {}
+        #endif
     };
 
     class data : public data_base, public value_compare
