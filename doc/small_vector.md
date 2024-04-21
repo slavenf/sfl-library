@@ -1,57 +1,5 @@
 # sfl::small_vector
 
-<details>
-<summary>Table of Contents</summary>
-
-* [Summary](#summary)
-* [Template Parameters](#template-parameters)
-* [Public Member Types](#public-member-types)
-* [Public Member Functions](#public-member-functions)
-  * [(constructor)](#constructor)
-  * [(destructor)](#destructor)
-  * [assign](#assign)
-  * [operator=](#operator)
-  * [get\_allocator](#get_allocator)
-  * [begin, cbegin](#begin-cbegin)
-  * [end, cend](#end-cend)
-  * [rbegin, crbegin](#rbegin-crbegin)
-  * [rend, crend](#rend-crend)
-  * [nth](#nth)
-  * [index\_of](#index_of)
-  * [empty](#empty)
-  * [size](#size)
-  * [max\_size](#max_size)
-  * [capacity](#capacity)
-  * [available](#available)
-  * [reserve](#reserve)
-  * [shrink\_to\_fit](#shrink_to_fit)
-  * [at](#at)
-  * [operator\[\]](#operator-1)
-  * [front](#front)
-  * [back](#back)
-  * [data](#data)
-  * [clear](#clear)
-  * [emplace](#emplace)
-  * [insert](#insert)
-  * [emplace\_back](#emplace_back)
-  * [push\_back](#push_back)
-  * [pop\_back](#pop_back)
-  * [erase](#erase)
-  * [resize](#resize)
-  * [swap](#swap)
-* [Non-member Functions](#non-member-functions)
-  * [operator==](#operator-2)
-  * [operator!=](#operator-3)
-  * [operator\<](#operator-4)
-  * [operator\>](#operator-5)
-  * [operator\<=](#operator-6)
-  * [operator\>=](#operator-7)
-  * [swap](#swap-1)
-  * [erase](#erase-1)
-  * [erase\_if](#erase_if)
-
-</details>
-
 ## Summary
 
 Defined in header `sfl/small_vector.hpp`:

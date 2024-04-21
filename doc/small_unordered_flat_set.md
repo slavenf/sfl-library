@@ -1,46 +1,5 @@
 # sfl::small_unordered_flat_set
 
-<details>
-<summary>Table of Contents</summary>
-
-* [Summary](#summary)
-* [Template Parameters](#template-parameters)
-* [Public Member Types](#public-member-types)
-* [Public Member Functions](#public-member-functions)
-  * [(constructor)](#constructor)
-  * [(destructor)](#destructor)
-  * [operator=](#operator)
-  * [get\_allocator](#get_allocator)
-  * [key\_eq](#key_eq)
-  * [begin, cbegin](#begin-cbegin)
-  * [end, cend](#end-cend)
-  * [nth](#nth)
-  * [index\_of](#index_of)
-  * [empty](#empty)
-  * [size](#size)
-  * [max\_size](#max_size)
-  * [capacity](#capacity)
-  * [available](#available)
-  * [reserve](#reserve)
-  * [shrink\_to\_fit](#shrink_to_fit)
-  * [clear](#clear)
-  * [emplace](#emplace)
-  * [emplace\_hint](#emplace_hint)
-  * [insert](#insert)
-  * [erase](#erase)
-  * [swap](#swap)
-  * [find](#find)
-  * [count](#count)
-  * [contains](#contains)
-  * [data](#data)
-* [Non-member Functions](#non-member-functions)
-  * [operator==](#operator-1)
-  * [operator !=](#operator-)
-  * [swap](#swap-1)
-  * [erase\_if](#erase_if)
-
-</details>
-
 ## Summary
 
 Defined in header `sfl/small_unordered_flat_set.hpp`:
