@@ -41,10 +41,6 @@ void test_small_flat_map();
 namespace sfl
 {
 
-//
-// ---- SMALL FLAT MAP --------------------------------------------------------
-//
-
 template < typename Key,
            typename T,
            std::size_t N,

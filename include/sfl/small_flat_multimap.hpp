@@ -41,10 +41,6 @@ void test_small_flat_multimap();
 namespace sfl
 {
 
-//
-// ---- SMALL FLAT MULTIMAP ---------------------------------------------------
-//
-
 template < typename Key,
            typename T,
            std::size_t N,

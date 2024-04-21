@@ -35,10 +35,6 @@
 namespace sfl
 {
 
-//
-// ---- COMPACT VECTOR --------------------------------------------------------
-//
-
 template <typename T, typename Allocator = std::allocator<T>>
 class compact_vector
 {

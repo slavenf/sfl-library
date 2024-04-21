@@ -41,10 +41,6 @@ void test_small_flat_multiset();
 namespace sfl
 {
 
-//
-// ---- SMALL FLAT MULTISET ---------------------------------------------------
-//
-
 template < typename Key,
            std::size_t N,
            typename Compare = std::less<Key>,

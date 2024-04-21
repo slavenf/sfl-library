@@ -41,10 +41,6 @@ void test_small_flat_set();
 namespace sfl
 {
 
-//
-// ---- SMALL FLAT SET --------------------------------------------------------
-//
-
 template < typename Key,
            std::size_t N,
            typename Compare = std::less<Key>,

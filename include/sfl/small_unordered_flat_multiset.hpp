@@ -41,10 +41,6 @@ void test_small_unordered_flat_multiset();
 namespace sfl
 {
 
-//
-// ---- SMALL UNORDERED FLAT SET ----------------------------------------------
-//
-
 template < typename Key,
            std::size_t N,
            typename KeyEqual = std::equal_to<Key>,

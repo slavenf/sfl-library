@@ -35,10 +35,6 @@
 namespace sfl
 {
 
-//
-// ---- SMALL VECTOR ----------------------------------------------------------
-//
-
 template < typename T,
            std::size_t N,
            typename Allocator = std::allocator<T> >

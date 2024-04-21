@@ -41,10 +41,6 @@ void test_small_unordered_flat_map();
 namespace sfl
 {
 
-//
-// ---- SMALL UNORDERED FLAT MAP ----------------------------------------------
-//
-
 template < typename Key,
            typename T,
            std::size_t N,
