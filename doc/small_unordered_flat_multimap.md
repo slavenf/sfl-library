@@ -1,5 +1,8 @@
 # sfl::small_unordered_flat_multimap
 
+<details>
+<summary>Table of Contents</summary>
+
 * [Summary](#summary)
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
@@ -36,6 +39,8 @@
   * [operator !=](#operator-)
   * [swap](#swap-1)
   * [erase\_if](#erase_if)
+
+</details>
 
 ## Summary
 

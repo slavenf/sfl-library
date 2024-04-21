@@ -1,5 +1,8 @@
 # sfl::small_flat_set
 
+<details>
+<summary>Table of Contents</summary>
+
 * [Summary](#summary)
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
@@ -45,6 +48,8 @@
   * [operator\>=](#operator-6)
   * [swap](#swap-1)
   * [erase\_if](#erase_if)
+
+</details>
 
 ## Summary
 
