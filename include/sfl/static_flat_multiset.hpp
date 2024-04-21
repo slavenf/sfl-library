@@ -852,6 +852,10 @@ private:
         }
         else
         {
+            // This container can contain duplicates.
+            // Create temporary value before making place for new element.
+            value_type temp(std::forward<Value>(value));
+
             const pointer p2 = data_.last_ - 1;
 
             const pointer old_last = data_.last_;
@@ -871,7 +875,7 @@ private:
                 old_last
             );
 
-            *p1 = std::forward<Value>(value);
+            *p1 = std::move(temp);
         }
 
         return p1;
