@@ -238,6 +238,99 @@ void test_static_unordered_flat_map()
             CHECK(value_eq({xobj(20), 1}, {xobj(20), 2}) == true);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test find, count, contains");
+    {
+        // xint, xint
+        {
+            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+            map.insert_unordered(20, 1);
+            map.insert_unordered(40, 1);
+            map.insert_unordered(60, 1);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.find(10) == map.end());
+            CHECK(map.find(20) == map.nth(0));
+            CHECK(map.find(30) == map.end());
+            CHECK(map.find(40) == map.nth(1));
+            CHECK(map.find(50) == map.end());
+            CHECK(map.find(60) == map.nth(2));
+            CHECK(map.find(70) == map.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.count(10) == 0);
+            CHECK(map.count(20) == 1);
+            CHECK(map.count(30) == 0);
+            CHECK(map.count(40) == 1);
+            CHECK(map.count(50) == 0);
+            CHECK(map.count(60) == 1);
+            CHECK(map.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.contains(10) == false);
+            CHECK(map.contains(20) == true);
+            CHECK(map.contains(30) == false);
+            CHECK(map.contains(40) == true);
+            CHECK(map.contains(50) == false);
+            CHECK(map.contains(60) == true);
+            CHECK(map.contains(70) == false);
+        }
+
+        // xobj, xint
+        {
+            sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+
+            map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+            map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
+            map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 20); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first.value() == 40); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first.value() == 60); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.find(10) == map.end());
+            CHECK(map.find(20) == map.nth(0));
+            CHECK(map.find(30) == map.end());
+            CHECK(map.find(40) == map.nth(1));
+            CHECK(map.find(50) == map.end());
+            CHECK(map.find(60) == map.nth(2));
+            CHECK(map.find(70) == map.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.count(10) == 0);
+            CHECK(map.count(20) == 1);
+            CHECK(map.count(30) == 0);
+            CHECK(map.count(40) == 1);
+            CHECK(map.count(50) == 0);
+            CHECK(map.count(60) == 1);
+            CHECK(map.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(map.contains(10) == false);
+            CHECK(map.contains(20) == true);
+            CHECK(map.contains(30) == false);
+            CHECK(map.contains(40) == true);
+            CHECK(map.contains(50) == false);
+            CHECK(map.contains(60) == true);
+            CHECK(map.contains(70) == false);
+        }
+    }
 }
 
 int main()
