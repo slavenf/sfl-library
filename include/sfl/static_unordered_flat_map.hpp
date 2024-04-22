@@ -329,6 +329,13 @@ public:
         data_.last_ = data_.first_;
     }
 
+    template <typename... Args>
+    std::pair<iterator, bool> emplace(Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(value_type(std::forward<Args>(args)...));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -426,6 +433,19 @@ public:
     //
 
 private:
+
+    template <typename Value>
+    std::pair<iterator, bool> insert_aux(Value&& value)
+    {
+        auto it = find(value.first);
+
+        if (it == end())
+        {
+            return std::make_pair(insert_unordered(std::forward<Value>(value)), true);
+        }
+
+        return std::make_pair(it, false);
+    }
 
     template <typename... Args>
     iterator insert_unordered(Args&&... args)
