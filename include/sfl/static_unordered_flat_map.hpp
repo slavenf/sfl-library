@@ -437,6 +437,36 @@ public:
         return insert_or_assign_aux(hint, std::move(key), std::forward<M>(obj));
     }
 
+    template <typename... Args>
+    std::pair<iterator, bool> try_emplace(const Key& key, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return try_emplace_aux(key, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    std::pair<iterator, bool> try_emplace(Key&& key, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return try_emplace_aux(std::move(key), std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    iterator try_emplace(const_iterator hint, const Key& key, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return try_emplace_aux(hint, key, std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    iterator try_emplace(const_iterator hint, Key&& key, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -583,6 +613,35 @@ private:
     {
         sfl::dtl::ignore_unused(hint);
         return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj)).first;
+    }
+
+    template <typename K, typename... Args>
+    std::pair<iterator, bool> try_emplace_aux(K&& key, Args&&... args)
+    {
+        auto it = find(key);
+
+        if (it == end())
+        {
+            return std::make_pair
+            (
+                insert_unordered
+                (
+                    std::piecewise_construct,
+                    std::forward_as_tuple(std::forward<K>(key)),
+                    std::forward_as_tuple(std::forward<Args>(args)...)
+                ),
+                true
+            );
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename K, typename... Args>
+    iterator try_emplace_aux(const_iterator hint, K&& key, Args&&... args)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...).first;
     }
 
     template <typename... Args>

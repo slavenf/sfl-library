@@ -940,6 +940,178 @@ void test_static_unordered_flat_map()
             CHECK(key_30 == +30);
         }
     }
+
+    PRINT("Test try_emplace(const Key&, Args&&...)");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(key_10, 1) == std::make_pair(map.nth(0), true));
+            CHECK(map.try_emplace(key_20, 1) == std::make_pair(map.nth(1), true));
+            CHECK(map.try_emplace(key_30, 1) == std::make_pair(map.nth(2), true));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == 10);
+            CHECK(key_20 == 20);
+            CHECK(key_30 == 30);
+        }
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(key_10, 2) == std::make_pair(map.nth(0), false));
+            CHECK(map.try_emplace(key_20, 2) == std::make_pair(map.nth(1), false));
+            CHECK(map.try_emplace(key_30, 2) == std::make_pair(map.nth(2), false));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == 10);
+            CHECK(key_20 == 20);
+            CHECK(key_30 == 30);
+        }
+    }
+
+    PRINT("Test try_emplace(Key&&, Args&&...)");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(std::move(key_10), 1) == std::make_pair(map.nth(0), true));
+            CHECK(map.try_emplace(std::move(key_20), 1) == std::make_pair(map.nth(1), true));
+            CHECK(map.try_emplace(std::move(key_30), 1) == std::make_pair(map.nth(2), true));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == -10);
+            CHECK(key_20 == -20);
+            CHECK(key_30 == -30);
+        }
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(std::move(key_10), 2) == std::make_pair(map.nth(0), false));
+            CHECK(map.try_emplace(std::move(key_20), 2) == std::make_pair(map.nth(1), false));
+            CHECK(map.try_emplace(std::move(key_30), 2) == std::make_pair(map.nth(2), false));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == +10);
+            CHECK(key_20 == +20);
+            CHECK(key_30 == +30);
+        }
+    }
+
+    PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(map.begin(), key_10, 1) == map.nth(0));
+            CHECK(map.try_emplace(map.begin(), key_20, 1) == map.nth(1));
+            CHECK(map.try_emplace(map.begin(), key_30, 1) == map.nth(2));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == 10);
+            CHECK(key_20 == 20);
+            CHECK(key_30 == 30);
+        }
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(map.begin(), key_10, 2) == map.nth(0));
+            CHECK(map.try_emplace(map.begin(), key_20, 2) == map.nth(1));
+            CHECK(map.try_emplace(map.begin(), key_30, 2) == map.nth(2));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == 10);
+            CHECK(key_20 == 20);
+            CHECK(key_30 == 30);
+        }
+    }
+
+    PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(map.begin(), std::move(key_10), 1) == map.nth(0));
+            CHECK(map.try_emplace(map.begin(), std::move(key_20), 1) == map.nth(1));
+            CHECK(map.try_emplace(map.begin(), std::move(key_30), 1) == map.nth(2));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == -10);
+            CHECK(key_20 == -20);
+            CHECK(key_30 == -30);
+        }
+
+        {
+            xint key_10(10);
+            xint key_20(20);
+            xint key_30(30);
+
+            CHECK(map.try_emplace(map.begin(), std::move(key_10), 2) == map.nth(0));
+            CHECK(map.try_emplace(map.begin(), std::move(key_20), 2) == map.nth(1));
+            CHECK(map.try_emplace(map.begin(), std::move(key_30), 2) == map.nth(2));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            CHECK(key_10 == +10);
+            CHECK(key_20 == +20);
+            CHECK(key_30 == +30);
+        }
+    }
 }
 
 int main()
