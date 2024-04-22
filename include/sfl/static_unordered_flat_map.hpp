@@ -467,6 +467,31 @@ public:
         return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
     }
 
+    iterator erase(iterator pos)
+    {
+        return erase(const_iterator(pos));
+    }
+
+    iterator erase(const_iterator pos)
+    {
+        SFL_ASSERT(cbegin() <= pos && pos < cend());
+
+        const difference_type offset = std::distance(cbegin(), pos);
+
+        const pointer p = data_.first_ + offset;
+
+        if (p < data_.last_ - 1)
+        {
+            *p = std::move(*(data_.last_ - 1));
+        }
+
+        --data_.last_;
+
+        sfl::dtl::destroy_at(data_.last_);
+
+        return p;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
