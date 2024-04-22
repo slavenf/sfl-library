@@ -403,6 +403,40 @@ public:
         insert(ilist.begin(), ilist.end());
     }
 
+    template <typename M,
+              sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    std::pair<iterator, bool> insert_or_assign(const Key& key, M&& obj)
+    {
+        SFL_ASSERT(!full());
+        return insert_or_assign_aux(key, std::forward<M>(obj));
+    }
+
+    template <typename M,
+              sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    std::pair<iterator, bool> insert_or_assign(Key&& key, M&& obj)
+    {
+        SFL_ASSERT(!full());
+        return insert_or_assign_aux(std::move(key), std::forward<M>(obj));
+    }
+
+    template <typename M,
+              sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_or_assign_aux(hint, key, std::forward<M>(obj));
+    }
+
+    template <typename M,
+              sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    iterator insert_or_assign(const_iterator hint, Key&& key, M&& obj)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_or_assign_aux(hint, std::move(key), std::forward<M>(obj));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -519,6 +553,36 @@ private:
     {
         sfl::dtl::ignore_unused(hint);
         return insert_aux(std::forward<Value>(value)).first;
+    }
+
+    template <typename K, typename M>
+    std::pair<iterator, bool> insert_or_assign_aux(K&& key, M&& obj)
+    {
+        auto it = find(key);
+
+        if (it == end())
+        {
+            return std::make_pair
+            (
+                insert_unordered
+                (
+                    std::piecewise_construct,
+                    std::forward_as_tuple(std::forward<K>(key)),
+                    std::forward_as_tuple(std::forward<M>(obj))
+                ),
+                true
+            );
+        }
+
+        it->second = std::forward<M>(obj);
+        return std::make_pair(it, false);
+    }
+
+    template <typename K, typename M>
+    iterator insert_or_assign_aux(const_iterator hint, K&& key, M&& obj)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj)).first;
     }
 
     template <typename... Args>
