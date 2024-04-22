@@ -690,6 +690,47 @@ void test_static_unordered_flat_map()
             CHECK(value_30_2.first == 30); CHECK(value_30_2.second == 2);
         }
     }
+
+    PRINT("Test insert(InputIt, InputIt)");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        {
+            std::vector<std::pair<xint, xint>> data
+            (
+                {
+                    {10, 1},
+                    {20, 1},
+                    {30, 1}
+                }
+            );
+
+            map.insert(data.begin(), data.end());
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        }
+
+        {
+            std::vector<std::pair<xint, xint>> data
+            (
+                {
+                    {10, 2},
+                    {20, 2},
+                    {30, 2}
+                }
+            );
+
+            map.insert(data.begin(), data.end());
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        }
+    }
 }
 
 int main()
