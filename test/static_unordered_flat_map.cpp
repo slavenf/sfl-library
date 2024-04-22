@@ -21,7 +21,7 @@ void test_static_unordered_flat_map()
     using sfl::test::xint;
     using sfl::test::xobj;
 
-    PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
+    PRINT("Test PRIVATE member function emplace_back(Args&&...)");
     {
         sfl::static_unordered_flat_map<xint, xint, 5, std::equal_to<xint>> map;
 
@@ -35,7 +35,7 @@ void test_static_unordered_flat_map()
 
         {
             PRINT(">");
-            const auto res = map.insert_unordered(10, 1);
+            const auto res = map.emplace_back(10, 1);
             PRINT("<");
 
             CHECK(res == map.nth(0));
@@ -49,7 +49,7 @@ void test_static_unordered_flat_map()
 
         {
             PRINT(">");
-            const auto res = map.insert_unordered(20, 1);
+            const auto res = map.emplace_back(20, 1);
             PRINT("<");
 
             CHECK(res == map.nth(1));
@@ -64,7 +64,7 @@ void test_static_unordered_flat_map()
 
         {
             PRINT(">");
-            const auto res = map.insert_unordered(30, 1);
+            const auto res = map.emplace_back(30, 1);
             PRINT("<");
 
             CHECK(res == map.nth(2));
@@ -80,7 +80,7 @@ void test_static_unordered_flat_map()
 
         {
             PRINT(">");
-            const auto res = map.insert_unordered(40, 1);
+            const auto res = map.emplace_back(40, 1);
             PRINT("<");
 
             CHECK(res == map.nth(3));
@@ -97,7 +97,7 @@ void test_static_unordered_flat_map()
 
         {
             PRINT(">");
-            const auto res = map.insert_unordered(50, 1);
+            const auto res = map.emplace_back(50, 1);
             PRINT("<");
 
             CHECK(res == map.nth(4));
@@ -120,9 +120,9 @@ void test_static_unordered_flat_map()
     {
         sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
 
-        map.insert_unordered(20, 1);
-        map.insert_unordered(40, 1);
-        map.insert_unordered(60, 1);
+        map.emplace_back(20, 1);
+        map.emplace_back(40, 1);
+        map.emplace_back(60, 1);
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -247,9 +247,9 @@ void test_static_unordered_flat_map()
         {
             sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
 
-            map.insert_unordered(20, 1);
-            map.insert_unordered(40, 1);
-            map.insert_unordered(60, 1);
+            map.emplace_back(20, 1);
+            map.emplace_back(40, 1);
+            map.emplace_back(60, 1);
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -291,9 +291,9 @@ void test_static_unordered_flat_map()
         {
             sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
 
-            map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
-            map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
-            map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
+            map.emplace_back(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+            map.emplace_back(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
+            map.emplace_back(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first.value() == 20); CHECK(map.nth(0)->second == 1);
@@ -340,9 +340,9 @@ void test_static_unordered_flat_map()
 
         CHECK(map.size() == 0);
 
-        map.insert_unordered(10, 1);
-        map.insert_unordered(20, 1);
-        map.insert_unordered(30, 1);
+        map.emplace_back(10, 1);
+        map.emplace_back(20, 1);
+        map.emplace_back(30, 1);
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -353,9 +353,9 @@ void test_static_unordered_flat_map()
 
         CHECK(map.size() == 0);
 
-        map.insert_unordered(40, 2);
-        map.insert_unordered(50, 2);
-        map.insert_unordered(60, 2);
+        map.emplace_back(40, 2);
+        map.emplace_back(50, 2);
+        map.emplace_back(60, 2);
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);

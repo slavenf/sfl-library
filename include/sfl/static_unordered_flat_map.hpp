@@ -333,7 +333,7 @@ public:
     std::pair<iterator, bool> emplace(Args&&... args)
     {
         SFL_ASSERT(!full());
-        return insert_aux(value_type(std::forward<Args>(args)...));
+        return emplace_aux(value_type(std::forward<Args>(args)...));
     }
 
     template <typename... Args>
@@ -341,7 +341,7 @@ public:
     {
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_aux(hint, value_type(std::forward<Args>(args)...));
+        return emplace_hint_aux(hint, value_type(std::forward<Args>(args)...));
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
@@ -565,6 +565,29 @@ public:
 
 private:
 
+    template <typename... Args>
+    std::pair<iterator, bool> emplace_aux(Args&&... args)
+    {
+        const auto it1 = emplace_back(std::forward<Args>(args)...);
+        const auto it2 = find(it1->first);
+
+        const bool is_unique = it1 == it2;
+
+        if (!is_unique)
+        {
+            erase_back();
+        }
+
+        return std::make_pair(it2, is_unique);
+    }
+
+    template <typename... Args>
+    iterator emplace_hint_aux(const_iterator hint, Args&&... args)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return emplace_aux(std::forward<Args>(args)...).first;
+    }
+
     template <typename Value>
     std::pair<iterator, bool> insert_aux(Value&& value)
     {
@@ -572,7 +595,7 @@ private:
 
         if (it == end())
         {
-            return std::make_pair(insert_unordered(std::forward<Value>(value)), true);
+            return std::make_pair(emplace_back(std::forward<Value>(value)), true);
         }
 
         return std::make_pair(it, false);
@@ -594,7 +617,7 @@ private:
         {
             return std::make_pair
             (
-                insert_unordered
+                emplace_back
                 (
                     std::piecewise_construct,
                     std::forward_as_tuple(std::forward<K>(key)),
@@ -624,7 +647,7 @@ private:
         {
             return std::make_pair
             (
-                insert_unordered
+                emplace_back
                 (
                     std::piecewise_construct,
                     std::forward_as_tuple(std::forward<K>(key)),
@@ -645,7 +668,7 @@ private:
     }
 
     template <typename... Args>
-    iterator insert_unordered(Args&&... args)
+    iterator emplace_back(Args&&... args)
     {
         SFL_ASSERT(!full());
 
@@ -660,6 +683,15 @@ private:
         ++data_.last_;
 
         return old_last;
+    }
+
+    void erase_back()
+    {
+        SFL_ASSERT(!empty());
+
+        --data_.last_;
+
+        sfl::dtl::destroy_at(data_.last_);
     }
 };
 
