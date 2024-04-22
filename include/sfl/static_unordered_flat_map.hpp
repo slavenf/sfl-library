@@ -591,7 +591,7 @@ private:
     template <typename Value>
     std::pair<iterator, bool> insert_aux(Value&& value)
     {
-        auto it = find(value.first);
+        const auto it = find(value.first);
 
         if (it == end())
         {
@@ -611,7 +611,7 @@ private:
     template <typename K, typename M>
     std::pair<iterator, bool> insert_or_assign_aux(K&& key, M&& obj)
     {
-        auto it = find(key);
+        const auto it = find(key);
 
         if (it == end())
         {
@@ -641,7 +641,7 @@ private:
     template <typename K, typename... Args>
     std::pair<iterator, bool> try_emplace_aux(K&& key, Args&&... args)
     {
-        auto it = find(key);
+        const auto it = find(key);
 
         if (it == end())
         {
