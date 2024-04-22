@@ -534,6 +534,34 @@ public:
         return p1;
     }
 
+    size_type erase(const Key& key)
+    {
+        auto it = find(key);
+
+        if (it == cend())
+        {
+            return 0;
+        }
+
+        erase(it);
+        return 1;
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
+    size_type erase(K&& x)
+    {
+        auto it = find(x);
+
+        if (it == cend())
+        {
+            return 0;
+        }
+
+        erase(it);
+        return 1;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //

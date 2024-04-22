@@ -1544,6 +1544,64 @@ void test_static_unordered_flat_map()
             CHECK(map.size() == 0);
         }
     }
+
+    PRINT("Test erase(const Key&)");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        map.emplace(10, 1);
+        map.emplace(20, 1);
+        map.emplace(30, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+        CHECK(map.erase(30) == 1);
+        CHECK(map.erase(30) == 0);
+        CHECK(map.size() == 2);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+
+        CHECK(map.erase(20) == 1);
+        CHECK(map.erase(20) == 0);
+        CHECK(map.size() == 1);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+
+        CHECK(map.erase(10) == 1);
+        CHECK(map.erase(10) == 0);
+        CHECK(map.size() == 0);
+    }
+
+    PRINT("Test erase(K&&)");
+    {
+        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+
+        CHECK(map.erase(30) == 1);
+        CHECK(map.erase(30) == 0);
+        CHECK(map.size() == 2);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+
+        CHECK(map.erase(20) == 1);
+        CHECK(map.erase(20) == 0);
+        CHECK(map.size() == 1);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+
+        CHECK(map.erase(10) == 1);
+        CHECK(map.erase(10) == 0);
+        CHECK(map.size() == 0);
+    }
 }
 
 int main()
