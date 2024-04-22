@@ -336,6 +336,14 @@ public:
         return insert_aux(value_type(std::forward<Args>(args)...));
     }
 
+    template <typename... Args>
+    iterator emplace_hint(const_iterator hint, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value_type(std::forward<Args>(args)...));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -445,6 +453,13 @@ private:
         }
 
         return std::make_pair(it, false);
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return insert_aux(std::forward<Value>(value)).first;
     }
 
     template <typename... Args>
