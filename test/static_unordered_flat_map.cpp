@@ -331,6 +331,41 @@ void test_static_unordered_flat_map()
             CHECK(map.contains(70) == false);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test clear()");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        CHECK(map.size() == 0);
+
+        map.insert_unordered(10, 1);
+        map.insert_unordered(20, 1);
+        map.insert_unordered(30, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+        map.clear();
+
+        CHECK(map.size() == 0);
+
+        map.insert_unordered(40, 2);
+        map.insert_unordered(50, 2);
+        map.insert_unordered(60, 2);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);
+        CHECK(map.nth(1)->first == 50); CHECK(map.nth(1)->second == 2);
+        CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 2);
+
+        map.clear();
+
+        CHECK(map.size() == 0);
+    }
 }
 
 int main()
