@@ -731,6 +731,43 @@ void test_static_unordered_flat_map()
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
         }
     }
+
+    PRINT("Test insert(std::initializer_list)");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        {
+            std::initializer_list<std::pair<xint, xint>> ilist
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1}
+            };
+
+            map.insert(ilist);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        }
+
+        {
+            std::initializer_list<std::pair<xint, xint>> ilist
+            {
+                {10, 2},
+                {20, 2},
+                {30, 2}
+            };
+
+            map.insert(ilist);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        }
+    }
 }
 
 int main()
