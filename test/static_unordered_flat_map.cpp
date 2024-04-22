@@ -113,6 +113,77 @@ void test_static_unordered_flat_map()
             CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test begin, end, cbegin, cend, nth, index_of");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        map.insert_unordered(20, 1);
+        map.insert_unordered(40, 1);
+        map.insert_unordered(60, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto it = map.begin();
+        CHECK(it->first == 20); CHECK(it->second == 1); ++it;
+        CHECK(it->first == 40); CHECK(it->second == 1); ++it;
+        CHECK(it->first == 60); CHECK(it->second == 1); ++it;
+        CHECK(it == map.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto cit = map.cbegin();
+        CHECK(cit->first == 20); CHECK(cit->second == 1); ++cit;
+        CHECK(cit->first == 40); CHECK(cit->second == 1); ++cit;
+        CHECK(cit->first == 60); CHECK(cit->second == 1); ++cit;
+        CHECK(cit == map.cend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3) == map.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(map.begin(), 0) == map.nth(0));
+        CHECK(std::next(map.begin(), 1) == map.nth(1));
+        CHECK(std::next(map.begin(), 2) == map.nth(2));
+        CHECK(std::next(map.begin(), 3) == map.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(map.cbegin(), 0) == map.nth(0));
+        CHECK(std::next(map.cbegin(), 1) == map.nth(1));
+        CHECK(std::next(map.cbegin(), 2) == map.nth(2));
+        CHECK(std::next(map.cbegin(), 3) == map.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.nth(0) < map.nth(1));
+        CHECK(map.nth(0) < map.nth(2));
+        CHECK(map.nth(0) < map.nth(3));
+
+        CHECK(map.nth(1) < map.nth(2));
+        CHECK(map.nth(1) < map.nth(3));
+
+        CHECK(map.nth(2) < map.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.index_of(map.nth(0)) == 0);
+        CHECK(map.index_of(map.nth(1)) == 1);
+        CHECK(map.index_of(map.nth(2)) == 2);
+        CHECK(map.index_of(map.nth(3)) == 3);
+    }
 }
 
 int main()
