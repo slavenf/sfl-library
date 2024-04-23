@@ -1919,6 +1919,54 @@ void test_static_unordered_flat_map()
         CHECK(map.capacity() == 100);
         CHECK(map.available() == 100);
     }
+
+    PRINT("Test container(InputIt, InputIt)");
+    {
+        std::vector<std::pair<xint, xint>> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+
+                {10, 2},
+                {20, 2},
+                {30, 2}
+            }
+        );
+
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end());
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+    }
+
+    PRINT("Test container(InputIt, InputIt, const Compare&)");
+    {
+        std::vector<std::pair<xint, xint>> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+
+                {10, 2},
+                {20, 2},
+                {30, 2}
+            }
+        );
+
+        std::equal_to<xint> equal;
+
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end(), equal);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+    }
 }
 
 int main()

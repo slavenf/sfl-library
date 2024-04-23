@@ -154,12 +154,12 @@ private:
             : ultra_equal()
         {}
 
-        data(const ultra_equal& comp) noexcept(std::is_nothrow_copy_constructible<ultra_equal>::value)
-            : ultra_equal(comp)
+        data(const ultra_equal& equal) noexcept(std::is_nothrow_copy_constructible<ultra_equal>::value)
+            : ultra_equal(equal)
         {}
 
-        data(ultra_equal&& comp) noexcept(std::is_nothrow_move_constructible<ultra_equal>::value)
-            : ultra_equal(std::move(comp))
+        data(ultra_equal&& equal) noexcept(std::is_nothrow_move_constructible<ultra_equal>::value)
+            : ultra_equal(std::move(equal))
         {}
 
         ultra_equal& ref_to_equal() noexcept
@@ -185,9 +185,49 @@ public:
         : data_()
     {}
 
-    explicit static_unordered_flat_map(const KeyEqual& comp) noexcept(std::is_nothrow_copy_constructible<KeyEqual>::value)
-        : data_(comp)
+    explicit static_unordered_flat_map(const KeyEqual& equal) noexcept(std::is_nothrow_copy_constructible<KeyEqual>::value)
+        : data_(equal)
     {}
+
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    static_unordered_flat_map(InputIt first, InputIt last)
+        : data_()
+    {
+        SFL_TRY
+        {
+            while (first != last)
+            {
+                emplace(*first);
+                ++first;
+            }
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy(data_.first_, data_.last_);
+            SFL_RETHROW;
+        }
+    }
+
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    static_unordered_flat_map(InputIt first, InputIt last, const KeyEqual& equal)
+        : data_(equal)
+    {
+        SFL_TRY
+        {
+            while (first != last)
+            {
+                emplace(*first);
+                ++first;
+            }
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy(data_.first_, data_.last_);
+            SFL_RETHROW;
+        }
+    }
 
     ~static_unordered_flat_map()
     {
