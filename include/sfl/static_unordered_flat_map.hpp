@@ -729,7 +729,7 @@ private:
 
         if (!is_unique)
         {
-            erase_back();
+            pop_back();
         }
 
         return std::make_pair(it2, is_unique);
@@ -839,7 +839,7 @@ private:
         return old_last;
     }
 
-    void erase_back()
+    void pop_back()
     {
         SFL_ASSERT(!empty());
 
