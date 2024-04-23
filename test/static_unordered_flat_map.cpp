@@ -1897,6 +1897,28 @@ void test_static_unordered_flat_map()
         CHECK(data->first == 20); CHECK(data->second == 1); ++data;
         CHECK(data->first == 30); CHECK(data->second == 1); ++data;
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test container()");
+    {
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+
+        CHECK(map.size() == 0);
+        CHECK(map.capacity() == 100);
+        CHECK(map.available() == 100);
+    }
+
+    PRINT("Test container(const KeyEqual&)");
+    {
+        std::equal_to<xint> equal;
+
+        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(equal);
+
+        CHECK(map.size() == 0);
+        CHECK(map.capacity() == 100);
+        CHECK(map.available() == 100);
+    }
 }
 
 int main()
