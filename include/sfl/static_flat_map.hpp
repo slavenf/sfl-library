@@ -274,22 +274,28 @@ public:
     {
         if (this != &other)
         {
+            data_.ref_to_comp() = other.data_.ref_to_comp();
+
             assign_range
             (
                 pointer(other.data_.first_),
                 pointer(other.data_.last_)
             );
         }
+
         return *this;
     }
 
     static_flat_map& operator=(static_flat_map&& other)
     {
+        data_.ref_to_comp() = other.data_.ref_to_comp();
+
         assign_range
         (
             std::make_move_iterator(pointer(other.data_.first_)),
             std::make_move_iterator(pointer(other.data_.last_))
         );
+
         return *this;
     }
 
