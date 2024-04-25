@@ -281,6 +281,16 @@ public:
         return *this;
     }
 
+    static_unordered_flat_map& operator=(static_unordered_flat_map&& other)
+    {
+        assign_range
+        (
+            std::make_move_iterator(pointer(other.data_.first_)),
+            std::make_move_iterator(pointer(other.data_.last_))
+        );
+        return *this;
+    }
+
     //
     // ---- KEY EQUAL ---------------------------------------------------------
     //
