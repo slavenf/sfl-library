@@ -516,6 +516,69 @@ public:
         return n;
     }
 
+    void swap(static_unordered_flat_multimap& other)
+    {
+        if (this == &other)
+        {
+            return;
+        }
+
+        using std::swap;
+
+        swap(this->data_.ref_to_equal(), other.data_.ref_to_equal());
+
+        const size_type this_size  = this->size();
+        const size_type other_size = other.size();
+
+        if (this_size <= other_size)
+        {
+            std::swap_ranges
+            (
+                this->data_.first_,
+                this->data_.first_ + this_size,
+                other.data_.first_
+            );
+
+            sfl::dtl::uninitialized_move
+            (
+                other.data_.first_ + this_size,
+                other.data_.first_ + other_size,
+                this->data_.first_ + this_size
+            );
+
+            sfl::dtl::destroy
+            (
+                other.data_.first_ + this_size,
+                other.data_.first_ + other_size
+            );
+        }
+        else
+        {
+            std::swap_ranges
+            (
+                other.data_.first_,
+                other.data_.first_ + other_size,
+                this->data_.first_
+            );
+
+            sfl::dtl::uninitialized_move
+            (
+                this->data_.first_ + other_size,
+                this->data_.first_ + this_size,
+                other.data_.first_ + other_size
+            );
+
+            sfl::dtl::destroy
+            (
+                this->data_.first_ + other_size,
+                this->data_.first_ + this_size
+            );
+        }
+
+        data_.last_ = data_.first_ + other_size;
+        other.data_.last_ = other.data_.first_ + this_size;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
