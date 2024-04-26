@@ -570,6 +570,18 @@ public:
     // ---- ELEMENT ACCESS ----------------------------------------------------
     //
 
+    SFL_NODISCARD
+    value_type* data() noexcept
+    {
+        return data_.first_;
+    }
+
+    SFL_NODISCARD
+    const value_type* data() const noexcept
+    {
+        return data_.first_;
+    }
+
 private:
 
     template <typename... Args>
