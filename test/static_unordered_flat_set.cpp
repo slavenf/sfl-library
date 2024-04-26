@@ -186,6 +186,33 @@ void test_static_unordered_flat_set()
         CHECK(set.index_of(set.nth(2)) == 2);
         CHECK(set.index_of(set.nth(3)) == 3);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test key_eq()");
+    {
+        {
+            sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
+
+            auto key_eq = set.key_eq();
+
+            CHECK(key_eq(10, 10) == true);
+            CHECK(key_eq(10, 20) == false);
+            CHECK(key_eq(20, 10) == false);
+            CHECK(key_eq(20, 20) == true);
+        }
+
+        {
+            sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+
+            auto key_eq = set.key_eq();
+
+            CHECK(key_eq(xobj(10), 10) == true);
+            CHECK(key_eq(xobj(10), 20) == false);
+            CHECK(key_eq(xobj(20), 10) == false);
+            CHECK(key_eq(xobj(20), 20) == true);
+        }
+    }
 }
 
 int main()
