@@ -1324,6 +1324,54 @@ void test_static_unordered_flat_set()
         CHECK(set.capacity() == 100);
         CHECK(set.available() == 100);
     }
+
+    PRINT("Test container(InputIt, InputIt)");
+    {
+        std::vector<xint_xint> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+
+                {10, 2},
+                {20, 2},
+                {30, 2}
+            }
+        );
+
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end());
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+    }
+
+    PRINT("Test container(InputIt, InputIt, const Compare&)");
+    {
+        std::vector<xint_xint> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+
+                {10, 2},
+                {20, 2},
+                {30, 2}
+            }
+        );
+
+        std::equal_to<xint_xint> equal;
+
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end(), equal);
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+    }
 }
 
 int main()
