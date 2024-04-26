@@ -653,6 +653,221 @@ void test_static_unordered_flat_set()
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
         }
     }
+
+    PRINT("Test erase(const_iterator)");
+    {
+        // Erase at the end
+        {
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+
+            CHECK(set.size() == 5);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(4)) == set.nth(4));
+            CHECK(set.size() == 4);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(3)) == set.nth(3));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(2)) == set.nth(2));
+            CHECK(set.size() == 2);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1)) == set.nth(1));
+            CHECK(set.size() == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+
+        // Erase at the begin
+        {
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+
+            CHECK(set.size() == 5);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 4);
+            CHECK(set.nth(0)->first == 50); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 2);
+            CHECK(set.nth(0)->first == 30); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 1);
+            CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+
+        // Erase near the end
+        {
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+
+            CHECK(set.size() == 5);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(3)) == set.nth(3));
+            CHECK(set.size() == 4);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 50); CHECK(set.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(2)) == set.nth(2));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 50); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1)) == set.nth(1));
+            CHECK(set.size() == 2);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 50); CHECK(set.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 1);
+            CHECK(set.nth(0)->first == 50); CHECK(set.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+
+        // Erase near the begin
+        {
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
+            set.emplace(40, 1);
+            set.emplace(50, 1);
+
+            CHECK(set.size() == 5);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1)) == set.nth(1));
+            CHECK(set.size() == 4);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 50); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1)) == set.nth(1));
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 40); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1)) == set.nth(1));
+            CHECK(set.size() == 2);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 30); CHECK(set.nth(1)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(1)) == set.nth(1));
+            CHECK(set.size() == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.erase(set.nth(0)) == set.nth(0));
+            CHECK(set.size() == 0);
+        }
+    }
 }
 
 int main()
