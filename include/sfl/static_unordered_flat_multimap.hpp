@@ -323,6 +323,12 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    void clear() noexcept
+    {
+        sfl::dtl::destroy(data_.first_, data_.last_);
+        data_.last_ = data_.first_;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
