@@ -279,6 +279,18 @@ public:
         return emplace_hint_aux(hint, std::forward<Args>(args)...);
     }
 
+    std::pair<iterator, bool> insert(const value_type& value)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(value);
+    }
+
+    std::pair<iterator, bool> insert(value_type&& value)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux(std::move(value));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -398,6 +410,26 @@ private:
     {
         sfl::dtl::ignore_unused(hint);
         return emplace_aux(std::forward<Args>(args)...).first;
+    }
+
+    template <typename Value>
+    std::pair<iterator, bool> insert_aux(Value&& value)
+    {
+        const auto it = find(value);
+
+        if (it == end())
+        {
+            return std::make_pair(emplace_back(std::forward<Value>(value)), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename Value>
+    iterator insert_aux(const_iterator hint, Value&& value)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return insert_aux(std::forward<Value>(value)).first;
     }
 
     template <typename... Args>
