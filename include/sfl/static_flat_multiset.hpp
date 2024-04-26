@@ -534,6 +534,10 @@ public:
             return;
         }
 
+        using std::swap;
+
+        swap(this->data_.ref_to_comp(), other.data_.ref_to_comp());
+
         const size_type this_size  = this->size();
         const size_type other_size = other.size();
 
