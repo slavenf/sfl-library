@@ -264,6 +264,13 @@ public:
         data_.last_ = data_.first_;
     }
 
+    template <typename... Args>
+    std::pair<iterator, bool> emplace(Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return emplace_aux(std::forward<Args>(args)...);
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -361,6 +368,22 @@ public:
     //
 
 private:
+
+    template <typename... Args>
+    std::pair<iterator, bool> emplace_aux(Args&&... args)
+    {
+        const auto it1 = emplace_back(std::forward<Args>(args)...);
+        const auto it2 = find(*it1);
+
+        const bool is_unique = it1 == it2;
+
+        if (!is_unique)
+        {
+            pop_back();
+        }
+
+        return std::make_pair(it2, is_unique);
+    }
 
     template <typename... Args>
     iterator emplace_back(Args&&... args)
