@@ -271,6 +271,14 @@ public:
         return emplace_aux(std::forward<Args>(args)...);
     }
 
+    template <typename... Args>
+    iterator emplace_hint(const_iterator hint, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return emplace_hint_aux(hint, std::forward<Args>(args)...);
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
@@ -383,6 +391,13 @@ private:
         }
 
         return std::make_pair(it2, is_unique);
+    }
+
+    template <typename... Args>
+    iterator emplace_hint_aux(const_iterator hint, Args&&... args)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return emplace_aux(std::forward<Args>(args)...).first;
     }
 
     template <typename... Args>
