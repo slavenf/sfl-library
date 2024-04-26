@@ -329,6 +329,22 @@ public:
         data_.last_ = data_.first_;
     }
 
+    template <typename... Args>
+    iterator emplace(Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return emplace_back(std::forward<Args>(args)...);
+    }
+
+    template <typename... Args>
+    iterator emplace_hint(const_iterator hint, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        sfl::dtl::ignore_unused(hint);
+        return emplace_back(std::forward<Args>(args)...);
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
