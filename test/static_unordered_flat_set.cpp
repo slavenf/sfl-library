@@ -485,6 +485,96 @@ void test_static_unordered_flat_set()
             CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
         }
     }
+
+    PRINT("Test insert(const_iterator, const value_type&)");
+    {
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        using value_type = xint_xint;
+
+        {
+            value_type value_10_1(10, 1);
+            value_type value_20_1(20, 1);
+            value_type value_30_1(30, 1);
+
+            CHECK(set.insert(set.begin(), value_10_1) == set.nth(0));
+            CHECK(set.insert(set.begin(), value_20_1) == set.nth(1));
+            CHECK(set.insert(set.begin(), value_30_1) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            CHECK(value_10_1.first == 10); CHECK(value_10_1.second == 1);
+            CHECK(value_20_1.first == 20); CHECK(value_20_1.second == 1);
+            CHECK(value_30_1.first == 30); CHECK(value_30_1.second == 1);
+        }
+
+        {
+            value_type value_10_2(10, 2);
+            value_type value_20_2(20, 2);
+            value_type value_30_2(30, 2);
+
+            CHECK(set.insert(set.begin(), value_10_2) == set.nth(0));
+            CHECK(set.insert(set.begin(), value_20_2) == set.nth(1));
+            CHECK(set.insert(set.begin(), value_30_2) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            CHECK(value_10_2.first == 10); CHECK(value_10_2.second == 2);
+            CHECK(value_20_2.first == 20); CHECK(value_20_2.second == 2);
+            CHECK(value_30_2.first == 30); CHECK(value_30_2.second == 2);
+        }
+    }
+
+    PRINT("Test insert(const_iterator, value_type&&)");
+    {
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        using value_type = xint_xint;
+
+        {
+            value_type value_10_1(10, 1);
+            value_type value_20_1(20, 1);
+            value_type value_30_1(30, 1);
+
+            CHECK(set.insert(set.begin(), std::move(value_10_1)) == set.nth(0));
+            CHECK(set.insert(set.begin(), std::move(value_20_1)) == set.nth(1));
+            CHECK(set.insert(set.begin(), std::move(value_30_1)) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            CHECK(value_10_1.first == -10); CHECK(value_10_1.second == -1);
+            CHECK(value_20_1.first == -20); CHECK(value_20_1.second == -1);
+            CHECK(value_30_1.first == -30); CHECK(value_30_1.second == -1);
+        }
+
+        {
+            value_type value_10_2(10, 2);
+            value_type value_20_2(20, 2);
+            value_type value_30_2(30, 2);
+
+            CHECK(set.insert(set.begin(), std::move(value_10_2)) == set.nth(0));
+            CHECK(set.insert(set.begin(), std::move(value_20_2)) == set.nth(1));
+            CHECK(set.insert(set.begin(), std::move(value_30_2)) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+            CHECK(value_10_2.first == +10); CHECK(value_10_2.second == +2);
+            CHECK(value_20_2.first == +20); CHECK(value_20_2.second == +2);
+            CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
+        }
+    }
 }
 
 int main()

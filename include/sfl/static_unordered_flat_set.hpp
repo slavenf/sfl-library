@@ -291,6 +291,20 @@ public:
         return insert_aux(std::move(value));
     }
 
+    iterator insert(const_iterator hint, const value_type& value)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, value);
+    }
+
+    iterator insert(const_iterator hint, value_type&& value)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux(hint, std::move(value));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
