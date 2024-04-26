@@ -184,6 +184,60 @@ void test_static_unordered_flat_multimap()
         CHECK(map.index_of(map.nth(2)) == 2);
         CHECK(map.index_of(map.nth(3)) == 3);
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test key_eq()");
+    {
+        {
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+
+            auto key_eq = map.key_eq();
+
+            CHECK(key_eq(10, 10) == true);
+            CHECK(key_eq(10, 20) == false);
+            CHECK(key_eq(20, 10) == false);
+            CHECK(key_eq(20, 20) == true);
+        }
+
+        {
+            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
+
+            auto key_eq = map.key_eq();
+
+            CHECK(key_eq(xobj(10), 10) == true);
+            CHECK(key_eq(xobj(10), 20) == false);
+            CHECK(key_eq(xobj(20), 10) == false);
+            CHECK(key_eq(xobj(20), 20) == true);
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test value_eq()");
+    {
+        {
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+
+            auto value_eq = map.value_eq();
+
+            CHECK(value_eq({10, 1}, {10, 2}) == true);
+            CHECK(value_eq({10, 1}, {20, 2}) == false);
+            CHECK(value_eq({20, 1}, {10, 2}) == false);
+            CHECK(value_eq({20, 1}, {20, 2}) == true);
+        }
+
+        {
+            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
+
+            auto value_eq = map.value_eq();
+
+            CHECK(value_eq({xobj(10), 1}, {xobj(10), 2}) == true);
+            CHECK(value_eq({xobj(10), 1}, {xobj(20), 2}) == false);
+            CHECK(value_eq({xobj(20), 1}, {xobj(10), 2}) == false);
+            CHECK(value_eq({xobj(20), 1}, {xobj(20), 2}) == true);
+        }
+    }
 }
 
 int main()
