@@ -1302,6 +1302,28 @@ void test_static_unordered_flat_set()
         CHECK(data->first == 20); CHECK(data->second == 1); ++data;
         CHECK(data->first == 30); CHECK(data->second == 1); ++data;
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test container()");
+    {
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        CHECK(set.size() == 0);
+        CHECK(set.capacity() == 100);
+        CHECK(set.available() == 100);
+    }
+
+    PRINT("Test container(const KeyEqual&)");
+    {
+        std::equal_to<xint_xint> equal;
+
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(equal);
+
+        CHECK(set.size() == 0);
+        CHECK(set.capacity() == 100);
+        CHECK(set.available() == 100);
+    }
 }
 
 int main()
