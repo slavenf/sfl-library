@@ -1908,6 +1908,116 @@ void test_static_unordered_flat_multimap()
         }
         #undef CONDITION
     }
+
+    PRINT("Test operator=(std::initializer_list)");
+    {
+        #define CONDITION map.size() == ilist.size()
+        {
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            std::initializer_list<std::pair<xint, xint>> ilist
+            {
+                {40, 2},
+                {50, 2},
+                {60, 2}
+            };
+
+            ///////////////////////////////////////////////////////////////////
+
+            CHECK(CONDITION);
+
+            map = ilist;
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);
+            CHECK(map.nth(1)->first == 50); CHECK(map.nth(1)->second == 2);
+            CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 2);
+        }
+        #undef CONDITION
+
+        #define CONDITION map.size() < ilist.size()
+        {
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            std::initializer_list<std::pair<xint, xint>> ilist
+            {
+                {40, 2},
+                {50, 2},
+                {60, 2},
+                {70, 2},
+                {80, 2}
+            };
+
+            ///////////////////////////////////////////////////////////////////
+
+            CHECK(CONDITION);
+
+            map = ilist;
+
+            CHECK(map.size() == 5);
+            CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);
+            CHECK(map.nth(1)->first == 50); CHECK(map.nth(1)->second == 2);
+            CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 2);
+            CHECK(map.nth(3)->first == 70); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 80); CHECK(map.nth(4)->second == 2);
+        }
+        #undef CONDITION
+
+        #define CONDITION map.size() > ilist.size()
+        {
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+            map.emplace(40, 1);
+            map.emplace(50, 1);
+
+            CHECK(map.size() == 5);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+
+            std::initializer_list<std::pair<xint, xint>> ilist
+            {
+                {60, 2},
+                {70, 2},
+                {80, 2}
+            };
+
+            ///////////////////////////////////////////////////////////////////
+
+            CHECK(CONDITION);
+
+            map = ilist;
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 60); CHECK(map.nth(0)->second == 2);
+            CHECK(map.nth(1)->first == 70); CHECK(map.nth(1)->second == 2);
+            CHECK(map.nth(2)->first == 80); CHECK(map.nth(2)->second == 2);
+        }
+        #undef CONDITION
+    }
 }
 
 int main()
