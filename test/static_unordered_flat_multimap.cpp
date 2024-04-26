@@ -1535,6 +1535,56 @@ void test_static_unordered_flat_multimap()
         CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
         CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
     }
+
+    PRINT("Test container(std::initializer_list)");
+    {
+        std::initializer_list<std::pair<xint, xint>> ilist
+        {
+            {10, 1},
+            {20, 1},
+            {30, 1},
+
+            {10, 2},
+            {20, 2},
+            {30, 2}
+        };
+
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist);
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
+    }
+
+    PRINT("Test container(std::initializer_list, const Compare&)");
+    {
+        std::initializer_list<std::pair<xint, xint>> ilist
+        {
+            {10, 1},
+            {20, 1},
+            {30, 1},
+
+            {10, 2},
+            {20, 2},
+            {30, 2}
+        };
+
+        std::equal_to<xint> equal;
+
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist, equal);
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
+    }
 }
 
 int main()
