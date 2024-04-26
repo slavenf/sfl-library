@@ -438,7 +438,7 @@ public:
     std::pair<iterator, bool> emplace(Args&&... args)
     {
         SFL_ASSERT(!full());
-        return emplace_aux(value_type(std::forward<Args>(args)...));
+        return emplace_aux(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
@@ -446,7 +446,7 @@ public:
     {
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return emplace_hint_aux(hint, value_type(std::forward<Args>(args)...));
+        return emplace_hint_aux(hint, std::forward<Args>(args)...);
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
