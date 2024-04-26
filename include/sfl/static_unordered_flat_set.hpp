@@ -174,6 +174,14 @@ public:
         }
     }
 
+    static_unordered_flat_set(std::initializer_list<value_type> ilist)
+        : static_unordered_flat_set(ilist.begin(), ilist.end())
+    {}
+
+    static_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal)
+        : static_unordered_flat_set(ilist.begin(), ilist.end(), equal)
+    {}
+
     ~static_unordered_flat_set()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
