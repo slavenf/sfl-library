@@ -25,94 +25,94 @@ void test_static_unordered_flat_set()
 
     PRINT("Test PRIVATE member function emplace_back(Args&&...)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 5, std::equal_to<xint_xint>> map;
+        sfl::static_unordered_flat_set<xint_xint, 5, std::equal_to<xint_xint>> set;
 
         {
-            CHECK(map.empty() == true);
-            CHECK(map.full() == false);
-            CHECK(map.size() == 0);
-            CHECK(map.capacity() == 5);
-            CHECK(map.available() == 5);
+            CHECK(set.empty() == true);
+            CHECK(set.full() == false);
+            CHECK(set.size() == 0);
+            CHECK(set.capacity() == 5);
+            CHECK(set.available() == 5);
         }
 
         {
             PRINT(">");
-            const auto res = map.emplace_back(10, 1);
+            const auto res = set.emplace_back(10, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(0));
-            CHECK(map.empty() == false);
-            CHECK(map.full() == false);
-            CHECK(map.size() == 1);
-            CHECK(map.capacity() == 5);
-            CHECK(map.available() == 4);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(res == set.nth(0));
+            CHECK(set.empty() == false);
+            CHECK(set.full() == false);
+            CHECK(set.size() == 1);
+            CHECK(set.capacity() == 5);
+            CHECK(set.available() == 4);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         }
 
         {
             PRINT(">");
-            const auto res = map.emplace_back(20, 1);
+            const auto res = set.emplace_back(20, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(1));
-            CHECK(map.empty() == false);
-            CHECK(map.full() == false);
-            CHECK(map.size() == 2);
-            CHECK(map.capacity() == 5);
-            CHECK(map.available() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(res == set.nth(1));
+            CHECK(set.empty() == false);
+            CHECK(set.full() == false);
+            CHECK(set.size() == 2);
+            CHECK(set.capacity() == 5);
+            CHECK(set.available() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
         }
 
         {
             PRINT(">");
-            const auto res = map.emplace_back(30, 1);
+            const auto res = set.emplace_back(30, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(2));
-            CHECK(map.empty() == false);
-            CHECK(map.full() == false);
-            CHECK(map.size() == 3);
-            CHECK(map.capacity() == 5);
-            CHECK(map.available() == 2);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(res == set.nth(2));
+            CHECK(set.empty() == false);
+            CHECK(set.full() == false);
+            CHECK(set.size() == 3);
+            CHECK(set.capacity() == 5);
+            CHECK(set.available() == 2);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
         }
 
         {
             PRINT(">");
-            const auto res = map.emplace_back(40, 1);
+            const auto res = set.emplace_back(40, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(3));
-            CHECK(map.empty() == false);
-            CHECK(map.full() == false);
-            CHECK(map.size() == 4);
-            CHECK(map.capacity() == 5);
-            CHECK(map.available() == 1);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(res == set.nth(3));
+            CHECK(set.empty() == false);
+            CHECK(set.full() == false);
+            CHECK(set.size() == 4);
+            CHECK(set.capacity() == 5);
+            CHECK(set.available() == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
         }
 
         {
             PRINT(">");
-            const auto res = map.emplace_back(50, 1);
+            const auto res = set.emplace_back(50, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(4));
-            CHECK(map.empty() == false);
-            CHECK(map.full() == true);
-            CHECK(map.size() == 5);
-            CHECK(map.capacity() == 5);
-            CHECK(map.available() == 0);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
-            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
+            CHECK(res == set.nth(4));
+            CHECK(set.empty() == false);
+            CHECK(set.full() == true);
+            CHECK(set.size() == 5);
+            CHECK(set.capacity() == 5);
+            CHECK(set.available() == 0);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
         }
     }
 
@@ -1148,135 +1148,135 @@ void test_static_unordered_flat_set()
     {
         // Swap with self
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> map;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
-            map.emplace(10, 1);
-            map.emplace(20, 1);
-            map.emplace(30, 1);
+            set.emplace(10, 1);
+            set.emplace(20, 1);
+            set.emplace(30, 1);
 
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
 
             ///////////////////////////////////////////////////////////////////
 
-            map.swap(map);
+            set.swap(set);
 
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
         }
 
-        // map1.size() == map2.size()
+        // set1.size() == set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> map1, map2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
-            map1.emplace(10, 1);
-            map1.emplace(20, 1);
-            map1.emplace(30, 1);
+            set1.emplace(10, 1);
+            set1.emplace(20, 1);
+            set1.emplace(30, 1);
 
-            map2.emplace(40, 2);
-            map2.emplace(50, 2);
-            map2.emplace(60, 2);
+            set2.emplace(40, 2);
+            set2.emplace(50, 2);
+            set2.emplace(60, 2);
 
-            CHECK(map1.size() == 3);
-            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
-            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+            CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+            CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
-            CHECK(map2.size() == 3);
-            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
-            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
-            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
-
-            ///////////////////////////////////////////////////////////////////
-
-            map1.swap(map2);
-
-            CHECK(map1.size() == 3);
-            CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
-            CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
-            CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
-
-            CHECK(map2.size() == 3);
-            CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
-            CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
-            CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
 
             ///////////////////////////////////////////////////////////////////
 
-            map1.swap(map2);
+            set1.swap(set2);
 
-            CHECK(map1.size() == 3);
-            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
-            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
+            CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
+            CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
 
-            CHECK(map2.size() == 3);
-            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
-            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
-            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
+            CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
+            CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////
+
+            set1.swap(set2);
+
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+            CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+            CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
+
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
         }
 
-        // map1.size() != map2.size()
+        // set1.size() != set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> map1, map2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
-            map1.emplace(10, 1);
-            map1.emplace(20, 1);
-            map1.emplace(30, 1);
+            set1.emplace(10, 1);
+            set1.emplace(20, 1);
+            set1.emplace(30, 1);
 
-            map2.emplace(40, 2);
-            map2.emplace(50, 2);
-            map2.emplace(60, 2);
-            map2.emplace(70, 2);
-            map2.emplace(80, 2);
+            set2.emplace(40, 2);
+            set2.emplace(50, 2);
+            set2.emplace(60, 2);
+            set2.emplace(70, 2);
+            set2.emplace(80, 2);
 
-            CHECK(map1.size() == 3);
-            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
-            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+            CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+            CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
-            CHECK(map2.size() == 5);
-            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
-            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
-            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
-            CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
-            CHECK(map2.nth(4)->first == 80); CHECK(map2.nth(4)->second == 2);
-
-            ///////////////////////////////////////////////////////////////////
-
-            map1.swap(map2);
-
-            CHECK(map1.size() == 5);
-            CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
-            CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
-            CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
-            CHECK(map1.nth(3)->first == 70); CHECK(map1.nth(3)->second == 2);
-            CHECK(map1.nth(4)->first == 80); CHECK(map1.nth(4)->second == 2);
-
-            CHECK(map2.size() == 3);
-            CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
-            CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
-            CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
+            CHECK(set2.size() == 5);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+            CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
+            CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
 
             ///////////////////////////////////////////////////////////////////
 
-            map1.swap(map2);
+            set1.swap(set2);
 
-            CHECK(map1.size() == 3);
-            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
-            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+            CHECK(set1.size() == 5);
+            CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
+            CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
+            CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
+            CHECK(set1.nth(3)->first == 70); CHECK(set1.nth(3)->second == 2);
+            CHECK(set1.nth(4)->first == 80); CHECK(set1.nth(4)->second == 2);
 
-            CHECK(map2.size() == 5);
-            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
-            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
-            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
-            CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
-            CHECK(map2.nth(4)->first == 80); CHECK(map2.nth(4)->second == 2);
+            CHECK(set2.size() == 3);
+            CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
+            CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
+            CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////
+
+            set1.swap(set2);
+
+            CHECK(set1.size() == 3);
+            CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+            CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+            CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
+
+            CHECK(set2.size() == 5);
+            CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+            CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+            CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+            CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
+            CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
         }
     }
 
