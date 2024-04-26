@@ -1143,6 +1143,142 @@ void test_static_unordered_flat_set()
         CHECK(set.erase(10) == 0);
         CHECK(set.size() == 0);
     }
+
+    PRINT("Test swap(container&)");
+    {
+        // Swap with self
+        {
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////
+
+            map.swap(map);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        }
+
+        // map1.size() == map2.size()
+        {
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> map1, map2;
+
+            map1.emplace(10, 1);
+            map1.emplace(20, 1);
+            map1.emplace(30, 1);
+
+            map2.emplace(40, 2);
+            map2.emplace(50, 2);
+            map2.emplace(60, 2);
+
+            CHECK(map1.size() == 3);
+            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
+            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
+            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+
+            CHECK(map2.size() == 3);
+            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
+            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
+            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+
+            ///////////////////////////////////////////////////////////////////
+
+            map1.swap(map2);
+
+            CHECK(map1.size() == 3);
+            CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
+            CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
+            CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
+
+            CHECK(map2.size() == 3);
+            CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
+            CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
+            CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////
+
+            map1.swap(map2);
+
+            CHECK(map1.size() == 3);
+            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
+            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
+            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+
+            CHECK(map2.size() == 3);
+            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
+            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
+            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+        }
+
+        // map1.size() != map2.size()
+        {
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> map1, map2;
+
+            map1.emplace(10, 1);
+            map1.emplace(20, 1);
+            map1.emplace(30, 1);
+
+            map2.emplace(40, 2);
+            map2.emplace(50, 2);
+            map2.emplace(60, 2);
+            map2.emplace(70, 2);
+            map2.emplace(80, 2);
+
+            CHECK(map1.size() == 3);
+            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
+            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
+            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+
+            CHECK(map2.size() == 5);
+            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
+            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
+            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+            CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
+            CHECK(map2.nth(4)->first == 80); CHECK(map2.nth(4)->second == 2);
+
+            ///////////////////////////////////////////////////////////////////
+
+            map1.swap(map2);
+
+            CHECK(map1.size() == 5);
+            CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
+            CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
+            CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
+            CHECK(map1.nth(3)->first == 70); CHECK(map1.nth(3)->second == 2);
+            CHECK(map1.nth(4)->first == 80); CHECK(map1.nth(4)->second == 2);
+
+            CHECK(map2.size() == 3);
+            CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
+            CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
+            CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
+
+            ///////////////////////////////////////////////////////////////////
+
+            map1.swap(map2);
+
+            CHECK(map1.size() == 3);
+            CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
+            CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
+            CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
+
+            CHECK(map2.size() == 5);
+            CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
+            CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
+            CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+            CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
+            CHECK(map2.nth(4)->first == 80); CHECK(map2.nth(4)->second == 2);
+        }
+    }
 }
 
 int main()
