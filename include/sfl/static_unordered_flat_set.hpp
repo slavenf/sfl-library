@@ -807,6 +807,63 @@ private:
     }
 };
 
+//
+// ---- NON-MEMBER FUNCTIONS --------------------------------------------------
+//
+
+template <typename K, std::size_t N, typename E>
+SFL_NODISCARD
+bool operator==
+(
+    const static_unordered_flat_set<K, N, E>& x,
+    const static_unordered_flat_set<K, N, E>& y
+)
+{
+    return x.size() == y.size() && std::is_permutation(x.begin(), x.end(), y.begin());
+}
+
+template <typename K, std::size_t N, typename E>
+SFL_NODISCARD
+bool operator!=
+(
+    const static_unordered_flat_set<K, N, E>& x,
+    const static_unordered_flat_set<K, N, E>& y
+)
+{
+    return !(x == y);
+}
+
+template <typename K, std::size_t N, typename E>
+void swap
+(
+    static_unordered_flat_set<K, N, E>& x,
+    static_unordered_flat_set<K, N, E>& y
+)
+{
+    x.swap(y);
+}
+
+template <typename K, std::size_t N, typename E, typename Predicate>
+typename static_unordered_flat_set<K, N, E>::size_type
+    erase_if(static_unordered_flat_set<K, N, E>& c, Predicate pred)
+{
+    auto old_size = c.size();
+
+    for (auto it = c.begin(); it != c.end(); )
+    {
+        if (pred(*it))
+        {
+            it = c.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    return old_size - c.size();
+}
+
 } // namespace sfl
 
 #endif // SFL_STATIC_UNORDERED_FLAT_SET_HPP_INCLUDED
