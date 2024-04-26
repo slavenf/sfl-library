@@ -1085,6 +1085,64 @@ void test_static_unordered_flat_set()
             CHECK(set.size() == 0);
         }
     }
+
+    PRINT("Test erase(const Key&)");
+    {
+        sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
+
+        set.emplace(10);
+        set.emplace(20);
+        set.emplace(30);
+
+        CHECK(set.size() == 3);
+        CHECK(*set.nth(0) == 10);
+        CHECK(*set.nth(1) == 20);
+        CHECK(*set.nth(2) == 30);
+
+        CHECK(set.erase(30) == 1);
+        CHECK(set.erase(30) == 0);
+        CHECK(set.size() == 2);
+        CHECK(*set.nth(0) == 10);
+        CHECK(*set.nth(1) == 20);
+
+        CHECK(set.erase(20) == 1);
+        CHECK(set.erase(20) == 0);
+        CHECK(set.size() == 1);
+        CHECK(*set.nth(0) == 10);
+
+        CHECK(set.erase(10) == 1);
+        CHECK(set.erase(10) == 0);
+        CHECK(set.size() == 0);
+    }
+
+    PRINT("Test erase(K&&)");
+    {
+        sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+
+        set.emplace(10);
+        set.emplace(20);
+        set.emplace(30);
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+        CHECK(set.nth(2)->value() == 30);
+
+        CHECK(set.erase(30) == 1);
+        CHECK(set.erase(30) == 0);
+        CHECK(set.size() == 2);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+
+        CHECK(set.erase(20) == 1);
+        CHECK(set.erase(20) == 0);
+        CHECK(set.size() == 1);
+        CHECK(set.nth(0)->value() == 10);
+
+        CHECK(set.erase(10) == 1);
+        CHECK(set.erase(10) == 0);
+        CHECK(set.size() == 0);
+    }
 }
 
 int main()
