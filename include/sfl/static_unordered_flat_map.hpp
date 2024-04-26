@@ -674,6 +674,10 @@ public:
             return;
         }
 
+        using std::swap;
+
+        swap(this->data_.ref_to_equal(), other.data_.ref_to_equal());
+
         const size_type this_size  = this->size();
         const size_type other_size = other.size();
 
