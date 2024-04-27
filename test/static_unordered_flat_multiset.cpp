@@ -213,6 +213,99 @@ void test_static_unordered_flat_multiset()
             CHECK(key_eq(xobj(20), 20) == true);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test find, count, contains");
+    {
+        // xint
+        {
+            sfl::static_unordered_flat_multiset<xint, 100, std::equal_to<xint>> set;
+
+            set.emplace_back(20);
+            set.emplace_back(40);
+            set.emplace_back(60);
+
+            CHECK(set.size() == 3);
+            CHECK(*set.nth(0) == 20);
+            CHECK(*set.nth(1) == 40);
+            CHECK(*set.nth(2) == 60);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.find(10) == set.end());
+            CHECK(set.find(20) == set.nth(0));
+            CHECK(set.find(30) == set.end());
+            CHECK(set.find(40) == set.nth(1));
+            CHECK(set.find(50) == set.end());
+            CHECK(set.find(60) == set.nth(2));
+            CHECK(set.find(70) == set.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.count(10) == 0);
+            CHECK(set.count(20) == 1);
+            CHECK(set.count(30) == 0);
+            CHECK(set.count(40) == 1);
+            CHECK(set.count(50) == 0);
+            CHECK(set.count(60) == 1);
+            CHECK(set.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.contains(10) == false);
+            CHECK(set.contains(20) == true);
+            CHECK(set.contains(30) == false);
+            CHECK(set.contains(40) == true);
+            CHECK(set.contains(50) == false);
+            CHECK(set.contains(60) == true);
+            CHECK(set.contains(70) == false);
+        }
+
+        // xobj
+        {
+            sfl::static_unordered_flat_multiset<xobj, 100, xobj::equal> set;
+
+            set.emplace_back(20);
+            set.emplace_back(40);
+            set.emplace_back(60);
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->value() == 20);
+            CHECK(set.nth(1)->value() == 40);
+            CHECK(set.nth(2)->value() == 60);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.find(10) == set.end());
+            CHECK(set.find(20) == set.nth(0));
+            CHECK(set.find(30) == set.end());
+            CHECK(set.find(40) == set.nth(1));
+            CHECK(set.find(50) == set.end());
+            CHECK(set.find(60) == set.nth(2));
+            CHECK(set.find(70) == set.end());
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.count(10) == 0);
+            CHECK(set.count(20) == 1);
+            CHECK(set.count(30) == 0);
+            CHECK(set.count(40) == 1);
+            CHECK(set.count(50) == 0);
+            CHECK(set.count(60) == 1);
+            CHECK(set.count(70) == 0);
+
+            ///////////////////////////////////////////////////////////////////////
+
+            CHECK(set.contains(10) == false);
+            CHECK(set.contains(20) == true);
+            CHECK(set.contains(30) == false);
+            CHECK(set.contains(40) == true);
+            CHECK(set.contains(50) == false);
+            CHECK(set.contains(60) == true);
+            CHECK(set.contains(70) == false);
+        }
+    }
 }
 
 int main()
