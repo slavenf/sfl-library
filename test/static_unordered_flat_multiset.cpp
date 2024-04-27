@@ -115,6 +115,77 @@ void test_static_unordered_flat_multiset()
             CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test begin, end, cbegin, cend, nth, index_of");
+    {
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        set.emplace_back(20, 1);
+        set.emplace_back(40, 1);
+        set.emplace_back(60, 1);
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 40); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 60); CHECK(set.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto it = set.begin();
+        CHECK(it->first == 20); CHECK(it->second == 1); ++it;
+        CHECK(it->first == 40); CHECK(it->second == 1); ++it;
+        CHECK(it->first == 60); CHECK(it->second == 1); ++it;
+        CHECK(it == set.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        auto cit = set.cbegin();
+        CHECK(cit->first == 20); CHECK(cit->second == 1); ++cit;
+        CHECK(cit->first == 40); CHECK(cit->second == 1); ++cit;
+        CHECK(cit->first == 60); CHECK(cit->second == 1); ++cit;
+        CHECK(cit == set.cend());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 40); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 60); CHECK(set.nth(2)->second == 1);
+        CHECK(set.nth(3) == set.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(set.begin(), 0) == set.nth(0));
+        CHECK(std::next(set.begin(), 1) == set.nth(1));
+        CHECK(std::next(set.begin(), 2) == set.nth(2));
+        CHECK(std::next(set.begin(), 3) == set.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(std::next(set.cbegin(), 0) == set.nth(0));
+        CHECK(std::next(set.cbegin(), 1) == set.nth(1));
+        CHECK(std::next(set.cbegin(), 2) == set.nth(2));
+        CHECK(std::next(set.cbegin(), 3) == set.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(set.nth(0) < set.nth(1));
+        CHECK(set.nth(0) < set.nth(2));
+        CHECK(set.nth(0) < set.nth(3));
+
+        CHECK(set.nth(1) < set.nth(2));
+        CHECK(set.nth(1) < set.nth(3));
+
+        CHECK(set.nth(2) < set.nth(3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(set.index_of(set.nth(0)) == 0);
+        CHECK(set.index_of(set.nth(1)) == 1);
+        CHECK(set.index_of(set.nth(2)) == 2);
+        CHECK(set.index_of(set.nth(3)) == 3);
+    }
 }
 
 int main()
