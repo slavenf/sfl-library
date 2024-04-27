@@ -341,6 +341,66 @@ void test_static_unordered_flat_multiset()
 
         CHECK(set.size() == 0);
     }
+
+    PRINT("Test emplace(Args&&...)");
+    {
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        {
+            CHECK(set.emplace(10, 1) == set.nth(0));
+            CHECK(set.emplace(20, 1) == set.nth(1));
+            CHECK(set.emplace(30, 1) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+        }
+
+        {
+            CHECK(set.emplace(10, 2) == set.nth(3));
+            CHECK(set.emplace(20, 2) == set.nth(4));
+            CHECK(set.emplace(30, 2) == set.nth(5));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
+            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
+            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
+        }
+    }
+
+    PRINT("Test emplace_hint(const_iterator, Args&&...)");
+    {
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        {
+            CHECK(set.emplace_hint(set.begin(), 10, 1) == set.nth(0));
+            CHECK(set.emplace_hint(set.begin(), 20, 1) == set.nth(1));
+            CHECK(set.emplace_hint(set.begin(), 30, 1) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+        }
+
+        {
+            CHECK(set.emplace_hint(set.begin(), 10, 2) == set.nth(3));
+            CHECK(set.emplace_hint(set.begin(), 20, 2) == set.nth(4));
+            CHECK(set.emplace_hint(set.begin(), 30, 2) == set.nth(5));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
+            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
+            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
+        }
+    }
 }
 
 int main()
