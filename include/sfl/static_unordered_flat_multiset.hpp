@@ -344,6 +344,48 @@ public:
         return p;
     }
 
+    iterator erase(const_iterator first, const_iterator last)
+    {
+        SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
+
+        if (first == last)
+        {
+            return begin() + std::distance(cbegin(), first);
+        }
+
+        const difference_type count1 = std::distance(first, last);
+        const difference_type count2 = std::distance(last, cend());
+
+        const difference_type offset = std::distance(cbegin(), first);
+
+        const pointer p1 = data_.first_ + offset;
+
+        if (count1 >= count2)
+        {
+            const pointer p2 = p1 + count1;
+
+            const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
+
+            sfl::dtl::destroy(new_last, data_.last_);
+
+            data_.last_ = new_last;
+        }
+        else
+        {
+            const pointer p2 = p1 + count2;
+
+            sfl::dtl::move(p2, data_.last_, p1);
+
+            const pointer new_last = p2;
+
+            sfl::dtl::destroy(new_last, data_.last_);
+
+            data_.last_ = new_last;
+        }
+
+        return p1;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
