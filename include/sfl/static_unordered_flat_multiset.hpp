@@ -308,6 +308,17 @@ public:
         return emplace_back(std::move(value));
     }
 
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    void insert(InputIt first, InputIt last)
+    {
+        while (first != last)
+        {
+            insert(*first);
+            ++first;
+        }
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
