@@ -386,6 +386,48 @@ public:
         return p1;
     }
 
+    size_type erase(const Key& key)
+    {
+        size_type n = 0;
+
+        for (auto it = begin(); it != end();)
+        {
+            if (data_.ref_to_equal()(*it, key))
+            {
+                it = erase(it);
+                ++n;
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        return n;
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
+    size_type erase(K&& x)
+    {
+        size_type n = 0;
+
+        for (auto it = begin(); it != end();)
+        {
+            if (data_.ref_to_equal()(*it, x))
+            {
+                it = erase(it);
+                ++n;
+            }
+            else
+            {
+                ++it;
+            }
+        }
+
+        return n;
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
