@@ -280,6 +280,34 @@ public:
         return emplace_back(std::forward<Args>(args)...);
     }
 
+    iterator insert(const value_type& value)
+    {
+        SFL_ASSERT(!full());
+        return emplace_back(value);
+    }
+
+    iterator insert(value_type&& value)
+    {
+        SFL_ASSERT(!full());
+        return emplace_back(std::move(value));
+    }
+
+    iterator insert(const_iterator hint, const value_type& value)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        sfl::dtl::ignore_unused(hint);
+        return emplace_back(value);
+    }
+
+    iterator insert(const_iterator hint, value_type&& value)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        sfl::dtl::ignore_unused(hint);
+        return emplace_back(std::move(value));
+    }
+
     //
     // ---- LOOKUP ------------------------------------------------------------
     //
