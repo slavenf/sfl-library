@@ -1315,6 +1315,28 @@ void test_static_unordered_flat_multiset()
             CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
         }
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test container()");
+    {
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        CHECK(set.size() == 0);
+        CHECK(set.capacity() == 100);
+        CHECK(set.available() == 100);
+    }
+
+    PRINT("Test container(const KeyEqual&)");
+    {
+        std::equal_to<xint_xint> equal;
+
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(equal);
+
+        CHECK(set.size() == 0);
+        CHECK(set.capacity() == 100);
+        CHECK(set.available() == 100);
+    }
 }
 
 int main()
