@@ -3,6 +3,7 @@
 This is header-only C++11 library that offers several new or less-known containers:
 
   * [`small_vector`](doc/small_vector.md)
+    * A sequence container similar to `std::vector` that internally holds statically allocated small amount of memory to avoid dynamic memory allocation and deallocation if the number of elements is small.
   * [`small_flat_set`](doc/small_flat_set.md)
   * [`small_flat_map`](doc/small_flat_map.md)
   * [`small_flat_multiset`](doc/small_flat_multiset.md)
@@ -10,8 +11,10 @@ This is header-only C++11 library that offers several new or less-known containe
   * [`small_unordered_flat_set`](doc/small_unordered_flat_set.md)
   * [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
   * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.md)
-  * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md) <br><br>
+  * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
+    * An associative containers similar to `std::map/set/unordered_map/unordered_set` that internally hold statically allocated small amount of memory to avoid dynamic memory allocation and deallocation if the number of elements is small.
   * [`static_vector`](doc/static_vector.md)
+    * A sequence container similar to `std::vector`, but the maximal capacity is specified at the compile time and dynamic memory management is **never** used. This container is suitable for **embedded** software development, including **bare-metal** development.
   * [`static_flat_set`](doc/static_flat_set.md)
   * [`static_flat_map`](doc/static_flat_map.md)
   * [`static_flat_multiset`](doc/static_flat_multiset.md)
@@ -19,38 +22,14 @@ This is header-only C++11 library that offers several new or less-known containe
   * [`static_unordered_flat_set`](doc/static_unordered_flat_set.md)
   * [`static_unordered_flat_map`](doc/static_unordered_flat_map.md)
   * [`static_unordered_flat_multiset`](doc/static_unordered_flat_multiset.md)
-  * [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md) <br><br>
+  * [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md)
+    * An associative containers similar to `std::map/set/unordered_map/unordered_set`, but the maximal capacity is specified at the compile time and dynamic memory management is **never** used. These containers are suitable for **embedded** software development, including **bare-metal** development.
   * [`compact_vector`](doc/compact_vector.md)
+    * A sequence container similar to `std::vector` that always has `capacity()` equal to `size()`
   * [`segmented_vector`](doc/segmented_vector.md)
+    * A sequence container similar to `std::vector` with the segmented storage that allows fast insertion and deletion at its end.
   * [`segmented_devector`](doc/segmented_devector.md)
-
-All containers are defined in namespace `sfl`.
-
-## About small vector
-
-`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`. Size `N` is is specified at the compile time as a template parameter.
-
-## About small flat maps and sets
-
-Small flat maps and sets from namespace `sfl` are associative containers similar to standard maps and sets, but with the storage model identical to the storage model of `sfl::small_vector`, i.e. all of them internally hold statically allocated array of size `N` and store elements into this array until the number of elements is not greater than `N`. Elements of these containers are **always** stored contiguously into the memory.
-
-## About static vector
-
-`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management and the number of elements **cannot** be greater than `N`. Size `N` is specified at the compile time as a template parameter.
-
-## About compact vector
-
-`sfl::compact_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that always has `capacity()` equal to `size()`. Compact vector reallocates storage every time when element is inserted or removed in order to keep capacity and size equal. That means insertions and removals are very inefficient.
-
-This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
-
-## About segmented vector
-
-`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that allows fast insertion at its end. The storage of segmented vector consists of a sequence of individually allocated arrays of size `N` which are referred to as *segments*. Size `N` is specified at the compile time as a template parameter.
-
-## About segmented double-ended vector
-
-`sfl::segmented_devector` is a sequence container similar to [`std::deque`](https://en.cppreference.com/w/cpp/container/deque) that allows fast insertion and deletion at both its beginning and its end. The storage of segmented double-ended vector consists of a sequence of individually allocated arrays of size `N` which are referred to as *segments*. Size `N` is specified at the compile time as a template parameter.
+    * A sequence container similar to `std::deque` with the segmented storage that allows fast insertion and deletion at **both** its **beginning** and its **end**.
 
 
 
