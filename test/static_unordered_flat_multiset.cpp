@@ -1874,6 +1874,126 @@ void test_static_unordered_flat_multiset()
         }
         #undef CONDITION
     }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test NON-MEMBER comparison operators");
+    {
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2, set3;
+
+        set1.emplace(10, 1);
+        set1.emplace(20, 1);
+        set1.emplace(30, 1);
+
+        set2.emplace(10, 1);
+        set2.emplace(20, 1);
+        set2.emplace(30, 1);
+        set2.emplace(40, 1);
+        set2.emplace(50, 1);
+
+        set3.emplace(20, 1);
+        set3.emplace(10, 1);
+        set3.emplace(30, 1);
+        set3.emplace(50, 1);
+        set3.emplace(40, 1);
+
+        CHECK((set1 == set1) == true);
+        CHECK((set1 == set2) == false);
+        CHECK((set2 == set1) == false);
+        CHECK((set2 == set2) == true);
+
+        CHECK((set1 != set1) == false);
+        CHECK((set1 != set2) == true);
+        CHECK((set2 != set1) == true);
+        CHECK((set2 != set2) == false);
+
+        CHECK((set2 == set3) == true);
+        CHECK((set3 == set2) == true);
+        CHECK((set2 != set3) == false);
+        CHECK((set3 != set2) == false);
+    }
+
+    PRINT("Test NON-MEMBER swap(container&)");
+    {
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+
+        set1.emplace(10, 1);
+        set1.emplace(20, 1);
+        set1.emplace(30, 1);
+
+        set2.emplace(40, 2);
+        set2.emplace(50, 2);
+        set2.emplace(60, 2);
+        set2.emplace(70, 2);
+        set2.emplace(80, 2);
+
+        CHECK(set1.size() == 3);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
+
+        CHECK(set2.size() == 5);
+        CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+        CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+        CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+        CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
+        CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        swap(set1, set2);
+
+        CHECK(set1.size() == 5);
+        CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
+        CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
+        CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
+        CHECK(set1.nth(3)->first == 70); CHECK(set1.nth(3)->second == 2);
+        CHECK(set1.nth(4)->first == 80); CHECK(set1.nth(4)->second == 2);
+
+        CHECK(set2.size() == 3);
+        CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
+        CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
+        CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
+    }
+
+    PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+    {
+        using container_type =
+            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>>;
+
+        using const_reference = typename container_type::const_reference;
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        container_type set;
+
+        set.emplace(10, 1);
+        set.emplace(20, 1);
+        set.emplace(20, 2);
+        set.emplace(20, 3);
+        set.emplace(30, 1);
+
+        CHECK(set.size() == 5);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 20); CHECK(set.nth(2)->second == 2);
+        CHECK(set.nth(3)->first == 20); CHECK(set.nth(3)->second == 3);
+        CHECK(set.nth(4)->first == 30); CHECK(set.nth(4)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(erase_if(set, [](const_reference& value){ return value.first == 20; }) == 3);
+        CHECK(set.size() == 2);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 30); CHECK(set.nth(1)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        CHECK(erase_if(set, [](const_reference& value){ return value.first == 20; }) == 0);
+        CHECK(set.size() == 2);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 30); CHECK(set.nth(1)->second == 1);
+    }
 }
 
 int main()
