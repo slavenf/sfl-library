@@ -1,6 +1,6 @@
 # sfl library
 
-This is header-only C++11 library that offers several new containers:
+This is header-only C++11 library that offers several new or less-known containers:
 
   * [`small_vector`](doc/small_vector.md)
   * [`small_flat_set`](doc/small_flat_set.md)
@@ -10,8 +10,16 @@ This is header-only C++11 library that offers several new containers:
   * [`small_unordered_flat_set`](doc/small_unordered_flat_set.md)
   * [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
   * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.md)
-  * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
+  * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md) <br><br>
   * [`static_vector`](doc/static_vector.md)
+  * [`static_flat_set`](doc/static_flat_set.md)
+  * [`static_flat_map`](doc/static_flat_map.md)
+  * [`static_flat_multiset`](doc/static_flat_multiset.md)
+  * [`static_flat_multimap`](doc/static_flat_multimap.md)
+  * [`static_unordered_flat_set`](doc/static_unordered_flat_set.md)
+  * [`static_unordered_flat_map`](doc/static_unordered_flat_map.md)
+  * [`static_unordered_flat_multiset`](doc/static_unordered_flat_multiset.md)
+  * [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md) <br><br>
   * [`compact_vector`](doc/compact_vector.md)
   * [`segmented_vector`](doc/segmented_vector.md)
   * [`segmented_devector`](doc/segmented_devector.md)
