@@ -1391,6 +1391,56 @@ void test_static_unordered_flat_multiset()
         CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
         CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
     }
+
+    PRINT("Test container(std::initializer_list)");
+    {
+        std::initializer_list<xint_xint> ilist
+        {
+            {10, 1},
+            {20, 1},
+            {30, 1},
+
+            {10, 2},
+            {20, 2},
+            {30, 2}
+        };
+
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(ilist);
+
+        CHECK(set.size() == 6);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+        CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
+        CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
+        CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
+    }
+
+    PRINT("Test container(std::initializer_list, const Compare&)");
+    {
+        std::initializer_list<xint_xint> ilist
+        {
+            {10, 1},
+            {20, 1},
+            {30, 1},
+
+            {10, 2},
+            {20, 2},
+            {30, 2}
+        };
+
+        std::equal_to<xint_xint> equal;
+
+        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(ilist, equal);
+
+        CHECK(set.size() == 6);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+        CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
+        CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
+        CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
+    }
 }
 
 int main()
