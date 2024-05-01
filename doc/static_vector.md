@@ -197,7 +197,7 @@ Copy constructor.
 Constructs the container with the copy of the contents of `other`.
 
 **Complexity:**
-Linear in `other.size()`.
+Linear in size.
 
 <br><br>
 
@@ -216,7 +216,7 @@ Constructs the container with the contents of `other` using move semantics.
 `other` is in a valid but unspecified state after the move.
 
 **Complexity:**
-Linear in `other.size()`.
+Linear in size.
 
 <br><br>
 
@@ -232,7 +232,7 @@ Linear in `other.size()`.
 Destructs the container. The destructors of the elements are called and the used storage is deallocated.
 
 **Complexity:**
-Linear in `size()`.
+Linear in size.
 
 <br><br>
 
