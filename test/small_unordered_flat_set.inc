@@ -6,7 +6,7 @@ using sfl::test::xint;
 using sfl::test::xint_xint;
 using sfl::test::xobj;
 
-PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
+PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 {
     // N == 0
     {
@@ -17,7 +17,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(10, 1);
+            auto res = set.emplace_back(10, 1);
             PRINT("<");
 
             CHECK(res == set.nth(0));
@@ -28,71 +28,71 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(20, 1);
+            auto res = set.emplace_back(20, 1);
             PRINT("<");
 
-            CHECK(res == set.nth(0));
+            CHECK(res == set.nth(1));
             CHECK(set.size() == 2);
             CHECK(set.capacity() == 2);
-            CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 10); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(30, 1);
+            auto res = set.emplace_back(30, 1);
             PRINT("<");
 
-            CHECK(res == set.nth(0));
+            CHECK(res == set.nth(2));
             CHECK(set.size() == 3);
             CHECK(set.capacity() == 4);
-            CHECK(set.nth(0)->first == 30); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 10); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(40, 1);
+            auto res = set.emplace_back(40, 1);
             PRINT("<");
 
             CHECK(res == set.nth(3));
             CHECK(set.size() == 4);
             CHECK(set.capacity() == 4);
-            CHECK(set.nth(0)->first == 30); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 10); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
             CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(50, 1);
+            auto res = set.emplace_back(50, 1);
             PRINT("<");
 
-            CHECK(res == set.nth(0));
+            CHECK(res == set.nth(4));
             CHECK(set.size() == 5);
             CHECK(set.capacity() == 8);
-            CHECK(set.nth(0)->first == 50); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 30); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 20); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 1);
-            CHECK(set.nth(4)->first == 40); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(60, 1);
+            auto res = set.emplace_back(60, 1);
             PRINT("<");
 
             CHECK(res == set.nth(5));
             CHECK(set.size() == 6);
             CHECK(set.capacity() == 8);
-            CHECK(set.nth(0)->first == 50); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 30); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 20); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 1);
-            CHECK(set.nth(4)->first == 40); CHECK(set.nth(4)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
             CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
         }
     }
@@ -106,7 +106,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(10, 1);
+            auto res = set.emplace_back(10, 1);
             PRINT("<");
 
             CHECK(res == set.nth(0));
@@ -117,7 +117,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(20, 1);
+            auto res = set.emplace_back(20, 1);
             PRINT("<");
 
             CHECK(res == set.nth(1));
@@ -129,7 +129,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(30, 1);
+            auto res = set.emplace_back(30, 1);
             PRINT("<");
 
             CHECK(res == set.nth(2));
@@ -142,45 +142,45 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(40, 1);
+            auto res = set.emplace_back(40, 1);
             PRINT("<");
 
-            CHECK(res == set.nth(0));
+            CHECK(res == set.nth(3));
             CHECK(set.size() == 4);
             CHECK(set.capacity() == 6);
-            CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 10); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 20); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 30); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(50, 1);
+            auto res = set.emplace_back(50, 1);
             PRINT("<");
 
             CHECK(res == set.nth(4));
             CHECK(set.size() == 5);
             CHECK(set.capacity() == 6);
-            CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 10); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 20); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 30); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
             CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = set.insert_unordered(60, 1);
+            auto res = set.emplace_back(60, 1);
             PRINT("<");
 
             CHECK(res == set.nth(5));
             CHECK(set.size() == 6);
             CHECK(set.capacity() == 6);
-            CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 10); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 20); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 30); CHECK(set.nth(3)->second == 1);
+            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
             CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
             CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
         }
@@ -196,9 +196,9 @@ PRINT("Test begin, end, cbegin, cend, nth, index_of");
                                    std::equal_to<xint_xint>,
                                    TPARAM_ALLOCATOR<xint_xint> > set;
 
-    set.insert_unordered(20, 1);
-    set.insert_unordered(40, 1);
-    set.insert_unordered(60, 1);
+    set.emplace_back(20, 1);
+    set.emplace_back(40, 1);
+    set.emplace_back(60, 1);
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
@@ -319,9 +319,9 @@ PRINT("Test find, count, contains");
                                        std::equal_to<xint>,
                                        TPARAM_ALLOCATOR<xint> > set;
 
-        set.insert_unordered(20);
-        set.insert_unordered(40);
-        set.insert_unordered(60);
+        set.emplace_back(20);
+        set.emplace_back(40);
+        set.emplace_back(60);
 
         CHECK(set.size() == 3);
         CHECK(*set.nth(0) == 20);
@@ -366,9 +366,9 @@ PRINT("Test find, count, contains");
                                        xobj::equal,
                                        TPARAM_ALLOCATOR<xobj> > set;
 
-        set.insert_unordered(20);
-        set.insert_unordered(40);
-        set.insert_unordered(60);
+        set.emplace_back(20);
+        set.emplace_back(40);
+        set.emplace_back(60);
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->value() == 20);
@@ -418,9 +418,9 @@ PRINT("Test clear()");
 
     CHECK(set.size() == 0);
 
-    set.insert_unordered(10, 1);
-    set.insert_unordered(20, 1);
-    set.insert_unordered(30, 1);
+    set.emplace_back(10, 1);
+    set.emplace_back(20, 1);
+    set.emplace_back(30, 1);
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -431,9 +431,9 @@ PRINT("Test clear()");
 
     CHECK(set.size() == 0);
 
-    set.insert_unordered(40, 2);
-    set.insert_unordered(50, 2);
-    set.insert_unordered(60, 2);
+    set.emplace_back(40, 2);
+    set.emplace_back(50, 2);
+    set.emplace_back(60, 2);
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 2);
@@ -1393,12 +1393,12 @@ PRINT("Test swap(container&)");
 
         CHECK(set2.size() == 6);
         CHECK(set2.capacity() == 10);
-        CHECK(set2.nth(0)->first == 90); CHECK(set2.nth(0)->second == 2);
-        CHECK(set2.nth(1)->first == 40); CHECK(set2.nth(1)->second == 2);
-        CHECK(set2.nth(2)->first == 50); CHECK(set2.nth(2)->second == 2);
-        CHECK(set2.nth(3)->first == 60); CHECK(set2.nth(3)->second == 2);
-        CHECK(set2.nth(4)->first == 70); CHECK(set2.nth(4)->second == 2);
-        CHECK(set2.nth(5)->first == 80); CHECK(set2.nth(5)->second == 2);
+        CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+        CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+        CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+        CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
+        CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
+        CHECK(set2.nth(5)->first == 90); CHECK(set2.nth(5)->second == 2);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1406,12 +1406,12 @@ PRINT("Test swap(container&)");
 
         CHECK(set1.size() == 6);
         CHECK(set1.capacity() == 10);
-        CHECK(set1.nth(0)->first == 90); CHECK(set1.nth(0)->second == 2);
-        CHECK(set1.nth(1)->first == 40); CHECK(set1.nth(1)->second == 2);
-        CHECK(set1.nth(2)->first == 50); CHECK(set1.nth(2)->second == 2);
-        CHECK(set1.nth(3)->first == 60); CHECK(set1.nth(3)->second == 2);
-        CHECK(set1.nth(4)->first == 70); CHECK(set1.nth(4)->second == 2);
-        CHECK(set1.nth(5)->first == 80); CHECK(set1.nth(5)->second == 2);
+        CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
+        CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
+        CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
+        CHECK(set1.nth(3)->first == 70); CHECK(set1.nth(3)->second == 2);
+        CHECK(set1.nth(4)->first == 80); CHECK(set1.nth(4)->second == 2);
+        CHECK(set1.nth(5)->first == 90); CHECK(set1.nth(5)->second == 2);
 
         CHECK(set2.size() == 3);
         CHECK(set2.capacity() == 5);
@@ -1431,12 +1431,12 @@ PRINT("Test swap(container&)");
 
         CHECK(set2.size() == 6);
         CHECK(set2.capacity() == 10);
-        CHECK(set2.nth(0)->first == 90); CHECK(set2.nth(0)->second == 2);
-        CHECK(set2.nth(1)->first == 40); CHECK(set2.nth(1)->second == 2);
-        CHECK(set2.nth(2)->first == 50); CHECK(set2.nth(2)->second == 2);
-        CHECK(set2.nth(3)->first == 60); CHECK(set2.nth(3)->second == 2);
-        CHECK(set2.nth(4)->first == 70); CHECK(set2.nth(4)->second == 2);
-        CHECK(set2.nth(5)->first == 80); CHECK(set2.nth(5)->second == 2);
+        CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
+        CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
+        CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
+        CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
+        CHECK(set2.nth(4)->first == 80); CHECK(set2.nth(4)->second == 2);
+        CHECK(set2.nth(5)->first == 90); CHECK(set2.nth(5)->second == 2);
     }
 
     // Both containers are using external storage
@@ -1457,15 +1457,15 @@ PRINT("Test swap(container&)");
 
         CHECK(set1.size() == 3);
         CHECK(set1.capacity() == 4);
-        CHECK(set1.nth(0)->first == 30); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
-        CHECK(set1.nth(2)->first == 10); CHECK(set1.nth(2)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         CHECK(set2.size() == 4);
         CHECK(set2.capacity() == 4);
-        CHECK(set2.nth(0)->first == 60); CHECK(set2.nth(0)->second == 2);
+        CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
         CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
-        CHECK(set2.nth(2)->first == 40); CHECK(set2.nth(2)->second == 2);
+        CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
         CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
 
         ///////////////////////////////////////////////////////////////////////
@@ -1474,16 +1474,16 @@ PRINT("Test swap(container&)");
 
         CHECK(set1.size() == 4);
         CHECK(set1.capacity() == 4);
-        CHECK(set1.nth(0)->first == 60); CHECK(set1.nth(0)->second == 2);
+        CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
         CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
-        CHECK(set1.nth(2)->first == 40); CHECK(set1.nth(2)->second == 2);
+        CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
         CHECK(set1.nth(3)->first == 70); CHECK(set1.nth(3)->second == 2);
 
         CHECK(set2.size() == 3);
         CHECK(set2.capacity() == 4);
-        CHECK(set2.nth(0)->first == 30); CHECK(set2.nth(0)->second == 1);
+        CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
         CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
-        CHECK(set2.nth(2)->first == 10); CHECK(set2.nth(2)->second == 1);
+        CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1491,15 +1491,15 @@ PRINT("Test swap(container&)");
 
         CHECK(set1.size() == 3);
         CHECK(set1.capacity() == 4);
-        CHECK(set1.nth(0)->first == 30); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
-        CHECK(set1.nth(2)->first == 10); CHECK(set1.nth(2)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         CHECK(set2.size() == 4);
         CHECK(set2.capacity() == 4);
-        CHECK(set2.nth(0)->first == 60); CHECK(set2.nth(0)->second == 2);
+        CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
         CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
-        CHECK(set2.nth(2)->first == 40); CHECK(set2.nth(2)->second == 2);
+        CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
         CHECK(set2.nth(3)->first == 70); CHECK(set2.nth(3)->second == 2);
     }
 }
@@ -1547,9 +1547,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(set.size() == 3);
         CHECK(set.capacity() == 4);
-        CHECK(set.nth(0)->first == 30); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-        CHECK(set.nth(2)->first == 10); CHECK(set.nth(2)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1557,9 +1557,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(set.size() == 3);
         CHECK(set.capacity() == 3);
-        CHECK(set.nth(0)->first == 30); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-        CHECK(set.nth(2)->first == 10); CHECK(set.nth(2)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1567,9 +1567,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(set.size() == 3);
         CHECK(set.capacity() == 999);
-        CHECK(set.nth(0)->first == 30); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-        CHECK(set.nth(2)->first == 10); CHECK(set.nth(2)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1577,9 +1577,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(set.size() == 3);
         CHECK(set.capacity() == 3);
-        CHECK(set.nth(0)->first == 30); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-        CHECK(set.nth(2)->first == 10); CHECK(set.nth(2)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
     }
 
     // N = 100
@@ -1919,9 +1919,9 @@ PRINT("Test container(const container&)");
         set1.emplace(30, 1);
 
         CHECK(set1.size() == 3);
-        CHECK(set1.nth(0)->first == 30); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
-        CHECK(set1.nth(2)->first == 10); CHECK(set1.nth(2)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1931,9 +1931,9 @@ PRINT("Test container(const container&)");
                                        TPARAM_ALLOCATOR<xint_xint> > set2(set1);
 
         CHECK(set2.size() == 3);
-        CHECK(set2.nth(0)->first == 30); CHECK(set2.nth(0)->second == 1);
+        CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
         CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
-        CHECK(set2.nth(2)->first == 10); CHECK(set2.nth(2)->second == 1);
+        CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
     }
 
     // N == 100
@@ -1980,9 +1980,9 @@ PRINT("Test container(const container&, const Allocator&)");
         set1.emplace(30, 1);
 
         CHECK(set1.size() == 3);
-        CHECK(set1.nth(0)->first == 30); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
-        CHECK(set1.nth(2)->first == 10); CHECK(set1.nth(2)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1994,9 +1994,9 @@ PRINT("Test container(const container&, const Allocator&)");
                                        TPARAM_ALLOCATOR<xint_xint> > set2(set1, alloc);
 
         CHECK(set2.size() == 3);
-        CHECK(set2.nth(0)->first == 30); CHECK(set2.nth(0)->second == 1);
+        CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
         CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
-        CHECK(set2.nth(2)->first == 10); CHECK(set2.nth(2)->second == 1);
+        CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
     }
 
     // N == 100
@@ -2045,9 +2045,9 @@ PRINT("Test container(container&&)");
         set1.emplace(30, 1);
 
         CHECK(set1.size() == 3);
-        CHECK(set1.nth(0)->first == 30); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
-        CHECK(set1.nth(2)->first == 10); CHECK(set1.nth(2)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2057,18 +2057,18 @@ PRINT("Test container(container&&)");
                                        TPARAM_ALLOCATOR<xint_xint> > set2(std::move(set1));
 
         CHECK(set2.size() == 3);
-        CHECK(set2.nth(0)->first == 30); CHECK(set2.nth(0)->second == 1);
+        CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
         CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
-        CHECK(set2.nth(2)->first == 10); CHECK(set2.nth(2)->second == 1);
+        CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
         if (set1.size() == 3)
         {
             // Elements were moved one-by-one
-            CHECK(set1.nth(0)->first == -30); CHECK(set1.nth(0)->second == -1);
+            CHECK(set1.nth(0)->first == -10); CHECK(set1.nth(0)->second == -1);
             CHECK(set1.nth(1)->first == -20); CHECK(set1.nth(1)->second == -1);
-            CHECK(set1.nth(2)->first == -10); CHECK(set1.nth(2)->second == -1);
+            CHECK(set1.nth(2)->first == -30); CHECK(set1.nth(2)->second == -1);
         }
         else
         {
@@ -2134,9 +2134,9 @@ PRINT("Test container(container&&, const Allocator&)");
         set1.emplace(30, 1);
 
         CHECK(set1.size() == 3);
-        CHECK(set1.nth(0)->first == 30); CHECK(set1.nth(0)->second == 1);
+        CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
-        CHECK(set1.nth(2)->first == 10); CHECK(set1.nth(2)->second == 1);
+        CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2148,18 +2148,18 @@ PRINT("Test container(container&&, const Allocator&)");
                                        TPARAM_ALLOCATOR<xint_xint> > set2(std::move(set1), alloc);
 
         CHECK(set2.size() == 3);
-        CHECK(set2.nth(0)->first == 30); CHECK(set2.nth(0)->second == 1);
+        CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
         CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
-        CHECK(set2.nth(2)->first == 10); CHECK(set2.nth(2)->second == 1);
+        CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
         if (set1.size() == 3)
         {
             // Elements were moved one-by-one
-            CHECK(set1.nth(0)->first == -30); CHECK(set1.nth(0)->second == -1);
+            CHECK(set1.nth(0)->first == -10); CHECK(set1.nth(0)->second == -1);
             CHECK(set1.nth(1)->first == -20); CHECK(set1.nth(1)->second == -1);
-            CHECK(set1.nth(2)->first == -10); CHECK(set1.nth(2)->second == -1);
+            CHECK(set1.nth(2)->first == -30); CHECK(set1.nth(2)->second == -1);
         }
         else
         {
@@ -3169,10 +3169,10 @@ PRINT("Test operator=(std::initializer_list)");
         set = ilist;
 
         CHECK(set.size() == 5);
-        CHECK(set.nth(0)->first == 70); CHECK(set.nth(0)->second == 2);
-        CHECK(set.nth(1)->first == 40); CHECK(set.nth(1)->second == 2);
-        CHECK(set.nth(2)->first == 50); CHECK(set.nth(2)->second == 2);
-        CHECK(set.nth(3)->first == 60); CHECK(set.nth(3)->second == 2);
+        CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 2);
+        CHECK(set.nth(1)->first == 50); CHECK(set.nth(1)->second == 2);
+        CHECK(set.nth(2)->first == 60); CHECK(set.nth(2)->second == 2);
+        CHECK(set.nth(3)->first == 70); CHECK(set.nth(3)->second == 2);
         CHECK(set.nth(4)->first == 80); CHECK(set.nth(4)->second == 2);
     }
     #undef CONDITION
