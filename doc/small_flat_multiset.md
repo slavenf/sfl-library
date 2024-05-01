@@ -15,7 +15,7 @@ namespace sfl
 }
 ```
 
-`sfl::small_flat_multiset` is an associative container similar to [`std::multiset`](https://en.cppreference.com/w/cpp/container/multiset) with the underlying storage implemented as a sorted vector.
+`sfl::small_flat_multiset` is an associative container similar to [`std::multiset`](https://en.cppreference.com/w/cpp/container/multiset), but the underlying storage is implemented as a **sorted vector**.
 
 `sfl::small_flat_multiset` internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 

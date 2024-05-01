@@ -16,7 +16,7 @@ namespace sfl
 }
 ```
 
-`sfl::small_flat_multimap` is an associative container similar to [`std::multimap`](https://en.cppreference.com/w/cpp/container/multimap) with the underlying storage implemented as a sorted vector.
+`sfl::small_flat_multimap` is an associative container similar to [`std::multimap`](https://en.cppreference.com/w/cpp/container/multimap), but the underlying storage is implemented as a **sorted vector**.
 
 `sfl::small_flat_multimap` internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
