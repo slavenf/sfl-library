@@ -229,6 +229,19 @@ public:
         return *this;
     }
 
+    static_unordered_flat_multiset& operator=(static_unordered_flat_multiset&& other)
+    {
+        data_.ref_to_equal() = other.data_.ref_to_equal();
+
+        assign_range
+        (
+            std::make_move_iterator(pointer(other.data_.first_)),
+            std::make_move_iterator(pointer(other.data_.last_))
+        );
+
+        return *this;
+    }
+
     //
     // ---- KEY EQUAL ---------------------------------------------------------
     //
