@@ -25,7 +25,7 @@ This is header-only C++11 library that offers several new or less-known containe
   * [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md)
     * An associative containers similar to `std::map/set/unordered_map/unordered_set`, but the maximal capacity is specified at the compile time and dynamic memory management is **never** used. These containers are suitable for **embedded** software development, including **bare-metal** development.
   * [`compact_vector`](doc/compact_vector.md)
-    * A sequence container similar to `std::vector` that always has `capacity()` equal to `size()`
+    * A sequence container similar to `std::vector` that always has `capacity()` equal to `size()`.
   * [`segmented_vector`](doc/segmented_vector.md)
     * A sequence container similar to `std::vector` with the segmented storage that allows fast insertion and deletion at its end.
   * [`segmented_devector`](doc/segmented_devector.md)
