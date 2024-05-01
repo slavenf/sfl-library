@@ -17,11 +17,11 @@ run()
     echo :::: Finished test \[$1\]
 }
 
-run "make CXX=\"g++     -std=c++11\" SILENT=1 -j"
-run "make CXX=\"clang++ -std=c++11\" SILENT=1 -j"
+run "make CXX=\"g++     -std=c++11\" SILENT=1 -j$(nproc)"
+run "make CXX=\"clang++ -std=c++11\" SILENT=1 -j$(nproc)"
 
-run "make CXX=\"g++     -std=c++11 -fno-exceptions -DSFL_NO_EXCEPTIONS\" SILENT=1 -j"
-run "make CXX=\"clang++ -std=c++11 -fno-exceptions -DSFL_NO_EXCEPTIONS\" SILENT=1 -j"
+run "make CXX=\"g++     -std=c++11 -fno-exceptions -DSFL_NO_EXCEPTIONS\" SILENT=1 -j$(nproc)"
+run "make CXX=\"clang++ -std=c++11 -fno-exceptions -DSFL_NO_EXCEPTIONS\" SILENT=1 -j$(nproc)"
 
 echo :::: Finished all tests.
 echo :::: THE END.
