@@ -1,17 +1,22 @@
 # Next release
 
-* New container `static_flat_map`.
-* New container `static_flat_set`.
-* New container `static_flat_multimap`.
-* New container `static_flat_multiset`.
+* New containers:
+  - `static_flat_map`.
+  - `static_flat_set`.
+  - `static_flat_multimap`.
+  - `static_flat_multiset`.
+  - `static_unordered_flat_map`.
+  - `static_unordered_flat_set`.
+  - `static_unordered_flat_multimap`.
+  - `static_unordered_flat_multiset`.
 * Small flat map: Refactored private member function `insert_exactly_at`.
 * Small flat set: Refactored private member function `insert_exactly_at`.
 * Small flat multimap: Refactored private member function `insert_exactly_at`.
 * Small flat multiset: Refactored private member function `insert_exactly_at`.
-* Fix: Small flat map: Fixed memory leak in `insert_exactly_at` if exception is thrown.
-* Fix: Small flat set: Fixed memory leak in `insert_exactly_at` if exception is thrown.
-* Fix: Small flat multimap: Fixed memory leak in `insert_exactly_at` if exception is thrown.
-* Fix: Small flat multiset: Fixed memory leak in `insert_exactly_at` if exception is thrown.
+* Small flat map: Fixed memory leak in `insert_exactly_at` if exception is thrown.
+* Small flat set: Fixed memory leak in `insert_exactly_at` if exception is thrown.
+* Small flat multimap: Fixed memory leak in `insert_exactly_at` if exception is thrown.
+* Small flat multiset: Fixed memory leak in `insert_exactly_at` if exception is thrown.
 * Small flat map: Refactored member function `erase`.
 * Small flat set: Refactored member function `erase`.
 * Small flat multimap: Refactored member function `erase`.
