@@ -134,6 +134,46 @@ public:
         : data_(equal)
     {}
 
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    static_unordered_flat_multiset(InputIt first, InputIt last)
+        : data_()
+    {
+        SFL_TRY
+        {
+            while (first != last)
+            {
+                emplace(*first);
+                ++first;
+            }
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy(data_.first_, data_.last_);
+            SFL_RETHROW;
+        }
+    }
+
+    template <typename InputIt,
+              sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    static_unordered_flat_multiset(InputIt first, InputIt last, const KeyEqual& equal)
+        : data_(equal)
+    {
+        SFL_TRY
+        {
+            while (first != last)
+            {
+                emplace(*first);
+                ++first;
+            }
+        }
+        SFL_CATCH (...)
+        {
+            sfl::dtl::destroy(data_.first_, data_.last_);
+            SFL_RETHROW;
+        }
+    }
+
     ~static_unordered_flat_multiset()
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
