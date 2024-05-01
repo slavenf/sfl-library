@@ -5,7 +5,7 @@
 using sfl::test::xint;
 using sfl::test::xobj;
 
-PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
+PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 {
     // N == 0
     {
@@ -17,7 +17,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(10, 1);
+            auto res = map.emplace_back(10, 1);
             PRINT("<");
 
             CHECK(res == map.nth(0));
@@ -28,71 +28,71 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(20, 1);
+            auto res = map.emplace_back(20, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(0));
+            CHECK(res == map.nth(1));
             CHECK(map.size() == 2);
             CHECK(map.capacity() == 2);
-            CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 10); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(30, 1);
+            auto res = map.emplace_back(30, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(0));
+            CHECK(res == map.nth(2));
             CHECK(map.size() == 3);
             CHECK(map.capacity() == 4);
-            CHECK(map.nth(0)->first == 30); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 10); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(40, 1);
+            auto res = map.emplace_back(40, 1);
             PRINT("<");
 
             CHECK(res == map.nth(3));
             CHECK(map.size() == 4);
             CHECK(map.capacity() == 4);
-            CHECK(map.nth(0)->first == 30); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 10); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
             CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(50, 1);
+            auto res = map.emplace_back(50, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(0));
+            CHECK(res == map.nth(4));
             CHECK(map.size() == 5);
             CHECK(map.capacity() == 8);
-            CHECK(map.nth(0)->first == 50); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 30); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 1);
-            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 1);
-            CHECK(map.nth(4)->first == 40); CHECK(map.nth(4)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(60, 1);
+            auto res = map.emplace_back(60, 1);
             PRINT("<");
 
             CHECK(res == map.nth(5));
             CHECK(map.size() == 6);
             CHECK(map.capacity() == 8);
-            CHECK(map.nth(0)->first == 50); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 30); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 1);
-            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 1);
-            CHECK(map.nth(4)->first == 40); CHECK(map.nth(4)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
             CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 1);
         }
     }
@@ -107,7 +107,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(10, 1);
+            auto res = map.emplace_back(10, 1);
             PRINT("<");
 
             CHECK(res == map.nth(0));
@@ -118,7 +118,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(20, 1);
+            auto res = map.emplace_back(20, 1);
             PRINT("<");
 
             CHECK(res == map.nth(1));
@@ -130,7 +130,7 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(30, 1);
+            auto res = map.emplace_back(30, 1);
             PRINT("<");
 
             CHECK(res == map.nth(2));
@@ -143,45 +143,45 @@ PRINT("Test PRIVATE member function insert_unordered(Args&&...)");
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(40, 1);
+            auto res = map.emplace_back(40, 1);
             PRINT("<");
 
-            CHECK(res == map.nth(0));
+            CHECK(res == map.nth(3));
             CHECK(map.size() == 4);
             CHECK(map.capacity() == 6);
-            CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 10); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 1);
-            CHECK(map.nth(3)->first == 30); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(50, 1);
+            auto res = map.emplace_back(50, 1);
             PRINT("<");
 
             CHECK(res == map.nth(4));
             CHECK(map.size() == 5);
             CHECK(map.capacity() == 6);
-            CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 10); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 1);
-            CHECK(map.nth(3)->first == 30); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
             CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
         }
 
         {
             PRINT(">");
-            auto res = map.insert_unordered(60, 1);
+            auto res = map.emplace_back(60, 1);
             PRINT("<");
 
             CHECK(res == map.nth(5));
             CHECK(map.size() == 6);
             CHECK(map.capacity() == 6);
-            CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 10); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 1);
-            CHECK(map.nth(3)->first == 30); CHECK(map.nth(3)->second == 1);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 1);
             CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 1);
             CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 1);
         }
@@ -198,9 +198,9 @@ PRINT("Test begin, end, cbegin, cend, nth, index_of");
                                    std::equal_to<xint>,
                                    TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
-    map.insert_unordered(20, 1);
-    map.insert_unordered(40, 1);
-    map.insert_unordered(60, 1);
+    map.emplace_back(20, 1);
+    map.emplace_back(40, 1);
+    map.emplace_back(60, 1);
 
     CHECK(map.size() == 3);
     CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -360,9 +360,9 @@ PRINT("Test find, count, contains");
                                        std::equal_to<xint>,
                                        TPARAM_ALLOCATOR<std::pair<xint, xint>> > map;
 
-        map.insert_unordered(20, 1);
-        map.insert_unordered(40, 1);
-        map.insert_unordered(60, 1);
+        map.emplace_back(20, 1);
+        map.emplace_back(40, 1);
+        map.emplace_back(60, 1);
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 20); CHECK(map.nth(0)->second == 1);
@@ -408,9 +408,9 @@ PRINT("Test find, count, contains");
                                        xobj::equal,
                                        TPARAM_ALLOCATOR<std::pair<xobj, xint>> > map;
 
-        map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
-        map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
-        map.insert_unordered(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
+        map.emplace_back(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+        map.emplace_back(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
+        map.emplace_back(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first.value() == 20); CHECK(map.nth(0)->second == 1);
@@ -461,9 +461,9 @@ PRINT("Test clear()");
 
     CHECK(map.size() == 0);
 
-    map.insert_unordered(10, 1);
-    map.insert_unordered(20, 1);
-    map.insert_unordered(30, 1);
+    map.emplace_back(10, 1);
+    map.emplace_back(20, 1);
+    map.emplace_back(30, 1);
 
     CHECK(map.size() == 3);
     CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -474,9 +474,9 @@ PRINT("Test clear()");
 
     CHECK(map.size() == 0);
 
-    map.insert_unordered(40, 2);
-    map.insert_unordered(50, 2);
-    map.insert_unordered(60, 2);
+    map.emplace_back(40, 2);
+    map.emplace_back(50, 2);
+    map.emplace_back(60, 2);
 
     CHECK(map.size() == 3);
     CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);
@@ -1930,12 +1930,12 @@ PRINT("Test swap(container&)");
 
         CHECK(map2.size() == 6);
         CHECK(map2.capacity() == 10);
-        CHECK(map2.nth(0)->first == 90); CHECK(map2.nth(0)->second == 2);
-        CHECK(map2.nth(1)->first == 40); CHECK(map2.nth(1)->second == 2);
-        CHECK(map2.nth(2)->first == 50); CHECK(map2.nth(2)->second == 2);
-        CHECK(map2.nth(3)->first == 60); CHECK(map2.nth(3)->second == 2);
-        CHECK(map2.nth(4)->first == 70); CHECK(map2.nth(4)->second == 2);
-        CHECK(map2.nth(5)->first == 80); CHECK(map2.nth(5)->second == 2);
+        CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
+        CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
+        CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+        CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
+        CHECK(map2.nth(4)->first == 80); CHECK(map2.nth(4)->second == 2);
+        CHECK(map2.nth(5)->first == 90); CHECK(map2.nth(5)->second == 2);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -1943,12 +1943,12 @@ PRINT("Test swap(container&)");
 
         CHECK(map1.size() == 6);
         CHECK(map1.capacity() == 10);
-        CHECK(map1.nth(0)->first == 90); CHECK(map1.nth(0)->second == 2);
-        CHECK(map1.nth(1)->first == 40); CHECK(map1.nth(1)->second == 2);
-        CHECK(map1.nth(2)->first == 50); CHECK(map1.nth(2)->second == 2);
-        CHECK(map1.nth(3)->first == 60); CHECK(map1.nth(3)->second == 2);
-        CHECK(map1.nth(4)->first == 70); CHECK(map1.nth(4)->second == 2);
-        CHECK(map1.nth(5)->first == 80); CHECK(map1.nth(5)->second == 2);
+        CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
+        CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
+        CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
+        CHECK(map1.nth(3)->first == 70); CHECK(map1.nth(3)->second == 2);
+        CHECK(map1.nth(4)->first == 80); CHECK(map1.nth(4)->second == 2);
+        CHECK(map1.nth(5)->first == 90); CHECK(map1.nth(5)->second == 2);
 
         CHECK(map2.size() == 3);
         CHECK(map2.capacity() == 5);
@@ -1968,12 +1968,12 @@ PRINT("Test swap(container&)");
 
         CHECK(map2.size() == 6);
         CHECK(map2.capacity() == 10);
-        CHECK(map2.nth(0)->first == 90); CHECK(map2.nth(0)->second == 2);
-        CHECK(map2.nth(1)->first == 40); CHECK(map2.nth(1)->second == 2);
-        CHECK(map2.nth(2)->first == 50); CHECK(map2.nth(2)->second == 2);
-        CHECK(map2.nth(3)->first == 60); CHECK(map2.nth(3)->second == 2);
-        CHECK(map2.nth(4)->first == 70); CHECK(map2.nth(4)->second == 2);
-        CHECK(map2.nth(5)->first == 80); CHECK(map2.nth(5)->second == 2);
+        CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
+        CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
+        CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
+        CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
+        CHECK(map2.nth(4)->first == 80); CHECK(map2.nth(4)->second == 2);
+        CHECK(map2.nth(5)->first == 90); CHECK(map2.nth(5)->second == 2);
     }
 
     // Both containers are using external storage
@@ -1995,15 +1995,15 @@ PRINT("Test swap(container&)");
 
         CHECK(map1.size() == 3);
         CHECK(map1.capacity() == 4);
-        CHECK(map1.nth(0)->first == 30); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-        CHECK(map1.nth(2)->first == 10); CHECK(map1.nth(2)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         CHECK(map2.size() == 4);
         CHECK(map2.capacity() == 4);
-        CHECK(map2.nth(0)->first == 60); CHECK(map2.nth(0)->second == 2);
+        CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
         CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
-        CHECK(map2.nth(2)->first == 40); CHECK(map2.nth(2)->second == 2);
+        CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
         CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
 
         ///////////////////////////////////////////////////////////////////////
@@ -2012,16 +2012,16 @@ PRINT("Test swap(container&)");
 
         CHECK(map1.size() == 4);
         CHECK(map1.capacity() == 4);
-        CHECK(map1.nth(0)->first == 60); CHECK(map1.nth(0)->second == 2);
+        CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
         CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
-        CHECK(map1.nth(2)->first == 40); CHECK(map1.nth(2)->second == 2);
+        CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
         CHECK(map1.nth(3)->first == 70); CHECK(map1.nth(3)->second == 2);
 
         CHECK(map2.size() == 3);
         CHECK(map2.capacity() == 4);
-        CHECK(map2.nth(0)->first == 30); CHECK(map2.nth(0)->second == 1);
+        CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
         CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
-        CHECK(map2.nth(2)->first == 10); CHECK(map2.nth(2)->second == 1);
+        CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2029,15 +2029,15 @@ PRINT("Test swap(container&)");
 
         CHECK(map1.size() == 3);
         CHECK(map1.capacity() == 4);
-        CHECK(map1.nth(0)->first == 30); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-        CHECK(map1.nth(2)->first == 10); CHECK(map1.nth(2)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         CHECK(map2.size() == 4);
         CHECK(map2.capacity() == 4);
-        CHECK(map2.nth(0)->first == 60); CHECK(map2.nth(0)->second == 2);
+        CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
         CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
-        CHECK(map2.nth(2)->first == 40); CHECK(map2.nth(2)->second == 2);
+        CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
         CHECK(map2.nth(3)->first == 70); CHECK(map2.nth(3)->second == 2);
     }
 }
@@ -2235,9 +2235,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(map.size() == 3);
         CHECK(map.capacity() == 4);
-        CHECK(map.nth(0)->first == 30); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 10); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2245,9 +2245,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(map.size() == 3);
         CHECK(map.capacity() == 3);
-        CHECK(map.nth(0)->first == 30); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 10); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2255,9 +2255,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(map.size() == 3);
         CHECK(map.capacity() == 999);
-        CHECK(map.nth(0)->first == 30); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 10); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2265,9 +2265,9 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
         CHECK(map.size() == 3);
         CHECK(map.capacity() == 3);
-        CHECK(map.nth(0)->first == 30); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 10); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
     }
 
     // N = 100
@@ -2621,9 +2621,9 @@ PRINT("Test container(const container&)");
         map1.emplace(30, 1);
 
         CHECK(map1.size() == 3);
-        CHECK(map1.nth(0)->first == 30); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-        CHECK(map1.nth(2)->first == 10); CHECK(map1.nth(2)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2634,9 +2634,9 @@ PRINT("Test container(const container&)");
                                        TPARAM_ALLOCATOR<std::pair<xint, xint>> > map2(map1);
 
         CHECK(map2.size() == 3);
-        CHECK(map2.nth(0)->first == 30); CHECK(map2.nth(0)->second == 1);
+        CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
         CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
-        CHECK(map2.nth(2)->first == 10); CHECK(map2.nth(2)->second == 1);
+        CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
     }
 
     // N == 100
@@ -2686,9 +2686,9 @@ PRINT("Test container(const container&, const Allocator&)");
         map1.emplace(30, 1);
 
         CHECK(map1.size() == 3);
-        CHECK(map1.nth(0)->first == 30); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-        CHECK(map1.nth(2)->first == 10); CHECK(map1.nth(2)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2701,9 +2701,9 @@ PRINT("Test container(const container&, const Allocator&)");
                                        TPARAM_ALLOCATOR<std::pair<xint, xint>> > map2(map1, alloc);
 
         CHECK(map2.size() == 3);
-        CHECK(map2.nth(0)->first == 30); CHECK(map2.nth(0)->second == 1);
+        CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
         CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
-        CHECK(map2.nth(2)->first == 10); CHECK(map2.nth(2)->second == 1);
+        CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
     }
 
     // N == 100
@@ -2755,9 +2755,9 @@ PRINT("Test container(container&&)");
         map1.emplace(30, 1);
 
         CHECK(map1.size() == 3);
-        CHECK(map1.nth(0)->first == 30); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-        CHECK(map1.nth(2)->first == 10); CHECK(map1.nth(2)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2768,18 +2768,18 @@ PRINT("Test container(container&&)");
                                        TPARAM_ALLOCATOR<std::pair<xint, xint>> > map2(std::move(map1));
 
         CHECK(map2.size() == 3);
-        CHECK(map2.nth(0)->first == 30); CHECK(map2.nth(0)->second == 1);
+        CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
         CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
-        CHECK(map2.nth(2)->first == 10); CHECK(map2.nth(2)->second == 1);
+        CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
         if (map1.size() == 3)
         {
             // Elements were moved one-by-one
-            CHECK(map1.nth(0)->first == -30); CHECK(map1.nth(0)->second == -1);
+            CHECK(map1.nth(0)->first == -10); CHECK(map1.nth(0)->second == -1);
             CHECK(map1.nth(1)->first == -20); CHECK(map1.nth(1)->second == -1);
-            CHECK(map1.nth(2)->first == -10); CHECK(map1.nth(2)->second == -1);
+            CHECK(map1.nth(2)->first == -30); CHECK(map1.nth(2)->second == -1);
         }
         else
         {
@@ -2848,9 +2848,9 @@ PRINT("Test container(container&&, const Allocator&)");
         map1.emplace(30, 1);
 
         CHECK(map1.size() == 3);
-        CHECK(map1.nth(0)->first == 30); CHECK(map1.nth(0)->second == 1);
+        CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
-        CHECK(map1.nth(2)->first == 10); CHECK(map1.nth(2)->second == 1);
+        CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2863,18 +2863,18 @@ PRINT("Test container(container&&, const Allocator&)");
                                        TPARAM_ALLOCATOR<std::pair<xint, xint>> > map2(std::move(map1), alloc);
 
         CHECK(map2.size() == 3);
-        CHECK(map2.nth(0)->first == 30); CHECK(map2.nth(0)->second == 1);
+        CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
         CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
-        CHECK(map2.nth(2)->first == 10); CHECK(map2.nth(2)->second == 1);
+        CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
         if (map1.size() == 3)
         {
             // Elements were moved one-by-one
-            CHECK(map1.nth(0)->first == -30); CHECK(map1.nth(0)->second == -1);
+            CHECK(map1.nth(0)->first == -10); CHECK(map1.nth(0)->second == -1);
             CHECK(map1.nth(1)->first == -20); CHECK(map1.nth(1)->second == -1);
-            CHECK(map1.nth(2)->first == -10); CHECK(map1.nth(2)->second == -1);
+            CHECK(map1.nth(2)->first == -30); CHECK(map1.nth(2)->second == -1);
         }
         else
         {
@@ -3902,10 +3902,10 @@ PRINT("Test operator=(std::initializer_list)");
         map = ilist;
 
         CHECK(map.size() == 5);
-        CHECK(map.nth(0)->first == 70); CHECK(map.nth(0)->second == 2);
-        CHECK(map.nth(1)->first == 40); CHECK(map.nth(1)->second == 2);
-        CHECK(map.nth(2)->first == 50); CHECK(map.nth(2)->second == 2);
-        CHECK(map.nth(3)->first == 60); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(0)->first == 40); CHECK(map.nth(0)->second == 2);
+        CHECK(map.nth(1)->first == 50); CHECK(map.nth(1)->second == 2);
+        CHECK(map.nth(2)->first == 60); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 70); CHECK(map.nth(3)->second == 2);
         CHECK(map.nth(4)->first == 80); CHECK(map.nth(4)->second == 2);
     }
     #undef CONDITION

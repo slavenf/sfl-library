@@ -809,14 +809,14 @@ public:
     template <typename... Args>
     std::pair<iterator, bool> emplace(Args&&... args)
     {
-        return insert_aux(value_type(std::forward<Args>(args)...));
+        return emplace_aux(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_aux(hint, value_type(std::forward<Args>(args)...));
+        return emplace_hint_aux(hint, std::forward<Args>(args)...);
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
@@ -1647,6 +1647,29 @@ private:
         }
     }
 
+    template <typename... Args>
+    std::pair<iterator, bool> emplace_aux(Args&&... args)
+    {
+        const auto it1 = emplace_back(std::forward<Args>(args)...);
+        const auto it2 = find(it1->first);
+
+        const bool is_unique = it1 == it2;
+
+        if (!is_unique)
+        {
+            pop_back();
+        }
+
+        return std::make_pair(it2, is_unique);
+    }
+
+    template <typename... Args>
+    iterator emplace_hint_aux(const_iterator hint, Args&&... args)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return emplace_aux(std::forward<Args>(args)...).first;
+    }
+
     template <typename Value>
     std::pair<iterator, bool> insert_aux(Value&& value)
     {
@@ -1654,7 +1677,7 @@ private:
 
         if (it == end())
         {
-            return std::make_pair(insert_unordered(std::forward<Value>(value)), true);
+            return std::make_pair(emplace_back(std::forward<Value>(value)), true);
         }
 
         return std::make_pair(it, false);
@@ -1676,7 +1699,7 @@ private:
         {
             return std::make_pair
             (
-                insert_unordered
+                emplace_back
                 (
                     std::piecewise_construct,
                     std::forward_as_tuple(std::forward<K>(key)),
@@ -1706,7 +1729,7 @@ private:
         {
             return std::make_pair
             (
-                insert_unordered
+                emplace_back
                 (
                     std::piecewise_construct,
                     std::forward_as_tuple(std::forward<K>(key)),
@@ -1727,7 +1750,7 @@ private:
     }
 
     template <typename... Args>
-    iterator insert_unordered(Args&&... args)
+    iterator emplace_back(Args&&... args)
     {
         if (data_.last_ != data_.end_)
         {
@@ -1746,8 +1769,10 @@ private:
         }
         else
         {
+            const difference_type offset = size();
+
             const size_type new_cap =
-                recommend_size(1, "sfl::small_unordered_flat_map::insert_unordered");
+                recommend_size(1, "sfl::small_unordered_flat_map::emplace_back");
 
             pointer new_first;
             pointer new_last;
@@ -1771,28 +1796,41 @@ private:
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
-                    new_last,
+                    new_first + offset,
                     std::forward<Args>(args)...
                 );
 
-                ++new_last;
+                new_last = nullptr;
 
                 new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_,
-                    new_last
+                    new_first
                 );
+
+                ++new_last;
             }
             SFL_CATCH (...)
             {
-                sfl::dtl::destroy_a
-                (
-                    data_.ref_to_alloc(),
-                    new_first,
-                    new_last
-                );
+                if (new_last == nullptr)
+                {
+                    sfl::dtl::destroy_at_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first + offset
+                    );
+                }
+                else
+                {
+                    sfl::dtl::destroy_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first,
+                        new_last
+                    );
+                }
 
                 if (new_first != data_.internal_storage())
                 {
@@ -1828,8 +1866,17 @@ private:
             data_.last_  = new_last;
             data_.end_   = new_end;
 
-            return data_.first_;
+            return begin() + offset;
         }
+    }
+
+    void pop_back()
+    {
+        SFL_ASSERT(!empty());
+
+        --data_.last_;
+
+        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), data_.last_);
     }
 };
 
