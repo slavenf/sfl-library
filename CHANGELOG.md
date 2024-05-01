@@ -9,25 +9,27 @@
   - `static_unordered_flat_set`.
   - `static_unordered_flat_multimap`.
   - `static_unordered_flat_multiset`.
-* Small flat map: Refactored private member function `insert_exactly_at`.
-* Small flat set: Refactored private member function `insert_exactly_at`.
-* Small flat multimap: Refactored private member function `insert_exactly_at`.
-* Small flat multiset: Refactored private member function `insert_exactly_at`.
+* Small flat map: Refactored `insert_exactly_at`.
 * Small flat map: Fixed memory leak in `insert_exactly_at` if exception is thrown.
+* Small flat map: Refactored `erase`.
+* Small flat set: Refactored `insert_exactly_at`.
 * Small flat set: Fixed memory leak in `insert_exactly_at` if exception is thrown.
+* Small flat set: Refactored `erase`.
+* Small flat multimap: Refactored `insert_exactly_at`.
 * Small flat multimap: Fixed memory leak in `insert_exactly_at` if exception is thrown.
+* Small flat multimap: Refactored `erase`.
+* Small flat multiset: Refactored `insert_exactly_at`.
 * Small flat multiset: Fixed memory leak in `insert_exactly_at` if exception is thrown.
-* Small flat map: Refactored member function `erase`.
-* Small flat set: Refactored member function `erase`.
-* Small flat multimap: Refactored member function `erase`.
-* Small flat multiset: Refactored member function `erase`.
+* Small flat multiset: Refactored `erase`.
 * Small unordered flat map: Removed `insert_unordered` and added `emplace_back`
 * Small unordered flat set: Removed `insert_unordered` and added `emplace_back`
 * Small unordered flat multimap: Removed `insert_unordered` and added `emplace_back`
 * Small unordered flat multiset: Removed `insert_unordered` and added `emplace_back`
-* Static vector: Refactored copy and move constructors.
-* Static vector: Refactored copy and move assignment operators.
-* Static vector: Refactored member function `emplace`.
+* Static vector: Refactored copy constructor.
+* Static vector: Refactored move constructor.
+* Static vector: Refactored copy assignment operator.
+* Static vector: Refactored move assignment operator.
+* Static vector: Refactored `emplace`.
 
 
 
