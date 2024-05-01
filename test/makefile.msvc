@@ -9,7 +9,7 @@ SHELL = cmd
 CXX = cl /std:c++14
 
 # C++ compiler flags
-CXXFLAGS = /nologo /EHsc /W4 /WX /I ..\include /Od /Zi
+CXXFLAGS = /nologo /EHsc /W4 /WX /Zc:__cplusplus /I ..\include /Od /Zi
 
 # Command for removing all files and directories
 RM_RF = del /f /s /q
