@@ -808,7 +808,7 @@ public:
     template <typename... Args>
     iterator emplace(Args&&... args)
     {
-        return insert_unordered(std::forward<Args>(args)...);
+        return emplace_back(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
@@ -816,38 +816,38 @@ public:
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         sfl::dtl::ignore_unused(hint);
-        return insert_unordered(std::forward<Args>(args)...);
+        return emplace_back(std::forward<Args>(args)...);
     }
 
     iterator insert(const value_type& value)
     {
-        return insert_unordered(value);
+        return emplace_back(value);
     }
 
     iterator insert(value_type&& value)
     {
-        return insert_unordered(std::move(value));
+        return emplace_back(std::move(value));
     }
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
     iterator insert(P&& value)
     {
-        return insert_unordered(std::forward<P>(value));
+        return emplace_back(std::forward<P>(value));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         sfl::dtl::ignore_unused(hint);
-        return insert_unordered(value);
+        return emplace_back(value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         sfl::dtl::ignore_unused(hint);
-        return insert_unordered(std::move(value));
+        return emplace_back(std::move(value));
     }
 
     template <typename P,
@@ -856,7 +856,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         sfl::dtl::ignore_unused(hint);
-        return insert_unordered(std::forward<P>(value));
+        return emplace_back(std::forward<P>(value));
     }
 
     template <typename InputIt,
@@ -1591,7 +1591,7 @@ private:
     }
 
     template <typename... Args>
-    iterator insert_unordered(Args&&... args)
+    iterator emplace_back(Args&&... args)
     {
         if (data_.last_ != data_.end_)
         {
@@ -1610,8 +1610,10 @@ private:
         }
         else
         {
+            const difference_type offset = size();
+
             const size_type new_cap =
-                recommend_size(1, "sfl::small_unordered_flat_multimap::insert_unordered");
+                recommend_size(1, "sfl::small_unordered_flat_multimap::emplace_back");
 
             pointer new_first;
             pointer new_last;
@@ -1635,28 +1637,41 @@ private:
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
-                    new_last,
+                    new_first + offset,
                     std::forward<Args>(args)...
                 );
 
-                ++new_last;
+                new_last = nullptr;
 
                 new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
                     data_.last_,
-                    new_last
+                    new_first
                 );
+
+                ++new_last;
             }
             SFL_CATCH (...)
             {
-                sfl::dtl::destroy_a
-                (
-                    data_.ref_to_alloc(),
-                    new_first,
-                    new_last
-                );
+                if (new_last == nullptr)
+                {
+                    sfl::dtl::destroy_at_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first + offset
+                    );
+                }
+                else
+                {
+                    sfl::dtl::destroy_a
+                    (
+                        data_.ref_to_alloc(),
+                        new_first,
+                        new_last
+                    );
+                }
 
                 if (new_first != data_.internal_storage())
                 {
@@ -1692,7 +1707,7 @@ private:
             data_.last_  = new_last;
             data_.end_   = new_end;
 
-            return data_.first_;
+            return begin() + offset;
         }
     }
 };
