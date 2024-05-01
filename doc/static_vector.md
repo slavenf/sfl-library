@@ -12,7 +12,7 @@ namespace sfl
 }
 ```
 
-`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but the capacity is fixed.
+`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but the capacity is **fixed**.
 
 `sfl::static_vector` internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management.
 
