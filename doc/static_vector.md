@@ -22,6 +22,8 @@ The number of elements in static vector **cannot** be greater than `N`. Attempti
 
 `sfl::static_vector` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*SequenceContainer*](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
 
+This container is suitable for **embedded** software development, including **bare-metal** development.
+
 <br><br>
 
 
