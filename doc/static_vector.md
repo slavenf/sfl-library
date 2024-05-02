@@ -156,7 +156,7 @@ static_vector(InputIt first, InputIt last);
 Constructs the container with the contents of the range `[first, last)`.
 
 **Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [`LegacyInputIterator`](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
 **Note:**
 The behavior is undefined if preconditions are not satisfied.
@@ -272,7 +272,7 @@ void assign(InputIt first, InputIt last);
 Replaces the contents of the container with the contents of the range `[first, last)`.
 
 **Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [`LegacyInputIterator`](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
 **Note:**
 The behavior is undefined if preconditions are not satisfied.
@@ -868,7 +868,7 @@ iterator insert(const_iterator pos, InputIt first, InputIt last);
 Inserts elements from the range `[first, last)` before position `pos`.
 
 **Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [`LegacyInputIterator`](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
 **Note:**
 The behavior is undefined if either `first` or `last` is an iterator into `*this`.

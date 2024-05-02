@@ -155,7 +155,7 @@ small_flat_set(InputIt first, InputIt last, const Compare& comp, const Allocator
 Constructs an empty container and inserts elements from the range `[first, last)`.
 
 **Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [`LegacyInputIterator`](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
 **Complexity:**
 Linear in `std::distance(first, last)`.
@@ -796,7 +796,7 @@ while (first != last)
 ```
 
 **Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [`LegacyInputIterator`](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
 <br><br>
 

@@ -157,7 +157,7 @@ small_unordered_flat_multimap(InputIt first, InputIt last, const KeyEqual& equal
 Constructs an empty container and inserts elements from the range `[first, last)`.
 
 **Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [`LegacyInputIterator`](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
 <br><br>
 
@@ -785,7 +785,7 @@ while (first != last)
 ```
 
 **Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [`LegacyInputIterator`](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
 <br><br>
 
