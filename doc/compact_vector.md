@@ -39,7 +39,7 @@ This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`Li
 
     Allocator used for memory allocation/deallocation and construction/destruction of elements.
 
-    This type must meet the requirements of [`Allocator`](https://en.cppreference.com/w/cpp/named_req/Allocator).
+    This type must meet the requirements of [*Allocator*](https://en.cppreference.com/w/cpp/named_req/Allocator).
 
     The program is ill-formed if `Allocator::value_type` is not the same as `T`.
 
