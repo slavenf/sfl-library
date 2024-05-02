@@ -53,8 +53,7 @@ This container is suitable for **embedded** software development, including **ba
     std::size_t N
     ```
 
-    Size of the internal statically allocated array.
-    This parameter can be zero.
+    Size of the internal statically allocated array, i.e. the maximal number of elements that this container can contain.
 
 4.  ```
     typename Compare
