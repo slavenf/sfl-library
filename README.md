@@ -14,7 +14,7 @@ This is header-only C++11 library that offers several new or less-known containe
   * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
     * An associative containers that internally hold small amount of statically allocated memory to avoid dynamic memory management if the number of stored elements is small.
   * [`static_vector`](doc/static_vector.md)
-    * A sequence container similar to `std::vector` with fixed capacity. Dynamic memory management is **never** used. This container is suitable for **embedded** software development, including **bare-metal** development.
+    * A sequence container similar to `std::vector` with fixed capacity. Storage is statically allocated. Dynamic memory management is never used. Convenient for bare-metal embedded software development.
   * [`static_flat_set`](doc/static_flat_set.md)
   * [`static_flat_map`](doc/static_flat_map.md)
   * [`static_flat_multiset`](doc/static_flat_multiset.md)
@@ -23,13 +23,13 @@ This is header-only C++11 library that offers several new or less-known containe
   * [`static_unordered_flat_map`](doc/static_unordered_flat_map.md)
   * [`static_unordered_flat_multiset`](doc/static_unordered_flat_multiset.md)
   * [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md)
-    * An associative containers with fixed capacity. Dynamic memory management is **never** used. These containers are suitable for **embedded** software development, including **bare-metal** development.
+    * An associative containers with fixed capacity. Storage is statically allocated. Dynamic memory management is never used. Convenient for bare-metal embedded software development.
   * [`compact_vector`](doc/compact_vector.md)
     * A sequence container similar to `std::vector` that always has `capacity()` equal to `size()`.
   * [`segmented_vector`](doc/segmented_vector.md)
-    * A sequence container similar to `std::vector` with the segmented storage that allows fast insertion and deletion at its end.
+    * A sequence container similar to `std::vector` that allows fast insertion and deletion at its end.
   * [`segmented_devector`](doc/segmented_devector.md)
-    * A sequence container similar to `std::deque` with the segmented storage that allows fast insertion and deletion at **both** its **beginning** and its **end**.
+    * A sequence container similar to `std::deque` that allows fast insertion and deletion at both its beginning and its end.
 
 
 

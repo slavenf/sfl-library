@@ -29,7 +29,7 @@ Iterators to elements of `sfl::static_flat_map` are random access iterators and 
 
 `sfl::static_flat_map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
-This container is suitable for **embedded** software development, including **bare-metal** development.
+This container is convenient for bare-metal embedded software development.
 
 <br><br>
 
