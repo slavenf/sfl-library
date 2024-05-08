@@ -15,7 +15,7 @@ namespace sfl
 }
 ```
 
-`sfl::static_unordered_flat_multimap` is an associative container similar to [`std::unordered_multimap`](https://en.cppreference.com/w/cpp/container/unordered_multimap), but the capacity is **fixed** and the underlying storage is implemented as a **unsorted vector**.
+`sfl::static_unordered_flat_multimap` is an associative container similar to [`std::unordered_multimap`](https://en.cppreference.com/w/cpp/container/unordered_multimap), but the capacity is **fixed** and the underlying storage is implemented as an **unsorted vector**.
 
 `sfl::static_unordered_flat_multimap` internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management.
 
