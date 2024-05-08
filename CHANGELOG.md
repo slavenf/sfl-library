@@ -1,4 +1,4 @@
-# Next release
+# 1.5.0 (2024-05-08)
 
 * New containers:
   - `static_flat_map`.
