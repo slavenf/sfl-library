@@ -14,7 +14,7 @@ namespace sfl
 }
 ```
 
-`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that allows fast insertion at its end.
+`sfl::segmented_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector) that allows fast insertion and deletion at its end.
 
 The storage of segmented vector consists of a sequence of individually allocated arrays of size `N` which are referred to as *segments*. Elements of segmented vector are not stored contiguously in the memory, but they are stored contiguously within a segment. Size `N` is specified at the compile time as a template parameter.
 

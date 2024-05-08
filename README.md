@@ -27,9 +27,9 @@ This is header-only C++11 library that offers several new or less-known containe
   * [`compact_vector`](doc/compact_vector.md)
     * A sequence container similar to `std::vector` that always has `capacity()` equal to `size()`.
   * [`segmented_vector`](doc/segmented_vector.md)
-    * A sequence container similar to `std::vector` that allows fast insertion and deletion at its end.
+    * A sequence container similar to `std::vector` with segmented storage that allows fast insertion and deletion at its end.
   * [`segmented_devector`](doc/segmented_devector.md)
-    * A sequence container similar to `std::deque` that allows fast insertion and deletion at both its beginning and its end.
+    * A sequence container similar to `std::deque` with segmented storage that allows fast insertion and deletion at both its beginning and its end.
 
 
 
