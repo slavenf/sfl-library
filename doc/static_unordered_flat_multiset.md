@@ -1,5 +1,47 @@
 # sfl::static_unordered_flat_multiset
 
+<details>
+
+<summary>Table of Contents</summary>
+
+* [Summary](#summary)
+* [Template Parameters](#template-parameters)
+* [Public Member Types](#public-member-types)
+* [Public Member Functions](#public-member-functions)
+  * [(constructor)](#constructor)
+  * [(destructor)](#destructor)
+  * [operator=](#operator)
+  * [key\_eq](#key_eq)
+  * [begin, cbegin](#begin-cbegin)
+  * [end, cend](#end-cend)
+  * [nth](#nth)
+  * [index\_of](#index_of)
+  * [empty](#empty)
+  * [full](#full)
+  * [size](#size)
+  * [max\_size](#max_size)
+  * [capacity](#capacity)
+  * [available](#available)
+  * [clear](#clear)
+  * [emplace](#emplace)
+  * [emplace\_hint](#emplace_hint)
+  * [insert](#insert)
+  * [erase](#erase)
+  * [swap](#swap)
+  * [find](#find)
+  * [count](#count)
+  * [contains](#contains)
+  * [data](#data)
+* [Non-member Functions](#non-member-functions)
+  * [operator==](#operator-1)
+  * [operator!=](#operator-2)
+  * [swap](#swap-1)
+  * [erase\_if](#erase_if)
+
+</details>
+
+
+
 ## Summary
 
 Defined in header `sfl/static_unordered_flat_multiset.hpp`:
@@ -985,7 +1027,7 @@ This comparison ignores the container's `KeyEqual` function.
 
 
 
-### operator !=
+### operator!=
 
 ```
 template <typename K, std::size_t N, typename E>
