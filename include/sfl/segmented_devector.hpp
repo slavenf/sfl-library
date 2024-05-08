@@ -465,30 +465,19 @@ private:
         iterator last_;  // One-past-last element in vector
     };
 
-    class data
-        : public data_base
-        , public allocator_type
+    class data : public data_base, public allocator_type
     {
     public:
 
-        data() noexcept
-        (
-            std::is_nothrow_default_constructible<allocator_type>::value
-        )
+        data() noexcept(std::is_nothrow_default_constructible<allocator_type>::value)
             : allocator_type()
         {}
 
-        data(const allocator_type& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<allocator_type>::value
-        )
+        data(const allocator_type& alloc) noexcept(std::is_nothrow_copy_constructible<allocator_type>::value)
             : allocator_type(alloc)
         {}
 
-        data(allocator_type&& other) noexcept
-        (
-            std::is_nothrow_move_constructible<allocator_type>::value
-        )
+        data(allocator_type&& other) noexcept(std::is_nothrow_move_constructible<allocator_type>::value)
             : allocator_type(std::move(other))
         {}
 
