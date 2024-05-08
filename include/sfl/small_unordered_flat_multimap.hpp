@@ -101,23 +101,14 @@ private:
     {
     public:
 
-        ultra_equal() noexcept
-        (
-            std::is_nothrow_default_constructible<key_equal>::value
-        )
+        ultra_equal() noexcept(std::is_nothrow_default_constructible<key_equal>::value)
         {}
 
-        ultra_equal(const key_equal& e) noexcept
-        (
-            std::is_nothrow_copy_constructible<key_equal>::value
-        )
+        ultra_equal(const key_equal& e) noexcept(std::is_nothrow_copy_constructible<key_equal>::value)
             : key_equal(e)
         {}
 
-        ultra_equal(key_equal&& e) noexcept
-        (
-            std::is_nothrow_move_constructible<key_equal>::value
-        )
+        ultra_equal(key_equal&& e) noexcept(std::is_nothrow_move_constructible<key_equal>::value)
             : key_equal(std::move(e))
         {}
 
@@ -144,7 +135,10 @@ private:
     {
     private:
 
-        alignas(value_type) unsigned char internal_storage_[N * sizeof(value_type)];
+        union
+        {
+            value_type internal_storage_[N];
+        };
 
     public:
 
@@ -153,23 +147,17 @@ private:
         pointer end_;
 
         data_base() noexcept
-            : first_
-            (
-                std::pointer_traits<pointer>::pointer_to
-                (
-                    *reinterpret_cast<value_type*>(internal_storage_)
-                )
-            )
+            : first_(std::pointer_traits<pointer>::pointer_to(*internal_storage_))
             , last_(first_)
             , end_(first_ + N)
         {}
 
+        ~data_base() noexcept
+        {}
+
         pointer internal_storage() noexcept
         {
-            return std::pointer_traits<pointer>::pointer_to
-            (
-                *reinterpret_cast<value_type*>(internal_storage_)
-            );
+            return std::pointer_traits<pointer>::pointer_to(*internal_storage_);
         }
     };
 
@@ -194,10 +182,7 @@ private:
         }
     };
 
-    class data
-        : public data_base<(N > 0)>
-        , public allocator_type
-        , public ultra_equal
+    class data : public data_base<(N > 0)>, public allocator_type, public ultra_equal
     {
     public:
 

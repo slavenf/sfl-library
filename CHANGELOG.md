@@ -9,6 +9,9 @@
   - `static_unordered_flat_set`.
   - `static_unordered_flat_multimap`.
   - `static_unordered_flat_multiset`.
+* All small containers: Using anonymous union for internal storage. The effect
+  is the same as before, but the code is more readable and it is consistent with
+  static containers.
 * Small flat map: Refactored `insert_exactly_at`.
 * Small flat map: Fixed memory leak in `insert_exactly_at` if exception is thrown.
 * Small flat map: Refactored `erase`.

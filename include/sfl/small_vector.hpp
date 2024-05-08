@@ -69,7 +69,10 @@ private:
     {
     private:
 
-        alignas(value_type) unsigned char internal_storage_[N * sizeof(value_type)];
+        union
+        {
+            value_type internal_storage_[N];
+        };
 
     public:
 
@@ -78,23 +81,17 @@ private:
         pointer end_;
 
         data_base() noexcept
-            : first_
-            (
-                std::pointer_traits<pointer>::pointer_to
-                (
-                    *reinterpret_cast<value_type*>(internal_storage_)
-                )
-            )
+            : first_(std::pointer_traits<pointer>::pointer_to(*internal_storage_))
             , last_(first_)
             , end_(first_ + N)
         {}
 
+        ~data_base() noexcept
+        {}
+
         pointer internal_storage() noexcept
         {
-            return std::pointer_traits<pointer>::pointer_to
-            (
-                *reinterpret_cast<value_type*>(internal_storage_)
-            );
+            return std::pointer_traits<pointer>::pointer_to(*internal_storage_);
         }
     };
 
@@ -119,30 +116,19 @@ private:
         }
     };
 
-    class data
-        : public data_base<(N > 0)>
-        , public allocator_type
+    class data : public data_base<(N > 0)> , public allocator_type
     {
     public:
 
-        data() noexcept
-        (
-            std::is_nothrow_default_constructible<allocator_type>::value
-        )
+        data() noexcept(std::is_nothrow_default_constructible<allocator_type>::value)
             : allocator_type()
         {}
 
-        data(const allocator_type& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<allocator_type>::value
-        )
+        data(const allocator_type& alloc) noexcept(std::is_nothrow_copy_constructible<allocator_type>::value)
             : allocator_type(alloc)
         {}
 
-        data(allocator_type&& other) noexcept
-        (
-            std::is_nothrow_move_constructible<allocator_type>::value
-        )
+        data(allocator_type&& other) noexcept(std::is_nothrow_move_constructible<allocator_type>::value)
             : allocator_type(std::move(other))
         {}
 

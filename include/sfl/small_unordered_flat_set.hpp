@@ -81,7 +81,10 @@ private:
     {
     private:
 
-        alignas(value_type) unsigned char internal_storage_[N * sizeof(value_type)];
+        union
+        {
+            value_type internal_storage_[N];
+        };
 
     public:
 
@@ -90,23 +93,17 @@ private:
         pointer end_;
 
         data_base() noexcept
-            : first_
-            (
-                std::pointer_traits<pointer>::pointer_to
-                (
-                    *reinterpret_cast<value_type*>(internal_storage_)
-                )
-            )
+            : first_(std::pointer_traits<pointer>::pointer_to(*internal_storage_))
             , last_(first_)
             , end_(first_ + N)
         {}
 
+        ~data_base() noexcept
+        {}
+
         pointer internal_storage() noexcept
         {
-            return std::pointer_traits<pointer>::pointer_to
-            (
-                *reinterpret_cast<value_type*>(internal_storage_)
-            );
+            return std::pointer_traits<pointer>::pointer_to(*internal_storage_);
         }
     };
 
@@ -131,10 +128,7 @@ private:
         }
     };
 
-    class data
-        : public data_base<(N > 0)>
-        , public allocator_type
-        , public key_equal
+    class data : public data_base<(N > 0)>, public allocator_type, public key_equal
     {
     public:
 
