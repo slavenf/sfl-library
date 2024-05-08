@@ -98,8 +98,13 @@ private:
             , end_(first_ + N)
         {}
 
+        #if defined(__clang__) && (__clang_major__ == 3) // For CentOS 7
+        ~data_base()
+        {}
+        #else
         ~data_base() noexcept
         {}
+        #endif
 
         pointer internal_storage() noexcept
         {
