@@ -477,7 +477,7 @@ Constant.
 ### max_size
 
 ```
-size_type max_size() const noexcept;
+static constexpr size_type max_size() const noexcept;
 ```
 
 **Effects:**
@@ -493,7 +493,7 @@ Constant.
 ### capacity
 
 ```
-size_type capacity() const noexcept;
+static constexpr size_type capacity() const noexcept;
 ```
 
 **Effects:**
