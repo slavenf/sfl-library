@@ -449,13 +449,13 @@ public:
     }
 
     SFL_NODISCARD
-    static size_type max_size() noexcept
+    static constexpr size_type max_size() noexcept
     {
         return N;
     }
 
     SFL_NODISCARD
-    static size_type capacity() noexcept
+    static constexpr size_type capacity() noexcept
     {
         return N;
     }
