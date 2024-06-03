@@ -68,6 +68,10 @@ public:
     using reverse_iterator       = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
+public:
+
+    static constexpr size_type static_capacity = N;
+
 private:
 
     class data_base

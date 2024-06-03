@@ -93,6 +93,10 @@ public:
         "Allocator::value_type must be same as sfl::small_unordered_flat_multimap::value_type."
     );
 
+public:
+
+    static constexpr size_type static_capacity = N;
+
 private:
 
     // Like `value_equal` but with additional operators.

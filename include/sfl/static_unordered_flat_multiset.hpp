@@ -65,6 +65,10 @@ public:
     using iterator         = const_pointer; // MUST BE const_pointer
     using const_iterator   = const_pointer;
 
+public:
+
+    static constexpr size_type static_capacity = N;
+
 private:
 
     class data_base

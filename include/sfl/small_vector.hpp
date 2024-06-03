@@ -62,6 +62,10 @@ public:
         "Allocator::value_type must be same as sfl::small_vector::value_type."
     );
 
+public:
+
+    static constexpr size_type static_capacity = N;
+
 private:
 
     template <bool WithInternalStorage = true, typename = void>

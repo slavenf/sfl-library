@@ -85,6 +85,10 @@ public:
         }
     };
 
+public:
+
+    static constexpr size_type static_capacity = N;
+
 private:
 
     // Like `value_equal` but with additional operators.

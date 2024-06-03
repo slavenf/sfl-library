@@ -95,6 +95,10 @@ public:
         "Allocator::value_type must be same as sfl::small_flat_map::value_type."
     );
 
+public:
+
+    static constexpr size_type static_capacity = N;
+
 private:
 
     // Like `value_compare` but with additional operators.
