@@ -7,6 +7,7 @@
 * [Summary](#summary)
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
+* [Public Data Members](#public-data-members)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
@@ -127,6 +128,16 @@ using iterator               = const_pointer;
 using const_iterator         = const_pointer;
 using reverse_iterator       = std::reverse_iterator<iterator>;
 using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+```
+
+<br><br>
+
+
+
+## Public Data Members
+
+```
+static constexpr size_type static_capacity = N;
 ```
 
 <br><br>

@@ -7,6 +7,7 @@
 * [Summary](#summary)
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
+* [Public Data Members](#public-data-members)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
@@ -126,6 +127,16 @@ using pointer          = typename allocator_traits::pointer;
 using const_pointer    = typename allocator_traits::const_pointer;
 using iterator         = const_pointer;
 using const_iterator   = const_pointer;
+```
+
+<br><br>
+
+
+
+## Public Data Members
+
+```
+static constexpr size_type static_capacity = N;
 ```
 
 <br><br>
