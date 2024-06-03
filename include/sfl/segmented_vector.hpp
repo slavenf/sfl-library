@@ -406,6 +406,10 @@ public:
         "Allocator::value_type must be same as sfl::segmented_vector::value_type."
     );
 
+public:
+
+    static constexpr size_type segment_capacity = N;
+
 private:
 
     using segment_allocator =
