@@ -1338,6 +1338,17 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
 
 ///////////////////////////////////////////////////////////////////////////////
 
+PRINT("Test static_capacity");
+{
+    CHECK((sfl::small_flat_map< xint,
+                                xint,
+                                100,
+                                std::less<xint>,
+                                TPARAM_ALLOCATOR<std::pair<xint, xint>> >::static_capacity == 100));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 PRINT("Test get_allocator()");
 {
     sfl::small_flat_map< xint,

@@ -263,6 +263,16 @@ PRINT("Test begin, end, cbegin, cend, nth, index_of");
 
 ///////////////////////////////////////////////////////////////////////////////
 
+PRINT("Test static_capacity");
+{
+    CHECK((sfl::small_unordered_flat_multiset< xint_xint,
+                                               100,
+                                               std::equal_to<xint_xint>,
+                                               TPARAM_ALLOCATOR<xint_xint> >::static_capacity == 100));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 PRINT("Test get_allocator()");
 {
     sfl::small_unordered_flat_multiset< xint_xint,

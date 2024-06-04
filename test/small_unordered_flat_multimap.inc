@@ -265,6 +265,17 @@ PRINT("Test begin, end, cbegin, cend, nth, index_of");
 
 ///////////////////////////////////////////////////////////////////////////////
 
+PRINT("Test static_capacity");
+{
+    CHECK((sfl::small_unordered_flat_multimap< xint,
+                                               xint,
+                                               100,
+                                               std::equal_to<xint>,
+                                               TPARAM_ALLOCATOR<std::pair<xint, xint>> >::static_capacity == 100));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 PRINT("Test get_allocator()");
 {
     sfl::small_unordered_flat_multimap< xint,

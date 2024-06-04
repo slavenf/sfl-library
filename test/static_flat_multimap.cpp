@@ -553,6 +553,13 @@ void test_static_flat_multimap()
         CHECK(map.index_of(map.nth(3)) == 3);
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test static_capacity");
+    {
+        CHECK((sfl::static_flat_multimap<xint, xint, 100, std::less<xint>>::static_capacity == 100));
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
 
     PRINT("Test key_comp()");

@@ -555,6 +555,13 @@ void test_static_flat_multiset()
         CHECK(set.index_of(set.nth(3)) == 3);
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test static_capacity");
+    {
+        CHECK((sfl::static_flat_multiset<xint_xint, 100, std::less<xint_xint>>::static_capacity == 100));
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
 
     PRINT("Test key_comp()");

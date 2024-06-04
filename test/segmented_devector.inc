@@ -963,6 +963,13 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
 
 ///////////////////////////////////////////////////////////////////////////////
 
+PRINT("Test segment_capacity");
+{
+    CHECK((sfl::segmented_devector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>>::segment_capacity == TPARAM_N));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 PRINT("Test get_allocator()");
 {
     sfl::segmented_devector<xint, TPARAM_N, TPARAM_ALLOCATOR<xint>> vec;

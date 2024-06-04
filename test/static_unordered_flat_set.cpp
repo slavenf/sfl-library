@@ -187,6 +187,13 @@ void test_static_unordered_flat_set()
         CHECK(set.index_of(set.nth(3)) == 3);
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
+    PRINT("Test static_capacity");
+    {
+        CHECK((sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>>::static_capacity == 100));
+    }
+
     ///////////////////////////////////////////////////////////////////////////////
 
     PRINT("Test key_eq()");

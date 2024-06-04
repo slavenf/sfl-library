@@ -555,6 +555,13 @@ void test_static_vector()
 
     ///////////////////////////////////////////////////////////////////////////
 
+    PRINT("Test static_capacity");
+    {
+        CHECK((sfl::static_vector<xint, 100>::static_capacity == 100));
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
     PRINT("Test clear()");
     {
         sfl::static_vector<xint, 100> vec;

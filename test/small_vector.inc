@@ -1222,6 +1222,13 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
 
 ///////////////////////////////////////////////////////////////////////////////
 
+PRINT("Test static_capacity");
+{
+    CHECK((sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>>::static_capacity == 100));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 PRINT("Test get_allocator()");
 {
     sfl::small_vector<xint, 100, TPARAM_ALLOCATOR<xint>> vec;
