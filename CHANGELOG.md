@@ -1,4 +1,4 @@
-# New release
+# 1.6.0 (2024-06-04)
 
 * Segmented vector and devector: Added public data member `segment_capacity`.
 * All small and static containers: Added public data member `static_capacity`.
