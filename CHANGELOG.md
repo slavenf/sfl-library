@@ -1,3 +1,11 @@
+# New release
+
+* Segmented vector and devector: Added public data member `segment_capacity`.
+* All small and static containers: Added public data member `static_capacity`.
+* All static containers: Public member functions `max_size` and `capacity` are `constexpr` now.
+
+
+
 # 1.5.0 (2024-05-08)
 
 * New containers:
