@@ -281,12 +281,24 @@ public:
         : it_()
     {}
 
-    // Copy constructor and converting constructor (from iterator to const_iterator)
+    // Copy constructor
+    normal_iterator(const normal_iterator& other) noexcept
+        : it_(other.it_)
+    {}
+
+    // Converting constructor (from iterator to const_iterator)
     template <typename OtherIterator,
               sfl::dtl::enable_if_t<std::is_convertible<OtherIterator, Iterator>::value>* = nullptr>
     normal_iterator(const normal_iterator<OtherIterator, Container>& other) noexcept
         : it_(other.it_)
     {}
+
+    // Copy assignment operator
+    normal_iterator& operator=(const normal_iterator& other) noexcept
+    {
+        it_ = other.it_;
+        return *this;
+    }
 
     SFL_NODISCARD
     reference operator*() const noexcept
