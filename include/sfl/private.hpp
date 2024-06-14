@@ -244,6 +244,169 @@ auto to_address(const Pointer& p) noexcept -> typename std::pointer_traits<Point
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+// ITERATORS
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename Iterator, typename Container>
+class normal_iterator
+{
+    template <typename, typename>
+    friend class normal_iterator;
+
+    friend Container;
+
+private:
+
+    Iterator it_;
+
+public:
+
+    using difference_type   = typename std::iterator_traits<Iterator>::difference_type;
+    using value_type        = typename std::iterator_traits<Iterator>::value_type;
+    using pointer           = typename std::iterator_traits<Iterator>::pointer;
+    using reference         = typename std::iterator_traits<Iterator>::reference;
+    using iterator_category = typename std::iterator_traits<Iterator>::iterator_category;
+
+private:
+
+    explicit normal_iterator(const Iterator& it) noexcept
+        : it_(it)
+    {}
+
+public:
+
+    // Default constructor
+    normal_iterator() noexcept
+        : it_()
+    {}
+
+    // Copy constructor and converting constructor (from iterator to const_iterator)
+    template <typename OtherIterator,
+              sfl::dtl::enable_if_t<std::is_convertible<OtherIterator, Iterator>::value>* = nullptr>
+    normal_iterator(const normal_iterator<OtherIterator, Container>& other) noexcept
+        : it_(other.it_)
+    {}
+
+    SFL_NODISCARD
+    reference operator*() const noexcept
+    {
+        return *it_;
+    }
+
+    SFL_NODISCARD
+    pointer operator->() const noexcept
+    {
+        return sfl::dtl::to_address(it_);
+    }
+
+    normal_iterator& operator++() noexcept
+    {
+        ++it_;
+        return *this;
+    }
+
+    normal_iterator operator++(int) noexcept
+    {
+        auto temp = *this;
+        ++it_;
+        return temp;
+    }
+
+    normal_iterator& operator--() noexcept
+    {
+        --it_;
+        return *this;
+    }
+
+    normal_iterator operator--(int) noexcept
+    {
+        auto temp = *this;
+        --it_;
+        return temp;
+    }
+
+    normal_iterator& operator+=(difference_type n) noexcept
+    {
+        it_ += n;
+        return *this;
+    }
+
+    normal_iterator& operator-=(difference_type n) noexcept
+    {
+        it_ -= n;
+        return *this;
+    }
+
+    SFL_NODISCARD
+    normal_iterator operator+(difference_type n) const noexcept
+    {
+        return normal_iterator(it_ + n);
+    }
+
+    SFL_NODISCARD
+    normal_iterator operator-(difference_type n) const noexcept
+    {
+        return normal_iterator(it_ - n);
+    }
+
+    SFL_NODISCARD
+    reference operator[](difference_type n) const noexcept
+    {
+        return it_[n];
+    }
+
+    SFL_NODISCARD
+    friend normal_iterator operator+(difference_type n, const normal_iterator& it) noexcept
+    {
+        return it + n;
+    }
+
+    SFL_NODISCARD
+    friend difference_type operator-(const normal_iterator& x, const normal_iterator& y) noexcept
+    {
+        return x.it_ - y.it_;
+    }
+
+    SFL_NODISCARD
+    friend bool operator==(const normal_iterator& x, const normal_iterator& y) noexcept
+    {
+        return x.it_ == y.it_;
+    }
+
+    SFL_NODISCARD
+    friend bool operator!=(const normal_iterator& x, const normal_iterator& y) noexcept
+    {
+        return !(x == y);
+    }
+
+    SFL_NODISCARD
+    friend bool operator<(const normal_iterator& x, const normal_iterator& y) noexcept
+    {
+        return x.it_ < y.it_;
+    }
+
+    SFL_NODISCARD
+    friend bool operator>(const normal_iterator& x, const normal_iterator& y) noexcept
+    {
+        return y < x;
+    }
+
+    SFL_NODISCARD
+    friend bool operator<=(const normal_iterator& x, const normal_iterator& y) noexcept
+    {
+        return !(y < x);
+    }
+
+    SFL_NODISCARD
+    friend bool operator>=(const normal_iterator& x, const normal_iterator& y) noexcept
+    {
+        return !(x < y);
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // INITIALIZED MEMORY ALGORITHMS
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

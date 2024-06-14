@@ -134,8 +134,8 @@ using reference        = value_type&;
 using const_reference  = const value_type&;
 using pointer          = typename allocator_traits::pointer;
 using const_pointer    = typename allocator_traits::const_pointer;
-using iterator         = pointer;
-using const_iterator   = const_pointer;
+using iterator         = /* Random access iterator to value_type */
+using const_iterator   = /* Random access iterator to const value_type */
 ```
 
 <br><br>

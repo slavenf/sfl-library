@@ -126,8 +126,8 @@ using reference        = value_type&;
 using const_reference  = const value_type&;
 using pointer          = value_type*;
 using const_pointer    = const value_type*;
-using iterator         = pointer;
-using const_iterator   = const_pointer;
+using iterator         = /* Random access iterator to value_type */
+using const_iterator   = /* Random access iterator to const value_type */
 
 class value_equal
 {

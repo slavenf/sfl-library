@@ -66,8 +66,8 @@ public:
     using const_reference        = const value_type&;
     using pointer                = typename allocator_traits::pointer;
     using const_pointer          = typename allocator_traits::const_pointer;
-    using iterator               = const_pointer; // MUST BE const_pointer
-    using const_iterator         = const_pointer;
+    using iterator               = sfl::dtl::normal_iterator<const_pointer, small_flat_set>; // MUST BE const_pointer
+    using const_iterator         = sfl::dtl::normal_iterator<const_pointer, small_flat_set>;
     using reverse_iterator       = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
@@ -434,37 +434,37 @@ public:
     SFL_NODISCARD
     iterator begin() noexcept
     {
-        return data_.first_;
+        return iterator(data_.first_);
     }
 
     SFL_NODISCARD
     const_iterator begin() const noexcept
     {
-        return data_.first_;
+        return const_iterator(data_.first_);
     }
 
     SFL_NODISCARD
     const_iterator cbegin() const noexcept
     {
-        return data_.first_;
+        return const_iterator(data_.first_);
     }
 
     SFL_NODISCARD
     iterator end() noexcept
     {
-        return data_.last_;
+        return iterator(data_.last_);
     }
 
     SFL_NODISCARD
     const_iterator end() const noexcept
     {
-        return data_.last_;
+        return const_iterator(data_.last_);
     }
 
     SFL_NODISCARD
     const_iterator cend() const noexcept
     {
-        return data_.last_;
+        return const_iterator(data_.last_);
     }
 
     SFL_NODISCARD
@@ -507,21 +507,21 @@ public:
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
-        return data_.first_ + pos;
+        return iterator(data_.first_ + pos);
     }
 
     SFL_NODISCARD
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
-        return data_.first_ + pos;
+        return const_iterator(data_.first_ + pos);
     }
 
     SFL_NODISCARD
     size_type index_of(const_iterator pos) const noexcept
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-        return pos - cbegin();
+        return std::distance(cbegin(), pos);
     }
 
     //
@@ -531,13 +531,13 @@ public:
     SFL_NODISCARD
     bool empty() const noexcept
     {
-        return data_.last_ == data_.first_;
+        return data_.first_ == data_.last_;
     }
 
     SFL_NODISCARD
     size_type size() const noexcept
     {
-        return data_.last_ - data_.first_;
+        return std::distance(data_.first_, data_.last_);
     }
 
     SFL_NODISCARD
@@ -553,7 +553,7 @@ public:
     SFL_NODISCARD
     size_type capacity() const noexcept
     {
-        return data_.end_ - data_.first_;
+        return std::distance(data_.first_, data_.end_);
     }
 
     SFL_NODISCARD
@@ -839,7 +839,7 @@ public:
 
         sfl::dtl::destroy_at_a(data_.ref_to_alloc(), data_.last_);
 
-        return p;
+        return iterator(p);
     }
 
     iterator erase(const_iterator first, const_iterator last)
@@ -860,7 +860,7 @@ public:
 
         data_.last_ = new_last;
 
-        return p1;
+        return iterator(p1);
     }
 
     size_type erase(const Key& key)
@@ -1621,7 +1621,7 @@ private:
                 *p1 = std::forward<Value>(value);
             }
 
-            return p1;
+            return iterator(p1);
         }
         else
         {

@@ -62,8 +62,8 @@ public:
     using const_reference  = const value_type&;
     using pointer          = value_type*;
     using const_pointer    = const value_type*;
-    using iterator         = const_pointer; // MUST BE const_pointer
-    using const_iterator   = const_pointer;
+    using iterator         = sfl::dtl::normal_iterator<const_pointer, static_unordered_flat_set>; // MUST BE const_pointer
+    using const_iterator   = sfl::dtl::normal_iterator<const_pointer, static_unordered_flat_set>;
 
 public:
 
@@ -269,51 +269,51 @@ public:
     SFL_NODISCARD
     iterator begin() noexcept
     {
-        return data_.first_;
+        return iterator(data_.first_);
     }
 
     SFL_NODISCARD
     const_iterator begin() const noexcept
     {
-        return data_.first_;
+        return const_iterator(data_.first_);
     }
 
     SFL_NODISCARD
     const_iterator cbegin() const noexcept
     {
-        return data_.first_;
+        return const_iterator(data_.first_);
     }
 
     SFL_NODISCARD
     iterator end() noexcept
     {
-        return data_.last_;
+        return iterator(data_.last_);
     }
 
     SFL_NODISCARD
     const_iterator end() const noexcept
     {
-        return data_.last_;
+        return const_iterator(data_.last_);
     }
 
     SFL_NODISCARD
     const_iterator cend() const noexcept
     {
-        return data_.last_;
+        return const_iterator(data_.last_);
     }
 
     SFL_NODISCARD
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
-        return data_.first_ + pos;
+        return iterator(data_.first_ + pos);
     }
 
     SFL_NODISCARD
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
-        return data_.first_ + pos;
+        return const_iterator(data_.first_ + pos);
     }
 
     SFL_NODISCARD
@@ -447,7 +447,7 @@ public:
 
         sfl::dtl::destroy_at(data_.last_);
 
-        return p;
+        return iterator(p);
     }
 
     iterator erase(const_iterator first, const_iterator last)
@@ -489,7 +489,7 @@ public:
             data_.last_ = new_last;
         }
 
-        return p1;
+        return iterator(p1);
     }
 
     size_type erase(const Key& key)
@@ -798,7 +798,7 @@ private:
 
         ++data_.last_;
 
-        return old_last;
+        return iterator(old_last);
     }
 
     void pop_back()
