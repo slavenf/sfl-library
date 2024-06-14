@@ -35,352 +35,6 @@
 namespace sfl
 {
 
-template < typename ValueType,      // std::iterator_traits<Iter>::value_type
-           typename Pointer,        // std::iterator_traits<Iter>::pointer
-           typename Reference,      // std::iterator_traits<Iter>::reference
-           typename DifferenceType, // std::iterator_traits<Iter>::difference_type
-           typename SegmentPointer, // Non-const pointer to segment.
-           typename ElementPointer, // Non-const pointer to element.
-           std::size_t N >
-class segmented_vector_iterator
-{
-    template <typename, typename, typename, typename, typename, typename, std::size_t>
-    friend class segmented_vector_iterator;
-
-    template <typename, std::size_t, typename>
-    friend class segmented_vector;
-
-public:
-
-    using value_type        = ValueType;
-    using pointer           = Pointer;
-    using reference         = Reference;
-    using difference_type   = DifferenceType;
-    using iterator_category = std::random_access_iterator_tag;
-
-private:
-
-    using segment_pointer = SegmentPointer;
-    using element_pointer = ElementPointer;
-
-    segment_pointer seg_;
-    element_pointer elem_;
-
-public:
-
-    /// Default constructor.
-    segmented_vector_iterator() noexcept
-    {}
-
-    /// Copy constructor.
-    segmented_vector_iterator(const segmented_vector_iterator& other) noexcept
-        : seg_(other.seg_)
-        , elem_(other.elem_)
-    {}
-
-    /// Converting constructor (from iterator to const_iterator).
-    template <typename OtherPointer,
-              typename OtherReference,
-              sfl::dtl::enable_if_t<std::is_convertible<OtherPointer, Pointer>::value>* = nullptr>
-    segmented_vector_iterator
-    (
-        const segmented_vector_iterator<
-            ValueType,
-            OtherPointer,
-            OtherReference,
-            DifferenceType,
-            SegmentPointer,
-            ElementPointer,
-            N
-        >& other
-    ) noexcept
-        : seg_(other.seg_)
-        , elem_(other.elem_)
-    {}
-
-    /// Copy assignment operator.
-    segmented_vector_iterator& operator=(const segmented_vector_iterator& other) noexcept
-    {
-        seg_ = other.seg_;
-        elem_ = other.elem_;
-        return *this;
-    }
-
-    SFL_NODISCARD
-    reference operator*() const noexcept
-    {
-        return *elem_;
-    }
-
-    SFL_NODISCARD
-    pointer operator->() const noexcept
-    {
-        return elem_;
-    }
-
-    segmented_vector_iterator& operator++() noexcept
-    {
-        increment_once();
-        return *this;
-    }
-
-    segmented_vector_iterator operator++(int) noexcept
-    {
-        auto temp = *this;
-        increment_once();
-        return temp;
-    }
-
-    segmented_vector_iterator& operator--() noexcept
-    {
-        decrement_once();
-        return *this;
-    }
-
-    segmented_vector_iterator operator--(int) noexcept
-    {
-        auto temp = *this;
-        decrement_once();
-        return temp;
-    }
-
-    segmented_vector_iterator& operator+=(difference_type n) noexcept
-    {
-        advance(n);
-        return *this;
-    }
-
-    segmented_vector_iterator& operator-=(difference_type n) noexcept
-    {
-        advance(-n);
-        return *this;
-    }
-
-    SFL_NODISCARD
-    segmented_vector_iterator operator+(difference_type n) const noexcept
-    {
-        auto temp = *this;
-        temp.advance(n);
-        return temp;
-    }
-
-    SFL_NODISCARD
-    segmented_vector_iterator operator-(difference_type n) const noexcept
-    {
-        auto temp = *this;
-        temp.advance(-n);
-        return temp;
-    }
-
-    SFL_NODISCARD
-    reference operator[](difference_type n) const noexcept
-    {
-        auto temp = *this;
-        temp.advance(n);
-        return *temp;
-    }
-
-    SFL_NODISCARD
-    friend segmented_vector_iterator operator+
-    (
-        difference_type n,
-        const segmented_vector_iterator& it
-    ) noexcept
-    {
-        return it + n;
-    }
-
-    SFL_NODISCARD
-    friend difference_type operator-
-    (
-        const segmented_vector_iterator& x,
-        const segmented_vector_iterator& y
-    ) noexcept
-    {
-        return (x.seg_ - y.seg_) * difference_type(N)
-            + (x.elem_ - *x.seg_) - (y.elem_ - *y.seg_);
-    }
-
-    SFL_NODISCARD
-    friend bool operator==
-    (
-        const segmented_vector_iterator& x,
-        const segmented_vector_iterator& y
-    ) noexcept
-    {
-        return x.elem_ == y.elem_;
-    }
-
-    SFL_NODISCARD
-    friend bool operator!=
-    (
-        const segmented_vector_iterator& x,
-        const segmented_vector_iterator& y
-    ) noexcept
-    {
-        return !(x == y);
-    }
-
-    SFL_NODISCARD
-    friend bool operator<
-    (
-        const segmented_vector_iterator& x,
-        const segmented_vector_iterator& y
-    ) noexcept
-    {
-        return (x.seg_ == y.seg_) ? (x.elem_ < y.elem_) : (x.seg_ < y.seg_);
-    }
-
-    SFL_NODISCARD
-    friend bool operator>
-    (
-        const segmented_vector_iterator& x,
-        const segmented_vector_iterator& y
-    ) noexcept
-    {
-        return y < x;
-    }
-
-    SFL_NODISCARD
-    friend bool operator<=
-    (
-        const segmented_vector_iterator& x,
-        const segmented_vector_iterator& y
-    ) noexcept
-    {
-        return !(y < x);
-    }
-
-    SFL_NODISCARD
-    friend bool operator>=
-    (
-        const segmented_vector_iterator& x,
-        const segmented_vector_iterator& y
-    ) noexcept
-    {
-        return !(x < y);
-    }
-
-private:
-
-    segmented_vector_iterator(segment_pointer seg, element_pointer elem) noexcept
-        : seg_(seg)
-        , elem_(elem)
-    {}
-
-    void increment_once() noexcept
-    {
-        ++elem_;
-
-        if (elem_ == *seg_ + N)
-        {
-            ++seg_;
-            elem_ = *seg_;
-        }
-    }
-
-    void decrement_once() noexcept
-    {
-        if (elem_ == *seg_)
-        {
-            --seg_;
-            elem_ = *seg_ + N;
-        }
-
-        --elem_;
-    }
-
-    void advance(difference_type n) noexcept
-    {
-        const difference_type offset = n + (elem_ - *seg_);
-
-        if (offset >= 0 && offset < difference_type(N))
-        {
-            elem_ += n;
-        }
-        else
-        {
-            const difference_type seg_offset =
-                offset > 0 ? offset / difference_type(N)
-                           : -difference_type((-offset - 1) / N) - 1;
-
-            seg_ += seg_offset;
-
-            elem_ = *seg_ + (offset - seg_offset * difference_type(N));
-        }
-    }
-
-    template <typename>
-    friend struct sfl::dtl::segmented_iterator_traits;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-namespace dtl
-{
-
-template < typename ValueType,
-           typename Pointer,
-           typename Reference,
-           typename DifferenceType,
-           typename SegmentPointer,
-           typename ElementPointer,
-           std::size_t N >
-struct segmented_iterator_traits< segmented_vector_iterator<
-    ValueType, Pointer, Reference, DifferenceType, SegmentPointer, ElementPointer, N > >
-{
-    using is_segmented_iterator = std::true_type;
-
-    using iterator = segmented_vector_iterator< ValueType, Pointer,
-        Reference, DifferenceType, SegmentPointer, ElementPointer, N >;
-
-    using segment_iterator = SegmentPointer;
-    using local_iterator   = ElementPointer;
-
-    static segment_iterator segment(iterator it) noexcept
-    {
-        return it.seg_;
-    }
-
-    static local_iterator local(iterator it) noexcept
-    {
-        return it.elem_;
-    }
-
-    static local_iterator begin(segment_iterator it) noexcept
-    {
-        return *it;
-    }
-
-    static local_iterator end(segment_iterator it) noexcept
-    {
-        return *it + N;
-    }
-
-    static iterator compose(segment_iterator seg, local_iterator elem) noexcept
-    {
-        SFL_ASSERT(*seg <= elem && elem <= *seg + N);
-
-        if (elem == *seg + N)
-        {
-            ++seg;
-            elem = *seg;
-        }
-
-        return iterator(seg, elem);
-    }
-};
-
-} // namespace dtl
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 template < typename T,
            std::size_t N,
            typename Allocator = std::allocator<T> >
@@ -390,15 +44,27 @@ class segmented_vector
 
 public:
 
-    using allocator_type   = Allocator;
-    using allocator_traits = std::allocator_traits<Allocator>;
-    using value_type       = T;
-    using size_type        = typename allocator_traits::size_type;
-    using difference_type  = typename allocator_traits::difference_type;
-    using reference        = T&;
-    using const_reference  = const T&;
-    using pointer          = typename allocator_traits::pointer;
-    using const_pointer    = typename allocator_traits::const_pointer;
+    using allocator_type         = Allocator;
+    using allocator_traits       = std::allocator_traits<Allocator>;
+    using value_type             = T;
+    using size_type              = typename allocator_traits::size_type;
+    using difference_type        = typename allocator_traits::difference_type;
+    using reference              = T&;
+    using const_reference        = const T&;
+    using pointer                = typename allocator_traits::pointer;
+    using const_pointer          = typename allocator_traits::const_pointer;
+
+private:
+
+    using segment_allocator      = typename std::allocator_traits<allocator_type>::template rebind_alloc<pointer>;
+    using segment_pointer        = typename std::allocator_traits<segment_allocator>::pointer;
+
+public:
+
+    using iterator               = sfl::dtl::segmented_iterator<segment_pointer, pointer,       N, segmented_vector>;
+    using const_iterator         = sfl::dtl::segmented_iterator<segment_pointer, const_pointer, N, segmented_vector>;
+    using reverse_iterator       = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     static_assert
     (
@@ -409,44 +75,6 @@ public:
 public:
 
     static constexpr size_type segment_capacity = N;
-
-private:
-
-    using segment_allocator =
-        typename std::allocator_traits<allocator_type>::template rebind_alloc<pointer>;
-
-    using segment_pointer =
-        typename std::allocator_traits<segment_allocator>::pointer;
-
-public:
-
-    using iterator =
-        sfl::segmented_vector_iterator<
-            value_type,
-            pointer,
-            reference,
-            difference_type,
-            segment_pointer,
-            pointer,
-            N
-        >;
-
-    using const_iterator =
-        sfl::segmented_vector_iterator<
-            value_type,
-            const_pointer,
-            const_reference,
-            difference_type,
-            segment_pointer,
-            pointer,
-            N
-        >;
-
-    using reverse_iterator =
-        std::reverse_iterator<iterator>;
-
-    using const_reverse_iterator =
-        std::reverse_iterator<const_iterator>;
 
 private:
 
@@ -920,7 +548,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
 
-        iterator p1(pos.seg_, pos.elem_);
+        iterator p1 = begin() + std::distance(cbegin(), pos);
 
         if (data_.last_ == data_.eos_)
         {
@@ -1052,7 +680,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        const iterator p(pos.seg_, pos.elem_);
+        const iterator p = begin() + std::distance(cbegin(), pos);
 
         data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
@@ -1067,11 +695,11 @@ public:
 
         if (first == last)
         {
-            return iterator(first.seg_, first.elem_);
+            return begin() + std::distance(cbegin(), first);
         }
 
-        const iterator p1(first.seg_, first.elem_);
-        const iterator p2(last.seg_, last.elem_);
+        const iterator p1 = begin() + std::distance(cbegin(), first);
+        const iterator p2 = begin() + std::distance(cbegin(), last);
 
         const iterator new_last = sfl::dtl::move(p2, data_.last_, p1);
 
@@ -1287,13 +915,13 @@ private:
         {
             allocate_segments(data_.table_first_, data_.table_last_);
 
-            data_.first_.seg_  =  data_.table_first_;
-            data_.first_.elem_ = *data_.table_first_;
+            data_.first_.segment_ =  data_.table_first_;
+            data_.first_.local_   = *data_.table_first_;
 
             data_.last_ = data_.first_;
 
-            data_.eos_.seg_  =  (data_.table_last_ - 1);
-            data_.eos_.elem_ = *(data_.table_last_ - 1) + (N - 1);
+            data_.eos_.segment_ =  (data_.table_last_ - 1);
+            data_.eos_.local_   = *(data_.table_last_ - 1) + (N - 1);
         }
         SFL_CATCH (...)
         {
@@ -1354,11 +982,11 @@ private:
 
             // Distance (in segments) from FIRST element to LAST element.
             const size_type dist1 =
-                std::distance(data_.first_.seg_, data_.last_.seg_);
+                std::distance(data_.first_.segment_, data_.last_.segment_);
 
             // Distance (in segments) from FIRST element to END OF STORAGE.
             const size_type dist2 =
-                std::distance(data_.first_.seg_, data_.eos_.seg_);
+                std::distance(data_.first_.segment_, data_.eos_.segment_);
 
             // Allocate new table. No effects if allocation fails.
             const segment_pointer new_table_first =
@@ -1384,9 +1012,9 @@ private:
             data_.table_eos_   = new_table_eos;
 
             // Update iterators (noexcept).
-            data_.first_.seg_ = new_table_first;
-            data_.last_.seg_  = new_table_first + dist1;
-            data_.eos_.seg_   = new_table_first + dist2;
+            data_.first_.segment_ = new_table_first;
+            data_.last_.segment_  = new_table_first + dist1;
+            data_.eos_.segment_   = new_table_first + dist2;
         }
 
         const segment_pointer new_table_last =
@@ -1399,8 +1027,8 @@ private:
         data_.table_last_ = new_table_last;
 
         // Update iterators (noexcept).
-        data_.eos_.seg_  =   data_.table_last_ - 1;
-        data_.eos_.elem_ = *(data_.table_last_ - 1) + (N - 1);
+        data_.eos_.segment_ =   data_.table_last_ - 1;
+        data_.eos_.local_   = *(data_.table_last_ - 1) + (N - 1);
     }
 
     // Removes unused capacity.
@@ -1411,14 +1039,14 @@ private:
     {
         // Destroy empty segments.
         {
-            const segment_pointer new_table_last = data_.last_.seg_ + 1;
+            const segment_pointer new_table_last = data_.last_.segment_ + 1;
 
             deallocate_segments(new_table_last, data_.table_last_);
 
             data_.table_last_ = new_table_last;
 
-            data_.eos_.seg_  =  (data_.table_last_ - 1);
-            data_.eos_.elem_ = *(data_.table_last_ - 1) + (N - 1);
+            data_.eos_.segment_ =  (data_.table_last_ - 1);
+            data_.eos_.local_   = *(data_.table_last_ - 1) + (N - 1);
         }
 
         // Shrink table.
@@ -1434,7 +1062,7 @@ private:
 
             // Distance (in segments) from FIRST element to LAST element.
             const size_type dist =
-                std::distance(data_.first_.seg_, data_.last_.seg_);
+                std::distance(data_.first_.segment_, data_.last_.segment_);
 
             // Allocate new table. No effects if allocation fails.
             const segment_pointer new_table_first =
@@ -1460,9 +1088,9 @@ private:
             data_.table_eos_   = new_table_eos;
 
             // Update iterators (noexcept).
-            data_.first_.seg_ = data_.table_first_;
-            data_.last_.seg_  = data_.table_first_ + dist;
-            data_.eos_.seg_   = data_.table_last_ - 1;
+            data_.first_.segment_ = data_.table_first_;
+            data_.last_.segment_  = data_.table_first_ + dist;
+            data_.eos_.segment_   = data_.table_last_ - 1;
         }
     }
 
@@ -1895,7 +1523,7 @@ private:
     {
         if (n == 0)
         {
-            return iterator(pos.seg_, pos.elem_);
+            return begin() + std::distance(cbegin(), pos);
         }
 
         const value_type tmp(value);
@@ -1995,7 +1623,7 @@ private:
     {
         if (first == last)
         {
-            return iterator(pos.seg_, pos.elem_);
+            return begin() + std::distance(cbegin(), pos);
         }
 
         const size_type n = std::distance(first, last);
