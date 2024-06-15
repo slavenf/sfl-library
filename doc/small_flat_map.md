@@ -7,6 +7,7 @@
 * [Summary](#summary)
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
+* [Public Member Classes](#public-member-classes)
 * [Public Data Members](#public-data-members)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
@@ -134,24 +135,32 @@ Iterators to elements of `sfl::small_flat_map` are random access iterators and t
 
 ## Public Member Types
 
-```
-using allocator_type         = Allocator;
-using allocator_traits       = std::allocator_traits<allocator_type>;
-using key_type               = Key;
-using mapped_type            = T;
-using value_type             = std::pair<Key, T>;
-using size_type              = typename allocator_traits::size_type;
-using difference_type        = typename allocator_traits::difference_type;
-using key_compare            = Compare;
-using reference              = value_type&;
-using const_reference        = const value_type&;
-using pointer                = typename allocator_traits::pointer;
-using const_pointer          = typename allocator_traits::const_pointer;
-using iterator               = /* Random access iterator to value_type */
-using const_iterator         = /* Random access iterator to const value_type */
-using reverse_iterator       = std::reverse_iterator<iterator>;
-using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+| Member Type               | Definition |
+| ------------------------- | ---------- |
+| `allocator_type`          | `Allocator` |
+| `allocator_traits`        | `std::allocator_traits<allocator_type>` |
+| `key_type`                | `Key` |
+| `mapped_type`             | `T` |
+| `value_type`              | `std::pair<Key, T>` |
+| `size_type`               | `typename allocator_traits::size_type` |
+| `difference_type`         | `typename allocator_traits::difference_type` |
+| `key_compare`             | `Compare` |
+| `reference`               | `value_type&` |
+| `const_reference`         | `const value_type&` |
+| `pointer`                 | `typename allocator_traits::pointer` |
+| `const_pointer`           | `typename allocator_traits::const_pointer` |
+| `iterator`                | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `value_type` |
+| `const_iterator`          | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
+| `reverse_iterator`        | `std::reverse_iterator<iterator>` |
+| `const_reverse_iterator`  | `std::reverse_iterator<const_iterator>` |
 
+<br><br>
+
+
+
+## Public Member Classes
+
+```
 class value_compare
 {
 public:

@@ -102,21 +102,21 @@ This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`Li
 
 ## Public Member Types
 
-```
-using allocator_type         = Allocator;
-using allocator_traits       = std::allocator_traits<Allocator>;
-using value_type             = T;
-using size_type              = typename allocator_traits::size_type;
-using difference_type        = typename allocator_traits::difference_type;
-using reference              = T&;
-using const_reference        = const T&;
-using pointer                = typename allocator_traits::pointer;
-using const_pointer          = typename allocator_traits::const_pointer;
-using iterator               = /* Random access iterator to value_type */
-using const_iterator         = /* Random access iterator to const value_type */
-using reverse_iterator       = std::reverse_iterator<iterator>;
-using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-```
+| Member Type               | Definition |
+| ------------------------- | ---------- |
+| `allocator_type`          | `Allocator` |
+| `allocator_traits`        | `std::allocator_traits<Allocator>` |
+| `value_type`              | `T` |
+| `size_type`               | `typename allocator_traits::size_type` |
+| `difference_type`         | `typename allocator_traits::difference_type` |
+| `reference`               | `T&` |
+| `const_reference`         | `const T&` |
+| `pointer`                 | `typename allocator_traits::pointer` |
+| `const_pointer`           | `typename allocator_traits::const_pointer` |
+| `iterator`                | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `value_type` |
+| `const_iterator`          | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
+| `reverse_iterator`        | `std::reverse_iterator<iterator>` |
+| `const_reverse_iterator`  | `std::reverse_iterator<const_iterator>` |
 
 <br><br>
 

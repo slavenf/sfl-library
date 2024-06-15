@@ -113,22 +113,22 @@ This container is convenient for bare-metal embedded software development.
 
 ## Public Member Types
 
-```
-using key_type               = Key;
-using value_type             = Key;
-using size_type              = std::size_t;
-using difference_type        = std::ptrdiff_t;
-using key_compare            = Compare;
-using value_compare          = Compare;
-using reference              = value_type&;
-using const_reference        = const value_type&;
-using pointer                = value_type*;
-using const_pointer          = const value_type*;
-using iterator               = /* Random access iterator to const value_type */
-using const_iterator         = /* Random access iterator to const value_type */
-using reverse_iterator       = std::reverse_iterator<iterator>;
-using const_reverse_iterator = std::reverse_iterator<const_iterator>;
-```
+| Member Type               | Definition |
+| ------------------------- | ---------- |
+| `key_type`                | `Key` |
+| `value_type`              | `Key` |
+| `size_type`               | `std::size_t` |
+| `difference_type`         | `std::ptrdiff_t` |
+| `key_compare`             | `Compare` |
+| `value_compare`           | `Compare` |
+| `reference`               | `value_type&` |
+| `const_reference`         | `const value_type&` |
+| `pointer`                 | `value_type*` |
+| `const_pointer`           | `const value_type*` |
+| `iterator`                | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
+| `const_iterator`          | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
+| `reverse_iterator`        | `std::reverse_iterator<iterator>` |
+| `const_reverse_iterator`  | `std::reverse_iterator<const_iterator>` |
 
 <br><br>
 
