@@ -18,6 +18,7 @@
   because iterators are just aliases to pointers and all overloads are
   equivalent to the overload for `const T*`.
 
+* Small flat map: Added heterogeneous `at`.
 * Static flat map: Added heterogeneous `at`.
 * Static unordered flat map: Added heterogeneous `at`.
 
