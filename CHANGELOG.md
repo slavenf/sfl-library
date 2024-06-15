@@ -19,6 +19,7 @@
   equivalent to the overload for `const T*`.
 
 * Static flat map: Added heterogeneous `at`.
+* Static unordered flat map: Added heterogeneous `at`.
 
 
 # 1.6.0 (2024-06-04)
