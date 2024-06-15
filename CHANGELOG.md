@@ -1,3 +1,25 @@
+# New
+
+* Iterators are now distinct types for all containers.
+  Iterators are no more aliases for `pointer` and `const_pointer`.
+
+  Now it is possible to overload functions for different iterators, for example:
+
+      void test(const T*);
+      void test(sfl::compact_vector<T>::const_iterator);
+      void test(sfl::small_vector<T, 10>::const_iterator);
+      void test(sfl::small_vector<T, 20>::const_iterator);
+      void test(sfl::small_flat_set<T, 10>::const_iterator);
+      void test(sfl::small_flat_set<T, 20>::const_iterator);
+      void test(sfl::static_unordered_flat_set<T, 10>::const_iterator);
+      void test(sfl::static_unordered_flat_set<T, 20>::const_iterator);
+
+  The above example cannot be compiled with older versions of this library
+  because iterators are just aliases to pointers and all overloads are
+  equivalent to the overload for `const T*`.
+
+
+
 # 1.6.0 (2024-06-04)
 
 * Segmented vector and devector: Added public data member `segment_capacity`.
