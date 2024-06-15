@@ -942,6 +942,36 @@ public:
         return it->second;
     }
 
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    T& at(const K& x)
+    {
+        auto it = find(x);
+
+        if (it == end())
+        {
+            sfl::dtl::throw_out_of_range("sfl::static_flat_map::at");
+        }
+
+        return it->second;
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_NODISCARD
+    const T& at(const K& x) const
+    {
+        auto it = find(x);
+
+        if (it == end())
+        {
+            sfl::dtl::throw_out_of_range("sfl::static_flat_map::at");
+        }
+
+        return it->second;
+    }
+
     SFL_NODISCARD
     T& operator[](const Key& key)
     {

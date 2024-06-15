@@ -2662,48 +2662,97 @@ void test_static_flat_map()
 
     PRINT("Test at(const Key&)");
     {
-        sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
-
-        map.emplace(10, 1);
-        map.emplace(20, 1);
-        map.emplace(30, 1);
-
-        CHECK(map.at(10) == 1);
-        CHECK(map.at(20) == 1);
-        CHECK(map.at(30) == 1);
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-        map.at(10) = 2;
-        map.at(20) = 2;
-        map.at(30) = 2;
-
-        CHECK(map.at(10) == 2);
-        CHECK(map.at(20) == 2);
-        CHECK(map.at(30) == 2);
-
-        #if !defined(SFL_NO_EXCEPTIONS)
-        bool caught_exception = false;
-
-        try
+        // xint, xint
         {
-            map.at(40) = 1;
+            sfl::static_flat_map<xint, xint, 100, std::less<xint>> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+
+            CHECK(map.at(10) == 1);
+            CHECK(map.at(20) == 1);
+            CHECK(map.at(30) == 1);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+
+            map.at(10) = 2;
+            map.at(20) = 2;
+            map.at(30) = 2;
+
+            CHECK(map.at(10) == 2);
+            CHECK(map.at(20) == 2);
+            CHECK(map.at(30) == 2);
+
+            #if !defined(SFL_NO_EXCEPTIONS)
+            bool caught_exception = false;
+
+            try
+            {
+                map.at(40) = 1;
+            }
+            catch (...)
+            {
+                caught_exception = true;
+            }
+
+            CHECK(caught_exception == true);
+            #endif
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
+            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
+            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
         }
-        catch (...)
+
+        // xobj, xint
         {
-            caught_exception = true;
+            sfl::static_flat_map<xobj, xint, 100, xobj::less> map;
+
+            map.emplace(10, 1);
+            map.emplace(20, 1);
+            map.emplace(30, 1);
+
+            CHECK(map.at(10) == 1);
+            CHECK(map.at(20) == 1);
+            CHECK(map.at(30) == 1);
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+
+            map.at(10) = 2;
+            map.at(20) = 2;
+            map.at(30) = 2;
+
+            CHECK(map.at(10) == 2);
+            CHECK(map.at(20) == 2);
+            CHECK(map.at(30) == 2);
+
+            #if !defined(SFL_NO_EXCEPTIONS)
+            bool caught_exception = false;
+
+            try
+            {
+                map.at(40) = 1;
+            }
+            catch (...)
+            {
+                caught_exception = true;
+            }
+
+            CHECK(caught_exception == true);
+            #endif
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
+            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
+            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
         }
-
-        CHECK(caught_exception == true);
-        #endif
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
     }
 
     PRINT("Test operator[](const Key&)");
