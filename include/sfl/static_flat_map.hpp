@@ -598,6 +598,16 @@ public:
         return try_emplace_aux(std::move(key), std::forward<Args>(args)...);
     }
 
+    template <typename K, typename... Args,
+              sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
+                                    !std::is_convertible<K&&, const_iterator>::value &&
+                                    !std::is_convertible<K&&, iterator>::value >* = nullptr>
+    std::pair<iterator, bool> try_emplace(K&& key, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...);
+    }
+
     template <typename... Args>
     iterator try_emplace(const_iterator hint, const Key& key, Args&&... args)
     {
@@ -612,6 +622,15 @@ public:
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
+    }
+
+    template <typename K, typename... Args,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    iterator try_emplace(const_iterator hint, K&& key, Args&&... args)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return try_emplace_aux(hint, std::forward<K>(key), std::forward<Args>(args)...);
     }
 
     iterator erase(iterator pos)
