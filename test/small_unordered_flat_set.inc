@@ -611,6 +611,36 @@ PRINT("Test insert(value_type&&)");
     }
 }
 
+PRINT("Test insert(K&&)");
+{
+    sfl::small_unordered_flat_set< xobj,
+                                   100,
+                                   xobj::equal,
+                                   TPARAM_ALLOCATOR<xobj> > set;
+
+    {
+        CHECK(set.insert(10) == std::make_pair(set.nth(0), true));
+        CHECK(set.insert(20) == std::make_pair(set.nth(1), true));
+        CHECK(set.insert(30) == std::make_pair(set.nth(2), true));
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+        CHECK(set.nth(2)->value() == 30);
+    }
+
+    {
+        CHECK(set.insert(10) == std::make_pair(set.nth(0), false));
+        CHECK(set.insert(20) == std::make_pair(set.nth(1), false));
+        CHECK(set.insert(30) == std::make_pair(set.nth(2), false));
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+        CHECK(set.nth(2)->value() == 30);
+    }
+}
+
 PRINT("Test insert(const_iterator, const value_type&)");
 {
     sfl::small_unordered_flat_set< xint_xint,
@@ -704,6 +734,36 @@ PRINT("Test insert(const_iterator, value_type&&)");
         CHECK(value_10_2.first == +10); CHECK(value_10_2.second == +2);
         CHECK(value_20_2.first == +20); CHECK(value_20_2.second == +2);
         CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
+    }
+}
+
+PRINT("Test insert(const_iterator, K&&)");
+{
+    sfl::small_unordered_flat_set< xobj,
+                                   100,
+                                   xobj::equal,
+                                   TPARAM_ALLOCATOR<xobj> > set;
+
+    {
+        CHECK(set.insert(set.begin(), 10) == set.nth(0));
+        CHECK(set.insert(set.begin(), 20) == set.nth(1));
+        CHECK(set.insert(set.begin(), 30) == set.nth(2));
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+        CHECK(set.nth(2)->value() == 30);
+    }
+
+    {
+        CHECK(set.insert(set.begin(), 10) == set.nth(0));
+        CHECK(set.insert(set.begin(), 20) == set.nth(1));
+        CHECK(set.insert(set.begin(), 30) == set.nth(2));
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->value() == 10);
+        CHECK(set.nth(1)->value() == 20);
+        CHECK(set.nth(2)->value() == 30);
     }
 }
 

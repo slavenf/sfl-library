@@ -757,6 +757,13 @@ public:
         return insert_aux(std::move(value));
     }
 
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
+    std::pair<iterator, bool> insert(K&& x)
+    {
+        return insert_aux_heterogeneous(std::forward<K>(x));
+    }
+
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
@@ -767,6 +774,16 @@ public:
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         return insert_aux(hint, std::move(value));
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<KeyEqual, K>::value &&
+                                    !std::is_convertible<K&&, const_iterator>::value &&
+                                    !std::is_convertible<K&&, iterator>::value >* = nullptr>
+    iterator insert(const_iterator hint, K&& x)
+    {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux_heterogeneous(hint, std::forward<K>(x));
     }
 
     template <typename InputIt,
@@ -1502,6 +1519,26 @@ private:
     {
         sfl::dtl::ignore_unused(hint);
         return insert_aux(std::forward<Value>(value)).first;
+    }
+
+    template <typename K>
+    std::pair<iterator, bool> insert_aux_heterogeneous(K&& x)
+    {
+        auto it = find(x);
+
+        if (it == end())
+        {
+            return std::make_pair(emplace_back(value_type(std::forward<K>(x))), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename K>
+    iterator insert_aux_heterogeneous(const_iterator hint, K&& x)
+    {
+        sfl::dtl::ignore_unused(hint);
+        return insert_aux_heterogeneous(std::forward<K>(x)).first;
     }
 
     template <typename... Args>

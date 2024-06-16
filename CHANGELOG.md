@@ -27,6 +27,7 @@
 * Small unordered flat map: Added heterogeneous `insert_or_assign`.
 * Small unordered flat map: Added heterogeneous `operator[]`.
 * Small unordered flat map: Added heterogeneous `try_emplace`.
+* Small unordered flat set: Added heterogeneous `insert`.
 * Static flat map: Added heterogeneous `at`.
 * Static flat map: Added heterogeneous `insert_or_assign`.
 * Static flat map: Added heterogeneous `operator[]`.
