@@ -1024,6 +1024,47 @@ void test_static_flat_set()
         }
     }
 
+    PRINT("Test insert(K&&)");
+    {
+        sfl::static_flat_set<xobj, 100, xobj::less> set;
+
+        {
+            CHECK(set.insert(20) == std::make_pair(set.nth(0), true));
+            CHECK(set.insert(40) == std::make_pair(set.nth(1), true));
+            CHECK(set.insert(60) == std::make_pair(set.nth(2), true));
+
+            CHECK(set.insert(10) == std::make_pair(set.nth(0), true));
+            CHECK(set.insert(30) == std::make_pair(set.nth(2), true));
+            CHECK(set.insert(50) == std::make_pair(set.nth(4), true));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
+            CHECK(set.nth(3)->value() == 40);
+            CHECK(set.nth(4)->value() == 50);
+            CHECK(set.nth(5)->value() == 60);
+        }
+
+        {
+            CHECK(set.insert(20) == std::make_pair(set.nth(1), false));
+            CHECK(set.insert(40) == std::make_pair(set.nth(3), false));
+            CHECK(set.insert(60) == std::make_pair(set.nth(5), false));
+
+            CHECK(set.insert(10) == std::make_pair(set.nth(0), false));
+            CHECK(set.insert(30) == std::make_pair(set.nth(2), false));
+            CHECK(set.insert(50) == std::make_pair(set.nth(4), false));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
+            CHECK(set.nth(3)->value() == 40);
+            CHECK(set.nth(4)->value() == 50);
+            CHECK(set.nth(5)->value() == 60);
+        }
+    }
+
     PRINT("Test insert(const_iterator, const value_type&)");
     {
         sfl::static_flat_set<xint_xint, 100, std::less<xint_xint>> set;
@@ -1171,6 +1212,47 @@ void test_static_flat_set()
             CHECK(value_10_2.first == +10); CHECK(value_10_2.second == +2);
             CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
             CHECK(value_50_2.first == +50); CHECK(value_50_2.second == +2);
+        }
+    }
+
+    PRINT("Test insert(const_iterator, K&&)");
+    {
+        sfl::static_flat_set<xobj, 100, xobj::less> set;
+
+        {
+            CHECK(set.insert(set.begin(), 20) == set.nth(0));
+            CHECK(set.insert(set.begin(), 40) == set.nth(1));
+            CHECK(set.insert(set.begin(), 60) == set.nth(2));
+
+            CHECK(set.insert(set.begin(), 10) == set.nth(0));
+            CHECK(set.insert(set.begin(), 30) == set.nth(2));
+            CHECK(set.insert(set.begin(), 50) == set.nth(4));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
+            CHECK(set.nth(3)->value() == 40);
+            CHECK(set.nth(4)->value() == 50);
+            CHECK(set.nth(5)->value() == 60);
+        }
+
+        {
+            CHECK(set.insert(set.begin(), 20) == set.nth(1));
+            CHECK(set.insert(set.begin(), 40) == set.nth(3));
+            CHECK(set.insert(set.begin(), 60) == set.nth(5));
+
+            CHECK(set.insert(set.begin(), 10) == set.nth(0));
+            CHECK(set.insert(set.begin(), 30) == set.nth(2));
+            CHECK(set.insert(set.begin(), 50) == set.nth(4));
+
+            CHECK(set.size() == 6);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
+            CHECK(set.nth(3)->value() == 40);
+            CHECK(set.nth(4)->value() == 50);
+            CHECK(set.nth(5)->value() == 60);
         }
     }
 

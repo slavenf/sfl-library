@@ -449,6 +449,14 @@ public:
         return insert_aux(std::move(value));
     }
 
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    std::pair<iterator, bool> insert(K&& x)
+    {
+        SFL_ASSERT(!full());
+        return insert_aux_heterogeneous(std::forward<K>(x));
+    }
+
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(!full());
@@ -461,6 +469,17 @@ public:
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         return insert_aux(hint, std::move(value));
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
+                                    !std::is_convertible<K&&, const_iterator>::value &&
+                                    !std::is_convertible<K&&, iterator>::value >* = nullptr>
+    iterator insert(const_iterator hint, K&& x)
+    {
+        SFL_ASSERT(!full());
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_aux_heterogeneous(hint, std::forward<K>(x));
     }
 
     template <typename InputIt,
@@ -860,6 +879,31 @@ private:
 
         // Hint is not good. Use non-hinted function.
         return insert_aux(std::forward<Value>(value)).first;
+    }
+
+    template <typename K>
+    std::pair<iterator, bool> insert_aux_heterogeneous(K&& x)
+    {
+        auto it = lower_bound(x);
+
+        if (it == end() || data_.ref_to_comp()(x, *it))
+        {
+            return std::make_pair(insert_exactly_at(it, value_type(std::forward<K>(x))), true);
+        }
+
+        return std::make_pair(it, false);
+    }
+
+    template <typename K>
+    iterator insert_aux_heterogeneous(const_iterator hint, K&& x)
+    {
+        if (is_insert_hint_good(hint, x))
+        {
+            return insert_exactly_at(hint, value_type(std::forward<K>(x)));
+        }
+
+        // Hint is not good. Use non-hinted function.
+        return insert_aux_heterogeneous(std::forward<K>(x)).first;
     }
 
     template <typename Value>
