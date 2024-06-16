@@ -26,6 +26,7 @@
 * Static flat map: Added heterogeneous `operator[]`.
 * Static flat map: Added heterogeneous `try_emplace`.
 * Static unordered flat map: Added heterogeneous `at`.
+* Static unordered flat map: Added heterogeneous `operator[]`.
 * Static unordered flat map: Added heterogeneous `try_emplace`.
 
 

@@ -1987,6 +1987,37 @@ void test_static_unordered_flat_map()
         CHECK(key_60 == -60);
     }
 
+    PRINT("Test operator[](K&&)");
+    {
+        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+
+        map.emplace(10, 1);
+        map.emplace(20, 1);
+        map.emplace(30, 1);
+
+        CHECK(map.size() == 3);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        map[10] = 2;
+        map[20] = 2;
+        map[30] = 2;
+        map[40] = 2;
+        map[50] = 2;
+        map[60] = 2;
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
+        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first.value() == 40); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first.value() == 50); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first.value() == 60); CHECK(map.nth(5)->second == 2);
+    }
+
     PRINT("Test data()");
     {
         sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
