@@ -1360,6 +1360,14 @@ public:
         return try_emplace(std::move(key)).first->second;
     }
 
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
+    SFL_NODISCARD
+    T& operator[](K&& key)
+    {
+        return try_emplace(std::forward<K>(key)).first->second;
+    }
+
     SFL_NODISCARD
     value_type* data() noexcept
     {
