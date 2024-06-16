@@ -2490,6 +2490,51 @@ PRINT("Test insert_or_assign(Key&&, M&&)");
     }
 }
 
+PRINT("Test insert_or_assign(K&&, M&&)");
+{
+    sfl::small_flat_map< xobj,
+                         xint,
+                         100,
+                         xobj::less,
+                         TPARAM_ALLOCATOR<std::pair<xobj, xint>> > map;
+
+    {
+        CHECK(map.insert_or_assign(20, 1) == std::make_pair(map.nth(0), true));
+        CHECK(map.insert_or_assign(40, 1) == std::make_pair(map.nth(1), true));
+        CHECK(map.insert_or_assign(60, 1) == std::make_pair(map.nth(2), true));
+
+        CHECK(map.insert_or_assign(10, 1) == std::make_pair(map.nth(0), true));
+        CHECK(map.insert_or_assign(30, 1) == std::make_pair(map.nth(2), true));
+        CHECK(map.insert_or_assign(50, 1) == std::make_pair(map.nth(4), true));
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first.value() == 40); CHECK(map.nth(3)->second == 1);
+        CHECK(map.nth(4)->first.value() == 50); CHECK(map.nth(4)->second == 1);
+        CHECK(map.nth(5)->first.value() == 60); CHECK(map.nth(5)->second == 1);
+    }
+
+    {
+        CHECK(map.insert_or_assign(20, 2) == std::make_pair(map.nth(1), false));
+        CHECK(map.insert_or_assign(40, 2) == std::make_pair(map.nth(3), false));
+        CHECK(map.insert_or_assign(60, 2) == std::make_pair(map.nth(5), false));
+
+        CHECK(map.insert_or_assign(10, 2) == std::make_pair(map.nth(0), false));
+        CHECK(map.insert_or_assign(30, 2) == std::make_pair(map.nth(2), false));
+        CHECK(map.insert_or_assign(50, 2) == std::make_pair(map.nth(4), false));
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
+        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first.value() == 40); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first.value() == 50); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first.value() == 60); CHECK(map.nth(5)->second == 2);
+    }
+}
+
 PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
 {
     sfl::small_flat_map< xint,
@@ -2641,6 +2686,51 @@ PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
         CHECK(key_10 == +10);
         CHECK(key_30 == +30);
         CHECK(key_50 == +50);
+    }
+}
+
+PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
+{
+    sfl::small_flat_map< xobj,
+                         xint,
+                         100,
+                         xobj::less,
+                         TPARAM_ALLOCATOR<std::pair<xobj, xint>> > map;
+
+    {
+        CHECK(map.insert_or_assign(map.end(), 20, 1) == map.nth(0));
+        CHECK(map.insert_or_assign(map.end(), 40, 1) == map.nth(1));
+        CHECK(map.insert_or_assign(map.end(), 60, 1) == map.nth(2));
+
+        CHECK(map.insert_or_assign(map.end(), 10, 1) == map.nth(0));
+        CHECK(map.insert_or_assign(map.end(), 30, 1) == map.nth(2));
+        CHECK(map.insert_or_assign(map.end(), 50, 1) == map.nth(4));
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first.value() == 40); CHECK(map.nth(3)->second == 1);
+        CHECK(map.nth(4)->first.value() == 50); CHECK(map.nth(4)->second == 1);
+        CHECK(map.nth(5)->first.value() == 60); CHECK(map.nth(5)->second == 1);
+    }
+
+    {
+        CHECK(map.insert_or_assign(map.end(), 20, 2) == map.nth(1));
+        CHECK(map.insert_or_assign(map.end(), 40, 2) == map.nth(3));
+        CHECK(map.insert_or_assign(map.end(), 60, 2) == map.nth(5));
+
+        CHECK(map.insert_or_assign(map.end(), 10, 2) == map.nth(0));
+        CHECK(map.insert_or_assign(map.end(), 30, 2) == map.nth(2));
+        CHECK(map.insert_or_assign(map.end(), 50, 2) == map.nth(4));
+
+        CHECK(map.size() == 6);
+        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
+        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
+        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first.value() == 40); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first.value() == 50); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first.value() == 60); CHECK(map.nth(5)->second == 2);
     }
 }
 

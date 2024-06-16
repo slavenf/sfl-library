@@ -911,6 +911,14 @@ public:
         return insert_or_assign_aux(std::move(key), std::forward<M>(obj));
     }
 
+    template <typename K, typename M,
+              sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
+                                     std::is_assignable<mapped_type&, M&&>::value >* = nullptr>
+    std::pair<iterator, bool> insert_or_assign(K&& key, M&& obj)
+    {
+        return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj));
+    }
+
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
     iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj)
@@ -925,6 +933,15 @@ public:
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         return insert_or_assign_aux(hint, std::move(key), std::forward<M>(obj));
+    }
+
+    template <typename K, typename M,
+              sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
+                                     std::is_assignable<mapped_type&, M&&>::value >* = nullptr>
+    iterator insert_or_assign(const_iterator hint, K&& key, M&& obj)
+    {
+        SFL_ASSERT(cbegin() <= hint && hint <= cend());
+        return insert_or_assign_aux(hint, std::forward<K>(key), std::forward<M>(obj));
     }
 
     template <typename... Args>
