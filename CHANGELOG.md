@@ -21,6 +21,7 @@
 * Small flat map: Added heterogeneous `at`.
 * Small flat map: Added heterogeneous `try_emplace`.
 * Small unordered flat map: Added heterogeneous `at`.
+* Small unordered flat map: Added heterogeneous `try_emplace`.
 * Static flat map: Added heterogeneous `at`.
 * Static flat map: Added heterogeneous `try_emplace`.
 * Static unordered flat map: Added heterogeneous `at`.
