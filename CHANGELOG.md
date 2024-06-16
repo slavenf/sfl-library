@@ -36,6 +36,7 @@
 * Static unordered flat map: Added heterogeneous `insert_or_assign`.
 * Static unordered flat map: Added heterogeneous `operator[]`.
 * Static unordered flat map: Added heterogeneous `try_emplace`.
+* Static unordered flat set: Added heterogeneous `insert`.
 
 
 # 1.6.0 (2024-06-04)
