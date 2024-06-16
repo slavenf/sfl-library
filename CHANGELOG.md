@@ -23,6 +23,7 @@
 * Static flat map: Added heterogeneous `at`.
 * Static flat map: Added heterogeneous `try_emplace`.
 * Static unordered flat map: Added heterogeneous `at`.
+* Static unordered flat map: Added heterogeneous `try_emplace`.
 
 
 # 1.6.0 (2024-06-04)

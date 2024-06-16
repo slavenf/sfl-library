@@ -1034,6 +1034,33 @@ void test_static_unordered_flat_map()
         }
     }
 
+    PRINT("Test try_emplace(K&&, Args&&...)");
+    {
+        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+
+        {
+            CHECK(map.try_emplace(10, 1) == std::make_pair(map.nth(0), true));
+            CHECK(map.try_emplace(20, 1) == std::make_pair(map.nth(1), true));
+            CHECK(map.try_emplace(30, 1) == std::make_pair(map.nth(2), true));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+        }
+
+        {
+            CHECK(map.try_emplace(10, 2) == std::make_pair(map.nth(0), false));
+            CHECK(map.try_emplace(20, 2) == std::make_pair(map.nth(1), false));
+            CHECK(map.try_emplace(30, 2) == std::make_pair(map.nth(2), false));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+        }
+    }
+
     PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
     {
         sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
@@ -1117,6 +1144,33 @@ void test_static_unordered_flat_map()
             CHECK(key_10 == +10);
             CHECK(key_20 == +20);
             CHECK(key_30 == +30);
+        }
+    }
+
+    PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
+    {
+        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+
+        {
+            CHECK(map.try_emplace(map.begin(), 10, 1) == map.nth(0));
+            CHECK(map.try_emplace(map.begin(), 20, 1) == map.nth(1));
+            CHECK(map.try_emplace(map.begin(), 30, 1) == map.nth(2));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+        }
+
+        {
+            CHECK(map.try_emplace(map.begin(), 10, 2) == map.nth(0));
+            CHECK(map.try_emplace(map.begin(), 20, 2) == map.nth(1));
+            CHECK(map.try_emplace(map.begin(), 30, 2) == map.nth(2));
+
+            CHECK(map.size() == 3);
+            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
+            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
         }
     }
 
