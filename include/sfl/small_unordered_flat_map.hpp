@@ -926,9 +926,15 @@ public:
     }
 
     template <typename K, typename... Args,
-              sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<KeyEqual, K>::value &&
-                                    !std::is_convertible<K&&, const_iterator>::value &&
-                                    !std::is_convertible<K&&, iterator>::value >* = nullptr>
+              sfl::dtl::enable_if_t<
+                #if defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 7)
+                // This is workaround for GCC 4 bug on CentOS 7.
+                !std::is_same<sfl::dtl::remove_cvref_t<Key>, sfl::dtl::remove_cvref_t<K>>::value &&
+                #endif
+                sfl::dtl::has_is_transparent<KeyEqual, K>::value &&
+                !std::is_convertible<K&&, const_iterator>::value &&
+                !std::is_convertible<K&&, iterator>::value
+              >* = nullptr>
     std::pair<iterator, bool> try_emplace(K&& key, Args&&... args)
     {
         return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...);
@@ -949,7 +955,13 @@ public:
     }
 
     template <typename K, typename... Args,
-              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
+              sfl::dtl::enable_if_t<
+                #if defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 7)
+                // This is workaround for GCC 4 bug on CentOS 7.
+                !std::is_same<sfl::dtl::remove_cvref_t<Key>, sfl::dtl::remove_cvref_t<K>>::value &&
+                #endif
+                sfl::dtl::has_is_transparent<KeyEqual, K>::value
+              >* = nullptr>
     iterator try_emplace(const_iterator hint, K&& key, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());

@@ -94,6 +94,9 @@ using void_t = void;
 template <bool B, typename T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
 
+template <typename T>
+using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
+
 //
 // This struct provides information about segmented iterators.
 //

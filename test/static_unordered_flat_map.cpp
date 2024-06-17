@@ -1906,9 +1906,9 @@ void test_static_unordered_flat_map()
     {
         sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
 
-        map.emplace(10, 1);
-        map.emplace(20, 1);
-        map.emplace(30, 1);
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
 
         CHECK(map.at(10) == 1);
         CHECK(map.at(20) == 1);
@@ -2042,9 +2042,9 @@ void test_static_unordered_flat_map()
     {
         sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
 
-        map.emplace(10, 1);
-        map.emplace(20, 1);
-        map.emplace(30, 1);
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
