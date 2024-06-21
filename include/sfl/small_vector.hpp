@@ -2030,6 +2030,8 @@ private:
                 new_eos   = new_first + new_cap;
             }
 
+            const pointer p = new_first + offset;
+
             SFL_TRY
             {
                 // `value` can be a reference to an element in this
@@ -2039,18 +2041,20 @@ private:
                 sfl::dtl::uninitialized_fill_n_a
                 (
                     data_.ref_to_alloc(),
-                    new_first + offset,
+                    p,
                     n,
                     value
                 );
 
                 new_last = nullptr;
 
+                const pointer mid = data_.first_ + offset;
+
                 new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
-                    data_.first_ + offset,
+                    mid,
                     new_first
                 );
 
@@ -2059,7 +2063,7 @@ private:
                 new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
-                    data_.first_ + offset,
+                    mid,
                     data_.last_,
                     new_last
                 );
@@ -2071,7 +2075,7 @@ private:
                     sfl::dtl::destroy_n_a
                     (
                         data_.ref_to_alloc(),
-                        new_first + offset,
+                        p,
                         n
                     );
                 }
@@ -2119,7 +2123,7 @@ private:
             data_.last_  = new_last;
             data_.eos_   = new_eos;
 
-            return begin() + offset;
+            return iterator(p);
         }
     }
 
