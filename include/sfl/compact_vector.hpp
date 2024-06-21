@@ -919,7 +919,7 @@ public:
         SFL_ASSERT
         (
             allocator_traits::propagate_on_container_swap::value ||
-            data_.ref_to_alloc() == other.data_.ref_to_alloc()
+            this->data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
         // If this and other allocator compares equal then one allocator
@@ -929,11 +929,11 @@ public:
 
         if (allocator_traits::propagate_on_container_swap::value)
         {
-            swap(data_.ref_to_alloc(), other.data_.ref_to_alloc());
+            swap(this->data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
 
-        swap(data_.first_, other.data_.first_);
-        swap(data_.last_, other.data_.last_);
+        swap(this->data_.first_, other.data_.first_);
+        swap(this->data_.last_,  other.data_.last_);
     }
 
 private:

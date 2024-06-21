@@ -1158,7 +1158,7 @@ public:
         SFL_ASSERT
         (
             allocator_traits::propagate_on_container_swap::value ||
-            data_.ref_to_alloc() == other.data_.ref_to_alloc()
+            this->data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
         if (this == &other)
@@ -1170,10 +1170,10 @@ public:
 
         if (allocator_traits::propagate_on_container_swap::value)
         {
-            swap(data_.ref_to_alloc(), other.data_.ref_to_alloc());
+            swap(this->data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
 
-        swap(data_, other.data_);
+        swap(this->data_, other.data_);
     }
 
 private:

@@ -590,7 +590,7 @@ public:
             );
         }
 
-        data_.last_ = data_.first_ + other_size;
+        this->data_.last_ = this->data_.first_ + other_size;
         other.data_.last_ = other.data_.first_ + this_size;
     }
 
