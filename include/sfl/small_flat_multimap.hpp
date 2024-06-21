@@ -422,7 +422,7 @@ public:
             (
                 data_.ref_to_alloc(),
                 data_.first_,
-                data_.end_ - data_.first_
+                std::distance(data_.first_, data_.end_)
             );
         }
     }
@@ -655,7 +655,7 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        data_.end_ - data_.first_
+                        std::distance(data_.first_, data_.end_)
                     );
 
                     data_.first_ = new_first;
@@ -704,7 +704,7 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        data_.end_ - data_.first_
+                        std::distance(data_.first_, data_.end_)
                     );
                 }
 
@@ -755,7 +755,7 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        data_.end_ - data_.first_
+                        std::distance(data_.first_, data_.end_)
                     );
 
                     data_.first_ = new_first;
@@ -804,7 +804,7 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        data_.end_ - data_.first_
+                        std::distance(data_.first_, data_.end_)
                     );
                 }
 
@@ -1351,7 +1351,7 @@ private:
             (
                 data_.ref_to_alloc(),
                 data_.first_,
-                data_.end_ - data_.first_
+                std::distance(data_.first_, data_.end_)
             );
         }
 
@@ -1396,7 +1396,7 @@ private:
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
-                    data_.end_ - data_.first_
+                    std::distance(data_.first_, data_.end_)
                 );
             }
 
@@ -1788,7 +1788,7 @@ private:
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
-                    data_.end_ - data_.first_
+                    std::distance(data_.first_, data_.end_)
                 );
             }
 
