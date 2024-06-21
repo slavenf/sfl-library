@@ -4,6 +4,289 @@
 
 using sfl::test::xint;
 
+PRINT("Test emplace_back(Args&&...)");
+{
+    // N == 0
+    {
+        sfl::small_vector<xint, 0, TPARAM_ALLOCATOR<xint>> vec;
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(10);
+            PRINT("<");
+
+            CHECK(res == 10);
+            CHECK(vec.size() == 1);
+            CHECK(vec.capacity() == 1);
+            CHECK(*vec.nth(0) == 10);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(20);
+            PRINT("<");
+
+            CHECK(res == 20);
+            CHECK(vec.size() == 2);
+            CHECK(vec.capacity() == 2);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(30);
+            PRINT("<");
+
+            CHECK(res == 30);
+            CHECK(vec.size() == 3);
+            CHECK(vec.capacity() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(40);
+            PRINT("<");
+
+            CHECK(res == 40);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(50);
+            PRINT("<");
+
+            CHECK(res == 50);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 8);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(60);
+            PRINT("<");
+
+            CHECK(res == 60);
+            CHECK(vec.size() == 6);
+            CHECK(vec.capacity() == 8);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(70);
+            PRINT("<");
+
+            CHECK(res == 70);
+            CHECK(vec.size() == 7);
+            CHECK(vec.capacity() == 8);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+            CHECK(*vec.nth(6) == 70);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(80);
+            PRINT("<");
+
+            CHECK(res == 80);
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 8);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+            CHECK(*vec.nth(6) == 70);
+            CHECK(*vec.nth(7) == 80);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(90);
+            PRINT("<");
+
+            CHECK(res == 90);
+            CHECK(vec.size() == 9);
+            CHECK(vec.capacity() == 16);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+            CHECK(*vec.nth(6) == 70);
+            CHECK(*vec.nth(7) == 80);
+            CHECK(*vec.nth(8) == 90);
+        }
+    }
+
+    // N == 3
+    {
+        sfl::small_vector<xint, 3, TPARAM_ALLOCATOR<xint>> vec;
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(10);
+            PRINT("<");
+
+            CHECK(res == 10);
+            CHECK(vec.size() == 1);
+            CHECK(vec.capacity() == 3);
+            CHECK(*vec.nth(0) == 10);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(20);
+            PRINT("<");
+
+            CHECK(res == 20);
+            CHECK(vec.size() == 2);
+            CHECK(vec.capacity() == 3);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(30);
+            PRINT("<");
+
+            CHECK(res == 30);
+            CHECK(vec.size() == 3);
+            CHECK(vec.capacity() == 3);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(40);
+            PRINT("<");
+
+            CHECK(res == 40);
+            CHECK(vec.size() == 4);
+            CHECK(vec.capacity() == 6);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(50);
+            PRINT("<");
+
+            CHECK(res == 50);
+            CHECK(vec.size() == 5);
+            CHECK(vec.capacity() == 6);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(60);
+            PRINT("<");
+
+            CHECK(res == 60);
+            CHECK(vec.size() == 6);
+            CHECK(vec.capacity() == 6);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(70);
+            PRINT("<");
+
+            CHECK(res == 70);
+            CHECK(vec.size() == 7);
+            CHECK(vec.capacity() == 12);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+            CHECK(*vec.nth(6) == 70);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(80);
+            PRINT("<");
+
+            CHECK(res == 80);
+            CHECK(vec.size() == 8);
+            CHECK(vec.capacity() == 12);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+            CHECK(*vec.nth(6) == 70);
+            CHECK(*vec.nth(7) == 80);
+        }
+
+        {
+            PRINT(">");
+            const auto res = vec.emplace_back(90);
+            PRINT("<");
+
+            CHECK(res == 90);
+            CHECK(vec.size() == 9);
+            CHECK(vec.capacity() == 12);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+            CHECK(*vec.nth(6) == 70);
+            CHECK(*vec.nth(7) == 80);
+            CHECK(*vec.nth(8) == 90);
+        }
+    }
+}
+
 PRINT("Test emplace(const_iterator, Args&&...)");
 {
     // N == 0
