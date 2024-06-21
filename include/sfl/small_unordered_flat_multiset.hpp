@@ -1518,8 +1518,6 @@ private:
         }
         else
         {
-            const difference_type offset = size();
-
             const size_type new_cap =
                 recommend_size(1, "sfl::small_unordered_flat_multiset::emplace_back");
 
@@ -1540,12 +1538,14 @@ private:
                 new_eos   = new_first + new_cap;
             }
 
+            const pointer p = new_first + size();
+
             SFL_TRY
             {
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
-                    new_first + offset,
+                    p,
                     std::forward<Args>(args)...
                 );
 
@@ -1568,17 +1568,12 @@ private:
                     sfl::dtl::destroy_at_a
                     (
                         data_.ref_to_alloc(),
-                        new_first + offset
+                        p
                     );
                 }
                 else
                 {
-                    sfl::dtl::destroy_a
-                    (
-                        data_.ref_to_alloc(),
-                        new_first,
-                        new_last
-                    );
+                    // Nothing to do
                 }
 
                 if (new_first != data_.internal_storage())
@@ -1615,7 +1610,7 @@ private:
             data_.last_  = new_last;
             data_.eos_   = new_eos;
 
-            return begin() + offset;
+            return iterator(p);
         }
     }
 };
