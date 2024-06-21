@@ -822,22 +822,26 @@ public:
                 new_eos   = new_first + new_cap;
             }
 
+            const pointer p = new_first + offset;
+
             SFL_TRY
             {
                 sfl::dtl::construct_at_a
                 (
                     data_.ref_to_alloc(),
-                    new_first + offset,
+                    p,
                     std::forward<Args>(args)...
                 );
 
                 new_last = nullptr;
 
+                const pointer mid = data_.first_ + offset;
+
                 new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
-                    data_.first_ + offset,
+                    mid,
                     new_first
                 );
 
@@ -846,7 +850,7 @@ public:
                 new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                 (
                     data_.ref_to_alloc(),
-                    data_.first_ + offset,
+                    mid,
                     data_.last_,
                     new_last
                 );
@@ -858,7 +862,7 @@ public:
                     sfl::dtl::destroy_at_a
                     (
                         data_.ref_to_alloc(),
-                        new_first + offset
+                        p
                     );
                 }
                 else
@@ -905,7 +909,7 @@ public:
             data_.last_  = new_last;
             data_.eos_   = new_eos;
 
-            return begin() + offset;
+            return iterator(p);
         }
     }
 
