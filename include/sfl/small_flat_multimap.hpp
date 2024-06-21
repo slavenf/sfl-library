@@ -150,12 +150,12 @@ private:
 
         pointer first_;
         pointer last_;
-        pointer end_;
+        pointer eos_;
 
         data_base() noexcept
             : first_(std::pointer_traits<pointer>::pointer_to(*internal_storage_))
             , last_(first_)
-            , end_(first_ + N)
+            , eos_(first_ + N)
         {}
 
         #if defined(__clang__) && (__clang_major__ == 3) // For CentOS 7
@@ -179,12 +179,12 @@ private:
 
         pointer first_;
         pointer last_;
-        pointer end_;
+        pointer eos_;
 
         data_base() noexcept
             : first_(nullptr)
             , last_(nullptr)
-            , end_(nullptr)
+            , eos_(nullptr)
         {}
 
         pointer internal_storage() noexcept
@@ -422,7 +422,7 @@ public:
             (
                 data_.ref_to_alloc(),
                 data_.first_,
-                std::distance(data_.first_, data_.end_)
+                std::distance(data_.first_, data_.eos_)
             );
         }
     }
@@ -606,13 +606,13 @@ public:
     SFL_NODISCARD
     size_type capacity() const noexcept
     {
-        return std::distance(data_.first_, data_.end_);
+        return std::distance(data_.first_, data_.eos_);
     }
 
     SFL_NODISCARD
     size_type available() const noexcept
     {
-        return std::distance(data_.last_, data_.end_);
+        return std::distance(data_.last_, data_.eos_);
     }
 
     void reserve(size_type new_cap)
@@ -634,7 +634,7 @@ public:
 
                     pointer new_first = data_.internal_storage();
                     pointer new_last  = new_first;
-                    pointer new_end   = new_first + N;
+                    pointer new_eos   = new_first + N;
 
                     new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                     (
@@ -655,19 +655,19 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        std::distance(data_.first_, data_.end_)
+                        std::distance(data_.first_, data_.eos_)
                     );
 
                     data_.first_ = new_first;
                     data_.last_  = new_last;
-                    data_.end_   = new_end;
+                    data_.eos_   = new_eos;
                 }
             }
             else
             {
                 pointer new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
-                pointer new_end   = new_first + new_cap;
+                pointer new_eos   = new_first + new_cap;
 
                 SFL_TRY
                 {
@@ -704,13 +704,13 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        std::distance(data_.first_, data_.end_)
+                        std::distance(data_.first_, data_.eos_)
                     );
                 }
 
                 data_.first_ = new_first;
                 data_.last_  = new_last;
-                data_.end_   = new_end;
+                data_.eos_   = new_eos;
             }
         }
     }
@@ -734,7 +734,7 @@ public:
 
                     pointer new_first = data_.internal_storage();
                     pointer new_last  = new_first;
-                    pointer new_end   = new_first + N;
+                    pointer new_eos   = new_first + N;
 
                     new_last = sfl::dtl::uninitialized_move_if_noexcept_a
                     (
@@ -755,19 +755,19 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        std::distance(data_.first_, data_.end_)
+                        std::distance(data_.first_, data_.eos_)
                     );
 
                     data_.first_ = new_first;
                     data_.last_  = new_last;
-                    data_.end_   = new_end;
+                    data_.eos_   = new_eos;
                 }
             }
             else
             {
                 pointer new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
                 pointer new_last  = new_first;
-                pointer new_end   = new_first + new_cap;
+                pointer new_eos   = new_first + new_cap;
 
                 SFL_TRY
                 {
@@ -804,13 +804,13 @@ public:
                     (
                         data_.ref_to_alloc(),
                         data_.first_,
-                        std::distance(data_.first_, data_.end_)
+                        std::distance(data_.first_, data_.eos_)
                     );
                 }
 
                 data_.first_ = new_first;
                 data_.last_  = new_last;
-                data_.end_   = new_end;
+                data_.eos_   = new_eos;
             }
         }
     }
@@ -1050,7 +1050,7 @@ public:
         {
             pointer new_other_first = other.data_.internal_storage();
             pointer new_other_last  = new_other_first;
-            pointer new_other_end   = new_other_first + N;
+            pointer new_other_eos   = new_other_first + N;
 
             new_other_last = sfl::dtl::uninitialized_move_a
             (
@@ -1069,11 +1069,11 @@ public:
 
             this->data_.first_ = other.data_.first_;
             this->data_.last_  = other.data_.last_;
-            this->data_.end_   = other.data_.end_;
+            this->data_.eos_   = other.data_.eos_;
 
             other.data_.first_ = new_other_first;
             other.data_.last_  = new_other_last;
-            other.data_.end_   = new_other_end;
+            other.data_.eos_   = new_other_eos;
         }
         else if
         (
@@ -1083,7 +1083,7 @@ public:
         {
             pointer new_this_first = this->data_.internal_storage();
             pointer new_this_last  = new_this_first;
-            pointer new_this_end   = new_this_first + N;
+            pointer new_this_eos   = new_this_first + N;
 
             new_this_last = sfl::dtl::uninitialized_move_a
             (
@@ -1102,17 +1102,17 @@ public:
 
             other.data_.first_ = this->data_.first_;
             other.data_.last_  = this->data_.last_;
-            other.data_.end_   = this->data_.end_;
+            other.data_.eos_   = this->data_.eos_;
 
             this->data_.first_ = new_this_first;
             this->data_.last_  = new_this_last;
-            this->data_.end_   = new_this_end;
+            this->data_.eos_   = new_this_eos;
         }
         else
         {
             swap(this->data_.first_, other.data_.first_);
             swap(this->data_.last_,  other.data_.last_);
-            swap(this->data_.end_,   other.data_.end_);
+            swap(this->data_.eos_,   other.data_.eos_);
         }
     }
 
@@ -1351,21 +1351,21 @@ private:
             (
                 data_.ref_to_alloc(),
                 data_.first_,
-                std::distance(data_.first_, data_.end_)
+                std::distance(data_.first_, data_.eos_)
             );
         }
 
         data_.first_ = data_.internal_storage();
         data_.last_  = data_.first_;
-        data_.end_   = data_.first_ + N;
+        data_.eos_   = data_.first_ + N;
 
         if (new_cap > N)
         {
             data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
             data_.last_  = data_.first_;
-            data_.end_   = data_.first_ + new_cap;
+            data_.eos_   = data_.first_ + new_cap;
 
-            // If allocation throws, first_, last_ and end_ will be valid
+            // If allocation throws, first_, last_ and eos_ will be valid
             // (they will be pointing to internal_storage).
         }
     }
@@ -1396,7 +1396,7 @@ private:
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
-                    std::distance(data_.first_, data_.end_)
+                    std::distance(data_.first_, data_.eos_)
                 );
             }
 
@@ -1414,7 +1414,7 @@ private:
         {
             data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), n);
             data_.last_  = data_.first_;
-            data_.end_   = data_.first_ + n;
+            data_.eos_   = data_.first_ + n;
         }
 
         SFL_TRY
@@ -1454,11 +1454,11 @@ private:
         {
             data_.first_ = other.data_.first_;
             data_.last_  = other.data_.last_;
-            data_.end_   = other.data_.end_;
+            data_.eos_   = other.data_.eos_;
 
             other.data_.first_ = nullptr;
             other.data_.last_  = nullptr;
-            other.data_.end_   = nullptr;
+            other.data_.eos_   = nullptr;
         }
         else
         {
@@ -1470,7 +1470,7 @@ private:
             {
                 data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), n);
                 data_.last_  = data_.first_;
-                data_.end_   = data_.first_ + n;
+                data_.eos_   = data_.first_ + n;
             }
 
             SFL_TRY
@@ -1606,11 +1606,11 @@ private:
 
             data_.first_ = other.data_.first_;
             data_.last_  = other.data_.last_;
-            data_.end_   = other.data_.end_;
+            data_.eos_   = other.data_.eos_;
 
             other.data_.first_ = nullptr;
             other.data_.last_  = nullptr;
-            other.data_.end_   = nullptr;
+            other.data_.eos_   = nullptr;
         }
         else
         {
@@ -1643,7 +1643,7 @@ private:
     template <typename Value>
     iterator insert_exactly_at(const_iterator pos, Value&& value)
     {
-        if (data_.last_ != data_.end_)
+        if (data_.last_ != data_.eos_)
         {
             const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
 
@@ -1698,19 +1698,19 @@ private:
 
             pointer new_first;
             pointer new_last;
-            pointer new_end;
+            pointer new_eos;
 
             if (new_cap <= N && data_.first_ != data_.internal_storage())
             {
                 new_first = data_.internal_storage();
                 new_last  = new_first;
-                new_end   = new_first + N;
+                new_eos   = new_first + N;
             }
             else
             {
                 new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
                 new_last  = new_first;
-                new_end   = new_first + new_cap;
+                new_eos   = new_first + new_cap;
             }
 
             SFL_TRY
@@ -1788,13 +1788,13 @@ private:
                 (
                     data_.ref_to_alloc(),
                     data_.first_,
-                    std::distance(data_.first_, data_.end_)
+                    std::distance(data_.first_, data_.eos_)
                 );
             }
 
             data_.first_ = new_first;
             data_.last_  = new_last;
-            data_.end_   = new_end;
+            data_.eos_   = new_eos;
 
             return begin() + offset;
         }
