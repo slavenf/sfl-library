@@ -18,6 +18,8 @@
   because iterators are just aliases to pointers and all overloads are
   equivalent to the overload for `const T*`.
 
+<br>
+
 * Small flat map: Added heterogeneous `at`.
 * Small flat map: Added heterogeneous `insert_or_assign`.
 * Small flat map: Added heterogeneous `operator[]`.
@@ -38,6 +40,24 @@
 * Static unordered flat map: Added heterogeneous `operator[]`.
 * Static unordered flat map: Added heterogeneous `try_emplace`.
 * Static unordered flat set: Added heterogeneous `insert`.
+
+<br>
+
+* All containers: Use `std::distance` instead of `operator-` just for better readability.
+* All containers: Use `this->` in public member function `swap` just for better readability.
+* All small containers: Renamed private data member `end_` to `eos_` (end-of-storage).
+* Small flat map: Refactored private member function `insert_exactly_at`.
+* Small flat set: Refactored private member function `insert_exactly_at`.
+* Small flat multimap: Refactored private member function `insert_exactly_at`.
+* Small flat multiset: Refactored private member function `insert_exactly_at`.
+* Small unordered flat map: Refactored private member function `emplace_back`.
+* Small unordered flat set: Refactored private member function `emplace_back`.
+* Small unordered flat multimap: Refactored private member function `emplace_back`.
+* Small unordered flat multiset: Refactored private member function `emplace_back`.
+* Small vector: Refactored public member functions `emplace` and `emplace_back`.
+* Small vector: Refactored private member functions `insert_fill_n` and `insert_range`.
+* Updated documentation.
+
 
 
 # 1.6.0 (2024-06-04)
