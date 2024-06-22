@@ -135,1067 +135,979 @@ static constexpr size_type static_capacity = N;
 
 ### (constructor)
 
-```
-static_vector() noexcept;
-```
+1.  ```
+    static_vector() noexcept;
+    ```
 
-**Effects:**
-Constructs an empty container.
+    **Effects:**
+    Constructs an empty container.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
-
-
-
-```
-static_vector(size_type n);
-```
-
-**Preconditions:**
-`n <= capacity()`
-
-**Effects:**
-Constructs the container with `n` [value-initialized](https://en.cppreference.com/w/cpp/language/value_initialization) elements.
-
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
-
-**Complexity:**
-Linear in `n`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_vector(size_type n, sfl::default_init_t);
-```
+2.  ```
+    static_vector(size_type n);
+    ```
 
-**Preconditions:**
-`n <= capacity()`
+    **Preconditions:**
+    `n <= capacity()`
 
-**Effects:**
-Constructs the container with `n` [default-initialized](https://en.cppreference.com/w/cpp/language/default_initialization) elements.
+    **Effects:**
+    Constructs the container with `n` [value-initialized](https://en.cppreference.com/w/cpp/language/value_initialization) elements.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Linear in `n`.
 
-**Complexity:**
-Linear in `n`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_vector(size_type n, const T& value);
-```
+3.  ```
+    static_vector(size_type n, sfl::default_init_t);
+    ```
 
-**Preconditions:**
-`n <= capacity()`
+    **Preconditions:**
+    `n <= capacity()`
 
-**Effects:**
-Constructs the container with `n` copies of elements with value `value`.
+    **Effects:**
+    Constructs the container with `n` [default-initialized](https://en.cppreference.com/w/cpp/language/default_initialization) elements.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Linear in `n`.
 
-**Complexity:**
-Linear in `n`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-template <typename InputIt>
-static_vector(InputIt first, InputIt last);
-```
+4.  ```
+    static_vector(size_type n, const T& value);
+    ```
 
-**Preconditions:**
-`std::distance(first, last) <= capacity()`
+    **Preconditions:**
+    `n <= capacity()`
 
-**Effects:**
-Constructs the container with the contents of the range `[first, last)`.
+    **Effects:**
+    Constructs the container with `n` copies of elements with value `value`.
 
-**Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+    **Complexity:**
+    Linear in `n`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
-
-**Complexity:**
-Linear in `std::distance(first, last)`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_vector(std::initializer_list<T> ilist);
-```
+5.  ```
+    template <typename InputIt>
+    static_vector(InputIt first, InputIt last);
+    ```
 
-**Preconditions:**
-`ilist.size() <= capacity()`
+    **Preconditions:**
+    `std::distance(first, last) <= capacity()`
 
-**Effects:**
-Constructs the container with the contents of the initializer list `ilist`.
+    **Effects:**
+    Constructs the container with the contents of the range `[first, last)`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Note:**
+    This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
-**Complexity:**
-Linear in `ilist.size()`.
+    **Complexity:**
+    Linear in `std::distance(first, last)`.
 
-<br><br>
-
-
-
-```
-static_vector(const static_vector& other);
-```
-
-**Effects:**
-Copy constructor.
-Constructs the container with the copy of the contents of `other`.
-
-**Complexity:**
-Linear in size.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_vector(static_vector&& other);
-```
+6.  ```
+    static_vector(std::initializer_list<T> ilist);
+    ```
 
-**Effects:**
-Move constructor.
-Constructs the container with the contents of `other` using move semantics.
+    **Preconditions:**
+    `ilist.size() <= capacity()`
 
-`other` is not guaranteed to be empty after the move.
+    **Effects:**
+    Constructs the container with the contents of the initializer list `ilist`.
 
-`other` is in a valid but unspecified state after the move.
+    **Complexity:**
+    Linear in `ilist.size()`.
 
-**Complexity:**
-Linear in size.
+    <br><br>
 
-<br><br>
+
+
+7.  ```
+    static_vector(const static_vector& other);
+    ```
+
+    **Effects:**
+    Copy constructor.
+    Constructs the container with the copy of the contents of `other`.
+
+    **Complexity:**
+    Linear in size.
+
+    <br><br>
+
+
+
+8.  ```
+    static_vector(static_vector&& other);
+    ```
+
+    **Effects:**
+    Move constructor.
+    Constructs the container with the contents of `other` using move semantics.
+
+    `other` is not guaranteed to be empty after the move.
+
+    `other` is in a valid but unspecified state after the move.
+
+    **Complexity:**
+    Linear in size.
+
+    <br><br>
 
 
 
 ### (destructor)
 
-```
-~static_vector();
-```
+1.  ```
+    ~static_vector();
+    ```
 
-**Effects:**
-Destructs the container. The destructors of the elements are called and the used storage is deallocated.
+    **Effects:**
+    Destructs the container. The destructors of the elements are called and the used storage is deallocated.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
+    <br><br>
 
 
 
 ### assign
 
-```
-void assign(size_type n, const T& value);
-```
+1.  ```
+    void assign(size_type n, const T& value);
+    ```
 
-**Preconditions:**
-`n <= capacity()`
+    **Preconditions:**
+    `n <= capacity()`
 
-**Effects:**
-Replaces the contents of the container with `n` copies of value `value`.
+    **Effects:**
+    Replaces the contents of the container with `n` copies of value `value`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Linear in size.
 
-**Complexity:**
-Linear in size.
-
-<br><br>
+    <br><br>
 
 
 
-```
-template <typename InputIt>
-void assign(InputIt first, InputIt last);
-```
+2.  ```
+    template <typename InputIt>
+    void assign(InputIt first, InputIt last);
+    ```
 
-**Preconditions:**
-`std::distance(first, last) <= capacity()`
+    **Preconditions:**
+    `std::distance(first, last) <= capacity()`
 
-**Effects:**
-Replaces the contents of the container with the contents of the range `[first, last)`.
+    **Effects:**
+    Replaces the contents of the container with the contents of the range `[first, last)`.
 
-**Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+    **Note:**
+    This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Note:**
+    The behavior is undefined if either `first` or `last` is an iterator into `*this`.
 
-**Note:**
-The behavior is undefined if either `first` or `last` is an iterator into `*this`.
+    **Complexity:**
+    Linear in size.
 
-**Complexity:**
-Linear in size.
-
-<br><br>
+    <br><br>
 
 
 
-```
-void assign(std::initializer_list<T> ilist);
-```
+3.  ```
+    void assign(std::initializer_list<T> ilist);
+    ```
 
-**Preconditions:**
-`ilist.size() <= capacity()`
+    **Preconditions:**
+    `ilist.size() <= capacity()`
 
-**Effects:**
-Replaces the contents of the container with the contents of the initializer list `ilist`.
+    **Effects:**
+    Replaces the contents of the container with the contents of the initializer list `ilist`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Linear in size.
 
-**Complexity:**
-Linear in size.
-
-<br><br>
+    <br><br>
 
 
 
 ### operator=
 
-```
-static_vector& operator=(const static_vector& other);
-```
+1.  ```
+    static_vector& operator=(const static_vector& other);
+    ```
 
-**Effects:**
-Copy assignment operator.
-Replaces the contents with a copy of the contents of `other`.
+    **Effects:**
+    Copy assignment operator.
+    Replaces the contents with a copy of the contents of `other`.
 
-**Returns:**
-`*this()`.
+    **Returns:**
+    `*this()`.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
-
-
-
-```
-static_vector& operator=(static_vector&& other);
-```
-
-**Effects:**
-Move assignment operator.
-Replaces the contents with those of `other` using move semantics.
-
-`other` is not guaranteed to be empty after the move.
-
-`other` is in a valid but unspecified state after the move.
-
-**Returns:**
-`*this()`.
-
-**Complexity:**
-Linear in size.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_vector& operator=(std::initializer_list<T> ilist);
-```
+2.  ```
+    static_vector& operator=(static_vector&& other);
+    ```
 
-**Preconditions:**
-`ilist.size() <= capacity()`
+    **Effects:**
+    Move assignment operator.
+    Replaces the contents with those of `other` using move semantics.
 
-**Effects:**
-Replaces the contents with those identified by initializer list `ilist`.
+    `other` is not guaranteed to be empty after the move.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    `other` is in a valid but unspecified state after the move.
 
-**Returns:**
-`*this()`.
+    **Returns:**
+    `*this()`.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
+    <br><br>
+
+
+
+3.  ```
+    static_vector& operator=(std::initializer_list<T> ilist);
+    ```
+
+    **Preconditions:**
+    `ilist.size() <= capacity()`
+
+    **Effects:**
+    Replaces the contents with those identified by initializer list `ilist`.
+
+    **Returns:**
+    `*this()`.
+
+    **Complexity:**
+    Linear in size.
+
+    <br><br>
 
 
 
 ### begin, cbegin
 
-```
-iterator begin() noexcept;
-```
-```
-const_iterator begin() const noexcept;
-```
-```
-const_iterator cbegin() const noexcept;
-```
+1.  ```
+    iterator begin() noexcept;
+    ```
+2.  ```
+    const_iterator begin() const noexcept;
+    ```
+3.  ```
+    const_iterator cbegin() const noexcept;
+    ```
 
-**Effects:**
-Returns an iterator to the first element of the container.
+    **Effects:**
+    Returns an iterator to the first element of the container.
+    If the container is empty, the returned iterator will be equal to `end()`.
 
-If the container is empty, the returned iterator will be equal to `end()`.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### end, cend
 
-```
-iterator end() noexcept;
-```
-```
-const_iterator end() const noexcept;
-```
-```
-const_iterator cend() const noexcept;
-```
+1.  ```
+    iterator end() noexcept;
+    ```
+2.  ```
+    const_iterator end() const noexcept;
+    ```
+3.  ```
+    const_iterator cend() const noexcept;
+    ```
 
-**Effects:**
-Returns an iterator to the element following the last element of the container.
+    **Effects:**
+    Returns an iterator to the element following the last element of the container.
+    This element acts as a placeholder; attempting to access it results in undefined behavior.
 
-This element acts as a placeholder; attempting to access it results in undefined behavior.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### rbegin, crbegin
 
-```
-reverse_iterator rbegin() noexcept;
-```
-```
-const_reverse_iterator rbegin() const noexcept;
-```
-```
-const_reverse_iterator crbegin() const noexcept;
-```
+1.  ```
+    reverse_iterator rbegin() noexcept;
+    ```
+2.  ```
+    const_reverse_iterator rbegin() const noexcept;
+    ```
+3.  ```
+    const_reverse_iterator crbegin() const noexcept;
+    ```
 
-**Effects:**
-Returns a reverse iterator to the first element of the reversed container.
-It corresponds to the last element of the non-reversed container.
-If the container is empty, the returned iterator is equal to `rend()`.
+    **Effects:**
+    Returns a reverse iterator to the first element of the reversed container.
+    It corresponds to the last element of the non-reversed container.
+    If the container is empty, the returned iterator is equal to `rend()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### rend, crend
 
-```
-reverse_iterator rend() noexcept;
-```
-```
-const_reverse_iterator rend() const noexcept;
-```
-```
-const_reverse_iterator crend() const noexcept;
-```
+1.  ```
+    reverse_iterator rend() noexcept;
+    ```
+2.  ```
+    const_reverse_iterator rend() const noexcept;
+    ```
+3.  ```
+    const_reverse_iterator crend() const noexcept;
+    ```
 
-**Effects:**
-Returns a reverse iterator to the element following the last element of the reversed container.
-It corresponds to the element preceding the first element of the non-reversed container.
-This element acts as a placeholder, attempting to access it results in undefined behavior.
+    **Effects:**
+    Returns a reverse iterator to the element following the last element of the reversed container.
+    It corresponds to the element preceding the first element of the non-reversed container.
+    This element acts as a placeholder, attempting to access it results in undefined behavior.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### nth
 
-```
-iterator nth(size_type pos) noexcept;
-```
-```
-const_iterator nth(size_type pos) const noexcept;
-```
+1.  ```
+    iterator nth(size_type pos) noexcept;
+    ```
+2.  ```
+    const_iterator nth(size_type pos) const noexcept;
+    ```
 
-**Preconditions:**
-`pos <= size()`
+    **Preconditions:**
+    `pos <= size()`
 
-**Effects:**
-Returns an iterator to the element at position `pos`.
-If `pos == size()`, the returned iterator is equal to `end()`.
+    **Effects:**
+    Returns an iterator to the element at position `pos`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    If `pos == size()`, the returned iterator is equal to `end()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### index_of
 
-```
-size_type index_of(const_iterator pos) const noexcept;
-```
+1.  ```
+    size_type index_of(const_iterator pos) const noexcept;
+    ```
 
-**Preconditions:**
-`cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Returns position of the element pointed by iterator `pos`, i.e. `std::distance(begin(), pos)`.
+    **Effects:**
+    Returns position of the element pointed by iterator `pos`, i.e. `std::distance(begin(), pos)`.
 
-If `pos == end()`, the returned value is equal to `size()`.
+    If `pos == end()`, the returned value is equal to `size()`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### empty
 
-```
-bool empty() const noexcept;
-```
+1.  ```
+    bool empty() const noexcept;
+    ```
 
-**Effects:**
-Returns `true` if the container has no elements, i.e. whether `begin() == end()`.
+    **Effects:**
+    Returns `true` if the container has no elements, i.e. whether `begin() == end()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### full
 
-```
-bool full() const noexcept;
-```
+1.  ```
+    bool full() const noexcept;
+    ```
 
-**Effects:**
-Returns `true` if the container is full, i.e. whether `size() == capacity()`.
+    **Effects:**
+    Returns `true` if the container is full, i.e. whether `size() == capacity()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### size
 
-```
-size_type size() const noexcept;
-```
+1.  ```
+    size_type size() const noexcept;
+    ```
 
-**Effects:**
-Returns the number of elements in the container, i.e. `std::distance(begin(), end())`.
+    **Effects:**
+    Returns the number of elements in the container, i.e. `std::distance(begin(), end())`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### max_size
 
-```
-static constexpr size_type max_size() const noexcept;
-```
+1.  ```
+    static constexpr size_type max_size() const noexcept;
+    ```
 
-**Effects:**
-Returns the maximum number of elements the container is able to hold, i.e. returns `N`.
+    **Effects:**
+    Returns the maximum number of elements the container is able to hold, i.e. `N`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### capacity
 
-```
-static constexpr size_type capacity() const noexcept;
-```
+1.  ```
+    static constexpr size_type capacity() const noexcept;
+    ```
 
-**Effects:**
-Returns the maximum number of elements the container is able to hold, i.e. returns `N`.
+    **Effects:**
+    Returns the maximum number of elements the container is able to hold, i.e. `N`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### available
 
-```
-size_type available() const noexcept;
-```
+1.  ```
+    size_type available() const noexcept;
+    ```
 
-**Effects:**
-Returns the number of elements that can be inserted into the container, i.e. returns `capacity() - size()`.
+    **Effects:**
+    Returns the number of elements that can be inserted into the container, i.e. `capacity() - size()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### at
 
-```
-reference at(size_type pos);
-```
-```
-const_reference at(size_type pos) const;
-```
+1.  ```
+    reference at(size_type pos);
+    ```
+2.  ```
+    const_reference at(size_type pos) const;
+    ```
 
-**Effects:**
-Returns a reference to the element at specified location `pos`, with bounds checking.
+    **Effects:**
+    Returns a reference to the element at specified location `pos`, with bounds checking.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-**Exceptions:**
-`std::out_of_range` if `pos >= size()`.
+    **Exceptions:**
+    `std::out_of_range` if `pos >= size()`.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator[]
 
-```
-reference operator[](size_type pos) noexcept;
-```
-```
-const_reference operator[](size_type pos) const noexcept;
-```
+1.  ```
+    reference operator[](size_type pos) noexcept;
+    ```
+2.  ```
+    const_reference operator[](size_type pos) const noexcept;
+    ```
 
-**Preconditions:**
-`pos < size()`
+    **Preconditions:**
+    `pos < size()`
 
-**Effects:**
-Returns a reference to the element at specified location pos. No bounds checking is performed.
+    **Effects:**
+    Returns a reference to the element at specified location pos. No bounds checking is performed.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Note:**
+    This operator never inserts a new element into the container.
 
-**Note:**
-This operator never inserts a new element into the container.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### front
 
-```
-reference front() noexcept;
-```
-```
-const_reference front() const noexcept;
-```
+1.  ```
+    reference front() noexcept;
+    ```
+2.  ```
+    const_reference front() const noexcept;
+    ```
 
-**Preconditions:**
-`!empty()`
+    **Preconditions:**
+    `!empty()`
 
-**Effects:**
-Returns a reference to the first element in the container.
+    **Effects:**
+    Returns a reference to the first element in the container.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### back
 
-```
-reference back() noexcept;
-```
-```
-const_reference back() const noexcept;
-```
+1.  ```
+    reference back() noexcept;
+    ```
+2.  ```
+    const_reference back() const noexcept;
+    ```
 
-**Preconditions:**
-`!empty()`
+    **Preconditions:**
+    `!empty()`
 
-**Effects:**
-Returns a reference to the last element in the container.
+    **Effects:**
+    Returns a reference to the last element in the container.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### data
 
-```
-T* data() noexcept;
-```
-```
-const T* data() const noexcept;
-```
+1.  ```
+    T* data() noexcept;
+    ```
+2.  ```
+    const T* data() const noexcept;
+    ```
 
-**Effects:**
-Returns pointer to the underlying array serving as element storage. The pointer is such that range `[data(), data() + size())` is always a valid range, even if the container is empty. `data()` is not dereferenceable if the container is empty.
+    **Effects:**
+    Returns pointer to the underlying array serving as element storage. The pointer is such that range `[data(), data() + size())` is always a valid range, even if the container is empty. `data()` is not dereferenceable if the container is empty.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### clear
 
-```
-void clear() noexcept;
-```
+1.  ```
+    void clear() noexcept;
+    ```
 
-**Effects:**
-Erases all elements from the container.
-After this call, `size()` returns zero.
+    **Effects:**
+    Erases all elements from the container.
+    After this call, `size()` returns zero.
 
-**Complexity:**
-Linear in `size()`.
+    **Complexity:**
+    Linear in `size()`.
 
-<br><br>
+    <br><br>
 
 
 
 ### emplace
 
-```
-template <typename... Args>
-iterator emplace(const_iterator pos, Args&&... args);
-```
+1.  ```
+    template <typename... Args>
+    iterator emplace(const_iterator pos, Args&&... args);
+    ```
 
-**Preconditions:**
-1. `!full()`
-2. `cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    1. `!full()`
+    2. `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Inserts a new element into the container at position `pos`.
+    **Effects:**
+    Inserts a new element into the container at position `pos`.
 
-New element is constructed as `value_type(std::forward<Args>(args)...)`.
+    New element is constructed as `value_type(std::forward<Args>(args)...)`.
 
-`args...` may directly or indirectly refer to a value in the container.
+    `args...` may directly or indirectly refer to a value in the container.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator to the inserted element.
 
-**Returns:**
-Iterator to the inserted element.
+    **Complexity:**
+    Constant plus linear in `std::distance(pos, end())`.
 
-**Complexity:**
-Constant plus linear in `std::distance(pos, end())`.
-
-<br><br>
+    <br><br>
 
 
 
 ### insert
 
-```
-iterator insert(const_iterator pos, const T& value);
-```
+1.  ```
+    iterator insert(const_iterator pos, const T& value);
+    ```
 
-**Preconditions:**
-1. `!full()`
-2. `cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    1. `!full()`
+    2. `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Inserts copy of `value` at position `pos`.
+    **Effects:**
+    Inserts copy of `value` at position `pos`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator to the inserted element.
 
-**Returns:**
-Iterator to the inserted element.
+    **Complexity:**
+    Constant plus linear in `std::distance(pos, end())`.
 
-**Complexity:**
-Constant plus linear in `std::distance(pos, end())`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-iterator insert(const_iterator pos, T&& value);
-```
+2.  ```
+    iterator insert(const_iterator pos, T&& value);
+    ```
 
-**Preconditions:**
-1. `!full()`
-2. `cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    1. `!full()`
+    2. `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Inserts `value` using move semantics at position `pos`.
+    **Effects:**
+    Inserts `value` using move semantics at position `pos`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator to the inserted element.
 
-**Returns:**
-Iterator to the inserted element.
+    **Complexity:**
+    Constant plus linear in `std::distance(pos, end())`.
 
-**Complexity:**
-Constant plus linear in `std::distance(pos, end())`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-iterator insert(const_iterator pos, size_type n, const T& value);
-```
+3.  ```
+    iterator insert(const_iterator pos, size_type n, const T& value);
+    ```
 
-**Preconditions:**
-1. `n <= available()`
-2. `cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    1. `n <= available()`
+    2. `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Inserts `n` copies of `value` before position `pos`.
+    **Effects:**
+    Inserts `n` copies of `value` before position `pos`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator to the first element inserted, or `pos` if `n == 0`.
 
-**Returns:**
-Iterator to the first element inserted, or `pos` if `n == 0`.
+    **Complexity:**
+    Linear in `n` plus linear in `std::distance(pos, end())`.
 
-**Complexity:**
-Linear in `n` plus linear in `std::distance(pos, end())`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-template <typename InputIt>
-iterator insert(const_iterator pos, InputIt first, InputIt last);
-```
+4.  ```
+    template <typename InputIt>
+    iterator insert(const_iterator pos, InputIt first, InputIt last);
+    ```
 
-**Preconditions:**
-1. `std::distance(first, last) <= available()`
-2. `cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    1. `std::distance(first, last) <= available()`
+    2. `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Inserts elements from the range `[first, last)` before position `pos`.
+    **Effects:**
+    Inserts elements from the range `[first, last)` before position `pos`.
 
-**Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+    **Note:**
+    This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
-**Note:**
-The behavior is undefined if either `first` or `last` is an iterator into `*this`.
+    **Returns:**
+    Iterator to the first element inserted, or `pos` if `first == last`.
 
-**Returns:**
-Iterator to the first element inserted, or `pos` if `first == last`.
+    **Complexity:**
+    Linear in `std::distance(first, last)` plus linear in `std::distance(pos, end())`.
 
-**Complexity:**
-Linear in `std::distance(first, last)` plus linear in `std::distance(pos, end())`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-iterator insert(const_iterator pos, std::initializer_list<T> ilist);
-```
+5.  ```
+    iterator insert(const_iterator pos, std::initializer_list<T> ilist);
+    ```
 
-**Preconditions:**
-1. `ilist.size() <= available()`
-2. `cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    1. `ilist.size() <= available()`
+    2. `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Inserts elements from initializer list `ilist` before position `pos`.
+    **Effects:**
+    Inserts elements from initializer list `ilist` before position `pos`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator to the first element inserted, or `pos` if `ilist` is empty.
 
-**Returns:**
-Iterator to the first element inserted, or `pos` if `ilist` is empty.
+    **Complexity:**
+    Linear in `ilist.size()` plus linear in `std::distance(pos, end())`.
 
-**Complexity:**
-Linear in `ilist.size()` plus linear in `std::distance(pos, end())`.
-
-<br><br>
+    <br><br>
 
 
 
 ### emplace_back
 
-```
-template <typename... Args>
-reference emplace_back(Args&&... args);
-```
+1.  ```
+    template <typename... Args>
+    reference emplace_back(Args&&... args);
+    ```
 
-**Preconditions:**
-`!full()`
+    **Preconditions:**
+    `!full()`
 
-**Effects:**
-Inserts a new element at the end of container.
+    **Effects:**
+    Inserts a new element at the end of container.
 
-New element is constructed as `value_type(std::forward<Args>(args)...)`.
+    New element is constructed as `value_type(std::forward<Args>(args)...)`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Reference to the inserted element.
 
-**Returns:**
-Reference to the inserted element.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### push_back
 
-```
-void push_back(const T& value);
-```
+1.  ```
+    void push_back(const T& value);
+    ```
 
-**Preconditions:**
-`!full()`
+    **Preconditions:**
+    `!full()`
 
-**Effects:**
-Inserts copy of `value` at the end of container.
+    **Effects:**
+    Inserts copy of `value` at the end of container.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
-```
-void push_back(T&& value);
-```
+2.  ```
+    void push_back(T&& value);
+    ```
 
-**Preconditions:**
-`!full()`
+    **Preconditions:**
+    `!full()`
 
-**Effects:**
-Inserts `value` using move semantics at the end of container.
+    **Effects:**
+    Inserts `value` using move semantics at the end of container.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### pop_back
 
-```
-void pop_back();
-```
+1.  ```
+    void pop_back();
+    ```
 
-**Preconditions:**
-`!empty()`
+    **Preconditions:**
+    `!empty()`
 
-**Effects:**
-Removes the last element of the container.
+    **Effects:**
+    Removes the last element of the container.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### erase
 
-```
-iterator erase(const_iterator pos);
-```
+1.  ```
+    iterator erase(const_iterator pos);
+    ```
 
-**Preconditions:**
-`cbegin() <= pos && pos < cend()`
+    **Preconditions:**
+    `cbegin() <= pos && pos < cend()`
 
-**Effects:**
-Removes the element at `pos`.
+    **Effects:**
+    Removes the element at `pos`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator following the last removed element.
 
-**Returns:**
-Iterator following the last removed element.
+    If `pos` refers to the last element, then the `end()` iterator is returned.
 
-If `pos` refers to the last element, then the `end()` iterator is returned.
-
-<br><br>
+    <br><br>
 
 
 
-```
-iterator erase(const_iterator first, const_iterator last);
-```
+2.  ```
+    iterator erase(const_iterator first, const_iterator last);
+    ```
 
-**Preconditions:**
-`cbegin() <= first && first <= last && last <= cend()`
+    **Preconditions:**
+    `cbegin() <= first && first <= last && last <= cend()`
 
-**Effects:**
-Removes the elements in the range `[first, last)`.
+    **Effects:**
+    Removes the elements in the range `[first, last)`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator following the last removed element.
 
-**Returns:**
-Iterator following the last removed element.
+    If `last == end()` prior to removal, then the updated `end()` iterator is returned.
 
-If `last == end()` prior to removal, then the updated `end()` iterator is returned.
+    If `[first, last)` is an empty range, then `last` is returned.
 
-If `[first, last)` is an empty range, then `last` is returned.
-
-<br><br>
+    <br><br>
 
 
 
 ### resize
 
-```
-void resize(size_type n);
-```
+1.  ```
+    void resize(size_type n);
+    ```
 
-**Preconditions:**
-`n <= capacity()`
+    **Preconditions:**
+    `n <= capacity()`
 
-**Effects:**
-Resizes the container to contain `n` elements.
+    **Effects:**
+    Resizes the container to contain `n` elements.
 
-1. If the `n > size()`, additional elements are inserted at the end of container. Additional elements are [value-initialized](https://en.cppreference.com/w/cpp/language/value_initialization).
-2. If the `n < size()`, the last `size() - n` elements are removed.
+    1. If the `n > size()`, additional elements are inserted at the end of container. Additional elements are [value-initialized](https://en.cppreference.com/w/cpp/language/value_initialization).
+    2. If the `n < size()`, the last `size() - n` elements are removed.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Linear in difference between `size()` and `n`.
 
-**Complexity:**
-Linear in difference between `size()` and `n`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-void resize(size_type n, sfl::default_init_t);
-```
+2.  ```
+    void resize(size_type n, sfl::default_init_t);
+    ```
 
-**Preconditions:**
-`n <= capacity()`
+    **Preconditions:**
+    `n <= capacity()`
 
-**Effects:**
-Resizes the container to contain `n` elements.
+    **Effects:**
+    Resizes the container to contain `n` elements.
 
-1. If the `n > size()`, additional elements are inserted at the end of container. Additional elements are [default-initialized](https://en.cppreference.com/w/cpp/language/default_initialization).
-2. If the `n < size()`, the last `size() - n` elements are removed.
+    1. If the `n > size()`, additional elements are inserted at the end of container. Additional elements are [default-initialized](https://en.cppreference.com/w/cpp/language/default_initialization).
+    2. If the `n < size()`, the last `size() - n` elements are removed.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Linear in difference between `size()` and `n`.
 
-**Complexity:**
-Linear in difference between `size()` and `n`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-void resize(size_type n, const T& value);
-```
+3.  ```
+    void resize(size_type n, const T& value);
+    ```
 
-**Preconditions:**
-`n <= capacity()`
+    **Preconditions:**
+    `n <= capacity()`
 
-**Effects:**
-Resizes the container to contain `n` elements.
+    **Effects:**
+    Resizes the container to contain `n` elements.
 
-1. If the `n > size()`, additional copies of `value` are inserted at the end of container.
-2. If the `n < size()`, the last `size() - n` elements are removed.
+    1. If the `n > size()`, additional copies of `value` are inserted at the end of container.
+    2. If the `n < size()`, the last `size() - n` elements are removed.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Complexity:**
+    Linear in difference between `size()` and `n`.
 
-**Complexity:**
-Linear in difference between `size()` and `n`.
-
-<br><br>
+    <br><br>
 
 
 
 ### swap
 
-```
-void swap(static_vector& other);
-```
+1.  ```
+    void swap(static_vector& other);
+    ```
 
-**Effects:**
-Exchanges the contents of the container with those of `other`.
+    **Effects:**
+    Exchanges the contents of the container with those of `other`.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
+    <br><br>
 
 
 
@@ -1203,217 +1115,217 @@ Linear in size.
 
 ### operator==
 
-```
-template <typename T, std::size_t N>
-bool operator==
-(
-    const static_vector<T, N>& x,
-    const static_vector<T, N>& y
-);
-```
+1.  ```
+    template <typename T, std::size_t N>
+    bool operator==
+    (
+        const static_vector<T, N>& x,
+        const static_vector<T, N>& y
+    );
+    ```
 
-**Effects:**
-Checks if the contents of `x` and `y` are equal.
+    **Effects:**
+    Checks if the contents of `x` and `y` are equal.
 
-The contents of `x` and `y` are equal if the following conditions hold:
-* `x.size() == y.size()`
-* Each element in `x` compares equal with the element in `y` at the same position.
+    The contents of `x` and `y` are equal if the following conditions hold:
+    * `x.size() == y.size()`
+    * Each element in `x` compares equal with the element in `y` at the same position.
 
-**Returns:**
-`true` if the contents of the `x` and `y` are equal, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` and `y` are equal, `false` otherwise.
 
-**Complexity:**
-Constant if `x` and `y` are of different size, otherwise linear in the size of the container.
+    **Complexity:**
+    Constant if `x` and `y` are of different size, otherwise linear in the size of the container.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator!=
 
-```
-template <typename T, std::size_t N>
-bool operator!=
-(
-    const static_vector<T, N>& x,
-    const static_vector<T, N>& y
-);
-```
+1.  ```
+    template <typename T, std::size_t N>
+    bool operator!=
+    (
+        const static_vector<T, N>& x,
+        const static_vector<T, N>& y
+    );
+    ```
 
-**Effects:**
-Checks if the contents of `x` and `y` are equal.
+    **Effects:**
+    Checks if the contents of `x` and `y` are equal.
 
-For details see `operator==`.
+    For details see `operator==`.
 
-**Returns:**
-`true` if the contents of the `x` and `y` are not equal, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` and `y` are not equal, `false` otherwise.
 
-**Complexity:**
-Constant if `x` and `y` are of different size, otherwise linear in the size of the container.
+    **Complexity:**
+    Constant if `x` and `y` are of different size, otherwise linear in the size of the container.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator<
 
-```
-template <typename T, std::size_t N>
-bool operator<
-(
-    const static_vector<T, N>& x,
-    const static_vector<T, N>& y
-);
-```
+1.  ```
+    template <typename T, std::size_t N>
+    bool operator<
+    (
+        const static_vector<T, N>& x,
+        const static_vector<T, N>& y
+    );
+    ```
 
-**Effects:**
-Compares the contents of `x` and `y` lexicographically.
-The comparison is performed by a function `std::lexicographical_compare`.
+    **Effects:**
+    Compares the contents of `x` and `y` lexicographically.
+    The comparison is performed by a function `std::lexicographical_compare`.
 
-**Returns:**
-`true` if the contents of the `x` are lexicographically less than the contents of `y`, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` are lexicographically less than the contents of `y`, `false` otherwise.
 
-**Complexity:**
-Linear in the size of the container.
+    **Complexity:**
+    Linear in the size of the container.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator>
 
-```
-template <typename T, std::size_t N>
-bool operator>
-(
-    const static_vector<T, N>& x,
-    const static_vector<T, N>& y
-);
-```
+1.  ```
+    template <typename T, std::size_t N>
+    bool operator>
+    (
+        const static_vector<T, N>& x,
+        const static_vector<T, N>& y
+    );
+    ```
 
-**Effects:**
-Compares the contents of `x` and `y` lexicographically.
-The comparison is performed by a function `std::lexicographical_compare`.
+    **Effects:**
+    Compares the contents of `x` and `y` lexicographically.
+    The comparison is performed by a function `std::lexicographical_compare`.
 
-**Returns:**
-`true` if the contents of the `x` are lexicographically greater than the contents of `y`, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` are lexicographically greater than the contents of `y`, `false` otherwise.
 
-**Complexity:**
-Linear in the size of the container.
+    **Complexity:**
+    Linear in the size of the container.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator<=
 
-```
-template <typename T, std::size_t N>
-bool operator<=
-(
-    const static_vector<T, N>& x,
-    const static_vector<T, N>& y
-);
-```
+1.  ```
+    template <typename T, std::size_t N>
+    bool operator<=
+    (
+        const static_vector<T, N>& x,
+        const static_vector<T, N>& y
+    );
+    ```
 
-**Effects:**
-Compares the contents of `x` and `y` lexicographically.
-The comparison is performed by a function `std::lexicographical_compare`.
+    **Effects:**
+    Compares the contents of `x` and `y` lexicographically.
+    The comparison is performed by a function `std::lexicographical_compare`.
 
-**Returns:**
-`true` if the contents of the `x` are lexicographically less than or equal to the contents of `y`, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` are lexicographically less than or equal to the contents of `y`, `false` otherwise.
 
-**Complexity:**
-Linear in the size of the container.
+    **Complexity:**
+    Linear in the size of the container.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator>=
 
-```
-template <typename T, std::size_t N>
-bool operator>=
-(
-    const static_vector<T, N>& x,
-    const static_vector<T, N>& y
-);
-```
+1.  ```
+    template <typename T, std::size_t N>
+    bool operator>=
+    (
+        const static_vector<T, N>& x,
+        const static_vector<T, N>& y
+    );
+    ```
 
-**Effects:**
-Compares the contents of `x` and `y` lexicographically.
-The comparison is performed by a function `std::lexicographical_compare`.
+    **Effects:**
+    Compares the contents of `x` and `y` lexicographically.
+    The comparison is performed by a function `std::lexicographical_compare`.
 
-**Returns:**
-`true` if the contents of the `x` are lexicographically greater than or equal to the contents of `y`, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` are lexicographically greater than or equal to the contents of `y`, `false` otherwise.
 
-**Complexity:**
-Linear in the size of the container.
+    **Complexity:**
+    Linear in the size of the container.
 
-<br><br>
+    <br><br>
 
 
 
 ### swap
 
-```
-template <typename T, std::size_t N>
-void swap
-(
-    static_vector<T, N>& x,
-    static_vector<T, N>& y
-);
-```
+1.  ```
+    template <typename T, std::size_t N>
+    void swap
+    (
+        static_vector<T, N>& x,
+        static_vector<T, N>& y
+    );
+    ```
 
-**Effects:**
-Swaps the contents of `x` and `y`. Calls `x.swap(y)`.
+    **Effects:**
+    Swaps the contents of `x` and `y`. Calls `x.swap(y)`.
 
-<br><br>
+    <br><br>
 
 
 
 ### erase
 
-```
-template <typename T, std::size_t N, typename U>
-typename static_vector<T, N>::size_type
-    erase(static_vector<T, N>& c, const U& value);
-```
+1.  ```
+    template <typename T, std::size_t N, typename U>
+    typename static_vector<T, N>::size_type
+        erase(static_vector<T, N>& c, const U& value);
+    ```
 
-**Effects:**
-Erases all elements that compare equal to `value` from the container.
+    **Effects:**
+    Erases all elements that compare equal to `value` from the container.
 
-**Returns:**
-The number of erased elements.
+    **Returns:**
+    The number of erased elements.
 
-**Complexity:**
-Linear.
+    **Complexity:**
+    Linear.
 
-<br><br>
+    <br><br>
 
 
 
 ### erase_if
 
-```
-template <typename T, std::size_t N, typename Predicate>
-typename static_vector<T, N>::size_type
-    erase_if(static_vector<T, N>& c, Predicate pred);
-```
+1.  ```
+    template <typename T, std::size_t N, typename Predicate>
+    typename static_vector<T, N>::size_type
+        erase_if(static_vector<T, N>& c, Predicate pred);
+    ```
 
-**Effects:**
-Erases all elements that satisfy the predicate `pred` from the container.
+    **Effects:**
+    Erases all elements that satisfy the predicate `pred` from the container.
 
-`pred` is unary predicate which returns `true` if the element should be removed.
+    `pred` is unary predicate which returns `true` if the element should be removed.
 
-**Returns:**
-The number of erased elements.
+    **Returns:**
+    The number of erased elements.
 
-**Complexity:**
-Linear.
+    **Complexity:**
+    Linear.
 
-<br><br>
+    <br><br>
 
 
 

@@ -135,822 +135,793 @@ static constexpr size_type static_capacity = N;
 
 ### (constructor)
 
-```
-static_unordered_flat_set() noexcept(std::is_nothrow_default_constructible<KeyEqual>::value)
-```
-```
-explicit static_unordered_flat_set(const KeyEqual& equal) noexcept(std::is_nothrow_copy_constructible<KeyEqual>::value)
-```
+1.  ```
+    static_unordered_flat_set() noexcept(std::is_nothrow_default_constructible<KeyEqual>::value)
+    ```
+2.  ```
+    explicit static_unordered_flat_set(const KeyEqual& equal) noexcept(std::is_nothrow_copy_constructible<KeyEqual>::value)
+    ```
 
-**Effects:**
-Constructs an empty container.
+    **Effects:**
+    Constructs an empty container.
 
-<br><br>
-
-
-
-```
-template <typename InputIt>
-static_unordered_flat_set(InputIt first, InputIt last);
-```
-```
-template <typename InputIt>
-static_unordered_flat_set(InputIt first, InputIt last, const KeyEqual& equal);
-```
-
-**Preconditions:**
-`std::distance(first, last) <= capacity()`
-
-**Effects:**
-Constructs an empty container and inserts elements from the range `[first, last)`.
-
-**Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
-
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
-
-**Complexity:**
-Linear in `std::distance(first, last)`.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_unordered_flat_set(std::initializer_list<value_type> ilist);
-```
-```
-static_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal);
-```
+3.  ```
+    template <typename InputIt>
+    static_unordered_flat_set(InputIt first, InputIt last);
+    ```
+4.  ```
+    template <typename InputIt>
+    static_unordered_flat_set(InputIt first, InputIt last, const KeyEqual& equal);
+    ```
 
-**Preconditions:**
-`ilist.size() <= capacity()`
+    **Preconditions:**
+    `std::distance(first, last) <= capacity()`
 
-**Effects:**
-Constructs an empty container and inserts elements from the initializer list `ilist`.
+    **Effects:**
+    Constructs an empty container and inserts elements from the range `[first, last)`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Note:**
+    This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
-**Complexity:**
-Linear in `ilist.size()`.
+    **Complexity:**
+    Linear in `std::distance(first, last)`.
 
-<br><br>
-
-
-
-```
-static_unordered_flat_set(const static_unordered_flat_set& other);
-```
-
-**Effects:**
-Copy constructor.
-Constructs the container with the copy of the contents of `other`.
-
-**Complexity:**
-Linear in size.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_unordered_flat_set(static_unordered_flat_set&& other);
-```
+5.  ```
+    static_unordered_flat_set(std::initializer_list<value_type> ilist);
+    ```
+6.  ```
+    static_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal);
+    ```
 
-**Effects:**
-Move constructor.
-Constructs the container with the contents of `other` using move semantics.
+    **Preconditions:**
+    `ilist.size() <= capacity()`
 
-`other` is not guaranteed to be empty after the move.
+    **Effects:**
+    Constructs an empty container and inserts elements from the initializer list `ilist`.
 
-`other` is in a valid but unspecified state after the move.
+    **Complexity:**
+    Linear in `ilist.size()`.
 
-**Complexity:**
-Linear in size.
+    <br><br>
 
-<br><br>
+
+
+7.  ```
+    static_unordered_flat_set(const static_unordered_flat_set& other);
+    ```
+
+    **Effects:**
+    Copy constructor.
+    Constructs the container with the copy of the contents of `other`.
+
+    **Complexity:**
+    Linear in size.
+
+    <br><br>
+
+
+
+8.  ```
+    static_unordered_flat_set(static_unordered_flat_set&& other);
+    ```
+
+    **Effects:**
+    Move constructor.
+    Constructs the container with the contents of `other` using move semantics.
+
+    `other` is not guaranteed to be empty after the move.
+
+    `other` is in a valid but unspecified state after the move.
+
+    **Complexity:**
+    Linear in size.
+
+    <br><br>
 
 
 
 ### (destructor)
 
-```
-~static_unordered_flat_set();
-```
+1.  ```
+    ~static_unordered_flat_set();
+    ```
 
-**Effects:**
-Destructs the container. The destructors of the elements are called and the used storage is deallocated.
+    **Effects:**
+    Destructs the container. The destructors of the elements are called and the used storage is deallocated.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator=
 
-```
-static_unordered_flat_set& operator=(const static_unordered_flat_set& other);
-```
+1.  ```
+    static_unordered_flat_set& operator=(const static_unordered_flat_set& other);
+    ```
 
-**Effects:**
-Copy assignment operator.
-Replaces the contents with a copy of the contents of `other`.
+    **Effects:**
+    Copy assignment operator.
+    Replaces the contents with a copy of the contents of `other`.
 
-**Returns:**
-`*this()`.
+    **Returns:**
+    `*this()`.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
-
-
-
-```
-static_unordered_flat_set& operator=(static_unordered_flat_set&& other);
-```
-
-**Effects:**
-Move assignment operator.
-Replaces the contents with those of `other` using move semantics.
-
-`other` is not guaranteed to be empty after the move.
-
-`other` is in a valid but unspecified state after the move.
-
-**Returns:**
-`*this()`.
-
-**Complexity:**
-Linear in size.
-
-<br><br>
+    <br><br>
 
 
 
-```
-static_unordered_flat_set& operator=(std::initializer_list<Key> ilist);
-```
+2.  ```
+    static_unordered_flat_set& operator=(static_unordered_flat_set&& other);
+    ```
 
-**Preconditions:**
-`ilist.size() <= capacity()`
+    **Effects:**
+    Move assignment operator.
+    Replaces the contents with those of `other` using move semantics.
 
-**Effects:**
-Replaces the contents with those identified by initializer list `ilist`.
+    `other` is not guaranteed to be empty after the move.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    `other` is in a valid but unspecified state after the move.
 
-**Returns:**
-`*this()`.
+    **Returns:**
+    `*this()`.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
+    <br><br>
+
+
+
+3.  ```
+    static_unordered_flat_set& operator=(std::initializer_list<Key> ilist);
+    ```
+
+    **Preconditions:**
+    `ilist.size() <= capacity()`
+
+    **Effects:**
+    Replaces the contents with those identified by initializer list `ilist`.
+
+    **Returns:**
+    `*this()`.
+
+    **Complexity:**
+    Linear in size.
+
+    <br><br>
 
 
 
 ### key_eq
 
-```
-key_equal key_eq() const;
-```
+1.  ```
+    key_equal key_eq() const;
+    ```
 
-**Effects:**
-Returns the function object that compares keys for equality, which is a copy of this container's constructor argument `equal`.
+    **Effects:**
+    Returns the function object that compares keys for equality, which is a copy of this container's constructor argument `equal`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### begin, cbegin
 
-```
-iterator begin() noexcept;
-```
-```
-const_iterator begin() const noexcept;
-```
-```
-const_iterator cbegin() const noexcept;
-```
+1.  ```
+    iterator begin() noexcept;
+    ```
+2.  ```
+    const_iterator begin() const noexcept;
+    ```
+3.  ```
+    const_iterator cbegin() const noexcept;
+    ```
 
-**Effects:**
-Returns an iterator to the first element of the container.
+    **Effects:**
+    Returns an iterator to the first element of the container.
+    If the container is empty, the returned iterator will be equal to `end()`.
 
-If the container is empty, the returned iterator will be equal to `end()`.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### end, cend
 
-```
-iterator end() noexcept;
-```
-```
-const_iterator end() const noexcept;
-```
-```
-const_iterator cend() const noexcept;
-```
+1.  ```
+    iterator end() noexcept;
+    ```
+2.  ```
+    const_iterator end() const noexcept;
+    ```
+3.  ```
+    const_iterator cend() const noexcept;
+    ```
 
-**Effects:**
-Returns an iterator to the element following the last element of the container.
+    **Effects:**
+    Returns an iterator to the element following the last element of the container.
+    This element acts as a placeholder; attempting to access it results in undefined behavior.
 
-This element acts as a placeholder; attempting to access it results in undefined behavior.
+    **Complexity:**
+    Constant.
 
-**Complexity:**
-Constant.
-
-<br><br>
+    <br><br>
 
 
 
 ### nth
 
-```
-iterator nth(size_type pos) noexcept;
-```
-```
-const_iterator nth(size_type pos) const noexcept;
-```
+1.  ```
+    iterator nth(size_type pos) noexcept;
+    ```
+2.  ```
+    const_iterator nth(size_type pos) const noexcept;
+    ```
 
-**Preconditions:**
-`pos <= size()`
+    **Preconditions:**
+    `pos <= size()`
 
-**Effects:**
-Returns an iterator to the element at position `pos`.
-If `pos == size()`, the returned iterator is equal to `end()`.
+    **Effects:**
+    Returns an iterator to the element at position `pos`.
 
-**Complexity:**
-Constant.
+    If `pos == size()`, the returned iterator is equal to `end()`.
 
-<br><br>
+    **Complexity:**
+    Constant.
+
+    <br><br>
 
 
 
 ### index_of
 
-```
-size_type index_of(const_iterator pos) const noexcept;
-```
+1.  ```
+    size_type index_of(const_iterator pos) const noexcept;
+    ```
 
-**Preconditions:**
-`cbegin() <= pos && pos <= cend()`
+    **Preconditions:**
+    `cbegin() <= pos && pos <= cend()`
 
-**Effects:**
-Returns position of the element pointed by iterator `pos`, i.e. `std::distance(begin(), pos)`.
+    **Effects:**
+    Returns position of the element pointed by iterator `pos`, i.e. `std::distance(begin(), pos)`.
 
-If `pos == end()`, the returned value is equal to `size()`.
+    If `pos == end()`, the returned value is equal to `size()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### empty
 
-```
-bool empty() const noexcept;
-```
+1.  ```
+    bool empty() const noexcept;
+    ```
 
-**Effects:**
-Returns `true` if the container has no elements, i.e. whether `begin() == end()`.
+    **Effects:**
+    Returns `true` if the container has no elements, i.e. whether `begin() == end()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### full
 
-```
-bool full() const noexcept;
-```
+1.  ```
+    bool full() const noexcept;
+    ```
 
-**Effects:**
-Returns `true` if the container is full, i.e. whether `size() == capacity()`.
+    **Effects:**
+    Returns `true` if the container is full, i.e. whether `size() == capacity()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### size
 
-```
-size_type size() const noexcept;
-```
+1.  ```
+    size_type size() const noexcept;
+    ```
 
-**Effects:**
-Returns the number of elements in the container, i.e. `std::distance(begin(), end())`.
+    **Effects:**
+    Returns the number of elements in the container, i.e. `std::distance(begin(), end())`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### max_size
 
-```
-static constexpr size_type max_size() const noexcept;
-```
+1.  ```
+    static constexpr size_type max_size() const noexcept;
+    ```
 
-**Effects:**
-Returns the maximum number of elements the container is able to hold, i.e. returns `N`.
+    **Effects:**
+    Returns the maximum number of elements the container is able to hold, i.e. `N`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### capacity
 
-```
-static constexpr size_type capacity() const noexcept;
-```
+1.  ```
+    static constexpr size_type capacity() const noexcept;
+    ```
 
-**Effects:**
-Returns the maximum number of elements the container is able to hold, i.e. returns `N`.
+    **Effects:**
+    Returns the maximum number of elements the container is able to hold, i.e. `N`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### available
 
-```
-size_type available() const noexcept;
-```
+1.  ```
+    size_type available() const noexcept;
+    ```
 
-**Effects:**
-Returns the number of elements that can be inserted into the container, i.e. returns `capacity() - size()`.
+    **Effects:**
+    Returns the number of elements that can be inserted into the container, i.e. `capacity() - size()`.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
 ### clear
 
-```
-void clear() noexcept;
-```
+1.  ```
+    void clear() noexcept;
+    ```
 
-**Effects:**
-Erases all elements from the container.
-After this call, `size()` returns zero and `capacity()` remains unchanged.
+    **Effects:**
+    Erases all elements from the container.
+    After this call, `size()` returns zero and `capacity()` remains unchanged.
 
-**Complexity:**
-Linear in `size()`.
+    **Complexity:**
+    Linear in `size()`.
 
-<br><br>
+    <br><br>
 
 
 
 ### emplace
 
-```
-template <typename... Args>
-std::pair<iterator, bool> emplace(Args&&... args);
-```
+1.  ```
+    template <typename... Args>
+    std::pair<iterator, bool> emplace(Args&&... args);
+    ```
 
-**Preconditions:**
-`!full()`
+    **Preconditions:**
+    `!full()`
 
-**Effects:**
-Inserts a new element into the container only if the container does not already contain an element with an equivalent key.
+    **Effects:**
+    Inserts new element into the container if the container doesn't already contain an element with an equivalent key.
 
-New element is constructed as `value_type(std::forward<Args>(args)...)`.
+    New element is constructed as `value_type(std::forward<Args>(args)...)`.
 
-The element may be constructed even if there already is an element with the key in the container, in which case the newly constructed element will be destroyed immediately.
+    The element may be constructed even if there already is an element with the key in the container, in which case the newly constructed element will be destroyed immediately.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
 
-**Returns:**
-Pair consisting of an iterator to the inserted element, or the already-existing element if no insertion happened, and a `bool` denoting whether the insertion took place (`true` if insertion happened, `false` if it did not).
-
-<br><br>
+    <br><br>
 
 
 
 ### emplace_hint
 
-```
-template <typename... Args>
-iterator emplace_hint(const_iterator hint, Args&&... args);
-```
+1.  ```
+    template <typename... Args>
+    iterator emplace_hint(const_iterator hint, Args&&... args);
+    ```
 
-**Preconditions:**
-1. `!full()`
-2. `cbegin() <= hint && hint <= cend()`
+    **Preconditions:**
+    1. `!full()`
+    2. `cbegin() <= hint && hint <= cend()`
 
-**Effects:**
-Inserts a new element into the container only if the container does not already contain an element with an equivalent key.
+    **Effects:**
+    Inserts new element into the container if the container doesn't already contain an element with an equivalent key.
 
-New element is constructed as `value_type(std::forward<Args>(args)...)`.
+    New element is constructed as `value_type(std::forward<Args>(args)...)`.
 
-The element may be constructed even if there already is an element with the key in the container, in which case the newly constructed element will be destroyed immediately.
+    The element may be constructed even if there already is an element with the key in the container, in which case the newly constructed element will be destroyed immediately.
 
-Iterator `hint` is used as a suggestion where to start to search insert position.
+    Iterator `hint` is used as a suggestion where to start to search insert position.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    Iterator `hint` is ignored due to container's underlying storage implementation. This overload exists just to have this container compatible with standard C++ containers as much as possible.
 
-**Returns:**
-Iterator to the inserted element or to the already existing element.
+    **Returns:**
+    Iterator to the inserted element or to the already existing element.
 
-<br><br>
+    <br><br>
 
 
 
 ### insert
 
-```
-std::pair<iterator, bool> insert(const value_type& value);
-```
+1.  ```
+    std::pair<iterator, bool> insert(const value_type& value);
+    ```
 
-**Preconditions:**
-`!full()`
+    **Preconditions:**
+    `!full()`
 
-**Effects:**
-Inserts copy of `value` only if the container does not already contain an element with an key equivalent to the key of `value`.
+    **Effects:**
+    Inserts copy of `value` if the container doesn't already contain an element with an equivalent key.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
 
-**Returns:**
-Pair consisting of an iterator to the inserted element, or the already-existing element if no insertion happened, and a `bool` denoting whether the insertion took place (`true` if insertion happened, `false` if it did not).
-
-<br><br>
+    <br><br>
 
 
 
-```
-std::pair<iterator, bool> insert(value_type&& value);
-```
+2.  ```
+    std::pair<iterator, bool> insert(value_type&& value);
+    ```
 
-**Preconditions:**
-`!full()`
+    **Preconditions:**
+    `!full()`
 
-**Effects:**
-Inserts `value` using move semantics only if the container does not already contain an element with an key equivalent to the key of `value`.
+    **Effects:**
+    Inserts `value` using move semantics if the container doesn't already contain an element with an equivalent key.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
 
-**Returns:**
-Pair consisting of an iterator to the inserted element, or the already-existing element if no insertion happened, and a `bool` denoting whether the insertion took place (`true` if insertion happened, `false` if it did not).
-
-<br><br>
+    <br><br>
 
 
 
-```
-iterator insert(const_iterator hint, const value_type& value);
-```
+3.  ```
+    template <typename K>
+    std::pair<iterator, bool> insert(K&& x);
+    ```
 
-**Preconditions:**
-1. `!full()`
-2. `cbegin() <= hint && hint <= cend()`
+    **Preconditions:**
+    `!full()`
 
-**Effects:**
-Inserts copy of `value` only if the container does not already contain an element with an key equivalent to the key of `value`.
+    **Effects:**
+    Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
 
-Iterator `hint` is used as a suggestion where to start to search insert position.
+    New element is constructed as `value_type(std::forward<K>(x))`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Note:** This overload participates in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
-**Returns:**
-Iterator to the inserted element or to the already existing element.
+    **Returns:**
+    The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
 
-<br><br>
-
-
-
-```
-iterator insert(const_iterator hint, value_type&& value);
-```
-
-**Preconditions:**
-1. `!full()`
-2. `cbegin() <= hint && hint <= cend()`
-
-**Effects:**
-Inserts `value` using move semantics only if the container does not already contain an element with an key equivalent to the key of `value`.
-
-Iterator `hint` is used as a suggestion where to start to search insert position.
-
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
-
-**Returns:**
-Iterator to the inserted element or to the already existing element.
-
-<br><br>
+    <br><br>
 
 
 
-```
-template <typename InputIt>
-void insert(InputIt first, InputIt last);
-```
+4.  ```
+    iterator insert(const_iterator hint, const value_type& value);
+    ```
 
-**Preconditions:**
-`std::distance(first, last) <= available()`
+    **Preconditions:**
+    1. `!full()`
+    2. `cbegin() <= hint && hint <= cend()`
 
-**Effects:**
-Inserts elements from range `[first, last)`.
+    **Effects:**
+    Inserts copy of `value` if the container doesn't already contain an element with an equivalent key.
 
-The call to this function is equivalent to:
-```
-while (first != last)
-{
-    insert(*first);
-    ++first;
-}
-```
+    Iterator `hint` is used as a suggestion where to start to search insert position.
 
-**Note:**
-This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+    Iterator `hint` is ignored due to container's underlying storage implementation. This overload exists just to have this container compatible with standard C++ containers as much as possible.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator to the inserted element or to the already existing element.
 
-<br><br>
+    <br><br>
 
 
 
-```
-void insert(std::initializer_list<value_type> ilist);
-```
+5.  ```
+    iterator insert(const_iterator hint, value_type&& value);
+    ```
 
-**Preconditions:**
-`ilist.size() <= available()`
+    **Preconditions:**
+    1. `!full()`
+    2. `cbegin() <= hint && hint <= cend()`
 
-**Effects:**
-Inserts elements from initializer list `ilist`.
+    **Effects:**
+    Inserts `value` using move semantics if the container doesn't already contain an element with an equivalent key.
 
-The call to this function is equivalent to:
-```
-insert(ilist.begin(), ilist.end());
-```
+    Iterator `hint` is used as a suggestion where to start to search insert position.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    Iterator `hint` is ignored due to container's underlying storage implementation. This overload exists just to have this container compatible with standard C++ containers as much as possible.
 
-<br><br>
+    **Returns:**
+    Iterator to the inserted element or to the already existing element.
+
+    <br><br>
+
+
+
+6.  ```
+    template <typename K>
+    iterator insert(const_iterator hint, K&& x);
+    ```
+
+    **Preconditions:**
+    1. `!full()`
+    2. `cbegin() <= hint && hint <= cend()`
+
+    **Effects:**
+    Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
+
+    New element is constructed as `value_type(std::forward<K>(x))`.
+
+    Iterator `hint` is used as a suggestion where to start to search insert position.
+
+    Iterator `hint` is ignored due to container's underlying storage implementation. This overload exists just to have this container compatible with standard C++ containers as much as possible.
+
+    **Note:** This overload participates in overload resolution only if all following conditions are satisfied:
+    1. `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
+    2. `std::is_convertible_v<K&&, iterator>` is `false`.
+    3. `std::is_convertible_v<K&&, const_iterator>` is `false`.
+
+    **Returns:**
+    Iterator to the inserted element or to the already existing element.
+
+    <br><br>
+
+
+
+7. ```
+    template <typename InputIt>
+    void insert(InputIt first, InputIt last);
+    ```
+
+    **Preconditions:**
+    `std::distance(first, last) <= available()`
+
+    **Effects:**
+    Inserts elements from range `[first, last)`.
+
+    The call to this function is equivalent to:
+    ```
+    while (first != last)
+    {
+        insert(*first);
+        ++first;
+    }
+    ```
+
+    **Note:**
+    This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+
+    <br><br>
+
+
+
+8.  ```
+    void insert(std::initializer_list<value_type> ilist);
+    ```
+
+    **Preconditions:**
+    `ilist.size() <= available()`
+
+    **Effects:**
+    Inserts elements from initializer list `ilist`.
+
+    The call to this function is equivalent to `insert(ilist.begin(), ilist.end())`.
+
+    <br><br>
 
 
 
 ### erase
 
-```
-iterator erase(iterator pos);
-```
-```
-iterator erase(const_iterator pos);
-```
+1.  ```
+    iterator erase(iterator pos);
+    ```
+2.  ```
+    iterator erase(const_iterator pos);
+    ```
 
-**Preconditions:**
-`cbegin() <= pos && pos < cend()`
+    **Preconditions:**
+    `cbegin() <= pos && pos < cend()`
 
-**Effects:**
-Removes the element at `pos`.
+    **Effects:**
+    Removes the element at `pos`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator following the last removed element.
 
-**Returns:**
-Iterator following the last removed element.
-
-<br><br>
+    <br><br>
 
 
 
-```
-iterator erase(const_iterator first, const_iterator last);
-```
+3.  ```
+    iterator erase(const_iterator first, const_iterator last);
+    ```
 
-**Preconditions:**
-`cbegin() <= first && first <= last && last <= cend()`
+    **Preconditions:**
+    `cbegin() <= first && first <= last && last <= cend()`
 
-**Effects:**
-Removes the elements in the range `[first, last)`.
+    **Effects:**
+    Removes the elements in the range `[first, last)`.
 
-**Note:**
-The behavior is undefined if preconditions are not satisfied.
+    **Returns:**
+    Iterator following the last removed element.
 
-**Returns:**
-Iterator following the last removed element.
-
-<br><br>
+    <br><br>
 
 
 
-```
-size_type erase(const Key& key);
-```
+4.  ```
+    size_type erase(const Key& key);
+    ```
+5.  ```
+    template <typename K>
+    size_type erase(K&& x);
+    ```
 
-**Effects:**
-Removes the element (if one exists) with the key equivalent to `key`.
+    **Effects:**
+    Removes the element (if one exists) with the key equivalent to `key` or `x`.
 
-**Returns:**
-Number of elements removed (0 or 1).
+    **Note:**
+    Overload (5) participates in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
-<br><br>
+    **Returns:**
+    Number of elements removed (0 or 1).
 
-
-
-```
-template <typename K>
-size_type erase(K&& x);
-```
-
-**Effects:**
-Removes the element (if one exists) with key that compares equivalent to the value `x`.
-
-**Note:**
-This overload participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-
-**Returns:**
-Number of elements removed (0 or 1).
-
-<br><br>
+    <br><br>
 
 
 
 ### swap
 
-```
-void swap(static_unordered_flat_set& other);
-```
+1.  ```
+    void swap(static_unordered_flat_set& other);
+    ```
 
-**Effects:**
-Exchanges the contents of the container with those of `other`.
+    **Effects:**
+    Exchanges the contents of the container with those of `other`.
 
-**Complexity:**
-Linear in size.
+    **Complexity:**
+    Linear in size.
 
-<br><br>
+    <br><br>
 
 
 
 ### find
 
-```
-iterator find(const Key& key);
-```
-```
-const_iterator find(const Key& key) const;
-```
+1.  ```
+    iterator find(const Key& key);
+    ```
+2.  ```
+    const_iterator find(const Key& key) const;
+    ```
+3.  ```
+    template <typename K>
+    iterator find(const K& x);
+    ```
+4.  ```
+    template <typename K>
+    const_iterator find(const K& x) const;
+    ```
 
-**Effects:**
-Returns an iterator to an element with key equivalent to `key`, or `end()` if such an element is not found.
+    **Effects:**
+    Returns an iterator pointing to the element with key equivalent to `key` or `x`. Returns `end()` if no such element is found.
 
-**Complexity:**
-Constant in the best case. Linear in `size()` in the worst case.
+    **Note:**
+    Overloads (3) and (4) participate in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling these functions without constructing an instance of `Key`.
 
-<br><br>
+    **Complexity:**
+    Constant in the best case. Linear in `size()` in the worst case.
 
-
-
-```
-template <typename K>
-iterator find(const K& x);
-```
-```
-template <typename K>
-const_iterator find(const K& x) const;
-```
-
-**Effects:**
-Returns an iterator to an element with key that compares equivalent to `x`, or `end()` if such an element is not found.
-
-**Note:**
-This overload participates in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-
-**Complexity:**
-Constant in the best case. Linear in `size()` in the worst case.
-
-<br><br>
+    <br><br>
 
 
 
 ### count
 
-```
-size_type count(const Key& key) const;
-```
+1.  ```
+    size_type count(const Key& key) const;
+    ```
+2.  ```
+    template <typename K>
+    size_type count(const K& x) const;
+    ```
 
-**Effects:**
-Returns the number of elements with key equivalent to `key`, which is either 1 or 0 since this container does not allow duplicates.
+    **Effects:**
+    Returns the number of elements with key equivalent to `key` or `x`, which is either 1 or 0 since this container does not allow duplicates.
 
-**Complexity:**
-Constant in the best case. Linear in `size()` in the worst case.
+    **Note:**
+    Overload (2) participates in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
-<br><br>
+    **Complexity:**
+    Constant in the best case. Linear in `size()` in the worst case.
 
-
-
-```
-template <typename K>
-size_type count(const K& x) const;
-```
-
-**Effects:**
-Returns the number of elements with key that compares equivalent to `x`, which is either 1 or 0 since this container does not allow duplicates.
-
-**Note:**
-This overload participates in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-
-**Complexity:**
-Constant in the best case. Linear in `size()` in the worst case.
-
-<br><br>
+    <br><br>
 
 
 
 ### contains
 
-```
-bool contains(const Key& key) const;
-```
+1.  ```
+    bool contains(const Key& key) const;
+    ```
+2.  ```
+    template <typename K>
+    bool contains(const K& x) const;
+    ```
 
-**Effects:**
-Returns `true` if the container contains an element with key equivalent to `key`, otherwise returns `false`.
+    **Effects:**
+    Returns `true` if the container contains an element with key equivalent to `key` or `x`, otherwise returns `false`.
 
-**Complexity:**
-Constant in the best case. Linear in `size()` in the worst case.
+    **Note:**
+    Overload (2) participates in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
-<br><br>
+    **Complexity:**
+    Constant in the best case. Linear in `size()` in the worst case.
 
-
-
-```
-template <typename K>
-bool contains(const K& x) const;
-```
-
-**Effects:**
-Returns `true` if the container contains an element with the key that compares equivalent to `x`, otherwise returns `false`.
-
-**Note:**
-This overload participates in overload resolution only if `KeyEqual::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-
-**Complexity:**
-Constant in the best case. Linear in `size()` in the worst case.
-
-<br><br>
+    <br><br>
 
 
 
 ### data
 
-```
-value_type* data() noexcept;
-```
-```
-const value_type* data() const noexcept;
-```
+1.  ```
+    value_type* data() noexcept;
+    ```
+2.  ```
+    const value_type* data() const noexcept;
+    ```
 
-**Effects:**
-Returns pointer to the underlying array serving as element storage. The pointer is such that range `[data(), data() + size())` is always a valid range, even if the container is empty. `data()` is not dereferenceable if the container is empty.
+    **Effects:**
+    Returns pointer to the underlying array serving as element storage. The pointer is such that range `[data(), data() + size())` is always a valid range, even if the container is empty. `data()` is not dereferenceable if the container is empty.
 
-**Complexity:**
-Constant.
+    **Complexity:**
+    Constant.
 
-<br><br>
+    <br><br>
 
 
 
@@ -958,93 +929,93 @@ Constant.
 
 ### operator==
 
-```
-template <typename K, std::size_t N, typename E>
-bool operator==
-(
-    const static_unordered_flat_set<K, N, E>& x,
-    const static_unordered_flat_set<K, N, E>& y
-);
-```
+1.  ```
+    template <typename K, std::size_t N, typename E>
+    bool operator==
+    (
+        const static_unordered_flat_set<K, N, E>& x,
+        const static_unordered_flat_set<K, N, E>& y
+    );
+    ```
 
-**Effects:**
-Checks if the contents of `x` and `y` are equal.
+    **Effects:**
+    Checks if the contents of `x` and `y` are equal.
 
-The contents of `x` and `y` are equal if the following conditions hold:
-* `x.size() == y.size()`
-* For each element in `x` there is equal element in `y`.
+    The contents of `x` and `y` are equal if the following conditions hold:
+    * `x.size() == y.size()`
+    * For each element in `x` there is equal element in `y`.
 
-The comparison is performed by `std::is_permutation`.
-This comparison ignores the container's `KeyEqual` function.
+    The comparison is performed by `std::is_permutation`.
+    This comparison ignores the container's `KeyEqual` function.
 
-**Returns:**
-`true` if the contents of the `x` and `y` are equal, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` and `y` are equal, `false` otherwise.
 
-<br><br>
+    <br><br>
 
 
 
 ### operator!=
 
-```
-template <typename K, std::size_t N, typename E>
-bool operator!=
-(
-    const static_unordered_flat_set<K, N, E>& x,
-    const static_unordered_flat_set<K, N, E>& y
-);
-```
+1.  ```
+    template <typename K, std::size_t N, typename E>
+    bool operator!=
+    (
+        const static_unordered_flat_set<K, N, E>& x,
+        const static_unordered_flat_set<K, N, E>& y
+    );
+    ```
 
-**Effects:**
-Checks if the contents of `x` and `y` are equal.
+    **Effects:**
+    Checks if the contents of `x` and `y` are equal.
 
-For details see `operator==`.
+    For details see `operator==`.
 
-**Returns:**
-`true` if the contents of the `x` and `y` are not equal, `false` otherwise.
+    **Returns:**
+    `true` if the contents of the `x` and `y` are not equal, `false` otherwise.
 
-<br><br>
+    <br><br>
 
 
 
 ### swap
 
-```
-template <typename K, std::size_t N, typename E>
-void swap
-(
-    static_unordered_flat_set<K, N, E>& x,
-    static_unordered_flat_set<K, N, E>& y
-);
-```
+1.  ```
+    template <typename K, std::size_t N, typename E>
+    void swap
+    (
+        static_unordered_flat_set<K, N, E>& x,
+        static_unordered_flat_set<K, N, E>& y
+    );
+    ```
 
-**Effects:**
-Swaps the contents of `x` and `y`. Calls `x.swap(y)`.
+    **Effects:**
+    Swaps the contents of `x` and `y`. Calls `x.swap(y)`.
 
-<br><br>
+    <br><br>
 
 
 
 ### erase_if
 
-```
-template <typename K, std::size_t N, typename E, typename Predicate>
-typename static_unordered_flat_set<K, N, E>::size_type
-    erase_if(static_unordered_flat_set<K, N, E>& c, Predicate pred);
-```
+1.  ```
+    template <typename K, std::size_t N, typename E, typename Predicate>
+    typename static_unordered_flat_set<K, N, E>::size_type
+        erase_if(static_unordered_flat_set<K, N, E>& c, Predicate pred);
+    ```
 
-**Effects:**
-Erases all elements that satisfy the predicate `pred` from the container.
+    **Effects:**
+    Erases all elements that satisfy the predicate `pred` from the container.
 
-`pred` is unary predicate which returns `true` if the element should be removed.
+    `pred` is unary predicate which returns `true` if the element should be removed.
 
-**Returns:**
-The number of erased elements.
+    **Returns:**
+    The number of erased elements.
 
-**Complexity:**
-Linear.
+    **Complexity:**
+    Linear.
 
-<br><br>
+    <br><br>
 
 
 
