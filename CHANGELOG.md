@@ -1,4 +1,4 @@
-# New
+# 1.7.0 (2024-06-22)
 
 * Iterators are now distinct types for all containers.
   Iterators are no more aliases for `pointer` and `const_pointer`.
