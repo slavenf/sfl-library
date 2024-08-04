@@ -45,7 +45,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == map.nth(2));
             CHECK(map.size() == 3);
-            CHECK(map.capacity() == 4);
+            CHECK(map.capacity() == 3);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
@@ -72,7 +72,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == map.nth(4));
             CHECK(map.size() == 5);
-            CHECK(map.capacity() == 8);
+            CHECK(map.capacity() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
@@ -87,7 +87,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == map.nth(5));
             CHECK(map.size() == 6);
-            CHECK(map.capacity() == 8);
+            CHECK(map.capacity() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
@@ -148,7 +148,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == map.nth(3));
             CHECK(map.size() == 4);
-            CHECK(map.capacity() == 6);
+            CHECK(map.capacity() == 4);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
@@ -2064,7 +2064,7 @@ PRINT("Test swap(container&)");
         CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         CHECK(map2.size() == 6);
-        CHECK(map2.capacity() == 10);
+        CHECK(map2.capacity() == 7);
         CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
         CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
         CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
@@ -2077,7 +2077,7 @@ PRINT("Test swap(container&)");
         map1.swap(map2);
 
         CHECK(map1.size() == 6);
-        CHECK(map1.capacity() == 10);
+        CHECK(map1.capacity() == 7);
         CHECK(map1.nth(0)->first == 40); CHECK(map1.nth(0)->second == 2);
         CHECK(map1.nth(1)->first == 50); CHECK(map1.nth(1)->second == 2);
         CHECK(map1.nth(2)->first == 60); CHECK(map1.nth(2)->second == 2);
@@ -2102,7 +2102,7 @@ PRINT("Test swap(container&)");
         CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
 
         CHECK(map2.size() == 6);
-        CHECK(map2.capacity() == 10);
+        CHECK(map2.capacity() == 7);
         CHECK(map2.nth(0)->first == 40); CHECK(map2.nth(0)->second == 2);
         CHECK(map2.nth(1)->first == 50); CHECK(map2.nth(1)->second == 2);
         CHECK(map2.nth(2)->first == 60); CHECK(map2.nth(2)->second == 2);
@@ -2129,7 +2129,7 @@ PRINT("Test swap(container&)");
         map2.emplace(70, 2);
 
         CHECK(map1.size() == 3);
-        CHECK(map1.capacity() == 4);
+        CHECK(map1.capacity() == 3);
         CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
         CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
@@ -2153,7 +2153,7 @@ PRINT("Test swap(container&)");
         CHECK(map1.nth(3)->first == 70); CHECK(map1.nth(3)->second == 2);
 
         CHECK(map2.size() == 3);
-        CHECK(map2.capacity() == 4);
+        CHECK(map2.capacity() == 3);
         CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
         CHECK(map2.nth(1)->first == 20); CHECK(map2.nth(1)->second == 1);
         CHECK(map2.nth(2)->first == 30); CHECK(map2.nth(2)->second == 1);
@@ -2163,7 +2163,7 @@ PRINT("Test swap(container&)");
         map1.swap(map2);
 
         CHECK(map1.size() == 3);
-        CHECK(map1.capacity() == 4);
+        CHECK(map1.capacity() == 3);
         CHECK(map1.nth(0)->first == 10); CHECK(map1.nth(0)->second == 1);
         CHECK(map1.nth(1)->first == 20); CHECK(map1.nth(1)->second == 1);
         CHECK(map1.nth(2)->first == 30); CHECK(map1.nth(2)->second == 1);
@@ -2452,6 +2452,8 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
         map.emplace(10, 1);
         map.emplace(20, 1);
         map.emplace(30, 1);
+        map.emplace(40, 1);
+        map.erase(map.end() - 1);
 
         CHECK(map.size() == 3);
         CHECK(map.capacity() == 4);

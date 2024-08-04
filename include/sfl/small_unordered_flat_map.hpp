@@ -1421,22 +1421,26 @@ private:
 
     size_type calculate_new_capacity(size_type num_additional_elements, const char* msg)
     {
-        const size_type max_size = this->max_size();
         const size_type size = this->size();
+        const size_type capacity = this->capacity();
+        const size_type max_size = this->max_size();
 
         if (max_size - size < num_additional_elements)
         {
             sfl::dtl::throw_length_error(msg);
         }
-
-        const size_type new_size = std::max(N, size + std::max(size, num_additional_elements));
-
-        if (new_size < size || new_size > max_size)
+        else if (max_size - capacity < capacity / 2)
         {
             return max_size;
         }
-
-        return new_size;
+        else if (size + num_additional_elements < capacity + capacity / 2)
+        {
+            return std::max(N, capacity + capacity / 2);
+        }
+        else
+        {
+            return std::max(N, size + num_additional_elements);
+        }
     }
 
     void reset(size_type new_cap = N)

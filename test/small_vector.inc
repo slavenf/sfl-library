@@ -40,7 +40,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 30);
             CHECK(vec.size() == 3);
-            CHECK(vec.capacity() == 4);
+            CHECK(vec.capacity() == 3);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -67,7 +67,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 50);
             CHECK(vec.size() == 5);
-            CHECK(vec.capacity() == 8);
+            CHECK(vec.capacity() == 6);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -82,7 +82,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 60);
             CHECK(vec.size() == 6);
-            CHECK(vec.capacity() == 8);
+            CHECK(vec.capacity() == 6);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -98,7 +98,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 70);
             CHECK(vec.size() == 7);
-            CHECK(vec.capacity() == 8);
+            CHECK(vec.capacity() == 9);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -115,7 +115,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 80);
             CHECK(vec.size() == 8);
-            CHECK(vec.capacity() == 8);
+            CHECK(vec.capacity() == 9);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -133,7 +133,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 90);
             CHECK(vec.size() == 9);
-            CHECK(vec.capacity() == 16);
+            CHECK(vec.capacity() == 9);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -193,7 +193,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 40);
             CHECK(vec.size() == 4);
-            CHECK(vec.capacity() == 6);
+            CHECK(vec.capacity() == 4);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -238,7 +238,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 70);
             CHECK(vec.size() == 7);
-            CHECK(vec.capacity() == 12);
+            CHECK(vec.capacity() == 9);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -255,7 +255,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 80);
             CHECK(vec.size() == 8);
-            CHECK(vec.capacity() == 12);
+            CHECK(vec.capacity() == 9);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -273,7 +273,7 @@ PRINT("Test emplace_back(Args&&...)");
 
             CHECK(res == 90);
             CHECK(vec.size() == 9);
-            CHECK(vec.capacity() == 12);
+            CHECK(vec.capacity() == 9);
             CHECK(*vec.nth(0) == 10);
             CHECK(*vec.nth(1) == 20);
             CHECK(*vec.nth(2) == 30);
@@ -325,7 +325,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(2));
                 CHECK(vec.size() == 3);
-                CHECK(vec.capacity() == 4);
+                CHECK(vec.capacity() == 3);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -352,7 +352,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(4));
                 CHECK(vec.size() == 5);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -367,7 +367,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(5));
                 CHECK(vec.size() == 6);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -383,7 +383,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(6));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -400,7 +400,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(7));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -418,7 +418,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(8));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 16);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -465,7 +465,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 3);
-                CHECK(vec.capacity() == 4);
+                CHECK(vec.capacity() == 3);
                 CHECK(*vec.nth(0) == 70);
                 CHECK(*vec.nth(1) == 80);
                 CHECK(*vec.nth(2) == 90);
@@ -492,7 +492,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 5);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 50);
                 CHECK(*vec.nth(1) == 60);
                 CHECK(*vec.nth(2) == 70);
@@ -507,7 +507,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 6);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 40);
                 CHECK(*vec.nth(1) == 50);
                 CHECK(*vec.nth(2) == 60);
@@ -523,7 +523,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 30);
                 CHECK(*vec.nth(1) == 40);
                 CHECK(*vec.nth(2) == 50);
@@ -540,7 +540,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 20);
                 CHECK(*vec.nth(1) == 30);
                 CHECK(*vec.nth(2) == 40);
@@ -558,7 +558,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 16);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -605,7 +605,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 3);
-                CHECK(vec.capacity() == 4);
+                CHECK(vec.capacity() == 3);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 90);
@@ -632,7 +632,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(3));
                 CHECK(vec.size() == 5);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -647,7 +647,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(4));
                 CHECK(vec.size() == 6);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -663,7 +663,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(5));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -680,7 +680,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(6));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -698,7 +698,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(7));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 16);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -745,7 +745,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 3);
-                CHECK(vec.capacity() == 4);
+                CHECK(vec.capacity() == 3);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 80);
                 CHECK(*vec.nth(2) == 90);
@@ -772,7 +772,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 5);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 60);
                 CHECK(*vec.nth(2) == 70);
@@ -787,7 +787,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 6);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 6);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 50);
                 CHECK(*vec.nth(2) == 60);
@@ -803,7 +803,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 40);
                 CHECK(*vec.nth(2) == 50);
@@ -820,7 +820,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 8);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 30);
                 CHECK(*vec.nth(2) == 40);
@@ -838,7 +838,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 16);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -901,7 +901,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(3));
                 CHECK(vec.size() == 4);
-                CHECK(vec.capacity() == 6);
+                CHECK(vec.capacity() == 4);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -946,7 +946,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(6));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -963,7 +963,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(7));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -981,7 +981,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(8));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -1041,7 +1041,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 4);
-                CHECK(vec.capacity() == 6);
+                CHECK(vec.capacity() == 4);
                 CHECK(*vec.nth(0) == 60);
                 CHECK(*vec.nth(1) == 70);
                 CHECK(*vec.nth(2) == 80);
@@ -1086,7 +1086,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 30);
                 CHECK(*vec.nth(1) == 40);
                 CHECK(*vec.nth(2) == 50);
@@ -1103,7 +1103,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 20);
                 CHECK(*vec.nth(1) == 30);
                 CHECK(*vec.nth(2) == 40);
@@ -1121,7 +1121,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(0));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -1181,7 +1181,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(2));
                 CHECK(vec.size() == 4);
-                CHECK(vec.capacity() == 6);
+                CHECK(vec.capacity() == 4);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -1226,7 +1226,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(5));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -1243,7 +1243,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(6));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -1261,7 +1261,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(7));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -1321,7 +1321,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 4);
-                CHECK(vec.capacity() == 6);
+                CHECK(vec.capacity() == 4);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 70);
                 CHECK(*vec.nth(2) == 80);
@@ -1366,7 +1366,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 7);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 40);
                 CHECK(*vec.nth(2) == 50);
@@ -1383,7 +1383,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 8);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 30);
                 CHECK(*vec.nth(2) == 40);
@@ -1401,7 +1401,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
 
                 CHECK(res == vec.nth(1));
                 CHECK(vec.size() == 9);
-                CHECK(vec.capacity() == 12);
+                CHECK(vec.capacity() == 9);
                 CHECK(*vec.nth(0) == 10);
                 CHECK(*vec.nth(1) == 20);
                 CHECK(*vec.nth(2) == 30);
@@ -4164,7 +4164,7 @@ PRINT("Test swap(container&)");
         CHECK(*vec1.nth(2) == 30);
 
         CHECK(vec2.size() == 6);
-        CHECK(vec2.capacity() == 10);
+        CHECK(vec2.capacity() == 7);
         CHECK(*vec2.nth(0) == 40);
         CHECK(*vec2.nth(1) == 50);
         CHECK(*vec2.nth(2) == 60);
@@ -4177,7 +4177,7 @@ PRINT("Test swap(container&)");
         vec1.swap(vec2);
 
         CHECK(vec1.size() == 6);
-        CHECK(vec1.capacity() == 10);
+        CHECK(vec1.capacity() == 7);
         CHECK(*vec1.nth(0) == 40);
         CHECK(*vec1.nth(1) == 50);
         CHECK(*vec1.nth(2) == 60);
@@ -4202,7 +4202,7 @@ PRINT("Test swap(container&)");
         CHECK(*vec1.nth(2) == 30);
 
         CHECK(vec2.size() == 6);
-        CHECK(vec2.capacity() == 10);
+        CHECK(vec2.capacity() == 7);
         CHECK(*vec2.nth(0) == 40);
         CHECK(*vec2.nth(1) == 50);
         CHECK(*vec2.nth(2) == 60);
@@ -4225,7 +4225,7 @@ PRINT("Test swap(container&)");
         vec2.emplace(vec2.end(), 70);
 
         CHECK(vec1.size() == 3);
-        CHECK(vec1.capacity() == 4);
+        CHECK(vec1.capacity() == 3);
         CHECK(*vec1.nth(0) == 10);
         CHECK(*vec1.nth(1) == 20);
         CHECK(*vec1.nth(2) == 30);
@@ -4249,7 +4249,7 @@ PRINT("Test swap(container&)");
         CHECK(*vec1.nth(3) == 70);
 
         CHECK(vec2.size() == 3);
-        CHECK(vec2.capacity() == 4);
+        CHECK(vec2.capacity() == 3);
         CHECK(*vec2.nth(0) == 10);
         CHECK(*vec2.nth(1) == 20);
         CHECK(*vec2.nth(2) == 30);
@@ -4259,7 +4259,7 @@ PRINT("Test swap(container&)");
         vec1.swap(vec2);
 
         CHECK(vec1.size() == 3);
-        CHECK(vec1.capacity() == 4);
+        CHECK(vec1.capacity() == 3);
         CHECK(*vec1.nth(0) == 10);
         CHECK(*vec1.nth(1) == 20);
         CHECK(*vec1.nth(2) == 30);
@@ -4404,6 +4404,8 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
         vec.emplace(vec.end(), 30);
+        vec.emplace(vec.end(), 40);
+        vec.erase(vec.end() - 1);
 
         CHECK(vec.size() == 3);
         CHECK(vec.capacity() == 4);

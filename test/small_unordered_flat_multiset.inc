@@ -45,7 +45,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == set.nth(2));
             CHECK(set.size() == 3);
-            CHECK(set.capacity() == 4);
+            CHECK(set.capacity() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
@@ -72,7 +72,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == set.nth(4));
             CHECK(set.size() == 5);
-            CHECK(set.capacity() == 8);
+            CHECK(set.capacity() == 6);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
@@ -87,7 +87,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == set.nth(5));
             CHECK(set.size() == 6);
-            CHECK(set.capacity() == 8);
+            CHECK(set.capacity() == 6);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
@@ -147,7 +147,7 @@ PRINT("Test PRIVATE member function emplace_back(Args&&...)");
 
             CHECK(res == set.nth(3));
             CHECK(set.size() == 4);
-            CHECK(set.capacity() == 6);
+            CHECK(set.capacity() == 4);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
@@ -1438,7 +1438,7 @@ PRINT("Test swap(container&)");
         CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         CHECK(set2.size() == 6);
-        CHECK(set2.capacity() == 10);
+        CHECK(set2.capacity() == 7);
         CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
         CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
         CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
@@ -1451,7 +1451,7 @@ PRINT("Test swap(container&)");
         set1.swap(set2);
 
         CHECK(set1.size() == 6);
-        CHECK(set1.capacity() == 10);
+        CHECK(set1.capacity() == 7);
         CHECK(set1.nth(0)->first == 40); CHECK(set1.nth(0)->second == 2);
         CHECK(set1.nth(1)->first == 50); CHECK(set1.nth(1)->second == 2);
         CHECK(set1.nth(2)->first == 60); CHECK(set1.nth(2)->second == 2);
@@ -1476,7 +1476,7 @@ PRINT("Test swap(container&)");
         CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
 
         CHECK(set2.size() == 6);
-        CHECK(set2.capacity() == 10);
+        CHECK(set2.capacity() == 7);
         CHECK(set2.nth(0)->first == 40); CHECK(set2.nth(0)->second == 2);
         CHECK(set2.nth(1)->first == 50); CHECK(set2.nth(1)->second == 2);
         CHECK(set2.nth(2)->first == 60); CHECK(set2.nth(2)->second == 2);
@@ -1502,7 +1502,7 @@ PRINT("Test swap(container&)");
         set2.emplace(70, 2);
 
         CHECK(set1.size() == 3);
-        CHECK(set1.capacity() == 4);
+        CHECK(set1.capacity() == 3);
         CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
         CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
@@ -1526,7 +1526,7 @@ PRINT("Test swap(container&)");
         CHECK(set1.nth(3)->first == 70); CHECK(set1.nth(3)->second == 2);
 
         CHECK(set2.size() == 3);
-        CHECK(set2.capacity() == 4);
+        CHECK(set2.capacity() == 3);
         CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
         CHECK(set2.nth(1)->first == 20); CHECK(set2.nth(1)->second == 1);
         CHECK(set2.nth(2)->first == 30); CHECK(set2.nth(2)->second == 1);
@@ -1536,7 +1536,7 @@ PRINT("Test swap(container&)");
         set1.swap(set2);
 
         CHECK(set1.size() == 3);
-        CHECK(set1.capacity() == 4);
+        CHECK(set1.capacity() == 3);
         CHECK(set1.nth(0)->first == 10); CHECK(set1.nth(0)->second == 1);
         CHECK(set1.nth(1)->first == 20); CHECK(set1.nth(1)->second == 1);
         CHECK(set1.nth(2)->first == 30); CHECK(set1.nth(2)->second == 1);
@@ -1590,6 +1590,8 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
         set.emplace(10, 1);
         set.emplace(20, 1);
         set.emplace(30, 1);
+        set.emplace(40, 1);
+        set.erase(set.end() - 1);
 
         CHECK(set.size() == 3);
         CHECK(set.capacity() == 4);
