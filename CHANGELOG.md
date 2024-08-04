@@ -1,4 +1,4 @@
-# New version
+# 1.8.0 (2024-08-04)
 
 * New containers `vector` and `devector` (double-ended vector).
 * All small containers: Reworked private member function `recommend_size` and
