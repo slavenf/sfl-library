@@ -44,8 +44,8 @@ Tested compilers:
 * Clang 3.4.2 on CentOS 7 (C++11)
 * GCC 7.3.1 on CentOS 7 (C++11, 14, 17)
 * Clang 5.0.1 on CentOS 7 (C++11, 14, 17)
-* GCC 13.2.1 on Arch Linux (C++11, 14, 17, 20, 23)
-* Clang 17.0.6 on Arch Linux (C++11, 14, 17, 20, 23)
+* GCC 14.1.1 on Arch Linux (C++11, 14, 17, 20, 23)
+* Clang 18.1.8 on Arch Linux (C++11, 14, 17, 20, 23)
 * MSVC 19.38 (C++14, 17, 20, latest)
 
 
