@@ -1,3 +1,11 @@
+# New version
+
+* New containers:
+  - `vector`
+  - `devector` (double-ended vector)
+
+
+
 # 1.7.0 (2024-06-22)
 
 * Iterators are now distinct types for all containers.
