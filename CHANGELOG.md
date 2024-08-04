@@ -3,6 +3,7 @@
 * New containers:
   - `vector`
   - `devector` (double-ended vector)
+* All small containers: Renamed private member function `recommend_size` to `calculate_new_capacity`.
 
 
 

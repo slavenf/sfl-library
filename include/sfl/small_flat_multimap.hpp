@@ -1316,17 +1316,17 @@ private:
         }
     }
 
-    size_type recommend_size(size_type n, const char* msg)
+    size_type calculate_new_capacity(size_type num_additional_elements, const char* msg)
     {
         const size_type max_size = this->max_size();
         const size_type size = this->size();
 
-        if (max_size - size < n)
+        if (max_size - size < num_additional_elements)
         {
             sfl::dtl::throw_length_error(msg);
         }
 
-        const size_type new_size = std::max(N, size + std::max(size, n));
+        const size_type new_size = std::max(N, size + std::max(size, num_additional_elements));
 
         if (new_size < size || new_size > max_size)
         {
@@ -1694,7 +1694,7 @@ private:
             const difference_type offset = std::distance(cbegin(), pos);
 
             const size_type new_cap =
-                recommend_size(1, "sfl::small_flat_multimap::insert_exactly_at");
+                calculate_new_capacity(1, "sfl::small_flat_multimap::insert_exactly_at");
 
             pointer new_first;
             pointer new_last;
