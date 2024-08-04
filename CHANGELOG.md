@@ -1,9 +1,8 @@
 # New version
 
-* New containers:
-  - `vector`
-  - `devector` (double-ended vector)
-* All small containers: Renamed private member function `recommend_size` to `calculate_new_capacity`.
+* New containers `vector` and `devector` (double-ended vector).
+* All small containers: Reworked private member function `recommend_size` and
+  renamed it to `calculate_new_capacity`. Reduced grow factor from 2.0 to 1.5.
 
 
 
