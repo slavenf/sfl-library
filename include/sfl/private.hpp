@@ -23,6 +23,7 @@
 
 #include <algorithm>    // move, copy, etc.
 #include <cassert>      // assert
+#include <cstddef>      // size_t
 #include <cstdlib>      // abort
 #include <iterator>     // iterator_traits, xxxxx_iterator_tag
 #include <memory>       // addressof, allocator_traits, pointer_traits
