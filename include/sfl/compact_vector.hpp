@@ -24,7 +24,6 @@
 #include "private.hpp"
 
 #include <algorithm>        // copy, move, swap, swap_ranges
-#include <cstddef>          // size_t
 #include <initializer_list> // initializer_list
 #include <iterator>         // distance, next, reverse_iterator
 #include <limits>           // numeric_limits
