@@ -2388,7 +2388,111 @@ inline void throw_out_of_range(const char* msg)
     #endif
 }
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// INDEX SEQUENCE
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <std::size_t... Ints>
+struct index_sequence
+{
+    using type = index_sequence;
+};
+
+template <typename IndexSequence1, typename IndexSequence2>
+struct index_sequence_concat;
+
+template <std::size_t... Ints1, std::size_t... Ints2>
+struct index_sequence_concat< sfl::dtl::index_sequence<Ints1...>,
+                              sfl::dtl::index_sequence<Ints2...> >
+    : sfl::dtl::index_sequence<Ints1..., (sizeof...(Ints1) + Ints2)...>
+{};
+
+template <std::size_t N>
+struct make_index_sequence
+    : index_sequence_concat< typename sfl::dtl::index_sequence<N/2>::type,
+                             typename sfl::dtl::index_sequence<N - N/2>::type >::type
+{};
+
+template <>
+struct make_index_sequence<0> : sfl::dtl::index_sequence<>
+{};
+
+template <>
+struct make_index_sequence<1> : sfl::dtl::index_sequence<0>
+{};
+
+template <typename... T>
+using index_sequence_for = sfl::dtl::make_index_sequence<sizeof...(T)>;
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// SCOPE GUARD
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename Lambda>
+class scope_guard
+{
+private:
+
+    mutable bool dismissed_;
+
+    Lambda lambda_;
+
+public:
+
+    scope_guard(Lambda&& lambda)
+        : dismissed_(false)
+        , lambda_(std::forward<Lambda>(lambda))
+    {}
+
+    scope_guard(const scope_guard& other) = delete;
+
+    scope_guard(scope_guard&& other)
+        : dismissed_(other.dismissed_)
+        , lambda_(std::move(other.lambda_))
+    {
+        other.dismissed_ = true;
+    }
+
+    scope_guard& operator=(const scope_guard& other) = delete;
+
+    scope_guard& operator=(scope_guard&& other)
+    {
+        dismissed_ = other.dismissed_;
+        lambda_ = std::move(other.lambda_);
+        other.dismissed_ = true;
+    }
+
+    ~scope_guard()
+    {
+        if (!dismissed_)
+        {
+            lambda_();
+        }
+    }
+
+    void dismiss() const noexcept
+    {
+        dismissed_ = true;
+    }
+};
+
+template <typename Lambda>
+scope_guard<Lambda> make_scope_guard(Lambda&& lambda)
+{
+    return scope_guard<Lambda>(std::forward<Lambda>(lambda));
+}
+
 } // namespace dtl
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// DEFAULT INIT TAG
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 // Type used to tag that the inserted values should be default initialized.
 struct default_init_t { };
