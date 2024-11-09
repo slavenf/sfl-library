@@ -2421,8 +2421,8 @@ struct index_sequence_concat< sfl::dtl::index_sequence<Ints1...>,
 
 template <std::size_t N>
 struct make_index_sequence
-    : index_sequence_concat< typename sfl::dtl::index_sequence<N/2>::type,
-                             typename sfl::dtl::index_sequence<N - N/2>::type >::type
+    : sfl::dtl::index_sequence_concat< typename sfl::dtl::make_index_sequence<N/2>::type,
+                                       typename sfl::dtl::make_index_sequence<N - N/2>::type >::type
 {};
 
 template <>
