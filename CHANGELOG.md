@@ -1,3 +1,27 @@
+# 1.8.1 (2024-11-09)
+
+* Fixed issue with MSVC compiler that does not correctly set `__cplusplus`
+  unless compiler flag `/Zc:__cplusplus` is specified so `constexpr` and
+  `nodiscard` were basically always disabled. Now, if MSVC compiler is used
+  then library uses `_MSVC_LANG` instead of `__cplusplus`, that allows usage
+  of newer C++ standard features without explicitly specifying `/Zc:__cplusplus`.
+  Thanks to @ZehMatt.
+
+* Added `iterator_concept` member type to `sfl::dtl::normal_iterator` in C++20
+  that enables use of `std::ranges`. Thanks to @ZehMatt.
+
+  For example, the following code will now successfuly compile in C++20:
+
+      static_assert(std::random_access_iterator<sfl::small_vector<uint8_t, 16>::iterator>);
+      static_assert(std::contiguous_iterator<sfl::small_vector<uint8_t, 16>::iterator>);
+      static_assert(std::ranges::contiguous_range<sfl::small_vector<uint8_t, 16>>);
+      static_assert(std::ranges::contiguous_range<sfl::vector<uint8_t>>);
+
+* Fixed bug in `sfl::dtl::make_index_sequence`. Fortunately, this bug never
+  caused a problem, but it had to be fixed to avoid problems in the future.
+
+
+
 # 1.8.0 (2024-08-04)
 
 * New containers `vector` and `devector` (double-ended vector).
