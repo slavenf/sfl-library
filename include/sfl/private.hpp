@@ -271,6 +271,9 @@ public:
     using pointer           = typename std::iterator_traits<Iterator>::pointer;
     using reference         = typename std::iterator_traits<Iterator>::reference;
     using iterator_category = typename std::iterator_traits<Iterator>::iterator_category;
+#if __cplusplus >= 202004 || (defined(_MSVC_LANG) && _MSVC_LANG >= 202004)
+    using iterator_concept  = std::contiguous_iterator_tag;
+#endif
 
 private:
 
