@@ -39,13 +39,19 @@
 
 #define SFL_ASSERT(x) assert(x)
 
-#if __cplusplus >= 201402L
+#if defined(_MSC_VER) && defined(_MSVC_LANG)
+    #define SFL_CXX_VERSION _MSVC_LANG
+#else
+    #define SFL_CXX_VERSION __cplusplus
+#endif
+
+#if SFL_CXX_VERSION >= 201402L
     #define SFL_CONSTEXPR_14 constexpr
 #else
     #define SFL_CONSTEXPR_14
 #endif
 
-#if __cplusplus >= 201703L
+#if SFL_CXX_VERSION >= 201703L
     #define SFL_NODISCARD [[nodiscard]]
 #else
     #define SFL_NODISCARD
@@ -271,6 +277,9 @@ public:
     using pointer           = typename std::iterator_traits<Iterator>::pointer;
     using reference         = typename std::iterator_traits<Iterator>::reference;
     using iterator_category = typename std::iterator_traits<Iterator>::iterator_category;
+#if SFL_CXX_VERSION >= 202004
+    using iterator_concept  = std::contiguous_iterator_tag;
+#endif
 
 private:
 
