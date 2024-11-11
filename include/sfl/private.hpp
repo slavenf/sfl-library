@@ -277,7 +277,7 @@ public:
     using pointer           = typename std::iterator_traits<Iterator>::pointer;
     using reference         = typename std::iterator_traits<Iterator>::reference;
     using iterator_category = typename std::iterator_traits<Iterator>::iterator_category;
-#if SFL_CXX_VERSION >= 202004
+#if SFL_CXX_VERSION >= 202002L
     using iterator_concept  = std::contiguous_iterator_tag;
 #endif
 
