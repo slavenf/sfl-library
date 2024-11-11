@@ -1,3 +1,9 @@
+# 1.8.2 (2024-11-11)
+
+* Bug fix: Use correct `__cplusplus` value for C++20 (it is `202002L`).
+
+
+
 # 1.8.1 (2024-11-09)
 
 * Fixed issue with MSVC compiler that does not correctly set `__cplusplus`
