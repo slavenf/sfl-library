@@ -25,6 +25,7 @@
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/optional_value.hpp>
+#include <sfl/detail/pointer_traits.hpp>
 #include <sfl/detail/type_traits.hpp>
 
 #include <algorithm>    // equal, lexicographical_compare

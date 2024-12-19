@@ -23,6 +23,7 @@
 
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>
+#include <sfl/detail/pointer_traits.hpp>
 #include <sfl/detail/type_traits.hpp>
 
 #include <algorithm>    // move, copy, etc.
@@ -40,35 +41,6 @@ namespace sfl
 
 namespace dtl
 {
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// POINTER TRAITS
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-//
-// Raw pointer overload.
-// Obtains a dereferenceable pointer to its argument.
-//
-template <typename T>
-constexpr
-T* to_address(T* p) noexcept
-{
-    static_assert(!std::is_function<T>::value, "not a function pointer");
-    return p;
-}
-
-//
-// Fancy pointer overload.
-// Obtains a raw pointer from a fancy pointer.
-//
-template <typename Pointer>
-constexpr
-auto to_address(const Pointer& p) noexcept -> typename std::pointer_traits<Pointer>::element_type*
-{
-    return sfl::dtl::to_address(p.operator->());
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

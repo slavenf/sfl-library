@@ -24,6 +24,7 @@
 #include <sfl/private.hpp>
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
+#include <sfl/detail/pointer_traits.hpp>
 #include <sfl/detail/tags.hpp>
 #include <sfl/detail/type_traits.hpp>
 

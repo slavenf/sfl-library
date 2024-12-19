@@ -24,6 +24,7 @@
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>
+#include <sfl/detail/pointer_traits.hpp>
 #include <sfl/detail/static_pool.hpp>
 
 #include <cstddef>      // size_t, ptrdiff_t
