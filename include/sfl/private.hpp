@@ -21,6 +21,8 @@
 #ifndef SFL_PRIVATE_HPP_INCLUDED
 #define SFL_PRIVATE_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
 #include <algorithm>    // move, copy, etc.
 #include <cassert>      // assert
 #include <cstddef>      // size_t
@@ -30,42 +32,6 @@
 #include <stdexcept>    // length_error, out_of_range
 #include <type_traits>  // enable_if, is_convertible, is_function, true_type...
 #include <utility>      // forward, move, move_if_noexcept
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// MACROS
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-#define SFL_ASSERT(x) assert(x)
-
-#if defined(_MSC_VER) && defined(_MSVC_LANG)
-    #define SFL_CXX_VERSION _MSVC_LANG
-#else
-    #define SFL_CXX_VERSION __cplusplus
-#endif
-
-#if SFL_CXX_VERSION >= 201402L
-    #define SFL_CONSTEXPR_14 constexpr
-#else
-    #define SFL_CONSTEXPR_14
-#endif
-
-#if SFL_CXX_VERSION >= 201703L
-    #define SFL_NODISCARD [[nodiscard]]
-#else
-    #define SFL_NODISCARD
-#endif
-
-#ifdef SFL_NO_EXCEPTIONS
-    #define SFL_TRY      if (true)
-    #define SFL_CATCH(x) if (false)
-    #define SFL_RETHROW
-#else
-    #define SFL_TRY      try
-    #define SFL_CATCH(x) catch (x)
-    #define SFL_RETHROW  throw
-#endif
 
 namespace sfl
 {

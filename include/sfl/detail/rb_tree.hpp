@@ -23,6 +23,7 @@
 
 #include <sfl/private.hpp>
 #include <sfl/detail/allocator_traits.hpp>
+#include <sfl/detail/cpp.hpp>
 #include <sfl/detail/optional_value.hpp>
 
 #include <algorithm>    // equal, lexicographical_compare

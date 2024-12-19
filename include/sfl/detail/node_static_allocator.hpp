@@ -21,7 +21,8 @@
 #ifndef SFL_DETAIL_NODE_STATIC_ALLOCATOR_HPP_INCLUDED
 #define SFL_DETAIL_NODE_STATIC_ALLOCATOR_HPP_INCLUDED
 
-#include <sfl/private.hpp>              // SFL_ASSERT, SFL_NODISCARD, ignore_unused
+#include <sfl/private.hpp>              // ignore_unused
+#include <sfl/detail/cpp.hpp>           // SFL_ASSERT, SFL_NODISCARD
 #include <sfl/detail/static_pool.hpp>   // static_pool
 
 #include <cstddef>      // size_t, ptrdiff_t

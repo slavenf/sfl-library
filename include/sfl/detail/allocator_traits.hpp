@@ -21,7 +21,8 @@
 #ifndef SFL_DETAIL_ALLOCATOR_TRAITS_HPP_INCLUDED
 #define SFL_DETAIL_ALLOCATOR_TRAITS_HPP_INCLUDED
 
-#include <sfl/private.hpp> // SFL_NODISCARD
+#include <sfl/private.hpp> // void_t, ignore_unused
+#include <sfl/detail/cpp.hpp>
 
 #include <limits>       // numeric_limits
 #include <memory>       // pointer_traits

@@ -21,7 +21,7 @@
 #ifndef SFL_DETAIL_FUNCTIONAL_HPP_INCLUDED
 #define SFL_DETAIL_FUNCTIONAL_HPP_INCLUDED
 
-#include <sfl/private.hpp> // SFL_NODISCARD
+#include <sfl/detail/cpp.hpp>
 
 namespace sfl
 {

@@ -2,6 +2,8 @@
 
 #include "sfl/detail/static_pool.hpp"
 
+#include "sfl/private.hpp" // construct_at, destroy_at
+
 #include "check.hpp"
 #include "print.hpp"
 

@@ -21,7 +21,7 @@
 #ifndef SFL_DETAIL_STATIC_POOL_HPP_INCLUDED
 #define SFL_DETAIL_STATIC_POOL_HPP_INCLUDED
 
-#include <sfl/private.hpp> // SFL_ASSERT, SFL_NODISCARD
+#include <sfl/detail/cpp.hpp>
 
 #include <cstddef> // size_t, ptrdiff_t
 #include <memory>  // addressof

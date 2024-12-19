@@ -21,7 +21,7 @@
 #ifndef SFL_DETAIL_OPTIONAL_VALUE_HPP_INCLUDED
 #define SFL_DETAIL_OPTIONAL_VALUE_HPP_INCLUDED
 
-#include <sfl/private.hpp> // SFL_NODISCARD
+#include <sfl/detail/cpp.hpp>
 
 #include <memory> // addressof
 

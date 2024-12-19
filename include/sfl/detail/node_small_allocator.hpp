@@ -23,6 +23,7 @@
 
 #include <sfl/private.hpp>                  // ignore_unused
 #include <sfl/detail/allocator_traits.hpp>  // allocator_traits
+#include <sfl/detail/cpp.hpp>               // SFL_ASSERT, SFL_NODISCARD
 #include <sfl/detail/static_pool.hpp>       // static_pool
 
 #include <cstddef>      // size_t, ptrdiff_t

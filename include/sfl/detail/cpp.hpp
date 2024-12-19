@@ -21,12 +21,40 @@
 #ifndef SFL_DETAIL_CPP_HPP_INCLUDED
 #define SFL_DETAIL_CPP_HPP_INCLUDED
 
-#include <sfl/private.hpp> // TODO: Refactor and remove this include
+#include <cassert>
 
-#define SFL_CPP_VERSION SFL_CXX_VERSION
+#define SFL_ASSERT(x) assert(x)
 
 #define SFL_CPP_14 201402L
 #define SFL_CPP_17 201703L
 #define SFL_CPP_20 202002L
+
+#if defined(_MSC_VER) && defined(_MSVC_LANG)
+    #define SFL_CPP_VERSION _MSVC_LANG
+#else
+    #define SFL_CPP_VERSION __cplusplus
+#endif
+
+#if SFL_CPP_VERSION >= SFL_CPP_14
+    #define SFL_CONSTEXPR_14 constexpr
+#else
+    #define SFL_CONSTEXPR_14
+#endif
+
+#if SFL_CPP_VERSION >= SFL_CPP_17
+    #define SFL_NODISCARD [[nodiscard]]
+#else
+    #define SFL_NODISCARD
+#endif
+
+#ifdef SFL_NO_EXCEPTIONS
+    #define SFL_TRY      if (true)
+    #define SFL_CATCH(x) if (false)
+    #define SFL_RETHROW
+#else
+    #define SFL_TRY      try
+    #define SFL_CATCH(x) catch (x)
+    #define SFL_RETHROW  throw
+#endif
 
 #endif // SFL_DETAIL_CPP_HPP_INCLUDED
