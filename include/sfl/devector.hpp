@@ -25,6 +25,7 @@
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/index_sequence.hpp>
+#include <sfl/detail/normal_iterator.hpp>
 #include <sfl/detail/pointer_traits.hpp>
 #include <sfl/detail/scope_guard.hpp>
 #include <sfl/detail/tags.hpp>
