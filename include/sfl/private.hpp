@@ -1719,36 +1719,6 @@ ForwardIt uninitialized_move(InputIt first, InputIt last, ForwardIt d_first)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// EXCEPTIONS
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-[[noreturn]]
-inline void throw_length_error(const char* msg)
-{
-    #ifdef SFL_NO_EXCEPTIONS
-    sfl::dtl::ignore_unused(msg);
-    SFL_ASSERT(!"std::length_error thrown");
-    std::abort();
-    #else
-    throw std::length_error(msg);
-    #endif
-}
-
-[[noreturn]]
-inline void throw_out_of_range(const char* msg)
-{
-    #ifdef SFL_NO_EXCEPTIONS
-    sfl::dtl::ignore_unused(msg);
-    SFL_ASSERT(!"std::out_of_range thrown");
-    std::abort();
-    #else
-    throw std::out_of_range(msg);
-    #endif
-}
-
 } // namespace dtl
 
 } // namespace sfl

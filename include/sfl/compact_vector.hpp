@@ -24,6 +24,7 @@
 #include <sfl/private.hpp>
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
+#include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/normal_iterator.hpp>
 #include <sfl/detail/pointer_traits.hpp>
 #include <sfl/detail/tags.hpp>
