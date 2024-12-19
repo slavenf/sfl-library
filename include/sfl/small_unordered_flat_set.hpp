@@ -21,7 +21,6 @@
 #ifndef SFL_SMALL_UNORDERED_FLAT_SET_HPP_INCLUDED
 #define SFL_SMALL_UNORDERED_FLAT_SET_HPP_INCLUDED
 
-#include <sfl/private.hpp>
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>

@@ -21,7 +21,6 @@
 #ifndef SFL_DETAIL_RB_TREE_HPP_INCLUDED
 #define SFL_DETAIL_RB_TREE_HPP_INCLUDED
 
-#include <sfl/private.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/optional_value.hpp>

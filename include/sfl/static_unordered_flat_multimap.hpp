@@ -21,7 +21,6 @@
 #ifndef SFL_STATIC_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
 #define SFL_STATIC_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
 
-#include <sfl/private.hpp>
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>

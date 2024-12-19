@@ -21,7 +21,6 @@
 #ifndef SFL_STATIC_FLAT_MULTISET_HPP_INCLUDED
 #define SFL_STATIC_FLAT_MULTISET_HPP_INCLUDED
 
-#include <sfl/private.hpp>
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/initialized_memory_algorithms.hpp>

@@ -21,7 +21,6 @@
 #ifndef SFL_MAP_HPP_INCLUDED
 #define SFL_MAP_HPP_INCLUDED
 
-#include <sfl/private.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
