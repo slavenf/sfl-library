@@ -4352,7 +4352,7 @@ typename devector<T, A>::size_type
 // ---- DEDUCTION GUIDES ------------------------------------------------------
 //
 
-#if __cplusplus >= 201703L
+#if SFL_CPP_VERSION >= SFL_CPP_17
 
 template < typename InputIt,
            typename Allocator = std::allocator<typename std::iterator_traits<InputIt>::value_type>,
