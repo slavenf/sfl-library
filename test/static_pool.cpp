@@ -2,7 +2,7 @@
 
 #include "sfl/detail/static_pool.hpp"
 
-#include "sfl/private.hpp" // construct_at, destroy_at
+#include "sfl/detail/uninitialized_memory_algorithms.hpp"
 
 #include "check.hpp"
 #include "print.hpp"
