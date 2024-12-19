@@ -9,6 +9,9 @@
 #include "sfl/small_unordered_flat_map.hpp"
 
 #include "check.hpp"
+#include "istream_view.hpp"
+#include "nth.hpp"
+#include "pair_io.hpp"
 #include "print.hpp"
 
 #include "xint.hpp"
@@ -19,6 +22,7 @@
 #include "stateless_alloc_no_prop.hpp"
 #include "stateless_fancy_alloc.hpp"
 
+#include <sstream>
 #include <vector>
 
 #if 0 // TODO: Review this

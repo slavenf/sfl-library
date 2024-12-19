@@ -8,6 +8,8 @@
 #include "sfl/static_vector.hpp"
 
 #include "check.hpp"
+#include "istream_view.hpp"
+#include "pair_io.hpp"
 #include "print.hpp"
 
 #include "xint.hpp"
@@ -1524,6 +1526,57 @@ void test_static_vector()
         }
     }
 
+    PRINT("Test insert(const_iterator, Range&&)");
+    {
+        // Input iterator (exactly)
+        {
+            sfl::static_vector<xint, 32> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(60);
+
+            std::istringstream iss("20 30 40 50");
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            vec.insert_range(vec.nth(1), std::views::istream<int>(iss));
+            #else
+            vec.insert_range(vec.nth(1), sfl::test::istream_view<int>(iss));
+            #endif
+
+            CHECK(vec.size() == 6);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+        }
+
+        // Forward iterator
+        {
+            sfl::static_vector<xint, 32> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(60);
+
+            std::vector<int> data({20, 30, 40, 50});
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            vec.insert_range(vec.nth(1), std::views::all(data));
+            #else
+            vec.insert_range(vec.nth(1), data);
+            #endif
+
+            CHECK(vec.size() == 6);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+        }
+    }
+
     PRINT("Test push_back(const T&)");
     {
         sfl::static_vector<xint, 100> vec;
@@ -1548,6 +1601,57 @@ void test_static_vector()
         CHECK(vec.size() == 1);
         CHECK(*vec.nth(0) == 10);
         CHECK(value_10 == -10);
+    }
+
+    PRINT("Test append_range(Range&&)");
+    {
+        // Input iterator (exactly)
+        {
+            sfl::static_vector<xint, 32> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+
+            std::istringstream iss("30 40 50 60");
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            vec.append_range(std::views::istream<int>(iss));
+            #else
+            vec.append_range(sfl::test::istream_view<int>(iss));
+            #endif
+
+            CHECK(vec.size() == 6);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+        }
+
+        // Forward iterator
+        {
+            sfl::static_vector<xint, 32> vec;
+
+            vec.emplace_back(10);
+            vec.emplace_back(20);
+
+            std::vector<int> data({30, 40, 50, 60});
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            vec.append_range(std::views::all(data));
+            #else
+            vec.append_range(data);
+            #endif
+
+            CHECK(vec.size() == 6);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+            CHECK(*vec.nth(4) == 50);
+            CHECK(*vec.nth(5) == 60);
+        }
     }
 
     PRINT("Test pop_back()");
@@ -2691,6 +2795,43 @@ void test_static_vector()
         CHECK(*vec1.nth(2) == -30);
     }
 
+    PRINT("Test container(sfl::from_range_t, Range&&)");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 20 30 40");
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_vector<xint, 32> vec(sfl::from_range_t(), (std::views::istream<int>(iss)));
+            #else
+            sfl::static_vector<xint, 32> vec(sfl::from_range_t(), (sfl::test::istream_view<int>(iss)));
+            #endif
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+
+        // Forward iterator
+        {
+            std::vector<int> data({10, 20, 30, 40});
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_vector<xint, 32> vec(sfl::from_range_t(), std::views::all(data));
+            #else
+            sfl::static_vector<xint, 32> vec(sfl::from_range_t(), data);
+            #endif
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
 
     PRINT("Test operator=(const container&)");
@@ -3569,6 +3710,47 @@ void test_static_vector()
         CHECK(*vec.nth(2) == 3);
         CHECK(*vec.nth(3) == 4);
         CHECK(*vec.nth(4) == 5);
+    }
+
+    PRINT("Test assign_range(Range&&)");
+    {
+        // Input iterator (exactly)
+        {
+            sfl::static_vector<xint, 32> vec;
+
+            std::istringstream iss("10 20 30 40");
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            vec.assign_range(std::views::istream<int>(iss));
+            #else
+            vec.assign_range(sfl::test::istream_view<int>(iss));
+            #endif
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
+
+        // Forward iterator
+        {
+            std::vector<int> data({10, 20, 30, 40});
+
+            sfl::static_vector<xint, 32> vec;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            vec.assign_range(std::views::all(data));
+            #else
+            vec.assign_range(data);
+            #endif
+
+            CHECK(vec.size() == 4);
+            CHECK(*vec.nth(0) == 10);
+            CHECK(*vec.nth(1) == 20);
+            CHECK(*vec.nth(2) == 30);
+            CHECK(*vec.nth(3) == 40);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////

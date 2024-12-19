@@ -9,12 +9,16 @@
 #include "sfl/static_flat_set.hpp"
 
 #include "check.hpp"
+#include "istream_view.hpp"
+#include "nth.hpp"
+#include "pair_io.hpp"
 #include "print.hpp"
 
 #include "xint.hpp"
 #include "xint_xint.hpp"
 #include "xobj.hpp"
 
+#include <sstream>
 #include <vector>
 
 void test_static_flat_set()
@@ -1382,6 +1386,45 @@ void test_static_flat_set()
         }
     }
 
+    PRINT("Test insert_range(Range&&");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 20 30 20 20");
+
+            sfl::static_flat_set<xint, 32, std::less<xint>> set;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            set.insert_range(std::views::istream<int>(iss));
+            #else
+            set.insert_range(sfl::test::istream_view<int>(iss));
+            #endif
+
+            CHECK(set.size() == 3);
+            CHECK(*NTH(set, 0) == 10);
+            CHECK(*NTH(set, 1) == 20);
+            CHECK(*NTH(set, 2) == 30);
+        }
+
+        // Forward iterator
+        {
+            std::vector<xint> data({10, 20, 30, 20, 20});
+
+            sfl::static_flat_set<xint, 32, std::less<xint>> set;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            set.insert_range(std::views::all(data));
+            #else
+            set.insert_range(data);
+            #endif
+
+            CHECK(set.size() == 3);
+            CHECK(*NTH(set, 0) == 10);
+            CHECK(*NTH(set, 1) == 20);
+            CHECK(*NTH(set, 2) == 30);
+        }
+    }
+
     PRINT("Test erase(const_iterator)");
     {
         // Erase at the end
@@ -2238,6 +2281,124 @@ void test_static_flat_set()
         CHECK(set1.nth(0)->first == -10); CHECK(set1.nth(0)->second == -1);
         CHECK(set1.nth(1)->first == -20); CHECK(set1.nth(1)->second == -1);
         CHECK(set1.nth(2)->first == -30); CHECK(set1.nth(2)->second == -1);
+    }
+
+    PRINT("Test container(sfl::from_range_t, Range&&)");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 20 30 20 20");
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                (sfl::from_range_t()),
+                (std::views::istream<int>(iss))
+            );
+            #else
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                (sfl::from_range_t()),
+                (sfl::test::istream_view<int>(iss))
+            );
+            #endif
+
+            CHECK(set.empty() == false);
+            CHECK(set.size() == 3);
+            CHECK(set.max_size() > 0);
+            CHECK(*NTH(set, 0) == 10);
+            CHECK(*NTH(set, 1) == 20);
+            CHECK(*NTH(set, 2) == 30);
+        }
+
+        // Forward iterator
+        {
+            std::vector<xint> data({10, 20, 30, 20, 20});
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                sfl::from_range_t(),
+                std::views::all(data)
+            );
+            #else
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                sfl::from_range_t(),
+                data
+            );
+            #endif
+
+            CHECK(set.empty() == false);
+            CHECK(set.size() == 3);
+            CHECK(set.max_size() > 0);
+            CHECK(*NTH(set, 0) == 10);
+            CHECK(*NTH(set, 1) == 20);
+            CHECK(*NTH(set, 2) == 30);
+        }
+    }
+
+    PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 20 30 20 20");
+
+            std::less<xint> comp;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                (sfl::from_range_t()),
+                (std::views::istream<int>(iss)),
+                comp
+            );
+            #else
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                (sfl::from_range_t()),
+                (sfl::test::istream_view<int>(iss)),
+                comp
+            );
+            #endif
+
+            CHECK(set.empty() == false);
+            CHECK(set.size() == 3);
+            CHECK(set.max_size() > 0);
+            CHECK(*NTH(set, 0) == 10);
+            CHECK(*NTH(set, 1) == 20);
+            CHECK(*NTH(set, 2) == 30);
+        }
+
+        // Forward iterator
+        {
+            std::vector<xint> data({10, 20, 30, 20, 20});
+
+            std::less<xint> comp;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                sfl::from_range_t(),
+                std::views::all(data),
+                comp
+            );
+            #else
+            sfl::static_flat_set<xint, 32, std::less<xint>> set
+            (
+                sfl::from_range_t(),
+                data,
+                comp
+            );
+            #endif
+
+            CHECK(set.empty() == false);
+            CHECK(set.size() == 3);
+            CHECK(set.max_size() > 0);
+            CHECK(*NTH(set, 0) == 10);
+            CHECK(*NTH(set, 1) == 20);
+            CHECK(*NTH(set, 2) == 30);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////

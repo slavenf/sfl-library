@@ -8,6 +8,8 @@
 #include "sfl/segmented_vector.hpp"
 
 #include "check.hpp"
+#include "istream_view.hpp"
+#include "pair_io.hpp"
 #include "print.hpp"
 
 #include "xint.hpp"

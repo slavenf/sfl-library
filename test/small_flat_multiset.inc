@@ -2218,6 +2218,53 @@ PRINT("Test insert(std::initializer_list)");
     }
 }
 
+PRINT("Test insert_range(Range&&");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 20 30 20 20");
+
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        set.insert_range(std::views::istream<int>(iss));
+        #else
+        set.insert_range(sfl::test::istream_view<int>(iss));
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+
+    // Forward iterator
+    {
+        std::vector<xint> data({10, 20, 30, 20, 20});
+
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        set.insert_range(std::views::all(data));
+        #else
+        set.insert_range(data);
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+}
+
 PRINT("Test erase(const_iterator)");
 {
     // Erase at the end
@@ -3799,6 +3846,272 @@ PRINT("Test container(container&&, const Allocator&)");
             // Storage was moved
             CHECK(set1.size() == 0);
         }
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 20 30 20 20");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<int>(iss))
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<int>(iss))
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+
+    // Forward iterator
+    {
+        std::vector<xint> data({10, 20, 30, 20, 20});
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            std::views::all(data)
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            data
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 20 30 20 20");
+
+        std::less<xint> comp;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<int>(iss)),
+            comp
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<int>(iss)),
+            comp
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+
+    // Forward iterator
+    {
+        std::vector<xint> data({10, 20, 30, 20, 20});
+
+        std::less<xint> comp;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            comp
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            data,
+            comp
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 20 30 20 20");
+
+        TPARAM_ALLOCATOR<xint> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<int>(iss)),
+            alloc
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<int>(iss)),
+            alloc
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+
+    // Forward iterator
+    {
+        std::vector<xint> data({10, 20, 30, 20, 20});
+
+        TPARAM_ALLOCATOR<xint> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            alloc
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            data,
+            alloc
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 20 30 20 20");
+
+        std::less<xint> comp;
+        TPARAM_ALLOCATOR<xint> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<int>(iss)),
+            comp,
+            alloc
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<int>(iss)),
+            comp,
+            alloc
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
+    }
+
+    // Forward iterator
+    {
+        std::vector<xint> data({10, 20, 30, 20, 20});
+
+        std::less<xint> comp;
+        TPARAM_ALLOCATOR<xint> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            comp,
+            alloc
+        );
+        #else
+        sfl::small_flat_multiset<xint, 32, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
+        (
+            sfl::from_range_t(),
+            data,
+            comp,
+            alloc
+        );
+        #endif
+
+        CHECK(set.empty() == false);
+        CHECK(set.size() == 5);
+        CHECK(set.max_size() > 0);
+        CHECK(*NTH(set, 0) == 10);
+        CHECK(*NTH(set, 1) == 20);
+        CHECK(*NTH(set, 2) == 20);
+        CHECK(*NTH(set, 3) == 20);
+        CHECK(*NTH(set, 4) == 30);
     }
 }
 

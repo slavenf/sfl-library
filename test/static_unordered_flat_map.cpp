@@ -9,11 +9,15 @@
 #include "sfl/static_unordered_flat_map.hpp"
 
 #include "check.hpp"
+#include "istream_view.hpp"
+#include "nth.hpp"
+#include "pair_io.hpp"
 #include "print.hpp"
 
 #include "xint.hpp"
 #include "xobj.hpp"
 
+#include <sstream>
 #include <vector>
 
 void test_static_unordered_flat_map()
@@ -773,6 +777,54 @@ void test_static_unordered_flat_map()
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        }
+    }
+
+    PRINT("Test insert_range(Range&&");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            map.insert_range(std::views::istream<std::pair<int, int>>(iss));
+            #else
+            map.insert_range(sfl::test::istream_view<std::pair<int, int>>(iss));
+            #endif
+
+            CHECK(map.size() == 3);
+            CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+            CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
+            CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+        }
+
+        // Forward iterator
+        {
+            std::vector<std::pair<xint, xint>> data
+            (
+                {
+                    {10, 1},
+                    {20, 1},
+                    {30, 1},
+                    {20, 2},
+                    {20, 3}
+                }
+            );
+
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            map.insert_range(std::views::all(data));
+            #else
+            map.insert_range(data);
+            #endif
+
+            CHECK(map.size() == 3);
+            CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+            CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
+            CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
         }
     }
 
@@ -2135,7 +2187,7 @@ void test_static_unordered_flat_map()
         CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
     }
 
-    PRINT("Test container(InputIt, InputIt, const Compare&)");
+    PRINT("Test container(InputIt, InputIt, const KeyEqual&)");
     {
         std::vector<std::pair<xint, xint>> data
         (
@@ -2181,7 +2233,7 @@ void test_static_unordered_flat_map()
         CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
     }
 
-    PRINT("Test container(std::initializer_list, const Compare&)");
+    PRINT("Test container(std::initializer_list, const KeyEqual&)");
     {
         std::initializer_list<std::pair<xint, xint>> ilist
         {
@@ -2253,6 +2305,142 @@ void test_static_unordered_flat_map()
         CHECK(map1.nth(0)->first == -10); CHECK(map1.nth(0)->second == -1);
         CHECK(map1.nth(1)->first == -20); CHECK(map1.nth(1)->second == -1);
         CHECK(map1.nth(2)->first == -30); CHECK(map1.nth(2)->second == -1);
+    }
+
+    PRINT("Test container(sfl::from_range_t, Range&&)");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                (sfl::from_range_t()),
+                (std::views::istream<std::pair<int, int>>(iss))
+            );
+            #else
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                (sfl::from_range_t()),
+                (sfl::test::istream_view<std::pair<int, int>>(iss))
+            );
+            #endif
+
+            CHECK(map.empty() == false);
+            CHECK(map.size() == 3);
+            CHECK(map.max_size() > 0);
+            CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+            CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
+            CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+        }
+
+        // Forward iterator
+        {
+            std::vector<std::pair<xint, xint>> data
+            (
+                {
+                    {10, 1},
+                    {20, 1},
+                    {30, 1},
+                    {20, 2},
+                    {20, 3}
+                }
+            );
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                sfl::from_range_t(),
+                std::views::all(data)
+            );
+            #else
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                sfl::from_range_t(),
+                data
+            );
+            #endif
+
+            CHECK(map.empty() == false);
+            CHECK(map.size() == 3);
+            CHECK(map.max_size() > 0);
+            CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+            CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
+            CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+        }
+    }
+
+    PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&)");
+    {
+        // Input iterator (exactly)
+        {
+            std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+            std::equal_to<xint> equal;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                (sfl::from_range_t()),
+                (std::views::istream<std::pair<int, int>>(iss)),
+                equal
+            );
+            #else
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                (sfl::from_range_t()),
+                (sfl::test::istream_view<std::pair<int, int>>(iss)),
+                equal
+            );
+            #endif
+
+            CHECK(map.empty() == false);
+            CHECK(map.size() == 3);
+            CHECK(map.max_size() > 0);
+            CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+            CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
+            CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+        }
+
+        // Forward iterator
+        {
+            std::vector<std::pair<xint, xint>> data
+            (
+                {
+                    {10, 1},
+                    {20, 1},
+                    {30, 1},
+                    {20, 2},
+                    {20, 3}
+                }
+            );
+
+            std::equal_to<xint> equal;
+
+            #if SFL_CPP_VERSION >= SFL_CPP_20
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                sfl::from_range_t(),
+                std::views::all(data),
+                equal
+            );
+            #else
+            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            (
+                sfl::from_range_t(),
+                data,
+                equal
+            );
+            #endif
+
+            CHECK(map.empty() == false);
+            CHECK(map.size() == 3);
+            CHECK(map.max_size() > 0);
+            CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+            CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
+            CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////

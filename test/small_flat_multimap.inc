@@ -2414,6 +2414,58 @@ PRINT("Test insert(std::initializer_list)");
     }
 }
 
+PRINT("Test insert_range(Range&&");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map.insert_range(std::views::istream<std::pair<int, int>>(iss));
+        #else
+        map.insert_range(sfl::test::istream_view<std::pair<int, int>>(iss));
+        #endif
+
+        CHECK(map.size() == 5);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+
+    // Forward iterator
+    {
+        std::vector<std::pair<xint, xint>> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
+
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map.insert_range(std::views::all(data));
+        #else
+        map.insert_range(data);
+        #endif
+
+        CHECK(map.size() == 5);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+}
+
 PRINT("Test erase(const_iterator)");
 {
     // Erase at the end
@@ -4039,6 +4091,308 @@ PRINT("Test container(container&&, const Allocator&)");
             // Storage was moved
             CHECK(map1.size() == 0);
         }
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<std::pair<int, int>>(iss))
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<std::pair<int, int>>(iss))
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+
+    // Forward iterator
+    {
+        std::vector<std::pair<xint, xint>> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            std::views::all(data)
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            data
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+        std::less<xint> comp;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<std::pair<int, int>>(iss)),
+            comp
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<std::pair<int, int>>(iss)),
+            comp
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+
+    // Forward iterator
+    {
+        std::vector<std::pair<xint, xint>> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
+
+        std::less<xint> comp;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            comp
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            data,
+            comp
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<std::pair<int, int>>(iss)),
+            alloc
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<std::pair<int, int>>(iss)),
+            alloc
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+
+    // Forward iterator
+    {
+        std::vector<std::pair<xint, xint>> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
+
+        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            alloc
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            data,
+            alloc
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+}
+
+PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)");
+{
+    // Input iterator (exactly)
+    {
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
+
+        std::less<xint> comp;
+        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (std::views::istream<std::pair<int, int>>(iss)),
+            comp,
+            alloc
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            (sfl::from_range_t()),
+            (sfl::test::istream_view<std::pair<int, int>>(iss)),
+            comp,
+            alloc
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
+    }
+
+    // Forward iterator
+    {
+        std::vector<std::pair<xint, xint>> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
+
+        std::less<xint> comp;
+        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            comp,
+            alloc
+        );
+        #else
+        sfl::small_flat_multimap<xint, xint, 32, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        (
+            sfl::from_range_t(),
+            data,
+            comp,
+            alloc
+        );
+        #endif
+
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 5);
+        CHECK(map.max_size() > 0);
+        CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
+        CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 3);
+        CHECK(NTH(map, 2)->first == 20); CHECK(NTH(map, 2)->second == 2);
+        CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 1);
+        CHECK(NTH(map, 4)->first == 30); CHECK(NTH(map, 4)->second == 1);
     }
 }
 

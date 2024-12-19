@@ -21,7 +21,10 @@
 #ifndef SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
 #define SFL_SMALL_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
 
-#include "private.hpp"
+#include <sfl/private.hpp>
+#include <sfl/detail/concepts.hpp>
+#include <sfl/detail/cpp.hpp>
+#include <sfl/detail/tags.hpp>
 
 #include <algorithm>        // copy, move, lower_bound, swap, swap_ranges
 #include <cstddef>          // size_t
@@ -410,6 +413,68 @@ public:
     {
         initialize_move(other);
     }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
+    template <sfl::dtl::container_compatible_range<value_type> Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range)
+        : data_()
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+    template <sfl::dtl::container_compatible_range<value_type> Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+        : data_(equal)
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+    template <sfl::dtl::container_compatible_range<value_type> Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const Allocator& alloc)
+        : data_(alloc)
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+    template <sfl::dtl::container_compatible_range<value_type> Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
+        : data_(equal, alloc)
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+#else // before C++20
+
+    template <typename Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range)
+        : data_()
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+    template <typename Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+        : data_(equal)
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+    template <typename Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const Allocator& alloc)
+        : data_(alloc)
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+    template <typename Range>
+    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
+        : data_(equal, alloc)
+    {
+        initialize_range(std::forward<Range>(range));
+    }
+
+#endif // before C++20
 
     ~small_unordered_flat_multimap()
     {
@@ -857,17 +922,33 @@ public:
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     void insert(InputIt first, InputIt last)
     {
-        while (first != last)
-        {
-            insert(*first);
-            ++first;
-        }
+        insert_range_aux(first, last);
     }
 
     void insert(std::initializer_list<value_type> ilist)
     {
-        insert(ilist.begin(), ilist.end());
+        insert_range_aux(ilist.begin(), ilist.end());
     }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
+    template <sfl::dtl::container_compatible_range<value_type> Range>
+    void insert_range(Range&& range)
+    {
+        insert_range_aux(std::ranges::begin(range), std::ranges::end(range));
+    }
+
+#else // before C++20
+
+    template <typename Range>
+    void insert_range(Range&& range)
+    {
+        using std::begin;
+        using std::end;
+        insert_range_aux(begin(range), end(range));
+    }
+
+#endif // before C++20
 
     iterator erase(iterator pos)
     {
@@ -1336,8 +1417,8 @@ private:
         }
     }
 
-    template <typename InputIt>
-    void initialize_range(InputIt first, InputIt last)
+    template <typename InputIt, typename Sentinel>
+    void initialize_range(InputIt first, Sentinel last)
     {
         SFL_TRY
         {
@@ -1369,6 +1450,26 @@ private:
             SFL_RETHROW;
         }
     }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
+    template <sfl::dtl::container_compatible_range<value_type> Range>
+    void initialize_range(Range&& range)
+    {
+        initialize_range(std::ranges::begin(range), std::ranges::end(range));
+    }
+
+#else // before C++20
+
+    template <typename Range>
+    void initialize_range(Range&& range)
+    {
+        using std::begin;
+        using std::end;
+        initialize_range(begin(range), end(range));
+    }
+
+#endif // before C++20
 
     void initialize_copy(const small_unordered_flat_multimap& other)
     {
@@ -1585,6 +1686,16 @@ private:
                 std::make_move_iterator(other.data_.first_),
                 std::make_move_iterator(other.data_.last_)
             );
+        }
+    }
+
+    template <typename InputIt, typename Sentinel>
+    void insert_range_aux(InputIt first, Sentinel last)
+    {
+        while (first != last)
+        {
+            insert(*first);
+            ++first;
         }
     }
 
