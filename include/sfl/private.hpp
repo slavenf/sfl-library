@@ -2398,44 +2398,6 @@ inline void throw_out_of_range(const char* msg)
     #endif
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// INDEX SEQUENCE
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-template <std::size_t... Ints>
-struct index_sequence
-{
-    using type = index_sequence;
-};
-
-template <typename IndexSequence1, typename IndexSequence2>
-struct index_sequence_concat;
-
-template <std::size_t... Ints1, std::size_t... Ints2>
-struct index_sequence_concat< sfl::dtl::index_sequence<Ints1...>,
-                              sfl::dtl::index_sequence<Ints2...> >
-    : sfl::dtl::index_sequence<Ints1..., (sizeof...(Ints1) + Ints2)...>
-{};
-
-template <std::size_t N>
-struct make_index_sequence
-    : sfl::dtl::index_sequence_concat< typename sfl::dtl::make_index_sequence<N/2>::type,
-                                       typename sfl::dtl::make_index_sequence<N - N/2>::type >::type
-{};
-
-template <>
-struct make_index_sequence<0> : sfl::dtl::index_sequence<>
-{};
-
-template <>
-struct make_index_sequence<1> : sfl::dtl::index_sequence<0>
-{};
-
-template <typename... T>
-using index_sequence_for = sfl::dtl::make_index_sequence<sizeof...(T)>;
-
 } // namespace dtl
 
 } // namespace sfl
