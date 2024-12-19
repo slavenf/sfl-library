@@ -24,6 +24,7 @@
 #include <sfl/private.hpp>
 #include <sfl/detail/concepts.hpp>
 #include <sfl/detail/cpp.hpp>
+#include <sfl/detail/ignore_unused.hpp>
 #include <sfl/detail/tags.hpp>
 
 #include <algorithm>        // copy, move, lower_bound, swap, swap_ranges

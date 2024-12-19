@@ -21,10 +21,10 @@
 #ifndef SFL_DETAIL_NODE_SMALL_ALLOCATOR_HPP_INCLUDED
 #define SFL_DETAIL_NODE_SMALL_ALLOCATOR_HPP_INCLUDED
 
-#include <sfl/private.hpp>                  // ignore_unused
-#include <sfl/detail/allocator_traits.hpp>  // allocator_traits
-#include <sfl/detail/cpp.hpp>               // SFL_ASSERT, SFL_NODISCARD
-#include <sfl/detail/static_pool.hpp>       // static_pool
+#include <sfl/detail/allocator_traits.hpp>
+#include <sfl/detail/cpp.hpp>
+#include <sfl/detail/ignore_unused.hpp>
+#include <sfl/detail/static_pool.hpp>
 
 #include <cstddef>      // size_t, ptrdiff_t
 #include <memory>       // allocator, allocator_traits, pointer_traits

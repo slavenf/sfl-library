@@ -2,6 +2,8 @@
 
 #include "sfl/detail/node_static_allocator.hpp"
 
+#include "sfl/private.hpp" // allocate, deallocate, construct_at_a, destroy_at_a
+
 #include "check.hpp"
 #include "print.hpp"
 
