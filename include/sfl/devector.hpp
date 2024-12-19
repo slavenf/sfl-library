@@ -27,6 +27,7 @@
 #include <sfl/detail/index_sequence.hpp>
 #include <sfl/detail/scope_guard.hpp>
 #include <sfl/detail/tags.hpp>
+#include <sfl/detail/type_traits.hpp>
 
 #include <algorithm>        // copy, move, swap, swap_ranges
 #include <cstddef>          // size_t

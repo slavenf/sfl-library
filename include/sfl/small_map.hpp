@@ -29,6 +29,7 @@
 #include <sfl/detail/node_small_allocator.hpp>
 #include <sfl/detail/rb_tree.hpp>
 #include <sfl/detail/tags.hpp>
+#include <sfl/detail/type_traits.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, less

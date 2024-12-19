@@ -26,6 +26,7 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>
 #include <sfl/detail/tags.hpp>
+#include <sfl/detail/type_traits.hpp>
 
 #include <algorithm>        // copy, move, lower_bound, swap, swap_ranges
 #include <cstddef>          // size_t
