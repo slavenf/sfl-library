@@ -1,4 +1,4 @@
-# sfl::static_flat_map
+# sfl::static_set
 
 <details>
 
@@ -7,8 +7,6 @@
 * [Summary](#summary)
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
-* [Public Member Classes](#public-member-classes)
-  * [value\_compare](#value_compare)
 * [Public Data Members](#public-data-members)
   * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
@@ -21,8 +19,6 @@
   * [end, cend](#end-cend)
   * [rbegin, crbegin](#rbegin-crbegin)
   * [rend, crend](#rend-crend)
-  * [nth](#nth)
-  * [index\_of](#index_of)
   * [empty](#empty)
   * [full](#full)
   * [size](#size)
@@ -34,8 +30,6 @@
   * [emplace\_hint](#emplace_hint)
   * [insert](#insert)
   * [insert\_range](#insert_range)
-  * [insert\_or\_assign](#insert_or_assign)
-  * [try\_emplace](#try_emplace)
   * [erase](#erase)
   * [swap](#swap)
   * [lower\_bound](#lower_bound)
@@ -44,16 +38,13 @@
   * [find](#find)
   * [count](#count)
   * [contains](#contains)
-  * [at](#at)
-  * [operator\[\]](#operator-1)
-  * [data](#data)
 * [Non-member Functions](#non-member-functions)
-  * [operator==](#operator-2)
-  * [operator!=](#operator-3)
-  * [operator\<](#operator-4)
-  * [operator\>](#operator-5)
-  * [operator\<=](#operator-6)
-  * [operator\>=](#operator-7)
+  * [operator==](#operator-1)
+  * [operator!=](#operator-2)
+  * [operator\<](#operator-3)
+  * [operator\>](#operator-4)
+  * [operator\<=](#operator-5)
+  * [operator\>=](#operator-6)
   * [swap](#swap-1)
   * [erase\_if](#erase_if)
 
@@ -63,32 +54,29 @@
 
 ## Summary
 
-Defined in header `sfl/static_flat_map.hpp`:
+Defined in header `sfl/static_set.hpp`:
 
 ```
 namespace sfl
 {
     template < typename Key,
-               typename T,
                std::size_t N,
                typename Compare = std::less<Key> >
-    class static_flat_map;
+    class static_set;
 }
 ```
 
-`sfl::static_flat_map` is an associative container that contains **sorted** set of **key-value** pairs with **unique** keys. Sorting is done using the key comparison function `Compare`.
+`sfl::static_set` is an associative container similar to [`std::set`](https://en.cppreference.com/w/cpp/container/set), but with the different storage model.
 
-Underlying storage is implemented as **sorted vector**.
+This container internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
 
-Complexity of search operation is O(log N). Complexity of insert and remove operations is O(N).
+Underlying storage is implemented as **red-black tree**.
 
-This internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
+Complexity of search, insert and remove operations is O(log N).
 
-Elements of this container are always stored **contiguously** in the memory.
+Iterators to elements are bidirectional iterators and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
 
-Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
-
-`sfl::static_flat_map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
+`sfl::static_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
 This container is convenient for bare-metal embedded software development.
 
@@ -105,18 +93,12 @@ This container is convenient for bare-metal embedded software development.
     Key type.
 
 2.  ```
-    typename T
-    ```
-
-    Value type.
-
-3.  ```
     std::size_t N
     ```
 
     Size of the internal statically allocated array, i.e. the maximal number of elements that this container can contain.
 
-4.  ```
+3.  ```
     typename Compare
     ```
 
@@ -131,35 +113,19 @@ This container is convenient for bare-metal embedded software development.
 | Member Type               | Definition |
 | :------------------------ | :--------- |
 | `key_type`                | `Key` |
-| `mapped_type`             | `T` |
-| `value_type`              | `std::pair<Key, T>` |
-| `size_type`               | `std::size_t` |
-| `difference_type`         | `std::ptrdiff_t` |
+| `value_type`              | `Key` |
+| `size_type`               | Unsigned integer type |
+| `difference_type`         | Signed integer type |
 | `key_compare`             | `Compare` |
+| `value_compare`           | `Compare` |
 | `reference`               | `value_type&` |
 | `const_reference`         | `const value_type&` |
-| `pointer`                 | `value_type*` |
-| `const_pointer`           | `const value_type*` |
-| `iterator`                | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `value_type` |
-| `const_iterator`          | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
-| `reverse_iterator`        | `std::reverse_iterator<iterator>` |
-| `const_reverse_iterator`  | `std::reverse_iterator<const_iterator>` |
-
-<br><br>
-
-
-
-## Public Member Classes
-
-### value_compare
-
-```
-class value_compare
-{
-public:
-    bool operator()(const value_type& x, const value_type& y) const;
-};
-```
+| `pointer`                 | Pointer to `value_type` |
+| `const_pointer`           | Pointer to `const value_type` |
+| `iterator`                | [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
+| `const_iterator`          | [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
+| `reverse_iterator`        | Reverse [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
+| `const_reverse_iterator`  | Reverse [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
 
 <br><br>
 
@@ -182,10 +148,10 @@ static constexpr size_type static_capacity = N;
 ### (constructor)
 
 1.  ```
-    static_flat_map() noexcept(std::is_nothrow_default_constructible<Compare>::value);
+    static_set() noexcept(std::is_nothrow_default_constructible<Compare>::value)
     ```
 2.  ```
-    explicit static_flat_map(const Compare& comp) noexcept(std::is_nothrow_copy_constructible<Compare>::value);
+    explicit static_set(const Compare& comp) noexcept(std::is_nothrow_copy_constructible<Compare>::value)
     ```
 
     **Effects:**
@@ -200,11 +166,11 @@ static constexpr size_type static_capacity = N;
 
 3.  ```
     template <typename InputIt>
-    static_flat_map(InputIt first, InputIt last);
+    static_set(InputIt first, InputIt last);
     ```
 4.  ```
     template <typename InputIt>
-    static_flat_map(InputIt first, InputIt last, const Compare& comp);
+    static_set(InputIt first, InputIt last, const Compare& comp);
     ```
 
     **Preconditions:**
@@ -218,18 +184,15 @@ static constexpr size_type static_capacity = N;
     **Note:**
     These overloads participate in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
-    **Complexity:**
-    Linear in `std::distance(first, last)`.
-
     <br><br>
 
 
 
 5.  ```
-    static_flat_map(std::initializer_list<value_type> ilist);
+    static_set(std::initializer_list<value_type> ilist);
     ```
 6.  ```
-    static_flat_map(std::initializer_list<value_type> ilist, const Compare& comp);
+    static_set(std::initializer_list<value_type> ilist, const Compare& comp);
     ```
 
     **Preconditions:**
@@ -240,30 +203,24 @@ static constexpr size_type static_capacity = N;
 
     If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
 
-    **Complexity:**
-    Linear in `ilist.size()`.
-
     <br><br>
 
 
 
 7.  ```
-    static_flat_map(const static_flat_map& other);
+    static_set(const static_set& other);
     ```
 
     **Effects:**
     Copy constructor.
     Constructs the container with the copy of the contents of `other`.
 
-    **Complexity:**
-    Linear in size.
-
     <br><br>
 
 
 
 8.  ```
-    static_flat_map(static_flat_map&& other);
+    static_set(static_set&& other);
     ```
 
     **Effects:**
@@ -274,20 +231,17 @@ static constexpr size_type static_capacity = N;
 
     `other` is in a valid but unspecified state after the move.
 
-    **Complexity:**
-    Linear in size.
-
     <br><br>
 
 
 
 9.  ```
     template <typename Range>
-    static_flat_map(sfl::from_range_t, Range&& range);
+    static_set(sfl::from_range_t, Range&& range);
     ```
 10. ```
     template <typename Range>
-    static_flat_map(sfl::from_range_t, Range&& range, const Compare& comp);
+    static_set(sfl::from_range_t, Range&& range, const Compare& comp);
     ```
 
     **Effects:**
@@ -305,7 +259,7 @@ static constexpr size_type static_capacity = N;
 ### (destructor)
 
 1.  ```
-    ~static_flat_map();
+    ~static_set();
     ```
 
     **Effects:**
@@ -321,7 +275,7 @@ static constexpr size_type static_capacity = N;
 ### operator=
 
 1.  ```
-    static_flat_map& operator=(const static_flat_map& other);
+    static_set& operator=(const static_set& other);
     ```
 
     **Effects:**
@@ -331,15 +285,12 @@ static constexpr size_type static_capacity = N;
     **Returns:**
     `*this()`.
 
-    **Complexity:**
-    Linear in size.
-
     <br><br>
 
 
 
 2.  ```
-    static_flat_map& operator=(static_flat_map&& other);
+    static_set& operator=(static_set&& other);
     ```
 
     **Effects:**
@@ -353,15 +304,12 @@ static constexpr size_type static_capacity = N;
     **Returns:**
     `*this()`.
 
-    **Complexity:**
-    Linear in size.
-
     <br><br>
 
 
 
 3.  ```
-    static_flat_map& operator=(std::initializer_list<value_type> ilist);
+    static_set& operator=(std::initializer_list<Key> ilist);
     ```
 
     **Preconditions:**
@@ -372,9 +320,6 @@ static constexpr size_type static_capacity = N;
 
     **Returns:**
     `*this()`.
-
-    **Complexity:**
-    Linear in size.
 
     <br><br>
 
@@ -498,51 +443,6 @@ static constexpr size_type static_capacity = N;
     Returns a reverse iterator to the element following the last element of the reversed container.
     It corresponds to the element preceding the first element of the non-reversed container.
     This element acts as a placeholder, attempting to access it results in undefined behavior.
-
-    **Complexity:**
-    Constant.
-
-    <br><br>
-
-
-
-### nth
-
-1.  ```
-    iterator nth(size_type pos) noexcept;
-    ```
-2.  ```
-    const_iterator nth(size_type pos) const noexcept;
-    ```
-
-    **Preconditions:**
-    `pos <= size()`
-
-    **Effects:**
-    Returns an iterator to the element at position `pos`.
-
-    If `pos == size()`, the returned iterator is equal to `end()`.
-
-    **Complexity:**
-    Constant.
-
-    <br><br>
-
-
-
-### index_of
-
-1.  ```
-    size_type index_of(const_iterator pos) const noexcept;
-    ```
-
-    **Preconditions:**
-    `cbegin() <= pos && pos <= cend()`
-
-    **Effects:**
-    Returns position of the element pointed by iterator `pos`, i.e. `std::distance(begin(), pos)`.
-
-    If `pos == end()`, the returned value is equal to `size()`.
 
     **Complexity:**
     Constant.
@@ -696,8 +596,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    1. `!full()`
-    2. `cbegin() <= hint && hint <= cend()`
+    `!full()`
 
     **Effects:**
     Inserts new element into the container if the container doesn't already contain an element with an equivalent key.
@@ -752,20 +651,19 @@ static constexpr size_type static_capacity = N;
 
 
 3.  ```
-    template <typename P>
-    std::pair<iterator, bool> insert(P&& value);
+    template <typename K>
+    std::pair<iterator, bool> insert(K&& x);
     ```
 
     **Preconditions:**
     `!full()`
 
     **Effects:**
-    Inserts new element into the container if the container doesn't already contain an element with an equivalent key.
+    Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
 
-    New element is constructed as `value_type(std::forward<P>(value))`.
+    New element is constructed as `value_type(std::forward<K>(x))`.
 
-    **Note:**
-    This overload participates in overload resolution only if `std::is_constructible<value_type, P&&>::value` is `true`.
+    **Note:** This overload participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
     **Returns:**
     The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
@@ -779,8 +677,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    1. `!full()`
-    2. `cbegin() <= hint && hint <= cend()`
+    `!full()`
 
     **Effects:**
     Inserts copy of `value` if the container doesn't already contain an element with an equivalent key.
@@ -799,8 +696,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    1. `!full()`
-    2. `cbegin() <= hint && hint <= cend()`
+    `!full()`
 
     **Effects:**
     Inserts `value` using move semantics if the container doesn't already contain an element with an equivalent key.
@@ -815,23 +711,24 @@ static constexpr size_type static_capacity = N;
 
 
 6.  ```
-    template <typename P>
-    iterator insert(const_iterator hint, P&& value);
+    template <typename K>
+    iterator insert(const_iterator hint, K&& x);
     ```
 
     **Preconditions:**
-    1. `!full()`
-    2. `cbegin() <= hint && hint <= cend()`
+    `!full()`
 
     **Effects:**
-    Inserts new element into the container if the container doesn't already contain an element with an equivalent key.
+    Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
 
-    New element is constructed as `value_type(std::forward<P>(value))`.
+    New element is constructed as `value_type(std::forward<K>(x))`.
 
     Iterator `hint` is used as a suggestion where to start to search insert position.
 
-    **Note:**
-    This overload participates in overload resolution only if `std::is_constructible<value_type, P&&>::value` is `true`.
+    **Note:** This overload participates in overload resolution only if all following conditions are satisfied:
+    1. `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
+    2. `std::is_convertible_v<K&&, iterator>` is `false`.
+    3. `std::is_convertible_v<K&&, const_iterator>` is `false`.
 
     **Returns:**
     Iterator to the inserted element or to the already existing element.
@@ -906,237 +803,6 @@ static constexpr size_type static_capacity = N;
 
 
 
-### insert_or_assign
-
-1.  ```
-    template <typename M>
-    std::pair<iterator, bool> insert_or_assign(const Key& key, M&& obj);
-    ```
-2.  ```
-    template <typename M>
-    std::pair<iterator, bool> insert_or_assign(Key&& key, M&& obj);
-    ```
-3.  ```
-    template <typename K, typename M>
-    std::pair<iterator, bool> insert_or_assign(K&& key, M&& obj);
-    ```
-
-    **Effects:**
-    If a key equivalent to `key` already exists in the container, assigns `std::forward<M>(obj)` to the mapped type corresponding to the key `key`. If the key does not exist, inserts the new element.
-
-    *   **Overload (1):** New element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<M>(obj)) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if `std::is_assignable_v<mapped_type&, M&&>` is `true`.
-
-    *   **Overload (2):** New element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<M>(obj)) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if `std::is_assignable_v<mapped_type&, M&&>` is `true`.
-
-    *   **Overload (3):** New element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::forward<K>(key)),
-                    std::forward_as_tuple(std::forward<M>(obj)) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if all following conditions are satisfied:
-        1.  `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-        2.  `std::is_assignable_v<mapped_type&, M&&>` is `true`.
-
-    **Returns:**
-    The iterator component points to the inserted element or to the updated element. The `bool` component is `true` if insertion took place and `false` if assignment took place.
-
-    <br><br>
-
-
-
-4.  ```
-    template <typename M>
-    iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj);
-    ```
-5.  ```
-    template <typename M>
-    iterator insert_or_assign(const_iterator hint, Key&& key, M&& obj);
-    ```
-6.  ```
-    template <typename K, typename M>
-    iterator insert_or_assign(const_iterator hint, K&& key, M&& obj);
-    ```
-
-    **Preconditions:**
-    `cbegin() <= hint && hint <= cend()`
-
-    **Effects:**
-    If a key equivalent to `key` already exists in the container, assigns `std::forward<M>(obj)` to the mapped type corresponding to the key `key`. If the key does not exist, inserts the new element.
-
-    Iterator `hint` is used as a suggestion where to start to search insert position.
-
-    *   **Overload (4):** New element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<M>(obj)) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if `std::is_assignable_v<mapped_type&, M&&>` is `true`.
-
-    *   **Overload (5):** New element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<M>(obj)) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if `std::is_assignable_v<mapped_type&, M&&>` is `true`.
-
-    *   **Overload (6):** New element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::forward<K>(key)),
-                    std::forward_as_tuple(std::forward<M>(obj)) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if all following conditions are satisfied:
-        1.  `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-        2.  `std::is_assignable_v<mapped_type&, M&&>` is `true`.
-
-    **Returns:**
-    Iterator to the element that was inserted or updated.
-
-    <br><br>
-
-
-
-### try_emplace
-
-1.  ```
-    template <typename... Args>
-    std::pair<iterator, bool> try_emplace(const Key& key, Args&&... args);
-    ```
-2.  ```
-    template <typename... Args>
-    std::pair<iterator, bool> try_emplace(Key&& key, Args&&... args);
-    ```
-3.  ```
-    template <typename K, typename... Args>
-    std::pair<iterator, bool> try_emplace(K&& key, Args&&... args);
-    ```
-
-    **Preconditions:**
-    `!full()`
-
-    **Effects:**
-    If a key equivalent to `key` already exists in the container, does nothing.
-    Otherwise, inserts a new element into the container.
-
-    *   **Overload (1):** Behaves like `emplace` except that the element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<Args>(args)...) )
-        ```
-
-    *   **Overload (2):** Behaves like `emplace` except that the element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<Args>(args)...) )
-        ```
-
-    *   **Overload (3):** Behaves like `emplace` except that the element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::forward<K>(key)),
-                    std::forward_as_tuple(std::forward<Args>(args)...) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if all following conditions are satisfied:
-        1.  `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-        2.  `std::is_convertible_v<K&&, iterator>` is `false`.
-        3.  `std::is_convertible_v<K&&, const_iterator>` is `false`.
-
-    **Returns:**
-    The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
-
-    <br><br>
-
-
-
-4.  ```
-    template <typename... Args>
-    iterator try_emplace(const_iterator hint, const Key& key, Args&&... args);
-    ```
-5.  ```
-    template <typename... Args>
-    iterator try_emplace(const_iterator hint, Key&& key, Args&&... args);
-    ```
-6.  ```
-    template <typename K, typename... Args>
-    iterator try_emplace(const_iterator hint, K&& key, Args&&... args);
-    ```
-
-    **Preconditions:**
-    1. `!full()`
-    2. `cbegin() <= hint && hint <= cend()`
-
-    **Effects:**
-    If a key equivalent to `key` already exists in the container, does nothing.
-    Otherwise, inserts a new element into the container.
-
-    Iterator `hint` is used as a suggestion where to start to search insert position.
-
-    *   **Overload (4):** Behaves like `emplace_hint` except that the element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(key),
-                    std::forward_as_tuple(std::forward<Args>(args)...) )
-        ```
-
-    *   **Overload (5):** Behaves like `emplace_hint` except that the element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::move(key)),
-                    std::forward_as_tuple(std::forward<Args>(args)...) )
-        ```
-
-    *   **Overload (6):** Behaves like `emplace_hint` except that the element is constructed as
-
-        ```
-        value_type( std::piecewise_construct,
-                    std::forward_as_tuple(std::forward<K>(key)),
-                    std::forward_as_tuple(std::forward<Args>(args)...) )
-        ```
-
-        **Note:** This overload participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-
-    **Returns:**
-    Iterator to the inserted element or to the already existing element.
-
-    <br><br>
-
-
-
 ### erase
 
 1.  ```
@@ -1145,9 +811,6 @@ static constexpr size_type static_capacity = N;
 2.  ```
     iterator erase(const_iterator pos);
     ```
-
-    **Preconditions:**
-    `cbegin() <= pos && pos < cend()`
 
     **Effects:**
     Removes the element at `pos`.
@@ -1162,9 +825,6 @@ static constexpr size_type static_capacity = N;
 3.  ```
     iterator erase(const_iterator first, const_iterator last);
     ```
-
-    **Preconditions:**
-    `cbegin() <= first && first <= last && last <= cend()`
 
     **Effects:**
     Removes the elements in the range `[first, last)`.
@@ -1200,14 +860,11 @@ static constexpr size_type static_capacity = N;
 ### swap
 
 1.  ```
-    void swap(static_flat_map& other);
+    void swap(static_set& other);
     ```
 
     **Effects:**
     Exchanges the contents of the container with those of `other`.
-
-    **Complexity:**
-    Linear in size.
 
     <br><br>
 
@@ -1381,109 +1038,16 @@ static constexpr size_type static_capacity = N;
 
 
 
-### at
-
-1.  ```
-    T& at(const Key& key);
-    ```
-2.  ```
-    const T& at(const Key& key) const;
-    ```
-3.  ```
-    template <typename K>
-    const T& at(const K& x) const;
-    ```
-
-    **Effects:**
-    Returns a reference to the mapped value of the element with key equivalent to `key` or `x`. If no such element exists, an exception of type `std::out_of_range` is thrown.
-
-    **Note:**
-    Overload (3) participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
-
-    **Complexity:**
-    Logarithmic in `size()`.
-
-    **Exceptions:**
-    `std::out_of_range` if the container does not have an element with the specified key.
-
-    <br><br>
-
-
-
-### operator[]
-
-1.  ```
-    T& operator[](const Key& key);
-    ```
-2.  ```
-    T& operator[](Key&& key);
-    ```
-3.  ```
-    template <typename K>
-    T& operator[](const K& x);
-    ```
-4.  ```
-    template <typename K>
-    T& operator[](K&& x);
-    ```
-
-    **Preconditions:**
-    `!full()`
-
-    **Effects:**
-    Returns a reference to the value that is mapped to a key equivalent to `key` or `x`, performing an insertion if such key does not already exist.
-
-    *   Overload (1) is equivalent to
-      `return try_emplace(key).first->second;`
-
-    *   Overload (2) is equivalent to
-      `return try_emplace(std::move(key)).first->second;`
-
-    *   Overload (3) is equivalent to
-      `return try_emplace(x).first->second;`
-
-    *   Overload (4) is equivalent to
-      `return try_emplace(std::forward<K>(x)).first->second;`
-
-    **Note:**
-    Overloads (3) and (4) participate in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling these functions without constructing an instance of `Key`.
-
-    **Complexity:**
-    Logarithmic in `size()`.
-
-    <br><br>
-
-
-
-### data
-
-1.  ```
-    value_type* data() noexcept;
-    ```
-2.  ```
-    const value_type* data() const noexcept;
-    ```
-
-    **Effects:**
-    Returns pointer to the underlying array serving as element storage. The pointer is such that range `[data(), data() + size())` is always a valid range, even if the container is empty. `data()` is not dereferenceable if the container is empty.
-
-    **Complexity:**
-    Constant.
-
-    <br><br>
-
-
-
 ## Non-member Functions
 
 ### operator==
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C>
+    template <typename K, std::size_t N, typename C>
     bool operator==
     (
-        const static_flat_map<K, T, N, C>& x,
-        const static_flat_map<K, T, N, C>& y
+        const static_set<K, N, C>& x,
+        const static_set<K, N, C>& y
     );
     ```
 
@@ -1507,11 +1071,11 @@ static constexpr size_type static_capacity = N;
 ### operator!=
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C>
+    template <typename K, std::size_t N, typename C>
     bool operator!=
     (
-        const static_flat_map<K, T, N, C>& x,
-        const static_flat_map<K, T, N, C>& y
+        const static_set<K, N, C>& x,
+        const static_set<K, N, C>& y
     );
     ```
 
@@ -1530,11 +1094,11 @@ static constexpr size_type static_capacity = N;
 ### operator<
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C>
+    template <typename K, std::size_t N, typename C>
     bool operator<
     (
-        const static_flat_map<K, T, N, C>& x,
-        const static_flat_map<K, T, N, C>& y
+        const static_set<K, N, C>& x,
+        const static_set<K, N, C>& y
     );
     ```
 
@@ -1553,11 +1117,11 @@ static constexpr size_type static_capacity = N;
 ### operator>
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C>
+    template <typename K, std::size_t N, typename C>
     bool operator>
     (
-        const static_flat_map<K, T, N, C>& x,
-        const static_flat_map<K, T, N, C>& y
+        const static_set<K, N, C>& x,
+        const static_set<K, N, C>& y
     );
     ```
 
@@ -1577,11 +1141,11 @@ static constexpr size_type static_capacity = N;
 ### operator<=
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C>
+    template <typename K, std::size_t N, typename C>
     bool operator<=
     (
-        const static_flat_map<K, T, N, C>& x,
-        const static_flat_map<K, T, N, C>& y
+        const static_set<K, N, C>& x,
+        const static_set<K, N, C>& y
     );
     ```
 
@@ -1600,11 +1164,11 @@ static constexpr size_type static_capacity = N;
 ### operator>=
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C>
+    template <typename K, std::size_t N, typename C>
     bool operator>=
     (
-        const static_flat_map<K, T, N, C>& x,
-        const static_flat_map<K, T, N, C>& y
+        const static_set<K, N, C>& x,
+        const static_set<K, N, C>& y
     );
     ```
 
@@ -1623,11 +1187,11 @@ static constexpr size_type static_capacity = N;
 ### swap
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C>
+    template <typename K, std::size_t N, typename C>
     void swap
     (
-        static_flat_map<K, T, N, C>& x,
-        static_flat_map<K, T, N, C>& y
+        static_set<K, N, C>& x,
+        static_set<K, N, C>& y
     );
     ```
 
@@ -1641,9 +1205,9 @@ static constexpr size_type static_capacity = N;
 ### erase_if
 
 1.  ```
-    template <typename K, typename T, std::size_t N, typename C, typename Predicate>
-    typename static_flat_map<K, T, N, C>::size_type
-        erase_if(static_flat_map<K, T, N, C>& c, Predicate pred)
+    template <typename K, std::size_t N, typename C, typename Predicate>
+    typename static_set<K, N, C>::size_type
+        erase_if(static_set<K, N, C>& c, Predicate pred);
     ```
 
     **Effects:**
@@ -1653,9 +1217,6 @@ static constexpr size_type static_capacity = N;
 
     **Returns:**
     The number of erased elements.
-
-    **Complexity:**
-    Linear.
 
     <br><br>
 

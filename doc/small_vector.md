@@ -8,10 +8,12 @@
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
 * [Public Data Members](#public-data-members)
+  * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
   * [assign](#assign)
+  * [assign\_range](#assign_range)
   * [operator=](#operator)
   * [get\_allocator](#get_allocator)
   * [begin, cbegin](#begin-cbegin)
@@ -35,8 +37,10 @@
   * [clear](#clear)
   * [emplace](#emplace)
   * [insert](#insert)
+  * [insert\_range](#insert_range)
   * [emplace\_back](#emplace_back)
   * [push\_back](#push_back)
+  * [append\_range](#append_range)
   * [pop\_back](#pop_back)
   * [erase](#erase)
   * [resize](#resize)
@@ -70,9 +74,9 @@ namespace sfl
 }
 ```
 
-`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model. Small vector internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+`sfl::small_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model.
 
-Size `N` is specified at the compile time as a template parameter. In case when `N` is equal to zero the container does not hold any statically allocated array and uses only dynamic memory management.
+This container internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
 `sfl::small_vector` is **not** specialized for `bool`.
 
@@ -115,7 +119,7 @@ Size `N` is specified at the compile time as a template parameter. In case when 
 ## Public Member Types
 
 | Member Type               | Definition |
-| ------------------------- | ---------- |
+| :------------------------ | :--------- |
 | `allocator_type`          | `Allocator` |
 | `allocator_traits`        | `std::allocator_traits<Allocator>` |
 | `value_type`              | `T` |
@@ -135,6 +139,8 @@ Size `N` is specified at the compile time as a template parameter. In case when 
 
 
 ## Public Data Members
+
+### static_capacity
 
 ```
 static constexpr size_type static_capacity = N;
@@ -279,6 +285,25 @@ static constexpr size_type static_capacity = N;
 
 
 
+15. ```
+    template <typename Range>
+    small_vector(sfl::from_range_t, Range&& range);
+    ```
+16. ```
+    template <typename Range>
+    small_vector(sfl::from_range_t, Range&& range, const Allocator& alloc);
+    ```
+
+    **Effects:**
+    Constructs the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
+
+    <br><br>
+
+
+
 ### (destructor)
 
 1.  ```
@@ -341,6 +366,23 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Linear in `ilist.size()`.
+
+    <br><br>
+
+
+
+### assign_range
+
+1.  ```
+    template <typename Range>
+    void assign_range(Range&& range);
+    ```
+
+    **Effects:**
+    Replaces the contents of the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
@@ -981,6 +1023,28 @@ static constexpr size_type static_capacity = N;
 
 
 
+### insert_range
+
+1.  ```
+    template <typename Range>
+    iterator insert_range(const_iterator pos, Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range` before position `pos`. Elements are inserted in non-reversing order.
+
+    `range` must not overlap with the container. Otherwise, the behavior is undefined.
+
+    **Returns:**
+    Iterator to the first element inserted, or `pos` if `range` is empty.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
+
+    <br><br>
+
+
+
 ### emplace_back
 
 1.  ```
@@ -1028,6 +1092,23 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Constant.
+
+    <br><br>
+
+
+
+### append_range
+
+1.  ```
+    template <typename Range>
+    void append_range(Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range` before `end()`. Elements are inserted in non-reversing order.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 

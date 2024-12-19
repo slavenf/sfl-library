@@ -8,6 +8,7 @@
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
 * [Public Data Members](#public-data-members)
+  * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
@@ -27,6 +28,7 @@
   * [emplace](#emplace)
   * [emplace\_hint](#emplace_hint)
   * [insert](#insert)
+  * [insert\_range](#insert_range)
   * [erase](#erase)
   * [swap](#swap)
   * [find](#find)
@@ -57,17 +59,17 @@ namespace sfl
 }
 ```
 
-`sfl::static_unordered_flat_set` is an associative container similar to [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set), but the capacity is **fixed** and the underlying storage is implemented as an **unsorted vector**.
+`sfl::static_unordered_flat_set` is an associative container that contains **unsorted** set of **unique** objects of type `Key`.
 
-`sfl::static_unordered_flat_set` internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management.
+Underlying storage is implemented as **unsorted vector**.
 
-The number of elements in static flat unordered set **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
+Complexity of search, insert and remove operations is O(N).
 
-The complexity of insertion or removal of elements is O(1). The complexity of search is O(N).
+This internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
 
-The elements of `sfl::static_unordered_flat_set` are always stored contiguously in the memory.
+Elements of this container are always stored **contiguously** in the memory.
 
-Iterators to elements of `sfl::static_unordered_flat_set` are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
 `sfl::static_unordered_flat_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met.
 
@@ -104,7 +106,7 @@ This container is convenient for bare-metal embedded software development.
 ## Public Member Types
 
 | Member Type               | Definition |
-| ------------------------- | ---------- |
+| :------------------------ | :--------- |
 | `key_type`                | `Key` |
 | `value_type`              | `Key` |
 | `size_type`               | `std::size_t` |
@@ -122,6 +124,8 @@ This container is convenient for bare-metal embedded software development.
 
 
 ## Public Data Members
+
+### static_capacity
 
 ```
 static constexpr size_type static_capacity = N;
@@ -162,7 +166,9 @@ static constexpr size_type static_capacity = N;
     `std::distance(first, last) <= capacity()`
 
     **Effects:**
-    Constructs an empty container and inserts elements from the range `[first, last)`.
+    Constructs the container with the contents of the range `[first, last)`.
+
+    If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
 
     **Note:**
     This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
@@ -185,7 +191,9 @@ static constexpr size_type static_capacity = N;
     `ilist.size() <= capacity()`
 
     **Effects:**
-    Constructs an empty container and inserts elements from the initializer list `ilist`.
+    Constructs the container with the contents of the initializer list `ilist`.
+
+    If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
 
     **Complexity:**
     Linear in `ilist.size()`.
@@ -223,6 +231,27 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Linear in size.
+
+    <br><br>
+
+
+
+9.  ```
+    template <typename Range>
+    static_unordered_flat_set(sfl::from_range_t, Range&& range);
+    ```
+10. ```
+    template <typename Range>
+    static_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal);
+    ```
+
+    **Effects:**
+    Constructs the container with the contents of `range`.
+
+    If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
@@ -720,7 +749,9 @@ static constexpr size_type static_capacity = N;
     `std::distance(first, last) <= available()`
 
     **Effects:**
-    Inserts elements from range `[first, last)`.
+    Inserts elements from range `[first, last)` if the container doesn't already contain an element with an equivalent key.
+
+    If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
 
     The call to this function is equivalent to:
     ```
@@ -746,9 +777,30 @@ static constexpr size_type static_capacity = N;
     `ilist.size() <= available()`
 
     **Effects:**
-    Inserts elements from initializer list `ilist`.
+    Inserts elements from initializer list `ilist` if the container doesn't already contain an element with an equivalent key.
+
+    If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
 
     The call to this function is equivalent to `insert(ilist.begin(), ilist.end())`.
+
+    <br><br>
+
+
+
+### insert_range
+
+1.  ```
+    template <typename Range>
+    void insert_range(Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range` if the container doesn't already contain an element with an equivalent key.
+
+    If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 

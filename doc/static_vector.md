@@ -8,10 +8,12 @@
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
 * [Public Data Members](#public-data-members)
+  * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
   * [assign](#assign)
+  * [assign\_range](#assign_range)
   * [operator=](#operator)
   * [begin, cbegin](#begin-cbegin)
   * [end, cend](#end-cend)
@@ -33,8 +35,10 @@
   * [clear](#clear)
   * [emplace](#emplace)
   * [insert](#insert)
+  * [insert\_range](#insert_range)
   * [emplace\_back](#emplace_back)
   * [push\_back](#push_back)
+  * [append\_range](#append_range)
   * [pop\_back](#pop_back)
   * [erase](#erase)
   * [resize](#resize)
@@ -66,11 +70,9 @@ namespace sfl
 }
 ```
 
-`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but the capacity is **fixed**.
+`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model.
 
-`sfl::static_vector` internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management.
-
-The number of elements in static vector **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
+This container internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in static vector **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
 
 `sfl::static_vector` is **not** specialized for `bool`.
 
@@ -103,7 +105,7 @@ This container is convenient for bare-metal embedded software development.
 ## Public Member Types
 
 | Member Type               | Definition |
-| ------------------------- | ---------- |
+| :------------------------ | :--------- |
 | `value_type`              | `T` |
 | `size_type`               | `std::size_t` |
 | `difference_type`         | `std::ptrdiff_t` |
@@ -121,6 +123,8 @@ This container is convenient for bare-metal embedded software development.
 
 
 ## Public Data Members
+
+### static_capacity
 
 ```
 static constexpr size_type static_capacity = N;
@@ -272,6 +276,24 @@ static constexpr size_type static_capacity = N;
 
 
 
+9.  ```
+    template <typename Range>
+    static_vector(sfl::from_range_t, Range&& range);
+    ```
+
+    **Preconditions:**
+    Number of elements in `range` must be `<= capacity()`.
+
+    **Effects:**
+    Constructs the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
+
+    <br><br>
+
+
+
 ### (destructor)
 
 1.  ```
@@ -343,6 +365,26 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Linear in size.
+
+    <br><br>
+
+
+
+### assign_range
+
+1.  ```
+    template <typename Range>
+    void assign_range(Range&& range);
+    ```
+
+    **Preconditions:**
+    Number of elements in `range` must be `<= capacity()`.
+
+    **Effects:**
+    Replaces the contents of the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
@@ -911,6 +953,31 @@ static constexpr size_type static_capacity = N;
 
 
 
+### insert_range
+
+1.  ```
+    template <typename Range>
+    iterator insert_range(const_iterator pos, Range&& range);
+    ```
+
+    **Preconditions:**
+    Number of elements in `range` must be `<= available()`.
+
+    **Effects:**
+    Inserts elements from `range` before position `pos`. Elements are inserted in non-reversing order.
+
+    `range` must not overlap with the container. Otherwise, the behavior is undefined.
+
+    **Returns:**
+    Iterator to the first element inserted, or `pos` if `range` is empty.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
+
+    <br><br>
+
+
+
 ### emplace_back
 
 1.  ```
@@ -967,6 +1034,26 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Constant.
+
+    <br><br>
+
+
+
+### append_range
+
+1.  ```
+    template <typename Range>
+    void append_range(Range&& range);
+    ```
+
+    **Preconditions:**
+    Number of elements in `range` must be `<= available()`.
+
+    **Effects:**
+    Inserts elements from `range` before `end()`. Elements are inserted in non-reversing order.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 

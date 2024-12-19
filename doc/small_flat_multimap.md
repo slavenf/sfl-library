@@ -8,7 +8,9 @@
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
 * [Public Member Classes](#public-member-classes)
+  * [value\_compare](#value_compare)
 * [Public Data Members](#public-data-members)
+  * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
@@ -33,6 +35,7 @@
   * [emplace](#emplace)
   * [emplace\_hint](#emplace_hint)
   * [insert](#insert)
+  * [insert\_range](#insert_range)
   * [erase](#erase)
   * [swap](#swap)
   * [lower\_bound](#lower_bound)
@@ -72,15 +75,17 @@ namespace sfl
 }
 ```
 
-`sfl::small_flat_multimap` is an associative container similar to [`std::multimap`](https://en.cppreference.com/w/cpp/container/multimap), but the underlying storage is implemented as a **sorted vector**.
+`sfl::small_flat_multimap` is an associative container that contains **sorted** set of **key-value** pairs, while permitting multiple entries with equivalent keys. Sorting is done using the key comparison function `Compare`.
 
-`sfl::small_flat_multimap` internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+Underlying storage is implemented as **sorted vector**.
 
-The complexity of insertion or removal of elements is O(N). The complexity of search is O(log N).
+Complexity of search operation is O(log N). Complexity of insert and remove operations is O(N).
 
-The elements of `sfl::small_flat_multimap` are always stored contiguously in the memory.
+This container internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
-Iterators to elements of `sfl::small_flat_multimap` are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+Elements of this container are always stored **contiguously** in the memory.
+
+Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
 `sfl::small_flat_multimap` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
@@ -133,7 +138,7 @@ Iterators to elements of `sfl::small_flat_multimap` are random access iterators 
 ## Public Member Types
 
 | Member Type               | Definition |
-| ------------------------- | ---------- |
+| :------------------------ | :--------- |
 | `allocator_type`          | `Allocator` |
 | `allocator_traits`        | `std::allocator_traits<allocator_type>` |
 | `key_type`                | `Key` |
@@ -157,6 +162,8 @@ Iterators to elements of `sfl::small_flat_multimap` are random access iterators 
 
 ## Public Member Classes
 
+### value_compare
+
 ```
 class value_compare
 {
@@ -170,6 +177,8 @@ public:
 
 
 ## Public Data Members
+
+### static_capacity
 
 ```
 static constexpr size_type static_capacity = N;
@@ -236,7 +245,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Effects:**
-    Constructs an empty container and inserts elements from the range `[first, last)`.
+    Constructs the container with the contents of the range `[first, last)`.
 
     **Note:**
     These overloads participate in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
@@ -262,7 +271,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Effects:**
-    Constructs an empty container and inserts elements from the initializer list `ilist`.
+    Constructs the container with the contents of the initializer list `ilist`.
 
     **Complexity:**
     Linear in `ilist.size()`.
@@ -306,6 +315,33 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Constant in the best case. Linear in `N` in the worst case.
+
+    <br><br>
+
+
+
+17. ```
+    template <typename Range>
+    small_flat_multimap(sfl::from_range_t, Range&& range);
+    ```
+18. ```
+    template <typename Range>
+    small_flat_multimap(sfl::from_range_t, Range&& range, const Compare& comp);
+    ```
+19. ```
+    template <typename Range>
+    small_flat_multimap(sfl::from_range_t, Range&& range, const Allocator& alloc);
+    ```
+20. ```
+    template <typename Range>
+    small_flat_multimap(sfl::from_range_t, Range&& range, const Compare& comp, const Allocator& alloc);
+    ```
+
+    **Effects:**
+    Constructs the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
@@ -936,6 +972,23 @@ static constexpr size_type static_capacity = N;
     Inserts elements from initializer list `ilist`.
 
     The call to this function is equivalent to `insert(ilist.begin(), ilist.end())`.
+
+    <br><br>
+
+
+
+### insert_range
+
+1.  ```
+    template <typename Range>
+    void insert_range(Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 

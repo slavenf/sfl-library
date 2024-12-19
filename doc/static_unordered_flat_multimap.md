@@ -8,7 +8,9 @@
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
 * [Public Member Classes](#public-member-classes)
+  * [value\_equal](#value_equal)
 * [Public Data Members](#public-data-members)
+  * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
@@ -29,6 +31,7 @@
   * [emplace](#emplace)
   * [emplace\_hint](#emplace_hint)
   * [insert](#insert)
+  * [insert\_range](#insert_range)
   * [erase](#erase)
   * [swap](#swap)
   * [find](#find)
@@ -60,17 +63,17 @@ namespace sfl
 }
 ```
 
-`sfl::static_unordered_flat_multimap` is an associative container similar to [`std::unordered_multimap`](https://en.cppreference.com/w/cpp/container/unordered_multimap), but the capacity is **fixed** and the underlying storage is implemented as an **unsorted vector**.
+`sfl::static_unordered_flat_multimap` is an associative container that contains **unsorted** set of **key-value** pairs, while permitting multiple entries with equivalent keys.
 
-`sfl::static_unordered_flat_multimap` internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management.
+Underlying storage is implemented as **unsorted vector**.
 
-The number of elements in static flat unordered multimap **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
+Complexity of search and remove operations is O(N). Complexity os insert operation is O(1).
 
-The complexity of insertion or removal of elements is O(1). The complexity of search is O(N).
+This internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
 
-The elements of `sfl::static_unordered_flat_multimap` are always stored contiguously in the memory.
+Elements of this container are always stored **contiguously** in the memory.
 
-Iterators to elements of `sfl::static_unordered_flat_multimap` are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
 `sfl::static_unordered_flat_multimap` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met.
 
@@ -113,7 +116,7 @@ This container is convenient for bare-metal embedded software development.
 ## Public Member Types
 
 | Member Type               | Definition |
-| ------------------------- | ---------- |
+| :------------------------ | :--------- |
 | `key_type`                | `Key` |
 | `mapped_type`             | `T` |
 | `value_type`              | `std::pair<Key, T>` |
@@ -133,6 +136,8 @@ This container is convenient for bare-metal embedded software development.
 
 ## Public Member Classes
 
+### value_equal
+
 ```
 class value_equal
 {
@@ -146,6 +151,8 @@ public:
 
 
 ## Public Data Members
+
+### static_capacity
 
 ```
 static constexpr size_type static_capacity = N;
@@ -186,7 +193,7 @@ static constexpr size_type static_capacity = N;
     `std::distance(first, last) <= capacity()`
 
     **Effects:**
-    Constructs an empty container and inserts elements from the range `[first, last)`.
+    Constructs the container with the contents of the range `[first, last)`.
 
     **Note:**
     This overload participates in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
@@ -209,7 +216,7 @@ static constexpr size_type static_capacity = N;
     `ilist.size() <= capacity()`
 
     **Effects:**
-    Constructs an empty container and inserts elements from the initializer list `ilist`.
+    Constructs the container with the contents of the initializer list `ilist`.
 
     **Complexity:**
     Linear in `ilist.size()`.
@@ -247,6 +254,25 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Linear in size.
+
+    <br><br>
+
+
+
+9.  ```
+    template <typename Range>
+    static_unordered_flat_multimap(sfl::from_range_t, Range&& range);
+    ```
+10. ```
+    template <typename Range>
+    static_unordered_flat_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal);
+    ```
+
+    **Effects:**
+    Constructs the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
@@ -581,9 +607,6 @@ static constexpr size_type static_capacity = N;
 
     New element is constructed as `value_type(std::forward<Args>(args)...)`.
 
-    **Note:**
-    The behavior is undefined if preconditions are not satisfied.
-
     **Returns:**
     Iterator to the inserted element.
 
@@ -787,6 +810,23 @@ static constexpr size_type static_capacity = N;
     Inserts elements from initializer list `ilist`.
 
     The call to this function is equivalent to `insert(ilist.begin(), ilist.end())`.
+
+    <br><br>
+
+
+
+### insert_range
+
+1.  ```
+    template <typename Range>
+    void insert_range(Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 

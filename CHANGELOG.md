@@ -1,3 +1,34 @@
+# New release
+
+* Bug fix in `segmented_devector::insert_range`: Auxiliary iterator was declared
+  too early and was pointing to out-of-range, but it wasn't used. Now, iterator
+  declaration is made in inner scope where it is actually used.
+* New associative containers implemented as red-black tree:
+  * `map`
+  * `set`
+  * `multimap`
+  * `multiset`
+  * `small_map`
+  * `small_set`
+  * `small_multimap`
+  * `small_multiset`
+  * `static_map`
+  * `static_set`
+  * `static_multimap`
+  * `static_multiset`
+* All containers: Added range constructor `container(sfl::from_range_t, Range&& r)`
+  that is also available in C++11.
+* All containers: Added range insertion function `insert_range(Range&& r)`
+  that is also available in C++11.
+* All vectors and devectors: Added range assignment function `assign_range(Range&& r)`
+  that is also available in C++11.
+* All vectors and devectors: Added range append function `append_range(Range&& r)`
+  that is also available in C++11.
+* All devectors: Added range prepend function `prepend_range(Range&& r)`
+  that is also available in C++11.
+
+
+
 # 1.8.2 (2024-11-11)
 
 * Bug fix: Use correct `__cplusplus` value for C++20 (it is `202002L`).

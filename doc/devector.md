@@ -11,6 +11,7 @@
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
   * [assign](#assign)
+  * [assign\_range](#assign_range)
   * [operator=](#operator)
   * [get\_allocator](#get_allocator)
   * [begin, cbegin](#begin-cbegin)
@@ -36,10 +37,13 @@
   * [clear](#clear)
   * [emplace](#emplace)
   * [insert](#insert)
+  * [insert\_range](#insert_range)
   * [emplace\_front](#emplace_front)
   * [emplace\_back](#emplace_back)
   * [push\_front](#push_front)
   * [push\_back](#push_back)
+  * [prepend\_range](#prepend_range)
+  * [append\_range](#append_range)
   * [pop\_front](#pop_front)
   * [pop\_back](#pop_back)
   * [erase](#erase)
@@ -115,7 +119,7 @@ Elements of `sfl::devector` are always stored contiguously in the memory.
 ## Public Member Types
 
 | Member Type               | Definition |
-| ------------------------- | ---------- |
+| :------------------------ | :--------- |
 | `allocator_type`          | `Allocator` |
 | `allocator_traits`        | `std::allocator_traits<Allocator>` |
 | `value_type`              | `T` |
@@ -269,6 +273,25 @@ Elements of `sfl::devector` are always stored contiguously in the memory.
 
 
 
+15. ```
+    template <typename Range>
+    devector(sfl::from_range_t, Range&& range);
+    ```
+16. ```
+    template <typename Range>
+    devector(sfl::from_range_t, Range&& range, const Allocator& alloc);
+    ```
+
+    **Effects:**
+    Constructs the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
+
+    <br><br>
+
+
+
 ### (destructor)
 
 1.  ```
@@ -331,6 +354,23 @@ Elements of `sfl::devector` are always stored contiguously in the memory.
 
     **Complexity:**
     Linear in `ilist.size()`.
+
+    <br><br>
+
+
+
+### assign_range
+
+1.  ```
+    template <typename Range>
+    void assign_range(Range&& range);
+    ```
+
+    **Effects:**
+    Replaces the contents of the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
@@ -1011,6 +1051,28 @@ Elements of `sfl::devector` are always stored contiguously in the memory.
 
 
 
+### insert_range
+
+1.  ```
+    template <typename Range>
+    iterator insert_range(const_iterator pos, Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range` before position `pos`. Elements are inserted in non-reversing order.
+
+    `range` must not overlap with the container. Otherwise, the behavior is undefined.
+
+    **Returns:**
+    Iterator to the first element inserted, or `pos` if `range` is empty.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
+
+    <br><br>
+
+
+
 ### emplace_front
 
 1.  ```
@@ -1114,6 +1176,40 @@ Elements of `sfl::devector` are always stored contiguously in the memory.
 
     **Complexity:**
     Constant.
+
+    <br><br>
+
+
+
+### prepend_range
+
+1.  ```
+    template <typename Range>
+    void prepend_range(Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range` before `begin()`. Elements are inserted in non-reversing order.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
+
+    <br><br>
+
+
+
+### append_range
+
+1.  ```
+    template <typename Range>
+    void append_range(Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range` before `end()`. Elements are inserted in non-reversing order.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 

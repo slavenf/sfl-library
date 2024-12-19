@@ -8,7 +8,9 @@
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
 * [Public Member Classes](#public-member-classes)
+  * [value\_compare](#value_compare)
 * [Public Data Members](#public-data-members)
+  * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
@@ -31,6 +33,7 @@
   * [emplace](#emplace)
   * [emplace\_hint](#emplace_hint)
   * [insert](#insert)
+  * [insert\_range](#insert_range)
   * [erase](#erase)
   * [swap](#swap)
   * [lower\_bound](#lower_bound)
@@ -69,17 +72,17 @@ namespace sfl
 }
 ```
 
-`sfl::static_flat_multimap` is an associative container similar to [`std::multimap`](https://en.cppreference.com/w/cpp/container/multimap), but the capacity is **fixed** and the underlying storage is implemented as a **sorted vector**.
+`sfl::static_flat_multimap` is an associative container that contains **sorted** set of **key-value** pairs, while permitting multiple entries with equivalent keys. Sorting is done using the key comparison function `Compare`.
 
-`sfl::static_flat_multimap` internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management.
+Underlying storage is implemented as **sorted vector**.
 
-The number of elements in static flat multimap **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
+Complexity of search operation is O(log N). Complexity of insert and remove operations is O(N).
 
-The complexity of insertion or removal of elements is O(N). The complexity of search is O(log N).
+This internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
 
-The elements of `sfl::static_flat_multimap` are always stored contiguously in the memory.
+Elements of this container are always stored **contiguously** in the memory.
 
-Iterators to elements of `sfl::static_flat_multimap` are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
+Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
 `sfl::static_flat_multimap` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
@@ -122,7 +125,7 @@ This container is convenient for bare-metal embedded software development.
 ## Public Member Types
 
 | Member Type               | Definition |
-| ------------------------- | ---------- |
+| :------------------------ | :--------- |
 | `key_type`                | `Key` |
 | `mapped_type`             | `T` |
 | `value_type`              | `std::pair<Key, T>` |
@@ -144,6 +147,8 @@ This container is convenient for bare-metal embedded software development.
 
 ## Public Member Classes
 
+### value_compare
+
 ```
 class value_compare
 {
@@ -157,6 +162,8 @@ public:
 
 
 ## Public Data Members
+
+### static_capacity
 
 ```
 static constexpr size_type static_capacity = N;
@@ -200,7 +207,7 @@ static constexpr size_type static_capacity = N;
     `std::distance(first, last) <= capacity()`
 
     **Effects:**
-    Constructs an empty container and inserts elements from the range `[first, last)`.
+    Constructs the container with the contents of the range `[first, last)`.
 
     **Note:**
     These overloads participate in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
@@ -223,7 +230,7 @@ static constexpr size_type static_capacity = N;
     `ilist.size() <= capacity()`
 
     **Effects:**
-    Constructs an empty container and inserts elements from the initializer list `ilist`.
+    Constructs the container with the contents of the initializer list `ilist`.
 
     **Complexity:**
     Linear in `ilist.size()`.
@@ -261,6 +268,25 @@ static constexpr size_type static_capacity = N;
 
     **Complexity:**
     Linear in size.
+
+    <br><br>
+
+
+
+9.  ```
+    template <typename Range>
+    static_flat_multimap(sfl::from_range_t, Range&& range);
+    ```
+10. ```
+    template <typename Range>
+    static_flat_multimap(sfl::from_range_t, Range&& range, const Compare& comp);
+    ```
+
+    **Effects:**
+    Constructs the container with the contents of `range`.
+
+    **Note:**
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
@@ -839,8 +865,22 @@ static constexpr size_type static_capacity = N;
 
     The call to this function is equivalent to `insert(ilist.begin(), ilist.end())`.
 
+    <br><br>
+
+
+
+### insert_range
+
+1.  ```
+    template <typename Range>
+    void insert_range(Range&& range);
+    ```
+
+    **Effects:**
+    Inserts elements from `range`.
+
     **Note:**
-    The behavior is undefined if preconditions are not satisfied.
+    It is available in C++11. In C++20 are used proper C++20 range concepts.
 
     <br><br>
 
