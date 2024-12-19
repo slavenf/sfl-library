@@ -2436,66 +2436,6 @@ struct make_index_sequence<1> : sfl::dtl::index_sequence<0>
 template <typename... T>
 using index_sequence_for = sfl::dtl::make_index_sequence<sizeof...(T)>;
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// SCOPE GUARD
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-template <typename Lambda>
-class scope_guard
-{
-private:
-
-    mutable bool dismissed_;
-
-    Lambda lambda_;
-
-public:
-
-    scope_guard(Lambda&& lambda)
-        : dismissed_(false)
-        , lambda_(std::forward<Lambda>(lambda))
-    {}
-
-    scope_guard(const scope_guard& other) = delete;
-
-    scope_guard(scope_guard&& other)
-        : dismissed_(other.dismissed_)
-        , lambda_(std::move(other.lambda_))
-    {
-        other.dismissed_ = true;
-    }
-
-    scope_guard& operator=(const scope_guard& other) = delete;
-
-    scope_guard& operator=(scope_guard&& other)
-    {
-        dismissed_ = other.dismissed_;
-        lambda_ = std::move(other.lambda_);
-        other.dismissed_ = true;
-    }
-
-    ~scope_guard()
-    {
-        if (!dismissed_)
-        {
-            lambda_();
-        }
-    }
-
-    void dismiss() const noexcept
-    {
-        dismissed_ = true;
-    }
-};
-
-template <typename Lambda>
-scope_guard<Lambda> make_scope_guard(Lambda&& lambda)
-{
-    return scope_guard<Lambda>(std::forward<Lambda>(lambda));
-}
-
 } // namespace dtl
 
 } // namespace sfl
