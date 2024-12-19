@@ -24,6 +24,9 @@
 namespace sfl
 {
 
+// Type used to tag that the inserted values should be default initialized.
+struct default_init_t { };
+
 // Type used to tag that container is constructed from range.
 struct from_range_t { };
 
