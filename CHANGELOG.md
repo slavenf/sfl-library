@@ -1,4 +1,4 @@
-# New release
+# 1.9.0 (2024-12-21)
 
 * Bug fix in `segmented_devector::insert_range`: Auxiliary iterator was declared
   too early and was pointing to out-of-range, but it wasn't used. Now, iterator
