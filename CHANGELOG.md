@@ -26,6 +26,9 @@
   that is also available in C++11.
 * All devectors: Added range prepend function `prepend_range(Range&& r)`
   that is also available in C++11.
+* Refactored and removed `private.hpp`.
+* GitHub actions: Use Ubuntu 24.04.
+* GitHub actions: Use matrix strategies.
 
 
 
