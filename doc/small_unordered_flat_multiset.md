@@ -66,7 +66,7 @@ namespace sfl
 
 Underlying storage is implemented as **unsorted vector**.
 
-Complexity of search and remove operations is O(N). Complexity os insert operation is O(1).
+Complexity of search and remove operations is O(N). Complexity of insert operation is O(1).
 
 This container internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
 
