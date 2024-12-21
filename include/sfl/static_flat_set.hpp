@@ -21,7 +21,7 @@
 #ifndef SFL_STATIC_FLAT_SET_HPP_INCLUDED
 #define SFL_STATIC_FLAT_SET_HPP_INCLUDED
 
-#include <sfl/detail/concepts.hpp>
+#include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/initialized_memory_algorithms.hpp>
 #include <sfl/detail/normal_iterator.hpp>

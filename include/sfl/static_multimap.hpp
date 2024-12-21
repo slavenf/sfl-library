@@ -22,7 +22,7 @@
 #define SFL_STATIC_MULTIMAP_HPP_INCLUDED
 
 #include <sfl/detail/allocator_traits.hpp>
-#include <sfl/detail/concepts.hpp>
+#include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/functional.hpp>
 #include <sfl/detail/node_static_allocator.hpp>

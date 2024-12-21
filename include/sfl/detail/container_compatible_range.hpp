@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_CONCEPTS_HPP_INCLUDED
-#define SFL_DETAIL_CONCEPTS_HPP_INCLUDED
+#ifndef SFL_DETAIL_CONTAINER_COMPATIBLE_RANGE_HPP_INCLUDED
+#define SFL_DETAIL_CONTAINER_COMPATIBLE_RANGE_HPP_INCLUDED
 
 #include <sfl/detail/cpp.hpp>
 
@@ -45,4 +45,4 @@ concept container_compatible_range =
 
 } // namespace sfl
 
-#endif // SFL_DETAIL_CONCEPTS_HPP_INCLUDED
+#endif // SFL_DETAIL_CONTAINER_COMPATIBLE_RANGE_HPP_INCLUDED

@@ -21,7 +21,7 @@
 #ifndef SFL_DEVECTOR_HPP_INCLUDED
 #define SFL_DEVECTOR_HPP_INCLUDED
 
-#include <sfl/detail/concepts.hpp>
+#include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/index_sequence.hpp>
