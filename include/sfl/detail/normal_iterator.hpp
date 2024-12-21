@@ -22,7 +22,7 @@
 #define SFL_DETAIL_NORMAL_ITERATOR_HPP_INCLUDED
 
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/pointer_traits.hpp>
+#include <sfl/detail/to_address.hpp>
 #include <sfl/detail/type_traits.hpp>
 
 #include <iterator>

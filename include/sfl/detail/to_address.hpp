@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_POINTER_TRAITS_HPP_INCLUDED
-#define SFL_DETAIL_POINTER_TRAITS_HPP_INCLUDED
+#ifndef SFL_DETAIL_TO_ADDRESS_HPP_INCLUDED
+#define SFL_DETAIL_TO_ADDRESS_HPP_INCLUDED
 
 #include <memory>       // pointer traits
 #include <type_traits>  // type traits
@@ -57,4 +57,4 @@ auto to_address(const Pointer& p) noexcept -> typename std::pointer_traits<Point
 
 } // namespace sfl
 
-#endif // SFL_DETAIL_POINTER_TRAITS_HPP_INCLUDED
+#endif // SFL_DETAIL_TO_ADDRESS_HPP_INCLUDED
