@@ -69,8 +69,7 @@ This is header-only C++11 library that offers several new or less-known containe
 # Requirements
 
 This library requires C++11 compiler or newer.
-
-If available, the library uses the features of the newer C++ standards.
+If available, library uses features of newer C++ standards.
 
 Tested compilers:
 * GCC 4.8.5 on CentOS 7 (C++11)
@@ -87,7 +86,11 @@ Tested compilers:
 
 ## Method 1: Manual copy-paste
 
-Copy subdirectory `sfl` from directory `include` into your project directory and `#include` what you need.
+**Step 1:** Copy `sfl` subdirectory from `include` into your project directory.
+
+**Step 2:** Configure your project or compiler to search include files in `sfl` subdirectory.
+
+**Step 3:** `#include` what you need.
 
 ## Method 2: CMake integration
 
