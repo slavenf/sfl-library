@@ -27,9 +27,9 @@
 #include <sfl/detail/index_sequence.hpp>
 #include <sfl/detail/initialized_memory_algorithms.hpp>
 #include <sfl/detail/normal_iterator.hpp>
-#include <sfl/detail/to_address.hpp>
 #include <sfl/detail/scope_guard.hpp>
 #include <sfl/detail/tags.hpp>
+#include <sfl/detail/to_address.hpp>
 #include <sfl/detail/type_traits.hpp>
 #include <sfl/detail/uninitialized_memory_algorithms.hpp>
 

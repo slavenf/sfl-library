@@ -24,8 +24,8 @@
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>
-#include <sfl/detail/to_address.hpp>
 #include <sfl/detail/static_pool.hpp>
+#include <sfl/detail/to_address.hpp>
 
 #include <cstddef>      // size_t, ptrdiff_t
 #include <memory>       // allocator, allocator_traits, pointer_traits
