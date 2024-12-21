@@ -5,7 +5,7 @@ on: [push, pull_request, workflow_dispatch]
 jobs:
   ubuntu:
     name: Test all on Ubuntu (GCC and Clang)
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
 
@@ -15,7 +15,7 @@ jobs:
 
       - name: Run all tests
         working-directory: ./test
-        run: ./test_all_ubuntu_22.04.sh
+        run: ./test_all_ubuntu_24.04.sh
 
   windows:
     name: Test all on Windows (Visual C++)
