@@ -1,3 +1,18 @@
+# New release
+
+* Bug fix: Fixed support for allocators with fancy pointers in all containers
+  based on red-black tree.
+
+  Before this update, fancy pointers returned from `allocate()` were *converted*
+  to native pointers and back from native to fancy pointers before passed to
+  `deallocate()` which often resulted in metadata loss.
+
+  Now, fancy pointers returned from `allocate()` are not *converted* to native
+  pointers at all.
+
+
+
+
 # 1.9.0 (2024-12-21)
 
 * Bug fix in `segmented_devector::insert_range`: Auxiliary iterator was declared

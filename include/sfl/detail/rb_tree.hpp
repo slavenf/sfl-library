@@ -23,7 +23,6 @@
 
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/optional_value.hpp>
 #include <sfl/detail/to_address.hpp>
 #include <sfl/detail/type_traits.hpp>
 #include <sfl/detail/uninitialized_memory_algorithms.hpp>
@@ -31,6 +30,7 @@
 #include <algorithm>    // equal, lexicographical_compare
 #include <cstddef>      // size_t, ptrdiff_t
 #include <iterator>     // iterator_traits, xxxxx_iterator_tag, reverse_iterator
+#include <memory>       // pointer_traits
 #include <type_traits>  // is_xxxxx
 #include <utility>      // forward, move, pair
 
@@ -51,16 +51,19 @@ enum class rb_tree_node_color
     black
 };
 
+template <typename VoidPointer>
 struct rb_tree_node_base
 {
+    using base_node_pointer = typename std::pointer_traits<VoidPointer>::template rebind<rb_tree_node_base>;
+
     rb_tree_node_color color_;
-    rb_tree_node_base* parent_;
-    rb_tree_node_base* left_;
-    rb_tree_node_base* right_;
+    base_node_pointer parent_;
+    base_node_pointer left_;
+    base_node_pointer right_;
 };
 
-template <typename Value, typename Allocator>
-struct rb_tree_node : rb_tree_node_base
+template <typename Value, typename Allocator, typename VoidPointer>
+struct rb_tree_node : rb_tree_node_base<VoidPointer>
 {
     static_assert
     (
@@ -68,7 +71,33 @@ struct rb_tree_node : rb_tree_node_base
         "Allocator::value_type must be Value."
     );
 
-    sfl::dtl::optional_value<Value> value_;
+    using typename rb_tree_node_base<VoidPointer>::base_node_pointer;
+
+    using node_pointer = typename std::pointer_traits<VoidPointer>::template rebind<rb_tree_node>;
+
+    union
+    {
+        Value value_;
+    };
+
+    rb_tree_node() noexcept
+    {}
+
+    rb_tree_node(const rb_tree_node& other) = delete;
+
+    rb_tree_node(rb_tree_node&& other) = delete;
+
+    rb_tree_node& operator=(const rb_tree_node& other) = delete;
+
+    rb_tree_node& operator=(rb_tree_node&& other) = delete;
+
+    #if defined(__clang__) && (__clang_major__ == 3) // For CentOS 7
+    ~rb_tree_node()
+    {}
+    #else
+    ~rb_tree_node() noexcept
+    {}
+    #endif
 };
 
 template < typename Key,
@@ -107,8 +136,17 @@ public:
 
 private:
 
-    using node_type = rb_tree_node<value_type, allocator_type>;
+    using void_pointer = typename sfl::dtl::allocator_traits<allocator_type>::void_pointer;
+
+    using base_node_type = rb_tree_node_base<void_pointer>;
+
+    using node_type = rb_tree_node<value_type, allocator_type, void_pointer>;
+
     using node_allocator_type = typename sfl::dtl::allocator_traits<allocator_type>::template rebind_alloc<node_type>;
+
+    using base_node_pointer = typename base_node_type::base_node_pointer;
+
+    using node_pointer = typename node_type::node_pointer;
 
 public:
 
@@ -133,11 +171,11 @@ public:
 
     private:
 
-        rb_tree_node_base* node_;
+        base_node_pointer node_;
 
     private:
 
-        explicit iterator(rb_tree_node_base* x) noexcept
+        explicit iterator(base_node_pointer x) noexcept
             : node_(x)
         {}
 
@@ -163,13 +201,13 @@ public:
         SFL_NODISCARD
         reference operator*() const noexcept
         {
-            return *static_cast<node_type*>(node_)->value_.get();
+            return static_cast<node_pointer>(node_)->value_;
         }
 
         SFL_NODISCARD
         pointer operator->() const noexcept
         {
-            return static_cast<node_type*>(node_)->value_.get();
+            return std::addressof(static_cast<node_pointer>(node_)->value_);
         }
 
         iterator& operator++() noexcept
@@ -232,11 +270,11 @@ public:
 
     private:
 
-        const rb_tree_node_base* node_;
+        base_node_pointer node_;
 
     private:
 
-        explicit const_iterator(const rb_tree_node_base* x) noexcept
+        explicit const_iterator(base_node_pointer x) noexcept
             : node_(x)
         {}
 
@@ -267,13 +305,13 @@ public:
         SFL_NODISCARD
         reference operator*() const noexcept
         {
-            return *static_cast<const node_type*>(node_)->value_.get();
+            return static_cast<node_pointer>(node_)->value_;
         }
 
         SFL_NODISCARD
         pointer operator->() const noexcept
         {
-            return static_cast<const node_type*>(node_)->value_.get();
+            return std::addressof(static_cast<node_pointer>(node_)->value_);
         }
 
         const_iterator& operator++() noexcept
@@ -313,13 +351,6 @@ public:
         {
             return !(x == y);
         }
-
-    private:
-
-        iterator to_iterator() const noexcept
-        {
-            return iterator(const_cast<rb_tree_node_base*>(node_));
-        }
     };
 
     using reverse_iterator = std::reverse_iterator<iterator>;
@@ -332,42 +363,24 @@ private:
     {
     public:
 
-        rb_tree_node_base header_;
+        base_node_type header_;
 
         size_type size_;
 
         SFL_NODISCARD
-        rb_tree_node_base* header() noexcept
+        base_node_pointer header() noexcept
         {
-            return &header_;
+            return std::pointer_traits<base_node_pointer>::pointer_to(header_);
         }
 
         SFL_NODISCARD
-        const rb_tree_node_base* header() const noexcept
-        {
-            return &header_;
-        }
-
-        SFL_NODISCARD
-        rb_tree_node_base*& root() noexcept
+        base_node_pointer& root() noexcept
         {
             return header_.left_;
         }
 
         SFL_NODISCARD
-        const rb_tree_node_base* root() const noexcept
-        {
-            return header_.left_;
-        }
-
-        SFL_NODISCARD
-        rb_tree_node_base*& minimum() noexcept
-        {
-            return header_.parent_;
-        }
-
-        SFL_NODISCARD
-        const rb_tree_node_base* minimum() const noexcept
+        base_node_pointer& minimum() noexcept
         {
             return header_.parent_;
         }
@@ -375,7 +388,7 @@ private:
         void reset() noexcept
         {
             header_.color_  = rb_tree_node_color::red;
-            header_.parent_ = &header_; // minimum
+            header_.parent_ = std::pointer_traits<base_node_pointer>::pointer_to(header_); // minimum
             header_.left_   = nullptr;  // root
             header_.right_  = nullptr;  // unused
             size_ = 0;
@@ -461,7 +474,7 @@ private:
         {}
     };
 
-    data data_;
+    mutable data data_;
 
 public:
 
@@ -750,7 +763,7 @@ public:
     iterator emplace_equal(Args&&... args)
     {
         make_node_functor make_node(*this);
-        auto* x = make_node(std::forward<Args>(args)...);
+        node_pointer x = make_node(std::forward<Args>(args)...);
         auto res = calculate_position_for_insert_equal(key(x));
         insert(x, res.pos, res.left, data_.root(), data_.minimum());
         ++data_.size_;
@@ -761,7 +774,7 @@ public:
     std::pair<iterator, bool> emplace_unique(Args&&... args)
     {
         make_node_functor make_node(*this);
-        auto* x = make_node(std::forward<Args>(args)...);
+        node_pointer x = make_node(std::forward<Args>(args)...);
         auto res = calculate_position_for_insert_unique(key(x));
         if (res.status)
         {
@@ -780,7 +793,7 @@ public:
     iterator emplace_hint_equal(const_iterator hint, Args&&... args)
     {
         make_node_functor make_node(*this);
-        auto* x = make_node(std::forward<Args>(args)...);
+        node_pointer x = make_node(std::forward<Args>(args)...);
         auto res = calculate_position_for_insert_hint_equal(hint, key(x));
         insert(x, res.pos, res.left, data_.root(), data_.minimum());
         ++data_.size_;
@@ -791,7 +804,7 @@ public:
     iterator emplace_hint_unique(const_iterator hint, Args&&... args)
     {
         make_node_functor make_node(*this);
-        auto* x = make_node(std::forward<Args>(args)...);
+        node_pointer x = make_node(std::forward<Args>(args)...);
         auto res = calculate_position_for_insert_hint_unique(hint, key(x));
         if (res.status)
         {
@@ -812,7 +825,7 @@ private:
     iterator insert_equal(V&& value, MakeNodeFunctor& make_node)
     {
         auto res = calculate_position_for_insert_equal(KeyOfValue()(value));
-        auto* x = make_node(std::forward<V>(value));
+        node_pointer x = make_node(std::forward<V>(value));
         insert(x, res.pos, res.left, data_.root(), data_.minimum());
         ++data_.size_;
         return iterator(x);
@@ -824,7 +837,7 @@ private:
         auto res = calculate_position_for_insert_unique(KeyOfValue()(value));
         if (res.status)
         {
-            auto* x = make_node(std::forward<V>(value));
+            node_pointer x = make_node(std::forward<V>(value));
             insert(x, res.pos, res.left, data_.root(), data_.minimum());
             ++data_.size_;
             return std::make_pair(iterator(x), true);
@@ -856,7 +869,7 @@ public:
     {
         auto res = calculate_position_for_insert_hint_equal(hint, KeyOfValue()(value));
         make_node_functor make_node(*this);
-        auto* x = make_node(std::forward<V>(value));
+        node_pointer x = make_node(std::forward<V>(value));
         insert(x, res.pos, res.left, data_.root(), data_.minimum());
         ++data_.size_;
         return iterator(x);
@@ -869,7 +882,7 @@ public:
         if (res.status)
         {
             make_node_functor make_node(*this);
-            auto* x = make_node(std::forward<V>(value));
+            node_pointer x = make_node(std::forward<V>(value));
             insert(x, res.pos, res.left, data_.root(), data_.minimum());
             ++data_.size_;
             return iterator(x);
@@ -882,27 +895,27 @@ public:
 
     iterator erase(iterator pos)
     {
-        rb_tree_node_base* x = pos.node_;
-        rb_tree_node_base* y = next(x);
+        base_node_pointer x = pos.node_;
+        base_node_pointer y = next(x);
         --data_.size_;
         remove(x, data_.root(), data_.minimum());
-        drop_node(static_cast<node_type*>(x));
+        drop_node(static_cast<node_pointer>(x));
         return iterator(y);
     }
 
     iterator erase(const_iterator pos)
     {
-        rb_tree_node_base* x = pos.to_iterator().node_;
-        rb_tree_node_base* y = next(x);
+        base_node_pointer x = pos.node_;
+        base_node_pointer y = next(x);
         --data_.size_;
         remove(x, data_.root(), data_.minimum());
-        drop_node(static_cast<node_type*>(x));
+        drop_node(static_cast<node_pointer>(x));
         return iterator(y);
     }
 
     iterator erase(const_iterator first, const_iterator last)
     {
-        auto it = first.to_iterator();
+        iterator it(first.node_);
         while (it != last)
         {
             it = erase(it);
@@ -932,8 +945,8 @@ public:
     SFL_NODISCARD
     iterator lower_bound(const K& k) noexcept
     {
-        rb_tree_node_base* x = data_.root();
-        rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         while (x != nullptr)
         {
@@ -955,8 +968,8 @@ public:
     SFL_NODISCARD
     const_iterator lower_bound(const K& k) const noexcept
     {
-        const rb_tree_node_base* x = data_.root();
-        const rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         while (x != nullptr)
         {
@@ -978,8 +991,8 @@ public:
     SFL_NODISCARD
     iterator upper_bound(const K& k) noexcept
     {
-        rb_tree_node_base* x = data_.root();
-        rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         while (x != nullptr)
         {
@@ -1001,8 +1014,8 @@ public:
     SFL_NODISCARD
     const_iterator upper_bound(const K& k) const noexcept
     {
-        const rb_tree_node_base* x = data_.root();
-        const rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         while (x != nullptr)
         {
@@ -1024,8 +1037,8 @@ public:
     SFL_NODISCARD
     std::pair<iterator, iterator> equal_range(const K& k) noexcept
     {
-        rb_tree_node_base* x = data_.root();
-        rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         while (x != nullptr)
         {
@@ -1041,8 +1054,8 @@ public:
             else
             {
                 // lower bound
-                auto* x_lower = x->left_;
-                auto* y_lower = x;
+                base_node_pointer x_lower = x->left_;
+                base_node_pointer y_lower = x;
                 while (x_lower != nullptr)
                 {
                     if (!ref_to_comp()(key(x_lower), k))
@@ -1057,8 +1070,8 @@ public:
                 }
 
                 // upper bound
-                auto* x_upper = x->right_;
-                auto* y_upper = y;
+                base_node_pointer x_upper = x->right_;
+                base_node_pointer y_upper = y;
                 while (x_upper != nullptr)
                 {
                     if (ref_to_comp()(k, key(x_upper)))
@@ -1083,8 +1096,8 @@ public:
     SFL_NODISCARD
     std::pair<const_iterator, const_iterator> equal_range(const K& k) const noexcept
     {
-        const rb_tree_node_base* x = data_.root();
-        const rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         while (x != nullptr)
         {
@@ -1100,8 +1113,8 @@ public:
             else
             {
                 // lower bound
-                auto* x_lower = x->left_;
-                auto* y_lower = x;
+                base_node_pointer x_lower = x->left_;
+                base_node_pointer y_lower = x;
                 while (x_lower != nullptr)
                 {
                     if (!ref_to_comp()(key(x_lower), k))
@@ -1116,8 +1129,8 @@ public:
                 }
 
                 // upper bound
-                auto* x_upper = x->right_;
-                auto* y_upper = y;
+                base_node_pointer x_upper = x->right_;
+                base_node_pointer y_upper = y;
                 while (x_upper != nullptr)
                 {
                     if (ref_to_comp()(k, key(x_upper)))
@@ -1183,7 +1196,7 @@ public:
 
 private:
 
-    static rb_tree_node_base* minimum(rb_tree_node_base* x) noexcept
+    static base_node_pointer minimum(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
 
@@ -1195,19 +1208,7 @@ private:
         return x;
     }
 
-    static const rb_tree_node_base* minimum(const rb_tree_node_base* x) noexcept
-    {
-        SFL_ASSERT(x != nullptr);
-
-        while (x->left_ != nullptr)
-        {
-            x = x->left_;
-        }
-
-        return x;
-    }
-
-    static rb_tree_node_base* maximum(rb_tree_node_base* x) noexcept
+    static base_node_pointer maximum(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
 
@@ -1219,19 +1220,7 @@ private:
         return x;
     }
 
-    static const rb_tree_node_base* maximum(const rb_tree_node_base* x) noexcept
-    {
-        SFL_ASSERT(x != nullptr);
-
-        while (x->right_ != nullptr)
-        {
-            x = x->right_;
-        }
-
-        return x;
-    }
-
-    static rb_tree_node_base* next(rb_tree_node_base* x) noexcept
+    static base_node_pointer next(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
 
@@ -1241,7 +1230,7 @@ private:
         }
         else
         {
-            rb_tree_node_base* y = x->parent_;
+            base_node_pointer y = x->parent_;
 
             while (x == y->right_)
             {
@@ -1253,29 +1242,7 @@ private:
         }
     }
 
-    static const rb_tree_node_base* next(const rb_tree_node_base* x) noexcept
-    {
-        SFL_ASSERT(x != nullptr);
-
-        if (x->right_ != nullptr)
-        {
-            return minimum(x->right_);
-        }
-        else
-        {
-            const rb_tree_node_base* y = x->parent_;
-
-            while (x == y->right_)
-            {
-                x = y;
-                y = y->parent_;
-            }
-
-            return y;
-        }
-    }
-
-    static rb_tree_node_base* prev(rb_tree_node_base* x) noexcept
+    static base_node_pointer prev(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
 
@@ -1285,7 +1252,7 @@ private:
         }
         else
         {
-            rb_tree_node_base* y = x->parent_;
+            base_node_pointer y = x->parent_;
 
             while (x == y->left_)
             {
@@ -1297,29 +1264,7 @@ private:
         }
     }
 
-    static const rb_tree_node_base* prev(const rb_tree_node_base* x) noexcept
-    {
-        SFL_ASSERT(x != nullptr);
-
-        if (x->left_ != nullptr)
-        {
-            return maximum(x->left_);
-        }
-        else
-        {
-            const rb_tree_node_base* y = x->parent_;
-
-            while (x == y->left_)
-            {
-                x = y;
-                y = y->parent_;
-            }
-
-            return y;
-        }
-    }
-
-    static void rotate_left(rb_tree_node_base* x) noexcept
+    static void rotate_left(base_node_pointer x) noexcept
     {
         /*
          *    |                       |
@@ -1333,7 +1278,7 @@ private:
         SFL_ASSERT(x != nullptr);
         SFL_ASSERT(x->right_ != nullptr);
 
-        rb_tree_node_base* y = x->right_;
+        base_node_pointer y = x->right_;
 
         x->right_ = y->left_;
 
@@ -1358,7 +1303,7 @@ private:
         x->parent_ = y;
     }
 
-    static void rotate_right(rb_tree_node_base* x) noexcept
+    static void rotate_right(base_node_pointer x) noexcept
     {
         /*
          *      |                   |
@@ -1372,7 +1317,7 @@ private:
         SFL_ASSERT(x != nullptr);
         SFL_ASSERT(x->left_ != nullptr);
 
-        rb_tree_node_base* y = x->left_;
+        base_node_pointer y = x->left_;
 
         x->left_ = y->right_;
 
@@ -1397,11 +1342,11 @@ private:
         x->parent_ = y;
     }
 
-    static void insert(rb_tree_node_base* x,
-                       rb_tree_node_base* parent,
+    static void insert(base_node_pointer x,
+                       base_node_pointer parent,
                        bool insert_left,
-                       rb_tree_node_base*& root,
-                       rb_tree_node_base*& minimum) noexcept
+                       base_node_pointer& root,
+                       base_node_pointer& minimum) noexcept
     {
         SFL_ASSERT(x != nullptr);
         SFL_ASSERT(parent != nullptr);
@@ -1429,13 +1374,13 @@ private:
         insert_fixup(x, root);
     }
 
-    static void insert_fixup(rb_tree_node_base* x, rb_tree_node_base*& root) noexcept
+    static void insert_fixup(base_node_pointer x, base_node_pointer& root) noexcept
     {
         while (x != root && x->parent_->color_ == rb_tree_node_color::red)
         {
             if (x->parent_ == x->parent_->parent_->left_) // is z's parent a left child?
             {
-                rb_tree_node_base* y = x->parent_->parent_->right_; // y is z's uncle
+                base_node_pointer y = x->parent_->parent_->right_; // y is z's uncle
 
                 if (y != nullptr && y->color_ == rb_tree_node_color::red) // are z's parent and uncle both red?
                 {
@@ -1462,7 +1407,7 @@ private:
             }
             else // same as block above, but with "right" and "left" exchanged
             {
-                rb_tree_node_base* y = x->parent_->parent_->left_;
+                base_node_pointer y = x->parent_->parent_->left_;
 
                 if (y != nullptr && y->color_ == rb_tree_node_color::red)
                 {
@@ -1489,7 +1434,7 @@ private:
         root->color_ = rb_tree_node_color::black;
     }
 
-    static void transplant(rb_tree_node_base* x, rb_tree_node_base* y)
+    static void transplant(base_node_pointer x, base_node_pointer y)
     {
         SFL_ASSERT(x != nullptr);
         SFL_ASSERT(x->parent_ != nullptr);
@@ -1509,7 +1454,7 @@ private:
         }
     }
 
-    static void remove(rb_tree_node_base* z, rb_tree_node_base*& root, rb_tree_node_base*& minimum)
+    static void remove(base_node_pointer z, base_node_pointer& root, base_node_pointer& minimum)
     {
         SFL_ASSERT(z != nullptr);
 
@@ -1518,8 +1463,8 @@ private:
             minimum = next(z);
         }
 
-        rb_tree_node_base* x;
-        rb_tree_node_base* y = z;
+        base_node_pointer x;
+        base_node_pointer y = z;
         rb_tree_node_color y_original_color = y->color_;
 
         if (z->left_ == nullptr)
@@ -1561,7 +1506,7 @@ private:
         }
     }
 
-    static void remove_fixup(rb_tree_node_base* x, rb_tree_node_base*& root)
+    static void remove_fixup(base_node_pointer x, base_node_pointer& root)
     {
         if (x == nullptr)
         {
@@ -1572,7 +1517,7 @@ private:
         {
             if (x == x->parent_->left_) // is x a left child?
             {
-                rb_tree_node_base* w = x->parent_->right_; // w is x's sibling
+                base_node_pointer w = x->parent_->right_; // w is x's sibling
 
                 if (w->color_ == rb_tree_node_color::red)
                 {
@@ -1614,7 +1559,7 @@ private:
             }
             else // same as block above, but with "right" and "left" exchanged
             {
-                rb_tree_node_base* w = x->parent_->left_;
+                base_node_pointer w = x->parent_->left_;
 
                 if (w->color_ == rb_tree_node_color::red)
                 {
@@ -1657,34 +1602,30 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
-    static const Key& key(const node_type* x) noexcept
+    static const Key& key(node_pointer x) noexcept
     {
-        return KeyOfValue()(*x->value_.get());
+        return KeyOfValue()(x->value_);
     }
 
-    static const Key& key(const rb_tree_node_base* x) noexcept
+    static const Key& key(base_node_pointer x) noexcept
     {
-        return KeyOfValue()(*static_cast<const node_type*>(x)->value_.get());
+        return KeyOfValue()(static_cast<node_pointer>(x)->value_);
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
-    node_type* allocate_node()
+    node_pointer allocate_node()
     {
-        using node_allocator_pointer = typename sfl::dtl::allocator_traits<node_allocator_type>::pointer;
-        node_allocator_pointer p = sfl::dtl::allocate(ref_to_node_alloc(), 1);
-        return sfl::dtl::to_address(p);
+        return sfl::dtl::allocate(ref_to_node_alloc(), 1);
     }
 
-    void deallocate_node(node_type* p) noexcept
+    void deallocate_node(node_pointer p) noexcept
     {
-        using node_allocator_pointer = typename sfl::dtl::allocator_traits<node_allocator_type>::pointer;
-        node_allocator_pointer q = std::pointer_traits<node_allocator_pointer>::pointer_to(*p);
-        sfl::dtl::deallocate(ref_to_node_alloc(), q, 1);
+        sfl::dtl::deallocate(ref_to_node_alloc(), p, 1);
     }
 
     template <typename... Args>
-    void construct_node(node_type* p, Args&&... args)
+    void construct_node(node_pointer p, Args&&... args)
     {
         sfl::dtl::construct_at_a(ref_to_node_alloc(), p);
 
@@ -1693,7 +1634,7 @@ private:
             sfl::dtl::construct_at_a
             (
                 ref_to_node_alloc(),
-                p->value_.get(),
+                std::addressof(p->value_),
                 std::forward<Args>(args)...
             );
         }
@@ -1704,9 +1645,9 @@ private:
         }
     }
 
-    void destroy_node(node_type* p) noexcept
+    void destroy_node(node_pointer p) noexcept
     {
-        sfl::dtl::destroy_at_a(ref_to_node_alloc(), p->value_.get());
+        sfl::dtl::destroy_at_a(ref_to_node_alloc(), std::addressof(p->value_));
         sfl::dtl::destroy_at_a(ref_to_node_alloc(), p);
     }
 
@@ -1723,9 +1664,9 @@ private:
         {}
 
         template <typename... Args>
-        node_type* operator()(Args&&... args)
+        node_pointer operator()(Args&&... args)
         {
-            auto* p = tree_.allocate_node();
+            node_pointer p = tree_.allocate_node();
 
             SFL_TRY
             {
@@ -1747,7 +1688,7 @@ private:
 
         rb_tree& tree_;
 
-        rb_tree_node_base* root_;
+        base_node_pointer root_;
 
     public:
 
@@ -1767,9 +1708,9 @@ private:
         }
 
         template <typename... Args>
-        node_type* operator()(Args&&... args)
+        node_pointer operator()(Args&&... args)
         {
-            auto* p = this->allocate_node();
+            node_pointer p = this->allocate_node();
 
             SFL_TRY
             {
@@ -1786,7 +1727,7 @@ private:
 
     private:
 
-        node_type* allocate_node()
+        node_pointer allocate_node()
         {
             if (root_ == nullptr)
             {
@@ -1794,7 +1735,7 @@ private:
             }
             else
             {
-                rb_tree_node_base* node = tree_.minimum(root_);
+                base_node_pointer node = tree_.minimum(root_);
 
                 if (node != root_)
                 {
@@ -1815,14 +1756,14 @@ private:
                     }
                 }
 
-                tree_.destroy_node(static_cast<node_type*>(node));
+                tree_.destroy_node(static_cast<node_pointer>(node));
 
-                return static_cast<node_type*>(node);
+                return static_cast<node_pointer>(node);
             }
         }
     };
 
-    void drop_node(node_type* p) noexcept
+    void drop_node(node_pointer p) noexcept
     {
         destroy_node(p);
         deallocate_node(p);
@@ -1832,13 +1773,13 @@ private:
 
     struct position_for_insert_equal
     {
-        rb_tree_node_base* pos;
+        base_node_pointer pos;
         bool               left;
     };
 
     struct position_for_insert_unique
     {
-        rb_tree_node_base* pos;
+        base_node_pointer pos;
         bool               left;
         bool               status;
     };
@@ -1846,8 +1787,8 @@ private:
     template <typename K>
     position_for_insert_equal calculate_position_for_insert_equal(const K& k)
     {
-        rb_tree_node_base* x = data_.root();
-        rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         bool comp = true;
 
@@ -1873,8 +1814,8 @@ private:
     template <typename K>
     position_for_insert_unique calculate_position_for_insert_unique(const K& k)
     {
-        rb_tree_node_base* x = data_.root();
-        rb_tree_node_base* y = data_.header();
+        base_node_pointer x = data_.root();
+        base_node_pointer y = data_.header();
 
         bool comp = true;
 
@@ -1899,7 +1840,7 @@ private:
             return position_for_insert_unique{y, comp, true};
         }
 
-        rb_tree_node_base* z = comp ? prev(y) : y;
+        base_node_pointer z = comp ? prev(y) : y;
 
         if (z != data_.header() && !ref_to_comp()(key(z), k))
         {
@@ -1924,7 +1865,7 @@ private:
 
                 if (!ref_to_comp()(k, key(maximum.node_))) // k >= maximum
                 {
-                    return position_for_insert_equal{maximum.to_iterator().node_, false};
+                    return position_for_insert_equal{maximum.node_, false};
                 }
                 else
                 {
@@ -1936,7 +1877,7 @@ private:
         {
             if (hint == cbegin()) // hint == minimum
             {
-                return position_for_insert_equal{hint.to_iterator().node_, true};
+                return position_for_insert_equal{hint.node_, true};
             }
             else
             {
@@ -1946,11 +1887,11 @@ private:
                 {
                     if (prev.node_->right_ == nullptr)
                     {
-                        return position_for_insert_equal{prev.to_iterator().node_, false};
+                        return position_for_insert_equal{prev.node_, false};
                     }
                     else
                     {
-                        return position_for_insert_equal{hint.to_iterator().node_, true};
+                        return position_for_insert_equal{hint.node_, true};
                     }
                 }
                 else // prev > k
@@ -1963,7 +1904,7 @@ private:
         {
             if (hint == std::prev(cend())) // hint == maximum
             {
-                return position_for_insert_equal{hint.to_iterator().node_, false};
+                return position_for_insert_equal{hint.node_, false};
             }
             else
             {
@@ -1973,11 +1914,11 @@ private:
                 {
                     if (next.node_->left_ == nullptr)
                     {
-                        return position_for_insert_equal{next.to_iterator().node_, true};
+                        return position_for_insert_equal{next.node_, true};
                     }
                     else
                     {
-                        return position_for_insert_equal{hint.to_iterator().node_, false};
+                        return position_for_insert_equal{hint.node_, false};
                     }
                 }
                 else // k > next
@@ -2003,7 +1944,7 @@ private:
 
                 if (ref_to_comp()(key(maximum.node_), k)) // maximum < k
                 {
-                    return position_for_insert_unique{maximum.to_iterator().node_, false, true};
+                    return position_for_insert_unique{maximum.node_, false, true};
                 }
                 else
                 {
@@ -2015,7 +1956,7 @@ private:
         {
             if (hint == cbegin()) // hint == minimum
             {
-                return position_for_insert_unique{hint.to_iterator().node_, true, true};
+                return position_for_insert_unique{hint.node_, true, true};
             }
             else
             {
@@ -2025,11 +1966,11 @@ private:
                 {
                     if (prev.node_->right_ == nullptr)
                     {
-                        return position_for_insert_unique{prev.to_iterator().node_, false, true};
+                        return position_for_insert_unique{prev.node_, false, true};
                     }
                     else
                     {
-                        return position_for_insert_unique{hint.to_iterator().node_, true, true};
+                        return position_for_insert_unique{hint.node_, true, true};
                     }
                 }
                 else // prev >= k
@@ -2042,7 +1983,7 @@ private:
         {
             if (hint == std::prev(cend())) // hint == maximum
             {
-                return position_for_insert_unique{hint.to_iterator().node_, false, true};
+                return position_for_insert_unique{hint.node_, false, true};
             }
             else
             {
@@ -2052,11 +1993,11 @@ private:
                 {
                     if (next.node_->left_ == nullptr)
                     {
-                        return position_for_insert_unique{next.to_iterator().node_, true, true};
+                        return position_for_insert_unique{next.node_, true, true};
                     }
                     else
                     {
-                        return position_for_insert_unique{hint.to_iterator().node_, false, true};
+                        return position_for_insert_unique{hint.node_, false, true};
                     }
                 }
                 else // k >= next
@@ -2067,18 +2008,18 @@ private:
         }
         else // k == hint
         {
-            return position_for_insert_unique{hint.to_iterator().node_, false, false};
+            return position_for_insert_unique{hint.node_, false, false};
         }
     }
 
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename MakeNodeFunctor>
-    rb_tree_node_base* copy(const rb_tree_node_base* x, MakeNodeFunctor& make_node)
+    base_node_pointer copy(base_node_pointer x, MakeNodeFunctor& make_node)
     {
         SFL_ASSERT(x != nullptr);
 
-        rb_tree_node_base* y = make_node(*static_cast<const node_type*>(x)->value_.get());
+        base_node_pointer y = make_node(static_cast<node_pointer>(x)->value_);
 
         y->color_ = x->color_;
         y->left_  = nullptr;
@@ -2100,7 +2041,7 @@ private:
         }
         SFL_CATCH (...)
         {
-            drop_node(static_cast<node_type*>(y));
+            drop_node(static_cast<node_pointer>(y));
             SFL_RETHROW;
         }
 
@@ -2108,11 +2049,11 @@ private:
     }
 
     template <typename MakeNodeFunctor>
-    rb_tree_node_base* move(rb_tree_node_base* x, MakeNodeFunctor& make_node)
+    base_node_pointer move(base_node_pointer x, MakeNodeFunctor& make_node)
     {
         SFL_ASSERT(x != nullptr);
 
-        rb_tree_node_base* y = make_node(std::move(*static_cast<node_type*>(x)->value_.get()));
+        base_node_pointer y = make_node(std::move(static_cast<node_pointer>(x)->value_));
 
         y->color_ = x->color_;
         y->left_  = nullptr;
@@ -2134,14 +2075,14 @@ private:
         }
         SFL_CATCH (...)
         {
-            drop_node(static_cast<node_type*>(y));
+            drop_node(static_cast<node_pointer>(y));
             SFL_RETHROW;
         }
 
         return y;
     }
 
-    void clear(rb_tree_node_base* x)
+    void clear(base_node_pointer x)
     {
         SFL_ASSERT(x != nullptr);
 
@@ -2155,7 +2096,7 @@ private:
             clear(x->right_);
         }
 
-        drop_node(static_cast<node_type*>(x));
+        drop_node(static_cast<node_pointer>(x));
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2310,8 +2251,8 @@ private:
 
         using std::swap;
 
-        rb_tree_node_base* old_this = this->data_.root();
-        rb_tree_node_base* old_other = other.data_.root();
+        base_node_pointer old_this = this->data_.root();
+        base_node_pointer old_other = other.data_.root();
 
         if (old_this != nullptr)
         {
@@ -2334,7 +2275,7 @@ private:
         {
             struct help
             {
-                static rb_tree_node_base* next_to_swap(rb_tree_node_base* x)
+                static base_node_pointer next_to_swap(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
 
@@ -2352,13 +2293,13 @@ private:
                     }
                 }
 
-                static rb_tree_node_base* detach(rb_tree_node_base* x)
+                static base_node_pointer detach(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
                     SFL_ASSERT(x->left_ == nullptr);
                     SFL_ASSERT(x->right_ == nullptr);
 
-                    rb_tree_node_base* parent = x->parent_;
+                    base_node_pointer parent = x->parent_;
 
                     if (parent != nullptr)
                     {
@@ -2376,8 +2317,8 @@ private:
                 }
             };
 
-            rb_tree_node_base* p_this = old_this;
-            rb_tree_node_base* p_other = old_other;
+            base_node_pointer p_this = old_this;
+            base_node_pointer p_other = old_other;
 
             while (true)
             {
@@ -2394,7 +2335,7 @@ private:
                         sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                         (
                             this->ref_to_node_alloc(),
-                            static_cast<node_type*>(p_this)
+                            static_cast<node_pointer>(p_this)
                         )
                         ||
                         (
@@ -2404,11 +2345,11 @@ private:
                         )
                     )
                     {
-                        other.insert_equal(std::move(*static_cast<node_type*>(p_this)->value_.get())); // may throw exception
+                        other.insert_equal(std::move(static_cast<node_pointer>(p_this)->value_)); // may throw exception
 
-                        rb_tree_node_base* p_this_parent = help::detach(p_this);
+                        base_node_pointer p_this_parent = help::detach(p_this);
 
-                        this->drop_node(static_cast<node_type*>(p_this));
+                        this->drop_node(static_cast<node_pointer>(p_this));
 
                         p_this = p_this_parent;
                     }
@@ -2416,7 +2357,7 @@ private:
                     {
                         auto res = other.calculate_position_for_insert_equal(key(p_this));
 
-                        rb_tree_node_base* p_this_parent = help::detach(p_this);
+                        base_node_pointer p_this_parent = help::detach(p_this);
 
                         insert(p_this, res.pos, res.left, other.data_.root(), other.data_.minimum());
 
@@ -2437,7 +2378,7 @@ private:
                         sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                         (
                             other.ref_to_node_alloc(),
-                            static_cast<node_type*>(p_other)
+                            static_cast<node_pointer>(p_other)
                         )
                         ||
                         (
@@ -2447,11 +2388,11 @@ private:
                         )
                     )
                     {
-                        this->insert_equal(std::move(*static_cast<node_type*>(p_other)->value_.get())); // may throw exception
+                        this->insert_equal(std::move(static_cast<node_pointer>(p_other)->value_)); // may throw exception
 
-                        rb_tree_node_base* p_other_parent = help::detach(p_other);
+                        base_node_pointer p_other_parent = help::detach(p_other);
 
-                        other.drop_node(static_cast<node_type*>(p_other));
+                        other.drop_node(static_cast<node_pointer>(p_other));
 
                         p_other = p_other_parent;
                     }
@@ -2459,7 +2400,7 @@ private:
                     {
                         auto res = this->calculate_position_for_insert_equal(key(p_other));
 
-                        rb_tree_node_base* p_other_parent = help::detach(p_other);
+                        base_node_pointer p_other_parent = help::detach(p_other);
 
                         insert(p_other, res.pos, res.left, this->data_.root(), this->data_.minimum());
 
@@ -2479,7 +2420,7 @@ private:
         {
             struct help
             {
-                static rb_tree_node_base* next_to_remove(rb_tree_node_base* x)
+                static base_node_pointer next_to_remove(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
 
@@ -2497,13 +2438,13 @@ private:
                     }
                 }
 
-                static rb_tree_node_base* detach(rb_tree_node_base* x)
+                static base_node_pointer detach(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
                     SFL_ASSERT(x->left_ == nullptr);
                     SFL_ASSERT(x->right_ == nullptr);
 
-                    rb_tree_node_base* parent = x->parent_;
+                    base_node_pointer parent = x->parent_;
 
                     if (parent != nullptr)
                     {
@@ -2521,35 +2462,35 @@ private:
                 }
             };
 
-            rb_tree_node_base* p_this = old_this;
-            rb_tree_node_base* p_other = old_other;
+            base_node_pointer p_this = old_this;
+            base_node_pointer p_other = old_other;
 
             while (p_this != nullptr)
             {
                 p_this = help::next_to_remove(p_this);
 
-                rb_tree_node_base* p_this_parent = help::detach(p_this);
+                base_node_pointer p_this_parent = help::detach(p_this);
 
                 if
                 (
                     sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                     (
                         this->ref_to_node_alloc(),
-                        static_cast<node_type*>(p_this)
+                        static_cast<node_pointer>(p_this)
                     )
                 )
                 {
-                    this->drop_node(static_cast<node_type*>(p_this));
+                    this->drop_node(static_cast<node_pointer>(p_this));
                 }
                 else
                 {
                     if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_swap::value)
                     {
-                        other.drop_node(static_cast<node_type*>(p_this));
+                        other.drop_node(static_cast<node_pointer>(p_this));
                     }
                     else
                     {
-                        this->drop_node(static_cast<node_type*>(p_this));
+                        this->drop_node(static_cast<node_pointer>(p_this));
                     }
                 }
 
@@ -2560,28 +2501,28 @@ private:
             {
                 p_other = help::next_to_remove(p_other);
 
-                rb_tree_node_base* p_other_parent = help::detach(p_other);
+                base_node_pointer p_other_parent = help::detach(p_other);
 
                 if
                 (
                     sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                     (
                         other.ref_to_node_alloc(),
-                        static_cast<node_type*>(p_other)
+                        static_cast<node_pointer>(p_other)
                     )
                 )
                 {
-                    other.drop_node(static_cast<node_type*>(p_other));
+                    other.drop_node(static_cast<node_pointer>(p_other));
                 }
                 else
                 {
                     if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_swap::value)
                     {
-                        this->drop_node(static_cast<node_type*>(p_other));
+                        this->drop_node(static_cast<node_pointer>(p_other));
                     }
                     else
                     {
-                        other.drop_node(static_cast<node_type*>(p_other));
+                        other.drop_node(static_cast<node_pointer>(p_other));
                     }
                 }
 

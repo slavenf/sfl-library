@@ -890,7 +890,7 @@ private:
         if (res.status)
         {
             typename tree_type::make_node_functor make_node(tree_);
-            auto* x = make_node
+            typename tree_type::node_pointer x = make_node
             (
                 std::piecewise_construct,
                 std::forward_as_tuple(std::forward<K>(key)),
@@ -915,7 +915,7 @@ private:
         if (res.status)
         {
             typename tree_type::make_node_functor make_node(tree_);
-            auto* x = make_node
+            typename tree_type::node_pointer x = make_node
             (
                 std::piecewise_construct,
                 std::forward_as_tuple(std::forward<K>(key)),
@@ -940,7 +940,7 @@ private:
         if (res.status)
         {
             typename tree_type::make_node_functor make_node(tree_);
-            auto* x = make_node
+            typename tree_type::node_pointer x = make_node
             (
                 std::piecewise_construct,
                 std::forward_as_tuple(std::forward<K>(key)),
@@ -963,7 +963,7 @@ private:
         if (res.status)
         {
             typename tree_type::make_node_functor make_node(tree_);
-            auto* x = make_node
+            typename tree_type::node_pointer x = make_node
             (
                 std::piecewise_construct,
                 std::forward_as_tuple(std::forward<K>(key)),

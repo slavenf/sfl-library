@@ -8,18 +8,19 @@ using sfl::test::xobj;
 PRINT("Test PRIVATE make_node and drop_node");
 {
     using tree_type = sfl::dtl::rb_tree<xint, xint, sfl::dtl::identity, std::less<xint>, TPARAM_ALLOCATOR<xint>, void>;
+    using node_pointer = typename tree_type::node_pointer;
 
     tree_type tree;
 
     tree_type::make_node_functor make_node(tree);
 
-    auto* p1 = make_node(1);
-    auto* p2 = make_node(2);
-    auto* p3 = make_node(3);
+    node_pointer p1 = make_node(1);
+    node_pointer p2 = make_node(2);
+    node_pointer p3 = make_node(3);
 
-    CHECK(*p1->value_.get() == 1);
-    CHECK(*p2->value_.get() == 2);
-    CHECK(*p3->value_.get() == 3);
+    CHECK(p1->value_ == 1);
+    CHECK(p2->value_ == 2);
+    CHECK(p3->value_ == 3);
 
     tree.drop_node(p3);
     tree.drop_node(p2);
@@ -189,23 +190,23 @@ PRINT("Test PRIVATE underlying implementation [non-empty tree]");
     n16.left_ = nullptr;    n16.right_ = nullptr;   n16.parent_ = &n17;
     n17.left_ = &n16;       n17.right_ = nullptr;   n17.parent_ = &n15;
 
-    *n1.value_.get()  = 1;
-    *n2.value_.get()  = 2;
-    *n3.value_.get()  = 3;
-    *n4.value_.get()  = 4;
-    *n5.value_.get()  = 5;
-    *n6.value_.get()  = 6;
-    *n7.value_.get()  = 7;
-    *n8.value_.get()  = 8;
-    *n9.value_.get()  = 9;
-    *n10.value_.get() = 10;
-    *n11.value_.get() = 11;
-    *n12.value_.get() = 12;
-    *n13.value_.get() = 13;
-    *n14.value_.get() = 14;
-    *n15.value_.get() = 15;
-    *n16.value_.get() = 16;
-    *n17.value_.get() = 17;
+    n1.value_  = 1;
+    n2.value_  = 2;
+    n3.value_  = 3;
+    n4.value_  = 4;
+    n5.value_  = 5;
+    n6.value_  = 6;
+    n7.value_  = 7;
+    n8.value_  = 8;
+    n9.value_  = 9;
+    n10.value_ = 10;
+    n11.value_ = 11;
+    n12.value_ = 12;
+    n13.value_ = 13;
+    n14.value_ = 14;
+    n15.value_ = 15;
+    n16.value_ = 16;
+    n17.value_ = 17;
 
     CHECK(tree.minimum(tree.data_.header()) == &n1);
     CHECK(tree.minimum(&n1) == &n1);
@@ -496,11 +497,11 @@ PRINT("Test PRIVATE calculate_position_for_insert_equal(const K&) [non-empty tre
     n40.left_  = &n20;       n40.right_  = &n50;      n40.parent_  = tree.data_.header();
     n50.left_  = nullptr;    n50.right_  = nullptr;   n50.parent_  = &n40;
 
-    *n10.value_.get() = 10;
-    *n20.value_.get() = 20;
-    *n30.value_.get() = 30;
-    *n40.value_.get() = 40;
-    *n50.value_.get() = 50;
+    n10.value_ = 10;
+    n20.value_ = 20;
+    n30.value_ = 30;
+    n40.value_ = 40;
+    n50.value_ = 50;
 
     {
         auto res = tree.calculate_position_for_insert_equal(5);
@@ -601,11 +602,11 @@ PRINT("Test PRIVATE calculate_position_for_insert_unique(const K&) [non-empty tr
     n40.left_  = &n20;       n40.right_  = &n50;      n40.parent_  = tree.data_.header();
     n50.left_  = nullptr;    n50.right_  = nullptr;   n50.parent_  = &n40;
 
-    *n10.value_.get() = 10;
-    *n20.value_.get() = 20;
-    *n30.value_.get() = 30;
-    *n40.value_.get() = 40;
-    *n50.value_.get() = 50;
+    n10.value_ = 10;
+    n20.value_ = 20;
+    n30.value_ = 30;
+    n40.value_ = 40;
+    n50.value_ = 50;
 
     {
         auto res = tree.calculate_position_for_insert_unique(5);
@@ -715,13 +716,13 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
         n60.left_ = &n50;       n60.right_ = &n70;      n60.parent_ = &n40;
         n70.left_ = nullptr;    n70.right_ = nullptr;   n70.parent_ = &n60;
 
-        *n10.value_.get() = 10;
-        *n20.value_.get() = 20;
-        *n30.value_.get() = 30;
-        *n40.value_.get() = 40;
-        *n50.value_.get() = 50;
-        *n60.value_.get() = 60;
-        *n70.value_.get() = 70;
+        n10.value_ = 10;
+        n20.value_ = 20;
+        n30.value_ = 30;
+        n40.value_ = 40;
+        n50.value_ = 50;
+        n60.value_ = 60;
+        n70.value_ = 70;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -868,11 +869,11 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
         n50.left_ = nullptr;    n50.right_ = nullptr;   n50.parent_ = &n60;
         n60.left_ = &n50;       n60.right_ = nullptr;   n60.parent_ = &n40;
 
-        *n10.value_.get() = 10;
-        *n20.value_.get() = 20;
-        *n40.value_.get() = 40;
-        *n50.value_.get() = 50;
-        *n60.value_.get() = 60;
+        n10.value_ = 10;
+        n20.value_ = 20;
+        n40.value_ = 40;
+        n50.value_ = 50;
+        n60.value_ = 60;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -1021,11 +1022,11 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
         n60.left_ = nullptr;    n60.right_ = &n70;      n60.parent_ = &n40;
         n70.left_ = nullptr;    n70.right_ = nullptr;   n70.parent_ = &n60;
 
-        *n20.value_.get() = 20;
-        *n30.value_.get() = 30;
-        *n40.value_.get() = 40;
-        *n60.value_.get() = 60;
-        *n70.value_.get() = 70;
+        n20.value_ = 20;
+        n30.value_ = 30;
+        n40.value_ = 40;
+        n60.value_ = 60;
+        n70.value_ = 70;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -1178,13 +1179,13 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
         n40.left_  = &n20;      n40.right_  = &n50;     n40.parent_  = tree.data_.header();
         n50.left_  = nullptr;   n50.right_  = nullptr;  n50.parent_  = &n40;
 
-        *n10.value_.get()  = 10;
-        *n20.value_.get()  = 20;
-        *n30a.value_.get() = 30;
-        *n30b.value_.get() = 30;
-        *n30c.value_.get() = 30;
-        *n40.value_.get()  = 40;
-        *n50.value_.get()  = 50;
+        n10.value_  = 10;
+        n20.value_  = 20;
+        n30a.value_ = 30;
+        n30b.value_ = 30;
+        n30c.value_ = 30;
+        n40.value_  = 40;
+        n50.value_  = 50;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -1305,12 +1306,12 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
         n40.left_  = &n20;      n40.right_  = &n50;     n40.parent_  = tree.data_.header();
         n50.left_  = nullptr;   n50.right_  = nullptr;  n50.parent_  = &n40;
 
-        *n10.value_.get()  = 10;
-        *n20.value_.get()  = 20;
-        *n30a.value_.get() = 30;
-        *n30b.value_.get() = 30;
-        *n40.value_.get()  = 40;
-        *n50.value_.get()  = 50;
+        n10.value_  = 10;
+        n20.value_  = 20;
+        n30a.value_ = 30;
+        n30b.value_ = 30;
+        n40.value_  = 40;
+        n50.value_  = 50;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -1431,12 +1432,12 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
         n40.left_  = &n20;      n40.right_  = &n50;     n40.parent_  = tree.data_.header();
         n50.left_  = nullptr;   n50.right_  = nullptr;  n50.parent_  = &n40;
 
-        *n10.value_.get()  = 10;
-        *n20.value_.get()  = 20;
-        *n30b.value_.get() = 30;
-        *n30c.value_.get() = 30;
-        *n40.value_.get()  = 40;
-        *n50.value_.get()  = 50;
+        n10.value_  = 10;
+        n20.value_  = 20;
+        n30b.value_ = 30;
+        n30c.value_ = 30;
+        n40.value_  = 40;
+        n50.value_  = 50;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -1559,13 +1560,13 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
         n60.left_ = &n50;       n60.right_ = &n70;      n60.parent_ = &n40;
         n70.left_ = nullptr;    n70.right_ = nullptr;   n70.parent_ = &n60;
 
-        *n10.value_.get() = 10;
-        *n20.value_.get() = 20;
-        *n30.value_.get() = 30;
-        *n40.value_.get() = 40;
-        *n50.value_.get() = 50;
-        *n60.value_.get() = 60;
-        *n70.value_.get() = 70;
+        n10.value_ = 10;
+        n20.value_ = 20;
+        n30.value_ = 30;
+        n40.value_ = 40;
+        n50.value_ = 50;
+        n60.value_ = 60;
+        n70.value_ = 70;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -1727,11 +1728,11 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
         n50.left_ = nullptr;    n50.right_ = nullptr;   n50.parent_ = &n60;
         n60.left_ = &n50;       n60.right_ = nullptr;   n60.parent_ = &n40;
 
-        *n10.value_.get() = 10;
-        *n20.value_.get() = 20;
-        *n40.value_.get() = 40;
-        *n50.value_.get() = 50;
-        *n60.value_.get() = 60;
+        n10.value_ = 10;
+        n20.value_ = 20;
+        n40.value_ = 40;
+        n50.value_ = 50;
+        n60.value_ = 60;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -1895,11 +1896,11 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
         n60.left_ = nullptr;    n60.right_ = &n70;      n60.parent_ = &n40;
         n70.left_ = nullptr;    n70.right_ = nullptr;   n70.parent_ = &n60;
 
-        *n20.value_.get() = 20;
-        *n30.value_.get() = 30;
-        *n40.value_.get() = 40;
-        *n60.value_.get() = 60;
-        *n70.value_.get() = 70;
+        n20.value_ = 20;
+        n30.value_ = 30;
+        n40.value_ = 40;
+        n60.value_ = 60;
+        n70.value_ = 70;
 
         for (int i = 0; i < int(tree.size() + 1); ++i)
         {
@@ -2035,7 +2036,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
     }
 }
 
-PRINT("Test PRIVATE rotate_left(rb_tree_node_base*)");
+PRINT("Test PRIVATE rotate_left(base_node_pointer)");
 {
     {
         /*
@@ -2176,7 +2177,7 @@ PRINT("Test PRIVATE rotate_left(rb_tree_node_base*)");
     }
 }
 
-PRINT("Test PRIVATE rotate_right(rb_tree_node_base*)");
+PRINT("Test PRIVATE rotate_right(base_node_pointer)");
 {
     {
         /*
@@ -2317,7 +2318,7 @@ PRINT("Test PRIVATE rotate_right(rb_tree_node_base*)");
     }
 }
 
-PRINT("Test PRIVATE insert(rb_tree_node_base*, rb_tree_node_base*, bool, rb_tree_node_base*&, rb_tree_node_base*&)");
+PRINT("Test PRIVATE insert(base_node_pointer, base_node_pointer, bool, base_node_pointer&, base_node_pointer&)");
 {
     static const std::vector<std::vector<int>> insert_patterns
     {
@@ -2346,6 +2347,7 @@ PRINT("Test PRIVATE insert(rb_tree_node_base*, rb_tree_node_base*, bool, rb_tree
     {
         using tree_type = sfl::dtl::rb_tree<int, int, sfl::dtl::identity, std::less<int>, TPARAM_ALLOCATOR<int>, void>;
         using node_type = typename tree_type::node_type;
+        using node_pointer = typename tree_type::node_pointer;
 
         tree_type tree;
 
@@ -2357,9 +2359,9 @@ PRINT("Test PRIVATE insert(rb_tree_node_base*, rb_tree_node_base*, bool, rb_tree
 
         for (int i = 0; i < int(row.size()); ++i)
         {
-            *nodes1[i].value_.get() = row[i];
-            *nodes2[i].value_.get() = row[i];
-            *nodes3[i].value_.get() = row[i];
+            nodes1[i].value_ = row[i];
+            nodes2[i].value_ = row[i];
+            nodes3[i].value_ = row[i];
         }
 
         CHECK(tree.begin() == tree.end());
@@ -2370,13 +2372,13 @@ PRINT("Test PRIVATE insert(rb_tree_node_base*, rb_tree_node_base*, bool, rb_tree
 
         for (int i = 0; i < int(nodes1.size()); ++i)
         {
-            const auto res = tree.calculate_position_for_insert_equal(*nodes1[i].value_.get());
+            const auto res = tree.calculate_position_for_insert_equal(nodes1[i].value_);
             tree.insert(&nodes1[i], res.pos, res.left, tree.data_.root(), tree.data_.minimum());
         }
 
         CHECK(tree.begin() != tree.end());
         CHECK(tree.data_.root() != nullptr);
-        CHECK(*static_cast<node_type*>(tree.data_.minimum())->value_.get() == 1);
+        CHECK(static_cast<node_pointer>(tree.data_.minimum())->value_ == 1);
 
         {
             int i = 1;
@@ -2391,13 +2393,13 @@ PRINT("Test PRIVATE insert(rb_tree_node_base*, rb_tree_node_base*, bool, rb_tree
 
         for (int i = 0; i < int(nodes2.size()); ++i)
         {
-            const auto res = tree.calculate_position_for_insert_equal(*nodes2[i].value_.get());
+            const auto res = tree.calculate_position_for_insert_equal(nodes2[i].value_);
             tree.insert(&nodes2[i], res.pos, res.left, tree.data_.root(), tree.data_.minimum());
         }
 
         CHECK(tree.begin() != tree.end());
         CHECK(tree.data_.root() != nullptr);
-        CHECK(*static_cast<node_type*>(tree.data_.minimum())->value_.get() == 1);
+        CHECK(static_cast<node_pointer>(tree.data_.minimum())->value_ == 1);
 
         {
             int i = 1;
@@ -2414,13 +2416,13 @@ PRINT("Test PRIVATE insert(rb_tree_node_base*, rb_tree_node_base*, bool, rb_tree
 
         for (int i = 0; i < int(nodes3.size()); ++i)
         {
-            const auto res = tree.calculate_position_for_insert_equal(*nodes3[i].value_.get());
+            const auto res = tree.calculate_position_for_insert_equal(nodes3[i].value_);
             tree.insert(&nodes3[i], res.pos, res.left, tree.data_.root(), tree.data_.minimum());
         }
 
         CHECK(tree.begin() != tree.end());
         CHECK(tree.data_.root() != nullptr);
-        CHECK(*static_cast<node_type*>(tree.data_.minimum())->value_.get() == 1);
+        CHECK(static_cast<node_pointer>(tree.data_.minimum())->value_ == 1);
 
         {
             int i = 1;
@@ -2441,7 +2443,7 @@ PRINT("Test PRIVATE insert(rb_tree_node_base*, rb_tree_node_base*, bool, rb_tree
     }
 }
 
-PRINT("Test PRIVATE remove(rb_tree_node_base*, rb_tree_node_base*&)");
+PRINT("Test PRIVATE remove(base_node_pointer, base_node_pointer&)");
 {
     static const std::vector<std::vector<int>> remove_patterns
     {
@@ -2470,6 +2472,7 @@ PRINT("Test PRIVATE remove(rb_tree_node_base*, rb_tree_node_base*&)");
     {
         using tree_type = sfl::dtl::rb_tree<int, int, sfl::dtl::identity, std::less<int>, TPARAM_ALLOCATOR<int>, void>;
         using node_type = typename tree_type::node_type;
+        using node_pointer = typename tree_type::node_pointer;
 
         tree_type tree;
 
@@ -2479,7 +2482,7 @@ PRINT("Test PRIVATE remove(rb_tree_node_base*, rb_tree_node_base*&)");
 
         for (int i = 0; i < int(nodes.size()); ++i)
         {
-            *nodes[i].value_.get() = i+1;
+            nodes[i].value_ = i+1;
         }
 
         CHECK(tree.begin() == tree.end());
@@ -2490,13 +2493,13 @@ PRINT("Test PRIVATE remove(rb_tree_node_base*, rb_tree_node_base*&)");
 
         for (int i = 0; i < int(nodes.size()); ++i)
         {
-            const auto res = tree.calculate_position_for_insert_equal(*nodes[i].value_.get());
+            const auto res = tree.calculate_position_for_insert_equal(nodes[i].value_);
             tree.insert(&nodes[i], res.pos, res.left, tree.data_.root(), tree.data_.minimum());
         }
 
         CHECK(tree.begin() != tree.end());
         CHECK(tree.data_.root() != nullptr);
-        CHECK(*static_cast<node_type*>(tree.data_.minimum())->value_.get() == 1);
+        CHECK(static_cast<node_pointer>(tree.data_.minimum())->value_ == 1);
 
         {
             int i = 1;
@@ -2515,7 +2518,7 @@ PRINT("Test PRIVATE remove(rb_tree_node_base*, rb_tree_node_base*&)");
             {
                 if (!first) std::cout << ", ";
                 first = false;
-                std::cout << *node.value_.get();
+                std::cout << node.value_;
             }
             std::cout << "]" << std::endl;
         }
@@ -2549,7 +2552,7 @@ PRINT("Test PRIVATE remove(rb_tree_node_base*, rb_tree_node_base*&)");
             {
                 CHECK(tree.begin() != tree.end());
                 CHECK(tree.data_.root() != nullptr);
-                CHECK(*static_cast<node_type*>(tree.data_.minimum())->value_.get() == remaining_elements[0]);
+                CHECK(static_cast<node_pointer>(tree.data_.minimum())->value_ == remaining_elements[0]);
             }
             else
             {
@@ -2651,13 +2654,13 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
     n40.left_  = &n20;      n40.right_  = &n50;     n40.parent_  = tree.data_.header();
     n50.left_  = nullptr;   n50.right_  = nullptr;  n50.parent_  = &n40;
 
-    *n10.value_.get()  = 10;
-    *n20.value_.get()  = 20;
-    *n30a.value_.get() = 30;
-    *n30b.value_.get() = 30;
-    *n30c.value_.get() = 30;
-    *n40.value_.get()  = 40;
-    *n50.value_.get()  = 50;
+    n10.value_  = 10;
+    n20.value_  = 20;
+    n30a.value_ = 30;
+    n30b.value_ = 30;
+    n30c.value_ = 30;
+    n40.value_  = 40;
+    n50.value_  = 50;
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -2838,18 +2841,19 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
 PRINT("Test clear()");
 {
     using tree_type = sfl::dtl::rb_tree<xint, xint, sfl::dtl::identity, std::less<xint>, TPARAM_ALLOCATOR<xint>, void>;
+    using node_pointer = typename tree_type::node_pointer;
 
     tree_type tree;
 
     tree_type::make_node_functor make_node(tree);
 
-    auto* n10 = make_node(10);
-    auto* n20 = make_node(20);
-    auto* n30 = make_node(30);
-    auto* n40 = make_node(40);
-    auto* n50 = make_node(50);
-    auto* n60 = make_node(60);
-    auto* n70 = make_node(70);
+    node_pointer n10 = make_node(10);
+    node_pointer n20 = make_node(20);
+    node_pointer n30 = make_node(30);
+    node_pointer n40 = make_node(40);
+    node_pointer n50 = make_node(50);
+    node_pointer n60 = make_node(60);
+    node_pointer n70 = make_node(70);
 
     tree.data_.root() = n40;
     tree.data_.minimum() = n10;

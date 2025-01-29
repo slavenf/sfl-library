@@ -17,12 +17,15 @@
 template <typename T, std::size_t N, typename Allocator>
 void test_node_small_allocator()
 {
-    sfl::dtl::node_small_allocator<T, N, Allocator> a;
+    using allocator_type = sfl::dtl::node_small_allocator<T, N, Allocator>;
+    using pointer = typename allocator_type::pointer;
 
-    auto* p1 = sfl::dtl::allocate(a, 1);
-    auto* p2 = sfl::dtl::allocate(a, 1);
-    auto* p3 = sfl::dtl::allocate(a, 1);
-    auto* p4 = sfl::dtl::allocate(a, 1);
+    allocator_type a;
+
+    pointer p1 = sfl::dtl::allocate(a, 1);
+    pointer p2 = sfl::dtl::allocate(a, 1);
+    pointer p3 = sfl::dtl::allocate(a, 1);
+    pointer p4 = sfl::dtl::allocate(a, 1);
 
     sfl::dtl::construct_at_a(a, p1, 10);
     sfl::dtl::construct_at_a(a, p2, 20);

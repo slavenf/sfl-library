@@ -54,19 +54,19 @@ private:
 
     using base_allocator_type = BaseAllocator;
 
-    using base_allocator_pointer = typename sfl::dtl::allocator_traits<base_allocator_type>::pointer;
-
     using static_pool_type = sfl::dtl::static_pool<T, N>;
 
 public:
 
-    using value_type      = T;
-    using pointer         = T*;
-    using const_pointer   = const T*;
-    using reference       = T&;
-    using const_reference = const T&;
-    using size_type       = std::size_t;
-    using difference_type = std::ptrdiff_t;
+    using value_type         = T;
+    using pointer            = typename sfl::dtl::allocator_traits<base_allocator_type>::pointer;
+    using const_pointer      = typename sfl::dtl::allocator_traits<base_allocator_type>::const_pointer;
+    using void_pointer       = typename sfl::dtl::allocator_traits<base_allocator_type>::void_pointer;
+    using const_void_pointer = typename sfl::dtl::allocator_traits<base_allocator_type>::const_void_pointer;
+    using reference          = T&;
+    using const_reference    = const T&;
+    using size_type          = std::size_t;
+    using difference_type    = std::ptrdiff_t;
 
     using propagate_on_container_copy_assignment = typename sfl::dtl::allocator_traits<base_allocator_type>::propagate_on_container_copy_assignment;
     using propagate_on_container_move_assignment = typename sfl::dtl::allocator_traits<base_allocator_type>::propagate_on_container_move_assignment;
@@ -185,12 +185,11 @@ public:
 
         if (!pool_.full())
         {
-            return pool_.allocate();
+            return std::pointer_traits<pointer>::pointer_to(*pool_.allocate());
         }
         else
         {
-            base_allocator_pointer p = sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1);
-            return sfl::dtl::to_address(p);
+            return sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1);
         }
     }
 
@@ -203,12 +202,11 @@ public:
 
         if (!pool_.full())
         {
-            return pool_.allocate();
+            return std::pointer_traits<pointer>::pointer_to(*pool_.allocate());
         }
         else
         {
-            base_allocator_pointer p = sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1, hint);
-            return sfl::dtl::to_address(p);
+            return sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1, hint);
         }
     }
 
@@ -218,21 +216,20 @@ public:
 
         sfl::dtl::ignore_unused(n);
 
-        if (pool_.contains(p))
+        if (pool_.contains(sfl::dtl::to_address(p)))
         {
-            pool_.deallocate(p);
+            pool_.deallocate(sfl::dtl::to_address(p));
         }
         else
         {
-            base_allocator_pointer q = std::pointer_traits<base_allocator_pointer>::pointer_to(*p);
-            sfl::dtl::allocator_traits<base_allocator_type>::deallocate(base(), q, 1);
+            sfl::dtl::allocator_traits<base_allocator_type>::deallocate(base(), p, 1);
         }
     }
 
     SFL_NODISCARD
     bool is_storage_unpropagable(pointer p) const noexcept
     {
-        return pool_.contains(p);
+        return pool_.contains(sfl::dtl::to_address(p));
     }
 };
 
@@ -252,17 +249,17 @@ private:
 
     using base_allocator_type = BaseAllocator;
 
-    using base_allocator_pointer = typename sfl::dtl::allocator_traits<base_allocator_type>::pointer;
-
 public:
 
-    using value_type      = T;
-    using pointer         = T*;
-    using const_pointer   = const T*;
-    using reference       = T&;
-    using const_reference = const T&;
-    using size_type       = std::size_t;
-    using difference_type = std::ptrdiff_t;
+    using value_type         = T;
+    using pointer            = typename sfl::dtl::allocator_traits<base_allocator_type>::pointer;
+    using const_pointer      = typename sfl::dtl::allocator_traits<base_allocator_type>::const_pointer;
+    using void_pointer       = typename sfl::dtl::allocator_traits<base_allocator_type>::void_pointer;
+    using const_void_pointer = typename sfl::dtl::allocator_traits<base_allocator_type>::const_void_pointer;
+    using reference          = T&;
+    using const_reference    = const T&;
+    using size_type          = std::size_t;
+    using difference_type    = std::ptrdiff_t;
 
     using propagate_on_container_copy_assignment = typename sfl::dtl::allocator_traits<base_allocator_type>::propagate_on_container_copy_assignment;
     using propagate_on_container_move_assignment = typename sfl::dtl::allocator_traits<base_allocator_type>::propagate_on_container_move_assignment;
@@ -371,8 +368,7 @@ public:
 
         sfl::dtl::ignore_unused(n);
 
-        base_allocator_pointer p = sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1);
-        return sfl::dtl::to_address(p);
+        return sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1);
     }
 
     SFL_NODISCARD
@@ -382,8 +378,7 @@ public:
 
         sfl::dtl::ignore_unused(n);
 
-        base_allocator_pointer p = sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1, hint);
-        return sfl::dtl::to_address(p);
+        return sfl::dtl::allocator_traits<base_allocator_type>::allocate(base(), 1, hint);
     }
 
     void deallocate(pointer p, std::size_t n) noexcept
@@ -392,8 +387,7 @@ public:
 
         sfl::dtl::ignore_unused(n);
 
-        base_allocator_pointer q = std::pointer_traits<base_allocator_pointer>::pointer_to(*p);
-        sfl::dtl::allocator_traits<base_allocator_type>::deallocate(base(), q, 1);
+        sfl::dtl::allocator_traits<base_allocator_type>::deallocate(base(), p, 1);
     }
 };
 

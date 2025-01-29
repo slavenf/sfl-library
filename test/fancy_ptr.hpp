@@ -5,68 +5,133 @@
 
 namespace sfl
 {
+
 namespace test
 {
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+namespace dtl
+{
+
+struct nat
+{
+};
+
+template <typename T>
+struct add_reference
+{
+    using type = T&;
+};
+
+template <class T>
+struct add_reference<T &>
+{
+    using type = T&;
+};
+
+template <>
+struct add_reference<void>
+{
+    using type = nat&;
+};
+
+template <>
+struct add_reference<const void>
+{
+    using type = const nat&;
+};
+
+} // namespace dtl
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
 class fancy_ptr
 {
-private:
-
-    T* ptr_;
+    template <typename>
+    friend class fancy_ptr;
 
 public:
 
     using element_type      = T;
     using difference_type   = std::ptrdiff_t;
-    using value_type        = element_type;
-    using pointer           = element_type*;
-    using reference         = element_type&;
+    using value_type        = typename std::remove_cv<T>::type;
+    using pointer           = T*;
+    using reference         = typename sfl::test::dtl::add_reference<T>::type;
     using iterator_category = std::random_access_iterator_tag;
-
-    //
-    // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
-    //
 
 private:
 
-    fancy_ptr(T *ptr, bool /*dummy*/) noexcept
+    pointer ptr_;
+
+private:
+
+    fancy_ptr(pointer ptr, bool /*dummy*/) noexcept
         : ptr_(ptr)
     {};
 
 public:
 
-    static fancy_ptr pointer_to(element_type &r) noexcept
+    static fancy_ptr pointer_to(reference r) noexcept
     {
         return fancy_ptr(&r, false);
     }
 
+public:
+
+    // Default constructor
     fancy_ptr() noexcept
     {}
 
-    fancy_ptr(std::nullptr_t) noexcept
-        : ptr_(nullptr)
+    // Construct from raw pointer
+    fancy_ptr(pointer ptr) noexcept
+        : ptr_(ptr)
     {}
 
+    // Construct from other raw pointer
+    template <typename U,
+              typename std::enable_if<std::is_convertible<T*, U*>::value>::type* = nullptr>
+    fancy_ptr(U* ptr) noexcept
+        : ptr_(static_cast<T*>(ptr))
+    {}
+
+    // Copy constructor
     fancy_ptr(const fancy_ptr& other) noexcept
         : ptr_(other.ptr_)
     {}
 
+    // Construct from other fancy_ptr.
+    // Participates in overload resolution if U* is convertible to T*.
+    template <typename U,
+              typename std::enable_if<std::is_convertible<U*, T*>::value>::type* = nullptr>
+    fancy_ptr(const fancy_ptr<U>& other) noexcept
+        : ptr_(static_cast<T*>(other.ptr_))
+    {}
+
+    // Construct from other fancy_ptr.
+    // Participates in overload resolution if U* is constructible from T*.
+    template <typename U,
+              typename std::enable_if<!std::is_convertible<U*, T*>::value && std::is_constructible<U*, T*>::value>::type* = nullptr>
+    explicit
+    fancy_ptr(const fancy_ptr<U>& other) noexcept
+        : ptr_(static_cast<T*>(other.ptr_))
+    {}
+
+    #if 0 // Old code.
     template <typename U = T, typename std::enable_if<std::is_const<U>::value>::type* = nullptr>
     fancy_ptr(const fancy_ptr<typename std::remove_const<T>::type>& other) noexcept
         : ptr_(other.operator->()  /* std::to_address(other) in C++20 */)
     {}
+    #endif
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    fancy_ptr& operator=(std::nullptr_t) noexcept
-    {
-        ptr_ = nullptr;
-        return *this;
-    }
-
+    // Copy assignment operator.
     fancy_ptr& operator=(const fancy_ptr& other) noexcept
     {
         ptr_ = other.ptr_;
