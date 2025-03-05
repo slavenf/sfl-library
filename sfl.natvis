@@ -63,11 +63,14 @@
         <DisplayString>{{ size={((data_.last_.segment_ - data_.first_.segment_) * segment_capacity)
             + (data_.last_.local_ - *(data_.last_.segment_))} }}</DisplayString>
         <Expand>
-            <Item Name="[size]" ExcludeView="simple">((data_.last_.segment_ - data_.first_.segment_)
-                * segment_capacity) + (data_.last_.local_ - *(data_.last_.segment_))</Item>
-            <Item Name="[capacity]" ExcludeView="simple">((data_.eos_.segment_ -
-                data_.first_.segment_) * segment_capacity) + (data_.eos_.local_ -
-                *(data_.eos_.segment_))</Item>
+            <Item Name="[size]" ExcludeView="simple">(data_.last_.segment_ - data_.first_.segment_)
+                * segment_capacity +
+                (data_.last_.local_ - *data_.last_.segment_) -
+                (data_.first_.local_ - *data_.first_.segment_)</Item>
+            <Item Name="[capacity]" ExcludeView="simple">(data_.eos_.segment_ -
+                data_.first_.segment_) * segment_capacity +
+                (data_.eos_.local_ - *data_.eos_.segment_) -
+                (data_.first_.local_ - *data_.first_.segment_)</Item>
             <Synthetic Name="[segments]" Optional="true">
                 <DisplayString>({data_.table_last_ - data_.table_first_})</DisplayString>
                 <Expand>
@@ -78,8 +81,10 @@
                 </Expand>
             </Synthetic>
             <IndexListItems>
-                <Size>((data_.last_.segment_ - data_.first_.segment_) * segment_capacity) +
-                    (data_.last_.local_ - *(data_.last_.segment_))</Size>
+                <Size>(data_.last_.segment_ - data_.first_.segment_)
+                    * segment_capacity +
+                    (data_.last_.local_ - *data_.last_.segment_) -
+                    (data_.first_.local_ - *data_.first_.segment_)</Size>
                 <ValueNode>*(*(data_.table_first_ + ($i / segment_capacity)) + ($i %
                     segment_capacity))</ValueNode>
             </IndexListItems>
@@ -90,15 +95,19 @@
         <DisplayString>{{ size={((data_.last_.segment_ - data_.first_.segment_) * segment_capacity)
             + (data_.last_.local_ - *(data_.last_.segment_))} }}</DisplayString>
         <Expand>
-            <Item Name="[size]" ExcludeView="simple">((data_.last_.segment_ - data_.first_.segment_)
-                * segment_capacity) + (data_.last_.local_ - *(data_.last_.segment_))</Item>
-            <Item Name="[capacity]" ExcludeView="simple">((data_.eos_.segment_ -
-                data_.bos_.segment_) * segment_capacity) + (data_.eos_.local_ -
-                *(data_.eos_.segment_))</Item>
+            <Item Name="[size]" ExcludeView="simple">(data_.last_.segment_ - data_.first_.segment_)
+                * segment_capacity +
+                (data_.last_.local_ - *data_.last_.segment_) -
+                (data_.first_.local_ - *data_.first_.segment_)</Item>
+            <Item Name="[capacity]" ExcludeView="simple">(data_.eos_.segment_ - data_.bos_.segment_)
+                * segment_capacity +
+                (data_.eos_.local_ - *data_.eos_.segment_) -
+                (data_.bos_.local_ - *data_.bos_.segment_)</Item>
             <Item Name="[segments]" ExcludeView="simple">data_.table_last_ - data_.table_first_</Item>
             <IndexListItems>
-                <Size>((data_.last_.segment_ - data_.first_.segment_) * segment_capacity) +
-                    (data_.last_.local_ - *(data_.last_.segment_))</Size>
+                <Size>(data_.last_.segment_ - data_.first_.segment_) * segment_capacity +
+                    (data_.last_.local_ - *data_.last_.segment_) -
+                    (data_.first_.local_ - *data_.first_.segment_)</Size>
                 <ValueNode>
                     *(*(data_.table_first_ + (($i + (data_.first_.local_ -
                     *(data_.first_.segment_))) / segment_capacity)) + (($i + (data_.first_.local_ -
