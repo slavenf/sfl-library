@@ -323,4 +323,216 @@
         </Expand>
     </Type>
 
+    <Type Name="sfl::map&lt;*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>(sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>(sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::multimap&lt;*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>(sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>(sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::set&lt;*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>(sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>(sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::multiset&lt;*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>(sfl::multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>(sfl::multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::small_map&lt;*,*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::small_multimap&lt;*,*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::small_set&lt;*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::small_multiset&lt;*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <TreeItems>
+                <Size>size()</Size>
+                <HeadPointer>
+                    (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::static_map&lt;*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::static_multimap&lt;*,*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::static_set&lt;*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+            <TreeItems>
+                <Size>tree_.data_.size_</Size>
+                <HeadPointer>
+                    (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
+    <Type Name="sfl::static_multiset&lt;*,*,*&gt;">
+        <Intrinsic Name="size" Expression="tree_.data_.size_" />
+        <DisplayString>{{ size={size()} }}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+            <TreeItems>
+                <Size>size()</Size>
+                <HeadPointer>
+                    (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
+                <LeftPointer>
+                    (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
+                <RightPointer>
+                    (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
+                <ValueNode>value_</ValueNode>
+            </TreeItems>
+        </Expand>
+    </Type>
+
 </AutoVisualizer>
