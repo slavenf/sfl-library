@@ -6,7 +6,7 @@
 CXX = g++ -std=c++11
 
 # C++ compiler flags
-CXXFLAGS = -Wall -Wextra -Wpedantic -Werror -Wfatal-errors -I ../include -g -O0
+CXXFLAGS = -Wall -Wextra -Wpedantic -Werror -Wfatal-errors -I ../include -I include -g -O0
 
 # Valgrind command
 VALGRIND = valgrind --leak-check=full --error-exitcode=1
