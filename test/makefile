@@ -11,12 +11,6 @@ CXXFLAGS = -Wall -Wextra -Wpedantic -Werror -Wfatal-errors -I ../include -I incl
 # Valgrind command
 VALGRIND = valgrind --leak-check=full --error-exitcode=1
 
-# Command for creating directory if directory does not exist
-MKDIR_P = mkdir -p
-
-# Command for removing all files and directories
-RM_RF = rm -rf
-
 # Set to 1 to execute (run) tests silently
 SILENT = 0
 
@@ -26,11 +20,15 @@ else
 	TO_NULL_IF_SILENT = > /dev/null 2>&1
 endif
 
+# Function: Resursive wildcard
+# Usage: $(call rwildcard,dir,pattern)
+rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
 # Source directory
 SRC_DIR := ./src
 
 # List of all source files that must be compiled and tested
-SRCS := $(shell find $(SRC_DIR) -name *.cpp)
+SRCS := $(call rwildcard,$(SRC_DIR),*.cpp)
 
 # Build directory
 BUILD_DIR := ./build
@@ -46,7 +44,7 @@ define generate_rules
 .PHONY: check_$(basename $(1))
 check:  check_$(basename $(1))
 check_$(basename $(1)):
-	$(MKDIR_P) $(dir $(BUILD_DIR)/$(basename $(1)).out)
+	mkdir -p $(dir $(BUILD_DIR)/$(basename $(1)).out)
 	$(CXX) $(CXXFLAGS) $(1) -o $(BUILD_DIR)/$(basename $(1)).out
 	$(VALGRIND) $(BUILD_DIR)/$(basename $(1)).out $(TO_NULL_IF_SILENT)
 
@@ -57,4 +55,4 @@ $(foreach file,$(SRCS),$(eval $(call generate_rules,$(file))))
 
 .PHONY: clean
 clean:
-	$(RM_RF) $(BUILD_DIR)
+	rm -rf $(BUILD_DIR)

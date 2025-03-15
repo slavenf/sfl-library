@@ -11,9 +11,6 @@ CXX = cl /std:c++14
 # C++ compiler flags
 CXXFLAGS = /nologo /EHsc /W4 /WX /Zc:__cplusplus /I ..\include /I include /Od /Zi /bigobj
 
-# Command for removing all files and directories
-RM_RF = del /f /s /q
-
 # Set to 1 to execute (run) tests silently
 SILENT = 0
 
@@ -23,8 +20,18 @@ else
 	TO_NULL_IF_SILENT = > nul 2>&1
 endif
 
+# Function: Resursive wildcard
+# Usage: $(call rwildcard,dir,pattern)
+rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
+# Source directory
+SRC_DIR := .\src
+
 # List of all source files that must be compiled and tested
-SRCS := $(wildcard *.cpp)
+SRCS := $(foreach path,$(call rwildcard,$(SRC_DIR),*.cpp),$(subst /,\,$(path)))
+
+# Build directory
+BUILD_DIR := .\build
 
 # First rule
 .PHONY: check
@@ -37,8 +44,11 @@ define generate_rules
 .PHONY: check_$(basename $(1))
 check:  check_$(basename $(1))
 check_$(basename $(1)):
-	$(CXX) $(CXXFLAGS) $(1)
-	.\$(basename $(1)).exe $(TO_NULL_IF_SILENT)
+	if not exist "$(BUILD_DIR)\$(dir $(1))" mkdir "$(BUILD_DIR)\$(dir $(1))"
+	$(CXX) $(CXXFLAGS) $(1) /Fe:$(BUILD_DIR)\$(basename $(1)).exe \
+		                    /Fo:$(BUILD_DIR)\$(basename $(1)).obj \
+		                    /Fd:$(BUILD_DIR)\$(basename $(1)).pdb
+	$(BUILD_DIR)\$(basename $(1)).exe $(TO_NULL_IF_SILENT)
 
 endef
 
@@ -47,7 +57,4 @@ $(foreach file,$(SRCS),$(eval $(call generate_rules,$(file))))
 
 .PHONY: clean
 clean:
-	$(RM_RF) *.exe
-	$(RM_RF) *.ilk
-	$(RM_RF) *.obj
-	$(RM_RF) *.pdb
+	if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR)
