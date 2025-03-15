@@ -7,11 +7,6 @@ benchmark/*.ilk
 benchmark/*.obj
 benchmark/*.pdb
 
-test/*.out
-
-test/*.exe
-test/*.ilk
-test/*.obj
-test/*.pdb
+test/build/*
 
 workspace.code-workspace
