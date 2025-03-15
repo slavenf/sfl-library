@@ -41,9 +41,9 @@ check:
 # Usage: $(call generate_rules,source_file)
 define generate_rules
 
-.PHONY: check_$(basename $(1))
-check:  check_$(basename $(1))
-check_$(basename $(1)):
+.PHONY: check_$(basename $(notdir $(1)))
+check:  check_$(basename $(notdir $(1)))
+check_$(basename $(notdir $(1))):
 	mkdir -p $(dir $(BUILD_DIR)/$(basename $(1)).out)
 	$(CXX) $(CXXFLAGS) $(1) -o $(BUILD_DIR)/$(basename $(1)).out
 	$(VALGRIND) $(BUILD_DIR)/$(basename $(1)).out $(TO_NULL_IF_SILENT)

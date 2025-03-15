@@ -41,9 +41,9 @@ check:
 # Usage: $(call generate_rules,source_file)
 define generate_rules
 
-.PHONY: check_$(basename $(1))
-check:  check_$(basename $(1))
-check_$(basename $(1)):
+.PHONY: check_$(basename $(notdir $(1)))
+check:  check_$(basename $(notdir $(1)))
+check_$(basename $(notdir $(1))):
 	if not exist "$(BUILD_DIR)\$(dir $(1))" mkdir "$(BUILD_DIR)\$(dir $(1))"
 	$(CXX) $(CXXFLAGS) $(1) /Fe:$(BUILD_DIR)\$(basename $(1)).exe \
 		                    /Fo:$(BUILD_DIR)\$(basename $(1)).obj \
