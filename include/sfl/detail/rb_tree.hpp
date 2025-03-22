@@ -1464,68 +1464,67 @@ private:
         }
 
         base_node_pointer x;
+        base_node_pointer x_parent;
         base_node_pointer y = z;
         rb_tree_node_color y_original_color = y->color_;
 
-        if (z->left_ == nullptr)
+        if (z->left_ == nullptr) // if z has at most one child
         {
-            x = z->right_;
+            x = z->right_; // z->right_ could be null pointer
             transplant(z, z->right_);
+            x_parent = z->parent_;
         }
-        else if (z->right_ == nullptr)
+        else if (z->right_ == nullptr) // if z has exactly one child
         {
-            x = z->left_;
+            x = z->left_; // z->left_ is not null pointer
             transplant(z, z->left_);
+            x_parent = z->parent_;
         }
-        else
+        else // if z has two children
         {
             y = rb_tree::minimum(z->right_);
             y_original_color = y->color_;
-            x = y->right_;
+            x = y->right_; // y->right_ could be null pointer
 
-            if (y != z->right_)
+            if (y != z->right_) // if y is farther down the tree
             {
-                transplant(y, y->right_);
-                y->right_ = z->right_;
+                transplant(y, y->right_); // replace y by its right child
+                x_parent = y->parent_;
+                y->right_ = z->right_; // z's right child becomes y's right child
                 y->right_->parent_ = y;
             }
-            else if (x != nullptr)
+            else
             {
-                x->parent_ = y;
+                x_parent = y; // in case x is NIL
             }
 
-            transplant(z, y);
-            y->left_ = z->left_;
+            transplant(z, y); // replace z by its successor y
+            y->left_ = z->left_; // give z's left child to y, which had not left child
             y->left_->parent_ = y;
             y->color_ = z->color_;
         }
 
         if (y_original_color == rb_tree_node_color::black)
         {
-            remove_fixup(x, root);
+            remove_fixup(x, x_parent, root);
         }
     }
 
-    static void remove_fixup(base_node_pointer x, base_node_pointer& root)
+    static void remove_fixup(base_node_pointer x, base_node_pointer x_parent, base_node_pointer& root)
     {
-        if (x == nullptr)
+        while (x != root && (x == nullptr || x->color_ == rb_tree_node_color::black))
         {
-            return;
-        }
-
-        while (x != root && x->color_ == rb_tree_node_color::black)
-        {
-            if (x == x->parent_->left_) // is x a left child?
+            if (x == x_parent->left_) // is x a left child?
             {
-                base_node_pointer w = x->parent_->right_; // w is x's sibling
+                base_node_pointer w = x_parent->right_; // w is x's sibling
 
                 if (w->color_ == rb_tree_node_color::red)
                 {
                     // Case 1
                     w->color_ = rb_tree_node_color::black;
-                    x->parent_->color_ = rb_tree_node_color::red;
-                    rotate_left(x->parent_);
-                    w = x->parent_->right_;
+                    x_parent->color_ = rb_tree_node_color::red;
+                    rotate_left(x_parent);
+                    w = x_parent->right_;
                 }
 
                 if
@@ -1536,7 +1535,8 @@ private:
                 {
                     // Case 2
                     w->color_ = rb_tree_node_color::red;
-                    x = x->parent_;
+                    x = x_parent;
+                    x_parent = x_parent->parent_;
                 }
                 else
                 {
@@ -1546,27 +1546,30 @@ private:
                         w->left_->color_ = rb_tree_node_color::black;
                         w->color_ = rb_tree_node_color::red;
                         rotate_right(w);
-                        w = x->parent_->right_;
+                        w = x_parent->right_;
                     }
 
                     // Case 4
-                    w->color_ = x->parent_->color_;
-                    x->parent_->color_ = rb_tree_node_color::black;
-                    w->right_->color_ = rb_tree_node_color::black;
-                    rotate_left(x->parent_);
-                    x = root;
+                    w->color_ = x_parent->color_;
+                    x_parent->color_ = rb_tree_node_color::black;
+                    if (w->right_ != nullptr)
+                    {
+                        w->right_->color_ = rb_tree_node_color::black;
+                    }
+                    rotate_left(x_parent);
+                    break;
                 }
             }
             else // same as block above, but with "right" and "left" exchanged
             {
-                base_node_pointer w = x->parent_->left_;
+                base_node_pointer w = x_parent->left_;
 
                 if (w->color_ == rb_tree_node_color::red)
                 {
                     w->color_ = rb_tree_node_color::black;
-                    x->parent_->color_ = rb_tree_node_color::red;
-                    rotate_right(x->parent_);
-                    w = x->parent_->left_;
+                    x_parent->color_ = rb_tree_node_color::red;
+                    rotate_right(x_parent);
+                    w = x_parent->left_;
                 }
 
                 if
@@ -1576,7 +1579,8 @@ private:
                 )
                 {
                     w->color_ = rb_tree_node_color::red;
-                    x = x->parent_;
+                    x = x_parent;
+                    x_parent = x_parent->parent_;
                 }
                 else
                 {
@@ -1585,19 +1589,25 @@ private:
                         w->right_->color_ = rb_tree_node_color::black;
                         w->color_ = rb_tree_node_color::red;
                         rotate_left(w);
-                        w = x->parent_->left_;
+                        w = x_parent->left_;
                     }
 
-                    w->color_ = x->parent_->color_;
-                    x->parent_->color_ = rb_tree_node_color::black;
-                    w->left_->color_ = rb_tree_node_color::black;
-                    rotate_right(x->parent_);
-                    x = root;
+                    w->color_ = x_parent->color_;
+                    x_parent->color_ = rb_tree_node_color::black;
+                    if (w->left_)
+                    {
+                        w->left_->color_ = rb_tree_node_color::black;
+                    }
+                    rotate_right(x_parent);
+                    break;
                 }
             }
         }
 
-        x->color_ = rb_tree_node_color::black;
+        if (x != nullptr)
+        {
+            x->color_ = rb_tree_node_color::black;
+        }
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -2564,6 +2574,89 @@ private:
         {
             swap(other, std::true_type());
         }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    std::size_t verify_black_count(base_node_pointer x, base_node_pointer root) const
+    {
+        if (x == nullptr)
+        {
+            return 0;
+        }
+
+        std::size_t count = 0;
+
+        while (true)
+        {
+            if (x->color_ == rb_tree_node_color::black)
+            {
+                ++count;
+            }
+
+            if (x == root)
+            {
+                break;
+            }
+
+            x = x->parent_;
+        }
+
+        return count;
+    }
+
+    bool verify() const
+    {
+        if (data_.size_ == 0 || begin() == end())
+        {
+            return data_.size_ == 0
+                && begin() == end()
+                && data_.header_.parent_ == std::pointer_traits<base_node_pointer>::pointer_to(data_.header_)
+                && data_.header_.left_ == nullptr;
+        }
+
+        const std::size_t len = verify_black_count(data_.minimum(), data_.root());
+
+        for (auto it = begin(); it != end(); ++it)
+        {
+            node_pointer x = static_cast<node_pointer>(it.node_);
+            node_pointer l = static_cast<node_pointer>(x->left_);
+            node_pointer r = static_cast<node_pointer>(x->right_);
+
+            if (x->color_ == rb_tree_node_color::red)
+            {
+                if
+                (
+                    (l != nullptr && l->color_ == rb_tree_node_color::red) ||
+                    (r != nullptr && r->color_ == rb_tree_node_color::red)
+                )
+                {
+                    return false;
+                }
+            }
+
+            if (l != nullptr && ref_to_comp()(key(x), key(l)))
+            {
+                return false;
+            }
+
+            if (r != nullptr && ref_to_comp()(key(r), key(x)))
+            {
+                return false;
+            }
+
+            if (l == nullptr && r == nullptr && verify_black_count(x, data_.root()) != len)
+            {
+                return false;
+            }
+        }
+
+        if (data_.minimum() != minimum(data_.root()))
+        {
+            return false;
+        }
+
+        return true;
     }
 };
 
