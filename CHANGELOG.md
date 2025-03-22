@@ -1,4 +1,4 @@
-# Next release
+# 1.9.2 (2025-03-22)
 
 * Bug fix: Fixed crash while erasing elements from red-black tree-based containers.
 * Added `sfl.natvis` file for Visual Studio. Thanks to @ZehMatt.
