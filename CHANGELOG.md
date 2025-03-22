@@ -1,3 +1,10 @@
+# Next release
+
+* Bug fix: Fixed crash while erasing elements from red-black tree-based containers.
+* Added `sfl.natvis` file for Visual Studio. Thanks to @ZehMatt.
+
+
+
 # 1.9.1 (2025-01-29)
 
 * Bug fix: Fixed support for allocators with fancy pointers in all containers
