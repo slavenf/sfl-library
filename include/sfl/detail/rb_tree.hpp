@@ -21,8 +21,10 @@
 #ifndef SFL_DETAIL_RB_TREE_HPP_INCLUDED
 #define SFL_DETAIL_RB_TREE_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/disjunction.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
+#include <sfl/detail/optional_value.hpp>
 #include <sfl/detail/to_address.hpp>
 #include <sfl/detail/type_traits.hpp>
 #include <sfl/detail/uninitialized_memory_algorithms.hpp>
@@ -31,6 +33,7 @@
 #include <cstddef>      // size_t, ptrdiff_t
 #include <iterator>     // iterator_traits, xxxxx_iterator_tag, reverse_iterator
 #include <memory>       // pointer_traits
+#include <tuple>        // forward_as_tuple
 #include <type_traits>  // is_xxxxx
 #include <utility>      // forward, move, pair
 
@@ -45,6 +48,12 @@ namespace sfl
 namespace dtl
 {
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// NODES
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 enum class rb_tree_node_color
 {
     red,
@@ -57,8 +66,11 @@ struct rb_tree_node_base
     using base_node_pointer = typename std::pointer_traits<VoidPointer>::template rebind<rb_tree_node_base>;
 
     rb_tree_node_color color_;
+
     base_node_pointer parent_;
+
     base_node_pointer left_;
+
     base_node_pointer right_;
 };
 
@@ -75,30 +87,14 @@ struct rb_tree_node : rb_tree_node_base<VoidPointer>
 
     using node_pointer = typename std::pointer_traits<VoidPointer>::template rebind<rb_tree_node>;
 
-    union
-    {
-        Value value_;
-    };
-
-    rb_tree_node() noexcept
-    {}
-
-    rb_tree_node(const rb_tree_node& other) = delete;
-
-    rb_tree_node(rb_tree_node&& other) = delete;
-
-    rb_tree_node& operator=(const rb_tree_node& other) = delete;
-
-    rb_tree_node& operator=(rb_tree_node&& other) = delete;
-
-    #if defined(__clang__) && (__clang_major__ == 3) // For CentOS 7
-    ~rb_tree_node()
-    {}
-    #else
-    ~rb_tree_node() noexcept
-    {}
-    #endif
+    sfl::dtl::optional_value<Value> value_;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// RED-BLACK TREE
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 template < typename Key,
            typename Value,
@@ -201,13 +197,13 @@ public:
         SFL_NODISCARD
         reference operator*() const noexcept
         {
-            return static_cast<node_pointer>(node_)->value_;
+            return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
         pointer operator->() const noexcept
         {
-            return std::addressof(static_cast<node_pointer>(node_)->value_);
+            return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
         iterator& operator++() noexcept
@@ -305,13 +301,13 @@ public:
         SFL_NODISCARD
         reference operator*() const noexcept
         {
-            return static_cast<node_pointer>(node_)->value_;
+            return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
         pointer operator->() const noexcept
         {
-            return std::addressof(static_cast<node_pointer>(node_)->value_);
+            return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
         const_iterator& operator++() noexcept
@@ -359,27 +355,28 @@ public:
 
 private:
 
-    class data_base
+    class data
+        : public key_compare
+        , public node_allocator_type
     {
-    public:
+    private:
 
         base_node_type header_;
 
+    public:
+
         size_type size_;
 
-        SFL_NODISCARD
         base_node_pointer header() noexcept
         {
             return std::pointer_traits<base_node_pointer>::pointer_to(header_);
         }
 
-        SFL_NODISCARD
         base_node_pointer& root() noexcept
         {
             return header_.left_;
         }
 
-        SFL_NODISCARD
         base_node_pointer& minimum() noexcept
         {
             return header_.parent_;
@@ -394,84 +391,89 @@ private:
             size_ = 0;
         }
 
-        data_base() noexcept
+    public:
+
+        data()
+            : key_compare()
+            , node_allocator_type()
         {
             reset();
         }
 
-        data_base(const data_base& other) = delete;
+        data(const key_compare& comp)
+            : key_compare(comp)
+            , node_allocator_type()
+        {
+            reset();
+        }
 
-        data_base(data_base&& other) = delete;
+        template <typename Alloc>
+        data(const Alloc& alloc)
+            : key_compare()
+            , node_allocator_type(alloc)
+        {
+            reset();
+        }
 
-        data_base& operator=(const data_base& other) = delete;
+        template <typename Alloc>
+        data(const key_compare& comp, const Alloc& alloc)
+            : key_compare(comp)
+            , node_allocator_type(alloc)
+        {
+            reset();
+        }
 
-        data_base& operator=(data_base&& other) = delete;
+        data(const data& other)
+            : key_compare(other.ref_to_key_compare())
+            , node_allocator_type(sfl::dtl::allocator_traits<node_allocator_type>::select_on_container_copy_construction(other.ref_to_node_alloc()))
+        {
+            reset();
+        }
 
-        ~data_base() noexcept
-        {};
-    };
+        template <typename Alloc>
+        data(const data& other, const Alloc& alloc)
+            : key_compare(other.ref_to_key_compare())
+            , node_allocator_type(alloc)
+        {
+            reset();
+        }
 
-    class data : public data_base, public node_allocator_type, public key_compare
-    {
-    public:
+        data(data&& other)
+            : key_compare(std::move(other.ref_to_key_compare()))
+            , node_allocator_type(std::move(other.ref_to_node_alloc()))
+        {
+            reset();
+        }
 
-        data() noexcept
-        (
-            std::is_nothrow_default_constructible<node_allocator_type>::value &&
-            std::is_nothrow_default_constructible<key_compare>::value
-        )
-            : node_allocator_type()
-            , key_compare()
-        {}
+        template <typename Alloc>
+        data(data&& other, const Alloc& alloc)
+            : key_compare(std::move(other.ref_to_key_compare()))
+            , node_allocator_type(alloc)
+        {
+            reset();
+        }
 
-        template <typename Allocator2>
-        data(const Allocator2& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<node_allocator_type>::value &&
-            std::is_nothrow_default_constructible<key_compare>::value
-        )
-            : node_allocator_type(alloc)
-            , key_compare()
-        {}
+        ///////////////////////////////////////////////////////////////////////
 
-        data(const key_compare& comp) noexcept
-        (
-            std::is_nothrow_default_constructible<node_allocator_type>::value &&
-            std::is_nothrow_copy_constructible<key_compare>::value
-        )
-            : node_allocator_type()
-            , key_compare(comp)
-        {}
+        key_compare& ref_to_key_compare()
+        {
+            return *this;
+        }
 
-        template <typename Allocator2>
-        data(const key_compare& comp, const Allocator2& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<node_allocator_type>::value &&
-            std::is_nothrow_copy_constructible<key_compare>::value
-        )
-            : node_allocator_type(alloc)
-            , key_compare(comp)
-        {}
+        const key_compare& ref_to_key_compare() const
+        {
+            return *this;
+        }
 
-        template <typename Allocator2>
-        data(key_compare&& comp, const Allocator2& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<node_allocator_type>::value &&
-            std::is_nothrow_move_constructible<key_compare>::value
-        )
-            : node_allocator_type(alloc)
-            , key_compare(std::move(comp))
-        {}
+        node_allocator_type& ref_to_node_alloc()
+        {
+            return *this;
+        }
 
-        template <typename Allocator2>
-        data(key_compare&& comp, Allocator2&& alloc) noexcept
-        (
-            std::is_nothrow_move_constructible<node_allocator_type>::value &&
-            std::is_nothrow_move_constructible<key_compare>::value
-        )
-            : node_allocator_type(std::move(alloc))
-            , key_compare(std::move(comp))
-        {}
+        const node_allocator_type& ref_to_node_alloc() const
+        {
+            return *this;
+        }
     };
 
     mutable data data_;
@@ -482,78 +484,50 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    rb_tree() noexcept
-    (
-        std::is_nothrow_default_constructible<Allocator>::value &&
-        std::is_nothrow_default_constructible<KeyCompare>::value
-    )
+    rb_tree()
     {}
 
-    explicit rb_tree(const KeyCompare& comp) noexcept
-    (
-        std::is_nothrow_default_constructible<Allocator>::value &&
-        std::is_nothrow_copy_constructible<KeyCompare>::value
-    )
+    rb_tree(const KeyCompare& comp)
         : data_(comp)
     {}
 
-    template <typename Allocator2>
-    explicit rb_tree(const Allocator2& alloc) noexcept
-    (
-        std::is_nothrow_copy_constructible<Allocator>::value &&
-        std::is_nothrow_default_constructible<KeyCompare>::value
-    )
+    template <typename Alloc>
+    rb_tree(const Alloc& alloc)
         : data_(alloc)
     {}
 
-    template <typename Allocator2>
-    explicit rb_tree(const KeyCompare& comp, const Allocator2& alloc) noexcept
-    (
-        std::is_nothrow_copy_constructible<Allocator>::value &&
-        std::is_nothrow_copy_constructible<KeyCompare>::value
-    )
+    template <typename Alloc>
+    rb_tree(const KeyCompare& comp, const Alloc& alloc)
         : data_(comp, alloc)
     {}
 
     rb_tree(const rb_tree& other)
-        : data_
-        (
-            other.ref_to_comp(),
-            sfl::dtl::allocator_traits<node_allocator_type>::select_on_container_copy_construction(other.ref_to_node_alloc())
-        )
+        : data_(other.data_)
     {
         initialize_copy(other);
     }
 
-    template <typename Allocator2>
-    rb_tree(const rb_tree& other, const Allocator2& alloc)
-        : data_(other.ref_to_comp(), alloc)
+    template <typename Alloc>
+    rb_tree(const rb_tree& other, const Alloc& alloc)
+        : data_(other.data_, alloc)
     {
         initialize_copy(other);
     }
 
     rb_tree(rb_tree&& other)
-        : data_
-        (
-            std::move(other.ref_to_comp()),
-            std::move(other.ref_to_node_alloc())
-        )
+        : data_(std::move(other.data_))
     {
         initialize_move(other);
     }
 
-    template <typename Allocator2>
-    rb_tree(rb_tree&& other, const Allocator2& alloc)
-        : data_
-        (
-            std::move(other.ref_to_comp()),
-            alloc
-        )
+    template <typename Alloc>
+    rb_tree(rb_tree&& other, const Alloc& alloc)
+        : data_(std::move(other.data_), alloc)
     {
         initialize_move(other);
     }
 
-    ~rb_tree() noexcept
+    ~rb_tree()
     {
         if (data_.root() != nullptr)
         {
@@ -565,16 +539,20 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    rb_tree& operator=(const rb_tree& other)
+    // This is deleted. Use `assign_copy` instead.
+    rb_tree& operator=(const rb_tree& other) = delete;
+
+    // This is deleted. Use `assign_move` instead.
+    rb_tree& operator=(rb_tree&& other) = delete;
+
+    void assign_copy(const rb_tree& other)
     {
-        assign_copy(other);
-        return *this;
+        assign_copy_impl(other);
     }
 
-    rb_tree& operator=(rb_tree&& other)
+    void assign_move(rb_tree& other)
     {
-        assign_move(other);
-        return *this;
+        assign_move_impl(other);
     }
 
     template <typename InputIt,
@@ -601,50 +579,6 @@ public:
             insert_unique(*first, make_node);
             ++first;
         }
-    }
-
-    //
-    // ---- ALLOCATOR ---------------------------------------------------------
-    //
-
-    SFL_NODISCARD
-    node_allocator_type& ref_to_node_alloc() noexcept
-    {
-        return data_;
-    }
-
-    SFL_NODISCARD
-    const node_allocator_type& ref_to_node_alloc() const noexcept
-    {
-        return data_;
-    }
-
-    SFL_NODISCARD
-    allocator_type get_allocator() const
-    {
-        return allocator_type(ref_to_node_alloc());
-    }
-
-    //
-    // ---- KEY COMPARE -------------------------------------------------------
-    //
-
-    SFL_NODISCARD
-    key_compare& ref_to_comp() noexcept
-    {
-        return data_;
-    }
-
-    SFL_NODISCARD
-    const key_compare& ref_to_comp() const noexcept
-    {
-        return data_;
-    }
-
-    SFL_NODISCARD
-    key_compare key_comp() const
-    {
-        return ref_to_comp();
     }
 
     //
@@ -742,7 +676,7 @@ public:
     SFL_NODISCARD
     size_type max_size() const noexcept
     {
-        return sfl::dtl::allocator_traits<node_allocator_type>::max_size(ref_to_node_alloc());
+        return sfl::dtl::allocator_traits<node_allocator_type>::max_size(data_.ref_to_node_alloc());
     }
 
     //
@@ -764,7 +698,7 @@ public:
     {
         make_node_functor make_node(*this);
         node_pointer x = make_node(std::forward<Args>(args)...);
-        auto res = calculate_position_for_insert_equal(key(x));
+        auto res = calculate_position_for_insert_equal(key_of(x));
         insert(x, res.pos, res.left, data_.root(), data_.minimum());
         ++data_.size_;
         return iterator(x);
@@ -775,7 +709,7 @@ public:
     {
         make_node_functor make_node(*this);
         node_pointer x = make_node(std::forward<Args>(args)...);
-        auto res = calculate_position_for_insert_unique(key(x));
+        auto res = calculate_position_for_insert_unique(key_of(x));
         if (res.status)
         {
             insert(x, res.pos, res.left, data_.root(), data_.minimum());
@@ -794,7 +728,7 @@ public:
     {
         make_node_functor make_node(*this);
         node_pointer x = make_node(std::forward<Args>(args)...);
-        auto res = calculate_position_for_insert_hint_equal(hint, key(x));
+        auto res = calculate_position_for_insert_hint_equal(hint, key_of(x));
         insert(x, res.pos, res.left, data_.root(), data_.minimum());
         ++data_.size_;
         return iterator(x);
@@ -805,7 +739,7 @@ public:
     {
         make_node_functor make_node(*this);
         node_pointer x = make_node(std::forward<Args>(args)...);
-        auto res = calculate_position_for_insert_hint_unique(hint, key(x));
+        auto res = calculate_position_for_insert_hint_unique(hint, key_of(x));
         if (res.status)
         {
             insert(x, res.pos, res.left, data_.root(), data_.minimum());
@@ -893,6 +827,102 @@ public:
         }
     }
 
+    template <typename K, typename M>
+    std::pair<iterator, bool> insert_or_assign(K&& k, M&& obj)
+    {
+        auto res = calculate_position_for_insert_unique(k);
+        if (res.status)
+        {
+            make_node_functor make_node(*this);
+            node_pointer x = make_node
+            (
+                std::piecewise_construct,
+                std::forward_as_tuple(std::forward<K>(k)),
+                std::forward_as_tuple(std::forward<M>(obj))
+            );
+            insert(x, res.pos, res.left, data_.root(), data_.minimum());
+            ++data_.size_;
+            return std::make_pair(iterator(x), true);
+        }
+        else
+        {
+            iterator it(res.pos);
+            it->second = std::forward<M>(obj);
+            return std::make_pair(it, false);
+        }
+    }
+
+    template <typename K, typename M>
+    iterator insert_or_assign_hint(const_iterator hint, K&& k, M&& obj)
+    {
+        auto res = calculate_position_for_insert_hint_unique(hint, k);
+        if (res.status)
+        {
+            make_node_functor make_node(*this);
+            node_pointer x = make_node
+            (
+                std::piecewise_construct,
+                std::forward_as_tuple(std::forward<K>(k)),
+                std::forward_as_tuple(std::forward<M>(obj))
+            );
+            insert(x, res.pos, res.left, data_.root(), data_.minimum());
+            ++data_.size_;
+            return iterator(x);
+        }
+        else
+        {
+            iterator it(res.pos);
+            it->second = std::forward<M>(obj);
+            return it;
+        }
+    }
+
+    template <typename K, typename... Args>
+    std::pair<iterator, bool> try_emplace(K&& k, Args&&... args)
+    {
+        auto res = calculate_position_for_insert_unique(k);
+        if (res.status)
+        {
+            make_node_functor make_node(*this);
+            node_pointer x = make_node
+            (
+                std::piecewise_construct,
+                std::forward_as_tuple(std::forward<K>(k)),
+                std::forward_as_tuple(std::forward<Args>(args)...)
+            );
+            insert(x, res.pos, res.left, data_.root(), data_.minimum());
+            ++data_.size_;
+            return std::make_pair(iterator(x), true);
+        }
+        else
+        {
+            return std::make_pair(iterator(res.pos), false);
+        }
+    }
+
+    template <typename K, typename... Args>
+    iterator try_emplace_hint(const_iterator hint, K&& k, Args&&... args)
+    {
+        auto res = calculate_position_for_insert_hint_unique(hint, k);
+        if (res.status)
+        {
+            make_node_functor make_node(*this);
+            node_pointer x = make_node
+            (
+                std::piecewise_construct,
+                std::forward_as_tuple(std::forward<K>(k)),
+                std::forward_as_tuple(std::forward<Args>(args)...)
+            );
+            insert(x, res.pos, res.left, data_.root(), data_.minimum());
+            ++data_.size_;
+            return iterator(x);
+        }
+        else
+        {
+            return iterator(res.pos);
+        }
+    }
+
     iterator erase(iterator pos)
     {
         base_node_pointer x = pos.node_;
@@ -934,7 +964,7 @@ public:
 
     void swap(rb_tree& other)
     {
-        swap(other, typename sfl::dtl::allocator_traits<node_allocator_type>::is_partially_propagable());
+        swap_impl(other);
     }
 
     //
@@ -950,7 +980,7 @@ public:
 
         while (x != nullptr)
         {
-            if (!ref_to_comp()(key(x), k))
+            if (!data_.ref_to_key_compare()(key_of(x), k))
             {
                 y = x;
                 x = x->left_;
@@ -973,7 +1003,7 @@ public:
 
         while (x != nullptr)
         {
-            if (!ref_to_comp()(key(x), k))
+            if (!data_.ref_to_key_compare()(key_of(x), k))
             {
                 y = x;
                 x = x->left_;
@@ -996,7 +1026,7 @@ public:
 
         while (x != nullptr)
         {
-            if (ref_to_comp()(k, key(x)))
+            if (data_.ref_to_key_compare()(k, key_of(x)))
             {
                 y = x;
                 x = x->left_;
@@ -1019,7 +1049,7 @@ public:
 
         while (x != nullptr)
         {
-            if (ref_to_comp()(k, key(x)))
+            if (data_.ref_to_key_compare()(k, key_of(x)))
             {
                 y = x;
                 x = x->left_;
@@ -1042,11 +1072,11 @@ public:
 
         while (x != nullptr)
         {
-            if (ref_to_comp()(key(x), k))
+            if (data_.ref_to_key_compare()(key_of(x), k))
             {
                 x = x->right_;
             }
-            else if (ref_to_comp()(k, key(x)))
+            else if (data_.ref_to_key_compare()(k, key_of(x)))
             {
                 y = x;
                 x = x->left_;
@@ -1058,7 +1088,7 @@ public:
                 base_node_pointer y_lower = x;
                 while (x_lower != nullptr)
                 {
-                    if (!ref_to_comp()(key(x_lower), k))
+                    if (!data_.ref_to_key_compare()(key_of(x_lower), k))
                     {
                         y_lower = x_lower;
                         x_lower = x_lower->left_;
@@ -1074,7 +1104,7 @@ public:
                 base_node_pointer y_upper = y;
                 while (x_upper != nullptr)
                 {
-                    if (ref_to_comp()(k, key(x_upper)))
+                    if (data_.ref_to_key_compare()(k, key_of(x_upper)))
                     {
                         y_upper = x_upper;
                         x_upper = x_upper->left_;
@@ -1101,11 +1131,11 @@ public:
 
         while (x != nullptr)
         {
-            if (ref_to_comp()(key(x), k))
+            if (data_.ref_to_key_compare()(key_of(x), k))
             {
                 x = x->right_;
             }
-            else if (ref_to_comp()(k, key(x)))
+            else if (data_.ref_to_key_compare()(k, key_of(x)))
             {
                 y = x;
                 x = x->left_;
@@ -1117,7 +1147,7 @@ public:
                 base_node_pointer y_lower = x;
                 while (x_lower != nullptr)
                 {
-                    if (!ref_to_comp()(key(x_lower), k))
+                    if (!data_.ref_to_key_compare()(key_of(x_lower), k))
                     {
                         y_lower = x_lower;
                         x_lower = x_lower->left_;
@@ -1133,7 +1163,7 @@ public:
                 base_node_pointer y_upper = y;
                 while (x_upper != nullptr)
                 {
-                    if (ref_to_comp()(k, key(x_upper)))
+                    if (data_.ref_to_key_compare()(k, key_of(x_upper)))
                     {
                         y_upper = x_upper;
                         x_upper = x_upper->left_;
@@ -1157,7 +1187,7 @@ public:
     {
         auto it = lower_bound(k);
 
-        if (it != end() && ref_to_comp()(k, key(it.node_)))
+        if (it != end() && data_.ref_to_key_compare()(k, key_of(it.node_)))
         {
             it = end();
         }
@@ -1171,7 +1201,7 @@ public:
     {
         auto it = lower_bound(k);
 
-        if (it != end() && ref_to_comp()(k, key(it.node_)))
+        if (it != end() && data_.ref_to_key_compare()(k, key_of(it.node_)))
         {
             it = end();
         }
@@ -1195,6 +1225,8 @@ public:
     }
 
 private:
+
+    ///////////////////////////////////////////////////////////////////////////
 
     static base_node_pointer minimum(base_node_pointer x) noexcept
     {
@@ -1612,53 +1644,50 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
-    static const Key& key(node_pointer x) noexcept
-    {
-        return KeyOfValue()(x->value_);
-    }
-
-    static const Key& key(base_node_pointer x) noexcept
-    {
-        return KeyOfValue()(static_cast<node_pointer>(x)->value_);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-
     node_pointer allocate_node()
     {
-        return sfl::dtl::allocate(ref_to_node_alloc(), 1);
+        return sfl::dtl::allocator_traits<node_allocator_type>::allocate
+        (
+            data_.ref_to_node_alloc(),
+            1
+        );
     }
 
     void deallocate_node(node_pointer p) noexcept
     {
-        sfl::dtl::deallocate(ref_to_node_alloc(), p, 1);
+        sfl::dtl::allocator_traits<node_allocator_type>::deallocate
+        (
+            data_.ref_to_node_alloc(),
+            p,
+            1
+        );
     }
 
     template <typename... Args>
     void construct_node(node_pointer p, Args&&... args)
     {
-        sfl::dtl::construct_at_a(ref_to_node_alloc(), p);
+        sfl::dtl::construct_at_a(data_.ref_to_node_alloc(), p);
 
         SFL_TRY
         {
             sfl::dtl::construct_at_a
             (
-                ref_to_node_alloc(),
-                std::addressof(p->value_),
+                data_.ref_to_node_alloc(),
+                p->value_.ptr(),
                 std::forward<Args>(args)...
             );
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy_at_a(ref_to_node_alloc(), p);
+            sfl::dtl::destroy_at_a(data_.ref_to_node_alloc(), p);
             SFL_RETHROW;
         }
     }
 
     void destroy_node(node_pointer p) noexcept
     {
-        sfl::dtl::destroy_at_a(ref_to_node_alloc(), std::addressof(p->value_));
-        sfl::dtl::destroy_at_a(ref_to_node_alloc(), p);
+        sfl::dtl::destroy_at_a(data_.ref_to_node_alloc(), p->value_.ptr());
+        sfl::dtl::destroy_at_a(data_.ref_to_node_alloc(), p);
     }
 
     class make_node_functor
@@ -1781,17 +1810,29 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    static const Key& key_of(node_pointer x) noexcept
+    {
+        return KeyOfValue()(x->value_.ref());
+    }
+
+    static const Key& key_of(base_node_pointer x) noexcept
+    {
+        return KeyOfValue()(static_cast<node_pointer>(x)->value_.ref());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+
     struct position_for_insert_equal
     {
         base_node_pointer pos;
-        bool               left;
+        bool              left;
     };
 
     struct position_for_insert_unique
     {
         base_node_pointer pos;
-        bool               left;
-        bool               status;
+        bool              left;
+        bool              status;
     };
 
     template <typename K>
@@ -1806,7 +1847,7 @@ private:
         {
             y = x;
 
-            comp = ref_to_comp()(k, key(x));
+            comp = data_.ref_to_key_compare()(k, key_of(x));
 
             if (comp)
             {
@@ -1833,7 +1874,7 @@ private:
         {
             y = x;
 
-            comp = ref_to_comp()(k, key(x));
+            comp = data_.ref_to_key_compare()(k, key_of(x));
 
             if (comp)
             {
@@ -1852,7 +1893,7 @@ private:
 
         base_node_pointer z = comp ? prev(y) : y;
 
-        if (z != data_.header() && !ref_to_comp()(key(z), k))
+        if (z != data_.header() && !data_.ref_to_key_compare()(key_of(z), k))
         {
             return position_for_insert_unique{z, comp, false};
         }
@@ -1873,7 +1914,7 @@ private:
             {
                 const_iterator maximum = std::prev(hint);
 
-                if (!ref_to_comp()(k, key(maximum.node_))) // k >= maximum
+                if (!data_.ref_to_key_compare()(k, key_of(maximum.node_))) // k >= maximum
                 {
                     return position_for_insert_equal{maximum.node_, false};
                 }
@@ -1883,7 +1924,7 @@ private:
                 }
             }
         }
-        else if (!ref_to_comp()(key(hint.node_), k)) // k <= hint
+        else if (!data_.ref_to_key_compare()(key_of(hint.node_), k)) // k <= hint
         {
             if (hint == cbegin()) // hint == minimum
             {
@@ -1893,7 +1934,7 @@ private:
             {
                 const_iterator prev = std::prev(hint);
 
-                if (!ref_to_comp()(k, key(prev.node_))) // prev <= k
+                if (!data_.ref_to_key_compare()(k, key_of(prev.node_))) // prev <= k
                 {
                     if (prev.node_->right_ == nullptr)
                     {
@@ -1920,7 +1961,7 @@ private:
             {
                 const_iterator next = std::next(hint);
 
-                if (!ref_to_comp()(key(next.node_), k)) // k <= next
+                if (!data_.ref_to_key_compare()(key_of(next.node_), k)) // k <= next
                 {
                     if (next.node_->left_ == nullptr)
                     {
@@ -1952,7 +1993,7 @@ private:
             {
                 const_iterator maximum = std::prev(hint);
 
-                if (ref_to_comp()(key(maximum.node_), k)) // maximum < k
+                if (data_.ref_to_key_compare()(key_of(maximum.node_), k)) // maximum < k
                 {
                     return position_for_insert_unique{maximum.node_, false, true};
                 }
@@ -1962,7 +2003,7 @@ private:
                 }
             }
         }
-        else if (ref_to_comp()(k, key(hint.node_))) // k < hint
+        else if (data_.ref_to_key_compare()(k, key_of(hint.node_))) // k < hint
         {
             if (hint == cbegin()) // hint == minimum
             {
@@ -1972,7 +2013,7 @@ private:
             {
                 const_iterator prev = std::prev(hint);
 
-                if (ref_to_comp()(key(prev.node_), k)) // prev < k
+                if (data_.ref_to_key_compare()(key_of(prev.node_), k)) // prev < k
                 {
                     if (prev.node_->right_ == nullptr)
                     {
@@ -1989,7 +2030,7 @@ private:
                 }
             }
         }
-        else if (ref_to_comp()(key(hint.node_), k)) // hint < k
+        else if (data_.ref_to_key_compare()(key_of(hint.node_), k)) // hint < k
         {
             if (hint == std::prev(cend())) // hint == maximum
             {
@@ -1999,7 +2040,7 @@ private:
             {
                 const_iterator next = std::next(hint);
 
-                if (ref_to_comp()(k, key(next.node_))) // k < next
+                if (data_.ref_to_key_compare()(k, key_of(next.node_))) // k < next
                 {
                     if (next.node_->left_ == nullptr)
                     {
@@ -2029,7 +2070,7 @@ private:
     {
         SFL_ASSERT(x != nullptr);
 
-        base_node_pointer y = make_node(static_cast<node_pointer>(x)->value_);
+        base_node_pointer y = make_node(static_cast<node_pointer>(x)->value_.ref());
 
         y->color_ = x->color_;
         y->left_  = nullptr;
@@ -2063,7 +2104,7 @@ private:
     {
         SFL_ASSERT(x != nullptr);
 
-        base_node_pointer y = make_node(std::move(static_cast<node_pointer>(x)->value_));
+        base_node_pointer y = make_node(std::move(static_cast<node_pointer>(x)->value_.ref()));
 
         y->color_ = x->color_;
         y->left_  = nullptr;
@@ -2122,9 +2163,15 @@ private:
         }
     }
 
+    ///////////////////////////////////////////////////////////////////////////
+
     void initialize_move(rb_tree& other)
     {
-        initialize_move(other, typename sfl::dtl::allocator_traits<node_allocator_type>::is_partially_propagable());
+        initialize_move
+        (
+            other,
+            typename sfl::dtl::allocator_traits<node_allocator_type>::is_partially_propagable()
+        );
     }
 
     void initialize_move(rb_tree& other, std::true_type)
@@ -2140,7 +2187,12 @@ private:
 
     void initialize_move(rb_tree& other, std::false_type)
     {
-        initialize_move(other, std::false_type(), typename sfl::dtl::allocator_traits<node_allocator_type>::is_always_equal());
+        initialize_move
+        (
+            other,
+            std::false_type(),
+            typename sfl::dtl::allocator_traits<node_allocator_type>::is_always_equal()
+        );
     }
 
     void initialize_move(rb_tree& other, std::false_type, std::true_type)
@@ -2153,7 +2205,7 @@ private:
 
     void initialize_move(rb_tree& other, std::false_type, std::false_type)
     {
-        if (ref_to_node_alloc() == other.ref_to_node_alloc())
+        if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
         {
             initialize_move(other, std::false_type(), std::true_type());
         }
@@ -2163,22 +2215,27 @@ private:
         }
     }
 
-    void assign_copy(const rb_tree& other)
+    ///////////////////////////////////////////////////////////////////////////
+
+    void assign_copy_impl(const rb_tree& other)
     {
         if (this != &other)
         {
+            // Copy function. May throw exception. No effects if throw.
+            data_.ref_to_key_compare() = other.data_.ref_to_key_compare();
+
+            // Copy allocator (noexcept)
             if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_copy_assignment::value)
             {
-                if (ref_to_node_alloc() != other.ref_to_node_alloc())
+                if (data_.ref_to_node_alloc() != other.data_.ref_to_node_alloc())
                 {
                     clear();
                 }
 
-                ref_to_node_alloc() = other.ref_to_node_alloc();
+                data_.ref_to_node_alloc() = other.data_.ref_to_node_alloc();
             }
 
-            ref_to_comp() = other.ref_to_comp();
-
+            // Copy elements one-by-one from other to this. May throw exception.
             make_node_with_recycling_functor make_node(*this);
 
             if (other.data_.root() != nullptr)
@@ -2190,25 +2247,34 @@ private:
         }
     }
 
-    void assign_move(rb_tree& other)
+    ///////////////////////////////////////////////////////////////////////////
+
+    void assign_move_impl(rb_tree& other)
     {
-        assign_move(other, typename sfl::dtl::allocator_traits<node_allocator_type>::is_partially_propagable());
+        assign_move_impl
+        (
+            other,
+            typename sfl::dtl::allocator_traits<node_allocator_type>::is_partially_propagable()
+        );
     }
 
-    void assign_move(rb_tree& other, std::true_type)
+    void assign_move_impl(rb_tree& other, std::true_type)
     {
+        // Move function. May throw exception. No effects if throw.
+        data_.ref_to_key_compare() = std::move(other.data_.ref_to_key_compare());
+
+        // Move allocator (noexcept)
         if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_move_assignment::value)
         {
-            if (ref_to_node_alloc() != other.ref_to_node_alloc())
+            if (data_.ref_to_node_alloc() != other.data_.ref_to_node_alloc())
             {
                 clear();
             }
 
-            ref_to_node_alloc() = std::move(other.ref_to_node_alloc());
+            data_.ref_to_node_alloc() = std::move(other.data_.ref_to_node_alloc());
         }
 
-        ref_to_comp() = std::move(other.ref_to_comp());
-
+        // Move elements one-by-one from other to this. May throw exception.
         make_node_with_recycling_functor make_node(*this);
 
         if (other.data_.root() != nullptr)
@@ -2219,48 +2285,77 @@ private:
         }
     }
 
-    void assign_move(rb_tree& other, std::false_type)
+    void assign_move_impl(rb_tree& other, std::false_type)
     {
-        assign_move(other, std::false_type(), typename sfl::dtl::allocator_traits<node_allocator_type>::is_always_equal());
+        assign_move_impl
+        (
+            other,
+            std::false_type(),
+            typename sfl::dtl::disjunction
+            <
+                typename sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_move_assignment,
+                typename sfl::dtl::allocator_traits<node_allocator_type>::is_always_equal
+            >()
+        );
     }
 
-    void assign_move(rb_tree& other, std::false_type, std::true_type)
+    void assign_move_impl(rb_tree& other, std::false_type, std::true_type)
     {
+        // Move function. May throw exception. No effects if throw.
+        data_.ref_to_key_compare() = std::move(other.data_.ref_to_key_compare());
+
+        // Move allocator (noexcept)
         if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_move_assignment::value)
         {
-            ref_to_node_alloc() = std::move(other.ref_to_node_alloc());
+            data_.ref_to_node_alloc() = std::move(other.data_.ref_to_node_alloc());
         }
 
-        ref_to_comp() = std::move(other.ref_to_comp());
-
+        // Drop nodes (noexcept)
         clear();
 
+        // Steal data (noexcept)
         data_.root() = other.data_.root();
         data_.minimum() = other.data_.minimum();
         data_.size_ = other.data_.size_;
 
+        // Set other data (noexcept)
         other.data_.reset();
     }
 
-    void assign_move(rb_tree& other, std::false_type, std::false_type)
+    void assign_move_impl(rb_tree& other, std::false_type, std::false_type)
     {
-        if (ref_to_node_alloc() == other.ref_to_node_alloc())
+        if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
         {
-            assign_move(other, std::false_type(), std::true_type());
+            assign_move_impl(other, std::false_type(), std::true_type());
         }
         else
         {
-            assign_move(other, std::true_type());
+            assign_move_impl(other, std::true_type());
         }
     }
 
-    void swap(rb_tree& other, std::true_type)
+    ///////////////////////////////////////////////////////////////////////////
+
+    void swap_impl(rb_tree& other)
+    {
+        swap_impl
+        (
+            other,
+            typename sfl::dtl::allocator_traits<node_allocator_type>::is_partially_propagable()
+        );
+    }
+
+    void swap_impl(rb_tree& other, std::true_type)
     {
         SFL_ASSERT(this->size() < this->max_size());
         SFL_ASSERT(other.size() < other.max_size());
 
         using std::swap;
 
+        // Swap functions. May throw exception. No effects if thrown.
+        swap(data_.ref_to_key_compare(), other.data_.ref_to_key_compare());
+
+        // Steal data (noexcept)
         base_node_pointer old_this = this->data_.root();
         base_node_pointer old_other = other.data_.root();
 
@@ -2273,14 +2368,17 @@ private:
             old_other->parent_ = nullptr;
         }
 
+        // Reset data (noexcept)
         this->data_.reset();
         other.data_.reset();
 
+        // Swap allocators (noexcept)
         if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_swap::value)
         {
-            swap(ref_to_node_alloc(), other.ref_to_node_alloc()); // noexcept
+            swap(data_.ref_to_node_alloc(), other.data_.ref_to_node_alloc());
         }
 
+        // Swap nodes one-by-one. May throw exception.
         SFL_TRY
         {
             struct help
@@ -2344,18 +2442,18 @@ private:
                     (
                         sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                         (
-                            this->ref_to_node_alloc(),
+                            this->data_.ref_to_node_alloc(),
                             static_cast<node_pointer>(p_this)
                         )
                         ||
                         (
                             !sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_swap::value
                             &&
-                            this->ref_to_node_alloc() != other.ref_to_node_alloc()
+                            this->data_.ref_to_node_alloc() != other.data_.ref_to_node_alloc()
                         )
                     )
                     {
-                        other.insert_equal(std::move(static_cast<node_pointer>(p_this)->value_)); // may throw exception
+                        other.insert_equal(std::move(static_cast<node_pointer>(p_this)->value_.ref())); // may throw
 
                         base_node_pointer p_this_parent = help::detach(p_this);
 
@@ -2365,7 +2463,7 @@ private:
                     }
                     else
                     {
-                        auto res = other.calculate_position_for_insert_equal(key(p_this));
+                        auto res = other.calculate_position_for_insert_equal(key_of(p_this));
 
                         base_node_pointer p_this_parent = help::detach(p_this);
 
@@ -2387,18 +2485,18 @@ private:
                     (
                         sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                         (
-                            other.ref_to_node_alloc(),
+                            other.data_.ref_to_node_alloc(),
                             static_cast<node_pointer>(p_other)
                         )
                         ||
                         (
                             !sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_swap::value
                             &&
-                            this->ref_to_node_alloc() != other.ref_to_node_alloc()
+                            this->data_.ref_to_node_alloc() != other.data_.ref_to_node_alloc()
                         )
                     )
                     {
-                        this->insert_equal(std::move(static_cast<node_pointer>(p_other)->value_)); // may throw exception
+                        this->insert_equal(std::move(static_cast<node_pointer>(p_other)->value_.ref())); // may throw
 
                         base_node_pointer p_other_parent = help::detach(p_other);
 
@@ -2408,7 +2506,7 @@ private:
                     }
                     else
                     {
-                        auto res = this->calculate_position_for_insert_equal(key(p_other));
+                        auto res = this->calculate_position_for_insert_equal(key_of(p_other));
 
                         base_node_pointer p_other_parent = help::detach(p_other);
 
@@ -2485,7 +2583,7 @@ private:
                 (
                     sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                     (
-                        this->ref_to_node_alloc(),
+                        this->data_.ref_to_node_alloc(),
                         static_cast<node_pointer>(p_this)
                     )
                 )
@@ -2517,7 +2615,7 @@ private:
                 (
                     sfl::dtl::allocator_traits<node_allocator_type>::is_storage_unpropagable
                     (
-                        other.ref_to_node_alloc(),
+                        other.data_.ref_to_node_alloc(),
                         static_cast<node_pointer>(p_other)
                     )
                 )
@@ -2543,36 +2641,48 @@ private:
         }
     }
 
-    void swap(rb_tree& other, std::false_type)
+    void swap_impl(rb_tree& other, std::false_type)
     {
-        swap(other, std::false_type(), typename sfl::dtl::allocator_traits<node_allocator_type>::is_always_equal());
+        swap_impl
+        (
+            other,
+            std::false_type(),
+            typename sfl::dtl::disjunction
+            <
+                typename sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_swap,
+                typename sfl::dtl::allocator_traits<node_allocator_type>::is_always_equal
+            >()
+        );
     }
 
-    void swap(rb_tree& other, std::false_type, std::true_type)
+    void swap_impl(rb_tree& other, std::false_type, std::true_type)
     {
         using std::swap;
 
+        // Swap functions. May throw exception. No effects if thrown.
+        swap(data_.ref_to_key_compare(), other.data_.ref_to_key_compare());
+
+        // Swap allocators (noexcept)
         if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_swap::value)
         {
-            swap(ref_to_node_alloc(), other.ref_to_node_alloc());
+            swap(data_.ref_to_node_alloc(), other.data_.ref_to_node_alloc());
         }
 
-        swap(ref_to_comp(), other.ref_to_comp());
-
+        // Swap data (noexcept)
         swap(data_.root(), other.data_.root());
         swap(data_.minimum(), other.data_.minimum());
         swap(data_.size_, other.data_.size_);
     }
 
-    void swap(rb_tree& other, std::false_type, std::false_type)
+    void swap_impl(rb_tree& other, std::false_type, std::false_type)
     {
-        if (ref_to_node_alloc() == other.ref_to_node_alloc())
+        if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
         {
-            swap(other, std::false_type(), std::true_type());
+            swap_impl(other, std::false_type(), std::true_type());
         }
         else
         {
-            swap(other, std::true_type());
+            swap_impl(other, std::true_type());
         }
     }
 
@@ -2635,12 +2745,12 @@ private:
                 }
             }
 
-            if (l != nullptr && ref_to_comp()(key(x), key(l)))
+            if (l != nullptr && data_.ref_to_key_compare()(key_of(x), key_of(l)))
             {
                 return false;
             }
 
-            if (r != nullptr && ref_to_comp()(key(r), key(x)))
+            if (r != nullptr && data_.ref_to_key_compare()(key_of(r), key_of(x)))
             {
                 return false;
             }
@@ -2660,122 +2770,79 @@ private:
     }
 };
 
-//
-// ---- NON-MEMBER FUNCTIONS --------------------------------------------------
-//
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// NON-MEMBER FUNCTIONS
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
-template < typename Key,
-           typename Value,
-           typename KeyOfValue,
-           typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
 SFL_NODISCARD
 bool operator==
 (
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& x,
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
 )
 {
     return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
 }
 
-template < typename Key,
-           typename Value,
-           typename KeyOfValue,
-           typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
 SFL_NODISCARD
 bool operator!=
 (
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& x,
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
 )
 {
     return !(x == y);
 }
 
-template < typename Key,
-           typename Value,
-           typename KeyOfValue,
-           typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
 SFL_NODISCARD
 bool operator<
 (
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& x,
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
 )
 {
     return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 }
 
-template < typename Key,
-           typename Value,
-           typename KeyOfValue,
-           typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
 SFL_NODISCARD
 bool operator>
 (
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& x,
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
 )
 {
     return y < x;
 }
 
-template < typename Key,
-           typename Value,
-           typename KeyOfValue,
-           typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
 SFL_NODISCARD
 bool operator<=
 (
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& x,
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
 )
 {
     return !(y < x);
 }
 
-template < typename Key,
-           typename Value,
-           typename KeyOfValue,
-           typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
 SFL_NODISCARD
 bool operator>=
 (
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& x,
-    const rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
 )
 {
     return !(x < y);
 }
 
-template < typename Key,
-           typename Value,
-           typename KeyOfValue,
-           typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
-void swap
-(
-    rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& x,
-    rb_tree<Key, Value, KeyOfValue, KeyCompare, Allocator, UpperLevelContainer>& y
-)
-{
-    x.swap(y);
-}
-
-} //namespace dtl
+} // namespace dtl
 
 } // namespace sfl
 

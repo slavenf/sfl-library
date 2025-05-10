@@ -197,13 +197,13 @@ public:
 
     static_multimap& operator=(const static_multimap& other)
     {
-        tree_.operator=(other.tree_);
+        tree_.assign_copy(other.tree_);
         return *this;
     }
 
     static_multimap& operator=(static_multimap&& other)
     {
-        tree_.operator=(std::move(other.tree_));
+        tree_.assign_move(other.tree_);
         return *this;
     }
 
@@ -221,7 +221,7 @@ public:
     SFL_NODISCARD
     key_compare key_comp() const
     {
-        return key_compare(tree_.ref_to_comp());
+        return key_compare(tree_.data_.ref_to_key_compare());
     }
 
     //
@@ -231,7 +231,7 @@ public:
     SFL_NODISCARD
     value_compare value_comp() const
     {
-        return value_compare(tree_.ref_to_comp());
+        return value_compare(tree_.data_.ref_to_key_compare());
     }
 
     //
@@ -632,6 +632,24 @@ private:
             ++first;
         }
     }
+
+    template <typename K2, typename T2, std::size_t N2, typename C2>
+    friend bool operator==(const static_multimap<K2, T2, N2, C2>& x, const static_multimap<K2, T2, N2, C2>& y);
+
+    template <typename K2, typename T2, std::size_t N2, typename C2>
+    friend bool operator!=(const static_multimap<K2, T2, N2, C2>& x, const static_multimap<K2, T2, N2, C2>& y);
+
+    template <typename K2, typename T2, std::size_t N2, typename C2>
+    friend bool operator<(const static_multimap<K2, T2, N2, C2>& x, const static_multimap<K2, T2, N2, C2>& y);
+
+    template <typename K2, typename T2, std::size_t N2, typename C2>
+    friend bool operator>(const static_multimap<K2, T2, N2, C2>& x, const static_multimap<K2, T2, N2, C2>& y);
+
+    template <typename K2, typename T2, std::size_t N2, typename C2>
+    friend bool operator<=(const static_multimap<K2, T2, N2, C2>& x, const static_multimap<K2, T2, N2, C2>& y);
+
+    template <typename K2, typename T2, std::size_t N2, typename C2>
+    friend bool operator>=(const static_multimap<K2, T2, N2, C2>& x, const static_multimap<K2, T2, N2, C2>& y);
 };
 
 //
@@ -646,7 +664,7 @@ bool operator==
     const static_multimap<K, T, N, C>& y
 )
 {
-    return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
+    return x.tree_ == y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C>
@@ -657,7 +675,7 @@ bool operator!=
     const static_multimap<K, T, N, C>& y
 )
 {
-    return !(x == y);
+    return x.tree_ != y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C>
@@ -668,7 +686,7 @@ bool operator<
     const static_multimap<K, T, N, C>& y
 )
 {
-    return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+    return x.tree_ < y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C>
@@ -679,7 +697,7 @@ bool operator>
     const static_multimap<K, T, N, C>& y
 )
 {
-    return y < x;
+    return x.tree_ > y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C>
@@ -690,7 +708,7 @@ bool operator<=
     const static_multimap<K, T, N, C>& y
 )
 {
-    return !(y < x);
+    return x.tree_ <= y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C>
@@ -701,7 +719,7 @@ bool operator>=
     const static_multimap<K, T, N, C>& y
 )
 {
-    return !(x < y);
+    return x.tree_ >= y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C>

@@ -288,13 +288,13 @@ public:
 
     small_map& operator=(const small_map& other)
     {
-        tree_.operator=(other.tree_);
+        tree_.assign_copy(other.tree_);
         return *this;
     }
 
     small_map& operator=(small_map&& other)
     {
-        tree_.operator=(std::move(other.tree_));
+        tree_.assign_move(other.tree_);
         return *this;
     }
 
@@ -311,7 +311,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return allocator_type(tree_.ref_to_node_alloc());
+        return allocator_type(tree_.data_.ref_to_node_alloc());
     }
 
     //
@@ -321,7 +321,7 @@ public:
     SFL_NODISCARD
     key_compare key_comp() const
     {
-        return key_compare(tree_.ref_to_comp());
+        return key_compare(tree_.data_.ref_to_key_compare());
     }
 
     //
@@ -331,7 +331,7 @@ public:
     SFL_NODISCARD
     value_compare value_comp() const
     {
-        return value_compare(tree_.ref_to_comp());
+        return value_compare(tree_.data_.ref_to_key_compare());
     }
 
     //
@@ -523,14 +523,14 @@ public:
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
     std::pair<iterator, bool> insert_or_assign(const Key& key, M&& obj)
     {
-        return insert_or_assign_aux(key, std::forward<M>(obj));
+        return tree_.insert_or_assign(key, std::forward<M>(obj));
     }
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
     std::pair<iterator, bool> insert_or_assign(Key&& key, M&& obj)
     {
-        return insert_or_assign_aux(std::move(key), std::forward<M>(obj));
+        return tree_.insert_or_assign(std::move(key), std::forward<M>(obj));
     }
 
     template <typename K, typename M,
@@ -538,21 +538,21 @@ public:
                                      std::is_assignable<mapped_type&, M&&>::value >* = nullptr>
     std::pair<iterator, bool> insert_or_assign(K&& key, M&& obj)
     {
-        return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj));
+        return tree_.insert_or_assign(std::forward<K>(key), std::forward<M>(obj));
     }
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
     iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj)
     {
-        return insert_or_assign_aux(hint, key, std::forward<M>(obj));
+        return tree_.insert_or_assign_hint(hint, key, std::forward<M>(obj));
     }
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
     iterator insert_or_assign(const_iterator hint, Key&& key, M&& obj)
     {
-        return insert_or_assign_aux(hint, std::move(key), std::forward<M>(obj));
+        return tree_.insert_or_assign_hint(hint, std::move(key), std::forward<M>(obj));
     }
 
     template <typename K, typename M,
@@ -560,19 +560,19 @@ public:
                                      std::is_assignable<mapped_type&, M&&>::value >* = nullptr>
     iterator insert_or_assign(const_iterator hint, K&& key, M&& obj)
     {
-        return insert_or_assign_aux(hint, std::forward<K>(key), std::forward<M>(obj));
+        return tree_.insert_or_assign_hint(hint, std::forward<K>(key), std::forward<M>(obj));
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(const Key& key, Args&&... args)
     {
-        return try_emplace_aux(key, std::forward<Args>(args)...);
+        return tree_.try_emplace(key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(Key&& key, Args&&... args)
     {
-        return try_emplace_aux(std::move(key), std::forward<Args>(args)...);
+        return tree_.try_emplace(std::move(key), std::forward<Args>(args)...);
     }
 
     template <typename K, typename... Args,
@@ -587,19 +587,19 @@ public:
               >* = nullptr>
     std::pair<iterator, bool> try_emplace(K&& key, Args&&... args)
     {
-        return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...);
+        return tree_.try_emplace(std::forward<K>(key), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, const Key& key, Args&&... args)
     {
-        return try_emplace_aux(hint, key, std::forward<Args>(args)...);
+        return tree_.try_emplace_hint(hint, key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, Key&& key, Args&&... args)
     {
-        return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
+        return tree_.try_emplace_hint(hint, std::move(key), std::forward<Args>(args)...);
     }
 
     template <typename K, typename... Args,
@@ -612,7 +612,7 @@ public:
               >* = nullptr>
     iterator try_emplace(const_iterator hint, K&& key, Args&&... args)
     {
-        return try_emplace_aux(hint, std::forward<K>(key), std::forward<Args>(args)...);
+        return tree_.try_emplace_hint(hint, std::forward<K>(key), std::forward<Args>(args)...);
     }
 
     iterator erase(iterator pos)
@@ -883,101 +883,23 @@ private:
         }
     }
 
-    template <typename K, typename M>
-    std::pair<iterator, bool> insert_or_assign_aux(K&& key, M&& obj)
-    {
-        auto res = tree_.calculate_position_for_insert_unique(key);
-        if (res.status)
-        {
-            typename tree_type::make_node_functor make_node(tree_);
-            typename tree_type::node_pointer x = make_node
-            (
-                std::piecewise_construct,
-                std::forward_as_tuple(std::forward<K>(key)),
-                std::forward_as_tuple(std::forward<M>(obj))
-            );
-            tree_.insert(x, res.pos, res.left, tree_.data_.root(), tree_.data_.minimum());
-            ++tree_.data_.size_;
-            return std::make_pair(iterator(x), true);
-        }
-        else
-        {
-            iterator it(res.pos);
-            it->second = std::forward<M>(obj);
-            return std::make_pair(it, false);
-        }
-    }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator==(const small_map<K2, T2, N2, C2, A2>& x, const small_map<K2, T2, N2, C2, A2>& y);
 
-    template <typename K, typename M>
-    iterator insert_or_assign_aux(const_iterator hint, K&& key, M&& obj)
-    {
-        auto res = tree_.calculate_position_for_insert_hint_unique(hint, key);
-        if (res.status)
-        {
-            typename tree_type::make_node_functor make_node(tree_);
-            typename tree_type::node_pointer x = make_node
-            (
-                std::piecewise_construct,
-                std::forward_as_tuple(std::forward<K>(key)),
-                std::forward_as_tuple(std::forward<M>(obj))
-            );
-            tree_.insert(x, res.pos, res.left, tree_.data_.root(), tree_.data_.minimum());
-            ++tree_.data_.size_;
-            return iterator(x);
-        }
-        else
-        {
-            iterator it(res.pos);
-            it->second = std::forward<M>(obj);
-            return it;
-        }
-    }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator!=(const small_map<K2, T2, N2, C2, A2>& x, const small_map<K2, T2, N2, C2, A2>& y);
 
-    template <typename K, typename... Args>
-    std::pair<iterator, bool> try_emplace_aux(K&& key, Args&&... args)
-    {
-        auto res = tree_.calculate_position_for_insert_unique(key);
-        if (res.status)
-        {
-            typename tree_type::make_node_functor make_node(tree_);
-            typename tree_type::node_pointer x = make_node
-            (
-                std::piecewise_construct,
-                std::forward_as_tuple(std::forward<K>(key)),
-                std::forward_as_tuple(std::forward<Args>(args)...)
-            );
-            tree_.insert(x, res.pos, res.left, tree_.data_.root(), tree_.data_.minimum());
-            ++tree_.data_.size_;
-            return std::make_pair(iterator(x), true);
-        }
-        else
-        {
-            return std::make_pair(iterator(res.pos), false);
-        }
-    }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator<(const small_map<K2, T2, N2, C2, A2>& x, const small_map<K2, T2, N2, C2, A2>& y);
 
-    template <typename K, typename... Args>
-    iterator try_emplace_aux(const_iterator hint, K&& key, Args&&... args)
-    {
-        auto res = tree_.calculate_position_for_insert_hint_unique(hint, key);
-        if (res.status)
-        {
-            typename tree_type::make_node_functor make_node(tree_);
-            typename tree_type::node_pointer x = make_node
-            (
-                std::piecewise_construct,
-                std::forward_as_tuple(std::forward<K>(key)),
-                std::forward_as_tuple(std::forward<Args>(args)...)
-            );
-            tree_.insert(x, res.pos, res.left, tree_.data_.root(), tree_.data_.minimum());
-            ++tree_.data_.size_;
-            return iterator(x);
-        }
-        else
-        {
-            return iterator(res.pos);
-        }
-    }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator>(const small_map<K2, T2, N2, C2, A2>& x, const small_map<K2, T2, N2, C2, A2>& y);
+
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator<=(const small_map<K2, T2, N2, C2, A2>& x, const small_map<K2, T2, N2, C2, A2>& y);
+
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator>=(const small_map<K2, T2, N2, C2, A2>& x, const small_map<K2, T2, N2, C2, A2>& y);
 };
 
 //
@@ -992,7 +914,7 @@ bool operator==
     const small_map<K, T, N, C, A>& y
 )
 {
-    return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
+    return x.tree_ == y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -1003,7 +925,7 @@ bool operator!=
     const small_map<K, T, N, C, A>& y
 )
 {
-    return !(x == y);
+    return x.tree_ != y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -1014,7 +936,7 @@ bool operator<
     const small_map<K, T, N, C, A>& y
 )
 {
-    return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+    return x.tree_ < y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -1025,7 +947,7 @@ bool operator>
     const small_map<K, T, N, C, A>& y
 )
 {
-    return y < x;
+    return x.tree_ > y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -1036,7 +958,7 @@ bool operator<=
     const small_map<K, T, N, C, A>& y
 )
 {
-    return !(y < x);
+    return x.tree_ <= y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -1047,7 +969,7 @@ bool operator>=
     const small_map<K, T, N, C, A>& y
 )
 {
-    return !(x < y);
+    return x.tree_ >= y.tree_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>

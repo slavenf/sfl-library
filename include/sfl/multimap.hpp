@@ -276,13 +276,13 @@ public:
 
     multimap& operator=(const multimap& other)
     {
-        tree_.operator=(other.tree_);
+        tree_.assign_copy(other.tree_);
         return *this;
     }
 
     multimap& operator=(multimap&& other)
     {
-        tree_.operator=(std::move(other.tree_));
+        tree_.assign_move(other.tree_);
         return *this;
     }
 
@@ -299,7 +299,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return allocator_type(tree_.ref_to_node_alloc());
+        return allocator_type(tree_.data_.ref_to_node_alloc());
     }
 
     //
@@ -309,7 +309,7 @@ public:
     SFL_NODISCARD
     key_compare key_comp() const
     {
-        return key_compare(tree_.ref_to_comp());
+        return key_compare(tree_.data_.ref_to_key_compare());
     }
 
     //
@@ -319,7 +319,7 @@ public:
     SFL_NODISCARD
     value_compare value_comp() const
     {
-        return value_compare(tree_.ref_to_comp());
+        return value_compare(tree_.data_.ref_to_key_compare());
     }
 
     //
@@ -694,6 +694,24 @@ private:
             ++first;
         }
     }
+
+    template <typename K2, typename T2, typename C2, typename A2>
+    friend bool operator==(const multimap<K2, T2, C2, A2>& x, const multimap<K2, T2, C2, A2>& y);
+
+    template <typename K2, typename T2, typename C2, typename A2>
+    friend bool operator!=(const multimap<K2, T2, C2, A2>& x, const multimap<K2, T2, C2, A2>& y);
+
+    template <typename K2, typename T2, typename C2, typename A2>
+    friend bool operator<(const multimap<K2, T2, C2, A2>& x, const multimap<K2, T2, C2, A2>& y);
+
+    template <typename K2, typename T2, typename C2, typename A2>
+    friend bool operator>(const multimap<K2, T2, C2, A2>& x, const multimap<K2, T2, C2, A2>& y);
+
+    template <typename K2, typename T2, typename C2, typename A2>
+    friend bool operator<=(const multimap<K2, T2, C2, A2>& x, const multimap<K2, T2, C2, A2>& y);
+
+    template <typename K2, typename T2, typename C2, typename A2>
+    friend bool operator>=(const multimap<K2, T2, C2, A2>& x, const multimap<K2, T2, C2, A2>& y);
 };
 
 //
@@ -708,7 +726,7 @@ bool operator==
     const multimap<K, T, C, A>& y
 )
 {
-    return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
+    return x.tree_ == y.tree_;
 }
 
 template <typename K, typename T, typename C, typename A>
@@ -719,7 +737,7 @@ bool operator!=
     const multimap<K, T, C, A>& y
 )
 {
-    return !(x == y);
+    return x.tree_ != y.tree_;
 }
 
 template <typename K, typename T, typename C, typename A>
@@ -730,7 +748,7 @@ bool operator<
     const multimap<K, T, C, A>& y
 )
 {
-    return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+    return x.tree_ < y.tree_;
 }
 
 template <typename K, typename T, typename C, typename A>
@@ -741,7 +759,7 @@ bool operator>
     const multimap<K, T, C, A>& y
 )
 {
-    return y < x;
+    return x.tree_ > y.tree_;
 }
 
 template <typename K, typename T, typename C, typename A>
@@ -752,7 +770,7 @@ bool operator<=
     const multimap<K, T, C, A>& y
 )
 {
-    return !(y < x);
+    return x.tree_ <= y.tree_;
 }
 
 template <typename K, typename T, typename C, typename A>
@@ -763,7 +781,7 @@ bool operator>=
     const multimap<K, T, C, A>& y
 )
 {
-    return !(x < y);
+    return x.tree_ >= y.tree_;
 }
 
 template <typename K, typename T, typename C, typename A>
