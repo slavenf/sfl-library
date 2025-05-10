@@ -1,6 +1,6 @@
 #undef NDEBUG // This is very important. Must be in the first line.
 
-#include "sfl/detail/node_static_allocator.hpp"
+#include "sfl/detail/static_node_allocator.hpp"
 
 #include "sfl/detail/uninitialized_memory_algorithms.hpp"
 
@@ -13,9 +13,9 @@ int main()
 {
     using sfl::test::xint;
 
-    PRINT("Test node_static_allocator<xint, 4>");
+    PRINT("Test static_node_allocator<xint, 4>");
 
-    sfl::dtl::node_static_allocator<xint, 4> a;
+    sfl::dtl::static_node_allocator<xint, 4> a;
 
     auto* p1 = sfl::dtl::allocate(a, 1);
     auto* p2 = sfl::dtl::allocate(a, 1);
