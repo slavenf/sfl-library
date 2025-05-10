@@ -1,20 +1,31 @@
 #ifndef SFL_TEST_XINT_HPP
 #define SFL_TEST_XINT_HPP
 
+#include "hash.hpp"
 #include "print.hpp"
+
+#include <iosfwd>
 
 #define SFL_TEST_XINT_DEFAULT_VALUE 789456123
 
 namespace sfl
 {
+
 namespace test
 {
 
 class xint
 {
+    template <typename>
+    friend struct std::hash;
+
+    template <typename>
+    friend struct hash;
+
 private:
 
     static int counter_;
+
     int* value_;
 
 public:
@@ -77,6 +88,16 @@ public:
         }
     }
 
+    int value() const
+    {
+        return *value_;
+    }
+
+    int& value()
+    {
+        return *value_;
+    }
+
     friend bool operator==(const xint& x, const xint& y)
     {
         return *x.value_ == *y.value_;
@@ -110,7 +131,36 @@ public:
 
 int xint::counter_ = 0;
 
+template <>
+struct hash<xint>
+{
+    std::size_t operator()(const xint& x)
+    {
+        return static_cast<std::size_t>(*x.value_);
+    }
+};
+
 } // namespace test
+
 } // namespace sfl
+
+namespace std
+{
+
+template <>
+struct hash<sfl::test::xint>
+{
+    std::size_t operator()(const sfl::test::xint& x)
+    {
+        return static_cast<std::size_t>(*x.value_);
+    }
+};
+
+istream& operator>>(istream& is, sfl::test::xint& x)
+{
+    return is >> x.value();
+}
+
+} // namespace std
 
 #endif // SFL_TEST_XINT_HPP

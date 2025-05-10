@@ -94,6 +94,21 @@ public:
             return a == b.value();
         }
     };
+
+    struct hash
+    {
+        using is_transparent = void;
+
+        std::size_t operator()(const xobj& x) const
+        {
+            return x.value();
+        }
+
+        std::size_t operator()(int x) const
+        {
+            return x;
+        }
+    };
 };
 
 } // namespace test

@@ -3,8 +3,11 @@
 
 #include "xint.hpp"
 
+#include <iosfwd>
+
 namespace sfl
 {
+
 namespace test
 {
 
@@ -16,6 +19,11 @@ public:
     xint second;
 
 public:
+
+    xint_xint()
+        : first()
+        , second()
+    {}
 
     xint_xint(int first_, int second_)
         : first(first_)
@@ -78,6 +86,26 @@ public:
 };
 
 } // namespace test
+
 } // namespace sfl
+
+namespace std
+{
+
+template <>
+struct hash<sfl::test::xint_xint>
+{
+    std::size_t operator()(const sfl::test::xint_xint& x)
+    {
+        return static_cast<std::size_t>(x.first.value());
+    }
+};
+
+istream& operator>>(istream& is, sfl::test::xint_xint& x)
+{
+    return is >> x.first >> x.second;
+}
+
+} // namespace std
 
 #endif // SFL_TEST_XINT_XINT_HPP

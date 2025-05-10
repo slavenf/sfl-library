@@ -41,6 +41,13 @@ namespace sfl
 namespace dtl
 {
 
+template <typename Pointer, typename SizeType>
+struct allocation_result
+{
+    Pointer ptr;
+    SizeType count;
+};
+
 template <typename Allocator>
 class allocator_traits
 {
@@ -91,6 +98,22 @@ private:
 
     public:
         using type = decltype(test<Alloc, SizeType, ConstVoidPointer>(0));
+    };
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    template <typename Alloc>
+    struct has_allocate_at_least
+    {
+    private:
+        template <typename Alloc2>
+        static std::true_type test(decltype(&Alloc2::allocate_at_least));
+
+        template <typename Alloc2>
+        static std::false_type test(...);
+
+    public:
+        using type = decltype(test<Alloc>(nullptr));
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -197,6 +220,12 @@ public:
         return priv_allocate(a, n, hint, typename has_allocate_hint<Allocator, size_type, const_void_pointer>::type());
     }
 
+    SFL_NODISCARD
+    static sfl::dtl::allocation_result<pointer, size_type> allocate_at_least(Allocator& a, size_type n)
+    {
+        return priv_allocate_at_least(a, n, typename has_allocate_at_least<Allocator>::type());
+    }
+
     static void deallocate(Allocator& a, pointer p, size_type n)
     {
         a.deallocate(p, n);
@@ -231,6 +260,17 @@ private:
     {
         sfl::dtl::ignore_unused(hint);
         return a.allocate(n);
+    }
+
+    static sfl::dtl::allocation_result<pointer, size_type> priv_allocate_at_least(Allocator& a, size_type n, std::true_type)
+    {
+        auto res = a.allocate_at_least(n);
+        return sfl::dtl::allocation_result<pointer, size_type>{res.ptr, res.count};
+    }
+
+    static sfl::dtl::allocation_result<pointer, size_type> priv_allocate_at_least(Allocator& a, size_type n, std::false_type)
+    {
+        return sfl::dtl::allocation_result<pointer, size_type>{a.allocate(n), n};
     }
 
     static size_type priv_max_size(const Allocator& a, std::true_type)
