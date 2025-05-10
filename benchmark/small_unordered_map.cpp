@@ -3,6 +3,7 @@
 
 #include <sfl/small_unordered_flat_map.hpp>
 #include <sfl/small_unordered_map.hpp>
+#include <sfl/unordered_map.hpp>
 
 #include <algorithm>
 #include <chrono>
@@ -102,6 +103,7 @@ int main()
 {
     using sfl_small_unordered_map = sfl::small_unordered_map<std::uint64_t, std::uint64_t, 128>;
     using sfl_small_unordered_flat_map = sfl::small_unordered_flat_map<std::uint64_t, std::uint64_t, 128>;
+    using sfl_unordered_map = sfl::unordered_map<std::uint64_t, std::uint64_t>;
     using std_unordered_map = std::unordered_map<std::uint64_t, std::uint64_t>;
 
     std::cout << std::fixed;
@@ -111,6 +113,7 @@ int main()
         std::cout << "random insert " << n << " integers:" << std::endl;
         std::cout << " - sfl::small_unordered_map:      " << test_random_insert<sfl_small_unordered_map>(n, 100'000) << std::endl;
         std::cout << " - sfl::small_unordered_flat_map: " << test_random_insert<sfl_small_unordered_flat_map>(n, 100'000) << std::endl;
+        std::cout << " - sfl::unordered_map:            " << test_random_insert<sfl_unordered_map>(n, 100'000) << std::endl;
         std::cout << " - std::unordered_map:            " << test_random_insert<std_unordered_map>(n, 100'000) << std::endl;
         std::cout << std::endl;
     }
@@ -120,6 +123,7 @@ int main()
         std::cout << "random lookup " << n << " integers:" << std::endl;
         std::cout << " - sfl::small_unordered_map:      " << test_random_lookup<sfl_small_unordered_map>(n, 100'000) << std::endl;
         std::cout << " - sfl::small_unordered_flat_map: " << test_random_lookup<sfl_small_unordered_flat_map>(n, 100'000) << std::endl;
+        std::cout << " - sfl::unordered_map:            " << test_random_lookup<sfl_unordered_map>(n, 100'000) << std::endl;
         std::cout << " - std::unordered_map:            " << test_random_lookup<std_unordered_map>(n, 100'000) << std::endl;
         std::cout << std::endl;
     }
