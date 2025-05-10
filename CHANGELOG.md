@@ -1,3 +1,48 @@
+# Next release
+
+* Bug fix: Fixed `swap` member function for all containers based on red-black tree.
+  Now, `swap` member function also swaps the key comparison function `Compare`.
+  Previously, `swap` member function did not swap the key comparison function.
+* New unordered associative containers based on hash tables with separate chaining:
+  * `unordered_map`
+  * `unordered_set`
+  * `unordered_multimap`
+  * `unordered_multiset`
+  * `small_unordered_map`
+  * `small_unordered_set`
+  * `small_unordered_multimap`
+  * `small_unordered_multiset`
+  * `static_unordered_map`
+  * `static_unordered_set`
+  * `static_unordered_multimap`
+  * `static_unordered_multiset`
+* Red-black tree: Reimplemented private member function `allocate_node` in
+  terms of `allocator_traits::allocate`. Before this change, it was implemented
+  in terms of `sfl::dtl::allocate` which always checks whether parameter `n` is
+  zero. Parameter `n` is never zero, actually it is always one, so there is no
+  need for using `sfl::dtl::allocate`.
+* Red-black tree: Reimplemented private member function `deallocate_node` in
+  terms os `allocator_traits::deallocate`. The explanation for this change is
+  the same as the above explaination for reimplementation of `allocate_node`.
+* Red-black tree: Improved `swap`.
+* Red-black tree: Added `try_emplace`.
+* Red-black tree: Added `insert_or_assign`.
+* Map: Reimplemented `try_emplace` in terms of `rb_tree::try_emplace`.
+* Map: Reimplemented `insert_or_assign` in terms of `rb_tree::insert_or_assign`.
+* Small map: Reimplemented `try_emplace` in terms of `rb_tree::try_emplace`.
+* Small map: Reimplemented `insert_or_assign` in terms of `rb_tree::insert_or_assign`.
+* Static map: Reimplemented `try_emplace` in terms of `rb_tree::try_emplace`.
+* Static map: Reimplemented `insert_or_assign` in terms of `rb_tree::insert_or_assign`.
+* All containers based on red-black tree: Reimplemented all comparison operators
+  in terms of comparison operators from `rb_tree`.
+* Red-black tree: Reworked nested class `data`.
+* Red-black tree: Removed copy assignment operator and added `assign_copy`.
+* Red-black tree: Removed move assignment operator and added `assign_move`.
+* Red-black tree: Refactored `swap`.
+* Red-black tree: Removed non-member `swap`.
+
+
+
 # 1.9.2 (2025-03-22)
 
 * Bug fix: Fixed crash while erasing elements from red-black tree-based containers.
