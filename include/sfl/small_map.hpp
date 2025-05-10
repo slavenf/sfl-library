@@ -26,8 +26,8 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/functional.hpp>
-#include <sfl/detail/node_small_allocator.hpp>
 #include <sfl/detail/rb_tree.hpp>
+#include <sfl/detail/small_node_allocator.hpp>
 #include <sfl/detail/tags.hpp>
 #include <sfl/detail/type_traits.hpp>
 
@@ -87,7 +87,7 @@ private:
         value_type,
         sfl::dtl::first,
         key_compare,
-        sfl::dtl::node_small_allocator
+        sfl::dtl::small_node_allocator
         <
             value_type,
             N,
