@@ -1,53 +1,68 @@
 # sfl library
 
-This is header-only C++11 library that offers several new or less-known containers:
+This is header-only C++11 library that offers several new or less-known containers.
 
-* Sequence containers:
+#### Sequence containers:
 
-  * [`vector`](doc/vector.md) — Equivalent to `std::vector` with few minor differences.
-  * [`devector`](doc/devector.md) — Double-ended vector that allows faster insertion/deletion at front than `vector`.
-  * [`small_vector`](doc/small_vector.md) — Vector that internally embeds small statically allocated storage to avoid using dynamic memory management if number of elements is small.
-  * [`static_vector`](doc/static_vector.md) — Vector with fixed-size capacity specified at compile-time. Capacity cannot be changed at run-time. Dynamic memory management is never used.
-  * [`compact_vector`](doc/compact_vector.md) — Vector that always have `capacity()` equal to `size()`. It is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
-  * [`segmented_vector`](doc/segmented_vector.md) — Vector with segmented storage that allows fast insertion/deletion at back.
-  * [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion/deletion at both front and back.
+* [`vector`](doc/vector.md) — Equivalent to `std::vector` with few minor differences.
+* [`devector`](doc/devector.md) — Double-ended vector that allows faster insertion/deletion at front than `vector`.
+* [`small_vector`](doc/small_vector.md) — Vector that internally embeds small statically allocated storage to avoid using dynamic memory management if number of elements is small.
+* [`static_vector`](doc/static_vector.md) — Vector with fixed-size capacity specified at compile-time. Capacity cannot be changed at run-time. Dynamic memory management is never used.
+* [`compact_vector`](doc/compact_vector.md) — Vector that always have `capacity()` equal to `size()`. It is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
+* [`segmented_vector`](doc/segmented_vector.md) — Vector with segmented storage that allows fast insertion/deletion at back.
+* [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion/deletion at both front and back.
 
-* Associative containers implemented as **red-black tree**:
+#### Associative containers implemented as **red-black tree**:
 
-  * [`map`](doc/map.md)
-  * [`set`](doc/set.md)
-  * [`multimap`](doc/multimap.md)
-  * [`multiset`](doc/multiset.md) <br><br>
-  * [`small_map`](doc/small_map.md)
-  * [`small_set`](doc/small_set.md)
-  * [`small_multimap`](doc/small_multimap.md)
-  * [`small_multiset`](doc/small_multiset.md) <br><br>
-  * [`static_map`](doc/static_map.md)
-  * [`static_set`](doc/static_set.md)
-  * [`static_multimap`](doc/static_multimap.md)
-  * [`static_multiset`](doc/static_multiset.md)
+* [`map`](doc/map.md)
+* [`set`](doc/set.md)
+* [`multimap`](doc/multimap.md)
+* [`multiset`](doc/multiset.md) <br><br>
+* [`small_map`](doc/small_map.md)
+* [`small_set`](doc/small_set.md)
+* [`small_multimap`](doc/small_multimap.md)
+* [`small_multiset`](doc/small_multiset.md) <br><br>
+* [`static_map`](doc/static_map.md)
+* [`static_set`](doc/static_set.md)
+* [`static_multimap`](doc/static_multimap.md)
+* [`static_multiset`](doc/static_multiset.md)
 
-* Associative containers implemented as **sorted vector**:
+#### Unordered associative containers implemented as **hash table**:
 
-  * [`small_flat_map`](doc/small_flat_map.md)
-  * [`small_flat_set`](doc/small_flat_set.md)
-  * [`small_flat_multimap`](doc/small_flat_multimap.md)
-  * [`small_flat_multiset`](doc/small_flat_multiset.md) <br><br>
-  * [`static_flat_map`](doc/static_flat_map.md)
-  * [`static_flat_set`](doc/static_flat_set.md)
-  * [`static_flat_multimap`](doc/static_flat_multimap.md)
-  * [`static_flat_multiset`](doc/static_flat_multiset.md)
+* [`unordered_map`](doc/unordered_map.md)
+* [`unordered_set`](doc/unordered_set.md)
+* [`unordered_multimap`](doc/unordered_multimap.md)
+* [`unordered_multiset`](doc/unordered_multiset.md) <br><br>
+* [`small_unordered_map`](doc/small_unordered_map.md)
+* [`small_unordered_set`](doc/small_unordered_set.md)
+* [`small_unordered_multimap`](doc/small_unordered_multimap.md)
+* [`small_unordered_multiset`](doc/small_unordered_multiset.md) <br><br>
+* [`static_unordered_map`](doc/static_unordered_map.md)
+* [`static_unordered_set`](doc/static_unordered_set.md)
+* [`static_unordered_multimap`](doc/static_unordered_multimap.md)
+* [`static_unordered_multiset`](doc/static_unordered_multiset.md)
 
-* Unordered associative containers implemented as **unsorted vector**:
+#### Associative containers implemented as **sorted vector**:
 
-  * [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
-  * [`small_unordered_flat_set`](doc/small_unordered_flat_set.md)
-  * [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
-  * [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.md) <br><br>
-  * [`static_unordered_flat_map`](doc/static_unordered_flat_map.md)
-  * [`static_unordered_flat_set`](doc/static_unordered_flat_set.md)
-  * [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md)
-  * [`static_unordered_flat_multiset`](doc/static_unordered_flat_multiset.md)
+* [`small_flat_map`](doc/small_flat_map.md)
+* [`small_flat_set`](doc/small_flat_set.md)
+* [`small_flat_multimap`](doc/small_flat_multimap.md)
+* [`small_flat_multiset`](doc/small_flat_multiset.md) <br><br>
+* [`static_flat_map`](doc/static_flat_map.md)
+* [`static_flat_set`](doc/static_flat_set.md)
+* [`static_flat_multimap`](doc/static_flat_multimap.md)
+* [`static_flat_multiset`](doc/static_flat_multiset.md)
+
+#### Unordered associative containers implemented as **unsorted vector**:
+
+* [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
+* [`small_unordered_flat_set`](doc/small_unordered_flat_set.md)
+* [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
+* [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.md) <br><br>
+* [`static_unordered_flat_map`](doc/static_unordered_flat_map.md)
+* [`static_unordered_flat_set`](doc/static_unordered_flat_set.md)
+* [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md)
+* [`static_unordered_flat_multiset`](doc/static_unordered_flat_multiset.md)
 
 
 
