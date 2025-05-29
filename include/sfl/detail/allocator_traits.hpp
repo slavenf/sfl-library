@@ -41,12 +41,21 @@ namespace sfl
 namespace dtl
 {
 
+#ifdef __cpp_lib_allocate_at_least
+
+template <typename Pointer, typename SizeType>
+using allocation_result = std::allocation_result<Pointer, SizeType>;
+
+#else
+
 template <typename Pointer, typename SizeType>
 struct allocation_result
 {
     Pointer ptr;
     SizeType count;
 };
+
+#endif
 
 template <typename Allocator>
 class allocator_traits
@@ -264,8 +273,7 @@ private:
 
     static sfl::dtl::allocation_result<pointer, size_type> priv_allocate_at_least(Allocator& a, size_type n, std::true_type)
     {
-        auto res = a.allocate_at_least(n);
-        return sfl::dtl::allocation_result<pointer, size_type>{res.ptr, res.count};
+        return a.allocate_at_least(n);
     }
 
     static sfl::dtl::allocation_result<pointer, size_type> priv_allocate_at_least(Allocator& a, size_type n, std::false_type)
