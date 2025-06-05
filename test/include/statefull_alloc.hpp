@@ -2,6 +2,7 @@
 #define SFL_TEST_STATEFULL_ALLOC_HPP
 
 #include <cstddef>
+#include <cstdint>
 #include <type_traits>
 
 namespace sfl
