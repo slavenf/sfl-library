@@ -35,13 +35,13 @@ namespace is_nothrow_swappable_aux
 
 using std::swap;
 
-template <typename T, bool = noexcept(swap(std::declval<T&>(), std::declval<T&>()))>
-static std::true_type test(int);
+template <typename T, bool B = noexcept(swap(std::declval<T&>(), std::declval<T&>()))>
+static std::integral_constant<bool, B> test(int);
 
 template <typename T>
 static std::false_type test(...);
 
-} // namespace is_nothrow_swappable_impl
+} // namespace is_nothrow_swappable_aux
 
 template <typename T>
 struct is_nothrow_swappable_impl
