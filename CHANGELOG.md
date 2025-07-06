@@ -1,4 +1,4 @@
-# Next release
+# 1.10.0 (2025-07-06)
 
 * Bug fix: Fixed `swap` member function for all containers based on red-black tree.
   Now, `swap` member function also swaps the key comparison function `Compare`.
