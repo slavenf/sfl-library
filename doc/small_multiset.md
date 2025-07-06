@@ -65,17 +65,15 @@ namespace sfl
 }
 ```
 
-`sfl::small_multiset` is an associative container similar to [`std::multiset`](https://en.cppreference.com/w/cpp/container/multiset), but with the different storage model.
+`sfl::small_multiset` is an associative container similar to [`std::multiset`](https://en.cppreference.com/w/cpp/container/multiset), but it internally holds a small amount of statically allocated memory to avoid dynamic memory management when the number of stored elements is small. Dynamic memory management is used when the number of elements exceeds `N`.
 
-This container internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+The underlying storage is implemented as **red-black tree**.
 
-Underlying storage is implemented as **red-black tree**.
+The complexity of search, insert, and remove operations is O(log N).
 
-Complexity of search, insert and remove operations is O(log N).
+Iterators to elements are bidirectional iterators, and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
 
-Iterators to elements are bidirectional iterators and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
-
-`sfl::small_multiset` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
+`sfl::small_multiset` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
 <br><br>
 

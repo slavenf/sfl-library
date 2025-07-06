@@ -4,15 +4,15 @@ This is header-only C++11 library that offers several new or less-known containe
 
 #### Sequence containers:
 
-* [`vector`](doc/vector.md) — Equivalent to `std::vector` with few minor differences.
+* [`vector`](doc/vector.md) — Vector equivalent to `std::vector`, but not specialized for `bool`, and with few minor differences.
 * [`devector`](doc/devector.md) — Double-ended vector that allows faster insertion/deletion at front than `vector`.
 * [`small_vector`](doc/small_vector.md) — Vector that internally embeds small statically allocated storage to avoid using dynamic memory management if number of elements is small.
-* [`static_vector`](doc/static_vector.md) — Vector with fixed-size capacity specified at compile-time. Capacity cannot be changed at run-time. Dynamic memory management is never used.
+* [`static_vector`](doc/static_vector.md) — Vector with a fixed maximum capacity defined at compile time and backed entirely by statically alocated storage. Dynamic memory management is never used.
 * [`compact_vector`](doc/compact_vector.md) — Vector that always have `capacity()` equal to `size()`. It is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
-* [`segmented_vector`](doc/segmented_vector.md) — Vector with segmented storage that allows fast insertion/deletion at back.
-* [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion/deletion at both front and back.
+* [`segmented_vector`](doc/segmented_vector.md) — Vector with segmented storage that allows fast insertion/deletion at back without memory reallocation.
+* [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion/deletion at both front and back without memory reallocation.
 
-#### Associative containers implemented as **red-black tree**:
+#### Associative containers based on **red-black trees**:
 
 * [`map`](doc/map.md)
 * [`set`](doc/set.md)
@@ -27,7 +27,7 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`static_multimap`](doc/static_multimap.md)
 * [`static_multiset`](doc/static_multiset.md)
 
-#### Unordered associative containers implemented as **hash table**:
+#### Unordered associative containers based on **hash tables** with separate chaining:
 
 * [`unordered_map`](doc/unordered_map.md)
 * [`unordered_set`](doc/unordered_set.md)
@@ -42,7 +42,7 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`static_unordered_multimap`](doc/static_unordered_multimap.md)
 * [`static_unordered_multiset`](doc/static_unordered_multiset.md)
 
-#### Associative containers implemented as **sorted vector**:
+#### Associative containers based on **sorted vectors**:
 
 * [`small_flat_map`](doc/small_flat_map.md)
 * [`small_flat_set`](doc/small_flat_set.md)
@@ -53,7 +53,7 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`static_flat_multimap`](doc/static_flat_multimap.md)
 * [`static_flat_multiset`](doc/static_flat_multiset.md)
 
-#### Unordered associative containers implemented as **unsorted vector**:
+#### Unordered associative containers based on **unsorted vectors**:
 
 * [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
 * [`small_unordered_flat_set`](doc/small_unordered_flat_set.md)
@@ -91,8 +91,8 @@ Tested compilers:
 * Clang 3.4.2 on CentOS 7 (C++11)
 * GCC 7.3.1 on CentOS 7 (C++11, 14, 17)
 * Clang 5.0.1 on CentOS 7 (C++11, 14, 17)
-* GCC 14.2.1 on Arch Linux (C++11, 14, 17, 20, 23)
-* Clang 18.1.8 on Arch Linux (C++11, 14, 17, 20, 23)
+* GCC 15.1.1 on Arch Linux (C++11, 14, 17, 20, 23)
+* Clang 20.1.6 on Arch Linux (C++11, 14, 17, 20, 23)
 * MSVC 19.38 (C++14, 17, 20, latest)
 
 
@@ -103,7 +103,7 @@ Tested compilers:
 
 **Step 1:** Copy `sfl` subdirectory from `include` into your project directory.
 
-**Step 2:** Configure your project or compiler to search include files in `sfl` subdirectory.
+**Step 2:** Configure your project or compiler to search for include files in the directory containing `sfl` subdirectory.
 
 **Step 3:** `#include` what you need.
 

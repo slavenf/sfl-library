@@ -72,17 +72,15 @@ namespace sfl
 }
 ```
 
-`sfl::small_map` is an associative container similar to [`std::map`](https://en.cppreference.com/w/cpp/container/map), but with the different storage model.
+`sfl::small_map` is an associative container similar to [`std::map`](https://en.cppreference.com/w/cpp/container/map), but it internally holds a small amount of statically allocated memory to avoid dynamic memory management when the number of stored elements is small. Dynamic memory management is used when the number of elements exceeds `N`.
 
-This container internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
+The underlying storage is implemented as **red-black tree**.
 
-Underlying storage is implemented as **red-black tree**.
+The complexity of search, insert, and remove operations is O(log N).
 
-Complexity of search, insert and remove operations is O(log N).
+Iterators to elements are bidirectional iterators, and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
 
-Iterators to elements are bidirectional iterators and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
-
-`sfl::small_map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
+`sfl::small_map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
 <br><br>
 
@@ -1282,6 +1280,10 @@ static constexpr size_type static_capacity = N;
     ```
 3.  ```
     template <typename K>
+    T& at(const K& x);
+    ```
+4.  ```
+    template <typename K>
     const T& at(const K& x) const;
     ```
 
@@ -1289,7 +1291,7 @@ static constexpr size_type static_capacity = N;
     Returns a reference to the mapped value of the element with key equivalent to `key` or `x`. If no such element exists, an exception of type `std::out_of_range` is thrown.
 
     **Note:**
-    Overload (3) participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
+    Overloads (3) and (4) participate in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling these functions without constructing an instance of `Key`.
 
     **Complexity:**
     Logarithmic in `size()`.
@@ -1311,10 +1313,6 @@ static constexpr size_type static_capacity = N;
     ```
 3.  ```
     template <typename K>
-    T& operator[](const K& x);
-    ```
-4.  ```
-    template <typename K>
     T& operator[](K&& x);
     ```
 
@@ -1328,13 +1326,10 @@ static constexpr size_type static_capacity = N;
       `return try_emplace(std::move(key)).first->second;`
 
     * Overload (3) is equivalent to
-      `return try_emplace(x).first->second;`
-
-    * Overload (4) is equivalent to
       `return try_emplace(std::forward<K>(x)).first->second;`
 
     **Note:**
-    Overloads (3) and (4) participate in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling these functions without constructing an instance of `Key`.
+    Overload (3) participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
     **Complexity:**
     Logarithmic in `size()`.

@@ -1257,6 +1257,10 @@ public:
     ```
 3.  ```
     template <typename K>
+    T& at(const K& x);
+    ```
+4.  ```
+    template <typename K>
     const T& at(const K& x) const;
     ```
 
@@ -1264,7 +1268,7 @@ public:
     Returns a reference to the mapped value of the element with key equivalent to `key` or `x`. If no such element exists, an exception of type `std::out_of_range` is thrown.
 
     **Note:**
-    Overload (3) participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
+    Overloads (3) and (4) participate in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling these functions without constructing an instance of `Key`.
 
     **Complexity:**
     Logarithmic in `size()`.
@@ -1286,10 +1290,6 @@ public:
     ```
 3.  ```
     template <typename K>
-    T& operator[](const K& x);
-    ```
-4.  ```
-    template <typename K>
     T& operator[](K&& x);
     ```
 
@@ -1303,13 +1303,10 @@ public:
       `return try_emplace(std::move(key)).first->second;`
 
     * Overload (3) is equivalent to
-      `return try_emplace(x).first->second;`
-
-    * Overload (4) is equivalent to
       `return try_emplace(std::forward<K>(x)).first->second;`
 
     **Note:**
-    Overloads (3) and (4) participate in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling these functions without constructing an instance of `Key`.
+    Overload (3) participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
     **Complexity:**
     Logarithmic in `size()`.

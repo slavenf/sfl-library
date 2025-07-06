@@ -69,17 +69,15 @@ namespace sfl
 }
 ```
 
-`sfl::static_multimap` is an associative container similar to [`std::multimap`](https://en.cppreference.com/w/cpp/container/multimap), but with the different storage model.
+`sfl::static_multimap` is an associative container similar to [`std::multimap`](https://en.cppreference.com/w/cpp/container/multimap), but with a fixed maximum capacity defined at compile time and backed entirely by statically alocated storage. This container **does not** perform any dynamic memory allocation. The number of elements **cannot** be greater than `N`. Attempting to insert more elements results in **undefined behavior**.
 
-This container internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
+The underlying storage is implemented as **red-black tree**.
 
-Underlying storage is implemented as **red-black tree**.
+The complexity of search, insert, and remove operations is O(log N).
 
-Complexity of search, insert and remove operations is O(log N).
+Iterators to elements are bidirectional iterators, and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
 
-Iterators to elements are bidirectional iterators and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
-
-`sfl::static_multimap` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
+`sfl::static_multimap` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
 This container is convenient for bare-metal embedded software development.
 
