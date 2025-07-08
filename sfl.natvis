@@ -265,6 +265,22 @@
     </Expand>
   </Type>
 
+  <Type Name="sfl::unordered_multimap&lt;*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+
   <!-- Set -->
   <Type Name="sfl::set&lt;*,*,*&gt;">
     <AlternativeType Name="sfl::multiset&lt;*,*,*&gt;" />
@@ -417,6 +433,22 @@
           (sfl::unordered_set&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
         </HeadPointer>
         <NextPointer>(sfl::unordered_set&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode>value_.value_</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+
+  <Type Name="sfl::unordered_multiset&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::unordered_multiset&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::unordered_multiset&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)next_</NextPointer>
         <ValueNode>value_.value_</ValueNode>
       </LinkedListItems>
     </Expand>
