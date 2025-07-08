@@ -168,7 +168,7 @@
   <Type Name="sfl::small_flat_map&lt;*,*,*,*,*&gt;">
     <AlternativeType Name="sfl::small_flat_multimap&lt;*,*,*,*,*&gt;" />
     <AlternativeType Name="sfl::small_unordered_flat_map&lt;*,*,*,*&gt;" />
-    <AlternativeType Name="sfl::small_unordered_flat_multimap&lt;*,*,*,*&gt;" />
+    <AlternativeType Name="sfl::small_unordered_flat_multimap&lt;*,*,*,*,*&gt;" />
     <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
@@ -318,6 +318,7 @@
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
       <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
       <LinkedListItems>
         <Size>hash_table_.data_.size_</Size>
         <HeadPointer>
@@ -334,6 +335,7 @@
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
       <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
       <LinkedListItems>
         <Size>hash_table_.data_.size_</Size>
         <HeadPointer>
@@ -455,8 +457,8 @@
   </Type>
 
   <Type Name="sfl::small_flat_set&lt;*,*,*,*&gt;">
-    <AlternativeType Name="sfl::small_flat_multiset&lt;*,*,*,*,*&gt;" />
-    <AlternativeType Name="sfl::small_unordered_flat_set&lt;*,*,*&gt;" />
+    <AlternativeType Name="sfl::small_unordered_flat_set&lt;*,*,*,*&gt;" />
+    <AlternativeType Name="sfl::small_unordered_flat_multiset&lt;*,*,*,*&gt;" />
     <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
@@ -554,6 +556,7 @@
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
       <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
       <LinkedListItems>
         <Size>hash_table_.data_.size_</Size>
         <HeadPointer>
@@ -570,6 +573,7 @@
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
       <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
       <LinkedListItems>
         <Size>hash_table_.data_.size_</Size>
         <HeadPointer>
