@@ -121,10 +121,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -134,10 +138,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -173,10 +181,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -199,10 +211,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -225,10 +241,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -238,10 +258,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -277,10 +301,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -290,10 +318,14 @@
         <Expand>
             <Item Name="[size]" ExcludeView="simple">size()</Item>
             <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
+            <CustomListItems>
+                <Variable Name="i" InitialValue="0" />
                 <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
+                <Loop>
+                    <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+                    <Exec>i++</Exec>
+                </Loop>
+            </CustomListItems>
         </Expand>
     </Type>
 
@@ -334,7 +366,7 @@
                     (sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
                 <LeftPointer>(sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
                 <RightPointer>(sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
+                <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
             </TreeItems>
         </Expand>
     </Type>
@@ -350,7 +382,7 @@
                     (sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
                 <LeftPointer>(sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
                 <RightPointer>(sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
+                <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
             </TreeItems>
         </Expand>
     </Type>
@@ -400,7 +432,7 @@
                     (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_</LeftPointer>
                 <RightPointer>
                     (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
+                <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
             </TreeItems>
         </Expand>
     </Type>
@@ -418,7 +450,7 @@
                     (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_</LeftPointer>
                 <RightPointer>
                     (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
+                <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
             </TreeItems>
         </Expand>
     </Type>
@@ -473,7 +505,7 @@
                     (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
                 <RightPointer>
                     (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
+                <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
             </TreeItems>
         </Expand>
     </Type>
