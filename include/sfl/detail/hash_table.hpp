@@ -594,7 +594,7 @@ private:
 };
 
 template <>
-std::size_t hash_table_static_pow2_bucket_count_policy<1>::calculate_bucket_index_for_hash(std::size_t hash) const
+inline std::size_t hash_table_static_pow2_bucket_count_policy<1>::calculate_bucket_index_for_hash(std::size_t hash) const
 {
     sfl::dtl::ignore_unused(hash);
     return 0;
