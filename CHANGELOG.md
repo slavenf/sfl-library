@@ -1,3 +1,10 @@
+# 1.10.1 (2025-07-08)
+
+* Bug fix: Marked specialized template function as `inline` to avoid duplicate symbols. Thanks to @ZehMatt.
+* Improved and extended Nnatvis support. Thanks to @ZehMatt.
+
+
+
 # 1.10.0 (2025-07-06)
 
 * Bug fix: Fixed `swap` member function for all containers based on red-black tree.
