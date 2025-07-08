@@ -1,538 +1,588 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
-    <Type Name="sfl::compact_vector&lt;*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">size()</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
 
-    <Type Name="sfl::vector&lt;*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <!-- Vector -->
+  <Type Name="sfl::vector&lt;*&gt;">
+    <AlternativeType Name="sfl::devector&lt;*&gt;" />
+    <AlternativeType Name="sfl::small_vector&lt;*,*,*&gt;" />
+    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data_.first_</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::devector&lt;*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::compact_vector&lt;*&gt;">
+    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">size()</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data_.first_</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_vector&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_vector&lt;*,*&gt;">
+    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data_.first_</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_vector&lt;*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
-
-    <Type Name="sfl::segmented_vector&lt;*,*,*&gt;">
-        <Intrinsic Name="size"
-            Expression="((data_.last_.segment_ - data_.first_.segment_) * segment_capacity)
+  <Type Name="sfl::segmented_vector&lt;*,*,*&gt;">
+    <Intrinsic Name="size"
+        Expression="((data_.last_.segment_ - data_.first_.segment_) * segment_capacity)
             + (data_.last_.local_ - *(data_.last_.segment_))" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">
+        (data_.eos_.segment_ -
+        data_.first_.segment_) * segment_capacity +
+        (data_.eos_.local_ - *data_.eos_.segment_) -
+        (data_.first_.local_ - *data_.first_.segment_)
+      </Item>
+      <Synthetic Name="[segments]" Optional="true">
+        <DisplayString>({data_.table_last_ - data_.table_first_})</DisplayString>
         <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">(data_.eos_.segment_ -
-                data_.first_.segment_) * segment_capacity +
-                (data_.eos_.local_ - *data_.eos_.segment_) -
-                (data_.first_.local_ - *data_.first_.segment_)</Item>
-            <Synthetic Name="[segments]" Optional="true">
-                <DisplayString>({data_.table_last_ - data_.table_first_})</DisplayString>
-                <Expand>
-                    <IndexListItems>
-                        <Size>data_.table_last_ - data_.table_first_</Size>
-                        <ValueNode>*(data_.table_first_ + $i)</ValueNode>
-                    </IndexListItems>
-                </Expand>
-            </Synthetic>
-            <IndexListItems>
-                <Size>size()</Size>
-                <ValueNode>*(*(data_.table_first_ + ($i / segment_capacity)) + ($i %
-                    segment_capacity))</ValueNode>
-            </IndexListItems>
+          <IndexListItems>
+            <Size>data_.table_last_ - data_.table_first_</Size>
+            <ValueNode>*(data_.table_first_ + $i)</ValueNode>
+          </IndexListItems>
         </Expand>
-    </Type>
+      </Synthetic>
+      <IndexListItems>
+        <Size>size()</Size>
+        <ValueNode>
+          *(*(data_.table_first_ + ($i / segment_capacity)) + ($i %
+          segment_capacity))
+        </ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::segmented_devector&lt;*,*,*&gt;">
-        <Intrinsic Name="size"
-            Expression="((data_.last_.segment_ - data_.first_.segment_) * segment_capacity) + 
+  <Type Name="sfl::segmented_devector&lt;*,*,*&gt;">
+    <Intrinsic Name="size"
+        Expression="((data_.last_.segment_ - data_.first_.segment_) * segment_capacity) + 
                 (data_.last_.local_ - *data_.last_.segment_) - 
                 (data_.first_.local_ - *data_.first_.segment_)" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">(data_.eos_.segment_ - data_.bos_.segment_)
-                * segment_capacity +
-                (data_.eos_.local_ - *data_.eos_.segment_) -
-                (data_.bos_.local_ - *data_.bos_.segment_)</Item>
-            <Item Name="[segments]" ExcludeView="simple">data_.table_last_ - data_.table_first_</Item>
-            <IndexListItems>
-                <Size>size()</Size>
-                <ValueNode>*(*(data_.first_.segment_ + ($i + data_.first_.local_ -
-                    *data_.first_.segment_) / segment_capacity)
-                    + (($i + data_.first_.local_ - *data_.first_.segment_) % segment_capacity))</ValueNode>
-            </IndexListItems>
-        </Expand>
-    </Type>
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">
+        (data_.eos_.segment_ - data_.bos_.segment_)
+        * segment_capacity +
+        (data_.eos_.local_ - *data_.eos_.segment_) -
+        (data_.bos_.local_ - *data_.bos_.segment_)
+      </Item>
+      <Item Name="[segments]" ExcludeView="simple">data_.table_last_ - data_.table_first_</Item>
+      <IndexListItems>
+        <Size>size()</Size>
+        <ValueNode>
+          *(*(data_.first_.segment_ + ($i + data_.first_.local_ -
+          *data_.first_.segment_) / segment_capacity)
+          + (($i + data_.first_.local_ - *data_.first_.segment_) % segment_capacity))
+        </ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_flat_map&lt;*,*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <!-- Map -->
+  <Type Name="sfl::map&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_flat_multimap&lt;*,*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_multimap&lt;*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_flat_multiset&lt;*,*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_map&lt;*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_flat_set&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_flat_map&lt;*,*,*,*,*&gt;">
+    <AlternativeType Name="sfl::small_flat_multimap&lt;*,*,*,*,*&gt;" />
+    <AlternativeType Name="sfl::small_unordered_flat_map&lt;*,*,*,*&gt;" />
+    <AlternativeType Name="sfl::small_unordered_flat_multimap&lt;*,*,*,*,*&gt;" />
+    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
+      <CustomListItems>
+        <Variable Name="i" InitialValue="0" />
+        <Size>size()</Size>
+        <Loop>
+          <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+          <Exec>i++</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_flat_map&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={data_.last_ - data_.first_} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_flat_map&lt;*,*,*,*&gt;">
+    <AlternativeType Name="sfl::static_flat_multimap&lt;*,*,*,*&gt;" />
+    <AlternativeType Name="sfl::static_unordered_flat_map&lt;*,*,*,*&gt;" />
+    <AlternativeType Name="sfl::static_unordered_flat_multimap&lt;*,*,*,*&gt;" />
+    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <DisplayString>{{ size={data_.last_ - data_.first_} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <CustomListItems>
+        <Variable Name="i" InitialValue="0" />
+        <Size>size()</Size>
+        <Loop>
+          <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+          <Exec>i++</Exec>
+        </Loop>
+      </CustomListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_flat_set&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_map&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_flat_multimap&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_multimap&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode>value_</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_flat_multiset&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::unordered_map&lt;*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::unordered_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::unordered_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_unordered_flat_map&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::unordered_multimap&lt;*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_unordered_flat_multimap&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_unordered_map&lt;*,*,*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_unordered_map&lt;$T1,$T2,$T3,$T4,$T5,$T6,$T7&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::small_unordered_map&lt;$T1,$T2,$T3,$T4,$T5,$T6,$T7&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_unordered_flat_multiset&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_unordered_multimap&lt;*,*,*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5,$T6,$T7&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::small_unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5,$T6,$T7&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_unordered_flat_set&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_unordered_map&lt;*,*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::static_unordered_map&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::static_unordered_map&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_unordered_flat_map&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_unordered_multimap&lt;*,*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::static_unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::static_unordered_multimap&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode Name="[{value_.value_.first}]">value_.value_.second</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_unordered_flat_multimap&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <!-- Set -->
+  <Type Name="sfl::set&lt;*,*,*&gt;">
+    <AlternativeType Name="sfl::multiset&lt;*,*,*&gt;" />
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode>value_</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_unordered_flat_multiset&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_set&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode>value_</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_unordered_flat_set&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]" ExcludeView="simple">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <ArrayItems>
-                <Size>size()</Size>
-                <ValuePointer>data_.first_</ValuePointer>
-            </ArrayItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_multiset&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode>value_</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::map&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>(sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>(sfl::map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_set&lt;*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <TreeItems>
+        <Size>tree_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode>value_</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::multimap&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>(sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>(sfl::multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_multiset&lt;*,*,*&gt;">
+    <Intrinsic Name="size" Expression="tree_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <TreeItems>
+        <Size>size()</Size>
+        <HeadPointer>
+          (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_
+        </HeadPointer>
+        <LeftPointer>
+          (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_
+        </LeftPointer>
+        <RightPointer>
+          (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_
+        </RightPointer>
+        <ValueNode>value_</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::set&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>(sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>(sfl::set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_flat_set&lt;*,*,*,*&gt;">
+    <AlternativeType Name="sfl::small_unordered_flat_set&lt;*,*,*,*&gt;" />
+    <AlternativeType Name="sfl::small_unordered_flat_multiset&lt;*,*,*,*&gt;" />
+    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data_.first_</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::multiset&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>(sfl::multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>(sfl::multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_flat_set&lt;*,*,*&gt;">
+    <AlternativeType Name="sfl::static_flat_multiset&lt;*,*,*&gt;" />
+    <AlternativeType Name="sfl::static_unordered_flat_multiset&lt;*,*,*&gt;" />
+    <AlternativeType Name="sfl::static_unordered_flat_set&lt;*,*,*&gt;" />
+    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <ArrayItems>
+        <Size>size()</Size>
+        <ValuePointer>data_.first_</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_map&lt;*,*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::small_map&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::unordered_set&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::unordered_set&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::unordered_set&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode>value_.value_</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_multimap&lt;*,*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::small_multimap&lt;$T1,$T2,$T3,$T4,$T5&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::unordered_multiset&lt;*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::unordered_multiset&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::unordered_multiset&lt;$T1,$T2,$T3,$T4&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode>value_.value_</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_set&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::small_set&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_unordered_set&lt;*,*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_unordered_set&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::small_unordered_set&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode>value_.value_</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::small_multiset&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <TreeItems>
-                <Size>size()</Size>
-                <HeadPointer>
-                    (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::small_multiset&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::small_unordered_multiset&lt;*,*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::small_unordered_multiset&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::small_unordered_multiset&lt;$T1,$T2,$T3,$T4,$T5,$T6&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode>value_.value_</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_map&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::static_map&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_unordered_set&lt;*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::static_unordered_set&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::static_unordered_set&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode>value_.value_</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
-    <Type Name="sfl::static_multimap&lt;*,*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::static_multimap&lt;$T1,$T2,$T3,$T4&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
-
-    <Type Name="sfl::static_set&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <TreeItems>
-                <Size>tree_.data_.size_</Size>
-                <HeadPointer>
-                    (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::static_set&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
-
-    <Type Name="sfl::static_multiset&lt;*,*,*&gt;">
-        <Intrinsic Name="size" Expression="tree_.data_.size_" />
-        <DisplayString>{{ size={size()} }}</DisplayString>
-        <Expand>
-            <Item Name="[size]">size()</Item>
-            <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
-            <TreeItems>
-                <Size>size()</Size>
-                <HeadPointer>
-                    (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)tree_.data_.header_.left_</HeadPointer>
-                <LeftPointer>
-                    (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)left_</LeftPointer>
-                <RightPointer>
-                    (sfl::static_multiset&lt;$T1,$T2,$T3&gt;::tree_type::node_pointer)right_</RightPointer>
-                <ValueNode>value_</ValueNode>
-            </TreeItems>
-        </Expand>
-    </Type>
+  <Type Name="sfl::static_unordered_multiset&lt;*,*,*,*,*&gt;">
+    <Intrinsic Name="size" Expression="hash_table_.data_.size_" />
+    <DisplayString>{{ size={size()} }}</DisplayString>
+    <Expand>
+      <Item Name="[size]">size()</Item>
+      <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
+      <LinkedListItems>
+        <Size>hash_table_.data_.size_</Size>
+        <HeadPointer>
+          (sfl::static_unordered_multiset&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)hash_table_.data_.head_.next_
+        </HeadPointer>
+        <NextPointer>(sfl::static_unordered_multiset&lt;$T1,$T2,$T3,$T4,$T5&gt;::hash_table::node_pointer)next_</NextPointer>
+        <ValueNode>value_.value_</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
 
 </AutoVisualizer>
