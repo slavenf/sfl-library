@@ -21,30 +21,21 @@
 #ifndef SFL_SMALL_FLAT_MAP_HPP_INCLUDED
 #define SFL_SMALL_FLAT_MAP_HPP_INCLUDED
 
+#include <sfl/detail/associative_vector.hpp>
 #include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
-#include <sfl/detail/initialized_memory_algorithms.hpp>
-#include <sfl/detail/normal_iterator.hpp>
+#include <sfl/detail/functional.hpp>
 #include <sfl/detail/tags.hpp>
-#include <sfl/detail/to_address.hpp>
 #include <sfl/detail/type_traits.hpp>
-#include <sfl/detail/uninitialized_memory_algorithms.hpp>
+#include <sfl/small_vector.hpp>
 
-#include <algorithm>        // copy, move, lower_bound, swap, swap_ranges
 #include <cstddef>          // size_t
-#include <functional>       // equal_to, less
+#include <functional>       // less
 #include <initializer_list> // initializer_list
-#include <iterator>         // distance, next, reverse_iterator
-#include <limits>           // numeric_limits
-#include <memory>           // allocator, allocator_traits, pointer_traits
+#include <memory>           // allocator
 #include <type_traits>      // is_same, is_nothrow_xxxxx
 #include <utility>          // forward, move, pair
-
-#ifdef SFL_TEST_SMALL_FLAT_MAP
-template <int>
-void test_small_flat_map();
-#endif
 
 namespace sfl
 {
@@ -56,29 +47,45 @@ template < typename Key,
            typename Allocator = std::allocator<std::pair<Key, T>> >
 class small_flat_map
 {
-    #ifdef SFL_TEST_SMALL_FLAT_MAP
-    template <int>
-    friend void ::test_small_flat_map();
-    #endif
+    static_assert
+    (
+        std::is_same<typename Allocator::value_type, std::pair<Key, T>>::value,
+        "Allocator::value_type must be std::pair<Key, T>."
+    );
 
 public:
 
-    using allocator_type         = Allocator;
-    using allocator_traits       = std::allocator_traits<allocator_type>;
-    using key_type               = Key;
-    using mapped_type            = T;
-    using value_type             = std::pair<Key, T>;
-    using size_type              = typename allocator_traits::size_type;
-    using difference_type        = typename allocator_traits::difference_type;
-    using key_compare            = Compare;
-    using reference              = value_type&;
-    using const_reference        = const value_type&;
-    using pointer                = typename allocator_traits::pointer;
-    using const_pointer          = typename allocator_traits::const_pointer;
-    using iterator               = sfl::dtl::normal_iterator<pointer, small_flat_map>;
-    using const_iterator         = sfl::dtl::normal_iterator<const_pointer, small_flat_map>;
-    using reverse_iterator       = std::reverse_iterator<iterator>;
-    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+    using allocator_type = Allocator;
+    using key_type       = Key;
+    using mapped_type    = T;
+    using value_type     = std::pair<Key, T>;
+    using key_compare    = Compare;
+
+private:
+
+    using associative_vector = sfl::dtl::associative_vector
+    <
+        key_type,
+        value_type,
+        sfl::dtl::first,
+        key_compare,
+        sfl::small_vector<value_type, N, allocator_type>
+    >;
+
+    associative_vector impl_;
+
+public:
+
+    using size_type              = typename associative_vector::size_type;
+    using difference_type        = typename associative_vector::difference_type;
+    using reference              = typename associative_vector::reference;
+    using const_reference        = typename associative_vector::const_reference;
+    using pointer                = typename associative_vector::pointer;
+    using const_pointer          = typename associative_vector::const_pointer;
+    using iterator               = typename associative_vector::iterator;
+    using const_iterator         = typename associative_vector::const_iterator;
+    using reverse_iterator       = typename associative_vector::reverse_iterator;
+    using const_reverse_iterator = typename associative_vector::const_reverse_iterator;
 
     class value_compare : protected key_compare
     {
@@ -97,190 +104,9 @@ public:
         }
     };
 
-    static_assert
-    (
-        std::is_same<typename Allocator::value_type, value_type>::value,
-        "Allocator::value_type must be same as sfl::small_flat_map::value_type."
-    );
-
 public:
 
     static constexpr size_type static_capacity = N;
-
-private:
-
-    // Like `value_compare` but with additional operators.
-    // For internal use only.
-    class ultra_compare : public key_compare
-    {
-    public:
-
-        ultra_compare() noexcept(std::is_nothrow_default_constructible<key_compare>::value)
-        {}
-
-        ultra_compare(const key_compare& c) noexcept(std::is_nothrow_copy_constructible<key_compare>::value)
-            : key_compare(c)
-        {}
-
-        ultra_compare(key_compare&& c) noexcept(std::is_nothrow_move_constructible<key_compare>::value)
-            : key_compare(std::move(c))
-        {}
-
-        bool operator()(const value_type& x, const value_type& y) const
-        {
-            return key_compare::operator()(x.first, y.first);
-        }
-
-        template <typename K>
-        bool operator()(const value_type& x, const K& y) const
-        {
-            return key_compare::operator()(x.first, y);
-        }
-
-        template <typename K>
-        bool operator()(const K& x, const value_type& y) const
-        {
-            return key_compare::operator()(x, y.first);
-        }
-    };
-
-    template <bool WithInternalStorage = true, typename = void>
-    class data_base
-    {
-    private:
-
-        union
-        {
-            value_type internal_storage_[N];
-        };
-
-    public:
-
-        pointer first_;
-        pointer last_;
-        pointer eos_;
-
-        data_base() noexcept
-            : first_(std::pointer_traits<pointer>::pointer_to(*internal_storage_))
-            , last_(first_)
-            , eos_(first_ + N)
-        {}
-
-        #if defined(__clang__) && (__clang_major__ == 3) // For CentOS 7
-        ~data_base()
-        {}
-        #else
-        ~data_base() noexcept
-        {}
-        #endif
-
-        pointer internal_storage() noexcept
-        {
-            return std::pointer_traits<pointer>::pointer_to(*internal_storage_);
-        }
-    };
-
-    template <typename Dummy>
-    class data_base<false, Dummy>
-    {
-    public:
-
-        pointer first_;
-        pointer last_;
-        pointer eos_;
-
-        data_base() noexcept
-            : first_(nullptr)
-            , last_(nullptr)
-            , eos_(nullptr)
-        {}
-
-        pointer internal_storage() noexcept
-        {
-            return nullptr;
-        }
-    };
-
-    class data : public data_base<(N > 0)>, public allocator_type, public ultra_compare
-    {
-    public:
-
-        data() noexcept
-        (
-            std::is_nothrow_default_constructible<allocator_type>::value &&
-            std::is_nothrow_default_constructible<ultra_compare>::value
-        )
-            : allocator_type()
-            , ultra_compare()
-        {}
-
-        data(const ultra_compare& comp) noexcept
-        (
-            std::is_nothrow_default_constructible<allocator_type>::value &&
-            std::is_nothrow_copy_constructible<ultra_compare>::value
-        )
-            : allocator_type()
-            , ultra_compare(comp)
-        {}
-
-        data(const allocator_type& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<allocator_type>::value &&
-            std::is_nothrow_default_constructible<ultra_compare>::value
-        )
-            : allocator_type(alloc)
-            , ultra_compare()
-        {}
-
-        data(const ultra_compare& comp, const allocator_type& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<allocator_type>::value &&
-            std::is_nothrow_copy_constructible<ultra_compare>::value
-        )
-            : allocator_type(alloc)
-            , ultra_compare(comp)
-        {}
-
-        data(ultra_compare&& comp, allocator_type&& alloc) noexcept
-        (
-            std::is_nothrow_move_constructible<allocator_type>::value &&
-            std::is_nothrow_move_constructible<ultra_compare>::value
-        )
-            : allocator_type(std::move(alloc))
-            , ultra_compare(std::move(comp))
-        {}
-
-        data(ultra_compare&& comp, const allocator_type& alloc) noexcept
-        (
-            std::is_nothrow_copy_constructible<allocator_type>::value &&
-            std::is_nothrow_move_constructible<ultra_compare>::value
-        )
-            : allocator_type(alloc)
-            , ultra_compare(std::move(comp))
-        {}
-
-        allocator_type& ref_to_alloc() noexcept
-        {
-            return *this;
-        }
-
-        const allocator_type& ref_to_alloc() const noexcept
-        {
-            return *this;
-        }
-
-        ultra_compare& ref_to_comp() noexcept
-        {
-            return *this;
-        }
-
-        const ultra_compare& ref_to_comp() const noexcept
-        {
-            return *this;
-        }
-    };
-
-    data data_;
 
 public:
 
@@ -293,7 +119,7 @@ public:
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<Compare>::value
     )
-        : data_()
+        : impl_()
     {}
 
     explicit small_flat_map(const Compare& comp) noexcept
@@ -301,7 +127,7 @@ public:
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<Compare>::value
     )
-        : data_(comp)
+        : impl_(comp)
     {}
 
     explicit small_flat_map(const Allocator& alloc) noexcept
@@ -309,7 +135,7 @@ public:
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<Compare>::value
     )
-        : data_(alloc)
+        : impl_(alloc)
     {}
 
     explicit small_flat_map(const Compare& comp, const Allocator& alloc) noexcept
@@ -317,185 +143,137 @@ public:
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<Compare>::value
     )
-        : data_(comp, alloc)
+        : impl_(comp, alloc)
     {}
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_flat_map(InputIt first, InputIt last)
-        : data_()
+        : impl_()
     {
-        initialize_range(first, last);
+        insert(first, last);
     }
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_flat_map(InputIt first, InputIt last, const Compare& comp)
-        : data_(comp)
+        : impl_(comp)
     {
-        initialize_range(first, last);
+        insert(first, last);
     }
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     small_flat_map(InputIt first, InputIt last, const Allocator& alloc)
-        : data_(alloc)
+        : impl_(alloc)
     {
-        initialize_range(first, last);
+        insert(first, last);
     }
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_flat_map(InputIt first, InputIt last, const Compare& comp,
-                                                const Allocator& alloc)
-        : data_(comp, alloc)
+    small_flat_map(InputIt first, InputIt last, const Compare& comp, const Allocator& alloc)
+        : impl_(comp, alloc)
     {
-        initialize_range(first, last);
+        insert(first, last);
     }
 
     small_flat_map(std::initializer_list<value_type> ilist)
         : small_flat_map(ilist.begin(), ilist.end())
     {}
 
-    small_flat_map(std::initializer_list<value_type> ilist,
-                   const Compare& comp)
+    small_flat_map(std::initializer_list<value_type> ilist, const Compare& comp)
         : small_flat_map(ilist.begin(), ilist.end(), comp)
     {}
 
-    small_flat_map(std::initializer_list<value_type> ilist,
-                   const Allocator& alloc)
+    small_flat_map(std::initializer_list<value_type> ilist, const Allocator& alloc)
         : small_flat_map(ilist.begin(), ilist.end(), alloc)
     {}
 
-    small_flat_map(std::initializer_list<value_type> ilist,
-                   const Compare& comp, const Allocator& alloc)
+    small_flat_map(std::initializer_list<value_type> ilist, const Compare& comp, const Allocator& alloc)
         : small_flat_map(ilist.begin(), ilist.end(), comp, alloc)
     {}
 
     small_flat_map(const small_flat_map& other)
-        : data_
-        (
-            other.data_.ref_to_comp(),
-            allocator_traits::select_on_container_copy_construction
-            (
-                other.data_.ref_to_alloc()
-            )
-        )
-    {
-        initialize_copy(other);
-    }
+        : impl_(other.impl_)
+    {}
 
     small_flat_map(const small_flat_map& other, const Allocator& alloc)
-        : data_
-        (
-            other.data_.ref_to_comp(),
-            alloc
-        )
-    {
-        initialize_copy(other);
-    }
+        : impl_(other.impl_, alloc)
+    {}
 
     small_flat_map(small_flat_map&& other)
-        : data_
-        (
-            std::move(other.data_.ref_to_comp()),
-            std::move(other.data_.ref_to_alloc())
-        )
-    {
-        initialize_move(other);
-    }
+        : impl_(std::move(other.impl_))
+    {}
 
     small_flat_map(small_flat_map&& other, const Allocator& alloc)
-        : data_
-        (
-            std::move(other.data_.ref_to_comp()),
-            alloc
-        )
-    {
-        initialize_move(other);
-    }
+        : impl_(std::move(other.impl_), alloc)
+    {}
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
     small_flat_map(sfl::from_range_t, Range&& range)
-        : data_()
+        : impl_()
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
     small_flat_map(sfl::from_range_t, Range&& range, const Compare& comp)
-        : data_(comp)
+        : impl_(comp)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
     small_flat_map(sfl::from_range_t, Range&& range, const Allocator& alloc)
-        : data_(alloc)
+        : impl_(alloc)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
     small_flat_map(sfl::from_range_t, Range&& range, const Compare& comp, const Allocator& alloc)
-        : data_(comp, alloc)
+        : impl_(comp, alloc)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
 #else // before C++20
 
     template <typename Range>
     small_flat_map(sfl::from_range_t, Range&& range)
-        : data_()
+        : impl_()
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
     small_flat_map(sfl::from_range_t, Range&& range, const Compare& comp)
-        : data_(comp)
+        : impl_(comp)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
     small_flat_map(sfl::from_range_t, Range&& range, const Allocator& alloc)
-        : data_(alloc)
+        : impl_(alloc)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
     small_flat_map(sfl::from_range_t, Range&& range, const Compare& comp, const Allocator& alloc)
-        : data_(comp, alloc)
+        : impl_(comp, alloc)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
 #endif // before C++20
 
     ~small_flat_map()
-    {
-        sfl::dtl::destroy_a
-        (
-            data_.ref_to_alloc(),
-            data_.first_,
-            data_.last_
-        );
-
-        if (data_.first_ != data_.internal_storage())
-        {
-            sfl::dtl::deallocate
-            (
-                data_.ref_to_alloc(),
-                data_.first_,
-                std::distance(data_.first_, data_.eos_)
-            );
-        }
-    }
+    {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
@@ -503,20 +281,19 @@ public:
 
     small_flat_map& operator=(const small_flat_map& other)
     {
-        assign_copy(other);
+        impl_.assign_copy(other.impl_);
         return *this;
     }
 
     small_flat_map& operator=(small_flat_map&& other)
     {
-        assign_move(other);
+        impl_.assign_move(other.impl_);
         return *this;
     }
 
     small_flat_map& operator=(std::initializer_list<value_type> ilist)
     {
-        clear();
-        insert(ilist.begin(), ilist.end());
+        impl_.assign_range_unique(ilist.begin(), ilist.end());
         return *this;
     }
 
@@ -527,7 +304,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return data_.ref_to_alloc();
+        return impl_.ref_to_vector().get_allocator();
     }
 
     //
@@ -537,7 +314,7 @@ public:
     SFL_NODISCARD
     key_compare key_comp() const
     {
-        return data_.ref_to_comp();
+        return impl_.ref_to_key_compare();
     }
 
     //
@@ -547,7 +324,7 @@ public:
     SFL_NODISCARD
     value_compare value_comp() const
     {
-        return value_compare(data_.ref_to_comp());
+        return value_compare(impl_.ref_to_key_compare());
     }
 
     //
@@ -557,94 +334,94 @@ public:
     SFL_NODISCARD
     iterator begin() noexcept
     {
-        return iterator(data_.first_);
+        return impl_.begin();
     }
 
     SFL_NODISCARD
     const_iterator begin() const noexcept
     {
-        return const_iterator(data_.first_);
+        return impl_.begin();
     }
 
     SFL_NODISCARD
     const_iterator cbegin() const noexcept
     {
-        return const_iterator(data_.first_);
+        return impl_.cbegin();
     }
 
     SFL_NODISCARD
     iterator end() noexcept
     {
-        return iterator(data_.last_);
+        return impl_.end();
     }
 
     SFL_NODISCARD
     const_iterator end() const noexcept
     {
-        return const_iterator(data_.last_);
+        return impl_.end();
     }
 
     SFL_NODISCARD
     const_iterator cend() const noexcept
     {
-        return const_iterator(data_.last_);
+        return impl_.cend();
     }
 
     SFL_NODISCARD
     reverse_iterator rbegin() noexcept
     {
-        return reverse_iterator(end());
+        return impl_.rbegin();
     }
 
     SFL_NODISCARD
     const_reverse_iterator rbegin() const noexcept
     {
-        return const_reverse_iterator(end());
+        return impl_.rbegin();
     }
 
     SFL_NODISCARD
     const_reverse_iterator crbegin() const noexcept
     {
-        return const_reverse_iterator(end());
+        return impl_.crbegin();
     }
 
     SFL_NODISCARD
     reverse_iterator rend() noexcept
     {
-        return reverse_iterator(begin());
+        return impl_.rend();
     }
 
     SFL_NODISCARD
     const_reverse_iterator rend() const noexcept
     {
-        return const_reverse_iterator(begin());
+        return impl_.rend();
     }
 
     SFL_NODISCARD
     const_reverse_iterator crend() const noexcept
     {
-        return const_reverse_iterator(begin());
+        return impl_.crend();
     }
 
     SFL_NODISCARD
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
-        return iterator(data_.first_ + pos);
+        return impl_.nth(pos);
     }
 
     SFL_NODISCARD
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
-        return const_iterator(data_.first_ + pos);
+        return impl_.nth(pos);
     }
 
     SFL_NODISCARD
     size_type index_of(const_iterator pos) const noexcept
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-        return std::distance(cbegin(), pos);
+        return impl_.index_of(pos);
     }
 
     //
@@ -654,235 +431,41 @@ public:
     SFL_NODISCARD
     bool empty() const noexcept
     {
-        return data_.first_ == data_.last_;
+        return impl_.empty();
     }
 
     SFL_NODISCARD
     size_type size() const noexcept
     {
-        return std::distance(data_.first_, data_.last_);
+        return impl_.size();
     }
 
     SFL_NODISCARD
     size_type max_size() const noexcept
     {
-        return std::min<size_type>
-        (
-            allocator_traits::max_size(data_.ref_to_alloc()),
-            std::numeric_limits<difference_type>::max() / sizeof(value_type)
-        );
+        return impl_.max_size();
     }
 
     SFL_NODISCARD
     size_type capacity() const noexcept
     {
-        return std::distance(data_.first_, data_.eos_);
+        return impl_.capacity();
     }
 
     SFL_NODISCARD
     size_type available() const noexcept
     {
-        return std::distance(data_.last_, data_.eos_);
+        return impl_.available();
     }
 
     void reserve(size_type new_cap)
     {
-        check_size(new_cap, "sfl::small_flat_map::reserve");
-
-        if (new_cap > capacity())
-        {
-            if (new_cap <= N)
-            {
-                if (data_.first_ == data_.internal_storage())
-                {
-                    // Do nothing. We are already using internal storage.
-                }
-                else
-                {
-                    // We are not using internal storage but new capacity
-                    // can fit in internal storage.
-
-                    pointer new_first = data_.internal_storage();
-                    pointer new_last  = new_first;
-                    pointer new_eos   = new_first + N;
-
-                    new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.last_,
-                        new_first
-                    );
-
-                    sfl::dtl::destroy_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.last_
-                    );
-
-                    sfl::dtl::deallocate
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        std::distance(data_.first_, data_.eos_)
-                    );
-
-                    data_.first_ = new_first;
-                    data_.last_  = new_last;
-                    data_.eos_   = new_eos;
-                }
-            }
-            else
-            {
-                pointer new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
-                pointer new_last  = new_first;
-                pointer new_eos   = new_first + new_cap;
-
-                SFL_TRY
-                {
-                    new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.last_,
-                        new_first
-                    );
-                }
-                SFL_CATCH (...)
-                {
-                    sfl::dtl::deallocate
-                    (
-                        data_.ref_to_alloc(),
-                        new_first,
-                        new_cap
-                    );
-
-                    SFL_RETHROW;
-                }
-
-                sfl::dtl::destroy_a
-                (
-                    data_.ref_to_alloc(),
-                    data_.first_,
-                    data_.last_
-                );
-
-                if (data_.first_ != data_.internal_storage())
-                {
-                    sfl::dtl::deallocate
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        std::distance(data_.first_, data_.eos_)
-                    );
-                }
-
-                data_.first_ = new_first;
-                data_.last_  = new_last;
-                data_.eos_   = new_eos;
-            }
-        }
+        impl_.reserve(new_cap);
     }
 
     void shrink_to_fit()
     {
-        const size_type new_cap = size();
-
-        if (new_cap < capacity())
-        {
-            if (new_cap <= N)
-            {
-                if (data_.first_ == data_.internal_storage())
-                {
-                    // Do nothing. We are already using internal storage.
-                }
-                else
-                {
-                    // We are not using internal storage but new capacity
-                    // can fit in internal storage.
-
-                    pointer new_first = data_.internal_storage();
-                    pointer new_last  = new_first;
-                    pointer new_eos   = new_first + N;
-
-                    new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.last_,
-                        new_first
-                    );
-
-                    sfl::dtl::destroy_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.last_
-                    );
-
-                    sfl::dtl::deallocate
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        std::distance(data_.first_, data_.eos_)
-                    );
-
-                    data_.first_ = new_first;
-                    data_.last_  = new_last;
-                    data_.eos_   = new_eos;
-                }
-            }
-            else
-            {
-                pointer new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
-                pointer new_last  = new_first;
-                pointer new_eos   = new_first + new_cap;
-
-                SFL_TRY
-                {
-                    new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        data_.last_,
-                        new_first
-                    );
-                }
-                SFL_CATCH (...)
-                {
-                    sfl::dtl::deallocate
-                    (
-                        data_.ref_to_alloc(),
-                        new_first,
-                        new_cap
-                    );
-
-                    SFL_RETHROW;
-                }
-
-                sfl::dtl::destroy_a
-                (
-                    data_.ref_to_alloc(),
-                    data_.first_,
-                    data_.last_
-                );
-
-                if (data_.first_ != data_.internal_storage())
-                {
-                    sfl::dtl::deallocate
-                    (
-                        data_.ref_to_alloc(),
-                        data_.first_,
-                        std::distance(data_.first_, data_.eos_)
-                    );
-                }
-
-                data_.first_ = new_first;
-                data_.last_  = new_last;
-                data_.eos_   = new_eos;
-            }
-        }
+        impl_.shrink_to_fit();
     }
 
     //
@@ -891,56 +474,49 @@ public:
 
     void clear() noexcept
     {
-        sfl::dtl::destroy_a
-        (
-            data_.ref_to_alloc(),
-            data_.first_,
-            data_.last_
-        );
-
-        data_.last_ = data_.first_;
+        impl_.clear();
     }
 
     template <typename... Args>
     std::pair<iterator, bool> emplace(Args&&... args)
     {
-        return insert_aux(value_type(std::forward<Args>(args)...));
+        return impl_.emplace_unique(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_aux(hint, value_type(std::forward<Args>(args)...));
+        return impl_.emplace_hint_unique(hint, std::forward<Args>(args)...);
     }
 
     std::pair<iterator, bool> insert(const value_type& value)
     {
-        return insert_aux(value);
+        return impl_.insert_unique(value);
     }
 
     std::pair<iterator, bool> insert(value_type&& value)
     {
-        return insert_aux(std::move(value));
+        return impl_.insert_unique(std::move(value));
     }
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
     std::pair<iterator, bool> insert(P&& value)
     {
-        return insert_aux(value_type(std::forward<P>(value)));
+        return impl_.insert_unique(std::forward<P>(value));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_aux(hint, value);
+        return impl_.insert_hint_unique(hint, value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_aux(hint, std::move(value));
+        return impl_.insert_hint_unique(hint, std::move(value));
     }
 
     template <typename P,
@@ -948,7 +524,7 @@ public:
     iterator insert(const_iterator hint, P&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_aux(hint, value_type(std::forward<P>(value)));
+        return impl_.insert_hint_unique(hint, std::forward<P>(value));
     }
 
     template <typename InputIt,
@@ -987,14 +563,14 @@ public:
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
     std::pair<iterator, bool> insert_or_assign(const Key& key, M&& obj)
     {
-        return insert_or_assign_aux(key, std::forward<M>(obj));
+        return impl_.insert_or_assign(key, std::forward<M>(obj));
     }
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
     std::pair<iterator, bool> insert_or_assign(Key&& key, M&& obj)
     {
-        return insert_or_assign_aux(std::move(key), std::forward<M>(obj));
+        return impl_.insert_or_assign(std::move(key), std::forward<M>(obj));
     }
 
     template <typename K, typename M,
@@ -1002,7 +578,7 @@ public:
                                      std::is_assignable<mapped_type&, M&&>::value >* = nullptr>
     std::pair<iterator, bool> insert_or_assign(K&& key, M&& obj)
     {
-        return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj));
+        return impl_.insert_or_assign(std::forward<K>(key), std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1010,7 +586,7 @@ public:
     iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_or_assign_aux(hint, key, std::forward<M>(obj));
+        return impl_.insert_or_assign_hint(hint, key, std::forward<M>(obj));
     }
 
     template <typename M,
@@ -1018,7 +594,7 @@ public:
     iterator insert_or_assign(const_iterator hint, Key&& key, M&& obj)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_or_assign_aux(hint, std::move(key), std::forward<M>(obj));
+        return impl_.insert_or_assign_hint(hint, std::move(key), std::forward<M>(obj));
     }
 
     template <typename K, typename M,
@@ -1027,19 +603,19 @@ public:
     iterator insert_or_assign(const_iterator hint, K&& key, M&& obj)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return insert_or_assign_aux(hint, std::forward<K>(key), std::forward<M>(obj));
+        return impl_.insert_or_assign_hint(hint, std::forward<K>(key), std::forward<M>(obj));
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(const Key& key, Args&&... args)
     {
-        return try_emplace_aux(key, std::forward<Args>(args)...);
+        return impl_.try_emplace(key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     std::pair<iterator, bool> try_emplace(Key&& key, Args&&... args)
     {
-        return try_emplace_aux(std::move(key), std::forward<Args>(args)...);
+        return impl_.try_emplace(std::move(key), std::forward<Args>(args)...);
     }
 
     template <typename K, typename... Args,
@@ -1054,21 +630,21 @@ public:
               >* = nullptr>
     std::pair<iterator, bool> try_emplace(K&& key, Args&&... args)
     {
-        return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...);
+        return impl_.try_emplace(std::forward<K>(key), std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, const Key& key, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return try_emplace_aux(hint, key, std::forward<Args>(args)...);
+        return impl_.try_emplace_hint(hint, key, std::forward<Args>(args)...);
     }
 
     template <typename... Args>
     iterator try_emplace(const_iterator hint, Key&& key, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return try_emplace_aux(hint, std::move(key), std::forward<Args>(args)...);
+        return impl_.try_emplace_hint(hint, std::move(key), std::forward<Args>(args)...);
     }
 
     template <typename K, typename... Args,
@@ -1082,232 +658,42 @@ public:
     iterator try_emplace(const_iterator hint, K&& key, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        return try_emplace_aux(hint, std::forward<K>(key), std::forward<Args>(args)...);
+        return impl_.try_emplace_hint(hint, std::forward<K>(key), std::forward<Args>(args)...);
     }
 
     iterator erase(iterator pos)
     {
-        return erase(const_iterator(pos));
+        SFL_ASSERT(cbegin() <= pos && pos < cend());
+        return impl_.erase(pos);
     }
 
     iterator erase(const_iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
-
-        const pointer p = data_.first_ + std::distance(cbegin(), pos);
-
-        data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
-
-        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), data_.last_);
-
-        return iterator(p);
+        return impl_.erase(pos);
     }
 
     iterator erase(const_iterator first, const_iterator last)
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
-
-        if (first == last)
-        {
-            return begin() + std::distance(cbegin(), first);
-        }
-
-        const pointer p1 = data_.first_ + std::distance(cbegin(), first);
-        const pointer p2 = data_.first_ + std::distance(cbegin(), last);
-
-        const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
-
-        sfl::dtl::destroy_a(data_.ref_to_alloc(), new_last, data_.last_);
-
-        data_.last_ = new_last;
-
-        return iterator(p1);
+        return impl_.erase(first, last);
     }
 
     size_type erase(const Key& key)
     {
-        auto it = find(key);
-        if (it == cend())
-        {
-            return 0;
-        }
-        erase(it);
-        return 1;
+        return impl_.erase_key_unique(key);
     }
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     size_type erase(K&& x)
     {
-        auto it = find(x);
-        if (it == cend())
-        {
-            return 0;
-        }
-        erase(it);
-        return 1;
+        return impl_.erase_key_unique(x);
     }
 
     void swap(small_flat_map& other)
     {
-        if (this == &other)
-        {
-            return;
-        }
-
-        using std::swap;
-
-        SFL_ASSERT
-        (
-            allocator_traits::propagate_on_container_swap::value ||
-            this->data_.ref_to_alloc() == other.data_.ref_to_alloc()
-        );
-
-        // If this and other allocator compares equal then one allocator
-        // can deallocate memory allocated by another allocator.
-        // One allocator can safely destroy_a elements constructed by other
-        // allocator regardless the two allocators compare equal or not.
-
-        if (allocator_traits::propagate_on_container_swap::value)
-        {
-            swap(this->data_.ref_to_alloc(), other.data_.ref_to_alloc());
-        }
-
-        swap(this->data_.ref_to_comp(), other.data_.ref_to_comp());
-
-        if
-        (
-            this->data_.first_ == this->data_.internal_storage() &&
-            other.data_.first_ == other.data_.internal_storage()
-        )
-        {
-            const size_type this_size  = this->size();
-            const size_type other_size = other.size();
-
-            if (this_size <= other_size)
-            {
-                std::swap_ranges
-                (
-                    this->data_.first_,
-                    this->data_.first_ + this_size,
-                    other.data_.first_
-                );
-
-                sfl::dtl::uninitialized_move_a
-                (
-                    this->data_.ref_to_alloc(),
-                    other.data_.first_ + this_size,
-                    other.data_.first_ + other_size,
-                    this->data_.first_ + this_size
-                );
-
-                sfl::dtl::destroy_a
-                (
-                    other.data_.ref_to_alloc(),
-                    other.data_.first_ + this_size,
-                    other.data_.first_ + other_size
-                );
-            }
-            else
-            {
-                std::swap_ranges
-                (
-                    other.data_.first_,
-                    other.data_.first_ + other_size,
-                    this->data_.first_
-                );
-
-                sfl::dtl::uninitialized_move_a
-                (
-                    other.data_.ref_to_alloc(),
-                    this->data_.first_ + other_size,
-                    this->data_.first_ + this_size,
-                    other.data_.first_ + other_size
-                );
-
-                sfl::dtl::destroy_a
-                (
-                    this->data_.ref_to_alloc(),
-                    this->data_.first_ + other_size,
-                    this->data_.first_ + this_size
-                );
-            }
-
-            this->data_.last_ = this->data_.first_ + other_size;
-            other.data_.last_ = other.data_.first_ + this_size;
-        }
-        else if
-        (
-            this->data_.first_ == this->data_.internal_storage() &&
-            other.data_.first_ != other.data_.internal_storage()
-        )
-        {
-            pointer new_other_first = other.data_.internal_storage();
-            pointer new_other_last  = new_other_first;
-            pointer new_other_eos   = new_other_first + N;
-
-            new_other_last = sfl::dtl::uninitialized_move_a
-            (
-                other.data_.ref_to_alloc(),
-                this->data_.first_,
-                this->data_.last_,
-                new_other_first
-            );
-
-            sfl::dtl::destroy_a
-            (
-                this->data_.ref_to_alloc(),
-                this->data_.first_,
-                this->data_.last_
-            );
-
-            this->data_.first_ = other.data_.first_;
-            this->data_.last_  = other.data_.last_;
-            this->data_.eos_   = other.data_.eos_;
-
-            other.data_.first_ = new_other_first;
-            other.data_.last_  = new_other_last;
-            other.data_.eos_   = new_other_eos;
-        }
-        else if
-        (
-            this->data_.first_ != this->data_.internal_storage() &&
-            other.data_.first_ == other.data_.internal_storage()
-        )
-        {
-            pointer new_this_first = this->data_.internal_storage();
-            pointer new_this_last  = new_this_first;
-            pointer new_this_eos   = new_this_first + N;
-
-            new_this_last = sfl::dtl::uninitialized_move_a
-            (
-                this->data_.ref_to_alloc(),
-                other.data_.first_,
-                other.data_.last_,
-                new_this_first
-            );
-
-            sfl::dtl::destroy_a
-            (
-                other.data_.ref_to_alloc(),
-                other.data_.first_,
-                other.data_.last_
-            );
-
-            other.data_.first_ = this->data_.first_;
-            other.data_.last_  = this->data_.last_;
-            other.data_.eos_   = this->data_.eos_;
-
-            this->data_.first_ = new_this_first;
-            this->data_.last_  = new_this_last;
-            this->data_.eos_   = new_this_eos;
-        }
-        else
-        {
-            swap(this->data_.first_, other.data_.first_);
-            swap(this->data_.last_,  other.data_.last_);
-            swap(this->data_.eos_,   other.data_.eos_);
-        }
+        impl_.swap(other.impl_);
     }
 
     //
@@ -1317,13 +703,13 @@ public:
     SFL_NODISCARD
     iterator lower_bound(const Key& key)
     {
-        return std::lower_bound(begin(), end(), key, data_.ref_to_comp());
+        return impl_.lower_bound(key);
     }
 
     SFL_NODISCARD
     const_iterator lower_bound(const Key& key) const
     {
-        return std::lower_bound(begin(), end(), key, data_.ref_to_comp());
+        return impl_.lower_bound(key);
     }
 
     template <typename K,
@@ -1331,7 +717,7 @@ public:
     SFL_NODISCARD
     iterator lower_bound(const K& x)
     {
-        return std::lower_bound(begin(), end(), x, data_.ref_to_comp());
+        return impl_.lower_bound(x);
     }
 
     template <typename K,
@@ -1339,19 +725,19 @@ public:
     SFL_NODISCARD
     const_iterator lower_bound(const K& x) const
     {
-        return std::lower_bound(begin(), end(), x, data_.ref_to_comp());
+        return impl_.lower_bound(x);
     }
 
     SFL_NODISCARD
     iterator upper_bound(const Key& key)
     {
-        return std::upper_bound(begin(), end(), key, data_.ref_to_comp());
+        return impl_.upper_bound(key);
     }
 
     SFL_NODISCARD
     const_iterator upper_bound(const Key& key) const
     {
-        return std::upper_bound(begin(), end(), key, data_.ref_to_comp());
+        return impl_.upper_bound(key);
     }
 
     template <typename K,
@@ -1359,7 +745,7 @@ public:
     SFL_NODISCARD
     iterator upper_bound(const K& x)
     {
-        return std::upper_bound(begin(), end(), x, data_.ref_to_comp());
+        return impl_.upper_bound(x);
     }
 
     template <typename K,
@@ -1367,19 +753,19 @@ public:
     SFL_NODISCARD
     const_iterator upper_bound(const K& x) const
     {
-        return std::upper_bound(begin(), end(), x, data_.ref_to_comp());
+        return impl_.upper_bound(x);
     }
 
     SFL_NODISCARD
     std::pair<iterator, iterator> equal_range(const Key& key)
     {
-        return std::equal_range(begin(), end(), key, data_.ref_to_comp());
+        return impl_.equal_range(key);
     }
 
     SFL_NODISCARD
     std::pair<const_iterator, const_iterator> equal_range(const Key& key) const
     {
-        return std::equal_range(begin(), end(), key, data_.ref_to_comp());
+        return impl_.equal_range(key);
     }
 
     template <typename K,
@@ -1387,7 +773,7 @@ public:
     SFL_NODISCARD
     std::pair<iterator, iterator> equal_range(const K& x)
     {
-        return std::equal_range(begin(), end(), x, data_.ref_to_comp());
+        return impl_.equal_range(x);
     }
 
     template <typename K,
@@ -1395,33 +781,19 @@ public:
     SFL_NODISCARD
     std::pair<const_iterator, const_iterator> equal_range(const K& x) const
     {
-        return std::equal_range(begin(), end(), x, data_.ref_to_comp());
+        return impl_.equal_range(x);
     }
 
     SFL_NODISCARD
     iterator find(const Key& key)
     {
-        auto it = lower_bound(key);
-
-        if (it != end() && data_.ref_to_comp()(key, *it))
-        {
-            it = end();
-        }
-
-        return it;
+        return impl_.find(key);
     }
 
     SFL_NODISCARD
     const_iterator find(const Key& key) const
     {
-        auto it = lower_bound(key);
-
-        if (it != end() && data_.ref_to_comp()(key, *it))
-        {
-            it = end();
-        }
-
-        return it;
+        return impl_.find(key);
     }
 
     template <typename K,
@@ -1429,14 +801,7 @@ public:
     SFL_NODISCARD
     iterator find(const K& x)
     {
-        auto it = lower_bound(x);
-
-        if (it != end() && data_.ref_to_comp()(x, *it))
-        {
-            it = end();
-        }
-
-        return it;
+        return impl_.find(x);
     }
 
     template <typename K,
@@ -1444,20 +809,13 @@ public:
     SFL_NODISCARD
     const_iterator find(const K& x) const
     {
-        auto it = lower_bound(x);
-
-        if (it != end() && data_.ref_to_comp()(x, *it))
-        {
-            it = end();
-        }
-
-        return it;
+        return impl_.find(x);
     }
 
     SFL_NODISCARD
     size_type count(const Key& key) const
     {
-        return find(key) != end();
+        return impl_.count_unique(key);
     }
 
     template <typename K,
@@ -1465,13 +823,13 @@ public:
     SFL_NODISCARD
     size_type count(const K& x) const
     {
-        return find(x) != end();
+        return impl_.count_unique(x);
     }
 
     SFL_NODISCARD
     bool contains(const Key& key) const
     {
-        return find(key) != end();
+        return impl_.contains(key);
     }
 
     template <typename K,
@@ -1479,7 +837,7 @@ public:
     SFL_NODISCARD
     bool contains(const K& x) const
     {
-        return find(x) != end();
+        return impl_.contains(x);
     }
 
     //
@@ -1565,379 +923,16 @@ public:
     SFL_NODISCARD
     value_type* data() noexcept
     {
-        return sfl::dtl::to_address(data_.first_);
+        return impl_.data();
     }
 
     SFL_NODISCARD
     const value_type* data() const noexcept
     {
-        return sfl::dtl::to_address(data_.first_);
+        return impl_.data();
     }
 
 private:
-
-    void check_size(size_type n, const char* msg)
-    {
-        if (n > max_size())
-        {
-            sfl::dtl::throw_length_error(msg);
-        }
-    }
-
-    size_type calculate_new_capacity(size_type num_additional_elements, const char* msg)
-    {
-        const size_type size = this->size();
-        const size_type capacity = this->capacity();
-        const size_type max_size = this->max_size();
-
-        if (max_size - size < num_additional_elements)
-        {
-            sfl::dtl::throw_length_error(msg);
-        }
-        else if (max_size - capacity < capacity / 2)
-        {
-            return max_size;
-        }
-        else if (size + num_additional_elements < capacity + capacity / 2)
-        {
-            return std::max(N, capacity + capacity / 2);
-        }
-        else
-        {
-            return std::max(N, size + num_additional_elements);
-        }
-    }
-
-    void reset(size_type new_cap = N)
-    {
-        sfl::dtl::destroy_a
-        (
-            data_.ref_to_alloc(),
-            data_.first_,
-            data_.last_
-        );
-
-        if (data_.first_ != data_.internal_storage())
-        {
-            sfl::dtl::deallocate
-            (
-                data_.ref_to_alloc(),
-                data_.first_,
-                std::distance(data_.first_, data_.eos_)
-            );
-        }
-
-        data_.first_ = data_.internal_storage();
-        data_.last_  = data_.first_;
-        data_.eos_   = data_.first_ + N;
-
-        if (new_cap > N)
-        {
-            data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
-            data_.last_  = data_.first_;
-            data_.eos_   = data_.first_ + new_cap;
-
-            // If allocation throws, first_, last_ and eos_ will be valid
-            // (they will be pointing to internal_storage).
-        }
-    }
-
-    template <typename InputIt, typename Sentinel>
-    void initialize_range(InputIt first, Sentinel last)
-    {
-        SFL_TRY
-        {
-            while (first != last)
-            {
-                insert(*first);
-                ++first;
-            }
-        }
-        SFL_CATCH (...)
-        {
-            sfl::dtl::destroy_a
-            (
-                data_.ref_to_alloc(),
-                data_.first_,
-                data_.last_
-            );
-
-            if (data_.first_ != data_.internal_storage())
-            {
-                sfl::dtl::deallocate
-                (
-                    data_.ref_to_alloc(),
-                    data_.first_,
-                    std::distance(data_.first_, data_.eos_)
-                );
-            }
-
-            SFL_RETHROW;
-        }
-    }
-
-#if SFL_CPP_VERSION >= SFL_CPP_20
-
-    template <sfl::dtl::container_compatible_range<value_type> Range>
-    void initialize_range(Range&& range)
-    {
-        initialize_range(std::ranges::begin(range), std::ranges::end(range));
-    }
-
-#else // before C++20
-
-    template <typename Range>
-    void initialize_range(Range&& range)
-    {
-        using std::begin;
-        using std::end;
-        initialize_range(begin(range), end(range));
-    }
-
-#endif // before C++20
-
-    void initialize_copy(const small_flat_map& other)
-    {
-        const size_type n = other.size();
-
-        check_size(n, "sfl::small_flat_map::initialize_copy");
-
-        if (n > N)
-        {
-            data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), n);
-            data_.last_  = data_.first_;
-            data_.eos_   = data_.first_ + n;
-        }
-
-        SFL_TRY
-        {
-            data_.last_ = sfl::dtl::uninitialized_copy_a
-            (
-                data_.ref_to_alloc(),
-                other.data_.first_,
-                other.data_.last_,
-                data_.first_
-            );
-        }
-        SFL_CATCH (...)
-        {
-            if (n > N)
-            {
-                sfl::dtl::deallocate(data_.ref_to_alloc(), data_.first_, n);
-            }
-
-            SFL_RETHROW;
-        }
-    }
-
-    void initialize_move(small_flat_map& other)
-    {
-        if (other.data_.first_ == other.data_.internal_storage())
-        {
-            data_.last_ = sfl::dtl::uninitialized_move_a
-            (
-                data_.ref_to_alloc(),
-                other.data_.first_,
-                other.data_.last_,
-                data_.first_
-            );
-        }
-        else if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
-        {
-            data_.first_ = other.data_.first_;
-            data_.last_  = other.data_.last_;
-            data_.eos_   = other.data_.eos_;
-
-            other.data_.first_ = nullptr;
-            other.data_.last_  = nullptr;
-            other.data_.eos_   = nullptr;
-        }
-        else
-        {
-            const size_type n = other.size();
-
-            check_size(n, "sfl::small_flat_map::initialize_move");
-
-            if (n > N)
-            {
-                data_.first_ = sfl::dtl::allocate(data_.ref_to_alloc(), n);
-                data_.last_  = data_.first_;
-                data_.eos_   = data_.first_ + n;
-            }
-
-            SFL_TRY
-            {
-                data_.last_ = sfl::dtl::uninitialized_move_a
-                (
-                    data_.ref_to_alloc(),
-                    other.data_.first_,
-                    other.data_.last_,
-                    data_.first_
-                );
-            }
-            SFL_CATCH (...)
-            {
-                if (n > N)
-                {
-                    sfl::dtl::deallocate(data_.ref_to_alloc(), data_.first_, n);
-                }
-
-                SFL_RETHROW;
-            }
-        }
-    }
-
-    template <typename ForwardIt>
-    void assign_range(ForwardIt first, ForwardIt last)
-    {
-        const size_type n = std::distance(first, last);
-
-        check_size(n, "sfl::small_flat_map::assign_range");
-
-        if (n <= capacity())
-        {
-            const size_type s = size();
-
-            if (n <= s)
-            {
-                pointer new_last = sfl::dtl::copy
-                (
-                    first,
-                    last,
-                    data_.first_
-                );
-
-                sfl::dtl::destroy_a
-                (
-                    data_.ref_to_alloc(),
-                    new_last,
-                    data_.last_
-                );
-
-                data_.last_ = new_last;
-            }
-            else
-            {
-                ForwardIt mid = std::next(first, s);
-
-                sfl::dtl::copy
-                (
-                    first,
-                    mid,
-                    data_.first_
-                );
-
-                data_.last_ = sfl::dtl::uninitialized_copy_a
-                (
-                    data_.ref_to_alloc(),
-                    mid,
-                    last,
-                    data_.last_
-                );
-            }
-        }
-        else
-        {
-            reset(n);
-
-            data_.last_ = sfl::dtl::uninitialized_copy_a
-            (
-                data_.ref_to_alloc(),
-                first,
-                last,
-                data_.first_
-            );
-        }
-    }
-
-    void assign_copy(const small_flat_map& other)
-    {
-        if (this != &other)
-        {
-            if (allocator_traits::propagate_on_container_copy_assignment::value)
-            {
-                if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
-                {
-                    reset();
-                }
-
-                data_.ref_to_alloc() = other.data_.ref_to_alloc();
-            }
-
-            data_.ref_to_comp() = other.data_.ref_to_comp();
-
-            assign_range(other.data_.first_, other.data_.last_);
-        }
-    }
-
-    void assign_move(small_flat_map& other)
-    {
-        if (allocator_traits::propagate_on_container_move_assignment::value)
-        {
-            if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
-            {
-                reset();
-            }
-
-            data_.ref_to_alloc() = std::move(other.data_.ref_to_alloc());
-        }
-
-        data_.ref_to_comp() = other.data_.ref_to_comp();
-
-        if (other.data_.first_ == other.data_.internal_storage())
-        {
-            assign_range
-            (
-                std::make_move_iterator(other.data_.first_),
-                std::make_move_iterator(other.data_.last_)
-            );
-        }
-        else if (data_.ref_to_alloc() == other.data_.ref_to_alloc())
-        {
-            reset();
-
-            data_.first_ = other.data_.first_;
-            data_.last_  = other.data_.last_;
-            data_.eos_   = other.data_.eos_;
-
-            other.data_.first_ = nullptr;
-            other.data_.last_  = nullptr;
-            other.data_.eos_   = nullptr;
-        }
-        else
-        {
-            assign_range
-            (
-                std::make_move_iterator(other.data_.first_),
-                std::make_move_iterator(other.data_.last_)
-            );
-        }
-    }
-
-    template <typename Value>
-    std::pair<iterator, bool> insert_aux(Value&& value)
-    {
-        auto it = lower_bound(value.first);
-
-        if (it == end() || data_.ref_to_comp()(value, *it))
-        {
-            return std::make_pair(insert_exactly_at(it, std::forward<Value>(value)), true);
-        }
-
-        return std::make_pair(it, false);
-    }
-
-    template <typename Value>
-    iterator insert_aux(const_iterator hint, Value&& value)
-    {
-        if (is_insert_hint_good(hint, value))
-        {
-            return insert_exactly_at(hint, std::forward<Value>(value));
-        }
-
-        // Hint is not good. Use non-hinted function.
-        return insert_aux(std::forward<Value>(value)).first;
-    }
 
     template <typename InputIt, typename Sentinel>
     void insert_range_aux(InputIt first, Sentinel last)
@@ -1949,267 +944,23 @@ private:
         }
     }
 
-    template <typename K, typename M>
-    std::pair<iterator, bool> insert_or_assign_aux(K&& key, M&& obj)
-    {
-        auto it = lower_bound(key);
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator==(const small_flat_map<K2, T2, N2, C2, A2>& x, const small_flat_map<K2, T2, N2, C2, A2>& y);
 
-        if (it == end() || data_.ref_to_comp()(key, *it))
-        {
-            return std::make_pair
-            (
-                insert_exactly_at
-                (
-                    it,
-                    value_type
-                    (
-                        std::piecewise_construct,
-                        std::forward_as_tuple(std::forward<K>(key)),
-                        std::forward_as_tuple(std::forward<M>(obj))
-                    )
-                ),
-                true
-            );
-        }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator!=(const small_flat_map<K2, T2, N2, C2, A2>& x, const small_flat_map<K2, T2, N2, C2, A2>& y);
 
-        it->second = std::forward<M>(obj);
-        return std::make_pair(it, false);
-    }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator<(const small_flat_map<K2, T2, N2, C2, A2>& x, const small_flat_map<K2, T2, N2, C2, A2>& y);
 
-    template <typename K, typename M>
-    iterator insert_or_assign_aux(const_iterator hint, K&& key, M&& obj)
-    {
-        if (is_insert_hint_good(hint, key))
-        {
-            return insert_exactly_at
-            (
-                hint,
-                value_type
-                (
-                    std::piecewise_construct,
-                    std::forward_as_tuple(std::forward<K>(key)),
-                    std::forward_as_tuple(std::forward<M>(obj))
-                )
-            );
-        }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator>(const small_flat_map<K2, T2, N2, C2, A2>& x, const small_flat_map<K2, T2, N2, C2, A2>& y);
 
-        // Hint is not good. Use non-hinted function.
-        return insert_or_assign_aux(std::forward<K>(key), std::forward<M>(obj)).first;
-    }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator<=(const small_flat_map<K2, T2, N2, C2, A2>& x, const small_flat_map<K2, T2, N2, C2, A2>& y);
 
-    template <typename K, typename... Args>
-    std::pair<iterator, bool> try_emplace_aux(K&& key, Args&&... args)
-    {
-        auto it = lower_bound(key);
-
-        if (it == end() || data_.ref_to_comp()(key, *it))
-        {
-            return std::make_pair
-            (
-                insert_exactly_at
-                (
-                    it,
-                    value_type
-                    (
-                        std::piecewise_construct,
-                        std::forward_as_tuple(std::forward<K>(key)),
-                        std::forward_as_tuple(std::forward<Args>(args)...)
-                    )
-                ),
-                true
-            );
-        }
-
-        return std::make_pair(it, false);
-    }
-
-    template <typename K, typename... Args>
-    iterator try_emplace_aux(const_iterator hint, K&& key, Args&&... args)
-    {
-        if (is_insert_hint_good(hint, key))
-        {
-            return insert_exactly_at
-            (
-                hint,
-                value_type
-                (
-                    std::piecewise_construct,
-                    std::forward_as_tuple(std::forward<K>(key)),
-                    std::forward_as_tuple(std::forward<Args>(args)...)
-                )
-            );
-        }
-
-        // Hint is not good. Use non-hinted function.
-        return try_emplace_aux(std::forward<K>(key), std::forward<Args>(args)...).first;
-    }
-
-    template <typename Value>
-    iterator insert_exactly_at(const_iterator pos, Value&& value)
-    {
-        if (data_.last_ != data_.eos_)
-        {
-            const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
-
-            if (p1 == data_.last_)
-            {
-                sfl::dtl::construct_at_a
-                (
-                    data_.ref_to_alloc(),
-                    p1,
-                    std::forward<Value>(value)
-                );
-
-                ++data_.last_;
-            }
-            else
-            {
-                const pointer p2 = data_.last_ - 1;
-
-                const pointer old_last = data_.last_;
-
-                sfl::dtl::construct_at_a
-                (
-                    data_.ref_to_alloc(),
-                    data_.last_,
-                    std::move(*p2)
-                );
-
-                ++data_.last_;
-
-                sfl::dtl::move_backward
-                (
-                    p1,
-                    p2,
-                    old_last
-                );
-
-                *p1 = std::forward<Value>(value);
-            }
-
-            return iterator(p1);
-        }
-        else
-        {
-            const difference_type offset = std::distance(cbegin(), pos);
-
-            const size_type new_cap =
-                calculate_new_capacity(1, "sfl::small_flat_map::insert_exactly_at");
-
-            pointer new_first;
-            pointer new_last;
-            pointer new_eos;
-
-            if (new_cap <= N && data_.first_ != data_.internal_storage())
-            {
-                new_first = data_.internal_storage();
-                new_last  = new_first;
-                new_eos   = new_first + N;
-            }
-            else
-            {
-                new_first = sfl::dtl::allocate(data_.ref_to_alloc(), new_cap);
-                new_last  = new_first;
-                new_eos   = new_first + new_cap;
-            }
-
-            const pointer p = new_first + offset;
-
-            SFL_TRY
-            {
-                sfl::dtl::construct_at_a
-                (
-                    data_.ref_to_alloc(),
-                    p,
-                    std::forward<Value>(value)
-                );
-
-                new_last = nullptr;
-
-                const pointer mid = data_.first_ + offset;
-
-                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                (
-                    data_.ref_to_alloc(),
-                    data_.first_,
-                    mid,
-                    new_first
-                );
-
-                ++new_last;
-
-                new_last = sfl::dtl::uninitialized_move_if_noexcept_a
-                (
-                    data_.ref_to_alloc(),
-                    mid,
-                    data_.last_,
-                    new_last
-                );
-            }
-            SFL_CATCH (...)
-            {
-                if (new_last == nullptr)
-                {
-                    sfl::dtl::destroy_at_a
-                    (
-                        data_.ref_to_alloc(),
-                        p
-                    );
-                }
-                else
-                {
-                    sfl::dtl::destroy_a
-                    (
-                        data_.ref_to_alloc(),
-                        new_first,
-                        new_last
-                    );
-                }
-
-                if (new_first != data_.internal_storage())
-                {
-                    sfl::dtl::deallocate
-                    (
-                        data_.ref_to_alloc(),
-                        new_first,
-                        new_cap
-                    );
-                }
-
-                SFL_RETHROW;
-            }
-
-            sfl::dtl::destroy_a
-            (
-                data_.ref_to_alloc(),
-                data_.first_,
-                data_.last_
-            );
-
-            if (data_.first_ != data_.internal_storage())
-            {
-                sfl::dtl::deallocate
-                (
-                    data_.ref_to_alloc(),
-                    data_.first_,
-                    std::distance(data_.first_, data_.eos_)
-                );
-            }
-
-            data_.first_ = new_first;
-            data_.last_  = new_last;
-            data_.eos_   = new_eos;
-
-            return iterator(p);
-        }
-    }
-
-    template <typename Value>
-    bool is_insert_hint_good(const_iterator hint, const Value& value)
-    {
-        return (hint == begin() || data_.ref_to_comp()(*(hint - 1), value))
-            && (hint == end()   || data_.ref_to_comp()(value, *hint));
-    }
+    template <typename K2, typename T2, std::size_t N2, typename C2, typename A2>
+    friend bool operator>=(const small_flat_map<K2, T2, N2, C2, A2>& x, const small_flat_map<K2, T2, N2, C2, A2>& y);
 };
 
 //
@@ -2224,7 +975,7 @@ bool operator==
     const small_flat_map<K, T, N, C, A>& y
 )
 {
-    return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
+    return x.impl_ == y.impl_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -2235,7 +986,7 @@ bool operator!=
     const small_flat_map<K, T, N, C, A>& y
 )
 {
-    return !(x == y);
+    return x.impl_ != y.impl_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -2246,7 +997,7 @@ bool operator<
     const small_flat_map<K, T, N, C, A>& y
 )
 {
-    return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
+    return x.impl_ < y.impl_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -2257,7 +1008,7 @@ bool operator>
     const small_flat_map<K, T, N, C, A>& y
 )
 {
-    return y < x;
+    return x.impl_ > y.impl_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -2268,7 +1019,7 @@ bool operator<=
     const small_flat_map<K, T, N, C, A>& y
 )
 {
-    return !(y < x);
+    return x.impl_ <= y.impl_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -2279,7 +1030,7 @@ bool operator>=
     const small_flat_map<K, T, N, C, A>& y
 )
 {
-    return !(x < y);
+    return x.impl_ >= y.impl_;
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename A>
@@ -2292,8 +1043,7 @@ void swap
     x.swap(y);
 }
 
-template <typename K, typename T, std::size_t N, typename C, typename A,
-          typename Predicate>
+template <typename K, typename T, std::size_t N, typename C, typename A, typename Predicate>
 typename small_flat_map<K, T, N, C, A>::size_type
     erase_if(small_flat_map<K, T, N, C, A>& c, Predicate pred)
 {
