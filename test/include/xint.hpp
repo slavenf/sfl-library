@@ -127,6 +127,21 @@ public:
     {
         return *x.value_ < y;
     }
+
+    friend bool operator<=(const xint& x, const xint& y)
+    {
+        return *x.value_ <= *y.value_;
+    }
+
+    friend bool operator<=(int x, const xint& y)
+    {
+        return x <= *y.value_;
+    }
+
+    friend bool operator<=(const xint& x, int y)
+    {
+        return *x.value_ <= y;
+    }
 };
 
 int xint::counter_ = 0;
