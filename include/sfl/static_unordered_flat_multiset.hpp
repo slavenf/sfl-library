@@ -23,26 +23,18 @@
 
 #include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/ignore_unused.hpp>
-#include <sfl/detail/initialized_memory_algorithms.hpp>
-#include <sfl/detail/normal_iterator.hpp>
+#include <sfl/detail/exceptions.hpp>
+#include <sfl/detail/functional.hpp>
 #include <sfl/detail/tags.hpp>
 #include <sfl/detail/type_traits.hpp>
-#include <sfl/detail/uninitialized_memory_algorithms.hpp>
+#include <sfl/detail/unordered_associative_vector.hpp>
+#include <sfl/static_vector.hpp>
 
-#include <algorithm>        // copy, move, lower_bound, swap, swap_ranges
 #include <cstddef>          // size_t
-#include <functional>       // equal_to, less
+#include <functional>       // equal_to
 #include <initializer_list> // initializer_list
-#include <iterator>         // distance, next, reverse_iterator
-#include <limits>           // numeric_limits
-#include <memory>           // allocator, allocator_traits, pointer_traits
 #include <type_traits>      // is_same, is_nothrow_xxxxx
 #include <utility>          // forward, move, pair
-
-#ifdef SFL_TEST_STATIC_UNORDERED_FLAT_MULTISET
-void test_static_unordered_flat_multiset();
-#endif
 
 namespace sfl
 {
@@ -52,84 +44,41 @@ template < typename Key,
            typename KeyEqual = std::equal_to<Key> >
 class static_unordered_flat_multiset
 {
-    #ifdef SFL_TEST_STATIC_UNORDERED_FLAT_MULTISET
-    friend void ::test_static_unordered_flat_multiset();
-    #endif
-
     static_assert(N > 0, "N must be greater than zero.");
 
 public:
 
-    using key_type         = Key;
-    using value_type       = Key;
-    using size_type        = std::size_t;
-    using difference_type  = std::ptrdiff_t;
-    using key_equal        = KeyEqual;
-    using reference        = value_type&;
-    using const_reference  = const value_type&;
-    using pointer          = value_type*;
-    using const_pointer    = const value_type*;
-    using iterator         = sfl::dtl::normal_iterator<const_pointer, static_unordered_flat_multiset>; // MUST BE const_pointer
-    using const_iterator   = sfl::dtl::normal_iterator<const_pointer, static_unordered_flat_multiset>;
+    using key_type    = Key;
+    using value_type  = Key;
+    using key_equal   = KeyEqual;
+
+private:
+
+    using unordered_associative_vector = sfl::dtl::unordered_associative_vector
+    <
+        key_type,
+        value_type,
+        sfl::dtl::identity,
+        key_equal,
+        sfl::static_vector<value_type, N>
+    >;
+
+    unordered_associative_vector impl_;
+
+public:
+
+    using size_type       = typename unordered_associative_vector::size_type;
+    using difference_type = typename unordered_associative_vector::difference_type;
+    using reference       = typename unordered_associative_vector::reference;
+    using const_reference = typename unordered_associative_vector::const_reference;
+    using pointer         = typename unordered_associative_vector::pointer;
+    using const_pointer   = typename unordered_associative_vector::const_pointer;
+    using iterator        = typename unordered_associative_vector::const_iterator; // MUST BE const
+    using const_iterator  = typename unordered_associative_vector::const_iterator;
 
 public:
 
     static constexpr size_type static_capacity = N;
-
-private:
-
-    class data_base
-    {
-    public:
-
-        union
-        {
-            value_type first_[N];
-        };
-
-        pointer last_;
-
-        data_base() noexcept
-            : last_(first_)
-        {}
-
-        #if defined(__clang__) && (__clang_major__ == 3) // For CentOS 7
-        ~data_base()
-        {}
-        #else
-        ~data_base() noexcept
-        {}
-        #endif
-    };
-
-    class data : public data_base, public key_equal
-    {
-    public:
-
-        data() noexcept(std::is_nothrow_default_constructible<key_equal>::value)
-            : key_equal()
-        {}
-
-        data(const key_equal& equal) noexcept(std::is_nothrow_copy_constructible<key_equal>::value)
-            : key_equal(equal)
-        {}
-
-        data(key_equal&& equal) noexcept(std::is_nothrow_move_constructible<key_equal>::value)
-            : key_equal(std::move(equal))
-        {}
-
-        key_equal& ref_to_equal() noexcept
-        {
-            return *this;
-        }
-
-        const key_equal& ref_to_equal() const noexcept
-        {
-            return *this;
-        }
-    };
-
-    data data_;
 
 public:
 
@@ -138,27 +87,27 @@ public:
     //
 
     static_unordered_flat_multiset() noexcept(std::is_nothrow_default_constructible<KeyEqual>::value)
-        : data_()
+        : impl_()
     {}
 
     explicit static_unordered_flat_multiset(const KeyEqual& equal) noexcept(std::is_nothrow_copy_constructible<KeyEqual>::value)
-        : data_(equal)
+        : impl_(equal)
     {}
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     static_unordered_flat_multiset(InputIt first, InputIt last)
-        : data_()
+        : impl_()
     {
-        initialize_range(first, last);
+        insert(first, last);
     }
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
     static_unordered_flat_multiset(InputIt first, InputIt last, const KeyEqual& equal)
-        : data_(equal)
+        : impl_(equal)
     {
-        initialize_range(first, last);
+        insert(first, last);
     }
 
     static_unordered_flat_multiset(std::initializer_list<value_type> ilist)
@@ -170,65 +119,49 @@ public:
     {}
 
     static_unordered_flat_multiset(const static_unordered_flat_multiset& other)
-        : data_(other.data_.ref_to_equal())
-    {
-        data_.last_ = sfl::dtl::uninitialized_copy
-        (
-            pointer(other.data_.first_),
-            pointer(other.data_.last_),
-            data_.first_
-        );
-    }
+        : impl_(other.impl_)
+    {}
 
     static_unordered_flat_multiset(static_unordered_flat_multiset&& other)
-        : data_(std::move(other.data_.ref_to_equal()))
-    {
-        data_.last_ = sfl::dtl::uninitialized_move
-        (
-            std::make_move_iterator(pointer(other.data_.first_)),
-            std::make_move_iterator(pointer(other.data_.last_)),
-            data_.first_
-        );
-    }
+        : impl_(std::move(other.impl_))
+    {}
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
     static_unordered_flat_multiset(sfl::from_range_t, Range&& range)
-        : data_()
+        : impl_()
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
     static_unordered_flat_multiset(sfl::from_range_t, Range&& range, const KeyEqual& equal)
-        : data_(equal)
+        : impl_(equal)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
 #else // before C++20
 
     template <typename Range>
     static_unordered_flat_multiset(sfl::from_range_t, Range&& range)
-        : data_()
+        : impl_()
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
     static_unordered_flat_multiset(sfl::from_range_t, Range&& range, const KeyEqual& equal)
-        : data_(equal)
+        : impl_(equal)
     {
-        initialize_range(std::forward<Range>(range));
+        insert_range(std::forward<Range>(range));
     }
 
 #endif // before C++20
 
     ~static_unordered_flat_multiset()
-    {
-        sfl::dtl::destroy(data_.first_, data_.last_);
-    }
+    {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
@@ -236,36 +169,20 @@ public:
 
     static_unordered_flat_multiset& operator=(const static_unordered_flat_multiset& other)
     {
-        if (this != &other)
-        {
-            data_.ref_to_equal() = other.data_.ref_to_equal();
-
-            assign_range
-            (
-                pointer(other.data_.first_),
-                pointer(other.data_.last_)
-            );
-        }
-
+        impl_.assign_copy(other.impl_);
         return *this;
     }
 
     static_unordered_flat_multiset& operator=(static_unordered_flat_multiset&& other)
     {
-        data_.ref_to_equal() = other.data_.ref_to_equal();
-
-        assign_range
-        (
-            std::make_move_iterator(pointer(other.data_.first_)),
-            std::make_move_iterator(pointer(other.data_.last_))
-        );
-
+        impl_.assign_move(other.impl_);
         return *this;
     }
 
     static_unordered_flat_multiset& operator=(std::initializer_list<value_type> ilist)
     {
-        assign_range(ilist.begin(), ilist.end());
+        SFL_ASSERT(size_type(ilist.size()) <= capacity());
+        impl_.assign_range_equal(ilist.begin(), ilist.end());
         return *this;
     }
 
@@ -276,7 +193,7 @@ public:
     SFL_NODISCARD
     key_equal key_eq() const
     {
-        return data_.ref_to_equal();
+        return impl_.ref_to_key_equal();
     }
 
     //
@@ -286,58 +203,58 @@ public:
     SFL_NODISCARD
     iterator begin() noexcept
     {
-        return iterator(data_.first_);
+        return impl_.begin();
     }
 
     SFL_NODISCARD
     const_iterator begin() const noexcept
     {
-        return const_iterator(data_.first_);
+        return impl_.begin();
     }
 
     SFL_NODISCARD
     const_iterator cbegin() const noexcept
     {
-        return const_iterator(data_.first_);
+        return impl_.cbegin();
     }
 
     SFL_NODISCARD
     iterator end() noexcept
     {
-        return iterator(data_.last_);
+        return impl_.end();
     }
 
     SFL_NODISCARD
     const_iterator end() const noexcept
     {
-        return const_iterator(data_.last_);
+        return impl_.end();
     }
 
     SFL_NODISCARD
     const_iterator cend() const noexcept
     {
-        return const_iterator(data_.last_);
+        return impl_.cend();
     }
 
     SFL_NODISCARD
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
-        return iterator(data_.first_ + pos);
+        return impl_.nth(pos);
     }
 
     SFL_NODISCARD
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
-        return const_iterator(data_.first_ + pos);
+        return impl_.nth(pos);
     }
 
     SFL_NODISCARD
     size_type index_of(const_iterator pos) const noexcept
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-        return std::distance(cbegin(), pos);
+        return impl_.index_of(pos);
     }
 
     //
@@ -347,19 +264,19 @@ public:
     SFL_NODISCARD
     bool empty() const noexcept
     {
-        return data_.first_ == data_.last_;
+        return impl_.empty();
     }
 
     SFL_NODISCARD
     bool full() const noexcept
     {
-        return std::distance(begin(), end()) == N;
+        return impl_.ref_to_vector().full();
     }
 
     SFL_NODISCARD
     size_type size() const noexcept
     {
-        return std::distance(begin(), end());
+        return impl_.size();
     }
 
     SFL_NODISCARD
@@ -377,7 +294,7 @@ public:
     SFL_NODISCARD
     size_type available() const noexcept
     {
-        return capacity() - size();
+        return impl_.available();
     }
 
     //
@@ -386,15 +303,14 @@ public:
 
     void clear() noexcept
     {
-        sfl::dtl::destroy(data_.first_, data_.last_);
-        data_.last_ = data_.first_;
+        impl_.clear();
     }
 
     template <typename... Args>
     iterator emplace(Args&&... args)
     {
         SFL_ASSERT(!full());
-        return emplace_back(std::forward<Args>(args)...);
+        return impl_.emplace_equal(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
@@ -402,36 +318,33 @@ public:
     {
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        sfl::dtl::ignore_unused(hint);
-        return emplace_back(std::forward<Args>(args)...);
+        return impl_.emplace_hint_equal(hint, std::forward<Args>(args)...);
     }
 
     iterator insert(const value_type& value)
     {
         SFL_ASSERT(!full());
-        return emplace_back(value);
+        return impl_.insert_equal(value);
     }
 
     iterator insert(value_type&& value)
     {
         SFL_ASSERT(!full());
-        return emplace_back(std::move(value));
+        return impl_.insert_equal(std::move(value));
     }
 
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        sfl::dtl::ignore_unused(hint);
-        return emplace_back(value);
+        return impl_.insert_hint_equal(hint, value);
     }
 
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
-        sfl::dtl::ignore_unused(hint);
-        return emplace_back(std::move(value));
+        return impl_.insert_hint_equal(hint, std::move(value));
     }
 
     template <typename InputIt,
@@ -469,168 +382,30 @@ public:
     iterator erase(const_iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
-
-        const difference_type offset = std::distance(cbegin(), pos);
-
-        const pointer p = data_.first_ + offset;
-
-        if (p < data_.last_ - 1)
-        {
-            *p = std::move(*(data_.last_ - 1));
-        }
-
-        --data_.last_;
-
-        sfl::dtl::destroy_at(data_.last_);
-
-        return iterator(p);
+        return impl_.erase(pos);
     }
 
     iterator erase(const_iterator first, const_iterator last)
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
-
-        if (first == last)
-        {
-            return begin() + std::distance(cbegin(), first);
-        }
-
-        const difference_type count1 = std::distance(first, last);
-        const difference_type count2 = std::distance(last, cend());
-
-        const difference_type offset = std::distance(cbegin(), first);
-
-        const pointer p1 = data_.first_ + offset;
-
-        if (count1 >= count2)
-        {
-            const pointer p2 = p1 + count1;
-
-            const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
-
-            sfl::dtl::destroy(new_last, data_.last_);
-
-            data_.last_ = new_last;
-        }
-        else
-        {
-            const pointer p2 = p1 + count2;
-
-            sfl::dtl::move(p2, data_.last_, p1);
-
-            const pointer new_last = p2;
-
-            sfl::dtl::destroy(new_last, data_.last_);
-
-            data_.last_ = new_last;
-        }
-
-        return iterator(p1);
+        return impl_.erase(first, last);
     }
 
     size_type erase(const Key& key)
     {
-        size_type n = 0;
-
-        for (auto it = begin(); it != end();)
-        {
-            if (data_.ref_to_equal()(*it, key))
-            {
-                it = erase(it);
-                ++n;
-            }
-            else
-            {
-                ++it;
-            }
-        }
-
-        return n;
+        return impl_.erase_key_equal(key);
     }
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<KeyEqual, K>::value>* = nullptr>
     size_type erase(K&& x)
     {
-        size_type n = 0;
-
-        for (auto it = begin(); it != end();)
-        {
-            if (data_.ref_to_equal()(*it, x))
-            {
-                it = erase(it);
-                ++n;
-            }
-            else
-            {
-                ++it;
-            }
-        }
-
-        return n;
+        return impl_.erase_key_equal(x);
     }
 
     void swap(static_unordered_flat_multiset& other)
     {
-        if (this == &other)
-        {
-            return;
-        }
-
-        using std::swap;
-
-        swap(this->data_.ref_to_equal(), other.data_.ref_to_equal());
-
-        const size_type this_size  = this->size();
-        const size_type other_size = other.size();
-
-        if (this_size <= other_size)
-        {
-            std::swap_ranges
-            (
-                this->data_.first_,
-                this->data_.first_ + this_size,
-                other.data_.first_
-            );
-
-            sfl::dtl::uninitialized_move
-            (
-                other.data_.first_ + this_size,
-                other.data_.first_ + other_size,
-                this->data_.first_ + this_size
-            );
-
-            sfl::dtl::destroy
-            (
-                other.data_.first_ + this_size,
-                other.data_.first_ + other_size
-            );
-        }
-        else
-        {
-            std::swap_ranges
-            (
-                other.data_.first_,
-                other.data_.first_ + other_size,
-                this->data_.first_
-            );
-
-            sfl::dtl::uninitialized_move
-            (
-                this->data_.first_ + other_size,
-                this->data_.first_ + this_size,
-                other.data_.first_ + other_size
-            );
-
-            sfl::dtl::destroy
-            (
-                this->data_.first_ + other_size,
-                this->data_.first_ + this_size
-            );
-        }
-
-        this->data_.last_ = this->data_.first_ + other_size;
-        other.data_.last_ = other.data_.first_ + this_size;
+        impl_.swap(other.impl_);
     }
 
     //
@@ -640,29 +415,13 @@ public:
     SFL_NODISCARD
     iterator find(const Key& key)
     {
-        for (auto it = begin(); it != end(); ++it)
-        {
-            if (data_.ref_to_equal()(*it, key))
-            {
-                return it;
-            }
-        }
-
-        return end();
+        return impl_.find(key);
     }
 
     SFL_NODISCARD
     const_iterator find(const Key& key) const
     {
-        for (auto it = begin(); it != end(); ++it)
-        {
-            if (data_.ref_to_equal()(*it, key))
-            {
-                return it;
-            }
-        }
-
-        return end();
+        return impl_.find(key);
     }
 
     template <typename K,
@@ -670,15 +429,7 @@ public:
     SFL_NODISCARD
     iterator find(const K& x)
     {
-        for (auto it = begin(); it != end(); ++it)
-        {
-            if (data_.ref_to_equal()(*it, x))
-            {
-                return it;
-            }
-        }
-
-        return end();
+        return impl_.find(x);
     }
 
     template <typename K,
@@ -686,31 +437,13 @@ public:
     SFL_NODISCARD
     const_iterator find(const K& x) const
     {
-        for (auto it = begin(); it != end(); ++it)
-        {
-            if (data_.ref_to_equal()(*it, x))
-            {
-                return it;
-            }
-        }
-
-        return end();
+        return impl_.find(x);
     }
 
     SFL_NODISCARD
     size_type count(const Key& key) const
     {
-        size_type n = 0;
-
-        for (auto it = begin(); it != end(); ++it)
-        {
-            if (data_.ref_to_equal()(*it, key))
-            {
-                ++n;
-            }
-        }
-
-        return n;
+        return impl_.count_equal(key);
     }
 
     template <typename K,
@@ -718,23 +451,13 @@ public:
     SFL_NODISCARD
     size_type count(const K& x) const
     {
-        size_type n = 0;
-
-        for (auto it = begin(); it != end(); ++it)
-        {
-            if (data_.ref_to_equal()(*it, x))
-            {
-                ++n;
-            }
-        }
-
-        return n;
+        return impl_.count_equal(x);
     }
 
     SFL_NODISCARD
     bool contains(const Key& key) const
     {
-        return find(key) != end();
+        return impl_.contains(key);
     }
 
     template <typename K,
@@ -742,7 +465,7 @@ public:
     SFL_NODISCARD
     bool contains(const K& x) const
     {
-        return find(x) != end();
+        return impl_.contains(x);
     }
 
     //
@@ -752,101 +475,16 @@ public:
     SFL_NODISCARD
     value_type* data() noexcept
     {
-        return data_.first_;
+        return impl_.data();
     }
 
     SFL_NODISCARD
     const value_type* data() const noexcept
     {
-        return data_.first_;
+        return impl_.data();
     }
 
 private:
-
-    template <typename InputIt, typename Sentinel>
-    void initialize_range(InputIt first, Sentinel last)
-    {
-        SFL_TRY
-        {
-            while (first != last)
-            {
-                insert(*first);
-                ++first;
-            }
-        }
-        SFL_CATCH (...)
-        {
-            sfl::dtl::destroy(data_.first_, data_.last_);
-            SFL_RETHROW;
-        }
-    }
-
-#if SFL_CPP_VERSION >= SFL_CPP_20
-
-    template <sfl::dtl::container_compatible_range<value_type> Range>
-    void initialize_range(Range&& range)
-    {
-        initialize_range(std::ranges::begin(range), std::ranges::end(range));
-    }
-
-#else // before C++20
-
-    template <typename Range>
-    void initialize_range(Range&& range)
-    {
-        using std::begin;
-        using std::end;
-        initialize_range(begin(range), end(range));
-    }
-
-#endif // before C++20
-
-    template <typename ForwardIt,
-              sfl::dtl::enable_if_t<sfl::dtl::is_forward_iterator<ForwardIt>::value>* = nullptr>
-    void assign_range(ForwardIt first, ForwardIt last)
-    {
-        SFL_ASSERT(size_type(std::distance(first, last)) <= capacity());
-
-        const size_type n = std::distance(first, last);
-
-        const size_type size = this->size();
-
-        if (n <= size)
-        {
-            const pointer new_last = sfl::dtl::copy
-            (
-                first,
-                last,
-                data_.first_
-            );
-
-            sfl::dtl::destroy
-            (
-                new_last,
-                data_.last_
-            );
-
-            data_.last_ = new_last;
-        }
-        else
-        {
-            const ForwardIt mid = std::next(first, size);
-
-            sfl::dtl::copy
-            (
-                first,
-                mid,
-                data_.first_
-            );
-
-            data_.last_ = sfl::dtl::uninitialized_copy
-            (
-                mid,
-                last,
-                data_.last_
-            );
-        }
-    }
 
     template <typename InputIt, typename Sentinel>
     void insert_range_aux(InputIt first, Sentinel last)
@@ -858,23 +496,11 @@ private:
         }
     }
 
-    template <typename... Args>
-    iterator emplace_back(Args&&... args)
-    {
-        SFL_ASSERT(!full());
+    template <typename K2, std::size_t N2, typename E2>
+    friend bool operator==(const static_unordered_flat_multiset<K2, N2, E2>& x, const static_unordered_flat_multiset<K2, N2, E2>& y);
 
-        const pointer old_last = data_.last_;
-
-        sfl::dtl::construct_at
-        (
-            data_.last_,
-            std::forward<Args>(args)...
-        );
-
-        ++data_.last_;
-
-        return iterator(old_last);
-    }
+    template <typename K2, std::size_t N2, typename E2>
+    friend bool operator!=(const static_unordered_flat_multiset<K2, N2, E2>& x, const static_unordered_flat_multiset<K2, N2, E2>& y);
 };
 
 //
@@ -889,7 +515,7 @@ bool operator==
     const static_unordered_flat_multiset<K, N, E>& y
 )
 {
-    return x.size() == y.size() && std::is_permutation(x.begin(), x.end(), y.begin());
+    return x.impl_ == y.impl_;
 }
 
 template <typename K, std::size_t N, typename E>
@@ -900,7 +526,7 @@ bool operator!=
     const static_unordered_flat_multiset<K, N, E>& y
 )
 {
-    return !(x == y);
+    return x.impl_ != y.impl_;
 }
 
 template <typename K, std::size_t N, typename E>

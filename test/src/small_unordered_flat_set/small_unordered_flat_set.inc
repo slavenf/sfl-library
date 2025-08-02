@@ -6,189 +6,6 @@ using sfl::test::xint;
 using sfl::test::xint_xint;
 using sfl::test::xobj;
 
-PRINT("Test PRIVATE member function emplace_back(Args&&...)");
-{
-    // N == 0
-    {
-        sfl::small_unordered_flat_set< xint_xint,
-                                       0,
-                                       std::equal_to<xint_xint>,
-                                       TPARAM_ALLOCATOR<xint_xint> > set;
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(10, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(0));
-            CHECK(set.size() == 1);
-            CHECK(set.capacity() == 1);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(20, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(1));
-            CHECK(set.size() == 2);
-            CHECK(set.capacity() == 2);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(30, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(2));
-            CHECK(set.size() == 3);
-            CHECK(set.capacity() == 3);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(40, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(3));
-            CHECK(set.size() == 4);
-            CHECK(set.capacity() == 4);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(50, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(4));
-            CHECK(set.size() == 5);
-            CHECK(set.capacity() == 6);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
-            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(60, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(5));
-            CHECK(set.size() == 6);
-            CHECK(set.capacity() == 6);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
-            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
-            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
-        }
-    }
-
-    // N == 3
-    {
-        sfl::small_unordered_flat_set< xint_xint,
-                                       3,
-                                       std::equal_to<xint_xint>,
-                                       TPARAM_ALLOCATOR<xint_xint> > set;
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(10, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(0));
-            CHECK(set.size() == 1);
-            CHECK(set.capacity() == 3);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(20, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(1));
-            CHECK(set.size() == 2);
-            CHECK(set.capacity() == 3);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(30, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(2));
-            CHECK(set.size() == 3);
-            CHECK(set.capacity() == 3);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(40, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(3));
-            CHECK(set.size() == 4);
-            CHECK(set.capacity() == 4);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(50, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(4));
-            CHECK(set.size() == 5);
-            CHECK(set.capacity() == 6);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
-            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
-        }
-
-        {
-            PRINT(">");
-            auto res = set.emplace_back(60, 1);
-            PRINT("<");
-
-            CHECK(res == set.nth(5));
-            CHECK(set.size() == 6);
-            CHECK(set.capacity() == 6);
-            CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
-            CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-            CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 40); CHECK(set.nth(3)->second == 1);
-            CHECK(set.nth(4)->first == 50); CHECK(set.nth(4)->second == 1);
-            CHECK(set.nth(5)->first == 60); CHECK(set.nth(5)->second == 1);
-        }
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 PRINT("Test begin, end, cbegin, cend, nth, index_of");
 {
     sfl::small_unordered_flat_set< xint_xint,
@@ -196,9 +13,9 @@ PRINT("Test begin, end, cbegin, cend, nth, index_of");
                                    std::equal_to<xint_xint>,
                                    TPARAM_ALLOCATOR<xint_xint> > set;
 
-    set.emplace_back(20, 1);
-    set.emplace_back(40, 1);
-    set.emplace_back(60, 1);
+    set.emplace(20, 1);
+    set.emplace(40, 1);
+    set.emplace(60, 1);
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 20); CHECK(set.nth(0)->second == 1);
@@ -329,9 +146,9 @@ PRINT("Test find, count, contains");
                                        std::equal_to<xint>,
                                        TPARAM_ALLOCATOR<xint> > set;
 
-        set.emplace_back(20);
-        set.emplace_back(40);
-        set.emplace_back(60);
+        set.emplace(20);
+        set.emplace(40);
+        set.emplace(60);
 
         CHECK(set.size() == 3);
         CHECK(*set.nth(0) == 20);
@@ -376,9 +193,9 @@ PRINT("Test find, count, contains");
                                        xobj::equal,
                                        TPARAM_ALLOCATOR<xobj> > set;
 
-        set.emplace_back(20);
-        set.emplace_back(40);
-        set.emplace_back(60);
+        set.emplace(20);
+        set.emplace(40);
+        set.emplace(60);
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->value() == 20);
@@ -428,9 +245,9 @@ PRINT("Test clear()");
 
     CHECK(set.size() == 0);
 
-    set.emplace_back(10, 1);
-    set.emplace_back(20, 1);
-    set.emplace_back(30, 1);
+    set.emplace(10, 1);
+    set.emplace(20, 1);
+    set.emplace(30, 1);
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -441,9 +258,9 @@ PRINT("Test clear()");
 
     CHECK(set.size() == 0);
 
-    set.emplace_back(40, 2);
-    set.emplace_back(50, 2);
-    set.emplace_back(60, 2);
+    set.emplace(40, 2);
+    set.emplace(50, 2);
+    set.emplace(60, 2);
 
     CHECK(set.size() == 3);
     CHECK(set.nth(0)->first == 40); CHECK(set.nth(0)->second == 2);
