@@ -44,6 +44,10 @@ This is header-only C++11 library that offers several new or less-known containe
 
 #### Associative containers based on **sorted vectors**:
 
+* [`flat_map`](doc/flat_map.md)
+* [`flat_set`](doc/flat_set.md)
+* [`flat_multimap`](doc/flat_multimap.md)
+* [`flat_multiset`](doc/flat_multiset.md) <br><br>
 * [`small_flat_map`](doc/small_flat_map.md)
 * [`small_flat_set`](doc/small_flat_set.md)
 * [`small_flat_multimap`](doc/small_flat_multimap.md)
