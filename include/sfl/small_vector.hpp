@@ -98,7 +98,7 @@ private:
             , eos_(first_ + N)
         {}
 
-        ~data_base() noexcept
+        ~data_base()
         {}
 
         pointer internal_storage() noexcept

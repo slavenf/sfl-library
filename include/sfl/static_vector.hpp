@@ -80,7 +80,7 @@ private:
             : last_(first_)
         {}
 
-        ~data() noexcept
+        ~data()
         {}
     };
 
