@@ -36,12 +36,6 @@ namespace sfl
 namespace dtl
 {
 
-template <typename InputIt, typename Size, typename OutputIt>
-OutputIt copy_n(InputIt first, Size count, OutputIt d_first)
-{
-    return std::copy_n(first, count, d_first);
-}
-
 template <typename BidirIt1, typename BidirIt2,
           sfl::dtl::enable_if_t< (!sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
                                   !sfl::dtl::is_segmented_iterator<BidirIt2>::value) ||
