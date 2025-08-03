@@ -26,6 +26,7 @@
 #include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
+#include <sfl/detail/memory/value_construct_at.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
@@ -43,12 +44,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <typename T>
-void value_construct_at(T* p)
-{
-    ::new (static_cast<void*>(p)) T();
-}
 
 template <typename T, typename... Args>
 void construct_at(T* p, Args&&... args)
