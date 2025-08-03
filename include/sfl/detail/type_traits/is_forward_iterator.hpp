@@ -18,14 +18,13 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
-#define SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
+#ifndef SFL_DETAIL_IS_FORWARD_ITERATOR_HPP_INCLUDED
+#define SFL_DETAIL_IS_FORWARD_ITERATOR_HPP_INCLUDED
 
 #include <sfl/detail/type_traits/enable_if_t.hpp>
-#include <sfl/detail/type_traits/void_t.hpp>
 
-#include <iterator>
-#include <type_traits>
+#include <iterator>    // iterator_traits, forward_iterator_tag
+#include <type_traits> // true_type, false_type, is_convertible
 
 namespace sfl
 {
@@ -33,36 +32,25 @@ namespace sfl
 namespace dtl
 {
 
-//
-// Checks if `T` is random access iterator.
-//
 template <typename T, typename = void>
-struct is_random_access_iterator : std::false_type {};
+struct is_forward_iterator : std::false_type {};
 
 template <typename T>
-struct is_random_access_iterator<
+struct is_forward_iterator
+<
     T,
-    sfl::dtl::enable_if_t<
-        std::is_convertible<
+    sfl::dtl::enable_if_t
+    <
+        std::is_convertible
+        <
             typename std::iterator_traits<T>::iterator_category,
-            std::random_access_iterator_tag
+            std::forward_iterator_tag
         >::value
     >
-> : std::true_type {};
-
-//
-// Checks if `Type` has member `is_transparent`.
-//
-template <typename Type, typename SfinaeType, typename = void>
-struct has_is_transparent : std::false_type {};
-
-template <typename Type, typename SfinaeType>
-struct has_is_transparent<
-    Type, SfinaeType, sfl::dtl::void_t<typename Type::is_transparent>
 > : std::true_type {};
 
 } // namespace dtl
 
 } // namespace sfl
 
-#endif // SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
+#endif // SFL_DETAIL_IS_FORWARD_ITERATOR_HPP_INCLUDED
