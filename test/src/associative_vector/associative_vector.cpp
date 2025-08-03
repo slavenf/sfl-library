@@ -3,6 +3,7 @@
 #define SFL_TEST_ASSOCIATIVE_VECTOR
 #include "sfl/detail/associative_vector.hpp"
 
+#include <sfl/detail/functional/first.hpp>
 #include <sfl/detail/functional/identity.hpp>
 #include "sfl/detail/functional.hpp"
 #include "sfl/vector.hpp"

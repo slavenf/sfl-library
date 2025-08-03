@@ -3,6 +3,7 @@
 #define SFL_TEST_HASH_TABLE
 #include "sfl/detail/hash_table.hpp"
 
+#include <sfl/detail/functional/first.hpp>
 #include <sfl/detail/functional/identity.hpp>
 #include "sfl/detail/functional.hpp"
 

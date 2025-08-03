@@ -23,6 +23,7 @@
 
 #include <sfl/detail/bit/bit_ceil.hpp>
 #include <sfl/detail/concepts/container_compatible_range.hpp>
+#include <sfl/detail/functional/first.hpp>
 #include <sfl/detail/math/is_pow2.hpp>
 #include <sfl/detail/math/is_prime.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
