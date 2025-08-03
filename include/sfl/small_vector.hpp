@@ -22,6 +22,7 @@
 #define SFL_SMALL_VECTOR_HPP_INCLUDED
 
 #include <sfl/detail/algorithm/copy.hpp>
+#include <sfl/detail/algorithm/fill.hpp>
 #include <sfl/detail/algorithm/move.hpp>
 #include <sfl/detail/algorithm/move_backward.hpp>
 #include <sfl/detail/concepts/container_compatible_range.hpp>

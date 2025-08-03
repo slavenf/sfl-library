@@ -36,63 +36,6 @@ namespace sfl
 namespace dtl
 {
 
-template <typename ForwardIt, typename T,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void fill(ForwardIt first, ForwardIt last, const T& value)
-{
-    std::fill(first, last, value);
-}
-
-template <typename ForwardIt, typename T,
-          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void fill(ForwardIt first, ForwardIt last, const T& value)
-{
-    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
-
-    auto first_seg = traits::segment(first);
-    auto last_seg  = traits::segment(last);
-
-    if (first_seg == last_seg)
-    {
-        sfl::dtl::fill
-        (
-            traits::local(first),
-            traits::local(last),
-            value
-        );
-    }
-    else
-    {
-        sfl::dtl::fill
-        (
-            traits::local(first),
-            traits::end(first_seg),
-            value
-        );
-
-        ++first_seg;
-
-        while (first_seg != last_seg)
-        {
-            sfl::dtl::fill
-            (
-                traits::begin(first_seg),
-                traits::end(first_seg),
-                value
-            );
-
-            ++first_seg;
-        }
-
-        sfl::dtl::fill
-        (
-            traits::begin(last_seg),
-            traits::local(last),
-            value
-        );
-    }
-}
-
 template <typename OutputIt, typename Size, typename T>
 OutputIt fill_n(OutputIt first, Size count, const T& value)
 {
