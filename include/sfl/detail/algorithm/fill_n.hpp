@@ -18,17 +18,10 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_INITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
-#define SFL_DETAIL_INITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
+#ifndef SFL_DETAIL_FILL_N_HPP_INCLUDED
+#define SFL_DETAIL_FILL_N_HPP_INCLUDED
 
-#include <sfl/detail/type_traits/enable_if_t.hpp>
-#include <sfl/detail/type_traits/is_random_access_iterator.hpp>
-#include <sfl/detail/type_traits/is_segmented_iterator.hpp>
-#include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
-#include <sfl/detail/cpp.hpp>
-
-#include <algorithm>
-#include <iterator>
+#include <algorithm> // fill_n
 
 namespace sfl
 {
@@ -36,8 +29,14 @@ namespace sfl
 namespace dtl
 {
 
+template <typename OutputIt, typename Size, typename T>
+OutputIt fill_n(OutputIt first, Size count, const T& value)
+{
+    return std::fill_n(first, count, value);
+}
+
 } // namespace dtl
 
 } // namespace sfl
 
-#endif // SFL_DETAIL_INITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
+#endif // SFL_DETAIL_FILL_N_HPP_INCLUDED
