@@ -24,9 +24,9 @@
 #include <sfl/detail/cpp.hpp>
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
+
 #include <concepts>
 #include <ranges>
-#endif
 
 namespace sfl
 {
@@ -34,15 +34,15 @@ namespace sfl
 namespace dtl
 {
 
-#if SFL_CPP_VERSION >= SFL_CPP_20
 template <typename Range, typename T>
 concept container_compatible_range =
     std::ranges::input_range<Range> &&
     std::convertible_to<std::ranges::range_reference_t<Range>, T>;
-#endif
 
 } // namespace dtl
 
 } // namespace sfl
+
+#endif // SFL_CPP_VERSION >= SFL_CPP_20
 
 #endif // SFL_DETAIL_CONTAINER_COMPATIBLE_RANGE_HPP_INCLUDED
