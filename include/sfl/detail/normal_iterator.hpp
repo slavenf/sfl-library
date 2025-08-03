@@ -24,7 +24,6 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/to_address.hpp>
-#include <sfl/detail/type_traits.hpp>
 
 #include <iterator>
 #include <type_traits>

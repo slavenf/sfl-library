@@ -28,7 +28,6 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/optional_value.hpp>
 #include <sfl/detail/to_address.hpp>
-#include <sfl/detail/type_traits.hpp>
 #include <sfl/detail/uninitialized_memory_algorithms.hpp>
 
 #include <algorithm>    // equal, lexicographical_compare

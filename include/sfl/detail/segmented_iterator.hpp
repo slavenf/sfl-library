@@ -25,7 +25,6 @@
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/to_address.hpp>
-#include <sfl/detail/type_traits.hpp>
 
 #include <cstddef>
 #include <iterator>

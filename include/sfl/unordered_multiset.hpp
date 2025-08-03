@@ -30,7 +30,6 @@
 #include <sfl/detail/functional.hpp>
 #include <sfl/detail/hash_table.hpp>
 #include <sfl/detail/tags.hpp>
-#include <sfl/detail/type_traits.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, hash

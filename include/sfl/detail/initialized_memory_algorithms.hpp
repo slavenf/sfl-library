@@ -26,7 +26,6 @@
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/type_traits.hpp>
 
 #include <algorithm>
 #include <iterator>

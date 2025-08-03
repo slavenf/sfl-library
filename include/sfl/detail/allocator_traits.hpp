@@ -24,7 +24,6 @@
 #include <sfl/detail/type_traits/void_t.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>
-#include <sfl/detail/type_traits.hpp>
 
 #include <limits>       // numeric_limits
 #include <memory>       // pointer_traits

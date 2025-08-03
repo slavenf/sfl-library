@@ -31,7 +31,6 @@
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/functional.hpp>
 #include <sfl/detail/tags.hpp>
-#include <sfl/detail/type_traits.hpp>
 #include <sfl/vector.hpp>
 
 #include <functional>       // less

@@ -24,7 +24,6 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/type_traits.hpp>
 
 #include <algorithm>    // lexicographical_compare, lower_bound, upper_bound
 #include <iterator>     // distance, next, prev

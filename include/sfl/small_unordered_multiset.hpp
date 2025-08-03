@@ -36,7 +36,6 @@
 #include <sfl/detail/small_node_allocator.hpp>
 #include <sfl/detail/small_storage_allocator.hpp>
 #include <sfl/detail/tags.hpp>
-#include <sfl/detail/type_traits.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, hash
