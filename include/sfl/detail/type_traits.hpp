@@ -22,6 +22,7 @@
 #define SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
 
 #include <sfl/detail/type_traits/enable_if_t.hpp>
+#include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
 #include <sfl/detail/type_traits/void_t.hpp>
 
 #include <iterator>
@@ -32,34 +33,6 @@ namespace sfl
 
 namespace dtl
 {
-
-//
-// This struct provides information about segmented iterators.
-//
-// The architecture about segmented iterator traits is based on this article:
-// "Segmented Iterators and Hierarchical Algorithms", Matthew H. Austern.
-//
-template <typename T>
-struct segmented_iterator_traits
-{
-    using is_segmented_iterator = std::false_type;
-
-    //
-    // Specialized struct must define the following types and functions:
-    //
-    // using iterator         = xxxxx; (it is usually `T`)
-    // using segment_iterator = xxxxx;
-    // using local_iterator   = xxxxx;
-    //
-    // static segment_iterator segment(iterator);
-    // static local_iterator   local(iterator);
-    //
-    // static local_iterator begin(segment_iterator);
-    // static local_iterator end(segment_iterator);
-    //
-    // static iterator compose(segment_iterator, local_iterator);
-    //
-};
 
 //
 // Checks if `T` is segmented iterator.

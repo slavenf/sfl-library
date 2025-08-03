@@ -22,6 +22,7 @@
 #define SFL_DETAIL_INITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
 
 #include <sfl/detail/type_traits/enable_if_t.hpp>
+#include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/type_traits.hpp>
 
