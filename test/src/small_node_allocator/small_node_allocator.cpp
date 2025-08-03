@@ -2,6 +2,7 @@
 
 #include "sfl/detail/small_node_allocator.hpp"
 
+#include "sfl/detail/memory/allocate.hpp"
 #include "sfl/detail/uninitialized_memory_algorithms.hpp"
 
 #include "check.hpp"

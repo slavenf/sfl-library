@@ -39,16 +39,6 @@ namespace sfl
 namespace dtl
 {
 
-template <typename Allocator, typename Size>
-auto allocate(Allocator& a, Size n) -> typename std::allocator_traits<Allocator>::pointer
-{
-    if (n != 0)
-    {
-        return std::allocator_traits<Allocator>::allocate(a, n);
-    }
-    return nullptr;
-}
-
 template <typename Allocator, typename Pointer, typename Size>
 void deallocate(Allocator& a, Pointer p, Size n) noexcept
 {
