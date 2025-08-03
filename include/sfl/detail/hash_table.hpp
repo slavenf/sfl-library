@@ -28,6 +28,7 @@
 #include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
+#include <sfl/detail/memory/uninitialized_default_construct_n_a.hpp>
 #include <sfl/detail/type_traits/conjunction.hpp>
 #include <sfl/detail/type_traits/disjunction.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
