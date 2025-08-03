@@ -22,6 +22,7 @@
 #define SFL_DETAIL_UNINITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
 
 #include <sfl/detail/memory/construct_at_a.hpp>
+#include <sfl/detail/memory/default_construct_at.hpp>
 #include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
@@ -42,15 +43,6 @@ namespace sfl
 
 namespace dtl
 {
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-template <typename T>
-void default_construct_at(T* p)
-{
-    ::new (static_cast<void*>(p)) T;
-}
 
 template <typename T>
 void value_construct_at(T* p)
