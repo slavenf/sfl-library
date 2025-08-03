@@ -24,6 +24,7 @@
 #include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
+#include <sfl/detail/memory/destroy_n_a.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
@@ -41,63 +42,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <typename Allocator, typename ForwardIt, typename Size,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt destroy_n_a(Allocator& a, ForwardIt first, Size n) noexcept
-{
-    while (n > 0)
-    {
-        sfl::dtl::destroy_at_a(a, std::addressof(*first));
-        ++first;
-        --n;
-    }
-    return first;
-}
-
-template <typename Allocator, typename ForwardIt, typename Size,
-          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-ForwardIt destroy_n_a(Allocator& a, ForwardIt first, Size n) noexcept
-{
-    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
-
-    auto curr_local = traits::local(first);
-    auto curr_seg   = traits::segment(first);
-
-    auto remainining = n;
-
-    while (true)
-    {
-        using difference_type =
-            typename std::iterator_traits<typename traits::local_iterator>::difference_type;
-
-        const auto count = std::min<difference_type>
-        (
-            remainining,
-            std::distance(curr_local, traits::end(curr_seg))
-        );
-
-        curr_local = sfl::dtl::destroy_n_a
-        (
-            a,
-            curr_local,
-            count
-        );
-
-        remainining -= count;
-
-        SFL_ASSERT(remainining <= n && "Bug in algorithm. Please report it.");
-
-        if (remainining == 0)
-        {
-            return traits::compose(curr_seg, curr_local);
-        }
-
-        ++curr_seg;
-
-        curr_local = traits::begin(curr_seg);
-    }
-}
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
