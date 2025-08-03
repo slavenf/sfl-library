@@ -25,6 +25,7 @@
 #include <sfl/detail/bit/bit_log2.hpp>
 #include <sfl/detail/bit/has_single_bit.hpp>
 #include <sfl/detail/math/is_prime.hpp>
+#include <sfl/detail/memory/construct_at.hpp>
 #include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
