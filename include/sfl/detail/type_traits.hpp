@@ -33,9 +33,6 @@ namespace sfl
 namespace dtl
 {
 
-template <typename T>
-using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;
-
 //
 // This struct provides information about segmented iterators.
 //

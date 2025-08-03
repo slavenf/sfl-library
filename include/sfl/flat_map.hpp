@@ -22,6 +22,7 @@
 #define SFL_FLAT_MAP_HPP_INCLUDED
 
 #include <sfl/detail/type_traits/enable_if_t.hpp>
+#include <sfl/detail/type_traits/remove_cvref_t.hpp>
 #include <sfl/detail/associative_vector.hpp>
 #include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>
