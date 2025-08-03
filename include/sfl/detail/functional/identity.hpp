@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_FUNCTIONAL_HPP_INCLUDED
-#define SFL_DETAIL_FUNCTIONAL_HPP_INCLUDED
+#ifndef SFL_DETAIL_IDENTITY_HPP_INCLUDED
+#define SFL_DETAIL_IDENTITY_HPP_INCLUDED
 
 #include <sfl/detail/cpp.hpp>
 
@@ -29,21 +29,21 @@ namespace sfl
 namespace dtl
 {
 
-// Function object type whose operator() returns first element of pair unchanged.
-struct first
+// Function object type whose operator() returns its argument unchanged.
+struct identity
 {
-    template <typename Pair>
+    template <typename T>
     SFL_NODISCARD
-    typename Pair::first_type& operator()(Pair& p) const noexcept
+    T& operator()(T& t) const noexcept
     {
-        return p.first;
+        return t;
     }
 
-    template <typename Pair>
+    template <typename T>
     SFL_NODISCARD
-    const typename Pair::first_type& operator()(const Pair& p) const noexcept
+    const T& operator()(const T& t) const noexcept
     {
-        return p.first;
+        return t;
     }
 };
 
@@ -51,4 +51,4 @@ struct first
 
 } // namespace sfl
 
-#endif // SFL_DETAIL_FUNCTIONAL_HPP_INCLUDED
+#endif // SFL_DETAIL_IDENTITY_HPP_INCLUDED
