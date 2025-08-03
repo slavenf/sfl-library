@@ -5,6 +5,7 @@
 #include "sfl/detail/memory/allocate.hpp"
 #include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/memory/deallocate.hpp>
+#include <sfl/detail/memory/destroy_at_a.hpp>
 #include "sfl/detail/uninitialized_memory_algorithms.hpp"
 
 #include "check.hpp"
