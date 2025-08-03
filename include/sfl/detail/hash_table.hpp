@@ -43,7 +43,6 @@
 #include <sfl/detail/optional_value.hpp>
 #include <sfl/detail/scope_guard.hpp>
 #include <sfl/detail/to_address.hpp>
-#include <sfl/detail/uninitialized_memory_algorithms.hpp>
 
 #include <algorithm>    // max, min
 #include <cmath>        // ceil, floor

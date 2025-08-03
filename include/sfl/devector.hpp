@@ -48,7 +48,6 @@
 #include <sfl/detail/scope_guard.hpp>
 #include <sfl/detail/tags.hpp>
 #include <sfl/detail/to_address.hpp>
-#include <sfl/detail/uninitialized_memory_algorithms.hpp>
 
 #include <algorithm>        // copy, move, swap, swap_ranges
 #include <cstddef>          // size_t
