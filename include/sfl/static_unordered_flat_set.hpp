@@ -21,10 +21,10 @@
 #ifndef SFL_STATIC_UNORDERED_FLAT_SET_HPP_INCLUDED
 #define SFL_STATIC_UNORDERED_FLAT_SET_HPP_INCLUDED
 
+#include <sfl/detail/concepts/container_compatible_range.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/has_is_transparent.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
-#include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/functional.hpp>
