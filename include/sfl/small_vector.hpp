@@ -37,6 +37,7 @@
 #include <sfl/detail/memory/uninitialized_fill_a.hpp>
 #include <sfl/detail/memory/uninitialized_fill_n_a.hpp>
 #include <sfl/detail/memory/uninitialized_move_a.hpp>
+#include <sfl/detail/memory/uninitialized_move_if_noexcept_a.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
