@@ -30,6 +30,7 @@
 #include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
+#include <sfl/detail/memory/uninitialized_copy_a.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n_a.hpp>
 #include <sfl/detail/memory/uninitialized_fill_n_a.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
