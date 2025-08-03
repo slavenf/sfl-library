@@ -48,25 +48,6 @@ namespace sfl
 namespace dtl
 {
 
-template <typename ForwardIt, typename T>
-void uninitialized_fill(ForwardIt first, ForwardIt last, const T& value)
-{
-    ForwardIt curr = first;
-    SFL_TRY
-    {
-        while (curr != last)
-        {
-            sfl::dtl::construct_at(std::addressof(*curr), value);
-            ++curr;
-        }
-    }
-    SFL_CATCH (...)
-    {
-        sfl::dtl::destroy(first, curr);
-        SFL_RETHROW;
-    }
-}
-
 template <typename ForwardIt, typename Size, typename T>
 ForwardIt uninitialized_fill_n(ForwardIt first, Size n, const T& value)
 {

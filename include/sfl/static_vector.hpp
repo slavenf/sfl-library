@@ -30,6 +30,7 @@
 #include <sfl/detail/memory/destroy.hpp>
 #include <sfl/detail/memory/destroy_at.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n.hpp>
+#include <sfl/detail/memory/uninitialized_fill.hpp>
 #include <sfl/detail/memory/uninitialized_value_construct_n.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
