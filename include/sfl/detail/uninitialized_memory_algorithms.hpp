@@ -39,15 +39,6 @@ namespace sfl
 namespace dtl
 {
 
-template <typename Allocator, typename Pointer, typename Size>
-void deallocate(Allocator& a, Pointer p, Size n) noexcept
-{
-    if (p != nullptr)
-    {
-        std::allocator_traits<Allocator>::deallocate(a, p, n);
-    }
-}
-
 template <typename Allocator, typename Pointer, typename... Args>
 void construct_at_a(Allocator& a, Pointer p, Args&&... args)
 {
