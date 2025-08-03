@@ -29,6 +29,7 @@
 #include <sfl/detail/memory/construct_at.hpp>
 #include <sfl/detail/memory/destroy.hpp>
 #include <sfl/detail/memory/destroy_at.hpp>
+#include <sfl/detail/memory/uninitialized_copy.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n.hpp>
 #include <sfl/detail/memory/uninitialized_fill.hpp>
 #include <sfl/detail/memory/uninitialized_fill_n.hpp>

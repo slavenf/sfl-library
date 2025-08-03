@@ -18,29 +18,14 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_UNINITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
-#define SFL_DETAIL_UNINITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
+#ifndef SFL_DETAIL_UNINITIALIZED_COPY_HPP_INCLUDED
+#define SFL_DETAIL_UNINITIALIZED_COPY_HPP_INCLUDED
 
 #include <sfl/detail/memory/construct_at.hpp>
-#include <sfl/detail/memory/construct_at_a.hpp>
-#include <sfl/detail/memory/default_construct_at.hpp>
 #include <sfl/detail/memory/destroy.hpp>
-#include <sfl/detail/memory/destroy_a.hpp>
-#include <sfl/detail/memory/destroy_at.hpp>
-#include <sfl/detail/memory/destroy_at_a.hpp>
-#include <sfl/detail/memory/destroy_n_a.hpp>
-#include <sfl/detail/memory/value_construct_at.hpp>
-#include <sfl/detail/type_traits/enable_if_t.hpp>
-#include <sfl/detail/type_traits/is_random_access_iterator.hpp>
-#include <sfl/detail/type_traits/is_segmented_iterator.hpp>
-#include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/to_address.hpp>
 
-#include <algorithm>
-#include <iterator>
-#include <memory>
-#include <utility>
+#include <memory> // addressof
 
 namespace sfl
 {
@@ -49,14 +34,14 @@ namespace dtl
 {
 
 template <typename InputIt, typename ForwardIt>
-ForwardIt uninitialized_move(InputIt first, InputIt last, ForwardIt d_first)
+ForwardIt uninitialized_copy(InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
     SFL_TRY
     {
         while (first != last)
         {
-            sfl::dtl::construct_at(std::addressof(*d_curr), std::move(*first));
+            sfl::dtl::construct_at(std::addressof(*d_curr), *first);
             ++d_curr;
             ++first;
         }
@@ -73,4 +58,4 @@ ForwardIt uninitialized_move(InputIt first, InputIt last, ForwardIt d_first)
 
 } // namespace sfl
 
-#endif // SFL_DETAIL_UNINITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
+#endif // SFL_DETAIL_UNINITIALIZED_COPY_HPP_INCLUDED
