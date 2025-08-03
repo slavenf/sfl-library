@@ -18,14 +18,12 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
-#define SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
+#ifndef SFL_DETAIL_HAS_IS_TRANSPARENT_HPP_INCLUDED
+#define SFL_DETAIL_HAS_IS_TRANSPARENT_HPP_INCLUDED
 
-#include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/void_t.hpp>
 
-#include <iterator>
-#include <type_traits>
+#include <type_traits> // true_type, false_type
 
 namespace sfl
 {
@@ -33,8 +31,14 @@ namespace sfl
 namespace dtl
 {
 
+template <typename Type, typename SfinaeType, typename = void>
+struct has_is_transparent : std::false_type {};
+
+template <typename Type, typename SfinaeType>
+struct has_is_transparent<Type, SfinaeType, sfl::dtl::void_t<typename Type::is_transparent>> : std::true_type {};
+
 } // namespace dtl
 
 } // namespace sfl
 
-#endif // SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
+#endif // SFL_DETAIL_HAS_IS_TRANSPARENT_HPP_INCLUDED

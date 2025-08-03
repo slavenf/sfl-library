@@ -22,6 +22,7 @@
 #define SFL_SMALL_MAP_HPP_INCLUDED
 
 #include <sfl/detail/type_traits/enable_if_t.hpp>
+#include <sfl/detail/type_traits/has_is_transparent.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/type_traits/remove_cvref_t.hpp>
 #include <sfl/detail/allocator_traits.hpp>
