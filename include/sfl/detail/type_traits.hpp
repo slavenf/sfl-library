@@ -22,7 +22,6 @@
 #define SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
 
 #include <sfl/detail/type_traits/enable_if_t.hpp>
-#include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
 #include <sfl/detail/type_traits/void_t.hpp>
 
 #include <iterator>
@@ -33,13 +32,6 @@ namespace sfl
 
 namespace dtl
 {
-
-//
-// Checks if `T` is segmented iterator.
-//
-template <typename T>
-struct is_segmented_iterator :
-    sfl::dtl::segmented_iterator_traits<T>::is_segmented_iterator {};
 
 //
 // Checks if `T` is input iterator.
