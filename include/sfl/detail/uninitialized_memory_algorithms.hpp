@@ -21,6 +21,7 @@
 #ifndef SFL_DETAIL_UNINITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
 #define SFL_DETAIL_UNINITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
 
+#include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
@@ -38,17 +39,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <typename Allocator, typename Pointer, typename... Args>
-void construct_at_a(Allocator& a, Pointer p, Args&&... args)
-{
-    std::allocator_traits<Allocator>::construct
-    (
-        a,
-        sfl::dtl::to_address(p),
-        std::forward<Args>(args)...
-    );
-}
 
 template <typename Allocator, typename Pointer>
 void destroy_at_a(Allocator& a, Pointer p) noexcept
