@@ -27,6 +27,7 @@
 #include <sfl/detail/math/is_prime.hpp>
 #include <sfl/detail/memory/construct_at.hpp>
 #include <sfl/detail/memory/construct_at_a.hpp>
+#include <sfl/detail/memory/destroy_at.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n_a.hpp>

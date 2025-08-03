@@ -3,6 +3,7 @@
 #include "sfl/detail/static_pool.hpp"
 
 #include "sfl/detail/memory/construct_at.hpp"
+#include "sfl/detail/memory/destroy_at.hpp"
 #include "sfl/detail/uninitialized_memory_algorithms.hpp"
 
 #include "check.hpp"

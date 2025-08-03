@@ -25,6 +25,7 @@
 #include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/memory/default_construct_at.hpp>
 #include <sfl/detail/memory/destroy_a.hpp>
+#include <sfl/detail/memory/destroy_at.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
 #include <sfl/detail/memory/value_construct_at.hpp>
@@ -45,12 +46,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <typename T>
-void destroy_at(T* p) noexcept
-{
-    p->~T();
-}
 
 template <typename ForwardIt>
 void destroy(ForwardIt first, ForwardIt last) noexcept
