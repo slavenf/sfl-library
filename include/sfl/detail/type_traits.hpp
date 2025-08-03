@@ -34,23 +34,6 @@ namespace dtl
 {
 
 //
-// Checks if `T` is input iterator.
-//
-template <typename Iterator, typename = void>
-struct is_input_iterator : std::false_type {};
-
-template <typename Iterator>
-struct is_input_iterator<
-    Iterator,
-    sfl::dtl::enable_if_t<
-        std::is_convertible<
-            typename std::iterator_traits<Iterator>::iterator_category,
-            std::input_iterator_tag
-        >::value
-    >
-> : std::true_type {};
-
-//
 // Checks if `T` is exactly input iterator.
 //
 template <typename T, typename = void>
