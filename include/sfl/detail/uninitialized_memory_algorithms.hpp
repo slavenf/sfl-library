@@ -22,6 +22,7 @@
 #define SFL_DETAIL_UNINITIALIZED_MEMORY_ALGORITHMS_HPP_INCLUDED
 
 #include <sfl/detail/memory/construct_at_a.hpp>
+#include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
@@ -40,67 +41,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <typename Allocator, typename ForwardIt,
-          sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void destroy_a(Allocator& a, ForwardIt first, ForwardIt last) noexcept
-{
-    while (first != last)
-    {
-        sfl::dtl::destroy_at_a(a, std::addressof(*first));
-        ++first;
-    }
-}
-
-template <typename Allocator, typename ForwardIt,
-          sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
-void destroy_a(Allocator& a, ForwardIt first, ForwardIt last) noexcept
-{
-    using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
-
-    auto first_seg = traits::segment(first);
-    auto last_seg  = traits::segment(last);
-
-    if (first_seg == last_seg)
-    {
-        sfl::dtl::destroy_a
-        (
-            a,
-            traits::local(first),
-            traits::local(last)
-        );
-    }
-    else
-    {
-        sfl::dtl::destroy_a
-        (
-            a,
-            traits::local(first),
-            traits::end(first_seg)
-        );
-
-        ++first_seg;
-
-        while (first_seg != last_seg)
-        {
-            sfl::dtl::destroy_a
-            (
-                a,
-                traits::begin(first_seg),
-                traits::end(first_seg)
-            );
-
-            ++first_seg;
-        }
-
-        sfl::dtl::destroy_a
-        (
-            a,
-            traits::begin(last_seg),
-            traits::local(last)
-        );
-    }
-}
 
 template <typename Allocator, typename ForwardIt, typename Size,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
