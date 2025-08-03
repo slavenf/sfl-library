@@ -21,6 +21,8 @@
 #ifndef SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
 #define SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/void_t.hpp>
+
 #include <iterator>
 #include <type_traits>
 
@@ -29,9 +31,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <typename...>
-using void_t = void;
 
 template <bool B, typename T = void>
 using enable_if_t = typename std::enable_if<B, T>::type;
