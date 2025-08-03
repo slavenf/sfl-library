@@ -8,9 +8,8 @@
 #define SFL_TEST_RB_TREE
 #include "sfl/detail/rb_tree.hpp"
 
-#include <sfl/detail/functional/first.hpp>
-#include <sfl/detail/functional/identity.hpp>
-#include "sfl/detail/functional.hpp"
+#include "sfl/detail/functional/first.hpp"
+#include "sfl/detail/functional/identity.hpp"
 
 #include "check.hpp"
 #include "nth.hpp"

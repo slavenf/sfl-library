@@ -31,7 +31,6 @@
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
-#include <sfl/detail/functional.hpp>
 #include <sfl/detail/hash_table.hpp>
 #include <sfl/detail/static_node_allocator.hpp>
 #include <sfl/detail/static_storage_allocator.hpp>

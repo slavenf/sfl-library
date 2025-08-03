@@ -30,7 +30,6 @@
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
-#include <sfl/detail/functional.hpp>
 #include <sfl/detail/rb_tree.hpp>
 #include <sfl/detail/tags.hpp>
 

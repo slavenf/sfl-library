@@ -28,7 +28,6 @@
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/functional.hpp>
 #include <sfl/detail/rb_tree.hpp>
 #include <sfl/detail/tags.hpp>
 
