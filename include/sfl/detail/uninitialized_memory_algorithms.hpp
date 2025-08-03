@@ -24,6 +24,7 @@
 #include <sfl/detail/memory/construct_at.hpp>
 #include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/memory/default_construct_at.hpp>
+#include <sfl/detail/memory/destroy.hpp>
 #include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
@@ -46,16 +47,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <typename ForwardIt>
-void destroy(ForwardIt first, ForwardIt last) noexcept
-{
-    while (first != last)
-    {
-        sfl::dtl::destroy_at(std::addressof(*first));
-        ++first;
-    }
-}
 
 template <typename ForwardIt, typename Size>
 ForwardIt uninitialized_default_construct_n(ForwardIt first, Size n)
