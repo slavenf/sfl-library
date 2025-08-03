@@ -21,6 +21,7 @@
 #ifndef SFL_FLAT_SET_HPP_INCLUDED
 #define SFL_FLAT_SET_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/associative_vector.hpp>
 #include <sfl/detail/container_compatible_range.hpp>
 #include <sfl/detail/cpp.hpp>

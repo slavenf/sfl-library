@@ -27,6 +27,7 @@
 #include <sfl/detail/math/is_prime.hpp>
 #include <sfl/detail/type_traits/conjunction.hpp>
 #include <sfl/detail/type_traits/disjunction.hpp>
+#include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_nothrow_swappable.hpp>
 #include <sfl/detail/utility/compressed_pair.hpp>
 #include <sfl/detail/utility/floating_point_to_size_t.hpp>

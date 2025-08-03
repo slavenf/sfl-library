@@ -21,6 +21,7 @@
 #ifndef SFL_DETAIL_RB_TREE_HPP_INCLUDED
 #define SFL_DETAIL_RB_TREE_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/disjunction.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>

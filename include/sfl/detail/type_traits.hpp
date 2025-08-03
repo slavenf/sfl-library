@@ -21,6 +21,7 @@
 #ifndef SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
 #define SFL_DETAIL_TYPE_TRAITS_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/void_t.hpp>
 
 #include <iterator>
@@ -31,9 +32,6 @@ namespace sfl
 
 namespace dtl
 {
-
-template <bool B, typename T = void>
-using enable_if_t = typename std::enable_if<B, T>::type;
 
 template <typename T>
 using remove_cvref_t = typename std::remove_cv<typename std::remove_reference<T>::type>::type;

@@ -21,6 +21,7 @@
 #ifndef SFL_DETAIL_SEGMENTED_ITERATOR_HPP_INCLUDED
 #define SFL_DETAIL_SEGMENTED_ITERATOR_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/to_address.hpp>
 #include <sfl/detail/type_traits.hpp>

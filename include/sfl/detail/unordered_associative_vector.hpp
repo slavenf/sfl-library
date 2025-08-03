@@ -21,6 +21,7 @@
 #ifndef SFL_DETAIL_UNORDERED_ASSOCIATIVE_VECTOR_HPP_INCLUDED
 #define SFL_DETAIL_UNORDERED_ASSOCIATIVE_VECTOR_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>
 #include <sfl/detail/initialized_memory_algorithms.hpp>
