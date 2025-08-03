@@ -21,6 +21,7 @@
 #ifndef SFL_DETAIL_UNORDERED_ASSOCIATIVE_VECTOR_HPP_INCLUDED
 #define SFL_DETAIL_UNORDERED_ASSOCIATIVE_VECTOR_HPP_INCLUDED
 
+#include <sfl/detail/algorithm/move.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
