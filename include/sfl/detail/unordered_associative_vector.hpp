@@ -26,7 +26,6 @@
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/ignore_unused.hpp>
-#include <sfl/detail/initialized_memory_algorithms.hpp>
 
 #include <algorithm>    // is_permutation
 #include <iterator>     // distance, next, prev

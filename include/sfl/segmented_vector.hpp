@@ -30,7 +30,6 @@
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
-#include <sfl/detail/initialized_memory_algorithms.hpp>
 #include <sfl/detail/segmented_iterator.hpp>
 #include <sfl/detail/tags.hpp>
 #include <sfl/detail/uninitialized_memory_algorithms.hpp>

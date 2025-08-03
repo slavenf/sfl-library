@@ -31,7 +31,6 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/index_sequence.hpp>
-#include <sfl/detail/initialized_memory_algorithms.hpp>
 #include <sfl/detail/normal_iterator.hpp>
 #include <sfl/detail/scope_guard.hpp>
 #include <sfl/detail/tags.hpp>
