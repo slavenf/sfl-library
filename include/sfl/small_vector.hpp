@@ -40,6 +40,7 @@
 #include <sfl/detail/memory/uninitialized_move_if_noexcept_a.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
+#include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/normal_iterator.hpp>
@@ -51,7 +52,7 @@
 #include <initializer_list> // initializer_list
 #include <iterator>         // distance, next, reverse_iterator
 #include <limits>           // numeric_limits
-#include <memory>           // allocator, allocator_traits, pointer_traits
+#include <memory>           // allocator, pointer_traits
 #include <type_traits>      // is_same, is_nothrow_xxxxx
 #include <utility>          // forward, move, pair
 
@@ -67,12 +68,12 @@ public:
 
     using allocator_type         = Allocator;
     using value_type             = T;
-    using size_type              = typename std::allocator_traits<allocator_type>::size_type;
-    using difference_type        = typename std::allocator_traits<allocator_type>::difference_type;
+    using size_type              = typename sfl::dtl::allocator_traits<allocator_type>::size_type;
+    using difference_type        = typename sfl::dtl::allocator_traits<allocator_type>::difference_type;
     using reference              = T&;
     using const_reference        = const T&;
-    using pointer                = typename std::allocator_traits<allocator_type>::pointer;
-    using const_pointer          = typename std::allocator_traits<allocator_type>::const_pointer;
+    using pointer                = typename sfl::dtl::allocator_traits<allocator_type>::pointer;
+    using const_pointer          = typename sfl::dtl::allocator_traits<allocator_type>::const_pointer;
     using iterator               = sfl::dtl::normal_iterator<pointer, small_vector>;
     using const_iterator         = sfl::dtl::normal_iterator<const_pointer, small_vector>;
     using reverse_iterator       = std::reverse_iterator<iterator>;
@@ -242,7 +243,7 @@ public:
     small_vector(const small_vector& other)
         : data_
         (
-            std::allocator_traits<allocator_type>::select_on_container_copy_construction
+            sfl::dtl::allocator_traits<allocator_type>::select_on_container_copy_construction
             (
                 other.data_.ref_to_alloc()
             )
@@ -517,7 +518,7 @@ public:
     {
         return std::min<size_type>
         (
-            std::allocator_traits<allocator_type>::max_size(data_.ref_to_alloc()),
+            sfl::dtl::allocator_traits<allocator_type>::max_size(data_.ref_to_alloc()),
             std::numeric_limits<difference_type>::max() / sizeof(value_type)
         );
     }
@@ -1517,7 +1518,7 @@ public:
 
         SFL_ASSERT
         (
-            std::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
+            sfl::dtl::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
             this->data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
@@ -1526,7 +1527,7 @@ public:
         // One allocator can safely destroy_a elements constructed by other
         // allocator regardless the two allocators compare equal or not.
 
-        if (std::allocator_traits<allocator_type>::propagate_on_container_swap::value)
+        if (sfl::dtl::allocator_traits<allocator_type>::propagate_on_container_swap::value)
         {
             swap(this->data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
@@ -2151,7 +2152,7 @@ private:
     {
         if (this != &other)
         {
-            if (std::allocator_traits<allocator_type>::propagate_on_container_copy_assignment::value)
+            if (sfl::dtl::allocator_traits<allocator_type>::propagate_on_container_copy_assignment::value)
             {
                 if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
                 {
@@ -2171,7 +2172,7 @@ private:
 
     void assign_move(small_vector& other)
     {
-        if (std::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value)
+        if (sfl::dtl::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value)
         {
             if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
             {
