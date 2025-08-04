@@ -63,14 +63,13 @@ class vector
 public:
 
     using allocator_type         = Allocator;
-    using allocator_traits       = std::allocator_traits<Allocator>;
     using value_type             = T;
-    using size_type              = typename allocator_traits::size_type;
-    using difference_type        = typename allocator_traits::difference_type;
+    using size_type              = typename std::allocator_traits<allocator_type>::size_type;
+    using difference_type        = typename std::allocator_traits<allocator_type>::difference_type;
     using reference              = T&;
     using const_reference        = const T&;
-    using pointer                = typename allocator_traits::pointer;
-    using const_pointer          = typename allocator_traits::const_pointer;
+    using pointer                = typename std::allocator_traits<allocator_type>::pointer;
+    using const_pointer          = typename std::allocator_traits<allocator_type>::const_pointer;
     using iterator               = sfl::dtl::normal_iterator<pointer, vector>;
     using const_iterator         = sfl::dtl::normal_iterator<const_pointer, vector>;
     using reverse_iterator       = std::reverse_iterator<iterator>;
@@ -193,7 +192,7 @@ public:
     vector(const vector& other)
         : data_
         (
-            allocator_traits::select_on_container_copy_construction
+            std::allocator_traits<allocator_type>::select_on_container_copy_construction
             (
                 other.data_.ref_to_alloc()
             )
@@ -465,7 +464,7 @@ public:
     {
         return std::min<size_type>
         (
-            allocator_traits::max_size(data_.ref_to_alloc()),
+            std::allocator_traits<allocator_type>::max_size(data_.ref_to_alloc()),
             std::numeric_limits<difference_type>::max() / sizeof(value_type)
         );
     }
@@ -1293,7 +1292,7 @@ public:
 
         SFL_ASSERT
         (
-            allocator_traits::propagate_on_container_swap::value ||
+            std::allocator_traits<allocator_type>::propagate_on_container_swap::value ||
             this->data_.ref_to_alloc() == other.data_.ref_to_alloc()
         );
 
@@ -1302,7 +1301,7 @@ public:
         // One allocator can safely destroy_a elements constructed by other
         // allocator regardless the two allocators compare equal or not.
 
-        if (allocator_traits::propagate_on_container_swap::value)
+        if (std::allocator_traits<allocator_type>::propagate_on_container_swap::value)
         {
             swap(this->data_.ref_to_alloc(), other.data_.ref_to_alloc());
         }
@@ -1746,7 +1745,7 @@ private:
     {
         if (this != &other)
         {
-            if (allocator_traits::propagate_on_container_copy_assignment::value)
+            if (std::allocator_traits<allocator_type>::propagate_on_container_copy_assignment::value)
             {
                 if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
                 {
@@ -1766,7 +1765,7 @@ private:
 
     void assign_move(vector& other)
     {
-        if (allocator_traits::propagate_on_container_move_assignment::value)
+        if (std::allocator_traits<allocator_type>::propagate_on_container_move_assignment::value)
         {
             if (data_.ref_to_alloc() != other.data_.ref_to_alloc())
             {
