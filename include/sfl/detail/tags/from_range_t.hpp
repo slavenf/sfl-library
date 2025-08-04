@@ -18,12 +18,15 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_DETAIL_TAGS_HPP_INCLUDED
-#define SFL_DETAIL_TAGS_HPP_INCLUDED
+#ifndef SFL_DETAIL_FROM_RANGE_T_HPP_INCLUDED
+#define SFL_DETAIL_FROM_RANGE_T_HPP_INCLUDED
 
 namespace sfl
 {
 
+// Type used to tag that container is constructed from range.
+struct from_range_t { };
+
 } // namespace sfl
 
-#endif // SFL_DETAIL_TAGS_HPP_INCLUDED
+#endif // SFL_DETAIL_FROM_RANGE_T_HPP_INCLUDED
