@@ -43,11 +43,11 @@
 #include <sfl/detail/tags/from_range_t.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
+#include <sfl/detail/utility/index_sequence.hpp>
 #include <sfl/detail/utility/scope_guard.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
-#include <sfl/detail/index_sequence.hpp>
 #include <sfl/detail/normal_iterator.hpp>
 
 #include <algorithm>        // copy, move, swap, swap_ranges
