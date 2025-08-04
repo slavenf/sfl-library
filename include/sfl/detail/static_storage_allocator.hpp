@@ -21,9 +21,9 @@
 #ifndef SFL_DETAIL_STATIC_STORAGE_ALLOCATOR_HPP_INCLUDED
 #define SFL_DETAIL_STATIC_STORAGE_ALLOCATOR_HPP_INCLUDED
 
+#include <sfl/detail/utility/ignore_unused.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/ignore_unused.hpp>
 
 #include <cstddef>      // size_t, ptrdiff_t
 #include <type_traits>  // true_type, false_type

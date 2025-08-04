@@ -21,8 +21,8 @@
 #ifndef SFL_DETAIL_EXCEPTIONS_HPP_INCLUDED
 #define SFL_DETAIL_EXCEPTIONS_HPP_INCLUDED
 
+#include <sfl/detail/utility/ignore_unused.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/ignore_unused.hpp>
 
 #include <cstdlib>      // abort
 #include <stdexcept>    // length_error, out_of_range

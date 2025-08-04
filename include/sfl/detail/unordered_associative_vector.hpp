@@ -24,8 +24,8 @@
 #include <sfl/detail/algorithm/move.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
+#include <sfl/detail/utility/ignore_unused.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/ignore_unused.hpp>
 
 #include <algorithm>    // is_permutation
 #include <iterator>     // distance, next, prev
