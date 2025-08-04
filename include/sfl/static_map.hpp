@@ -33,7 +33,6 @@
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/rb_tree.hpp>
 #include <sfl/detail/static_node_allocator.hpp>
-#include <sfl/detail/tags.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, less

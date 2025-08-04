@@ -32,7 +32,6 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/hash_table.hpp>
-#include <sfl/detail/tags.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, hash

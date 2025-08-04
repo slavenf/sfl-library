@@ -31,7 +31,6 @@
 #include <sfl/detail/associative_vector.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
-#include <sfl/detail/tags.hpp>
 #include <sfl/static_vector.hpp>
 
 #include <cstddef>          // size_t

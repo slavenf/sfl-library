@@ -48,7 +48,6 @@
 #include <sfl/detail/index_sequence.hpp>
 #include <sfl/detail/normal_iterator.hpp>
 #include <sfl/detail/scope_guard.hpp>
-#include <sfl/detail/tags.hpp>
 #include <sfl/detail/to_address.hpp>
 
 #include <algorithm>        // copy, move, swap, swap_ranges
