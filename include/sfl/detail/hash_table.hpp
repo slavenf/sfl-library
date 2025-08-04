@@ -30,6 +30,7 @@
 #include <sfl/detail/memory/destroy_at.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
+#include <sfl/detail/memory/to_address.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n_a.hpp>
 #include <sfl/detail/type_traits/conjunction.hpp>
 #include <sfl/detail/type_traits/disjunction.hpp>
@@ -42,7 +43,6 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/optional_value.hpp>
 #include <sfl/detail/scope_guard.hpp>
-#include <sfl/detail/to_address.hpp>
 
 #include <algorithm>    // max, min
 #include <cmath>        // ceil, floor

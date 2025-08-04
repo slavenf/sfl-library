@@ -32,6 +32,7 @@
 #include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
+#include <sfl/detail/memory/to_address.hpp>
 #include <sfl/detail/memory/uninitialized_copy_a.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n_a.hpp>
 #include <sfl/detail/memory/uninitialized_fill_a.hpp>
@@ -45,7 +46,6 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/normal_iterator.hpp>
-#include <sfl/detail/to_address.hpp>
 
 #include <algorithm>        // copy, move, swap, swap_ranges
 #include <cstddef>          // size_t

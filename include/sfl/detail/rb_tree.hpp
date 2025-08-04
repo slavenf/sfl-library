@@ -23,13 +23,13 @@
 
 #include <sfl/detail/memory/construct_at_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
+#include <sfl/detail/memory/to_address.hpp>
 #include <sfl/detail/type_traits/disjunction.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_input_iterator.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/optional_value.hpp>
-#include <sfl/detail/to_address.hpp>
 
 #include <algorithm>    // equal, lexicographical_compare
 #include <cstddef>      // size_t, ptrdiff_t

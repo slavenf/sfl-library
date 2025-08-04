@@ -21,7 +21,7 @@
 #ifndef SFL_DETAIL_DESTROY_AT_A_HPP_INCLUDED
 #define SFL_DETAIL_DESTROY_AT_A_HPP_INCLUDED
 
-#include <sfl/detail/to_address.hpp>
+#include <sfl/detail/memory/to_address.hpp>
 
 #include <memory> // allocator_traits
 
