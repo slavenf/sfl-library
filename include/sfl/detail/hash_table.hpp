@@ -40,9 +40,9 @@
 #include <sfl/detail/utility/compressed_pair.hpp>
 #include <sfl/detail/utility/floating_point_to_size_t.hpp>
 #include <sfl/detail/utility/optional_value.hpp>
+#include <sfl/detail/utility/scope_guard.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
-#include <sfl/detail/scope_guard.hpp>
 
 #include <algorithm>    // max, min
 #include <cmath>        // ceil, floor
