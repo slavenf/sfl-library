@@ -134,8 +134,8 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 | `key_equal`               | `KeyEqual` |
 | `reference`               | `value_type&` |
 | `const_reference`         | `const value_type&` |
-| `pointer`                 | `std::allocator_traits<Allocator>::pointer` |
-| `const_pointer`           | `std::allocator_traits<Allocator>::const_pointer` |
+| `pointer`                 | Pointer to `value_type` |
+| `const_pointer`           | Pointer to `const value_type` |
 | `iterator`                | [*LegacyForwardIterator*](https://en.cppreference.com/w/cpp/named_req/ForwardIterator) to `value_type` |
 | `const_iterator`          | [*LegacyForwardIterator*](https://en.cppreference.com/w/cpp/named_req/ForwardIterator) to `const value_type` |
 | `local_iterator`          | [*LegacyForwardIterator*](https://en.cppreference.com/w/cpp/named_req/ForwardIterator) to `value_type`. This iterator can be used to iterate through a single bucket but not across buckets. |

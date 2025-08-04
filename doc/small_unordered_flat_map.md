@@ -135,17 +135,16 @@ Iterators to elements are random access iterators and they meet the requirements
 | Member Type               | Definition |
 | :------------------------ | :--------- |
 | `allocator_type`          | `Allocator` |
-| `allocator_traits`        | `std::allocator_traits<allocator_type>` |
 | `key_type`                | `Key` |
 | `mapped_type`             | `T` |
 | `value_type`              | `std::pair<Key, T>` |
-| `size_type`               | `typename allocator_traits::size_type` |
-| `difference_type`         | `typename allocator_traits::difference_type` |
+| `size_type`               | Unsigned integer type |
+| `difference_type`         | Signed integer type |
 | `key_equal`               | `KeyEqual` |
 | `reference`               | `value_type&` |
 | `const_reference`         | `const value_type&` |
-| `pointer`                 | `typename allocator_traits::pointer` |
-| `const_pointer`           | `typename allocator_traits::const_pointer` |
+| `pointer`                 | Pointer to `value_type` |
+| `const_pointer`           | Pointer to `const value_type` |
 | `iterator`                | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `value_type` |
 | `const_iterator`          | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
 
@@ -1252,7 +1251,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    `allocator_traits::propagate_on_container_swap::value || get_allocator() == other.get_allocator()`
+    `std::allocator_traits<allocator_type>::propagate_on_container_swap::value || get_allocator() == other.get_allocator()`
 
     **Effects:**
     Exchanges the contents of the container with those of `other`.
