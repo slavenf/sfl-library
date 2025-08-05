@@ -54,7 +54,7 @@
 
 ## Summary
 
-Defined in header `sfl/static_unordered_flat_map.hpp`
+Defined in header `sfl/static_unordered_linear_map.hpp`
 
 ```
 namespace sfl

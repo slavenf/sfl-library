@@ -1,7 +1,7 @@
 #define ANKERL_NANOBENCH_IMPLEMENT
 #include "nanobench.h"
 
-#include <sfl/small_unordered_flat_map.hpp>
+#include <sfl/small_unordered_linear_map.hpp>
 #include <sfl/small_unordered_map.hpp>
 #include <sfl/unordered_map.hpp>
 

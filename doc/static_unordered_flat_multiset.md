@@ -47,7 +47,7 @@
 
 ## Summary
 
-Defined in header `sfl/static_unordered_flat_multiset.hpp`:
+Defined in header `sfl/static_unordered_linear_multiset.hpp`:
 
 ```
 namespace sfl

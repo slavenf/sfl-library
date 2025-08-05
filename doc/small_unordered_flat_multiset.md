@@ -49,7 +49,7 @@
 
 ## Summary
 
-Defined in header `sfl/small_unordered_flat_multiset.hpp`:
+Defined in header `sfl/small_unordered_linear_multiset.hpp`:
 
 ```
 namespace sfl

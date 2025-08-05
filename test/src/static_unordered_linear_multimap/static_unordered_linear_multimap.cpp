@@ -1,6 +1,6 @@
 #undef NDEBUG // This is very important. Must be in the first line.
 
-#include "sfl/static_unordered_flat_map.hpp"
+#include "sfl/static_unordered_linear_multimap.hpp"
 
 #include "check.hpp"
 #include "istream_view.hpp"
@@ -14,14 +14,14 @@
 #include <sstream>
 #include <vector>
 
-void test_static_unordered_flat_map()
+void test_static_unordered_flat_multimap()
 {
     using sfl::test::xint;
     using sfl::test::xobj;
 
     PRINT("Test begin, end, cbegin, cend, nth, index_of");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(20, 1);
         map.emplace(40, 1);
@@ -92,7 +92,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test static_capacity");
     {
-        CHECK((sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>>::static_capacity == 100));
+        CHECK((sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>>::static_capacity == 100));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ void test_static_unordered_flat_map()
     PRINT("Test key_eq()");
     {
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             auto key_eq = map.key_eq();
 
@@ -111,7 +111,7 @@ void test_static_unordered_flat_map()
         }
 
         {
-            sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
 
             auto key_eq = map.key_eq();
 
@@ -127,7 +127,7 @@ void test_static_unordered_flat_map()
     PRINT("Test value_eq()");
     {
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             auto value_eq = map.value_eq();
 
@@ -138,7 +138,7 @@ void test_static_unordered_flat_map()
         }
 
         {
-            sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
 
             auto value_eq = map.value_eq();
 
@@ -155,7 +155,7 @@ void test_static_unordered_flat_map()
     {
         // xint, xint
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(20, 1);
             map.emplace(40, 1);
@@ -199,7 +199,7 @@ void test_static_unordered_flat_map()
 
         // xobj, xint
         {
-            sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
 
             map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
             map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
@@ -246,7 +246,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test clear()");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         CHECK(map.size() == 0);
 
@@ -279,12 +279,12 @@ void test_static_unordered_flat_map()
 
     PRINT("Test emplace(Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
-            CHECK(map.emplace(10, 1) == std::make_pair(map.nth(0), true));
-            CHECK(map.emplace(20, 1) == std::make_pair(map.nth(1), true));
-            CHECK(map.emplace(30, 1) == std::make_pair(map.nth(2), true));
+            CHECK(map.emplace(10, 1) == map.nth(0));
+            CHECK(map.emplace(20, 1) == map.nth(1));
+            CHECK(map.emplace(30, 1) == map.nth(2));
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -293,20 +293,23 @@ void test_static_unordered_flat_map()
         }
 
         {
-            CHECK(map.emplace(10, 2) == std::make_pair(map.nth(0), false));
-            CHECK(map.emplace(20, 2) == std::make_pair(map.nth(1), false));
-            CHECK(map.emplace(30, 2) == std::make_pair(map.nth(2), false));
+            CHECK(map.emplace(10, 2) == map.nth(3));
+            CHECK(map.emplace(20, 2) == map.nth(4));
+            CHECK(map.emplace(30, 2) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
         }
     }
 
     PRINT("Test emplace_hint(const_iterator, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             CHECK(map.emplace_hint(map.begin(), 10, 1) == map.nth(0));
@@ -320,20 +323,23 @@ void test_static_unordered_flat_map()
         }
 
         {
-            CHECK(map.emplace_hint(map.begin(), 10, 2) == map.nth(0));
-            CHECK(map.emplace_hint(map.begin(), 20, 2) == map.nth(1));
-            CHECK(map.emplace_hint(map.begin(), 30, 2) == map.nth(2));
+            CHECK(map.emplace_hint(map.begin(), 10, 2) == map.nth(3));
+            CHECK(map.emplace_hint(map.begin(), 20, 2) == map.nth(4));
+            CHECK(map.emplace_hint(map.begin(), 30, 2) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
         }
     }
 
     PRINT("Test insert(const value_type&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -342,9 +348,9 @@ void test_static_unordered_flat_map()
             value_type value_20_1(20, 1);
             value_type value_30_1(30, 1);
 
-            CHECK(map.insert(value_10_1) == std::make_pair(map.nth(0), true));
-            CHECK(map.insert(value_20_1) == std::make_pair(map.nth(1), true));
-            CHECK(map.insert(value_30_1) == std::make_pair(map.nth(2), true));
+            CHECK(map.insert(value_10_1) == map.nth(0));
+            CHECK(map.insert(value_20_1) == map.nth(1));
+            CHECK(map.insert(value_30_1) == map.nth(2));
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -361,14 +367,17 @@ void test_static_unordered_flat_map()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(map.insert(value_10_2) == std::make_pair(map.nth(0), false));
-            CHECK(map.insert(value_20_2) == std::make_pair(map.nth(1), false));
-            CHECK(map.insert(value_30_2) == std::make_pair(map.nth(2), false));
+            CHECK(map.insert(value_10_2) == map.nth(3));
+            CHECK(map.insert(value_20_2) == map.nth(4));
+            CHECK(map.insert(value_30_2) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
 
             CHECK(value_10_2.first == 10); CHECK(value_10_2.second == 2);
             CHECK(value_20_2.first == 20); CHECK(value_20_2.second == 2);
@@ -378,7 +387,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(value_type&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -387,9 +396,9 @@ void test_static_unordered_flat_map()
             value_type value_20_1(20, 1);
             value_type value_30_1(30, 1);
 
-            CHECK(map.insert(std::move(value_10_1)) == std::make_pair(map.nth(0), true));
-            CHECK(map.insert(std::move(value_20_1)) == std::make_pair(map.nth(1), true));
-            CHECK(map.insert(std::move(value_30_1)) == std::make_pair(map.nth(2), true));
+            CHECK(map.insert(std::move(value_10_1)) == map.nth(0));
+            CHECK(map.insert(std::move(value_20_1)) == map.nth(1));
+            CHECK(map.insert(std::move(value_30_1)) == map.nth(2));
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -406,24 +415,27 @@ void test_static_unordered_flat_map()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(map.insert(std::move(value_10_2)) == std::make_pair(map.nth(0), false));
-            CHECK(map.insert(std::move(value_20_2)) == std::make_pair(map.nth(1), false));
-            CHECK(map.insert(std::move(value_30_2)) == std::make_pair(map.nth(2), false));
+            CHECK(map.insert(std::move(value_10_2)) == map.nth(3));
+            CHECK(map.insert(std::move(value_20_2)) == map.nth(4));
+            CHECK(map.insert(std::move(value_30_2)) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
 
-            CHECK(value_10_2.first == +10); CHECK(value_10_2.second == +2);
-            CHECK(value_20_2.first == +20); CHECK(value_20_2.second == +2);
-            CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
+            CHECK(value_10_2.first == -10); CHECK(value_10_2.second == -2);
+            CHECK(value_20_2.first == -20); CHECK(value_20_2.second == -2);
+            CHECK(value_30_2.first == -30); CHECK(value_30_2.second == -2);
         }
     }
 
     PRINT("Test insert(P&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<long, long>;
 
@@ -432,9 +444,9 @@ void test_static_unordered_flat_map()
             value_type value_20_1(20, 1);
             value_type value_30_1(30, 1);
 
-            CHECK(map.insert(std::move(value_10_1)) == std::make_pair(map.nth(0), true));
-            CHECK(map.insert(std::move(value_20_1)) == std::make_pair(map.nth(1), true));
-            CHECK(map.insert(std::move(value_30_1)) == std::make_pair(map.nth(2), true));
+            CHECK(map.insert(std::move(value_10_1)) == map.nth(0));
+            CHECK(map.insert(std::move(value_20_1)) == map.nth(1));
+            CHECK(map.insert(std::move(value_30_1)) == map.nth(2));
 
             CHECK(map.size() == 3);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -451,14 +463,17 @@ void test_static_unordered_flat_map()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(map.insert(std::move(value_10_2)) == std::make_pair(map.nth(0), false));
-            CHECK(map.insert(std::move(value_20_2)) == std::make_pair(map.nth(1), false));
-            CHECK(map.insert(std::move(value_30_2)) == std::make_pair(map.nth(2), false));
+            CHECK(map.insert(std::move(value_10_2)) == map.nth(3));
+            CHECK(map.insert(std::move(value_20_2)) == map.nth(4));
+            CHECK(map.insert(std::move(value_30_2)) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
 
             CHECK(value_10_2.first == 10); CHECK(value_10_2.second == 2);
             CHECK(value_20_2.first == 20); CHECK(value_20_2.second == 2);
@@ -468,7 +483,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(const_iterator, const value_type&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -496,14 +511,17 @@ void test_static_unordered_flat_map()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(map.insert(map.begin(), value_10_2) == map.nth(0));
-            CHECK(map.insert(map.begin(), value_20_2) == map.nth(1));
-            CHECK(map.insert(map.begin(), value_30_2) == map.nth(2));
+            CHECK(map.insert(map.begin(), value_10_2) == map.nth(3));
+            CHECK(map.insert(map.begin(), value_20_2) == map.nth(4));
+            CHECK(map.insert(map.begin(), value_30_2) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
 
             CHECK(value_10_2.first == 10); CHECK(value_10_2.second == 2);
             CHECK(value_20_2.first == 20); CHECK(value_20_2.second == 2);
@@ -513,7 +531,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(const_iterator, value_type&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -541,24 +559,27 @@ void test_static_unordered_flat_map()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(map.insert(map.begin(), std::move(value_10_2)) == map.nth(0));
-            CHECK(map.insert(map.begin(), std::move(value_20_2)) == map.nth(1));
-            CHECK(map.insert(map.begin(), std::move(value_30_2)) == map.nth(2));
+            CHECK(map.insert(map.begin(), std::move(value_10_2)) == map.nth(3));
+            CHECK(map.insert(map.begin(), std::move(value_20_2)) == map.nth(4));
+            CHECK(map.insert(map.begin(), std::move(value_30_2)) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
 
-            CHECK(value_10_2.first == +10); CHECK(value_10_2.second == +2);
-            CHECK(value_20_2.first == +20); CHECK(value_20_2.second == +2);
-            CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
+            CHECK(value_10_2.first == -10); CHECK(value_10_2.second == -2);
+            CHECK(value_20_2.first == -20); CHECK(value_20_2.second == -2);
+            CHECK(value_30_2.first == -30); CHECK(value_30_2.second == -2);
         }
     }
 
     PRINT("Test insert(const_iterator, P&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<long, long>;
 
@@ -586,14 +607,17 @@ void test_static_unordered_flat_map()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(map.insert(map.begin(), std::move(value_10_2)) == map.nth(0));
-            CHECK(map.insert(map.begin(), std::move(value_20_2)) == map.nth(1));
-            CHECK(map.insert(map.begin(), std::move(value_30_2)) == map.nth(2));
+            CHECK(map.insert(map.begin(), std::move(value_10_2)) == map.nth(3));
+            CHECK(map.insert(map.begin(), std::move(value_20_2)) == map.nth(4));
+            CHECK(map.insert(map.begin(), std::move(value_30_2)) == map.nth(5));
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
 
             CHECK(value_10_2.first == 10); CHECK(value_10_2.second == 2);
             CHECK(value_20_2.first == 20); CHECK(value_20_2.second == 2);
@@ -603,7 +627,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(InputIt, InputIt)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             std::vector<std::pair<xint, xint>> data
@@ -635,16 +659,19 @@ void test_static_unordered_flat_map()
 
             map.insert(data.begin(), data.end());
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
         }
     }
 
     PRINT("Test insert(std::initializer_list)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             std::initializer_list<std::pair<xint, xint>> ilist
@@ -672,10 +699,13 @@ void test_static_unordered_flat_map()
 
             map.insert(ilist);
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 6);
             CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
             CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
             CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+            CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+            CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
         }
     }
 
@@ -685,7 +715,7 @@ void test_static_unordered_flat_map()
         {
             std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             map.insert_range(std::views::istream<std::pair<int, int>>(iss));
@@ -693,10 +723,12 @@ void test_static_unordered_flat_map()
             map.insert_range(sfl::test::istream_view<std::pair<int, int>>(iss));
             #endif
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 5);
             CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
             CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
             CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+            CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 2);
+            CHECK(NTH(map, 4)->first == 20); CHECK(NTH(map, 4)->second == 3);
         }
 
         // Forward iterator
@@ -712,7 +744,7 @@ void test_static_unordered_flat_map()
                 }
             );
 
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             map.insert_range(std::views::all(data));
@@ -720,462 +752,12 @@ void test_static_unordered_flat_map()
             map.insert_range(data);
             #endif
 
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 5);
             CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
             CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
             CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
-        }
-    }
-
-    PRINT("Test insert_or_assign(const Key&, M&&)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(key_10, 1) == std::make_pair(map.nth(0), true));
-            CHECK(map.insert_or_assign(key_20, 1) == std::make_pair(map.nth(1), true));
-            CHECK(map.insert_or_assign(key_30, 1) == std::make_pair(map.nth(2), true));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(key_10, 2) == std::make_pair(map.nth(0), false));
-            CHECK(map.insert_or_assign(key_20, 2) == std::make_pair(map.nth(1), false));
-            CHECK(map.insert_or_assign(key_30, 2) == std::make_pair(map.nth(2), false));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-    }
-
-    PRINT("Test insert_or_assign(Key&&, M&&)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(std::move(key_10), 1) == std::make_pair(map.nth(0), true));
-            CHECK(map.insert_or_assign(std::move(key_20), 1) == std::make_pair(map.nth(1), true));
-            CHECK(map.insert_or_assign(std::move(key_30), 1) == std::make_pair(map.nth(2), true));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == -10);
-            CHECK(key_20 == -20);
-            CHECK(key_30 == -30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(std::move(key_10), 2) == std::make_pair(map.nth(0), false));
-            CHECK(map.insert_or_assign(std::move(key_20), 2) == std::make_pair(map.nth(1), false));
-            CHECK(map.insert_or_assign(std::move(key_30), 2) == std::make_pair(map.nth(2), false));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
-
-            CHECK(key_10 == +10);
-            CHECK(key_20 == +20);
-            CHECK(key_30 == +30);
-        }
-    }
-
-    PRINT("Test insert_or_assign(K&&, M&&)");
-    {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
-
-        {
-            CHECK(map.insert_or_assign(10, 1) == std::make_pair(map.nth(0), true));
-            CHECK(map.insert_or_assign(20, 1) == std::make_pair(map.nth(1), true));
-            CHECK(map.insert_or_assign(30, 1) == std::make_pair(map.nth(2), true));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
-        }
-
-        {
-            CHECK(map.insert_or_assign(10, 2) == std::make_pair(map.nth(0), false));
-            CHECK(map.insert_or_assign(20, 2) == std::make_pair(map.nth(1), false));
-            CHECK(map.insert_or_assign(30, 2) == std::make_pair(map.nth(2), false));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
-        }
-    }
-
-    PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(map.begin(), key_10, 1) == map.nth(0));
-            CHECK(map.insert_or_assign(map.begin(), key_20, 1) == map.nth(1));
-            CHECK(map.insert_or_assign(map.begin(), key_30, 1) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(map.begin(), key_10, 2) == map.nth(0));
-            CHECK(map.insert_or_assign(map.begin(), key_20, 2) == map.nth(1));
-            CHECK(map.insert_or_assign(map.begin(), key_30, 2) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-    }
-
-    PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(map.begin(), std::move(key_10), 1) == map.nth(0));
-            CHECK(map.insert_or_assign(map.begin(), std::move(key_20), 1) == map.nth(1));
-            CHECK(map.insert_or_assign(map.begin(), std::move(key_30), 1) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == -10);
-            CHECK(key_20 == -20);
-            CHECK(key_30 == -30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.insert_or_assign(map.begin(), std::move(key_10), 2) == map.nth(0));
-            CHECK(map.insert_or_assign(map.begin(), std::move(key_20), 2) == map.nth(1));
-            CHECK(map.insert_or_assign(map.begin(), std::move(key_30), 2) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
-
-            CHECK(key_10 == +10);
-            CHECK(key_20 == +20);
-            CHECK(key_30 == +30);
-        }
-    }
-
-    PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
-    {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
-
-        {
-            CHECK(map.insert_or_assign(map.begin(), 10, 1) == map.nth(0));
-            CHECK(map.insert_or_assign(map.begin(), 20, 1) == map.nth(1));
-            CHECK(map.insert_or_assign(map.begin(), 30, 1) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
-        }
-
-        {
-            CHECK(map.insert_or_assign(map.begin(), 10, 2) == map.nth(0));
-            CHECK(map.insert_or_assign(map.begin(), 20, 2) == map.nth(1));
-            CHECK(map.insert_or_assign(map.begin(), 30, 2) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
-        }
-    }
-
-    PRINT("Test try_emplace(const Key&, Args&&...)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(key_10, 1) == std::make_pair(map.nth(0), true));
-            CHECK(map.try_emplace(key_20, 1) == std::make_pair(map.nth(1), true));
-            CHECK(map.try_emplace(key_30, 1) == std::make_pair(map.nth(2), true));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(key_10, 2) == std::make_pair(map.nth(0), false));
-            CHECK(map.try_emplace(key_20, 2) == std::make_pair(map.nth(1), false));
-            CHECK(map.try_emplace(key_30, 2) == std::make_pair(map.nth(2), false));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-    }
-
-    PRINT("Test try_emplace(Key&&, Args&&...)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(std::move(key_10), 1) == std::make_pair(map.nth(0), true));
-            CHECK(map.try_emplace(std::move(key_20), 1) == std::make_pair(map.nth(1), true));
-            CHECK(map.try_emplace(std::move(key_30), 1) == std::make_pair(map.nth(2), true));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == -10);
-            CHECK(key_20 == -20);
-            CHECK(key_30 == -30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(std::move(key_10), 2) == std::make_pair(map.nth(0), false));
-            CHECK(map.try_emplace(std::move(key_20), 2) == std::make_pair(map.nth(1), false));
-            CHECK(map.try_emplace(std::move(key_30), 2) == std::make_pair(map.nth(2), false));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == +10);
-            CHECK(key_20 == +20);
-            CHECK(key_30 == +30);
-        }
-    }
-
-    PRINT("Test try_emplace(K&&, Args&&...)");
-    {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
-
-        {
-            CHECK(map.try_emplace(10, 1) == std::make_pair(map.nth(0), true));
-            CHECK(map.try_emplace(20, 1) == std::make_pair(map.nth(1), true));
-            CHECK(map.try_emplace(30, 1) == std::make_pair(map.nth(2), true));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
-        }
-
-        {
-            CHECK(map.try_emplace(10, 2) == std::make_pair(map.nth(0), false));
-            CHECK(map.try_emplace(20, 2) == std::make_pair(map.nth(1), false));
-            CHECK(map.try_emplace(30, 2) == std::make_pair(map.nth(2), false));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
-        }
-    }
-
-    PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(map.begin(), key_10, 1) == map.nth(0));
-            CHECK(map.try_emplace(map.begin(), key_20, 1) == map.nth(1));
-            CHECK(map.try_emplace(map.begin(), key_30, 1) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(map.begin(), key_10, 2) == map.nth(0));
-            CHECK(map.try_emplace(map.begin(), key_20, 2) == map.nth(1));
-            CHECK(map.try_emplace(map.begin(), key_30, 2) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == 10);
-            CHECK(key_20 == 20);
-            CHECK(key_30 == 30);
-        }
-    }
-
-    PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(map.begin(), std::move(key_10), 1) == map.nth(0));
-            CHECK(map.try_emplace(map.begin(), std::move(key_20), 1) == map.nth(1));
-            CHECK(map.try_emplace(map.begin(), std::move(key_30), 1) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == -10);
-            CHECK(key_20 == -20);
-            CHECK(key_30 == -30);
-        }
-
-        {
-            xint key_10(10);
-            xint key_20(20);
-            xint key_30(30);
-
-            CHECK(map.try_emplace(map.begin(), std::move(key_10), 2) == map.nth(0));
-            CHECK(map.try_emplace(map.begin(), std::move(key_20), 2) == map.nth(1));
-            CHECK(map.try_emplace(map.begin(), std::move(key_30), 2) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-            CHECK(key_10 == +10);
-            CHECK(key_20 == +20);
-            CHECK(key_30 == +30);
-        }
-    }
-
-    PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
-    {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
-
-        {
-            CHECK(map.try_emplace(map.begin(), 10, 1) == map.nth(0));
-            CHECK(map.try_emplace(map.begin(), 20, 1) == map.nth(1));
-            CHECK(map.try_emplace(map.begin(), 30, 1) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
-        }
-
-        {
-            CHECK(map.try_emplace(map.begin(), 10, 2) == map.nth(0));
-            CHECK(map.try_emplace(map.begin(), 20, 2) == map.nth(1));
-            CHECK(map.try_emplace(map.begin(), 30, 2) == map.nth(2));
-
-            CHECK(map.size() == 3);
-            CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-            CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-            CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+            CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 2);
+            CHECK(NTH(map, 4)->first == 20); CHECK(NTH(map, 4)->second == 3);
         }
     }
 
@@ -1183,7 +765,7 @@ void test_static_unordered_flat_map()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1236,7 +818,7 @@ void test_static_unordered_flat_map()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1289,7 +871,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1342,7 +924,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1398,7 +980,7 @@ void test_static_unordered_flat_map()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1448,7 +1030,7 @@ void test_static_unordered_flat_map()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1498,7 +1080,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1555,7 +1137,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1613,24 +1195,30 @@ void test_static_unordered_flat_map()
 
     PRINT("Test erase(const Key&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
+        map.emplace(20, 2);
+        map.emplace(20, 3);
         map.emplace(30, 1);
 
-        CHECK(map.size() == 3);
+        CHECK(map.size() == 5);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 20); CHECK(map.nth(3)->second == 3);
+        CHECK(map.nth(4)->first == 30); CHECK(map.nth(4)->second == 1);
 
         CHECK(map.erase(30) == 1);
         CHECK(map.erase(30) == 0);
-        CHECK(map.size() == 2);
+        CHECK(map.size() == 4);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 20); CHECK(map.nth(3)->second == 3);
 
-        CHECK(map.erase(20) == 1);
+        CHECK(map.erase(20) == 3);
         CHECK(map.erase(20) == 0);
         CHECK(map.size() == 1);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -1642,24 +1230,30 @@ void test_static_unordered_flat_map()
 
     PRINT("Test erase(K&&)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(2));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(3));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
 
-        CHECK(map.size() == 3);
+        CHECK(map.size() == 5);
         CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(2)->first.value() == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first.value() == 20); CHECK(map.nth(3)->second == 3);
+        CHECK(map.nth(4)->first.value() == 30); CHECK(map.nth(4)->second == 1);
 
         CHECK(map.erase(30) == 1);
         CHECK(map.erase(30) == 0);
-        CHECK(map.size() == 2);
+        CHECK(map.size() == 4);
         CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
+        CHECK(map.nth(2)->first.value() == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first.value() == 20); CHECK(map.nth(3)->second == 3);
 
-        CHECK(map.erase(20) == 1);
+        CHECK(map.erase(20) == 3);
         CHECK(map.erase(20) == 0);
         CHECK(map.size() == 1);
         CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
@@ -1673,7 +1267,7 @@ void test_static_unordered_flat_map()
     {
         // Swap with self
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1696,7 +1290,7 @@ void test_static_unordered_flat_map()
 
         // map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1747,7 +1341,7 @@ void test_static_unordered_flat_map()
 
         // map1.size() != map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1807,222 +1401,9 @@ void test_static_unordered_flat_map()
 
     ///////////////////////////////////////////////////////////////////////////////
 
-    PRINT("Test at(const Key&)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        map.emplace(10, 1);
-        map.emplace(20, 1);
-        map.emplace(30, 1);
-
-        CHECK(map.at(10) == 1);
-        CHECK(map.at(20) == 1);
-        CHECK(map.at(30) == 1);
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-        map.at(10) = 2;
-        map.at(20) = 2;
-        map.at(30) = 2;
-
-        CHECK(map.at(10) == 2);
-        CHECK(map.at(20) == 2);
-        CHECK(map.at(30) == 2);
-
-        #if !defined(SFL_NO_EXCEPTIONS)
-        bool caught_exception = false;
-
-        try
-        {
-            map.at(40) = 1;
-        }
-        catch (...)
-        {
-            caught_exception = true;
-        }
-
-        CHECK(caught_exception == true);
-        #endif
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
-    }
-
-    PRINT("Test at(const K&)");
-    {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
-
-        map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
-        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
-        map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
-
-        CHECK(map.at(10) == 1);
-        CHECK(map.at(20) == 1);
-        CHECK(map.at(30) == 1);
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
-
-        map.at(10) = 2;
-        map.at(20) = 2;
-        map.at(30) = 2;
-
-        CHECK(map.at(10) == 2);
-        CHECK(map.at(20) == 2);
-        CHECK(map.at(30) == 2);
-
-        #if !defined(SFL_NO_EXCEPTIONS)
-        bool caught_exception = false;
-
-        try
-        {
-            map.at(40) = 1;
-        }
-        catch (...)
-        {
-            caught_exception = true;
-        }
-
-        CHECK(caught_exception == true);
-        #endif
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
-        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
-        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
-    }
-
-    PRINT("Test operator[](const Key&)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        map.emplace(10, 1);
-        map.emplace(20, 1);
-        map.emplace(30, 1);
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-        ///////////////////////////////////////////////////////////////////////////
-
-        xint key_10 = 10;
-        xint key_20 = 20;
-        xint key_30 = 30;
-        xint key_40 = 40;
-        xint key_50 = 50;
-        xint key_60 = 60;
-
-        map[key_10] = 2;
-        map[key_20] = 2;
-        map[key_30] = 2;
-        map[key_40] = 2;
-        map[key_50] = 2;
-        map[key_60] = 2;
-
-        CHECK(map.size() == 6);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
-        CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 2);
-        CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 2);
-        CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 2);
-
-        CHECK(key_10 == 10);
-        CHECK(key_20 == 20);
-        CHECK(key_30 == 30);
-        CHECK(key_40 == 40);
-        CHECK(key_50 == 50);
-        CHECK(key_60 == 60);
-    }
-
-    PRINT("Test operator[](Key&&)");
-    {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
-
-        map.emplace(10, 1);
-        map.emplace(20, 1);
-        map.emplace(30, 1);
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
-
-        ///////////////////////////////////////////////////////////////////////////
-
-        xint key_10 = 10;
-        xint key_20 = 20;
-        xint key_30 = 30;
-        xint key_40 = 40;
-        xint key_50 = 50;
-        xint key_60 = 60;
-
-        map[std::move(key_10)] = 2;
-        map[std::move(key_20)] = 2;
-        map[std::move(key_30)] = 2;
-        map[std::move(key_40)] = 2;
-        map[std::move(key_50)] = 2;
-        map[std::move(key_60)] = 2;
-
-        CHECK(map.size() == 6);
-        CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 2);
-        CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 2);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 2);
-        CHECK(map.nth(3)->first == 40); CHECK(map.nth(3)->second == 2);
-        CHECK(map.nth(4)->first == 50); CHECK(map.nth(4)->second == 2);
-        CHECK(map.nth(5)->first == 60); CHECK(map.nth(5)->second == 2);
-
-        CHECK(key_10 == +10);
-        CHECK(key_20 == +20);
-        CHECK(key_30 == +30);
-        CHECK(key_40 == -40);
-        CHECK(key_50 == -50);
-        CHECK(key_60 == -60);
-    }
-
-    PRINT("Test operator[](K&&)");
-    {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
-
-        map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
-        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
-        map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
-
-        CHECK(map.size() == 3);
-        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 1);
-        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 1);
-
-        ///////////////////////////////////////////////////////////////////////////
-
-        map[10] = 2;
-        map[20] = 2;
-        map[30] = 2;
-        map[40] = 2;
-        map[50] = 2;
-        map[60] = 2;
-
-        CHECK(map.size() == 6);
-        CHECK(map.nth(0)->first.value() == 10); CHECK(map.nth(0)->second == 2);
-        CHECK(map.nth(1)->first.value() == 20); CHECK(map.nth(1)->second == 2);
-        CHECK(map.nth(2)->first.value() == 30); CHECK(map.nth(2)->second == 2);
-        CHECK(map.nth(3)->first.value() == 40); CHECK(map.nth(3)->second == 2);
-        CHECK(map.nth(4)->first.value() == 50); CHECK(map.nth(4)->second == 2);
-        CHECK(map.nth(5)->first.value() == 60); CHECK(map.nth(5)->second == 2);
-    }
-
     PRINT("Test data()");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -2045,7 +1426,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test container()");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         CHECK(map.size() == 0);
         CHECK(map.capacity() == 100);
@@ -2056,7 +1437,7 @@ void test_static_unordered_flat_map()
     {
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(equal);
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(equal);
 
         CHECK(map.size() == 0);
         CHECK(map.capacity() == 100);
@@ -2078,12 +1459,15 @@ void test_static_unordered_flat_map()
             }
         );
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end());
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end());
 
-        CHECK(map.size() == 3);
+        CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
         CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
     }
 
     PRINT("Test container(InputIt, InputIt, const KeyEqual&)");
@@ -2103,12 +1487,15 @@ void test_static_unordered_flat_map()
 
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end(), equal);
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end(), equal);
 
-        CHECK(map.size() == 3);
+        CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
         CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
     }
 
     PRINT("Test container(std::initializer_list)");
@@ -2124,12 +1511,15 @@ void test_static_unordered_flat_map()
             {30, 2}
         };
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(ilist);
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist);
 
-        CHECK(map.size() == 3);
+        CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
         CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
     }
 
     PRINT("Test container(std::initializer_list, const KeyEqual&)");
@@ -2147,17 +1537,20 @@ void test_static_unordered_flat_map()
 
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(ilist, equal);
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist, equal);
 
-        CHECK(map.size() == 3);
+        CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
         CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(3)->first == 10); CHECK(map.nth(3)->second == 2);
+        CHECK(map.nth(4)->first == 20); CHECK(map.nth(4)->second == 2);
+        CHECK(map.nth(5)->first == 30); CHECK(map.nth(5)->second == 2);
     }
 
     PRINT("Test container(const container&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2170,7 +1563,7 @@ void test_static_unordered_flat_map()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map2(map1);
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map2(map1);
 
         CHECK(map2.size() == 3);
         CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
@@ -2180,7 +1573,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test container(container&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2193,7 +1586,7 @@ void test_static_unordered_flat_map()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map2(std::move(map1));
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map2(std::move(map1));
 
         CHECK(map2.size() == 3);
         CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
@@ -2213,13 +1606,13 @@ void test_static_unordered_flat_map()
             std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (std::views::istream<std::pair<int, int>>(iss))
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<std::pair<int, int>>(iss))
@@ -2227,11 +1620,13 @@ void test_static_unordered_flat_map()
             #endif
 
             CHECK(map.empty() == false);
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 5);
             CHECK(map.max_size() > 0);
             CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
             CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
             CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+            CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 2);
+            CHECK(NTH(map, 4)->first == 20); CHECK(NTH(map, 4)->second == 3);
         }
 
         // Forward iterator
@@ -2248,13 +1643,13 @@ void test_static_unordered_flat_map()
             );
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 std::views::all(data)
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 data
@@ -2262,11 +1657,13 @@ void test_static_unordered_flat_map()
             #endif
 
             CHECK(map.empty() == false);
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 5);
             CHECK(map.max_size() > 0);
             CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
             CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
             CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+            CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 2);
+            CHECK(NTH(map, 4)->first == 20); CHECK(NTH(map, 4)->second == 3);
         }
     }
 
@@ -2279,14 +1676,14 @@ void test_static_unordered_flat_map()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (std::views::istream<std::pair<int, int>>(iss)),
                 equal
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<std::pair<int, int>>(iss)),
@@ -2295,11 +1692,13 @@ void test_static_unordered_flat_map()
             #endif
 
             CHECK(map.empty() == false);
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 5);
             CHECK(map.max_size() > 0);
             CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
             CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
             CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+            CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 2);
+            CHECK(NTH(map, 4)->first == 20); CHECK(NTH(map, 4)->second == 3);
         }
 
         // Forward iterator
@@ -2318,14 +1717,14 @@ void test_static_unordered_flat_map()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 std::views::all(data),
                 equal
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 data,
@@ -2334,11 +1733,13 @@ void test_static_unordered_flat_map()
             #endif
 
             CHECK(map.empty() == false);
-            CHECK(map.size() == 3);
+            CHECK(map.size() == 5);
             CHECK(map.max_size() > 0);
             CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
             CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
             CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
+            CHECK(NTH(map, 3)->first == 20); CHECK(NTH(map, 3)->second == 2);
+            CHECK(NTH(map, 4)->first == 20); CHECK(NTH(map, 4)->second == 3);
         }
     }
 
@@ -2348,7 +1749,7 @@ void test_static_unordered_flat_map()
     {
         #define CONDITION map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2388,7 +1789,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() < map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2436,7 +1837,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() > map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2483,7 +1884,7 @@ void test_static_unordered_flat_map()
     {
         #define CONDITION map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2523,7 +1924,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() < map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2571,7 +1972,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() > map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2618,7 +2019,7 @@ void test_static_unordered_flat_map()
     {
         #define CONDITION map.size() == ilist.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2651,7 +2052,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map.size() < ilist.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2688,7 +2089,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map.size() > ilist.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2728,7 +2129,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test NON-MEMBER comparison operators");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2, map3;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2, map3;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2764,7 +2165,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test NON-MEMBER swap(container&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2808,7 +2209,7 @@ void test_static_unordered_flat_map()
     PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     {
         using container_type =
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>>;
+            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>>;
 
         using const_reference = typename container_type::const_reference;
 
@@ -2818,16 +2219,20 @@ void test_static_unordered_flat_map()
 
         map.emplace(10, 1);
         map.emplace(20, 1);
+        map.emplace(20, 2);
+        map.emplace(20, 3);
         map.emplace(30, 1);
 
-        CHECK(map.size() == 3);
+        CHECK(map.size() == 5);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 20); CHECK(map.nth(1)->second == 1);
-        CHECK(map.nth(2)->first == 30); CHECK(map.nth(2)->second == 1);
+        CHECK(map.nth(2)->first == 20); CHECK(map.nth(2)->second == 2);
+        CHECK(map.nth(3)->first == 20); CHECK(map.nth(3)->second == 3);
+        CHECK(map.nth(4)->first == 30); CHECK(map.nth(4)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////////
 
-        CHECK(erase_if(map, [](const_reference& value){ return value.first == 20; }) == 1);
+        CHECK(erase_if(map, [](const_reference& value){ return value.first == 20; }) == 3);
         CHECK(map.size() == 2);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
         CHECK(map.nth(1)->first == 30); CHECK(map.nth(1)->second == 1);
@@ -2843,5 +2248,5 @@ void test_static_unordered_flat_map()
 
 int main()
 {
-    test_static_unordered_flat_map();
+    test_static_unordered_flat_multimap();
 }

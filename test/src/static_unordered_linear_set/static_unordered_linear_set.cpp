@@ -1,6 +1,6 @@
 #undef NDEBUG // This is very important. Must be in the first line.
 
-#include "sfl/static_unordered_flat_multiset.hpp"
+#include "sfl/static_unordered_linear_set.hpp"
 
 #include "check.hpp"
 #include "istream_view.hpp"
@@ -15,7 +15,7 @@
 #include <sstream>
 #include <vector>
 
-void test_static_unordered_flat_multiset()
+void test_static_unordered_flat_set()
 {
     using sfl::test::xint;
     using sfl::test::xint_xint;
@@ -23,7 +23,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test begin, end, cbegin, cend, nth, index_of");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         set.emplace(20, 1);
         set.emplace(40, 1);
@@ -94,7 +94,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test static_capacity");
     {
-        CHECK((sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>>::static_capacity == 100));
+        CHECK((sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>>::static_capacity == 100));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ void test_static_unordered_flat_multiset()
     PRINT("Test key_eq()");
     {
         {
-            sfl::static_unordered_flat_multiset<xint, 100, std::equal_to<xint>> set;
+            sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
 
             auto key_eq = set.key_eq();
 
@@ -113,7 +113,7 @@ void test_static_unordered_flat_multiset()
         }
 
         {
-            sfl::static_unordered_flat_multiset<xobj, 100, xobj::equal> set;
+            sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
 
             auto key_eq = set.key_eq();
 
@@ -130,7 +130,7 @@ void test_static_unordered_flat_multiset()
     {
         // xint
         {
-            sfl::static_unordered_flat_multiset<xint, 100, std::equal_to<xint>> set;
+            sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
 
             set.emplace(20);
             set.emplace(40);
@@ -174,7 +174,7 @@ void test_static_unordered_flat_multiset()
 
         // xobj
         {
-            sfl::static_unordered_flat_multiset<xobj, 100, xobj::equal> set;
+            sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
 
             set.emplace(20);
             set.emplace(40);
@@ -221,7 +221,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test clear()");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         CHECK(set.size() == 0);
 
@@ -254,12 +254,12 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test emplace(Args&&...)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
-            CHECK(set.emplace(10, 1) == set.nth(0));
-            CHECK(set.emplace(20, 1) == set.nth(1));
-            CHECK(set.emplace(30, 1) == set.nth(2));
+            CHECK(set.emplace(10, 1) == std::make_pair(set.nth(0), true));
+            CHECK(set.emplace(20, 1) == std::make_pair(set.nth(1), true));
+            CHECK(set.emplace(30, 1) == std::make_pair(set.nth(2), true));
 
             CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -268,23 +268,20 @@ void test_static_unordered_flat_multiset()
         }
 
         {
-            CHECK(set.emplace(10, 2) == set.nth(3));
-            CHECK(set.emplace(20, 2) == set.nth(4));
-            CHECK(set.emplace(30, 2) == set.nth(5));
+            CHECK(set.emplace(10, 2) == std::make_pair(set.nth(0), false));
+            CHECK(set.emplace(20, 2) == std::make_pair(set.nth(1), false));
+            CHECK(set.emplace(30, 2) == std::make_pair(set.nth(2), false));
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
         }
     }
 
     PRINT("Test emplace_hint(const_iterator, Args&&...)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
             CHECK(set.emplace_hint(set.begin(), 10, 1) == set.nth(0));
@@ -298,23 +295,20 @@ void test_static_unordered_flat_multiset()
         }
 
         {
-            CHECK(set.emplace_hint(set.begin(), 10, 2) == set.nth(3));
-            CHECK(set.emplace_hint(set.begin(), 20, 2) == set.nth(4));
-            CHECK(set.emplace_hint(set.begin(), 30, 2) == set.nth(5));
+            CHECK(set.emplace_hint(set.begin(), 10, 2) == set.nth(0));
+            CHECK(set.emplace_hint(set.begin(), 20, 2) == set.nth(1));
+            CHECK(set.emplace_hint(set.begin(), 30, 2) == set.nth(2));
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
         }
     }
 
     PRINT("Test insert(const value_type&)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -323,9 +317,9 @@ void test_static_unordered_flat_multiset()
             value_type value_20_1(20, 1);
             value_type value_30_1(30, 1);
 
-            CHECK(set.insert(value_10_1) == set.nth(0));
-            CHECK(set.insert(value_20_1) == set.nth(1));
-            CHECK(set.insert(value_30_1) == set.nth(2));
+            CHECK(set.insert(value_10_1) == std::make_pair(set.nth(0), true));
+            CHECK(set.insert(value_20_1) == std::make_pair(set.nth(1), true));
+            CHECK(set.insert(value_30_1) == std::make_pair(set.nth(2), true));
 
             CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -342,17 +336,14 @@ void test_static_unordered_flat_multiset()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(set.insert(value_10_2) == set.nth(3));
-            CHECK(set.insert(value_20_2) == set.nth(4));
-            CHECK(set.insert(value_30_2) == set.nth(5));
+            CHECK(set.insert(value_10_2) == std::make_pair(set.nth(0), false));
+            CHECK(set.insert(value_20_2) == std::make_pair(set.nth(1), false));
+            CHECK(set.insert(value_30_2) == std::make_pair(set.nth(2), false));
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
 
             CHECK(value_10_2.first == 10); CHECK(value_10_2.second == 2);
             CHECK(value_20_2.first == 20); CHECK(value_20_2.second == 2);
@@ -362,7 +353,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test insert(value_type&&)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -371,9 +362,9 @@ void test_static_unordered_flat_multiset()
             value_type value_20_1(20, 1);
             value_type value_30_1(30, 1);
 
-            CHECK(set.insert(std::move(value_10_1)) == set.nth(0));
-            CHECK(set.insert(std::move(value_20_1)) == set.nth(1));
-            CHECK(set.insert(std::move(value_30_1)) == set.nth(2));
+            CHECK(set.insert(std::move(value_10_1)) == std::make_pair(set.nth(0), true));
+            CHECK(set.insert(std::move(value_20_1)) == std::make_pair(set.nth(1), true));
+            CHECK(set.insert(std::move(value_30_1)) == std::make_pair(set.nth(2), true));
 
             CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -390,27 +381,51 @@ void test_static_unordered_flat_multiset()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(set.insert(std::move(value_10_2)) == set.nth(3));
-            CHECK(set.insert(std::move(value_20_2)) == set.nth(4));
-            CHECK(set.insert(std::move(value_30_2)) == set.nth(5));
+            CHECK(set.insert(std::move(value_10_2)) == std::make_pair(set.nth(0), false));
+            CHECK(set.insert(std::move(value_20_2)) == std::make_pair(set.nth(1), false));
+            CHECK(set.insert(std::move(value_30_2)) == std::make_pair(set.nth(2), false));
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
 
-            CHECK(value_10_2.first == -10); CHECK(value_10_2.second == -2);
-            CHECK(value_20_2.first == -20); CHECK(value_20_2.second == -2);
-            CHECK(value_30_2.first == -30); CHECK(value_30_2.second == -2);
+            CHECK(value_10_2.first == +10); CHECK(value_10_2.second == +2);
+            CHECK(value_20_2.first == +20); CHECK(value_20_2.second == +2);
+            CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
+        }
+    }
+
+    PRINT("Test insert(K&&)");
+    {
+        sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+
+        {
+            CHECK(set.insert(10) == std::make_pair(set.nth(0), true));
+            CHECK(set.insert(20) == std::make_pair(set.nth(1), true));
+            CHECK(set.insert(30) == std::make_pair(set.nth(2), true));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
+        }
+
+        {
+            CHECK(set.insert(10) == std::make_pair(set.nth(0), false));
+            CHECK(set.insert(20) == std::make_pair(set.nth(1), false));
+            CHECK(set.insert(30) == std::make_pair(set.nth(2), false));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
         }
     }
 
     PRINT("Test insert(const_iterator, const value_type&)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -438,17 +453,14 @@ void test_static_unordered_flat_multiset()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(set.insert(set.begin(), value_10_2) == set.nth(3));
-            CHECK(set.insert(set.begin(), value_20_2) == set.nth(4));
-            CHECK(set.insert(set.begin(), value_30_2) == set.nth(5));
+            CHECK(set.insert(set.begin(), value_10_2) == set.nth(0));
+            CHECK(set.insert(set.begin(), value_20_2) == set.nth(1));
+            CHECK(set.insert(set.begin(), value_30_2) == set.nth(2));
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
 
             CHECK(value_10_2.first == 10); CHECK(value_10_2.second == 2);
             CHECK(value_20_2.first == 20); CHECK(value_20_2.second == 2);
@@ -458,7 +470,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test insert(const_iterator, value_type&&)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -486,27 +498,51 @@ void test_static_unordered_flat_multiset()
             value_type value_20_2(20, 2);
             value_type value_30_2(30, 2);
 
-            CHECK(set.insert(set.begin(), std::move(value_10_2)) == set.nth(3));
-            CHECK(set.insert(set.begin(), std::move(value_20_2)) == set.nth(4));
-            CHECK(set.insert(set.begin(), std::move(value_30_2)) == set.nth(5));
+            CHECK(set.insert(set.begin(), std::move(value_10_2)) == set.nth(0));
+            CHECK(set.insert(set.begin(), std::move(value_20_2)) == set.nth(1));
+            CHECK(set.insert(set.begin(), std::move(value_30_2)) == set.nth(2));
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
 
-            CHECK(value_10_2.first == -10); CHECK(value_10_2.second == -2);
-            CHECK(value_20_2.first == -20); CHECK(value_20_2.second == -2);
-            CHECK(value_30_2.first == -30); CHECK(value_30_2.second == -2);
+            CHECK(value_10_2.first == +10); CHECK(value_10_2.second == +2);
+            CHECK(value_20_2.first == +20); CHECK(value_20_2.second == +2);
+            CHECK(value_30_2.first == +30); CHECK(value_30_2.second == +2);
+        }
+    }
+
+    PRINT("Test insert(const_iterator, K&&)");
+    {
+        sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+
+        {
+            CHECK(set.insert(set.begin(), 10) == set.nth(0));
+            CHECK(set.insert(set.begin(), 20) == set.nth(1));
+            CHECK(set.insert(set.begin(), 30) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
+        }
+
+        {
+            CHECK(set.insert(set.begin(), 10) == set.nth(0));
+            CHECK(set.insert(set.begin(), 20) == set.nth(1));
+            CHECK(set.insert(set.begin(), 30) == set.nth(2));
+
+            CHECK(set.size() == 3);
+            CHECK(set.nth(0)->value() == 10);
+            CHECK(set.nth(1)->value() == 20);
+            CHECK(set.nth(2)->value() == 30);
         }
     }
 
     PRINT("Test insert(InputIt, InputIt)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
             std::vector<xint_xint> data
@@ -538,19 +574,16 @@ void test_static_unordered_flat_multiset()
 
             set.insert(data.begin(), data.end());
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
         }
     }
 
     PRINT("Test insert(std::initializer_list)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
             std::initializer_list<xint_xint> ilist
@@ -578,13 +611,10 @@ void test_static_unordered_flat_multiset()
 
             set.insert(ilist);
 
-            CHECK(set.size() == 6);
+            CHECK(set.size() == 3);
             CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
             CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
             CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-            CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-            CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-            CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
         }
     }
 
@@ -594,7 +624,7 @@ void test_static_unordered_flat_multiset()
         {
             std::istringstream iss("10 20 30 20 20");
 
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set;
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             set.insert_range(std::views::istream<int>(iss));
@@ -602,21 +632,17 @@ void test_static_unordered_flat_multiset()
             set.insert_range(sfl::test::istream_view<int>(iss));
             #endif
 
-            CHECK(set.empty() == false);
-            CHECK(set.size() == 5);
-            CHECK(set.max_size() > 0);
+            CHECK(set.size() == 3);
             CHECK(*NTH(set, 0) == 10);
             CHECK(*NTH(set, 1) == 20);
             CHECK(*NTH(set, 2) == 30);
-            CHECK(*NTH(set, 3) == 20);
-            CHECK(*NTH(set, 4) == 20);
         }
 
         // Forward iterator
         {
             std::vector<xint> data({10, 20, 30, 20, 20});
 
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set;
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             set.insert_range(std::views::all(data));
@@ -624,14 +650,10 @@ void test_static_unordered_flat_multiset()
             set.insert_range(data);
             #endif
 
-            CHECK(set.empty() == false);
-            CHECK(set.size() == 5);
-            CHECK(set.max_size() > 0);
+            CHECK(set.size() == 3);
             CHECK(*NTH(set, 0) == 10);
             CHECK(*NTH(set, 1) == 20);
             CHECK(*NTH(set, 2) == 30);
-            CHECK(*NTH(set, 3) == 20);
-            CHECK(*NTH(set, 4) == 20);
         }
     }
 
@@ -639,7 +661,7 @@ void test_static_unordered_flat_multiset()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -692,7 +714,7 @@ void test_static_unordered_flat_multiset()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -745,7 +767,7 @@ void test_static_unordered_flat_multiset()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -798,7 +820,7 @@ void test_static_unordered_flat_multiset()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -854,7 +876,7 @@ void test_static_unordered_flat_multiset()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -904,7 +926,7 @@ void test_static_unordered_flat_multiset()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -954,7 +976,7 @@ void test_static_unordered_flat_multiset()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1011,7 +1033,7 @@ void test_static_unordered_flat_multiset()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1069,30 +1091,24 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test erase(const Key&)");
     {
-        sfl::static_unordered_flat_multiset<xint, 100, std::equal_to<xint>> set;
+        sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
 
         set.emplace(10);
         set.emplace(20);
-        set.emplace(20);
-        set.emplace(20);
         set.emplace(30);
 
-        CHECK(set.size() == 5);
+        CHECK(set.size() == 3);
         CHECK(*set.nth(0) == 10);
         CHECK(*set.nth(1) == 20);
-        CHECK(*set.nth(2) == 20);
-        CHECK(*set.nth(3) == 20);
-        CHECK(*set.nth(4) == 30);
+        CHECK(*set.nth(2) == 30);
 
         CHECK(set.erase(30) == 1);
         CHECK(set.erase(30) == 0);
-        CHECK(set.size() == 4);
+        CHECK(set.size() == 2);
         CHECK(*set.nth(0) == 10);
         CHECK(*set.nth(1) == 20);
-        CHECK(*set.nth(2) == 20);
-        CHECK(*set.nth(3) == 20);
 
-        CHECK(set.erase(20) == 3);
+        CHECK(set.erase(20) == 1);
         CHECK(set.erase(20) == 0);
         CHECK(set.size() == 1);
         CHECK(*set.nth(0) == 10);
@@ -1104,30 +1120,24 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test erase(K&&)");
     {
-        sfl::static_unordered_flat_multiset<xobj, 100, xobj::equal> set;
+        sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
 
         set.emplace(10);
         set.emplace(20);
-        set.emplace(20);
-        set.emplace(20);
         set.emplace(30);
 
-        CHECK(set.size() == 5);
+        CHECK(set.size() == 3);
         CHECK(set.nth(0)->value() == 10);
         CHECK(set.nth(1)->value() == 20);
-        CHECK(set.nth(2)->value() == 20);
-        CHECK(set.nth(3)->value() == 20);
-        CHECK(set.nth(4)->value() == 30);
+        CHECK(set.nth(2)->value() == 30);
 
         CHECK(set.erase(30) == 1);
         CHECK(set.erase(30) == 0);
-        CHECK(set.size() == 4);
+        CHECK(set.size() == 2);
         CHECK(set.nth(0)->value() == 10);
         CHECK(set.nth(1)->value() == 20);
-        CHECK(set.nth(2)->value() == 20);
-        CHECK(set.nth(3)->value() == 20);
 
-        CHECK(set.erase(20) == 3);
+        CHECK(set.erase(20) == 1);
         CHECK(set.erase(20) == 0);
         CHECK(set.size() == 1);
         CHECK(set.nth(0)->value() == 10);
@@ -1141,7 +1151,7 @@ void test_static_unordered_flat_multiset()
     {
         // Swap with self
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1164,7 +1174,7 @@ void test_static_unordered_flat_multiset()
 
         // set1.size() == set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1215,7 +1225,7 @@ void test_static_unordered_flat_multiset()
 
         // set1.size() != set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1275,9 +1285,32 @@ void test_static_unordered_flat_multiset()
 
     ///////////////////////////////////////////////////////////////////////////////
 
+    PRINT("Test data()");
+    {
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+
+        set.emplace(10, 1);
+        set.emplace(20, 1);
+        set.emplace(30, 1);
+
+        CHECK(set.size() == 3);
+        CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
+        CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
+
+        ///////////////////////////////////////////////////////////////////////////
+
+        auto data = set.data();
+        CHECK(data->first == 10); CHECK(data->second == 1); ++data;
+        CHECK(data->first == 20); CHECK(data->second == 1); ++data;
+        CHECK(data->first == 30); CHECK(data->second == 1); ++data;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////
+
     PRINT("Test container()");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         CHECK(set.size() == 0);
         CHECK(set.capacity() == 100);
@@ -1288,7 +1321,7 @@ void test_static_unordered_flat_multiset()
     {
         std::equal_to<xint_xint> equal;
 
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(equal);
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(equal);
 
         CHECK(set.size() == 0);
         CHECK(set.capacity() == 100);
@@ -1310,15 +1343,12 @@ void test_static_unordered_flat_multiset()
             }
         );
 
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end());
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end());
 
-        CHECK(set.size() == 6);
+        CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
         CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-        CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-        CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-        CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
     }
 
     PRINT("Test container(InputIt, InputIt, const KeyEqual&)");
@@ -1338,15 +1368,12 @@ void test_static_unordered_flat_multiset()
 
         std::equal_to<xint_xint> equal;
 
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end(), equal);
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end(), equal);
 
-        CHECK(set.size() == 6);
+        CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
         CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-        CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-        CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-        CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
     }
 
     PRINT("Test container(std::initializer_list)");
@@ -1362,15 +1389,12 @@ void test_static_unordered_flat_multiset()
             {30, 2}
         };
 
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(ilist);
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(ilist);
 
-        CHECK(set.size() == 6);
+        CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
         CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-        CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-        CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-        CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
     }
 
     PRINT("Test container(std::initializer_list, const KeyEqual&)");
@@ -1388,20 +1412,17 @@ void test_static_unordered_flat_multiset()
 
         std::equal_to<xint_xint> equal;
 
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set(ilist, equal);
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(ilist, equal);
 
-        CHECK(set.size() == 6);
+        CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
         CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
-        CHECK(set.nth(3)->first == 10); CHECK(set.nth(3)->second == 2);
-        CHECK(set.nth(4)->first == 20); CHECK(set.nth(4)->second == 2);
-        CHECK(set.nth(5)->first == 30); CHECK(set.nth(5)->second == 2);
     }
 
     PRINT("Test container(const container&)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -1414,7 +1435,7 @@ void test_static_unordered_flat_multiset()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set2(set1);
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set2(set1);
 
         CHECK(set2.size() == 3);
         CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
@@ -1424,7 +1445,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test container(container&&)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -1437,7 +1458,7 @@ void test_static_unordered_flat_multiset()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set2(std::move(set1));
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set2(std::move(set1));
 
         CHECK(set2.size() == 3);
         CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
@@ -1457,13 +1478,13 @@ void test_static_unordered_flat_multiset()
             std::istringstream iss("10 20 30 20 20");
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (std::views::istream<int>(iss))
             );
             #else
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<int>(iss))
@@ -1471,13 +1492,11 @@ void test_static_unordered_flat_multiset()
             #endif
 
             CHECK(set.empty() == false);
-            CHECK(set.size() == 5);
+            CHECK(set.size() == 3);
             CHECK(set.max_size() > 0);
             CHECK(*NTH(set, 0) == 10);
             CHECK(*NTH(set, 1) == 20);
             CHECK(*NTH(set, 2) == 30);
-            CHECK(*NTH(set, 3) == 20);
-            CHECK(*NTH(set, 4) == 20);
         }
 
         // Forward iterator
@@ -1485,13 +1504,13 @@ void test_static_unordered_flat_multiset()
             std::vector<xint> data({10, 20, 30, 20, 20});
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 std::views::all(data)
             );
             #else
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 data
@@ -1499,13 +1518,11 @@ void test_static_unordered_flat_multiset()
             #endif
 
             CHECK(set.empty() == false);
-            CHECK(set.size() == 5);
+            CHECK(set.size() == 3);
             CHECK(set.max_size() > 0);
             CHECK(*NTH(set, 0) == 10);
             CHECK(*NTH(set, 1) == 20);
             CHECK(*NTH(set, 2) == 30);
-            CHECK(*NTH(set, 3) == 20);
-            CHECK(*NTH(set, 4) == 20);
         }
     }
 
@@ -1518,14 +1535,14 @@ void test_static_unordered_flat_multiset()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (std::views::istream<int>(iss)),
                 equal
             );
             #else
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<int>(iss)),
@@ -1534,13 +1551,11 @@ void test_static_unordered_flat_multiset()
             #endif
 
             CHECK(set.empty() == false);
-            CHECK(set.size() == 5);
+            CHECK(set.size() == 3);
             CHECK(set.max_size() > 0);
             CHECK(*NTH(set, 0) == 10);
             CHECK(*NTH(set, 1) == 20);
             CHECK(*NTH(set, 2) == 30);
-            CHECK(*NTH(set, 3) == 20);
-            CHECK(*NTH(set, 4) == 20);
         }
 
         // Forward iterator
@@ -1550,14 +1565,14 @@ void test_static_unordered_flat_multiset()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 std::views::all(data),
                 equal
             );
             #else
-            sfl::static_unordered_flat_multiset<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 data,
@@ -1566,13 +1581,11 @@ void test_static_unordered_flat_multiset()
             #endif
 
             CHECK(set.empty() == false);
-            CHECK(set.size() == 5);
+            CHECK(set.size() == 3);
             CHECK(set.max_size() > 0);
             CHECK(*NTH(set, 0) == 10);
             CHECK(*NTH(set, 1) == 20);
             CHECK(*NTH(set, 2) == 30);
-            CHECK(*NTH(set, 3) == 20);
-            CHECK(*NTH(set, 4) == 20);
         }
     }
 
@@ -1582,7 +1595,7 @@ void test_static_unordered_flat_multiset()
     {
         #define CONDITION set1.size() == set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1622,7 +1635,7 @@ void test_static_unordered_flat_multiset()
 
         #define CONDITION set1.size() < set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1670,7 +1683,7 @@ void test_static_unordered_flat_multiset()
 
         #define CONDITION set1.size() > set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1717,7 +1730,7 @@ void test_static_unordered_flat_multiset()
     {
         #define CONDITION set1.size() == set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1757,7 +1770,7 @@ void test_static_unordered_flat_multiset()
 
         #define CONDITION set1.size() < set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1805,7 +1818,7 @@ void test_static_unordered_flat_multiset()
 
         #define CONDITION set1.size() > set2.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1852,7 +1865,7 @@ void test_static_unordered_flat_multiset()
     {
         #define CONDITION set.size() == ilist.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1885,7 +1898,7 @@ void test_static_unordered_flat_multiset()
 
         #define CONDITION set.size() < ilist.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1922,7 +1935,7 @@ void test_static_unordered_flat_multiset()
 
         #define CONDITION set.size() > ilist.size()
         {
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1962,7 +1975,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test NON-MEMBER comparison operators");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2, set3;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2, set3;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -1998,7 +2011,7 @@ void test_static_unordered_flat_multiset()
 
     PRINT("Test NON-MEMBER swap(container&)");
     {
-        sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -2042,7 +2055,7 @@ void test_static_unordered_flat_multiset()
     PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     {
         using container_type =
-            sfl::static_unordered_flat_multiset<xint_xint, 100, std::equal_to<xint_xint>>;
+            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>>;
 
         using const_reference = typename container_type::const_reference;
 
@@ -2052,20 +2065,16 @@ void test_static_unordered_flat_multiset()
 
         set.emplace(10, 1);
         set.emplace(20, 1);
-        set.emplace(20, 2);
-        set.emplace(20, 3);
         set.emplace(30, 1);
 
-        CHECK(set.size() == 5);
+        CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 20); CHECK(set.nth(1)->second == 1);
-        CHECK(set.nth(2)->first == 20); CHECK(set.nth(2)->second == 2);
-        CHECK(set.nth(3)->first == 20); CHECK(set.nth(3)->second == 3);
-        CHECK(set.nth(4)->first == 30); CHECK(set.nth(4)->second == 1);
+        CHECK(set.nth(2)->first == 30); CHECK(set.nth(2)->second == 1);
 
         ///////////////////////////////////////////////////////////////////////////
 
-        CHECK(erase_if(set, [](const_reference& value){ return value.first == 20; }) == 3);
+        CHECK(erase_if(set, [](const_reference& value){ return value.first == 20; }) == 1);
         CHECK(set.size() == 2);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
         CHECK(set.nth(1)->first == 30); CHECK(set.nth(1)->second == 1);
@@ -2081,5 +2090,5 @@ void test_static_unordered_flat_multiset()
 
 int main()
 {
-    test_static_unordered_flat_multiset();
+    test_static_unordered_flat_set();
 }

@@ -50,7 +50,7 @@
 
 ## Summary
 
-Defined in header `sfl/static_unordered_flat_multimap.hpp`:
+Defined in header `sfl/static_unordered_linear_multimap.hpp`:
 
 ```
 namespace sfl

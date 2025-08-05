@@ -52,7 +52,7 @@
 
 ## Summary
 
-Defined in header `sfl/small_unordered_flat_multimap.hpp`:
+Defined in header `sfl/small_unordered_linear_multimap.hpp`:
 
 ```
 namespace sfl
