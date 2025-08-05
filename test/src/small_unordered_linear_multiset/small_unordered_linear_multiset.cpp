@@ -20,35 +20,35 @@
 #include <sstream>
 #include <vector>
 
-void test_small_unordered_flat_multiset_1()
+void test_small_unordered_linear_multiset_1()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR std::allocator
     #include "small_unordered_linear_multiset.inc"
 }
 
-void test_small_unordered_flat_multiset_2()
+void test_small_unordered_linear_multiset_2()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
     #include "small_unordered_linear_multiset.inc"
 }
 
-void test_small_unordered_flat_multiset_3()
+void test_small_unordered_linear_multiset_3()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
     #include "small_unordered_linear_multiset.inc"
 }
 
-void test_small_unordered_flat_multiset_4()
+void test_small_unordered_linear_multiset_4()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
     #include "small_unordered_linear_multiset.inc"
 }
 
-void test_small_unordered_flat_multiset_5()
+void test_small_unordered_linear_multiset_5()
 {
     #undef   TPARAM_ALLOCATOR
     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
@@ -57,9 +57,9 @@ void test_small_unordered_flat_multiset_5()
 
 int main()
 {
-    test_small_unordered_flat_multiset_1();
-    test_small_unordered_flat_multiset_2();
-    test_small_unordered_flat_multiset_3();
-    test_small_unordered_flat_multiset_4();
-    test_small_unordered_flat_multiset_5();
+    test_small_unordered_linear_multiset_1();
+    test_small_unordered_linear_multiset_2();
+    test_small_unordered_linear_multiset_3();
+    test_small_unordered_linear_multiset_4();
+    test_small_unordered_linear_multiset_5();
 }

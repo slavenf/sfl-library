@@ -59,14 +59,14 @@ This is header-only C++11 library that offers several new or less-known containe
 
 #### Unordered associative containers based on **unsorted vectors**:
 
-* [`small_unordered_flat_map`](doc/small_unordered_flat_map.md)
-* [`small_unordered_flat_set`](doc/small_unordered_flat_set.md)
-* [`small_unordered_flat_multimap`](doc/small_unordered_flat_multimap.md)
-* [`small_unordered_flat_multiset`](doc/small_unordered_flat_multiset.md) <br><br>
-* [`static_unordered_flat_map`](doc/static_unordered_flat_map.md)
-* [`static_unordered_flat_set`](doc/static_unordered_flat_set.md)
-* [`static_unordered_flat_multimap`](doc/static_unordered_flat_multimap.md)
-* [`static_unordered_flat_multiset`](doc/static_unordered_flat_multiset.md)
+* [`small_unordered_linear_map`](doc/small_unordered_linear_map.md)
+* [`small_unordered_linear_set`](doc/small_unordered_linear_set.md)
+* [`small_unordered_linear_multimap`](doc/small_unordered_linear_multimap.md)
+* [`small_unordered_linear_multiset`](doc/small_unordered_linear_multiset.md) <br><br>
+* [`static_unordered_linear_map`](doc/static_unordered_linear_map.md)
+* [`static_unordered_linear_set`](doc/static_unordered_linear_set.md)
+* [`static_unordered_linear_multimap`](doc/static_unordered_linear_multimap.md)
+* [`static_unordered_linear_multiset`](doc/static_unordered_linear_multiset.md)
 
 
 

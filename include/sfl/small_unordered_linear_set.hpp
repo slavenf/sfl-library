@@ -46,7 +46,7 @@ template < typename Key,
            std::size_t N,
            typename KeyEqual = std::equal_to<Key>,
            typename Allocator = std::allocator<Key> >
-class small_unordered_flat_set
+class small_unordered_linear_set
 {
     static_assert
     (
@@ -95,7 +95,7 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    small_unordered_flat_set() noexcept
+    small_unordered_linear_set() noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
@@ -103,7 +103,7 @@ public:
         : impl_()
     {}
 
-    explicit small_unordered_flat_set(const KeyEqual& equal) noexcept
+    explicit small_unordered_linear_set(const KeyEqual& equal) noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
@@ -111,7 +111,7 @@ public:
         : impl_(equal)
     {}
 
-    explicit small_unordered_flat_set(const Allocator& alloc) noexcept
+    explicit small_unordered_linear_set(const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
@@ -119,7 +119,7 @@ public:
         : impl_(alloc)
     {}
 
-    explicit small_unordered_flat_set(const KeyEqual& equal, const Allocator& alloc) noexcept
+    explicit small_unordered_linear_set(const KeyEqual& equal, const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
@@ -129,7 +129,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_set(InputIt first, InputIt last)
+    small_unordered_linear_set(InputIt first, InputIt last)
         : impl_()
     {
         insert(first, last);
@@ -137,7 +137,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_set(InputIt first, InputIt last, const KeyEqual& equal)
+    small_unordered_linear_set(InputIt first, InputIt last, const KeyEqual& equal)
         : impl_(equal)
     {
         insert(first, last);
@@ -145,7 +145,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_set(InputIt first, InputIt last, const Allocator& alloc)
+    small_unordered_linear_set(InputIt first, InputIt last, const Allocator& alloc)
         : impl_(alloc)
     {
         insert(first, last);
@@ -153,69 +153,69 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_set(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc)
+    small_unordered_linear_set(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc)
         : impl_(equal, alloc)
     {
         insert(first, last);
     }
 
-    small_unordered_flat_set(std::initializer_list<value_type> ilist)
-        : small_unordered_flat_set(ilist.begin(), ilist.end())
+    small_unordered_linear_set(std::initializer_list<value_type> ilist)
+        : small_unordered_linear_set(ilist.begin(), ilist.end())
     {}
 
-    small_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal)
-        : small_unordered_flat_set(ilist.begin(), ilist.end(), equal)
+    small_unordered_linear_set(std::initializer_list<value_type> ilist, const KeyEqual& equal)
+        : small_unordered_linear_set(ilist.begin(), ilist.end(), equal)
     {}
 
-    small_unordered_flat_set(std::initializer_list<value_type> ilist, const Allocator& alloc)
-        : small_unordered_flat_set(ilist.begin(), ilist.end(), alloc)
+    small_unordered_linear_set(std::initializer_list<value_type> ilist, const Allocator& alloc)
+        : small_unordered_linear_set(ilist.begin(), ilist.end(), alloc)
     {}
 
-    small_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc)
-        : small_unordered_flat_set(ilist.begin(), ilist.end(), equal, alloc)
+    small_unordered_linear_set(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc)
+        : small_unordered_linear_set(ilist.begin(), ilist.end(), equal, alloc)
     {}
 
-    small_unordered_flat_set(const small_unordered_flat_set& other)
+    small_unordered_linear_set(const small_unordered_linear_set& other)
         : impl_(other.impl_)
     {}
 
-    small_unordered_flat_set(const small_unordered_flat_set& other, const Allocator& alloc)
+    small_unordered_linear_set(const small_unordered_linear_set& other, const Allocator& alloc)
         : impl_(other.impl_, alloc)
     {}
 
-    small_unordered_flat_set(small_unordered_flat_set&& other)
+    small_unordered_linear_set(small_unordered_linear_set&& other)
         : impl_(std::move(other.impl_))
     {}
 
-    small_unordered_flat_set(small_unordered_flat_set&& other, const Allocator& alloc)
+    small_unordered_linear_set(small_unordered_linear_set&& other, const Allocator& alloc)
         : impl_(std::move(other.impl_), alloc)
     {}
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range)
         : impl_()
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
         : impl_(equal)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const Allocator& alloc)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const Allocator& alloc)
         : impl_(alloc)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
         : impl_(equal, alloc)
     {
         insert_range(std::forward<Range>(range));
@@ -224,28 +224,28 @@ public:
 #else // before C++20
 
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range)
         : impl_()
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
         : impl_(equal)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const Allocator& alloc)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const Allocator& alloc)
         : impl_(alloc)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
         : impl_(equal, alloc)
     {
         insert_range(std::forward<Range>(range));
@@ -253,26 +253,26 @@ public:
 
 #endif // before C++20
 
-    ~small_unordered_flat_set()
+    ~small_unordered_linear_set()
     {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    small_unordered_flat_set& operator=(const small_unordered_flat_set& other)
+    small_unordered_linear_set& operator=(const small_unordered_linear_set& other)
     {
         impl_.assign_copy(other.impl_);
         return *this;
     }
 
-    small_unordered_flat_set& operator=(small_unordered_flat_set&& other)
+    small_unordered_linear_set& operator=(small_unordered_linear_set&& other)
     {
         impl_.assign_move(other.impl_);
         return *this;
     }
 
-    small_unordered_flat_set& operator=(std::initializer_list<Key> ilist)
+    small_unordered_linear_set& operator=(std::initializer_list<Key> ilist)
     {
         impl_.assign_range_unique(ilist.begin(), ilist.end());
         return *this;
@@ -520,7 +520,7 @@ public:
         return impl_.erase_key_unique(x);
     }
 
-    void swap(small_unordered_flat_set& other)
+    void swap(small_unordered_linear_set& other)
     {
         impl_.swap(other.impl_);
     }
@@ -614,10 +614,10 @@ private:
     }
 
     template <typename K2, std::size_t N2, typename E2, typename A2>
-    friend bool operator==(const small_unordered_flat_set<K2, N2, E2, A2>& x, const small_unordered_flat_set<K2, N2, E2, A2>& y);
+    friend bool operator==(const small_unordered_linear_set<K2, N2, E2, A2>& x, const small_unordered_linear_set<K2, N2, E2, A2>& y);
 
     template <typename K2, std::size_t N2, typename E2, typename A2>
-    friend bool operator!=(const small_unordered_flat_set<K2, N2, E2, A2>& x, const small_unordered_flat_set<K2, N2, E2, A2>& y);
+    friend bool operator!=(const small_unordered_linear_set<K2, N2, E2, A2>& x, const small_unordered_linear_set<K2, N2, E2, A2>& y);
 };
 
 //
@@ -628,8 +628,8 @@ template <typename K, std::size_t N, typename E, typename A>
 SFL_NODISCARD
 bool operator==
 (
-    const small_unordered_flat_set<K, N, E, A>& x,
-    const small_unordered_flat_set<K, N, E, A>& y
+    const small_unordered_linear_set<K, N, E, A>& x,
+    const small_unordered_linear_set<K, N, E, A>& y
 )
 {
     return x.impl_ == y.impl_;
@@ -639,8 +639,8 @@ template <typename K, std::size_t N, typename E, typename A>
 SFL_NODISCARD
 bool operator!=
 (
-    const small_unordered_flat_set<K, N, E, A>& x,
-    const small_unordered_flat_set<K, N, E, A>& y
+    const small_unordered_linear_set<K, N, E, A>& x,
+    const small_unordered_linear_set<K, N, E, A>& y
 )
 {
     return x.impl_ != y.impl_;
@@ -649,16 +649,16 @@ bool operator!=
 template <typename K, std::size_t N, typename E, typename A>
 void swap
 (
-    small_unordered_flat_set<K, N, E, A>& x,
-    small_unordered_flat_set<K, N, E, A>& y
+    small_unordered_linear_set<K, N, E, A>& x,
+    small_unordered_linear_set<K, N, E, A>& y
 )
 {
     x.swap(y);
 }
 
 template <typename K, std::size_t N, typename E, typename A, typename Predicate>
-typename small_unordered_flat_set<K, N, E, A>::size_type
-    erase_if(small_unordered_flat_set<K, N, E, A>& c, Predicate pred)
+typename small_unordered_linear_set<K, N, E, A>::size_type
+    erase_if(small_unordered_linear_set<K, N, E, A>& c, Predicate pred)
 {
     auto old_size = c.size();
 

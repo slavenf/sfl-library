@@ -7,7 +7,7 @@ using sfl::test::xobj;
 
 PRINT("Test begin, end, cbegin, cend, nth, index_of");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -82,7 +82,7 @@ PRINT("Test begin, end, cbegin, cend, nth, index_of");
 
 PRINT("Test static_capacity");
 {
-    CHECK((sfl::small_unordered_flat_map< xint,
+    CHECK((sfl::small_unordered_linear_map< xint,
                                           xint,
                                           100,
                                           std::equal_to<xint>,
@@ -93,7 +93,7 @@ PRINT("Test static_capacity");
 
 PRINT("Test get_allocator()");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -109,7 +109,7 @@ PRINT("Test get_allocator()");
 PRINT("Test key_eq()");
 {
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -124,7 +124,7 @@ PRINT("Test key_eq()");
     }
 
     {
-        sfl::small_unordered_flat_map< xobj,
+        sfl::small_unordered_linear_map< xobj,
                                        xint,
                                        100,
                                        xobj::equal,
@@ -144,7 +144,7 @@ PRINT("Test key_eq()");
 PRINT("Test value_eq()");
 {
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -159,7 +159,7 @@ PRINT("Test value_eq()");
     }
 
     {
-        sfl::small_unordered_flat_map< xobj,
+        sfl::small_unordered_linear_map< xobj,
                                        xint,
                                        100,
                                        xobj::equal,
@@ -180,7 +180,7 @@ PRINT("Test find, count, contains");
 {
     // xint, xint
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -228,7 +228,7 @@ PRINT("Test find, count, contains");
 
     // xobj, xint
     {
-        sfl::small_unordered_flat_map< xobj,
+        sfl::small_unordered_linear_map< xobj,
                                        xint,
                                        100,
                                        xobj::equal,
@@ -279,7 +279,7 @@ PRINT("Test find, count, contains");
 
 PRINT("Test clear()");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -316,7 +316,7 @@ PRINT("Test clear()");
 
 PRINT("Test emplace(Args&&...)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -347,7 +347,7 @@ PRINT("Test emplace(Args&&...)");
 
 PRINT("Test emplace_hint(const_iterator, Args&&...)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -378,7 +378,7 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
 
 PRINT("Test insert(const value_type&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -427,7 +427,7 @@ PRINT("Test insert(const value_type&)");
 
 PRINT("Test insert(value_type&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -476,7 +476,7 @@ PRINT("Test insert(value_type&&)");
 
 PRINT("Test insert(P&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -525,7 +525,7 @@ PRINT("Test insert(P&&)");
 
 PRINT("Test insert(const_iterator, const value_type&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -574,7 +574,7 @@ PRINT("Test insert(const_iterator, const value_type&)");
 
 PRINT("Test insert(const_iterator, value_type&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -623,7 +623,7 @@ PRINT("Test insert(const_iterator, value_type&&)");
 
 PRINT("Test insert(const_iterator, P&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -672,7 +672,7 @@ PRINT("Test insert(const_iterator, P&&)");
 
 PRINT("Test insert(InputIt, InputIt)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -717,7 +717,7 @@ PRINT("Test insert(InputIt, InputIt)");
 
 PRINT("Test insert(std::initializer_list)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -762,7 +762,7 @@ PRINT("Test insert_range(Range&&");
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map;
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         map.insert_range(std::views::istream<std::pair<int, int>>(iss));
@@ -789,7 +789,7 @@ PRINT("Test insert_range(Range&&");
             }
         );
 
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map;
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         map.insert_range(std::views::all(data));
@@ -806,7 +806,7 @@ PRINT("Test insert_range(Range&&");
 
 PRINT("Test insert_or_assign(const Key&, M&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -853,7 +853,7 @@ PRINT("Test insert_or_assign(const Key&, M&&)");
 
 PRINT("Test insert_or_assign(Key&&, M&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -900,7 +900,7 @@ PRINT("Test insert_or_assign(Key&&, M&&)");
 
 PRINT("Test insert_or_assign(K&&, M&&)");
 {
-    sfl::small_unordered_flat_map< xobj,
+    sfl::small_unordered_linear_map< xobj,
                                    xint,
                                    100,
                                    xobj::equal,
@@ -931,7 +931,7 @@ PRINT("Test insert_or_assign(K&&, M&&)");
 
 PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -978,7 +978,7 @@ PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
 
 PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -1025,7 +1025,7 @@ PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
 
 PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
 {
-    sfl::small_unordered_flat_map< xobj,
+    sfl::small_unordered_linear_map< xobj,
                                    xint,
                                    100,
                                    xobj::equal,
@@ -1056,7 +1056,7 @@ PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
 
 PRINT("Test try_emplace(const Key&, Args&&...)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -1103,7 +1103,7 @@ PRINT("Test try_emplace(const Key&, Args&&...)");
 
 PRINT("Test try_emplace(Key&&, Args&&...)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -1150,7 +1150,7 @@ PRINT("Test try_emplace(Key&&, Args&&...)");
 
 PRINT("Test try_emplace(K&&, Args&&...)");
 {
-    sfl::small_unordered_flat_map< xobj,
+    sfl::small_unordered_linear_map< xobj,
                                    xint,
                                    100,
                                    xobj::equal,
@@ -1181,7 +1181,7 @@ PRINT("Test try_emplace(K&&, Args&&...)");
 
 PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -1228,7 +1228,7 @@ PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
 
 PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -1275,7 +1275,7 @@ PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
 
 PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
 {
-    sfl::small_unordered_flat_map< xobj,
+    sfl::small_unordered_linear_map< xobj,
                                    xint,
                                    100,
                                    xobj::equal,
@@ -1308,7 +1308,7 @@ PRINT("Test erase(const_iterator)");
 {
     // Erase at the end
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1365,7 +1365,7 @@ PRINT("Test erase(const_iterator)");
 
     // Erase at the begin
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1422,7 +1422,7 @@ PRINT("Test erase(const_iterator)");
 
     // Erase near the end
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1479,7 +1479,7 @@ PRINT("Test erase(const_iterator)");
 
     // Erase near the begin
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1539,7 +1539,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 {
     // Erase at the end
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1593,7 +1593,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
     // Erase at the begin
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1647,7 +1647,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
     // Erase near the end
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1708,7 +1708,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
     // Erase near the begin
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -1770,7 +1770,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
 PRINT("Test erase(const Key&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -1803,7 +1803,7 @@ PRINT("Test erase(const Key&)");
 
 PRINT("Test erase(K&&)");
 {
-    sfl::small_unordered_flat_map< xobj,
+    sfl::small_unordered_linear_map< xobj,
                                    xint,
                                    100,
                                    xobj::equal,
@@ -1838,7 +1838,7 @@ PRINT("Test swap(container&)");
 {
     // Both containers are using internal storage
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        5,
                                        std::equal_to<xint>,
@@ -1903,7 +1903,7 @@ PRINT("Test swap(container&)");
 
     // One container is using internal storage and another is using external
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        5,
                                        std::equal_to<xint>,
@@ -1976,7 +1976,7 @@ PRINT("Test swap(container&)");
 
     // Both containers are using external storage
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2044,7 +2044,7 @@ PRINT("Test swap(container&)");
 
 PRINT("Test at(const Key&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2094,7 +2094,7 @@ PRINT("Test at(const Key&)");
 
 PRINT("Test at(const K&)");
 {
-    sfl::small_unordered_flat_map< xobj,
+    sfl::small_unordered_linear_map< xobj,
                                    xint,
                                    100,
                                    xobj::equal,
@@ -2144,7 +2144,7 @@ PRINT("Test at(const K&)");
 
 PRINT("Test operator[](const Key&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2193,7 +2193,7 @@ PRINT("Test operator[](const Key&)");
 
 PRINT("Test operator[](Key&&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2242,7 +2242,7 @@ PRINT("Test operator[](Key&&)");
 
 PRINT("Test operator[](K&&)");
 {
-    sfl::small_unordered_flat_map< xobj,
+    sfl::small_unordered_linear_map< xobj,
                                    xint,
                                    100,
                                    xobj::equal,
@@ -2277,7 +2277,7 @@ PRINT("Test operator[](K&&)");
 
 PRINT("Test data()");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2306,7 +2306,7 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 {
     // N = 0
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2357,7 +2357,7 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
     // N = 100
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2409,7 +2409,7 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
 PRINT("Test container()");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2424,7 +2424,7 @@ PRINT("Test container(const KeyEqual&)");
 {
     std::equal_to<xint> equal;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2439,7 +2439,7 @@ PRINT("Test container(const Allocator&)");
 {
     TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2456,7 +2456,7 @@ PRINT("Test container(const KeyEqual&, const Allocator&)");
 
     TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2482,7 +2482,7 @@ PRINT("Test container(InputIt, InputIt)");
         }
     );
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2511,7 +2511,7 @@ PRINT("Test container(InputIt, InputIt, const KeyEqual&)");
 
     std::equal_to<xint> equal;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2540,7 +2540,7 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
 
     TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2571,7 +2571,7 @@ PRINT("Test container(InputIt, InputIt, const KeyEqual&, const Allocator&)");
 
     TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2596,7 +2596,7 @@ PRINT("Test container(std::initializer_list)");
         {30, 2}
     };
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2623,7 +2623,7 @@ PRINT("Test container(std::initializer_list, const KeyEqual&)");
 
     std::equal_to<xint> equal;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2650,7 +2650,7 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
 
     TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2679,7 +2679,7 @@ PRINT("Test container(std::initializer_list, const KeyEqual&, const Allocator&)"
 
     TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -2695,7 +2695,7 @@ PRINT("Test container(const container&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2712,7 +2712,7 @@ PRINT("Test container(const container&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2726,7 +2726,7 @@ PRINT("Test container(const container&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2743,7 +2743,7 @@ PRINT("Test container(const container&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2760,7 +2760,7 @@ PRINT("Test container(const container&, const Allocator&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2779,7 +2779,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
         TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2793,7 +2793,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2812,7 +2812,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
         TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2829,7 +2829,7 @@ PRINT("Test container(container&&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2846,7 +2846,7 @@ PRINT("Test container(container&&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2875,7 +2875,7 @@ PRINT("Test container(container&&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2892,7 +2892,7 @@ PRINT("Test container(container&&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2922,7 +2922,7 @@ PRINT("Test container(container&&, const Allocator&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2941,7 +2941,7 @@ PRINT("Test container(container&&, const Allocator&)");
 
         TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -2970,7 +2970,7 @@ PRINT("Test container(container&&, const Allocator&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -2989,7 +2989,7 @@ PRINT("Test container(container&&, const Allocator&)");
 
         TPARAM_ALLOCATOR<std::pair<xint, xint>> alloc;
 
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -3024,13 +3024,13 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<int, int>>(iss))
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<int, int>>(iss))
@@ -3059,13 +3059,13 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             std::views::all(data)
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             data
@@ -3090,14 +3090,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&)");
         std::equal_to<xint> equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<int, int>>(iss)),
             equal
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<int, int>>(iss)),
@@ -3129,14 +3129,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&)");
         std::equal_to<xint> equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             std::views::all(data),
             equal
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             data,
@@ -3162,14 +3162,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<int, int>>(iss)),
             alloc
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<int, int>>(iss)),
@@ -3201,14 +3201,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             std::views::all(data),
             alloc
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             data,
@@ -3235,7 +3235,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
         TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<int, int>>(iss)),
@@ -3243,7 +3243,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
             alloc
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<int, int>>(iss)),
@@ -3277,7 +3277,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
         TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -3285,7 +3285,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
             alloc
         );
         #else
-        sfl::small_unordered_flat_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
+        sfl::small_unordered_linear_map<xint, xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>> map
         (
             sfl::from_range_t(),
             data,
@@ -3310,7 +3310,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 1/8
     #define CONDITION map1.size() < map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() < map2.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -3365,7 +3365,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 2/8
     #define CONDITION map1.size() < map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() > map2.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -3434,7 +3434,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 5/8
     #define CONDITION map1.size() > map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() < map2.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -3485,7 +3485,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 6/8
     #define CONDITION map1.size() > map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() > map2.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -3543,7 +3543,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 8/8
     #define CONDITION map1.size() > map2.size()  &&  map1.size() > map2.capacity()  &&  map1.capacity() > map2.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        0,
                                        std::equal_to<xint>,
@@ -3599,7 +3599,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 1/8
         #define CONDITION map2.capacity() != N  &&  map1.size() < map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() < map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -3662,7 +3662,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 2/8
         #define CONDITION map2.capacity() != N  &&  map1.size() < map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() > map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -3739,7 +3739,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 5/8
         #define CONDITION map2.capacity() != N  &&  map1.size() > map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() < map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -3798,7 +3798,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 6/8
         #define CONDITION map2.capacity() != N  &&  map1.size() > map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() > map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -3864,7 +3864,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 8/8
         #define CONDITION map2.capacity() != N  &&  map1.size() > map2.size()  &&  map1.size() > map2.capacity()  &&  map1.capacity() > map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -3934,7 +3934,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 2/8
         #define CONDITION map2.capacity() == N  &&  map1.size() < map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() > map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -4017,7 +4017,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 6/8
         #define CONDITION map2.capacity() == N  &&  map1.size() > map2.size()  &&  map1.size() < map2.capacity()  &&  map1.capacity() > map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -4080,7 +4080,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 8/8
         #define CONDITION map2.capacity() == N  &&  map1.size() > map2.size()  &&  map1.size() > map2.capacity()  &&  map1.capacity() > map2.capacity()
         {
-            sfl::small_unordered_flat_map< xint,
+            sfl::small_unordered_linear_map< xint,
                                            xint,
                                            N,
                                            std::equal_to<xint>,
@@ -4145,7 +4145,7 @@ PRINT("Test operator=(std::initializer_list)");
     // Permutation 1/4
     #define CONDITION ilist.size() < map.size() && ilist.size() < map.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        5,
                                        std::equal_to<xint>,
@@ -4196,7 +4196,7 @@ PRINT("Test operator=(std::initializer_list)");
     // Permutation 3/4
     #define CONDITION ilist.size() > map.size() && ilist.size() < map.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,
@@ -4240,7 +4240,7 @@ PRINT("Test operator=(std::initializer_list)");
     // Permutation 4/4
     #define CONDITION ilist.size() > map.size() && ilist.size() > map.capacity()
     {
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        3,
                                        std::equal_to<xint>,
@@ -4286,7 +4286,7 @@ PRINT("Test operator=(std::initializer_list)");
 
 PRINT("Test NON-MEMBER comparison operators");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -4326,7 +4326,7 @@ PRINT("Test NON-MEMBER comparison operators");
 
 PRINT("Test NON-MEMBER swap(container&)");
 {
-    sfl::small_unordered_flat_map< xint,
+    sfl::small_unordered_linear_map< xint,
                                    xint,
                                    100,
                                    std::equal_to<xint>,
@@ -4374,7 +4374,7 @@ PRINT("Test NON-MEMBER swap(container&)");
 PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
 {
     using container_type =
-        sfl::small_unordered_flat_map< xint,
+        sfl::small_unordered_linear_map< xint,
                                        xint,
                                        100,
                                        std::equal_to<xint>,

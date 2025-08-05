@@ -14,14 +14,14 @@
 #include <sstream>
 #include <vector>
 
-void test_static_unordered_flat_map()
+void test_static_unordered_linear_map()
 {
     using sfl::test::xint;
     using sfl::test::xobj;
 
     PRINT("Test begin, end, cbegin, cend, nth, index_of");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(20, 1);
         map.emplace(40, 1);
@@ -92,7 +92,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test static_capacity");
     {
-        CHECK((sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>>::static_capacity == 100));
+        CHECK((sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>>::static_capacity == 100));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ void test_static_unordered_flat_map()
     PRINT("Test key_eq()");
     {
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             auto key_eq = map.key_eq();
 
@@ -111,7 +111,7 @@ void test_static_unordered_flat_map()
         }
 
         {
-            sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
             auto key_eq = map.key_eq();
 
@@ -127,7 +127,7 @@ void test_static_unordered_flat_map()
     PRINT("Test value_eq()");
     {
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             auto value_eq = map.value_eq();
 
@@ -138,7 +138,7 @@ void test_static_unordered_flat_map()
         }
 
         {
-            sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
             auto value_eq = map.value_eq();
 
@@ -155,7 +155,7 @@ void test_static_unordered_flat_map()
     {
         // xint, xint
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(20, 1);
             map.emplace(40, 1);
@@ -199,7 +199,7 @@ void test_static_unordered_flat_map()
 
         // xobj, xint
         {
-            sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
             map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
             map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
@@ -246,7 +246,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test clear()");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         CHECK(map.size() == 0);
 
@@ -279,7 +279,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test emplace(Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             CHECK(map.emplace(10, 1) == std::make_pair(map.nth(0), true));
@@ -306,7 +306,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test emplace_hint(const_iterator, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             CHECK(map.emplace_hint(map.begin(), 10, 1) == map.nth(0));
@@ -333,7 +333,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(const value_type&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -378,7 +378,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(value_type&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -423,7 +423,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(P&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<long, long>;
 
@@ -468,7 +468,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(const_iterator, const value_type&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -513,7 +513,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(const_iterator, value_type&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -558,7 +558,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(const_iterator, P&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<long, long>;
 
@@ -603,7 +603,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(InputIt, InputIt)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             std::vector<std::pair<xint, xint>> data
@@ -644,7 +644,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert(std::initializer_list)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             std::initializer_list<std::pair<xint, xint>> ilist
@@ -685,7 +685,7 @@ void test_static_unordered_flat_map()
         {
             std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             map.insert_range(std::views::istream<std::pair<int, int>>(iss));
@@ -712,7 +712,7 @@ void test_static_unordered_flat_map()
                 }
             );
 
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             map.insert_range(std::views::all(data));
@@ -729,7 +729,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert_or_assign(const Key&, M&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -772,7 +772,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert_or_assign(Key&&, M&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -815,7 +815,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert_or_assign(K&&, M&&)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
         {
             CHECK(map.insert_or_assign(10, 1) == std::make_pair(map.nth(0), true));
@@ -842,7 +842,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -885,7 +885,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -928,7 +928,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
         {
             CHECK(map.insert_or_assign(map.begin(), 10, 1) == map.nth(0));
@@ -955,7 +955,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test try_emplace(const Key&, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -998,7 +998,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test try_emplace(Key&&, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -1041,7 +1041,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test try_emplace(K&&, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
         {
             CHECK(map.try_emplace(10, 1) == std::make_pair(map.nth(0), true));
@@ -1068,7 +1068,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -1111,7 +1111,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             xint key_10(10);
@@ -1154,7 +1154,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
         {
             CHECK(map.try_emplace(map.begin(), 10, 1) == map.nth(0));
@@ -1183,7 +1183,7 @@ void test_static_unordered_flat_map()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1236,7 +1236,7 @@ void test_static_unordered_flat_map()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1289,7 +1289,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1342,7 +1342,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1398,7 +1398,7 @@ void test_static_unordered_flat_map()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1448,7 +1448,7 @@ void test_static_unordered_flat_map()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1498,7 +1498,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1555,7 +1555,7 @@ void test_static_unordered_flat_map()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1613,7 +1613,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test erase(const Key&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -1642,7 +1642,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test erase(K&&)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -1673,7 +1673,7 @@ void test_static_unordered_flat_map()
     {
         // Swap with self
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1696,7 +1696,7 @@ void test_static_unordered_flat_map()
 
         // map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1747,7 +1747,7 @@ void test_static_unordered_flat_map()
 
         // map1.size() != map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1809,7 +1809,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test at(const Key&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -1855,7 +1855,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test at(const K&)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -1901,7 +1901,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test operator[](const Key&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -1946,7 +1946,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test operator[](Key&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -1991,7 +1991,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test operator[](K&&)");
     {
-        sfl::static_unordered_flat_map<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_map<xobj, xint, 100, xobj::equal> map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -2022,7 +2022,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test data()");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -2045,7 +2045,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test container()");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
         CHECK(map.size() == 0);
         CHECK(map.capacity() == 100);
@@ -2056,7 +2056,7 @@ void test_static_unordered_flat_map()
     {
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(equal);
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map(equal);
 
         CHECK(map.size() == 0);
         CHECK(map.capacity() == 100);
@@ -2078,7 +2078,7 @@ void test_static_unordered_flat_map()
             }
         );
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end());
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end());
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -2103,7 +2103,7 @@ void test_static_unordered_flat_map()
 
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end(), equal);
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end(), equal);
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -2124,7 +2124,7 @@ void test_static_unordered_flat_map()
             {30, 2}
         };
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(ilist);
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map(ilist);
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -2147,7 +2147,7 @@ void test_static_unordered_flat_map()
 
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map(ilist, equal);
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map(ilist, equal);
 
         CHECK(map.size() == 3);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -2157,7 +2157,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test container(const container&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2170,7 +2170,7 @@ void test_static_unordered_flat_map()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map2(map1);
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map2(map1);
 
         CHECK(map2.size() == 3);
         CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
@@ -2180,7 +2180,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test container(container&&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2193,7 +2193,7 @@ void test_static_unordered_flat_map()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map2(std::move(map1));
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map2(std::move(map1));
 
         CHECK(map2.size() == 3);
         CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
@@ -2213,13 +2213,13 @@ void test_static_unordered_flat_map()
             std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (std::views::istream<std::pair<int, int>>(iss))
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<std::pair<int, int>>(iss))
@@ -2248,13 +2248,13 @@ void test_static_unordered_flat_map()
             );
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 std::views::all(data)
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 data
@@ -2279,14 +2279,14 @@ void test_static_unordered_flat_map()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (std::views::istream<std::pair<int, int>>(iss)),
                 equal
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<std::pair<int, int>>(iss)),
@@ -2318,14 +2318,14 @@ void test_static_unordered_flat_map()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 std::views::all(data),
                 equal
             );
             #else
-            sfl::static_unordered_flat_map<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_map<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 data,
@@ -2348,7 +2348,7 @@ void test_static_unordered_flat_map()
     {
         #define CONDITION map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2388,7 +2388,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() < map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2436,7 +2436,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() > map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2483,7 +2483,7 @@ void test_static_unordered_flat_map()
     {
         #define CONDITION map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2523,7 +2523,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() < map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2571,7 +2571,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map1.size() > map2.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2618,7 +2618,7 @@ void test_static_unordered_flat_map()
     {
         #define CONDITION map.size() == ilist.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2651,7 +2651,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map.size() < ilist.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2688,7 +2688,7 @@ void test_static_unordered_flat_map()
 
         #define CONDITION map.size() > ilist.size()
         {
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2728,7 +2728,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test NON-MEMBER comparison operators");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2, map3;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2, map3;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2764,7 +2764,7 @@ void test_static_unordered_flat_map()
 
     PRINT("Test NON-MEMBER swap(container&)");
     {
-        sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
+        sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2808,7 +2808,7 @@ void test_static_unordered_flat_map()
     PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     {
         using container_type =
-            sfl::static_unordered_flat_map<xint, xint, 100, std::equal_to<xint>>;
+            sfl::static_unordered_linear_map<xint, xint, 100, std::equal_to<xint>>;
 
         using const_reference = typename container_type::const_reference;
 
@@ -2843,5 +2843,5 @@ void test_static_unordered_flat_map()
 
 int main()
 {
-    test_static_unordered_flat_map();
+    test_static_unordered_linear_map();
 }

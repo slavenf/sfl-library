@@ -14,14 +14,14 @@
 #include <sstream>
 #include <vector>
 
-void test_static_unordered_flat_multimap()
+void test_static_unordered_linear_multimap()
 {
     using sfl::test::xint;
     using sfl::test::xobj;
 
     PRINT("Test begin, end, cbegin, cend, nth, index_of");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(20, 1);
         map.emplace(40, 1);
@@ -92,7 +92,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test static_capacity");
     {
-        CHECK((sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>>::static_capacity == 100));
+        CHECK((sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>>::static_capacity == 100));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -100,7 +100,7 @@ void test_static_unordered_flat_multimap()
     PRINT("Test key_eq()");
     {
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             auto key_eq = map.key_eq();
 
@@ -111,7 +111,7 @@ void test_static_unordered_flat_multimap()
         }
 
         {
-            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_linear_multimap<xobj, xint, 100, xobj::equal> map;
 
             auto key_eq = map.key_eq();
 
@@ -127,7 +127,7 @@ void test_static_unordered_flat_multimap()
     PRINT("Test value_eq()");
     {
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             auto value_eq = map.value_eq();
 
@@ -138,7 +138,7 @@ void test_static_unordered_flat_multimap()
         }
 
         {
-            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_linear_multimap<xobj, xint, 100, xobj::equal> map;
 
             auto value_eq = map.value_eq();
 
@@ -155,7 +155,7 @@ void test_static_unordered_flat_multimap()
     {
         // xint, xint
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(20, 1);
             map.emplace(40, 1);
@@ -199,7 +199,7 @@ void test_static_unordered_flat_multimap()
 
         // xobj, xint
         {
-            sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
+            sfl::static_unordered_linear_multimap<xobj, xint, 100, xobj::equal> map;
 
             map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
             map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
@@ -246,7 +246,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test clear()");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         CHECK(map.size() == 0);
 
@@ -279,7 +279,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test emplace(Args&&...)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             CHECK(map.emplace(10, 1) == map.nth(0));
@@ -309,7 +309,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test emplace_hint(const_iterator, Args&&...)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             CHECK(map.emplace_hint(map.begin(), 10, 1) == map.nth(0));
@@ -339,7 +339,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(const value_type&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -387,7 +387,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(value_type&&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -435,7 +435,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(P&&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<long, long>;
 
@@ -483,7 +483,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(const_iterator, const value_type&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -531,7 +531,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(const_iterator, value_type&&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<xint, xint>;
 
@@ -579,7 +579,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(const_iterator, P&&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         using value_type = std::pair<long, long>;
 
@@ -627,7 +627,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(InputIt, InputIt)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             std::vector<std::pair<xint, xint>> data
@@ -671,7 +671,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test insert(std::initializer_list)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         {
             std::initializer_list<std::pair<xint, xint>> ilist
@@ -715,7 +715,7 @@ void test_static_unordered_flat_multimap()
         {
             std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             map.insert_range(std::views::istream<std::pair<int, int>>(iss));
@@ -744,7 +744,7 @@ void test_static_unordered_flat_multimap()
                 }
             );
 
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             map.insert_range(std::views::all(data));
@@ -765,7 +765,7 @@ void test_static_unordered_flat_multimap()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -818,7 +818,7 @@ void test_static_unordered_flat_multimap()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -871,7 +871,7 @@ void test_static_unordered_flat_multimap()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -924,7 +924,7 @@ void test_static_unordered_flat_multimap()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -980,7 +980,7 @@ void test_static_unordered_flat_multimap()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1030,7 +1030,7 @@ void test_static_unordered_flat_multimap()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1080,7 +1080,7 @@ void test_static_unordered_flat_multimap()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1137,7 +1137,7 @@ void test_static_unordered_flat_multimap()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1195,7 +1195,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test erase(const Key&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -1230,7 +1230,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test erase(K&&)");
     {
-        sfl::static_unordered_flat_multimap<xobj, xint, 100, xobj::equal> map;
+        sfl::static_unordered_linear_multimap<xobj, xint, 100, xobj::equal> map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -1267,7 +1267,7 @@ void test_static_unordered_flat_multimap()
     {
         // Swap with self
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -1290,7 +1290,7 @@ void test_static_unordered_flat_multimap()
 
         // map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1341,7 +1341,7 @@ void test_static_unordered_flat_multimap()
 
         // map1.size() != map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1403,7 +1403,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test data()");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -1426,7 +1426,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test container()");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
         CHECK(map.size() == 0);
         CHECK(map.capacity() == 100);
@@ -1437,7 +1437,7 @@ void test_static_unordered_flat_multimap()
     {
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(equal);
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map(equal);
 
         CHECK(map.size() == 0);
         CHECK(map.capacity() == 100);
@@ -1459,7 +1459,7 @@ void test_static_unordered_flat_multimap()
             }
         );
 
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end());
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end());
 
         CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -1487,7 +1487,7 @@ void test_static_unordered_flat_multimap()
 
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end(), equal);
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map(data.begin(), data.end(), equal);
 
         CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -1511,7 +1511,7 @@ void test_static_unordered_flat_multimap()
             {30, 2}
         };
 
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist);
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist);
 
         CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -1537,7 +1537,7 @@ void test_static_unordered_flat_multimap()
 
         std::equal_to<xint> equal;
 
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist, equal);
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map(ilist, equal);
 
         CHECK(map.size() == 6);
         CHECK(map.nth(0)->first == 10); CHECK(map.nth(0)->second == 1);
@@ -1550,7 +1550,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test container(const container&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -1563,7 +1563,7 @@ void test_static_unordered_flat_multimap()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map2(map1);
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map2(map1);
 
         CHECK(map2.size() == 3);
         CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
@@ -1573,7 +1573,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test container(container&&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -1586,7 +1586,7 @@ void test_static_unordered_flat_multimap()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map2(std::move(map1));
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map2(std::move(map1));
 
         CHECK(map2.size() == 3);
         CHECK(map2.nth(0)->first == 10); CHECK(map2.nth(0)->second == 1);
@@ -1606,13 +1606,13 @@ void test_static_unordered_flat_multimap()
             std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (std::views::istream<std::pair<int, int>>(iss))
             );
             #else
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<std::pair<int, int>>(iss))
@@ -1643,13 +1643,13 @@ void test_static_unordered_flat_multimap()
             );
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 std::views::all(data)
             );
             #else
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 data
@@ -1676,14 +1676,14 @@ void test_static_unordered_flat_multimap()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (std::views::istream<std::pair<int, int>>(iss)),
                 equal
             );
             #else
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<std::pair<int, int>>(iss)),
@@ -1717,14 +1717,14 @@ void test_static_unordered_flat_multimap()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 std::views::all(data),
                 equal
             );
             #else
-            sfl::static_unordered_flat_multimap<xint, xint, 32, std::equal_to<xint>> map
+            sfl::static_unordered_linear_multimap<xint, xint, 32, std::equal_to<xint>> map
             (
                 sfl::from_range_t(),
                 data,
@@ -1749,7 +1749,7 @@ void test_static_unordered_flat_multimap()
     {
         #define CONDITION map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1789,7 +1789,7 @@ void test_static_unordered_flat_multimap()
 
         #define CONDITION map1.size() < map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1837,7 +1837,7 @@ void test_static_unordered_flat_multimap()
 
         #define CONDITION map1.size() > map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1884,7 +1884,7 @@ void test_static_unordered_flat_multimap()
     {
         #define CONDITION map1.size() == map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1924,7 +1924,7 @@ void test_static_unordered_flat_multimap()
 
         #define CONDITION map1.size() < map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -1972,7 +1972,7 @@ void test_static_unordered_flat_multimap()
 
         #define CONDITION map1.size() > map2.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
             map1.emplace(10, 1);
             map1.emplace(20, 1);
@@ -2019,7 +2019,7 @@ void test_static_unordered_flat_multimap()
     {
         #define CONDITION map.size() == ilist.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2052,7 +2052,7 @@ void test_static_unordered_flat_multimap()
 
         #define CONDITION map.size() < ilist.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2089,7 +2089,7 @@ void test_static_unordered_flat_multimap()
 
         #define CONDITION map.size() > ilist.size()
         {
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map;
 
             map.emplace(10, 1);
             map.emplace(20, 1);
@@ -2129,7 +2129,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test NON-MEMBER comparison operators");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2, map3;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2, map3;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2165,7 +2165,7 @@ void test_static_unordered_flat_multimap()
 
     PRINT("Test NON-MEMBER swap(container&)");
     {
-        sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
+        sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>> map1, map2;
 
         map1.emplace(10, 1);
         map1.emplace(20, 1);
@@ -2209,7 +2209,7 @@ void test_static_unordered_flat_multimap()
     PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     {
         using container_type =
-            sfl::static_unordered_flat_multimap<xint, xint, 100, std::equal_to<xint>>;
+            sfl::static_unordered_linear_multimap<xint, xint, 100, std::equal_to<xint>>;
 
         using const_reference = typename container_type::const_reference;
 
@@ -2248,5 +2248,5 @@ void test_static_unordered_flat_multimap()
 
 int main()
 {
-    test_static_unordered_flat_multimap();
+    test_static_unordered_linear_multimap();
 }

@@ -15,7 +15,7 @@
 #include <sstream>
 #include <vector>
 
-void test_static_unordered_flat_set()
+void test_static_unordered_linear_set()
 {
     using sfl::test::xint;
     using sfl::test::xint_xint;
@@ -23,7 +23,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test begin, end, cbegin, cend, nth, index_of");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         set.emplace(20, 1);
         set.emplace(40, 1);
@@ -94,7 +94,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test static_capacity");
     {
-        CHECK((sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>>::static_capacity == 100));
+        CHECK((sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>>::static_capacity == 100));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ void test_static_unordered_flat_set()
     PRINT("Test key_eq()");
     {
         {
-            sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
+            sfl::static_unordered_linear_set<xint, 100, std::equal_to<xint>> set;
 
             auto key_eq = set.key_eq();
 
@@ -113,7 +113,7 @@ void test_static_unordered_flat_set()
         }
 
         {
-            sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+            sfl::static_unordered_linear_set<xobj, 100, xobj::equal> set;
 
             auto key_eq = set.key_eq();
 
@@ -130,7 +130,7 @@ void test_static_unordered_flat_set()
     {
         // xint
         {
-            sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
+            sfl::static_unordered_linear_set<xint, 100, std::equal_to<xint>> set;
 
             set.emplace(20);
             set.emplace(40);
@@ -174,7 +174,7 @@ void test_static_unordered_flat_set()
 
         // xobj
         {
-            sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+            sfl::static_unordered_linear_set<xobj, 100, xobj::equal> set;
 
             set.emplace(20);
             set.emplace(40);
@@ -221,7 +221,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test clear()");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         CHECK(set.size() == 0);
 
@@ -254,7 +254,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test emplace(Args&&...)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
             CHECK(set.emplace(10, 1) == std::make_pair(set.nth(0), true));
@@ -281,7 +281,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test emplace_hint(const_iterator, Args&&...)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
             CHECK(set.emplace_hint(set.begin(), 10, 1) == set.nth(0));
@@ -308,7 +308,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(const value_type&)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -353,7 +353,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(value_type&&)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -398,7 +398,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(K&&)");
     {
-        sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+        sfl::static_unordered_linear_set<xobj, 100, xobj::equal> set;
 
         {
             CHECK(set.insert(10) == std::make_pair(set.nth(0), true));
@@ -425,7 +425,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(const_iterator, const value_type&)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -470,7 +470,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(const_iterator, value_type&&)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         using value_type = xint_xint;
 
@@ -515,7 +515,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(const_iterator, K&&)");
     {
-        sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+        sfl::static_unordered_linear_set<xobj, 100, xobj::equal> set;
 
         {
             CHECK(set.insert(set.begin(), 10) == set.nth(0));
@@ -542,7 +542,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(InputIt, InputIt)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
             std::vector<xint_xint> data
@@ -583,7 +583,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test insert(std::initializer_list)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         {
             std::initializer_list<xint_xint> ilist
@@ -624,7 +624,7 @@ void test_static_unordered_flat_set()
         {
             std::istringstream iss("10 20 30 20 20");
 
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set;
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             set.insert_range(std::views::istream<int>(iss));
@@ -642,7 +642,7 @@ void test_static_unordered_flat_set()
         {
             std::vector<xint> data({10, 20, 30, 20, 20});
 
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set;
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
             set.insert_range(std::views::all(data));
@@ -661,7 +661,7 @@ void test_static_unordered_flat_set()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -714,7 +714,7 @@ void test_static_unordered_flat_set()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -767,7 +767,7 @@ void test_static_unordered_flat_set()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -820,7 +820,7 @@ void test_static_unordered_flat_set()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -876,7 +876,7 @@ void test_static_unordered_flat_set()
     {
         // Erase at the end
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -926,7 +926,7 @@ void test_static_unordered_flat_set()
 
         // Erase at the begin
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -976,7 +976,7 @@ void test_static_unordered_flat_set()
 
         // Erase near the end
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1033,7 +1033,7 @@ void test_static_unordered_flat_set()
 
         // Erase near the begin
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1091,7 +1091,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test erase(const Key&)");
     {
-        sfl::static_unordered_flat_set<xint, 100, std::equal_to<xint>> set;
+        sfl::static_unordered_linear_set<xint, 100, std::equal_to<xint>> set;
 
         set.emplace(10);
         set.emplace(20);
@@ -1120,7 +1120,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test erase(K&&)");
     {
-        sfl::static_unordered_flat_set<xobj, 100, xobj::equal> set;
+        sfl::static_unordered_linear_set<xobj, 100, xobj::equal> set;
 
         set.emplace(10);
         set.emplace(20);
@@ -1151,7 +1151,7 @@ void test_static_unordered_flat_set()
     {
         // Swap with self
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1174,7 +1174,7 @@ void test_static_unordered_flat_set()
 
         // set1.size() == set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1225,7 +1225,7 @@ void test_static_unordered_flat_set()
 
         // set1.size() != set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1287,7 +1287,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test data()");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         set.emplace(10, 1);
         set.emplace(20, 1);
@@ -1310,7 +1310,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test container()");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
         CHECK(set.size() == 0);
         CHECK(set.capacity() == 100);
@@ -1321,7 +1321,7 @@ void test_static_unordered_flat_set()
     {
         std::equal_to<xint_xint> equal;
 
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(equal);
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set(equal);
 
         CHECK(set.size() == 0);
         CHECK(set.capacity() == 100);
@@ -1343,7 +1343,7 @@ void test_static_unordered_flat_set()
             }
         );
 
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end());
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end());
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -1368,7 +1368,7 @@ void test_static_unordered_flat_set()
 
         std::equal_to<xint_xint> equal;
 
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end(), equal);
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set(data.begin(), data.end(), equal);
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -1389,7 +1389,7 @@ void test_static_unordered_flat_set()
             {30, 2}
         };
 
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(ilist);
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set(ilist);
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -1412,7 +1412,7 @@ void test_static_unordered_flat_set()
 
         std::equal_to<xint_xint> equal;
 
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set(ilist, equal);
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set(ilist, equal);
 
         CHECK(set.size() == 3);
         CHECK(set.nth(0)->first == 10); CHECK(set.nth(0)->second == 1);
@@ -1422,7 +1422,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test container(const container&)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -1435,7 +1435,7 @@ void test_static_unordered_flat_set()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set2(set1);
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set2(set1);
 
         CHECK(set2.size() == 3);
         CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
@@ -1445,7 +1445,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test container(container&&)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -1458,7 +1458,7 @@ void test_static_unordered_flat_set()
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set2(std::move(set1));
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set2(std::move(set1));
 
         CHECK(set2.size() == 3);
         CHECK(set2.nth(0)->first == 10); CHECK(set2.nth(0)->second == 1);
@@ -1478,13 +1478,13 @@ void test_static_unordered_flat_set()
             std::istringstream iss("10 20 30 20 20");
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (std::views::istream<int>(iss))
             );
             #else
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<int>(iss))
@@ -1504,13 +1504,13 @@ void test_static_unordered_flat_set()
             std::vector<xint> data({10, 20, 30, 20, 20});
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 std::views::all(data)
             );
             #else
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 data
@@ -1535,14 +1535,14 @@ void test_static_unordered_flat_set()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (std::views::istream<int>(iss)),
                 equal
             );
             #else
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 (sfl::from_range_t()),
                 (sfl::test::istream_view<int>(iss)),
@@ -1565,14 +1565,14 @@ void test_static_unordered_flat_set()
             std::equal_to<xint> equal;
 
             #if SFL_CPP_VERSION >= SFL_CPP_20
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 std::views::all(data),
                 equal
             );
             #else
-            sfl::static_unordered_flat_set<xint, 32, std::equal_to<xint>> set
+            sfl::static_unordered_linear_set<xint, 32, std::equal_to<xint>> set
             (
                 sfl::from_range_t(),
                 data,
@@ -1595,7 +1595,7 @@ void test_static_unordered_flat_set()
     {
         #define CONDITION set1.size() == set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1635,7 +1635,7 @@ void test_static_unordered_flat_set()
 
         #define CONDITION set1.size() < set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1683,7 +1683,7 @@ void test_static_unordered_flat_set()
 
         #define CONDITION set1.size() > set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1730,7 +1730,7 @@ void test_static_unordered_flat_set()
     {
         #define CONDITION set1.size() == set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1770,7 +1770,7 @@ void test_static_unordered_flat_set()
 
         #define CONDITION set1.size() < set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1818,7 +1818,7 @@ void test_static_unordered_flat_set()
 
         #define CONDITION set1.size() > set2.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
             set1.emplace(10, 1);
             set1.emplace(20, 1);
@@ -1865,7 +1865,7 @@ void test_static_unordered_flat_set()
     {
         #define CONDITION set.size() == ilist.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1898,7 +1898,7 @@ void test_static_unordered_flat_set()
 
         #define CONDITION set.size() < ilist.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1935,7 +1935,7 @@ void test_static_unordered_flat_set()
 
         #define CONDITION set.size() > ilist.size()
         {
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set;
 
             set.emplace(10, 1);
             set.emplace(20, 1);
@@ -1975,7 +1975,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test NON-MEMBER comparison operators");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2, set3;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2, set3;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -2011,7 +2011,7 @@ void test_static_unordered_flat_set()
 
     PRINT("Test NON-MEMBER swap(container&)");
     {
-        sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
+        sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>> set1, set2;
 
         set1.emplace(10, 1);
         set1.emplace(20, 1);
@@ -2055,7 +2055,7 @@ void test_static_unordered_flat_set()
     PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     {
         using container_type =
-            sfl::static_unordered_flat_set<xint_xint, 100, std::equal_to<xint_xint>>;
+            sfl::static_unordered_linear_set<xint_xint, 100, std::equal_to<xint_xint>>;
 
         using const_reference = typename container_type::const_reference;
 
@@ -2090,5 +2090,5 @@ void test_static_unordered_flat_set()
 
 int main()
 {
-    test_static_unordered_flat_set();
+    test_static_unordered_linear_set();
 }

@@ -44,7 +44,7 @@ namespace sfl
 template < typename Key,
            std::size_t N,
            typename KeyEqual = std::equal_to<Key> >
-class static_unordered_flat_set
+class static_unordered_linear_set
 {
     static_assert(N > 0, "N must be greater than zero.");
 
@@ -88,17 +88,17 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    static_unordered_flat_set() noexcept(std::is_nothrow_default_constructible<KeyEqual>::value)
+    static_unordered_linear_set() noexcept(std::is_nothrow_default_constructible<KeyEqual>::value)
         : impl_()
     {}
 
-    explicit static_unordered_flat_set(const KeyEqual& equal) noexcept(std::is_nothrow_copy_constructible<KeyEqual>::value)
+    explicit static_unordered_linear_set(const KeyEqual& equal) noexcept(std::is_nothrow_copy_constructible<KeyEqual>::value)
         : impl_(equal)
     {}
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    static_unordered_flat_set(InputIt first, InputIt last)
+    static_unordered_linear_set(InputIt first, InputIt last)
         : impl_()
     {
         insert(first, last);
@@ -106,39 +106,39 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    static_unordered_flat_set(InputIt first, InputIt last, const KeyEqual& equal)
+    static_unordered_linear_set(InputIt first, InputIt last, const KeyEqual& equal)
         : impl_(equal)
     {
         insert(first, last);
     }
 
-    static_unordered_flat_set(std::initializer_list<value_type> ilist)
-        : static_unordered_flat_set(ilist.begin(), ilist.end())
+    static_unordered_linear_set(std::initializer_list<value_type> ilist)
+        : static_unordered_linear_set(ilist.begin(), ilist.end())
     {}
 
-    static_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal)
-        : static_unordered_flat_set(ilist.begin(), ilist.end(), equal)
+    static_unordered_linear_set(std::initializer_list<value_type> ilist, const KeyEqual& equal)
+        : static_unordered_linear_set(ilist.begin(), ilist.end(), equal)
     {}
 
-    static_unordered_flat_set(const static_unordered_flat_set& other)
+    static_unordered_linear_set(const static_unordered_linear_set& other)
         : impl_(other.impl_)
     {}
 
-    static_unordered_flat_set(static_unordered_flat_set&& other)
+    static_unordered_linear_set(static_unordered_linear_set&& other)
         : impl_(std::move(other.impl_))
     {}
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    static_unordered_flat_set(sfl::from_range_t, Range&& range)
+    static_unordered_linear_set(sfl::from_range_t, Range&& range)
         : impl_()
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    static_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+    static_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
         : impl_(equal)
     {
         insert_range(std::forward<Range>(range));
@@ -147,14 +147,14 @@ public:
 #else // before C++20
 
     template <typename Range>
-    static_unordered_flat_set(sfl::from_range_t, Range&& range)
+    static_unordered_linear_set(sfl::from_range_t, Range&& range)
         : impl_()
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
-    static_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+    static_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal)
         : impl_(equal)
     {
         insert_range(std::forward<Range>(range));
@@ -162,26 +162,26 @@ public:
 
 #endif // before C++20
 
-    ~static_unordered_flat_set()
+    ~static_unordered_linear_set()
     {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    static_unordered_flat_set& operator=(const static_unordered_flat_set& other)
+    static_unordered_linear_set& operator=(const static_unordered_linear_set& other)
     {
         impl_.assign_copy(other.impl_);
         return *this;
     }
 
-    static_unordered_flat_set& operator=(static_unordered_flat_set&& other)
+    static_unordered_linear_set& operator=(static_unordered_linear_set&& other)
     {
         impl_.assign_move(other.impl_);
         return *this;
     }
 
-    static_unordered_flat_set& operator=(std::initializer_list<value_type> ilist)
+    static_unordered_linear_set& operator=(std::initializer_list<value_type> ilist)
     {
         SFL_ASSERT(size_type(ilist.size()) <= capacity());
         impl_.assign_range_unique(ilist.begin(), ilist.end());
@@ -424,7 +424,7 @@ public:
         return impl_.erase_key_unique(x);
     }
 
-    void swap(static_unordered_flat_set& other)
+    void swap(static_unordered_linear_set& other)
     {
         impl_.swap(other.impl_);
     }
@@ -518,10 +518,10 @@ private:
     }
 
     template <typename K2, std::size_t N2, typename E2>
-    friend bool operator==(const static_unordered_flat_set<K2, N2, E2>& x, const static_unordered_flat_set<K2, N2, E2>& y);
+    friend bool operator==(const static_unordered_linear_set<K2, N2, E2>& x, const static_unordered_linear_set<K2, N2, E2>& y);
 
     template <typename K2, std::size_t N2, typename E2>
-    friend bool operator!=(const static_unordered_flat_set<K2, N2, E2>& x, const static_unordered_flat_set<K2, N2, E2>& y);
+    friend bool operator!=(const static_unordered_linear_set<K2, N2, E2>& x, const static_unordered_linear_set<K2, N2, E2>& y);
 };
 
 //
@@ -532,8 +532,8 @@ template <typename K, std::size_t N, typename E>
 SFL_NODISCARD
 bool operator==
 (
-    const static_unordered_flat_set<K, N, E>& x,
-    const static_unordered_flat_set<K, N, E>& y
+    const static_unordered_linear_set<K, N, E>& x,
+    const static_unordered_linear_set<K, N, E>& y
 )
 {
     return x.impl_ == y.impl_;
@@ -543,8 +543,8 @@ template <typename K, std::size_t N, typename E>
 SFL_NODISCARD
 bool operator!=
 (
-    const static_unordered_flat_set<K, N, E>& x,
-    const static_unordered_flat_set<K, N, E>& y
+    const static_unordered_linear_set<K, N, E>& x,
+    const static_unordered_linear_set<K, N, E>& y
 )
 {
     return x.impl_ != y.impl_;
@@ -553,16 +553,16 @@ bool operator!=
 template <typename K, std::size_t N, typename E>
 void swap
 (
-    static_unordered_flat_set<K, N, E>& x,
-    static_unordered_flat_set<K, N, E>& y
+    static_unordered_linear_set<K, N, E>& x,
+    static_unordered_linear_set<K, N, E>& y
 )
 {
     x.swap(y);
 }
 
 template <typename K, std::size_t N, typename E, typename Predicate>
-typename static_unordered_flat_set<K, N, E>::size_type
-    erase_if(static_unordered_flat_set<K, N, E>& c, Predicate pred)
+typename static_unordered_linear_set<K, N, E>::size_type
+    erase_if(static_unordered_linear_set<K, N, E>& c, Predicate pred)
 {
     auto old_size = c.size();
 

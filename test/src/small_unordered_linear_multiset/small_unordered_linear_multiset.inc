@@ -8,7 +8,7 @@ using sfl::test::xobj;
 
 PRINT("Test begin, end, cbegin, cend, nth, index_of");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -82,7 +82,7 @@ PRINT("Test begin, end, cbegin, cend, nth, index_of");
 
 PRINT("Test static_capacity");
 {
-    CHECK((sfl::small_unordered_flat_multiset< xint_xint,
+    CHECK((sfl::small_unordered_linear_multiset< xint_xint,
                                                100,
                                                std::equal_to<xint_xint>,
                                                TPARAM_ALLOCATOR<xint_xint> >::static_capacity == 100));
@@ -92,7 +92,7 @@ PRINT("Test static_capacity");
 
 PRINT("Test get_allocator()");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -107,7 +107,7 @@ PRINT("Test get_allocator()");
 PRINT("Test key_eq()");
 {
     {
-        sfl::small_unordered_flat_multiset< xint,
+        sfl::small_unordered_linear_multiset< xint,
                                             100,
                                             std::equal_to<xint>,
                                             TPARAM_ALLOCATOR<xint> > set;
@@ -121,7 +121,7 @@ PRINT("Test key_eq()");
     }
 
     {
-        sfl::small_unordered_flat_multiset< xobj,
+        sfl::small_unordered_linear_multiset< xobj,
                                             100,
                                             xobj::equal,
                                             TPARAM_ALLOCATOR<xobj> > set;
@@ -141,7 +141,7 @@ PRINT("Test find, count, contains");
 {
     // xint
     {
-        sfl::small_unordered_flat_multiset< xint,
+        sfl::small_unordered_linear_multiset< xint,
                                             100,
                                             std::equal_to<xint>,
                                             TPARAM_ALLOCATOR<xint> > set;
@@ -188,7 +188,7 @@ PRINT("Test find, count, contains");
 
     // xobj
     {
-        sfl::small_unordered_flat_multiset< xobj,
+        sfl::small_unordered_linear_multiset< xobj,
                                             100,
                                             xobj::equal,
                                             TPARAM_ALLOCATOR<xobj> > set;
@@ -238,7 +238,7 @@ PRINT("Test find, count, contains");
 
 PRINT("Test clear()");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -274,7 +274,7 @@ PRINT("Test clear()");
 
 PRINT("Test emplace(Args&&...)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -307,7 +307,7 @@ PRINT("Test emplace(Args&&...)");
 
 PRINT("Test emplace_hint(const_iterator, Args&&...)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -340,7 +340,7 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
 
 PRINT("Test insert(const value_type&)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -391,7 +391,7 @@ PRINT("Test insert(const value_type&)");
 
 PRINT("Test insert(value_type&&)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -442,7 +442,7 @@ PRINT("Test insert(value_type&&)");
 
 PRINT("Test insert(const_iterator, const value_type&)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -493,7 +493,7 @@ PRINT("Test insert(const_iterator, const value_type&)");
 
 PRINT("Test insert(const_iterator, value_type&&)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -544,7 +544,7 @@ PRINT("Test insert(const_iterator, value_type&&)");
 
 PRINT("Test insert(InputIt, InputIt)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -591,7 +591,7 @@ PRINT("Test insert(InputIt, InputIt)");
 
 PRINT("Test insert(std::initializer_list)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -638,7 +638,7 @@ PRINT("Test insert_range(Range&&");
     {
         std::istringstream iss("10 20 30 20 20");
 
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set.insert_range(std::views::istream<int>(iss));
@@ -660,7 +660,7 @@ PRINT("Test insert_range(Range&&");
     {
         std::vector<xint> data({10, 20, 30, 20, 20});
 
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set.insert_range(std::views::all(data));
@@ -683,7 +683,7 @@ PRINT("Test erase(const_iterator)");
 {
     // Erase at the end
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -739,7 +739,7 @@ PRINT("Test erase(const_iterator)");
 
     // Erase at the begin
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -795,7 +795,7 @@ PRINT("Test erase(const_iterator)");
 
     // Erase near the end
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -851,7 +851,7 @@ PRINT("Test erase(const_iterator)");
 
     // Erase near the begin
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -910,7 +910,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 {
     // Erase at the end
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -963,7 +963,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
     // Erase at the begin
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -1016,7 +1016,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
     // Erase near the end
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -1076,7 +1076,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
     // Erase near the begin
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -1137,7 +1137,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
 PRINT("Test erase(const Key&)");
 {
-    sfl::small_unordered_flat_multiset< xint,
+    sfl::small_unordered_linear_multiset< xint,
                                         100,
                                         std::equal_to<xint>,
                                         TPARAM_ALLOCATOR<xint> > set;
@@ -1175,7 +1175,7 @@ PRINT("Test erase(const Key&)");
 
 PRINT("Test erase(K&&)");
 {
-    sfl::small_unordered_flat_multiset< xobj,
+    sfl::small_unordered_linear_multiset< xobj,
                                         100,
                                         xobj::equal,
                                         TPARAM_ALLOCATOR<xobj> > set;
@@ -1215,7 +1215,7 @@ PRINT("Test swap(container&)");
 {
     // Both containers are using internal storage
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             5,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -1279,7 +1279,7 @@ PRINT("Test swap(container&)");
 
     // One container is using internal storage and another is using external
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             5,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -1351,7 +1351,7 @@ PRINT("Test swap(container&)");
 
     // Both containers are using external storage
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -1418,7 +1418,7 @@ PRINT("Test swap(container&)");
 
 PRINT("Test data()");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -1446,7 +1446,7 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 {
     // N = 0
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -1496,7 +1496,7 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
     // N = 100
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -1547,7 +1547,7 @@ PRINT("Test reserve(size_type) and shrink_to_fit()");
 
 PRINT("Test container()");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set;
@@ -1561,7 +1561,7 @@ PRINT("Test container(const KeyEqual&)");
 {
     std::equal_to<xint_xint> equal;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(equal);
@@ -1575,7 +1575,7 @@ PRINT("Test container(const Allocator&)");
 {
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(alloc);
@@ -1591,7 +1591,7 @@ PRINT("Test container(const KeyEqual&, const Allocator&)");
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(equal, alloc);
@@ -1616,7 +1616,7 @@ PRINT("Test container(InputIt, InputIt)");
         }
     );
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(data.begin(), data.end());
@@ -1647,7 +1647,7 @@ PRINT("Test container(InputIt, InputIt, const KeyEqual&)");
 
     std::equal_to<xint_xint> equal;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(data.begin(), data.end(), equal);
@@ -1678,7 +1678,7 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(data.begin(), data.end(), alloc);
@@ -1711,7 +1711,7 @@ PRINT("Test container(InputIt, InputIt, const KeyEqual&, const Allocator&)");
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(data.begin(), data.end(), equal, alloc);
@@ -1738,7 +1738,7 @@ PRINT("Test container(std::initializer_list)");
         {30, 2}
     };
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(ilist);
@@ -1767,7 +1767,7 @@ PRINT("Test container(std::initializer_list, const KeyEqual&)");
 
     std::equal_to<xint_xint> equal;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(ilist, equal);
@@ -1796,7 +1796,7 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(ilist, alloc);
@@ -1827,7 +1827,7 @@ PRINT("Test container(std::initializer_list, const KeyEqual&, const Allocator&)"
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set(ilist, equal, alloc);
@@ -1845,7 +1845,7 @@ PRINT("Test container(const container&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -1861,7 +1861,7 @@ PRINT("Test container(const container&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(set1);
@@ -1874,7 +1874,7 @@ PRINT("Test container(const container&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -1890,7 +1890,7 @@ PRINT("Test container(const container&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(set1);
@@ -1906,7 +1906,7 @@ PRINT("Test container(const container&, const Allocator&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -1924,7 +1924,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(set1, alloc);
@@ -1937,7 +1937,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -1955,7 +1955,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(set1, alloc);
@@ -1971,7 +1971,7 @@ PRINT("Test container(container&&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -1987,7 +1987,7 @@ PRINT("Test container(container&&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(std::move(set1));
@@ -2015,7 +2015,7 @@ PRINT("Test container(container&&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -2031,7 +2031,7 @@ PRINT("Test container(container&&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(std::move(set1));
@@ -2060,7 +2060,7 @@ PRINT("Test container(container&&, const Allocator&)");
 {
     // N == 0
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -2078,7 +2078,7 @@ PRINT("Test container(container&&, const Allocator&)");
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(std::move(set1), alloc);
@@ -2106,7 +2106,7 @@ PRINT("Test container(container&&, const Allocator&)");
 
     // N == 100
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1;
@@ -2124,7 +2124,7 @@ PRINT("Test container(container&&, const Allocator&)");
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set2(std::move(set1), alloc);
@@ -2158,13 +2158,13 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         std::istringstream iss("10 20 30 20 20");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<int>(iss))
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<int>(iss))
@@ -2186,13 +2186,13 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         std::vector<xint> data({10, 20, 30, 20, 20});
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data)
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             data
@@ -2219,14 +2219,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&)");
         std::equal_to<xint> equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<int>(iss)),
             equal
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<int>(iss)),
@@ -2251,14 +2251,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&)");
         std::equal_to<xint> equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
             equal
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -2286,14 +2286,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         TPARAM_ALLOCATOR<xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<int>(iss)),
             alloc
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<int>(iss)),
@@ -2318,14 +2318,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         TPARAM_ALLOCATOR<xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
             alloc
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -2354,7 +2354,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
         TPARAM_ALLOCATOR<xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<int>(iss)),
@@ -2362,7 +2362,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
             alloc
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<int>(iss)),
@@ -2389,7 +2389,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
         TPARAM_ALLOCATOR<xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -2397,7 +2397,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const KeyEqual&, const Allocat
             alloc
         );
         #else
-        sfl::small_unordered_flat_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
+        sfl::small_unordered_linear_multiset<xint, 32, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -2424,7 +2424,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 1/8
     #define CONDITION set1.size() < set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() < set2.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2478,7 +2478,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 2/8
     #define CONDITION set1.size() < set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() > set2.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2546,7 +2546,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 5/8
     #define CONDITION set1.size() > set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() < set2.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2596,7 +2596,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 6/8
     #define CONDITION set1.size() > set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() > set2.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2653,7 +2653,7 @@ PRINT("Test operator=(const container&)");
     // Permutation 8/8
     #define CONDITION set1.size() > set2.size()  &&  set1.size() > set2.capacity()  &&  set1.capacity() > set2.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             0,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2708,7 +2708,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 1/8
         #define CONDITION set2.capacity() != N  &&  set1.size() < set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() < set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2770,7 +2770,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 2/8
         #define CONDITION set2.capacity() != N  &&  set1.size() < set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() > set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2846,7 +2846,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 5/8
         #define CONDITION set2.capacity() != N  &&  set1.size() > set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() < set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2904,7 +2904,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 6/8
         #define CONDITION set2.capacity() != N  &&  set1.size() > set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() > set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -2969,7 +2969,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 8/8
         #define CONDITION set2.capacity() != N  &&  set1.size() > set2.size()  &&  set1.size() > set2.capacity()  &&  set1.capacity() > set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -3038,7 +3038,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 2/8
         #define CONDITION set2.capacity() == N  &&  set1.size() < set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() > set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -3120,7 +3120,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 6/8
         #define CONDITION set2.capacity() == N  &&  set1.size() > set2.size()  &&  set1.size() < set2.capacity()  &&  set1.capacity() > set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -3182,7 +3182,7 @@ PRINT("Test operator=(container&&)");
         // Permutation 8/8
         #define CONDITION set2.capacity() == N  &&  set1.size() > set2.size()  &&  set1.size() > set2.capacity()  &&  set1.capacity() > set2.capacity()
         {
-            sfl::small_unordered_flat_multiset< xint_xint,
+            sfl::small_unordered_linear_multiset< xint_xint,
                                                 N,
                                                 std::equal_to<xint_xint>,
                                                 TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -3246,7 +3246,7 @@ PRINT("Test operator=(std::initializer_list)");
     // Permutation 1/4
     #define CONDITION ilist.size() < set.size() && ilist.size() < set.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             5,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -3296,7 +3296,7 @@ PRINT("Test operator=(std::initializer_list)");
     // Permutation 3/4
     #define CONDITION ilist.size() > set.size() && ilist.size() < set.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -3339,7 +3339,7 @@ PRINT("Test operator=(std::initializer_list)");
     // Permutation 4/4
     #define CONDITION ilist.size() > set.size() && ilist.size() > set.capacity()
     {
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             3,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> > set;
@@ -3384,7 +3384,7 @@ PRINT("Test operator=(std::initializer_list)");
 
 PRINT("Test NON-MEMBER comparison operators");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set1, set2, set3;
@@ -3423,7 +3423,7 @@ PRINT("Test NON-MEMBER comparison operators");
 
 PRINT("Test NON-MEMBER swap(container&)");
 {
-    sfl::small_unordered_flat_multiset< xint_xint,
+    sfl::small_unordered_linear_multiset< xint_xint,
                                         100,
                                         std::equal_to<xint_xint>,
                                         TPARAM_ALLOCATOR<xint_xint> > set1, set2;
@@ -3470,7 +3470,7 @@ PRINT("Test NON-MEMBER swap(container&)");
 PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
 {
     using container_type =
-        sfl::small_unordered_flat_multiset< xint_xint,
+        sfl::small_unordered_linear_multiset< xint_xint,
                                             100,
                                             std::equal_to<xint_xint>,
                                             TPARAM_ALLOCATOR<xint_xint> >;

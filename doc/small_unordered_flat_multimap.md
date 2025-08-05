@@ -1,4 +1,4 @@
-# sfl::small_unordered_flat_multimap
+# sfl::small_unordered_linear_multimap
 
 <details>
 
@@ -62,11 +62,11 @@ namespace sfl
                std::size_t N,
                typename KeyEqual = std::equal_to<Key>,
                typename Allocator = std::allocator<std::pair<Key, T>> >
-    class small_unordered_flat_multimap;
+    class small_unordered_linear_multimap;
 }
 ```
 
-`sfl::small_unordered_flat_multimap` is an unordered associative container that contains an unsorted collection of key-value pairs, where multiple elements can have equivalent keys. Underlying storage is implemented as an unsorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until their number exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
+`sfl::small_unordered_linear_multimap` is an unordered associative container that contains an unsorted collection of key-value pairs, where multiple elements can have equivalent keys. Underlying storage is implemented as an unsorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until their number exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
 
 Complexity of search, insert and remove operations is O(N).
 
@@ -74,7 +74,7 @@ Elements of this container are always stored contiguously in the memory.
 
 Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
-`sfl::small_unordered_flat_multimap` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met (this container doesn't use [*Hash*](https://en.cppreference.com/w/cpp/named_req/Hash)).
+`sfl::small_unordered_linear_multimap` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met (this container doesn't use [*Hash*](https://en.cppreference.com/w/cpp/named_req/Hash)).
 
 <br><br>
 
@@ -177,25 +177,25 @@ static constexpr size_type static_capacity = N;
 ### (constructor)
 
 1.  ```
-    small_unordered_flat_multimap() noexcept(
+    small_unordered_linear_multimap() noexcept(
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     );
     ```
 2.  ```
-    explicit small_unordered_flat_multimap(const KeyEqual& equal) noexcept(
+    explicit small_unordered_linear_multimap(const KeyEqual& equal) noexcept(
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     );
     ```
 3.  ```
-    explicit small_unordered_flat_multimap(const Allocator& alloc) noexcept(
+    explicit small_unordered_linear_multimap(const Allocator& alloc) noexcept(
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     );
     ```
 4.  ```
-    explicit small_unordered_flat_multimap(const KeyEqual& equal, const Allocator& alloc) noexcept(
+    explicit small_unordered_linear_multimap(const KeyEqual& equal, const Allocator& alloc) noexcept(
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     );
@@ -210,19 +210,19 @@ static constexpr size_type static_capacity = N;
 
 5.  ```
     template <typename InputIt>
-    small_unordered_flat_multimap(InputIt first, InputIt last);
+    small_unordered_linear_multimap(InputIt first, InputIt last);
     ```
 6.  ```
     template <typename InputIt>
-    small_unordered_flat_multimap(InputIt first, InputIt last, const KeyEqual& equal);
+    small_unordered_linear_multimap(InputIt first, InputIt last, const KeyEqual& equal);
     ```
 7.  ```
     template <typename InputIt>
-    small_unordered_flat_multimap(InputIt first, InputIt last, const Allocator& alloc);
+    small_unordered_linear_multimap(InputIt first, InputIt last, const Allocator& alloc);
     ```
 8.  ```
     template <typename InputIt>
-    small_unordered_flat_multimap(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_multimap(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -236,16 +236,16 @@ static constexpr size_type static_capacity = N;
 
 
 9.  ```
-    small_unordered_flat_multimap(std::initializer_list<value_type> ilist);
+    small_unordered_linear_multimap(std::initializer_list<value_type> ilist);
     ```
 10. ```
-    small_unordered_flat_multimap(std::initializer_list<value_type> ilist, const KeyEqual& equal);
+    small_unordered_linear_multimap(std::initializer_list<value_type> ilist, const KeyEqual& equal);
     ```
 11. ```
-    small_unordered_flat_multimap(std::initializer_list<value_type> ilist, const Allocator& alloc);
+    small_unordered_linear_multimap(std::initializer_list<value_type> ilist, const Allocator& alloc);
     ```
 12. ```
-    small_unordered_flat_multimap(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_multimap(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -256,10 +256,10 @@ static constexpr size_type static_capacity = N;
 
 
 13. ```
-    small_unordered_flat_multimap(const small_unordered_flat_multimap& other);
+    small_unordered_linear_multimap(const small_unordered_linear_multimap& other);
     ```
 14. ```
-    small_unordered_flat_multimap(const small_unordered_flat_multimap& other, const Allocator& alloc);
+    small_unordered_linear_multimap(const small_unordered_linear_multimap& other, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -274,10 +274,10 @@ static constexpr size_type static_capacity = N;
 
 
 15. ```
-    small_unordered_flat_multimap(small_unordered_flat_multimap&& other);
+    small_unordered_linear_multimap(small_unordered_linear_multimap&& other);
     ```
 16. ```
-    small_unordered_flat_multimap(small_unordered_flat_multimap&& other, const Allocator& alloc);
+    small_unordered_linear_multimap(small_unordered_linear_multimap&& other, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -297,19 +297,19 @@ static constexpr size_type static_capacity = N;
 
 17. ```
     template <typename Range>
-    small_unordered_flat_multimap(sfl::from_range_t, Range&& range);
+    small_unordered_linear_multimap(sfl::from_range_t, Range&& range);
     ```
 18. ```
     template <typename Range>
-    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal);
+    small_unordered_linear_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal);
     ```
 19. ```
     template <typename Range>
-    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const Allocator& alloc);
+    small_unordered_linear_multimap(sfl::from_range_t, Range&& range, const Allocator& alloc);
     ```
 20. ```
     template <typename Range>
-    small_unordered_flat_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_multimap(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -325,7 +325,7 @@ static constexpr size_type static_capacity = N;
 ### (destructor)
 
 1.  ```
-    ~small_unordered_flat_multimap();
+    ~small_unordered_linear_multimap();
     ```
 
     **Effects:**
@@ -341,7 +341,7 @@ static constexpr size_type static_capacity = N;
 ### operator=
 
 1.  ```
-    small_unordered_flat_multimap& operator=(const small_unordered_flat_multimap& other);
+    small_unordered_linear_multimap& operator=(const small_unordered_linear_multimap& other);
     ```
 
     **Effects:**
@@ -359,7 +359,7 @@ static constexpr size_type static_capacity = N;
 
 
 2.  ```
-    small_unordered_flat_multimap& operator=(small_unordered_flat_multimap&& other);
+    small_unordered_linear_multimap& operator=(small_unordered_linear_multimap&& other);
     ```
 
     **Effects:**
@@ -383,7 +383,7 @@ static constexpr size_type static_capacity = N;
 
 
 3.  ```
-    small_unordered_flat_multimap& operator=(std::initializer_list<value_type> ilist);
+    small_unordered_linear_multimap& operator=(std::initializer_list<value_type> ilist);
     ```
 
     **Effects:**
@@ -992,7 +992,7 @@ static constexpr size_type static_capacity = N;
 ### swap
 
 1.  ```
-    void swap(small_unordered_flat_multimap& other);
+    void swap(small_unordered_linear_multimap& other);
     ```
 
     **Preconditions:**
@@ -1112,8 +1112,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, typename T, std::size_t N, typename E, typename A>
     bool operator==
     (
-        const small_unordered_flat_multimap<K, T, N, E, A>& x,
-        const small_unordered_flat_multimap<K, T, N, E, A>& y
+        const small_unordered_linear_multimap<K, T, N, E, A>& x,
+        const small_unordered_linear_multimap<K, T, N, E, A>& y
     );
     ```
 
@@ -1140,8 +1140,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, typename T, std::size_t N, typename E, typename A>
     bool operator!=
     (
-        const small_unordered_flat_multimap<K, T, N, E, A>& x,
-        const small_unordered_flat_multimap<K, T, N, E, A>& y
+        const small_unordered_linear_multimap<K, T, N, E, A>& x,
+        const small_unordered_linear_multimap<K, T, N, E, A>& y
     );
     ```
 
@@ -1163,8 +1163,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, typename T, std::size_t N, typename E, typename A>
     void swap
     (
-        small_unordered_flat_multimap<K, T, N, E, A>& x,
-        small_unordered_flat_multimap<K, T, N, E, A>& y
+        small_unordered_linear_multimap<K, T, N, E, A>& x,
+        small_unordered_linear_multimap<K, T, N, E, A>& y
     );
     ```
 
@@ -1179,8 +1179,8 @@ static constexpr size_type static_capacity = N;
 
 1.  ```
     template <typename K, typename T, std::size_t N, typename E, typename A, typename Predicate>
-    typename small_unordered_flat_multimap<K, T, N, E, A>::size_type
-        erase_if(small_unordered_flat_multimap<K, T, N, E, A>& c, Predicate pred);
+    typename small_unordered_linear_multimap<K, T, N, E, A>::size_type
+        erase_if(small_unordered_linear_multimap<K, T, N, E, A>& c, Predicate pred);
     ```
 
     **Effects:**

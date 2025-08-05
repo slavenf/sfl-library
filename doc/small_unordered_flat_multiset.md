@@ -1,4 +1,4 @@
-# sfl::small_unordered_flat_multiset
+# sfl::small_unordered_linear_multiset
 
 <details>
 
@@ -58,11 +58,11 @@ namespace sfl
                std::size_t N,
                typename KeyEqual = std::equal_to<Key>,
                typename Allocator = std::allocator<Key> >
-    class small_unordered_flat_multiset;
+    class small_unordered_linear_multiset;
 }
 ```
 
-`sfl::small_unordered_flat_multiset` is an unordered associative container that contains an unsorted collection of keys, where multiple elements can have equivalent keys. Underlying storage is implemented as an unsorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until their number exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
+`sfl::small_unordered_linear_multiset` is an unordered associative container that contains an unsorted collection of keys, where multiple elements can have equivalent keys. Underlying storage is implemented as an unsorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until their number exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
 
 Complexity of search, insert and remove operations is O(N).
 
@@ -150,25 +150,25 @@ static constexpr size_type static_capacity = N;
 ### (constructor)
 
 1.  ```
-    small_unordered_flat_multiset() noexcept(
+    small_unordered_linear_multiset() noexcept(
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     );
     ```
 2.  ```
-    explicit small_unordered_flat_multiset(const KeyEqual& equal) noexcept(
+    explicit small_unordered_linear_multiset(const KeyEqual& equal) noexcept(
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     );
     ```
 3.  ```
-    explicit small_unordered_flat_multiset(const Allocator& alloc) noexcept(
+    explicit small_unordered_linear_multiset(const Allocator& alloc) noexcept(
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     );
     ```
 4.  ```
-    explicit small_unordered_flat_multiset(const KeyEqual& equal, const Allocator& alloc) noexcept(
+    explicit small_unordered_linear_multiset(const KeyEqual& equal, const Allocator& alloc) noexcept(
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     );
@@ -183,19 +183,19 @@ static constexpr size_type static_capacity = N;
 
 5.  ```
     template <typename InputIt>
-    small_unordered_flat_multiset(InputIt first, InputIt last);
+    small_unordered_linear_multiset(InputIt first, InputIt last);
     ```
 6.  ```
     template <typename InputIt>
-    small_unordered_flat_multiset(InputIt first, InputIt last, const KeyEqual& equal);
+    small_unordered_linear_multiset(InputIt first, InputIt last, const KeyEqual& equal);
     ```
 7.  ```
     template <typename InputIt>
-    small_unordered_flat_multiset(InputIt first, InputIt last, const Allocator& alloc);
+    small_unordered_linear_multiset(InputIt first, InputIt last, const Allocator& alloc);
     ```
 8.  ```
     template <typename InputIt>
-    small_unordered_flat_multiset(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_multiset(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -209,16 +209,16 @@ static constexpr size_type static_capacity = N;
 
 
 9.  ```
-    small_unordered_flat_multiset(std::initializer_list<value_type> ilist);
+    small_unordered_linear_multiset(std::initializer_list<value_type> ilist);
     ```
 10. ```
-    small_unordered_flat_multiset(std::initializer_list<value_type> ilist, const KeyEqual& equal);
+    small_unordered_linear_multiset(std::initializer_list<value_type> ilist, const KeyEqual& equal);
     ```
 11. ```
-    small_unordered_flat_multiset(std::initializer_list<value_type> ilist, const Allocator& alloc);
+    small_unordered_linear_multiset(std::initializer_list<value_type> ilist, const Allocator& alloc);
     ```
 12. ```
-    small_unordered_flat_multiset(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_multiset(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -229,10 +229,10 @@ static constexpr size_type static_capacity = N;
 
 
 13. ```
-    small_unordered_flat_multiset(const small_unordered_flat_multiset& other);
+    small_unordered_linear_multiset(const small_unordered_linear_multiset& other);
     ```
 14. ```
-    small_unordered_flat_multiset(const small_unordered_flat_multiset& other, const Allocator& alloc);
+    small_unordered_linear_multiset(const small_unordered_linear_multiset& other, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -247,10 +247,10 @@ static constexpr size_type static_capacity = N;
 
 
 15. ```
-    small_unordered_flat_multiset(small_unordered_flat_multiset&& other);
+    small_unordered_linear_multiset(small_unordered_linear_multiset&& other);
     ```
 16. ```
-    small_unordered_flat_multiset(small_unordered_flat_multiset&& other, const Allocator& alloc);
+    small_unordered_linear_multiset(small_unordered_linear_multiset&& other, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -270,19 +270,19 @@ static constexpr size_type static_capacity = N;
 
 17. ```
     template <typename Range>
-    small_unordered_flat_multiset(sfl::from_range_t, Range&& range);
+    small_unordered_linear_multiset(sfl::from_range_t, Range&& range);
     ```
 18. ```
     template <typename Range>
-    small_unordered_flat_multiset(sfl::from_range_t, Range&& range, const KeyEqual& equal);
+    small_unordered_linear_multiset(sfl::from_range_t, Range&& range, const KeyEqual& equal);
     ```
 19. ```
     template <typename Range>
-    small_unordered_flat_multiset(sfl::from_range_t, Range&& range, const Allocator& alloc);
+    small_unordered_linear_multiset(sfl::from_range_t, Range&& range, const Allocator& alloc);
     ```
 20. ```
     template <typename Range>
-    small_unordered_flat_multiset(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_multiset(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -298,7 +298,7 @@ static constexpr size_type static_capacity = N;
 ### (destructor)
 
 1.  ```
-    ~small_unordered_flat_multiset();
+    ~small_unordered_linear_multiset();
     ```
 
     **Effects:**
@@ -314,7 +314,7 @@ static constexpr size_type static_capacity = N;
 ### operator=
 
 1.  ```
-    small_unordered_flat_multiset& operator=(const small_unordered_flat_multiset& other);
+    small_unordered_linear_multiset& operator=(const small_unordered_linear_multiset& other);
     ```
 
     **Effects:**
@@ -332,7 +332,7 @@ static constexpr size_type static_capacity = N;
 
 
 2.  ```
-    small_unordered_flat_multiset& operator=(small_unordered_flat_multiset&& other);
+    small_unordered_linear_multiset& operator=(small_unordered_linear_multiset&& other);
     ```
 
     **Effects:**
@@ -356,7 +356,7 @@ static constexpr size_type static_capacity = N;
 
 
 3.  ```
-    small_unordered_flat_multiset& operator=(std::initializer_list<Key> ilist);
+    small_unordered_linear_multiset& operator=(std::initializer_list<Key> ilist);
     ```
 
     **Effects:**
@@ -900,7 +900,7 @@ static constexpr size_type static_capacity = N;
 ### swap
 
 1.  ```
-    void swap(small_unordered_flat_multiset& other);
+    void swap(small_unordered_linear_multiset& other);
     ```
 
     **Preconditions:**
@@ -1020,8 +1020,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, std::size_t N, typename E, typename A>
     bool operator==
     (
-        const small_unordered_flat_multiset<K, N, E, A>& x,
-        const small_unordered_flat_multiset<K, N, E, A>& y
+        const small_unordered_linear_multiset<K, N, E, A>& x,
+        const small_unordered_linear_multiset<K, N, E, A>& y
     );
     ```
 
@@ -1048,8 +1048,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, std::size_t N, typename E, typename A>
     bool operator!=
     (
-        const small_unordered_flat_multiset<K, N, E, A>& x,
-        const small_unordered_flat_multiset<K, N, E, A>& y
+        const small_unordered_linear_multiset<K, N, E, A>& x,
+        const small_unordered_linear_multiset<K, N, E, A>& y
     );
     ```
 
@@ -1071,8 +1071,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, std::size_t N, typename E, typename A>
     void swap
     (
-        small_unordered_flat_multiset<K, N, E, A>& x,
-        small_unordered_flat_multiset<K, N, E, A>& y
+        small_unordered_linear_multiset<K, N, E, A>& x,
+        small_unordered_linear_multiset<K, N, E, A>& y
     );
     ```
 
@@ -1087,8 +1087,8 @@ static constexpr size_type static_capacity = N;
 
 1.  ```
     template <typename K, std::size_t N, typename E, typename A, typename Predicate>
-    typename small_unordered_flat_multiset<K, N, E, A>::size_type
-        erase_if(small_unordered_flat_multiset<K, N, E, A>& c, Predicate pred);
+    typename small_unordered_linear_multiset<K, N, E, A>::size_type
+        erase_if(small_unordered_linear_multiset<K, N, E, A>& c, Predicate pred);
     ```
 
     **Effects:**

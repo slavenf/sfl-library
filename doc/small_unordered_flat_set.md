@@ -1,4 +1,4 @@
-# sfl::small_unordered_flat_set
+# sfl::small_unordered_linear_set
 
 <details>
 
@@ -58,11 +58,11 @@ namespace sfl
                std::size_t N,
                typename KeyEqual = std::equal_to<Key>,
                typename Allocator = std::allocator<Key> >
-    class small_unordered_flat_set;
+    class small_unordered_linear_set;
 }
 ```
 
-`sfl::small_unordered_flat_set` is an unordered associative container that contains an unsorted collection of unique keys. Underlying storage is implemented as an unsorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until their number exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
+`sfl::small_unordered_linear_set` is an unordered associative container that contains an unsorted collection of unique keys. Underlying storage is implemented as an unsorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until their number exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
 
 Complexity of search, insert and remove operations is O(N).
 
@@ -70,7 +70,7 @@ Elements of this container are always stored contiguously in the memory.
 
 Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
-`sfl::small_unordered_flat_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met (this container doesn't use [*Hash*](https://en.cppreference.com/w/cpp/named_req/Hash)).
+`sfl::small_unordered_linear_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met (this container doesn't use [*Hash*](https://en.cppreference.com/w/cpp/named_req/Hash)).
 
 <br><br>
 
@@ -150,25 +150,25 @@ static constexpr size_type static_capacity = N;
 ### (constructor)
 
 1.  ```
-    small_unordered_flat_set() noexcept(
+    small_unordered_linear_set() noexcept(
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     );
     ```
 2.  ```
-    explicit small_unordered_flat_set(const KeyEqual& equal) noexcept(
+    explicit small_unordered_linear_set(const KeyEqual& equal) noexcept(
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     );
     ```
 3.  ```
-    explicit small_unordered_flat_set(const Allocator& alloc) noexcept(
+    explicit small_unordered_linear_set(const Allocator& alloc) noexcept(
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
     );
     ```
 4.  ```
-    explicit small_unordered_flat_set(const KeyEqual& equal, const Allocator& alloc) noexcept(
+    explicit small_unordered_linear_set(const KeyEqual& equal, const Allocator& alloc) noexcept(
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
     );
@@ -183,19 +183,19 @@ static constexpr size_type static_capacity = N;
 
 5.  ```
     template <typename InputIt>
-    small_unordered_flat_set(InputIt first, InputIt last);
+    small_unordered_linear_set(InputIt first, InputIt last);
     ```
 6.  ```
     template <typename InputIt>
-    small_unordered_flat_set(InputIt first, InputIt last, const KeyEqual& equal);
+    small_unordered_linear_set(InputIt first, InputIt last, const KeyEqual& equal);
     ```
 7.  ```
     template <typename InputIt>
-    small_unordered_flat_set(InputIt first, InputIt last, const Allocator& alloc);
+    small_unordered_linear_set(InputIt first, InputIt last, const Allocator& alloc);
     ```
 8.  ```
     template <typename InputIt>
-    small_unordered_flat_set(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_set(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -211,16 +211,16 @@ static constexpr size_type static_capacity = N;
 
 
 9.  ```
-    small_unordered_flat_set(std::initializer_list<value_type> ilist);
+    small_unordered_linear_set(std::initializer_list<value_type> ilist);
     ```
 10. ```
-    small_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal);
+    small_unordered_linear_set(std::initializer_list<value_type> ilist, const KeyEqual& equal);
     ```
 11. ```
-    small_unordered_flat_set(std::initializer_list<value_type> ilist, const Allocator& alloc);
+    small_unordered_linear_set(std::initializer_list<value_type> ilist, const Allocator& alloc);
     ```
 12. ```
-    small_unordered_flat_set(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_set(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -233,10 +233,10 @@ static constexpr size_type static_capacity = N;
 
 
 13. ```
-    small_unordered_flat_set(const small_unordered_flat_set& other);
+    small_unordered_linear_set(const small_unordered_linear_set& other);
     ```
 14. ```
-    small_unordered_flat_set(const small_unordered_flat_set& other, const Allocator& alloc);
+    small_unordered_linear_set(const small_unordered_linear_set& other, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -251,10 +251,10 @@ static constexpr size_type static_capacity = N;
 
 
 15. ```
-    small_unordered_flat_set(small_unordered_flat_set&& other);
+    small_unordered_linear_set(small_unordered_linear_set&& other);
     ```
 16. ```
-    small_unordered_flat_set(small_unordered_flat_set&& other, const Allocator& alloc);
+    small_unordered_linear_set(small_unordered_linear_set&& other, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -274,19 +274,19 @@ static constexpr size_type static_capacity = N;
 
 17. ```
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range);
+    small_unordered_linear_set(sfl::from_range_t, Range&& range);
     ```
 18. ```
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal);
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal);
     ```
 19. ```
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const Allocator& alloc);
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const Allocator& alloc);
     ```
 20. ```
     template <typename Range>
-    small_unordered_flat_set(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc);
+    small_unordered_linear_set(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -304,7 +304,7 @@ static constexpr size_type static_capacity = N;
 ### (destructor)
 
 1.  ```
-    ~small_unordered_flat_set();
+    ~small_unordered_linear_set();
     ```
 
     **Effects:**
@@ -320,7 +320,7 @@ static constexpr size_type static_capacity = N;
 ### operator=
 
 1.  ```
-    small_unordered_flat_set& operator=(const small_unordered_flat_set& other);
+    small_unordered_linear_set& operator=(const small_unordered_linear_set& other);
     ```
 
     **Effects:**
@@ -338,7 +338,7 @@ static constexpr size_type static_capacity = N;
 
 
 2.  ```
-    small_unordered_flat_set& operator=(small_unordered_flat_set&& other);
+    small_unordered_linear_set& operator=(small_unordered_linear_set&& other);
     ```
 
     **Effects:**
@@ -362,7 +362,7 @@ static constexpr size_type static_capacity = N;
 
 
 3.  ```
-    small_unordered_flat_set& operator=(std::initializer_list<Key> ilist);
+    small_unordered_linear_set& operator=(std::initializer_list<Key> ilist);
     ```
 
     **Effects:**
@@ -966,7 +966,7 @@ static constexpr size_type static_capacity = N;
 ### swap
 
 1.  ```
-    void swap(small_unordered_flat_set& other);
+    void swap(small_unordered_linear_set& other);
     ```
 
     **Preconditions:**
@@ -1085,8 +1085,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, std::size_t N, typename E, typename A>
     bool operator==
     (
-        const small_unordered_flat_set<K, N, E, A>& x,
-        const small_unordered_flat_set<K, N, E, A>& y
+        const small_unordered_linear_set<K, N, E, A>& x,
+        const small_unordered_linear_set<K, N, E, A>& y
     );
     ```
 
@@ -1113,8 +1113,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, std::size_t N, typename E, typename A>
     bool operator!=
     (
-        const small_unordered_flat_set<K, N, E, A>& x,
-        const small_unordered_flat_set<K, N, E, A>& y
+        const small_unordered_linear_set<K, N, E, A>& x,
+        const small_unordered_linear_set<K, N, E, A>& y
     );
     ```
 
@@ -1136,8 +1136,8 @@ static constexpr size_type static_capacity = N;
     template <typename K, std::size_t N, typename E, typename A>
     void swap
     (
-        small_unordered_flat_set<K, N, E, A>& x,
-        small_unordered_flat_set<K, N, E, A>& y
+        small_unordered_linear_set<K, N, E, A>& x,
+        small_unordered_linear_set<K, N, E, A>& y
     );
     ```
 
@@ -1152,8 +1152,8 @@ static constexpr size_type static_capacity = N;
 
 1.  ```
     template <typename K, std::size_t N, typename E, typename A, typename Predicate>
-    typename small_unordered_flat_set<K, N, E, A>::size_type
-        erase_if(small_unordered_flat_set<K, N, E, A>& c, Predicate pred);
+    typename small_unordered_linear_set<K, N, E, A>::size_type
+        erase_if(small_unordered_linear_set<K, N, E, A>& c, Predicate pred);
     ```
 
     **Effects:**

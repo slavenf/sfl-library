@@ -48,7 +48,7 @@ template < typename Key,
            std::size_t N,
            typename KeyEqual = std::equal_to<Key>,
            typename Allocator = std::allocator<std::pair<Key, T>> >
-class small_unordered_flat_map
+class small_unordered_linear_map
 {
     static_assert
     (
@@ -90,7 +90,7 @@ public:
 
     class value_equal : protected key_equal
     {
-        friend class small_unordered_flat_map;
+        friend class small_unordered_linear_map;
 
     private:
 
@@ -115,7 +115,7 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
-    small_unordered_flat_map() noexcept
+    small_unordered_linear_map() noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
@@ -123,7 +123,7 @@ public:
         : impl_()
     {}
 
-    explicit small_unordered_flat_map(const KeyEqual& equal) noexcept
+    explicit small_unordered_linear_map(const KeyEqual& equal) noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
         std::is_nothrow_copy_constructible<KeyEqual>::value
@@ -131,7 +131,7 @@ public:
         : impl_(equal)
     {}
 
-    explicit small_unordered_flat_map(const Allocator& alloc) noexcept
+    explicit small_unordered_linear_map(const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
         std::is_nothrow_default_constructible<KeyEqual>::value
@@ -139,7 +139,7 @@ public:
         : impl_(alloc)
     {}
 
-    explicit small_unordered_flat_map(const KeyEqual& equal,
+    explicit small_unordered_linear_map(const KeyEqual& equal,
                                       const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
@@ -150,7 +150,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_map(InputIt first, InputIt last)
+    small_unordered_linear_map(InputIt first, InputIt last)
         : impl_()
     {
         insert(first, last);
@@ -158,7 +158,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_map(InputIt first, InputIt last, const KeyEqual& equal)
+    small_unordered_linear_map(InputIt first, InputIt last, const KeyEqual& equal)
         : impl_(equal)
     {
         insert(first, last);
@@ -166,7 +166,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_map(InputIt first, InputIt last, const Allocator& alloc)
+    small_unordered_linear_map(InputIt first, InputIt last, const Allocator& alloc)
         : impl_(alloc)
     {
         insert(first, last);
@@ -174,69 +174,69 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
-    small_unordered_flat_map(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc)
+    small_unordered_linear_map(InputIt first, InputIt last, const KeyEqual& equal, const Allocator& alloc)
         : impl_(equal, alloc)
     {
         insert(first, last);
     }
 
-    small_unordered_flat_map(std::initializer_list<value_type> ilist)
-        : small_unordered_flat_map(ilist.begin(), ilist.end())
+    small_unordered_linear_map(std::initializer_list<value_type> ilist)
+        : small_unordered_linear_map(ilist.begin(), ilist.end())
     {}
 
-    small_unordered_flat_map(std::initializer_list<value_type> ilist, const KeyEqual& equal)
-        : small_unordered_flat_map(ilist.begin(), ilist.end(), equal)
+    small_unordered_linear_map(std::initializer_list<value_type> ilist, const KeyEqual& equal)
+        : small_unordered_linear_map(ilist.begin(), ilist.end(), equal)
     {}
 
-    small_unordered_flat_map(std::initializer_list<value_type> ilist, const Allocator& alloc)
-        : small_unordered_flat_map(ilist.begin(), ilist.end(), alloc)
+    small_unordered_linear_map(std::initializer_list<value_type> ilist, const Allocator& alloc)
+        : small_unordered_linear_map(ilist.begin(), ilist.end(), alloc)
     {}
 
-    small_unordered_flat_map(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc)
-        : small_unordered_flat_map(ilist.begin(), ilist.end(), equal, alloc)
+    small_unordered_linear_map(std::initializer_list<value_type> ilist, const KeyEqual& equal, const Allocator& alloc)
+        : small_unordered_linear_map(ilist.begin(), ilist.end(), equal, alloc)
     {}
 
-    small_unordered_flat_map(const small_unordered_flat_map& other)
+    small_unordered_linear_map(const small_unordered_linear_map& other)
         : impl_(other.impl_)
     {}
 
-    small_unordered_flat_map(const small_unordered_flat_map& other, const Allocator& alloc)
+    small_unordered_linear_map(const small_unordered_linear_map& other, const Allocator& alloc)
         : impl_(other.impl_, alloc)
     {}
 
-    small_unordered_flat_map(small_unordered_flat_map&& other)
+    small_unordered_linear_map(small_unordered_linear_map&& other)
         : impl_(std::move(other.impl_))
     {}
 
-    small_unordered_flat_map(small_unordered_flat_map&& other, const Allocator& alloc)
+    small_unordered_linear_map(small_unordered_linear_map&& other, const Allocator& alloc)
         : impl_(std::move(other.impl_), alloc)
     {}
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range)
         : impl_()
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range, const KeyEqual& equal)
         : impl_(equal)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range, const Allocator& alloc)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range, const Allocator& alloc)
         : impl_(alloc)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
         : impl_(equal, alloc)
     {
         insert_range(std::forward<Range>(range));
@@ -245,28 +245,28 @@ public:
 #else // before C++20
 
     template <typename Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range)
         : impl_()
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range, const KeyEqual& equal)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range, const KeyEqual& equal)
         : impl_(equal)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range, const Allocator& alloc)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range, const Allocator& alloc)
         : impl_(alloc)
     {
         insert_range(std::forward<Range>(range));
     }
 
     template <typename Range>
-    small_unordered_flat_map(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
+    small_unordered_linear_map(sfl::from_range_t, Range&& range, const KeyEqual& equal, const Allocator& alloc)
         : impl_(equal, alloc)
     {
         insert_range(std::forward<Range>(range));
@@ -274,26 +274,26 @@ public:
 
 #endif // before C++20
 
-    ~small_unordered_flat_map()
+    ~small_unordered_linear_map()
     {}
 
     //
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
-    small_unordered_flat_map& operator=(const small_unordered_flat_map& other)
+    small_unordered_linear_map& operator=(const small_unordered_linear_map& other)
     {
         impl_.assign_copy(other.impl_);
         return *this;
     }
 
-    small_unordered_flat_map& operator=(small_unordered_flat_map&& other)
+    small_unordered_linear_map& operator=(small_unordered_linear_map&& other)
     {
         impl_.assign_move(other.impl_);
         return *this;
     }
 
-    small_unordered_flat_map& operator=(std::initializer_list<value_type> ilist)
+    small_unordered_linear_map& operator=(std::initializer_list<value_type> ilist)
     {
         impl_.assign_range_unique(ilist.begin(), ilist.end());
         return *this;
@@ -657,7 +657,7 @@ public:
         return impl_.erase_key_unique(x);
     }
 
-    void swap(small_unordered_flat_map& other)
+    void swap(small_unordered_linear_map& other)
     {
         impl_.swap(other.impl_);
     }
@@ -733,7 +733,7 @@ public:
 
         if (it == end())
         {
-            sfl::dtl::throw_out_of_range("sfl::small_unordered_flat_map::at");
+            sfl::dtl::throw_out_of_range("sfl::small_unordered_linear_map::at");
         }
 
         return it->second;
@@ -746,7 +746,7 @@ public:
 
         if (it == end())
         {
-            sfl::dtl::throw_out_of_range("sfl::small_unordered_flat_map::at");
+            sfl::dtl::throw_out_of_range("sfl::small_unordered_linear_map::at");
         }
 
         return it->second;
@@ -761,7 +761,7 @@ public:
 
         if (it == end())
         {
-            sfl::dtl::throw_out_of_range("sfl::small_unordered_flat_map::at");
+            sfl::dtl::throw_out_of_range("sfl::small_unordered_linear_map::at");
         }
 
         return it->second;
@@ -776,7 +776,7 @@ public:
 
         if (it == end())
         {
-            sfl::dtl::throw_out_of_range("sfl::small_unordered_flat_map::at");
+            sfl::dtl::throw_out_of_range("sfl::small_unordered_linear_map::at");
         }
 
         return it->second;
@@ -827,10 +827,10 @@ private:
     }
 
     template <typename K2, typename T2, std::size_t N2, typename E2, typename A2>
-    friend bool operator==(const small_unordered_flat_map<K2, T2, N2, E2, A2>& x, const small_unordered_flat_map<K2, T2, N2, E2, A2>& y);
+    friend bool operator==(const small_unordered_linear_map<K2, T2, N2, E2, A2>& x, const small_unordered_linear_map<K2, T2, N2, E2, A2>& y);
 
     template <typename K2, typename T2, std::size_t N2, typename E2, typename A2>
-    friend bool operator!=(const small_unordered_flat_map<K2, T2, N2, E2, A2>& x, const small_unordered_flat_map<K2, T2, N2, E2, A2>& y);
+    friend bool operator!=(const small_unordered_linear_map<K2, T2, N2, E2, A2>& x, const small_unordered_linear_map<K2, T2, N2, E2, A2>& y);
 };
 
 //
@@ -841,8 +841,8 @@ template <typename K, typename T, std::size_t N, typename E, typename A>
 SFL_NODISCARD
 bool operator==
 (
-    const small_unordered_flat_map<K, T, N, E, A>& x,
-    const small_unordered_flat_map<K, T, N, E, A>& y
+    const small_unordered_linear_map<K, T, N, E, A>& x,
+    const small_unordered_linear_map<K, T, N, E, A>& y
 )
 {
     return x.impl_ == y.impl_;
@@ -852,8 +852,8 @@ template <typename K, typename T, std::size_t N, typename E, typename A>
 SFL_NODISCARD
 bool operator!=
 (
-    const small_unordered_flat_map<K, T, N, E, A>& x,
-    const small_unordered_flat_map<K, T, N, E, A>& y
+    const small_unordered_linear_map<K, T, N, E, A>& x,
+    const small_unordered_linear_map<K, T, N, E, A>& y
 )
 {
     return x.impl_ != y.impl_;
@@ -862,16 +862,16 @@ bool operator!=
 template <typename K, typename T, std::size_t N, typename E, typename A>
 void swap
 (
-    small_unordered_flat_map<K, T, N, E, A>& x,
-    small_unordered_flat_map<K, T, N, E, A>& y
+    small_unordered_linear_map<K, T, N, E, A>& x,
+    small_unordered_linear_map<K, T, N, E, A>& y
 )
 {
     x.swap(y);
 }
 
 template <typename K, typename T, std::size_t N, typename E, typename A, typename Predicate>
-typename small_unordered_flat_map<K, T, N, E, A>::size_type
-    erase_if(small_unordered_flat_map<K, T, N, E, A>& c, Predicate pred)
+typename small_unordered_linear_map<K, T, N, E, A>::size_type
+    erase_if(small_unordered_linear_map<K, T, N, E, A>& c, Predicate pred)
 {
     auto old_size = c.size();
 
