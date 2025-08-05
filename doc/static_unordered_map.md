@@ -72,7 +72,7 @@ namespace sfl
 }
 ```
 
-`sfl::static_unordered_map` is an associative container similar to [`std::unordered_map`](https://en.cppreference.com/w/cpp/container/unordered_map), but with a fixed maximum capacity defined at compile time and backed entirely by statically alocated storage. This container **does not** perform any dynamic memory allocation. The number of elements **cannot** be greater than `StaticCapacity`. Attempting to insert more elements results in **undefined behavior**.
+`sfl::static_unordered_map` is an associative container similar to [`std::unordered_map`](https://en.cppreference.com/w/cpp/container/unordered_map), but with a fixed maximum capacity defined at compile time and backed entirely by statically alocated storage. This container **does not** perform any dynamic memory allocation. The number of elements **cannot** be greater than `StaticCapacity`. Attempting to insert more elements results in **undefined behavior**. This design provides a compact and cache-friendly representation optimized for use cases where the maximum size is known in advance. It is also well-suited for **bare-metal embedded** development where predictable memory usage and no dynamic allocation are critical.
 
 The underlying storage is implemented as a **hash table** with separate chaining.
 
@@ -83,8 +83,6 @@ References and pointers to elements are stable: insert and erase operations do n
 Iterators to elements are forward iterators, and they meet the requirements of [*LegacyForwardIterator*](https://en.cppreference.com/w/cpp/named_req/ForwardIterator).
 
 `sfl::static_unordered_map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container) and [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer).
-
-This container is convenient for bare-metal embedded software development.
 
 <br><br>
 

@@ -62,15 +62,11 @@ namespace sfl
 }
 ```
 
-`sfl::small_unordered_flat_set` is an associative container that contains **unsorted** set of **unique** objects of type `Key`.
-
-Underlying storage is implemented as **unsorted vector**.
+`sfl::small_unordered_flat_set` is an unordered associative container that contains an unsorted collection of unique keys. Underlying storage is implemented as an unsorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until their number exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
 
 Complexity of search, insert and remove operations is O(N).
 
-This container internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
-
-Elements of this container are always stored **contiguously** in the memory.
+Elements of this container are always stored contiguously in the memory.
 
 Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 

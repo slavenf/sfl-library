@@ -70,15 +70,11 @@ namespace sfl
 }
 ```
 
-`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with the different storage model.
-
-This container internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in static vector **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
+`sfl::static_vector` is a sequence container similar to [`std::vector`](https://en.cppreference.com/w/cpp/container/vector), but with a fixed maximum capacity defined at compile time and backed entirely by statically allocated storage. This container internally holds a statically allocated array of size `N` and stores elements in this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in the static vector **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**. This design provides a compact and cache-friendly representation optimized for use cases where the maximum size is known in advance. It is also well-suited for **bare-metal embedded** development where predictable memory usage and no dynamic allocation are critical.
 
 `sfl::static_vector` is **not** specialized for `bool`.
 
 `sfl::static_vector` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*SequenceContainer*](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
-
-This container is convenient for bare-metal embedded software development.
 
 <br><br>
 

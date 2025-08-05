@@ -68,6 +68,8 @@ Underlying storage is implemented as **red-black tree**.
 
 Complexity of search, insert and remove operations is O(log N).
 
+References and pointers to elements are stable: insert and erase operations do not invalidate them unless the referenced element is erased.
+
 Iterators to elements are bidirectional iterators and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
 
 `sfl::multiset` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).

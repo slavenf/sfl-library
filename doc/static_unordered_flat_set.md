@@ -59,21 +59,15 @@ namespace sfl
 }
 ```
 
-`sfl::static_unordered_flat_set` is an associative container that contains **unsorted** set of **unique** objects of type `Key`.
-
-Underlying storage is implemented as **unsorted vector**.
+`sfl::small_unordered_flat_set` is an unordered associative container that contains an unsorted collection of unique keys. Underlying storage is implemented as an unsorted [`static_vector`](static_vector.md), which has a fixed maximum capacity defined at compile time and is backed entirely by statically allocated storage. This container **does not** perform any dynamic memory allocation. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**. This design provides a compact and cache-friendly representation optimized for use cases where the maximum size is known in advance. It is also well-suited for **bare-metal embedded** development where predictable memory usage and no dynamic allocation are critical.
 
 Complexity of search, insert and remove operations is O(N).
 
-This internally holds statically allocated array of size `N` and stores elements into this array, which avoids dynamic memory allocation and deallocation. This container **never** uses dynamic memory management. The number of elements in this container **cannot** be greater than `N`. Attempting to insert more than `N` elements into this container results in **undefined behavior**.
-
-Elements of this container are always stored **contiguously** in the memory.
+Elements of this container are always stored contiguously in the memory.
 
 Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
 `sfl::static_unordered_flat_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container) and [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer). The requirements of [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer) are partionally met (this container doesn't use [*Hash*](https://en.cppreference.com/w/cpp/named_req/Hash)).
-
-This container is convenient for bare-metal embedded software development.
 
 <br><br>
 

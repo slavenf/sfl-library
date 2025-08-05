@@ -79,15 +79,13 @@ namespace sfl
 }
 ```
 
-`sfl::small_flat_map` is an associative container that contains **sorted** set of **key-value** pairs with **unique** keys. Sorting is done using the key comparison function `Compare`.
+`sfl::small_flat_map` is an associative container that contains a sorted collection of key-value pairs with unique keys. Underlying storage is implemented as a sorted [`small_vector`](small_vector.md), which internally holds a statically allocated array of size `N` and stores elements in this array until the number of elements exceeds `N`, which avoids dynamic memory allocation and deallocation. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
 
-Underlying storage is implemented as **sorted vector**.
+Sorting is done using the key comparison function `Compare`.
 
 Complexity of search operation is O(log N). Complexity of insert and remove operations is O(N).
 
-This container internally holds statically allocated array of size `N` and stores elements into this array until the number of elements is not greater than `N`, which avoids dynamic memory allocation and deallocation. The dynamic memory management is used when the number of elements has to be greater than `N`.
-
-Elements of this container are always stored **contiguously** in the memory.
+Elements of this container are always stored contiguously in the memory.
 
 Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 

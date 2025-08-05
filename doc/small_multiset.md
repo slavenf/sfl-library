@@ -65,11 +65,13 @@ namespace sfl
 }
 ```
 
-`sfl::small_multiset` is an associative container similar to [`std::multiset`](https://en.cppreference.com/w/cpp/container/multiset), but it internally holds a small amount of statically allocated memory to avoid dynamic memory management when the number of stored elements is small. Dynamic memory management is used when the number of elements exceeds `N`.
+`sfl::small_multiset` is an associative container similar to [`std::multiset`](https://en.cppreference.com/w/cpp/container/multiset), but it internally holds a small amount of statically allocated memory to avoid dynamic memory management when the number of stored elements is small. Dynamic memory management is used when the number of elements exceeds `N`. This design provides a compact and cache-friendly representation optimized for small sizes.
 
 The underlying storage is implemented as **red-black tree**.
 
 The complexity of search, insert, and remove operations is O(log N).
+
+References and pointers to elements are stable: insert and erase operations do not invalidate them unless the referenced element is erased.
 
 Iterators to elements are bidirectional iterators, and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
 

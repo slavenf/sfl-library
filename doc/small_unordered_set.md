@@ -68,7 +68,7 @@ namespace sfl
 }
 ```
 
-`sfl::small_unordered_set` is an associative container similar to [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set), but it internally holds a small amount of statically allocated memory to avoid dynamic memory management when the number of stored elements is small. Dynamic memory management is used when the number of elements exceeds `StaticCapacity`, or when the number of buckets exceeds `StaticBucketCount`.
+`sfl::small_unordered_set` is an associative container similar to [`std::unordered_set`](https://en.cppreference.com/w/cpp/container/unordered_set), but it internally holds a small amount of statically allocated memory to avoid dynamic memory management when the number of stored elements is small. Dynamic memory management is used when the number of elements exceeds `StaticCapacity`, or when the number of buckets exceeds `StaticBucketCount`. This design provides a compact and cache-friendly representation optimized for small sizes.
 
 The underlying storage is implemented as a **hash table** with separate chaining.
 

@@ -1,4 +1,4 @@
-# sfl::static_set
+# sfl::flat_set
 
 <details>
 
@@ -7,24 +7,26 @@
 * [Summary](#summary)
 * [Template Parameters](#template-parameters)
 * [Public Member Types](#public-member-types)
-* [Public Data Members](#public-data-members)
-  * [static\_capacity](#static_capacity)
 * [Public Member Functions](#public-member-functions)
   * [(constructor)](#constructor)
   * [(destructor)](#destructor)
   * [operator=](#operator)
+  * [get\_allocator](#get_allocator)
   * [key\_comp](#key_comp)
   * [value\_comp](#value_comp)
   * [begin, cbegin](#begin-cbegin)
   * [end, cend](#end-cend)
   * [rbegin, crbegin](#rbegin-crbegin)
   * [rend, crend](#rend-crend)
+  * [nth](#nth)
+  * [index\_of](#index_of)
   * [empty](#empty)
-  * [full](#full)
   * [size](#size)
   * [max\_size](#max_size)
   * [capacity](#capacity)
   * [available](#available)
+  * [reserve](#reserve)
+  * [shrink\_to\_fit](#shrink_to_fit)
   * [clear](#clear)
   * [emplace](#emplace)
   * [emplace\_hint](#emplace_hint)
@@ -38,6 +40,7 @@
   * [find](#find)
   * [count](#count)
   * [contains](#contains)
+  * [data](#data)
 * [Non-member Functions](#non-member-functions)
   * [operator==](#operator-1)
   * [operator!=](#operator-2)
@@ -54,29 +57,29 @@
 
 ## Summary
 
-Defined in header `sfl/static_set.hpp`:
+Defined in header `sfl/flat_set.hpp`:
 
 ```
 namespace sfl
 {
     template < typename Key,
-               std::size_t N,
-               typename Compare = std::less<Key> >
-    class static_set;
+               typename Compare = std::less<Key>,
+               typename Allocator = std::allocator<Key> >
+    class flat_set;
 }
 ```
 
-`sfl::static_set` is an associative container similar to [`std::set`](https://en.cppreference.com/w/cpp/container/set), but with a fixed maximum capacity defined at compile time and backed entirely by statically alocated storage. This container **does not** perform any dynamic memory allocation. The number of elements **cannot** be greater than `N`. Attempting to insert more elements results in **undefined behavior**. This design provides a compact and cache-friendly representation optimized for use cases where the maximum size is known in advance. It is also well-suited for **bare-metal embedded** development where predictable memory usage and no dynamic allocation are critical.
+`sfl::flat_set` is an associative container that contains a sorted collection of unique keys. Underlying storage is implemented as a sorted [`vector`](vector.md), providing a compact and cache-friendly representation.
 
-The underlying storage is implemented as **red-black tree**.
+Sorting is done using the key comparison function `Compare`.
 
-The complexity of search, insert, and remove operations is O(log N).
+Complexity of search operation is O(log N). Complexity of insert and remove operations is O(N).
 
-References and pointers to elements are stable: insert and erase operations do not invalidate them unless the referenced element is erased.
+Elements of this container are always stored contiguously in the memory.
 
-Iterators to elements are bidirectional iterators, and they meet the requirements of [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator).
+Iterators to elements are random access iterators and they meet the requirements of [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator).
 
-`sfl::static_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
+`sfl::flat_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
 <br><br>
 
@@ -91,16 +94,20 @@ Iterators to elements are bidirectional iterators, and they meet the requirement
     Key type.
 
 2.  ```
-    std::size_t N
-    ```
-
-    Size of the internal statically allocated array, i.e. the maximal number of elements that this container can contain.
-
-3.  ```
     typename Compare
     ```
 
     Ordering function for keys.
+
+3.  ```
+    typename Allocator
+    ```
+
+    Allocator used for memory allocation/deallocation and construction/destruction of elements.
+
+    This type must meet the requirements of [*Allocator*](https://en.cppreference.com/w/cpp/named_req/Allocator).
+
+    The program is ill-formed if `Allocator::value_type` is not the same as `Key`.
 
 <br><br>
 
@@ -110,6 +117,7 @@ Iterators to elements are bidirectional iterators, and they meet the requirement
 
 | Member Type               | Definition |
 | :------------------------ | :--------- |
+| `allocator_type`          | `Allocator` |
 | `key_type`                | `Key` |
 | `value_type`              | `Key` |
 | `size_type`               | Unsigned integer type |
@@ -120,22 +128,10 @@ Iterators to elements are bidirectional iterators, and they meet the requirement
 | `const_reference`         | `const value_type&` |
 | `pointer`                 | Pointer to `value_type` |
 | `const_pointer`           | Pointer to `const value_type` |
-| `iterator`                | [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
-| `const_iterator`          | [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
-| `reverse_iterator`        | Reverse [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
-| `const_reverse_iterator`  | Reverse [*LegacyBidirectionalIterator*](https://en.cppreference.com/w/cpp/named_req/BidirectionalIterator) to `const value_type` |
-
-<br><br>
-
-
-
-## Public Data Members
-
-### static_capacity
-
-```
-static constexpr size_type static_capacity = N;
-```
+| `iterator`                | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
+| `const_iterator`          | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
+| `reverse_iterator`        | `std::reverse_iterator<iterator>` |
+| `const_reverse_iterator`  | `std::reverse_iterator<const_iterator>` |
 
 <br><br>
 
@@ -146,10 +142,28 @@ static constexpr size_type static_capacity = N;
 ### (constructor)
 
 1.  ```
-    static_set() noexcept(std::is_nothrow_default_constructible<Compare>::value)
+    flat_set() noexcept(
+        std::is_nothrow_default_constructible<Allocator>::value &&
+        std::is_nothrow_default_constructible<Compare>::value
+    );
     ```
 2.  ```
-    explicit static_set(const Compare& comp) noexcept(std::is_nothrow_copy_constructible<Compare>::value)
+    explicit flat_set(const Compare& comp) noexcept(
+        std::is_nothrow_default_constructible<Allocator>::value &&
+        std::is_nothrow_copy_constructible<Compare>::value
+    );
+    ```
+3.  ```
+    explicit flat_set(const Allocator& alloc) noexcept(
+        std::is_nothrow_copy_constructible<Allocator>::value &&
+        std::is_nothrow_default_constructible<Compare>::value
+    );
+    ```
+4.  ```
+    explicit flat_set(const Compare& comp, const Allocator& alloc) noexcept(
+        std::is_nothrow_copy_constructible<Allocator>::value &&
+        std::is_nothrow_copy_constructible<Compare>::value
+    );
     ```
 
     **Effects:**
@@ -162,17 +176,22 @@ static constexpr size_type static_capacity = N;
 
 
 
-3.  ```
+5.  ```
     template <typename InputIt>
-    static_set(InputIt first, InputIt last);
+    flat_set(InputIt first, InputIt last);
     ```
-4.  ```
+6.  ```
     template <typename InputIt>
-    static_set(InputIt first, InputIt last, const Compare& comp);
+    flat_set(InputIt first, InputIt last, const Compare& comp);
     ```
-
-    **Preconditions:**
-    `std::distance(first, last) <= capacity()`
+7.  ```
+    template <typename InputIt>
+    flat_set(InputIt first, InputIt last, const Allocator& alloc);
+    ```
+8.  ```
+    template <typename InputIt>
+    flat_set(InputIt first, InputIt last, const Compare& comp, const Allocator& alloc);
+    ```
 
     **Effects:**
     Constructs the container with the contents of the range `[first, last)`.
@@ -182,43 +201,61 @@ static constexpr size_type static_capacity = N;
     **Note:**
     These overloads participate in overload resolution only if `InputIt` satisfies requirements of [*LegacyInputIterator*](https://en.cppreference.com/w/cpp/named_req/InputIterator).
 
+    **Complexity:**
+    Linear in `std::distance(first, last)`.
+
     <br><br>
 
 
 
-5.  ```
-    static_set(std::initializer_list<value_type> ilist);
+9.  ```
+    flat_set(std::initializer_list<value_type> ilist);
     ```
-6.  ```
-    static_set(std::initializer_list<value_type> ilist, const Compare& comp);
+10. ```
+    flat_set(std::initializer_list<value_type> ilist, const Compare& comp);
     ```
-
-    **Preconditions:**
-    `ilist.size() <= capacity()`
+11. ```
+    flat_set(std::initializer_list<value_type> ilist, const Allocator& alloc);
+    ```
+12. ```
+    flat_set(std::initializer_list<value_type> ilist, const Compare& comp, const Allocator& alloc);
+    ```
 
     **Effects:**
     Constructs the container with the contents of the initializer list `ilist`.
 
     If multiple elements in the range have keys that compare equivalent, then the first element is inserted.
 
+    **Complexity:**
+    Linear in `ilist.size()`.
+
     <br><br>
 
 
 
-7.  ```
-    static_set(const static_set& other);
+13. ```
+    flat_set(const flat_set& other);
+    ```
+14. ```
+    flat_set(const flat_set& other, const Allocator& alloc);
     ```
 
     **Effects:**
     Copy constructor.
     Constructs the container with the copy of the contents of `other`.
 
+    **Complexity:**
+    Linear in `other.size()`.
+
     <br><br>
 
 
 
-8.  ```
-    static_set(static_set&& other);
+15. ```
+    flat_set(flat_set&& other);
+    ```
+16. ```
+    flat_set(flat_set&& other, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -229,17 +266,28 @@ static constexpr size_type static_capacity = N;
 
     `other` is in a valid but unspecified state after the move.
 
+    **Complexity:**
+    Constant in the best case. Linear in size in the worst case.
+
     <br><br>
 
 
 
-9.  ```
+17. ```
     template <typename Range>
-    static_set(sfl::from_range_t, Range&& range);
+    flat_set(sfl::from_range_t, Range&& range);
     ```
-10. ```
+18. ```
     template <typename Range>
-    static_set(sfl::from_range_t, Range&& range, const Compare& comp);
+    flat_set(sfl::from_range_t, Range&& range, const Compare& comp);
+    ```
+19. ```
+    template <typename Range>
+    flat_set(sfl::from_range_t, Range&& range, const Allocator& alloc);
+    ```
+20. ```
+    template <typename Range>
+    flat_set(sfl::from_range_t, Range&& range, const Compare& comp, const Allocator& alloc);
     ```
 
     **Effects:**
@@ -257,14 +305,14 @@ static constexpr size_type static_capacity = N;
 ### (destructor)
 
 1.  ```
-    ~static_set();
+    ~flat_set();
     ```
 
     **Effects:**
     Destructs the container. The destructors of the elements are called and the used storage is deallocated.
 
     **Complexity:**
-    Linear in size.
+    Linear in `size()`.
 
     <br><br>
 
@@ -273,7 +321,7 @@ static constexpr size_type static_capacity = N;
 ### operator=
 
 1.  ```
-    static_set& operator=(const static_set& other);
+    flat_set& operator=(const flat_set& other);
     ```
 
     **Effects:**
@@ -283,12 +331,15 @@ static constexpr size_type static_capacity = N;
     **Returns:**
     `*this()`.
 
+    **Complexity:**
+    Linear in `this->size()` plus linear in `other.size()`.
+
     <br><br>
 
 
 
 2.  ```
-    static_set& operator=(static_set&& other);
+    flat_set& operator=(flat_set&& other);
     ```
 
     **Effects:**
@@ -302,22 +353,43 @@ static constexpr size_type static_capacity = N;
     **Returns:**
     `*this()`.
 
+    **Complexity:**
+
+    * The best case: Linear in `this->size()` plus constant.
+    * The worst case: Linear in `this->size()` plus linear in `other.size()`.
+
     <br><br>
 
 
 
 3.  ```
-    static_set& operator=(std::initializer_list<Key> ilist);
+    flat_set& operator=(std::initializer_list<Key> ilist);
     ```
-
-    **Preconditions:**
-    `ilist.size() <= capacity()`
 
     **Effects:**
     Replaces the contents with those identified by initializer list `ilist`.
 
     **Returns:**
     `*this()`.
+
+    **Complexity:**
+    Linear in `this->size()` plus linear in `ilist.size()`.
+
+    <br><br>
+
+
+
+### get_allocator
+
+1.  ```
+    allocator_type get_allocator() const noexcept;
+    ```
+
+    **Effects:**
+    Returns the allocator associated with the container.
+
+    **Complexity:**
+    Constant.
 
     <br><br>
 
@@ -449,14 +521,22 @@ static constexpr size_type static_capacity = N;
 
 
 
-### empty
+### nth
 
 1.  ```
-    bool empty() const noexcept;
+    iterator nth(size_type pos) noexcept;
+    ```
+2.  ```
+    const_iterator nth(size_type pos) const noexcept;
     ```
 
+    **Preconditions:**
+    `pos <= size()`
+
     **Effects:**
-    Returns `true` if the container has no elements, i.e. whether `begin() == end()`.
+    Returns an iterator to the element at position `pos`.
+
+    If `pos == size()`, the returned iterator is equal to `end()`.
 
     **Complexity:**
     Constant.
@@ -465,14 +545,35 @@ static constexpr size_type static_capacity = N;
 
 
 
-### full
+### index_of
 
 1.  ```
-    bool full() const noexcept;
+    size_type index_of(const_iterator pos) const noexcept;
+    ```
+
+    **Preconditions:**
+    `cbegin() <= pos && pos <= cend()`
+
+    **Effects:**
+    Returns position of the element pointed by iterator `pos`, i.e. `std::distance(begin(), pos)`.
+
+    If `pos == end()`, the returned value is equal to `size()`.
+
+    **Complexity:**
+    Constant.
+
+    <br><br>
+
+
+
+### empty
+
+1.  ```
+    bool empty() const noexcept;
     ```
 
     **Effects:**
-    Returns `true` if the container is full, i.e. whether `size() == capacity()`.
+    Returns `true` if the container has no elements, i.e. whether `begin() == end()`.
 
     **Complexity:**
     Constant.
@@ -500,11 +601,11 @@ static constexpr size_type static_capacity = N;
 ### max_size
 
 1.  ```
-    static constexpr size_type max_size() const noexcept;
+    size_type max_size() const noexcept;
     ```
 
     **Effects:**
-    Returns the maximum number of elements the container is able to hold, i.e. `N`.
+    Returns the maximum number of elements the container is able to hold, i.e. `std::distance(begin(), end())` for the largest container.
 
     **Complexity:**
     Constant.
@@ -516,11 +617,11 @@ static constexpr size_type static_capacity = N;
 ### capacity
 
 1.  ```
-    static constexpr size_type capacity() const noexcept;
+    size_type capacity() const noexcept;
     ```
 
     **Effects:**
-    Returns the maximum number of elements the container is able to hold, i.e. `N`.
+    Returns the number of elements that the container has currently allocated space for.
 
     **Complexity:**
     Constant.
@@ -536,10 +637,78 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Effects:**
-    Returns the number of elements that can be inserted into the container, i.e. `capacity() - size()`.
+    Returns the number of elements that can be inserted into the container without requiring allocation of additional memory.
 
     **Complexity:**
     Constant.
+
+    <br><br>
+
+
+
+### reserve
+
+1.  ```
+    void reserve(size_type new_cap);
+    ```
+
+    **Effects:**
+    If `new_cap > capacity()`, the function allocates memory for new storage of capacity equal to the value of `new_cap`, moves elements from old storage to new storage, and deallocates memory used by old storage. Otherwise, the function does nothing.
+
+    This function does not change size of the container.
+
+    If the capacity is changed, all iterators and all references to the elements are invalidated. Otherwise, no iterators or references are invalidated.
+
+    **Complexity:**
+    Linear.
+
+    **Exceptions:**
+
+    * `Allocator::allocate` may throw.
+    * `T`'s move or copy constructor may throw.
+
+    If an exception is thrown:
+
+    * If type `T` has available `noexcept` move constructor:
+        * This function has no effects (strong exception guarantee).
+    * Else if type `T` has available copy constructor:
+        * This function has no effects (strong exception guarantee).
+    * Else if type `T` has available throwing move constructor:
+        * Container is changed but in valid state (basic exception guarantee).
+
+    <br><br>
+
+
+
+### shrink_to_fit
+
+1.  ```
+    void shrink_to_fit();
+    ```
+
+    **Effects:**
+    If `size() < capacity()`, the function allocates memory for new storage of capacity equal to the value of `size()`, moves elements from old storage to new storage, and deallocates memory used by old storage. Otherwise, the function does nothing.
+
+    This function does not change size of the container.
+
+    If the capacity is changed, all iterators and all references to the elements are invalidated. Otherwise, no iterators or references are invalidated.
+
+    **Complexity:**
+    Linear.
+
+    **Exceptions:**
+
+    * `Allocator::allocate` may throw.
+    * `T`'s move or copy constructor may throw.
+
+    If an exception is thrown:
+
+    * If type `T` has available `noexcept` move constructor:
+        * This function has no effects (strong exception guarantee).
+    * Else if type `T` has available copy constructor:
+        * This function has no effects (strong exception guarantee).
+    * Else if type `T` has available throwing move constructor:
+        * Container is changed but in valid state (basic exception guarantee).
 
     <br><br>
 
@@ -569,9 +738,6 @@ static constexpr size_type static_capacity = N;
     std::pair<iterator, bool> emplace(Args&&... args);
     ```
 
-    **Preconditions:**
-    `!full()`
-
     **Effects:**
     Inserts new element into the container if the container doesn't already contain an element with an equivalent key.
 
@@ -594,7 +760,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    `!full()`
+    `cbegin() <= hint && hint <= cend()`
 
     **Effects:**
     Inserts new element into the container if the container doesn't already contain an element with an equivalent key.
@@ -618,9 +784,6 @@ static constexpr size_type static_capacity = N;
     std::pair<iterator, bool> insert(const value_type& value);
     ```
 
-    **Preconditions:**
-    `!full()`
-
     **Effects:**
     Inserts copy of `value` if the container doesn't already contain an element with an equivalent key.
 
@@ -634,9 +797,6 @@ static constexpr size_type static_capacity = N;
 2.  ```
     std::pair<iterator, bool> insert(value_type&& value);
     ```
-
-    **Preconditions:**
-    `!full()`
 
     **Effects:**
     Inserts `value` using move semantics if the container doesn't already contain an element with an equivalent key.
@@ -652,9 +812,6 @@ static constexpr size_type static_capacity = N;
     template <typename K>
     std::pair<iterator, bool> insert(K&& x);
     ```
-
-    **Preconditions:**
-    `!full()`
 
     **Effects:**
     Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
@@ -675,7 +832,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    `!full()`
+    `cbegin() <= hint && hint <= cend()`
 
     **Effects:**
     Inserts copy of `value` if the container doesn't already contain an element with an equivalent key.
@@ -694,7 +851,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    `!full()`
+    `cbegin() <= hint && hint <= cend()`
 
     **Effects:**
     Inserts `value` using move semantics if the container doesn't already contain an element with an equivalent key.
@@ -714,7 +871,7 @@ static constexpr size_type static_capacity = N;
     ```
 
     **Preconditions:**
-    `!full()`
+    `cbegin() <= hint && hint <= cend()`
 
     **Effects:**
     Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
@@ -740,9 +897,6 @@ static constexpr size_type static_capacity = N;
     void insert(InputIt first, InputIt last);
     ```
 
-    **Preconditions:**
-    `std::distance(first, last) <= available()`
-
     **Effects:**
     Inserts elements from range `[first, last)` if the container doesn't already contain an element with an equivalent key.
 
@@ -767,9 +921,6 @@ static constexpr size_type static_capacity = N;
 8.  ```
     void insert(std::initializer_list<value_type> ilist);
     ```
-
-    **Preconditions:**
-    `ilist.size() <= available()`
 
     **Effects:**
     Inserts elements from initializer list `ilist` if the container doesn't already contain an element with an equivalent key.
@@ -810,6 +961,9 @@ static constexpr size_type static_capacity = N;
     iterator erase(const_iterator pos);
     ```
 
+    **Preconditions:**
+    `cbegin() <= pos && pos < cend()`
+
     **Effects:**
     Removes the element at `pos`.
 
@@ -823,6 +977,9 @@ static constexpr size_type static_capacity = N;
 3.  ```
     iterator erase(const_iterator first, const_iterator last);
     ```
+
+    **Preconditions:**
+    `cbegin() <= first && first <= last && last <= cend()`
 
     **Effects:**
     Removes the elements in the range `[first, last)`.
@@ -858,11 +1015,17 @@ static constexpr size_type static_capacity = N;
 ### swap
 
 1.  ```
-    void swap(static_set& other);
+    void swap(flat_set& other);
     ```
+
+    **Preconditions:**
+    `std::allocator_traits<allocator_type>::propagate_on_container_swap::value || get_allocator() == other.get_allocator()`
 
     **Effects:**
     Exchanges the contents of the container with those of `other`.
+
+    **Complexity:**
+    Constant in the best case. Linear in `this->size()` plus linear in `other.size()` in the worst case.
 
     <br><br>
 
@@ -1036,16 +1199,35 @@ static constexpr size_type static_capacity = N;
 
 
 
+### data
+
+1.  ```
+    value_type* data() noexcept;
+    ```
+2.  ```
+    const value_type* data() const noexcept;
+    ```
+
+    **Effects:**
+    Returns pointer to the underlying array serving as element storage. The pointer is such that range `[data(), data() + size())` is always a valid range, even if the container is empty. `data()` is not dereferenceable if the container is empty.
+
+    **Complexity:**
+    Constant.
+
+    <br><br>
+
+
+
 ## Non-member Functions
 
 ### operator==
 
 1.  ```
-    template <typename K, std::size_t N, typename C>
+    template <typename K, typename C, typename A>
     bool operator==
     (
-        const static_set<K, N, C>& x,
-        const static_set<K, N, C>& y
+        const flat_set<K, C, A>& x,
+        const flat_set<K, C, A>& y
     );
     ```
 
@@ -1069,11 +1251,11 @@ static constexpr size_type static_capacity = N;
 ### operator!=
 
 1.  ```
-    template <typename K, std::size_t N, typename C>
+    template <typename K, typename C, typename A>
     bool operator!=
     (
-        const static_set<K, N, C>& x,
-        const static_set<K, N, C>& y
+        const flat_set<K, C, A>& x,
+        const flat_set<K, C, A>& y
     );
     ```
 
@@ -1092,11 +1274,11 @@ static constexpr size_type static_capacity = N;
 ### operator<
 
 1.  ```
-    template <typename K, std::size_t N, typename C>
+    template <typename K, typename C, typename A>
     bool operator<
     (
-        const static_set<K, N, C>& x,
-        const static_set<K, N, C>& y
+        const flat_set<K, C, A>& x,
+        const flat_set<K, C, A>& y
     );
     ```
 
@@ -1115,11 +1297,11 @@ static constexpr size_type static_capacity = N;
 ### operator>
 
 1.  ```
-    template <typename K, std::size_t N, typename C>
+    template <typename K, typename C, typename A>
     bool operator>
     (
-        const static_set<K, N, C>& x,
-        const static_set<K, N, C>& y
+        const flat_set<K, C, A>& x,
+        const flat_set<K, C, A>& y
     );
     ```
 
@@ -1139,11 +1321,11 @@ static constexpr size_type static_capacity = N;
 ### operator<=
 
 1.  ```
-    template <typename K, std::size_t N, typename C>
+    template <typename K, typename C, typename A>
     bool operator<=
     (
-        const static_set<K, N, C>& x,
-        const static_set<K, N, C>& y
+        const flat_set<K, C, A>& x,
+        const flat_set<K, C, A>& y
     );
     ```
 
@@ -1162,11 +1344,11 @@ static constexpr size_type static_capacity = N;
 ### operator>=
 
 1.  ```
-    template <typename K, std::size_t N, typename C>
+    template <typename K, typename C, typename A>
     bool operator>=
     (
-        const static_set<K, N, C>& x,
-        const static_set<K, N, C>& y
+        const flat_set<K, C, A>& x,
+        const flat_set<K, C, A>& y
     );
     ```
 
@@ -1185,11 +1367,11 @@ static constexpr size_type static_capacity = N;
 ### swap
 
 1.  ```
-    template <typename K, std::size_t N, typename C>
+    template <typename K, typename C, typename A>
     void swap
     (
-        static_set<K, N, C>& x,
-        static_set<K, N, C>& y
+        flat_set<K, C, A>& x,
+        flat_set<K, C, A>& y
     );
     ```
 
@@ -1203,9 +1385,9 @@ static constexpr size_type static_capacity = N;
 ### erase_if
 
 1.  ```
-    template <typename K, std::size_t N, typename C, typename Predicate>
-    typename static_set<K, N, C>::size_type
-        erase_if(static_set<K, N, C>& c, Predicate pred);
+    template <typename K, typename C, typename A, typename Predicate>
+    typename flat_set<K, C, A>::size_type
+        erase_if(flat_set<K, C, A>& c, Predicate pred);
     ```
 
     **Effects:**
@@ -1215,6 +1397,9 @@ static constexpr size_type static_capacity = N;
 
     **Returns:**
     The number of erased elements.
+
+    **Complexity:**
+    Linear.
 
     <br><br>
 
