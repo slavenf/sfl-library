@@ -18,8 +18,8 @@
 // 3. This notice may not be removed or altered from any source distribution.
 //
 
-#ifndef SFL_STATIC_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
-#define SFL_STATIC_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
+#ifndef SFL_STATIC_UNORDERED_LINEAR_MULTIMAP_HPP_INCLUDED
+#define SFL_STATIC_UNORDERED_LINEAR_MULTIMAP_HPP_INCLUDED
 
 #include <sfl/detail/concepts/container_compatible_range.hpp>
 #include <sfl/detail/functional/first.hpp>
@@ -617,4 +617,4 @@ typename static_unordered_flat_multimap<K, T, N, E>::size_type
 
 } // namespace sfl
 
-#endif // SFL_STATIC_UNORDERED_FLAT_MULTIMAP_HPP_INCLUDED
+#endif // SFL_STATIC_UNORDERED_LINEAR_MULTIMAP_HPP_INCLUDED
