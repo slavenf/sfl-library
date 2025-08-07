@@ -2582,220 +2582,225 @@ PRINT("Test PRIVATE remove(base_node_pointer, base_node_pointer&)");
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
+PRINT("Test lower_bound, upper_bound, equal_range, find, count_equal, count_unique, contains");
 {
-    /*
-     *           (pointer to minumum value, i.e. 10)
-     *           |
-     *           H (header)
-     *          /
-     *        40
-     *       /  \
-     *     20    50
-     *    /  \
-     *  10    30b
-     *       /  \
-     *     30a   30c
-     */
+    // Equal keys
+    {
+        /*
+         *           (pointer to minumum value, i.e. 10)
+         *           |
+         *           H (header)
+         *          /
+         *        40
+         *       /  \
+         *     20    50
+         *    /  \
+         *  10    30b
+         *       /  \
+         *     30a   30c
+         */
 
-    using tree_type = sfl::dtl::rb_tree<int, int, sfl::dtl::identity, std::less<int>, TPARAM_ALLOCATOR<int>, void>;
-    using node_type = typename tree_type::node_type;
+        using key_type = int;
+        using value_type = std::pair<int, int>;
+        using key_of_value = sfl::dtl::first;
+        using key_compare = std::less<int>;
+        using allocator_type = TPARAM_ALLOCATOR<value_type>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using node_type = typename tree_type::node_type;
 
-    tree_type tree;
-    node_type n10, n20, n30a, n30b, n30c, n40, n50;
+        tree_type tree;
+        node_type n10, n20, n30a, n30b, n30c, n40, n50;
 
-    tree.data_.root() = &n40;
-    tree.data_.minimum() = &n10;
-    tree.data_.size_ = 7;
+        tree.data_.root() = &n40;
+        tree.data_.minimum() = &n10;
+        tree.data_.size_ = 7;
 
-    n10.left_  = nullptr;   n10.right_  = nullptr;  n10.parent_  = &n20;
-    n20.left_  = &n10;      n20.right_  = &n30b;    n20.parent_  = &n40;
-    n30a.left_ = nullptr;   n30a.right_ = nullptr;  n30a.parent_ = &n30b;
-    n30b.left_ = &n30a;     n30b.right_ = &n30c;    n30b.parent_ = &n20;
-    n30c.left_ = nullptr;   n30c.right_ = nullptr;  n30c.parent_ = &n30b;
-    n40.left_  = &n20;      n40.right_  = &n50;     n40.parent_  = tree.data_.header();
-    n50.left_  = nullptr;   n50.right_  = nullptr;  n50.parent_  = &n40;
+        n10.left_  = nullptr;   n10.right_  = nullptr;  n10.parent_  = &n20;
+        n20.left_  = &n10;      n20.right_  = &n30b;    n20.parent_  = &n40;
+        n30a.left_ = nullptr;   n30a.right_ = nullptr;  n30a.parent_ = &n30b;
+        n30b.left_ = &n30a;     n30b.right_ = &n30c;    n30b.parent_ = &n20;
+        n30c.left_ = nullptr;   n30c.right_ = nullptr;  n30c.parent_ = &n30b;
+        n40.left_  = &n20;      n40.right_  = &n50;     n40.parent_  = tree.data_.header();
+        n50.left_  = nullptr;   n50.right_  = nullptr;  n50.parent_  = &n40;
 
-    n10.value_.ref()  = 10;
-    n20.value_.ref()  = 20;
-    n30a.value_.ref() = 30;
-    n30b.value_.ref() = 30;
-    n30c.value_.ref() = 30;
-    n40.value_.ref()  = 40;
-    n50.value_.ref()  = 50;
+        n10.value_.ref()  = value_type(10, 1);
+        n20.value_.ref()  = value_type(20, 1);
+        n30a.value_.ref() = value_type(30, 1);
+        n30b.value_.ref() = value_type(30, 2);
+        n30c.value_.ref() = value_type(30, 3);
+        n40.value_.ref()  = value_type(40, 1);
+        n50.value_.ref()  = value_type(50, 1);
 
-    ///////////////////////////////////////////////////////////////////////////
+        for (const auto x : {10, 20, 30, 40, 50})
+        {
+            // Check lower_bound, upper_bound and equal_range
+            {
+                auto it1 = tree.lower_bound(x);
+                auto it2 = tree.upper_bound(x);
 
-    CHECK(tree.size() == 7);
-    CHECK(*NTH(tree, 0) == 10);
-    CHECK(*NTH(tree, 1) == 20);
-    CHECK(*NTH(tree, 2) == 30);
-    CHECK(*NTH(tree, 3) == 30);
-    CHECK(*NTH(tree, 4) == 30);
-    CHECK(*NTH(tree, 5) == 40);
-    CHECK(*NTH(tree, 6) == 50);
+                CHECK(std::distance(it1, it2) == (x == 30 ? 3 : 1));
 
-    const auto& cref = tree;
+                auto er = tree.equal_range(x);
 
-    ///////////////////////////////////////////////////////////////////////////
+                CHECK(er.first == it1);
+                CHECK(er.second == it2);
 
-    CHECK(tree.lower_bound( 5) == NTH(tree, 0));
-    CHECK(tree.lower_bound(10) == NTH(tree, 0));
-    CHECK(tree.lower_bound(15) == NTH(tree, 1));
-    CHECK(tree.lower_bound(20) == NTH(tree, 1));
-    CHECK(tree.lower_bound(25) == NTH(tree, 2));
-    CHECK(tree.lower_bound(30) == NTH(tree, 2));
-    CHECK(tree.lower_bound(35) == NTH(tree, 5));
-    CHECK(tree.lower_bound(40) == NTH(tree, 5));
-    CHECK(tree.lower_bound(45) == NTH(tree, 6));
-    CHECK(tree.lower_bound(50) == NTH(tree, 6));
-    CHECK(tree.lower_bound(55) == tree.end());
+                while (it1 != it2)
+                {
+                    CHECK(it1->first == x);
+                    ++it1;
+                }
+            }
 
-    CHECK(cref.lower_bound( 5) == NTH(cref, 0));
-    CHECK(cref.lower_bound(10) == NTH(cref, 0));
-    CHECK(cref.lower_bound(15) == NTH(cref, 1));
-    CHECK(cref.lower_bound(20) == NTH(cref, 1));
-    CHECK(cref.lower_bound(25) == NTH(cref, 2));
-    CHECK(cref.lower_bound(30) == NTH(cref, 2));
-    CHECK(cref.lower_bound(35) == NTH(cref, 5));
-    CHECK(cref.lower_bound(40) == NTH(cref, 5));
-    CHECK(cref.lower_bound(45) == NTH(cref, 6));
-    CHECK(cref.lower_bound(50) == NTH(cref, 6));
-    CHECK(cref.lower_bound(55) == cref.end());
+            // Check find
+            {
+                auto it = tree.find(x);
+                CHECK(it != tree.end());
+                CHECK(it->first == x);
+            }
 
-    ///////////////////////////////////////////////////////////////////////////
+            // Check count
+            CHECK(tree.count_equal(x) == (x == 30 ? 3 : 1));
 
-    CHECK(tree.upper_bound( 5) == NTH(tree, 0));
-    CHECK(tree.upper_bound(10) == NTH(tree, 1));
-    CHECK(tree.upper_bound(15) == NTH(tree, 1));
-    CHECK(tree.upper_bound(20) == NTH(tree, 2));
-    CHECK(tree.upper_bound(25) == NTH(tree, 2));
-    CHECK(tree.upper_bound(30) == NTH(tree, 5));
-    CHECK(tree.upper_bound(35) == NTH(tree, 5));
-    CHECK(tree.upper_bound(40) == NTH(tree, 6));
-    CHECK(tree.upper_bound(45) == NTH(tree, 6));
-    CHECK(tree.upper_bound(50) == tree.end());
-    CHECK(tree.upper_bound(55) == tree.end());
+            // Check contains
+            CHECK(tree.contains(x) == true);
+        }
 
-    CHECK(cref.upper_bound( 5) == NTH(cref, 0));
-    CHECK(cref.upper_bound(10) == NTH(cref, 1));
-    CHECK(cref.upper_bound(15) == NTH(cref, 1));
-    CHECK(cref.upper_bound(20) == NTH(cref, 2));
-    CHECK(cref.upper_bound(25) == NTH(cref, 2));
-    CHECK(cref.upper_bound(30) == NTH(cref, 5));
-    CHECK(cref.upper_bound(35) == NTH(cref, 5));
-    CHECK(cref.upper_bound(40) == NTH(cref, 6));
-    CHECK(cref.upper_bound(45) == NTH(cref, 6));
-    CHECK(cref.upper_bound(50) == cref.end());
-    CHECK(cref.upper_bound(55) == cref.end());
+        for (const auto x : {5, 15, 25, 35, 45, 55})
+        {
+            // Check lower_bound, upper_bound and equal_range
+            {
+                auto it1 = tree.lower_bound(x);
+                auto it2 = tree.upper_bound(x);
 
-    ///////////////////////////////////////////////////////////////////////////
+                CHECK(std::distance(it1, it2) == 0);
 
-    CHECK(tree.equal_range( 5) == std::make_pair(NTH(tree, 0), NTH(tree, 0)));
-    CHECK(tree.equal_range(10) == std::make_pair(NTH(tree, 0), NTH(tree, 1)));
-    CHECK(tree.equal_range(15) == std::make_pair(NTH(tree, 1), NTH(tree, 1)));
-    CHECK(tree.equal_range(20) == std::make_pair(NTH(tree, 1), NTH(tree, 2)));
-    CHECK(tree.equal_range(25) == std::make_pair(NTH(tree, 2), NTH(tree, 2)));
-    CHECK(tree.equal_range(30) == std::make_pair(NTH(tree, 2), NTH(tree, 5)));
-    CHECK(tree.equal_range(35) == std::make_pair(NTH(tree, 5), NTH(tree, 5)));
-    CHECK(tree.equal_range(40) == std::make_pair(NTH(tree, 5), NTH(tree, 6)));
-    CHECK(tree.equal_range(45) == std::make_pair(NTH(tree, 6), NTH(tree, 6)));
-    CHECK(tree.equal_range(50) == std::make_pair(NTH(tree, 6), tree.end()));
-    CHECK(tree.equal_range(55) == std::make_pair(tree.end(), tree.end()));
+                auto er = tree.equal_range(x);
 
-    CHECK(cref.equal_range( 5) == std::make_pair(NTH(cref, 0), NTH(cref, 0)));
-    CHECK(cref.equal_range(10) == std::make_pair(NTH(cref, 0), NTH(cref, 1)));
-    CHECK(cref.equal_range(15) == std::make_pair(NTH(cref, 1), NTH(cref, 1)));
-    CHECK(cref.equal_range(20) == std::make_pair(NTH(cref, 1), NTH(cref, 2)));
-    CHECK(cref.equal_range(25) == std::make_pair(NTH(cref, 2), NTH(cref, 2)));
-    CHECK(cref.equal_range(30) == std::make_pair(NTH(cref, 2), NTH(cref, 5)));
-    CHECK(cref.equal_range(35) == std::make_pair(NTH(cref, 5), NTH(cref, 5)));
-    CHECK(cref.equal_range(40) == std::make_pair(NTH(cref, 5), NTH(cref, 6)));
-    CHECK(cref.equal_range(45) == std::make_pair(NTH(cref, 6), NTH(cref, 6)));
-    CHECK(cref.equal_range(50) == std::make_pair(NTH(cref, 6), cref.end()));
-    CHECK(cref.equal_range(55) == std::make_pair(cref.end(), cref.end()));
+                CHECK(std::distance(er.first, er.second) == 0);
+            }
 
-    ///////////////////////////////////////////////////////////////////////////
+            // Check find
+            {
+                auto it = tree.find(x);
+                CHECK(it == tree.end());
+            }
 
-    CHECK(tree.find( 5) == tree.end());
-    CHECK(tree.find(10) == tree.lower_bound(10));
-    CHECK(tree.find(15) == tree.end());
-    CHECK(tree.find(20) == tree.lower_bound(20));
-    CHECK(tree.find(25) == tree.end());
-    CHECK(tree.find(30) == tree.lower_bound(30));
-    CHECK(tree.find(35) == tree.end());
-    CHECK(tree.find(40) == tree.lower_bound(40));
-    CHECK(tree.find(45) == tree.end());
-    CHECK(tree.find(50) == tree.lower_bound(50));
-    CHECK(tree.find(55) == tree.end());
+            // Check count
+            CHECK(tree.count_equal(x) == 0);
 
-    CHECK(cref.find( 5) == cref.end());
-    CHECK(cref.find(10) == cref.lower_bound(10));
-    CHECK(cref.find(15) == cref.end());
-    CHECK(cref.find(20) == cref.lower_bound(20));
-    CHECK(cref.find(25) == cref.end());
-    CHECK(cref.find(30) == cref.lower_bound(30));
-    CHECK(cref.find(35) == cref.end());
-    CHECK(cref.find(40) == cref.lower_bound(40));
-    CHECK(cref.find(45) == cref.end());
-    CHECK(cref.find(50) == cref.lower_bound(50));
-    CHECK(cref.find(55) == cref.end());
+            // Check contains
+            CHECK(tree.contains(x) == false);
+        }
 
-    ///////////////////////////////////////////////////////////////////////////
+        tree.data_.reset();
+    }
 
-    CHECK(tree.count_equal( 5) == 0);
-    CHECK(tree.count_equal(10) == 1);
-    CHECK(tree.count_equal(15) == 0);
-    CHECK(tree.count_equal(20) == 1);
-    CHECK(tree.count_equal(25) == 0);
-    CHECK(tree.count_equal(30) == 3);
-    CHECK(tree.count_equal(35) == 0);
-    CHECK(tree.count_equal(40) == 1);
-    CHECK(tree.count_equal(45) == 0);
-    CHECK(tree.count_equal(50) == 1);
-    CHECK(tree.count_equal(55) == 0);
+    // Unique keys
+    {
+        /*
+         *           (pointer to minumum value, i.e. 10)
+         *           |
+         *           H (header)
+         *          /
+         *        40
+         *       /  \
+         *     20    50
+         *    /  \
+         *  10    30
+         */
 
-    CHECK(cref.count_equal( 5) == 0);
-    CHECK(cref.count_equal(10) == 1);
-    CHECK(cref.count_equal(15) == 0);
-    CHECK(cref.count_equal(20) == 1);
-    CHECK(cref.count_equal(25) == 0);
-    CHECK(cref.count_equal(30) == 3);
-    CHECK(cref.count_equal(35) == 0);
-    CHECK(cref.count_equal(40) == 1);
-    CHECK(cref.count_equal(45) == 0);
-    CHECK(cref.count_equal(50) == 1);
-    CHECK(cref.count_equal(55) == 0);
+        using key_type = int;
+        using value_type = std::pair<int, int>;
+        using key_of_value = sfl::dtl::first;
+        using key_compare = std::less<int>;
+        using allocator_type = TPARAM_ALLOCATOR<value_type>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using node_type = typename tree_type::node_type;
 
-    ///////////////////////////////////////////////////////////////////////////
+        tree_type tree;
+        node_type n10, n20, n30, n40, n50;
 
-    CHECK(tree.contains( 5) == false);
-    CHECK(tree.contains(10) == true);
-    CHECK(tree.contains(15) == false);
-    CHECK(tree.contains(20) == true);
-    CHECK(tree.contains(25) == false);
-    CHECK(tree.contains(30) == true);
-    CHECK(tree.contains(35) == false);
-    CHECK(tree.contains(40) == true);
-    CHECK(tree.contains(45) == false);
-    CHECK(tree.contains(50) == true);
-    CHECK(tree.contains(55) == false);
+        tree.data_.root() = &n40;
+        tree.data_.minimum() = &n10;
+        tree.data_.size_ = 7;
 
-    CHECK(cref.contains( 5) == false);
-    CHECK(cref.contains(10) == true);
-    CHECK(cref.contains(15) == false);
-    CHECK(cref.contains(20) == true);
-    CHECK(cref.contains(25) == false);
-    CHECK(cref.contains(30) == true);
-    CHECK(cref.contains(35) == false);
-    CHECK(cref.contains(40) == true);
-    CHECK(cref.contains(45) == false);
-    CHECK(cref.contains(50) == true);
-    CHECK(cref.contains(55) == false);
+        n10.left_ = nullptr; n10.right_ = nullptr; n10.parent_ = &n20;
+        n20.left_ = &n10;    n20.right_ = &n30;    n20.parent_ = &n40;
+        n30.left_ = nullptr; n30.right_ = nullptr; n30.parent_ = &n20;
+        n40.left_ = &n20;    n40.right_ = &n50;    n40.parent_ = tree.data_.header();
+        n50.left_ = nullptr; n50.right_ = nullptr; n50.parent_ = &n40;
 
-    ///////////////////////////////////////////////////////////////////////////
+        n10.value_.ref() = value_type(10, 1);
+        n20.value_.ref() = value_type(20, 1);
+        n30.value_.ref() = value_type(30, 1);
+        n40.value_.ref() = value_type(40, 1);
+        n50.value_.ref() = value_type(50, 1);
 
-    tree.data_.reset();
+        for (const auto x : {10, 20, 30, 40, 50})
+        {
+            // Check lower_bound, upper_bound and equal_range
+            {
+                auto it1 = tree.lower_bound(x);
+                auto it2 = tree.upper_bound(x);
+
+                CHECK(std::distance(it1, it2) == 1);
+
+                auto er = tree.equal_range(x);
+
+                CHECK(er.first == it1);
+                CHECK(er.second == it2);
+
+                while (it1 != it2)
+                {
+                    CHECK(it1->first == x);
+                    ++it1;
+                }
+            }
+
+            // Check find
+            {
+                auto it = tree.find(x);
+                CHECK(it != tree.end());
+                CHECK(it->first == x);
+            }
+
+            // Check count
+            CHECK(tree.count_unique(x) == 1);
+
+            // Check contains
+            CHECK(tree.contains(x) == true);
+        }
+
+        for (const auto x : {5, 15, 25, 35, 45, 55})
+        {
+            // Check lower_bound, upper_bound and equal_range
+            {
+                auto it1 = tree.lower_bound(x);
+                auto it2 = tree.upper_bound(x);
+
+                CHECK(std::distance(it1, it2) == 0);
+
+                auto er = tree.equal_range(x);
+
+                CHECK(std::distance(er.first, er.second) == 0);
+            }
+
+            // Check find
+            {
+                auto it = tree.find(x);
+                CHECK(it == tree.end());
+            }
+
+            // Check count
+            CHECK(tree.count_unique(x) == 0);
+
+            // Check contains
+            CHECK(tree.contains(x) == false);
+        }
+
+        tree.data_.reset();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
