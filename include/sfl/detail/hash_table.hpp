@@ -2175,7 +2175,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    std::pair<iterator, iterator> equal_range(const K& k) noexcept
+    std::pair<iterator, iterator> equal_range(const K& k)
     {
         base_node_pointer x = find_node(k).pos;
         base_node_pointer y = x;
@@ -2198,7 +2198,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    std::pair<const_iterator, const_iterator> equal_range(const K& k) const noexcept
+    std::pair<const_iterator, const_iterator> equal_range(const K& k) const
     {
         base_node_pointer x = find_node(k).pos;
         base_node_pointer y = x;
@@ -2221,21 +2221,21 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    iterator find(const K& k) noexcept
+    iterator find(const K& k)
     {
         return iterator(find_node(k).pos);
     }
 
     template <typename K>
     SFL_NODISCARD
-    const_iterator find(const K& k) const noexcept
+    const_iterator find(const K& k) const
     {
         return const_iterator(find_node(k).pos);
     }
 
     template <typename K>
     SFL_NODISCARD
-    size_type count(const K& k) const noexcept
+    size_type count(const K& k) const
     {
         const auto er = equal_range(k);
         return std::distance(er.first, er.second);
@@ -2243,7 +2243,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    bool contains(const K& k) const noexcept
+    bool contains(const K& k) const
     {
         return find_node(k).pos != nullptr;
     }
