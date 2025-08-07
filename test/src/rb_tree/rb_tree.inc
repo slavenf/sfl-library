@@ -2743,29 +2743,29 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    CHECK(tree.count( 5) == 0);
-    CHECK(tree.count(10) == 1);
-    CHECK(tree.count(15) == 0);
-    CHECK(tree.count(20) == 1);
-    CHECK(tree.count(25) == 0);
-    CHECK(tree.count(30) == 3);
-    CHECK(tree.count(35) == 0);
-    CHECK(tree.count(40) == 1);
-    CHECK(tree.count(45) == 0);
-    CHECK(tree.count(50) == 1);
-    CHECK(tree.count(55) == 0);
+    CHECK(tree.count_equal( 5) == 0);
+    CHECK(tree.count_equal(10) == 1);
+    CHECK(tree.count_equal(15) == 0);
+    CHECK(tree.count_equal(20) == 1);
+    CHECK(tree.count_equal(25) == 0);
+    CHECK(tree.count_equal(30) == 3);
+    CHECK(tree.count_equal(35) == 0);
+    CHECK(tree.count_equal(40) == 1);
+    CHECK(tree.count_equal(45) == 0);
+    CHECK(tree.count_equal(50) == 1);
+    CHECK(tree.count_equal(55) == 0);
 
-    CHECK(cref.count( 5) == 0);
-    CHECK(cref.count(10) == 1);
-    CHECK(cref.count(15) == 0);
-    CHECK(cref.count(20) == 1);
-    CHECK(cref.count(25) == 0);
-    CHECK(cref.count(30) == 3);
-    CHECK(cref.count(35) == 0);
-    CHECK(cref.count(40) == 1);
-    CHECK(cref.count(45) == 0);
-    CHECK(cref.count(50) == 1);
-    CHECK(cref.count(55) == 0);
+    CHECK(cref.count_equal( 5) == 0);
+    CHECK(cref.count_equal(10) == 1);
+    CHECK(cref.count_equal(15) == 0);
+    CHECK(cref.count_equal(20) == 1);
+    CHECK(cref.count_equal(25) == 0);
+    CHECK(cref.count_equal(30) == 3);
+    CHECK(cref.count_equal(35) == 0);
+    CHECK(cref.count_equal(40) == 1);
+    CHECK(cref.count_equal(45) == 0);
+    CHECK(cref.count_equal(50) == 1);
+    CHECK(cref.count_equal(55) == 0);
 
     ///////////////////////////////////////////////////////////////////////////
 

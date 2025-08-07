@@ -1213,10 +1213,17 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    size_type count(const K& k) const
+    size_type count_equal(const K& k) const
     {
         const auto er = equal_range(k);
         return std::distance(er.first, er.second);
+    }
+
+    template <typename K>
+    SFL_NODISCARD
+    size_type count_unique(const K& k) const
+    {
+        return find(k) != end() ? 1 : 0;
     }
 
     template <typename K>

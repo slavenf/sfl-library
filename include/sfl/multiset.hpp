@@ -623,7 +623,7 @@ public:
     SFL_NODISCARD
     size_type count(const Key& key) const
     {
-        return tree_.count(key);
+        return tree_.count_equal(key);
     }
 
     template <typename K,
@@ -631,7 +631,7 @@ public:
     SFL_NODISCARD
     size_type count(const K& x) const
     {
-        return tree_.count(x);
+        return tree_.count_equal(x);
     }
 
     SFL_NODISCARD
