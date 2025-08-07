@@ -975,7 +975,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    iterator lower_bound(const K& k) noexcept
+    iterator lower_bound(const K& k)
     {
         base_node_pointer x = data_.root();
         base_node_pointer y = data_.header();
@@ -998,7 +998,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    const_iterator lower_bound(const K& k) const noexcept
+    const_iterator lower_bound(const K& k) const
     {
         base_node_pointer x = data_.root();
         base_node_pointer y = data_.header();
@@ -1021,7 +1021,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    iterator upper_bound(const K& k) noexcept
+    iterator upper_bound(const K& k)
     {
         base_node_pointer x = data_.root();
         base_node_pointer y = data_.header();
@@ -1044,7 +1044,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    const_iterator upper_bound(const K& k) const noexcept
+    const_iterator upper_bound(const K& k) const
     {
         base_node_pointer x = data_.root();
         base_node_pointer y = data_.header();
@@ -1067,7 +1067,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    std::pair<iterator, iterator> equal_range(const K& k) noexcept
+    std::pair<iterator, iterator> equal_range(const K& k)
     {
         base_node_pointer x = data_.root();
         base_node_pointer y = data_.header();
@@ -1126,7 +1126,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    std::pair<const_iterator, const_iterator> equal_range(const K& k) const noexcept
+    std::pair<const_iterator, const_iterator> equal_range(const K& k) const
     {
         base_node_pointer x = data_.root();
         base_node_pointer y = data_.header();
@@ -1185,7 +1185,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    iterator find(const K& k) noexcept
+    iterator find(const K& k)
     {
         auto it = lower_bound(k);
 
@@ -1199,7 +1199,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    const_iterator find(const K& k) const noexcept
+    const_iterator find(const K& k) const
     {
         auto it = lower_bound(k);
 
@@ -1213,7 +1213,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    size_type count(const K& k) const noexcept
+    size_type count(const K& k) const
     {
         const auto er = equal_range(k);
         return std::distance(er.first, er.second);
@@ -1221,7 +1221,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
-    bool contains(const K& k) const noexcept
+    bool contains(const K& k) const
     {
         return find(k) != end();
     }
