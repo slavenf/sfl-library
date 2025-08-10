@@ -110,8 +110,7 @@ private:
         node_allocator_type,
         bucket_allocator_type,
         bucket_count_policy,
-        max_load_policy,
-        small_unordered_multimap
+        max_load_policy
     >;
 
     hash_table hash_table_;
@@ -431,7 +430,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return allocator_type(hash_table_.data_.ref_to_node_alloc());
+        return allocator_type(hash_table_.ref_to_node_alloc());
     }
 
     //
@@ -441,7 +440,7 @@ public:
     SFL_NODISCARD
     hasher hash_function() const
     {
-        return hasher(hash_table_.data_.ref_to_key_hash());
+        return hasher(hash_table_.ref_to_key_hash());
     }
 
     //
@@ -451,7 +450,7 @@ public:
     SFL_NODISCARD
     key_equal key_eq() const
     {
-        return key_equal(hash_table_.data_.ref_to_key_equal());
+        return key_equal(hash_table_.ref_to_key_equal());
     }
 
     //

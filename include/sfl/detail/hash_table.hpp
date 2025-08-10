@@ -966,16 +966,13 @@ template < typename Key,
            typename NodeAllocator,
            typename BucketAllocator,
            typename BucketCountPolicy,
-           typename MaxLoadPolicy,
-           typename UpperLevelContainer >
+           typename MaxLoadPolicy >
 class hash_table
 {
     #ifdef SFL_TEST_HASH_TABLE
     template <int>
     friend void ::test_hash_table();
     #endif
-
-    friend UpperLevelContainer;
 
 public:
 
@@ -1027,8 +1024,6 @@ public:
         #endif
 
         friend class hash_table;
-
-        friend UpperLevelContainer;
 
     public:
 
@@ -1112,8 +1107,6 @@ public:
         #endif
 
         friend class hash_table;
-
-        friend UpperLevelContainer;
 
     public:
 
@@ -1202,8 +1195,6 @@ public:
         #endif
 
         friend class hash_table;
-
-        friend UpperLevelContainer;
 
     public:
 
@@ -1300,8 +1291,6 @@ public:
         #endif
 
         friend class hash_table;
-
-        friend UpperLevelContainer;
 
     public:
 
@@ -1768,6 +1757,54 @@ public:
             insert_unique(*first, make_node);
             ++first;
         }
+    }
+
+    //
+    // ---- KEY HASH ----------------------------------------------------------
+    //
+
+    SFL_NODISCARD
+    key_hash& ref_to_key_hash() noexcept
+    {
+        return data_.ref_to_key_hash();
+    }
+
+    SFL_NODISCARD
+    const key_hash& ref_to_key_hash() const noexcept
+    {
+        return data_.ref_to_key_hash();
+    }
+
+    //
+    // ---- KEY EQUAL ---------------------------------------------------------
+    //
+
+    SFL_NODISCARD
+    key_equal& ref_to_key_equal() noexcept
+    {
+        return data_.ref_to_key_equal();
+    }
+
+    SFL_NODISCARD
+    const key_equal& ref_to_key_equal() const noexcept
+    {
+        return data_.ref_to_key_equal();
+    }
+
+    //
+    // ---- ALLOCATOR ---------------------------------------------------------
+    //
+
+    SFL_NODISCARD
+    node_allocator_type& ref_to_node_alloc() noexcept
+    {
+        return data_.ref_to_node_alloc();
+    }
+
+    SFL_NODISCARD
+    const node_allocator_type& ref_to_node_alloc() const noexcept
+    {
+        return data_.ref_to_node_alloc();
     }
 
     //
@@ -4043,23 +4080,23 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6, typename TP7, typename TP8, typename TP9, typename TP10>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6, typename TP7, typename TP8, typename TP9>
 SFL_NODISCARD
 bool operator==
 (
-    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TP10>& x,
-    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TP10>& y
+    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9>& x,
+    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9>& y
 )
 {
     return x.size() == y.size() && std::is_permutation(x.begin(), x.end(), y.begin());
 }
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6, typename TP7, typename TP8, typename TP9, typename TP10>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6, typename TP7, typename TP8, typename TP9>
 SFL_NODISCARD
 bool operator!=
 (
-    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TP10>& x,
-    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9, TP10>& y
+    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9>& x,
+    const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9>& y
 )
 {
     return !(x == y);
