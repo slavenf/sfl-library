@@ -169,16 +169,16 @@
     <AlternativeType Name="sfl::small_flat_multimap&lt;*,*,*,*,*&gt;" />
     <AlternativeType Name="sfl::small_unordered_linear_map&lt;*,*,*,*&gt;" />
     <AlternativeType Name="sfl::small_unordered_linear_multimap&lt;*,*,*,*,*&gt;" />
-    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <Intrinsic Name="size" Expression="impl_.data_.last_ - impl_.data_.first_" />
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
       <Item Name="[size]" ExcludeView="simple">size()</Item>
-      <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
+      <Item Name="[capacity]" ExcludeView="simple">impl_.data_.eos_ - impl_.data_.first_</Item>
       <CustomListItems>
         <Variable Name="i" InitialValue="0" />
         <Size>size()</Size>
         <Loop>
-          <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+          <Item Name="[{impl_.data_.first_[i].first}]">impl_.data_.first_[i].second</Item>
           <Exec>i++</Exec>
         </Loop>
       </CustomListItems>
@@ -189,8 +189,8 @@
     <AlternativeType Name="sfl::static_flat_multimap&lt;*,*,*,*&gt;" />
     <AlternativeType Name="sfl::static_unordered_linear_map&lt;*,*,*,*&gt;" />
     <AlternativeType Name="sfl::static_unordered_linear_multimap&lt;*,*,*,*&gt;" />
-    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
-    <DisplayString>{{ size={data_.last_ - data_.first_} }}</DisplayString>
+    <Intrinsic Name="size" Expression="impl_.data_.last_ - impl_.data_.first_" />
+    <DisplayString>{{ size={impl_.data_.last_ - impl_.data_.first_} }}</DisplayString>
     <Expand>
       <Item Name="[size]" ExcludeView="simple">size()</Item>
       <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
@@ -198,7 +198,7 @@
         <Variable Name="i" InitialValue="0" />
         <Size>size()</Size>
         <Loop>
-          <Item Name="[{data_.first_[i].first}]">data_.first_[i].second</Item>
+          <Item Name="[{impl_.data_.first_[i].first}]">impl_.data_.first_[i].second</Item>
           <Exec>i++</Exec>
         </Loop>
       </CustomListItems>
@@ -459,14 +459,14 @@
   <Type Name="sfl::small_flat_set&lt;*,*,*,*&gt;">
     <AlternativeType Name="sfl::small_unordered_linear_set&lt;*,*,*,*&gt;" />
     <AlternativeType Name="sfl::small_unordered_linear_multiset&lt;*,*,*,*&gt;" />
-    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <Intrinsic Name="size" Expression="impl_.data_.last_ - impl_.data_.first_" />
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
       <Item Name="[size]" ExcludeView="simple">size()</Item>
-      <Item Name="[capacity]" ExcludeView="simple">data_.eos_ - data_.first_</Item>
+      <Item Name="[capacity]" ExcludeView="simple">impl_.data_.eos_ - impl_.data_.first_</Item>
       <ArrayItems>
         <Size>size()</Size>
-        <ValuePointer>data_.first_</ValuePointer>
+        <ValuePointer>impl_.data_.first_</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -475,14 +475,14 @@
     <AlternativeType Name="sfl::static_flat_multiset&lt;*,*,*&gt;" />
     <AlternativeType Name="sfl::static_unordered_linear_multiset&lt;*,*,*&gt;" />
     <AlternativeType Name="sfl::static_unordered_linear_set&lt;*,*,*&gt;" />
-    <Intrinsic Name="size" Expression="data_.last_ - data_.first_" />
+    <Intrinsic Name="size" Expression="impl_.data_.last_ - impl_.data_.first_" />
     <DisplayString>{{ size={size()} }}</DisplayString>
     <Expand>
       <Item Name="[size]" ExcludeView="simple">size()</Item>
       <Item Name="[capacity]" ExcludeView="simple">static_capacity</Item>
       <ArrayItems>
         <Size>size()</Size>
-        <ValuePointer>data_.first_</ValuePointer>
+        <ValuePointer>impl_.data_.first_</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
