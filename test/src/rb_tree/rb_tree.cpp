@@ -12,6 +12,7 @@
 #include "sfl/detail/functional/identity.hpp"
 
 #include "check.hpp"
+#include "count_kv.hpp"
 #include "nth.hpp"
 #include "print.hpp"
 

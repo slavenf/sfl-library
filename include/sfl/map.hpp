@@ -624,14 +624,14 @@ public:
 
     size_type erase(const Key& key)
     {
-        return tree_.erase_key(key);
+        return tree_.erase_key_unique(key);
     }
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     size_type erase(K&& x)
     {
-        return tree_.erase_key(x);
+        return tree_.erase_key_unique(x);
     }
 
     void swap(map& other)

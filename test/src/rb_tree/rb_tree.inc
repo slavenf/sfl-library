@@ -3992,103 +3992,144 @@ PRINT("Test erase(const_iterator, const_iterator)");
     }
 }
 
-PRINT("Test erase(const K&)");
+PRINT("Test erase_key_equal(const K&)");
 {
-    {
-        sfl::dtl::rb_tree<xint, xint, sfl::dtl::identity, std::less<xint>, TPARAM_ALLOCATOR<xint>, void> tree;
+    using key_type = xint;
+    using value_type = std::pair<xint, xint>;
+    using key_of_value = sfl::dtl::first;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using rb_tree = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
 
-        CHECK(tree.empty() == true);
-        CHECK(tree.size() == 0);
-        CHECK(tree.max_size() > 0);
+    rb_tree tree;
 
-        tree.emplace_equal(10);
-        tree.emplace_equal(20);
-        tree.emplace_equal(20);
-        tree.emplace_equal(30);
-        tree.emplace_equal(30);
-        tree.emplace_equal(30);
+    tree.emplace_equal(10, 1);
+    tree.emplace_equal(20, 2);
+    tree.emplace_equal(20, 3);
+    tree.emplace_equal(30, 4);
+    tree.emplace_equal(30, 5);
+    tree.emplace_equal(30, 6);
 
-        CHECK(tree.size() == 6);
-        CHECK(*NTH(tree, 0) == 10);
-        CHECK(*NTH(tree, 1) == 20);
-        CHECK(*NTH(tree, 2) == 20);
-        CHECK(*NTH(tree, 3) == 30);
-        CHECK(*NTH(tree, 4) == 30);
-        CHECK(*NTH(tree, 5) == 30);
+    CHECK(tree.size() == 6);
+    CHECK(COUNT_KV(tree, 10, 1) == 1);
+    CHECK(COUNT_KV(tree, 20, 2) == 1);
+    CHECK(COUNT_KV(tree, 20, 3) == 1);
+    CHECK(COUNT_KV(tree, 30, 4) == 1);
+    CHECK(COUNT_KV(tree, 30, 5) == 1);
+    CHECK(COUNT_KV(tree, 30, 6) == 1);
+    CHECK(tree.verify());
 
-        {
-            CHECK(tree.erase_key(10) == 1);
-            CHECK(tree.erase_key(10) == 0);
-            CHECK(tree.size() == 5);
-            CHECK(*NTH(tree, 0) == 20);
-            CHECK(*NTH(tree, 1) == 20);
-            CHECK(*NTH(tree, 2) == 30);
-            CHECK(*NTH(tree, 3) == 30);
-            CHECK(*NTH(tree, 4) == 30);
-        }
+    ///////////////////////////////////////////////////////////////////////////
 
-        {
-            CHECK(tree.erase_key(30) == 3);
-            CHECK(tree.erase_key(30) == 0);
-            CHECK(tree.size() == 2);
-            CHECK(*NTH(tree, 0) == 20);
-            CHECK(*NTH(tree, 1) == 20);
-        }
+    CHECK(tree.erase_key_equal(30) == 3);
+    CHECK(tree.erase_key_equal(30) == 0);
 
-        {
-            CHECK(tree.erase_key(20) == 2);
-            CHECK(tree.erase_key(20) == 0);
-            CHECK(tree.size() == 0);
-        }
-    }
+    CHECK(tree.size() == 3);
+    CHECK(COUNT_KV(tree, 10, 1) == 1);
+    CHECK(COUNT_KV(tree, 20, 2) == 1);
+    CHECK(COUNT_KV(tree, 20, 3) == 1);
+    CHECK(COUNT_KV(tree, 30, 4) == 0);
+    CHECK(COUNT_KV(tree, 30, 5) == 0);
+    CHECK(COUNT_KV(tree, 30, 6) == 0);
+    CHECK(tree.verify());
 
-    {
-        sfl::dtl::rb_tree<xint, std::pair<const xint, xint>, sfl::dtl::first, std::less<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>, void> tree;
+    ///////////////////////////////////////////////////////////////////////////
 
-        CHECK(tree.empty() == true);
-        CHECK(tree.size() == 0);
-        CHECK(tree.max_size() > 0);
+    CHECK(tree.erase_key_equal(20) == 2);
+    CHECK(tree.erase_key_equal(20) == 0);
 
-        tree.emplace_equal(10, 1);
-        tree.emplace_equal(20, 1);
-        tree.emplace_equal(20, 1);
-        tree.emplace_equal(30, 1);
-        tree.emplace_equal(30, 1);
-        tree.emplace_equal(30, 1);
+    CHECK(tree.size() == 1);
+    CHECK(COUNT_KV(tree, 10, 1) == 1);
+    CHECK(COUNT_KV(tree, 20, 2) == 0);
+    CHECK(COUNT_KV(tree, 20, 3) == 0);
+    CHECK(COUNT_KV(tree, 30, 4) == 0);
+    CHECK(COUNT_KV(tree, 30, 5) == 0);
+    CHECK(COUNT_KV(tree, 30, 6) == 0);
+    CHECK(tree.verify());
 
-        CHECK(tree.size() == 6);
-        CHECK(NTH(tree, 0)->first == 10); CHECK(NTH(tree, 0)->second == 1);
-        CHECK(NTH(tree, 1)->first == 20); CHECK(NTH(tree, 1)->second == 1);
-        CHECK(NTH(tree, 2)->first == 20); CHECK(NTH(tree, 2)->second == 1);
-        CHECK(NTH(tree, 3)->first == 30); CHECK(NTH(tree, 3)->second == 1);
-        CHECK(NTH(tree, 4)->first == 30); CHECK(NTH(tree, 4)->second == 1);
-        CHECK(NTH(tree, 5)->first == 30); CHECK(NTH(tree, 5)->second == 1);
+    ///////////////////////////////////////////////////////////////////////////
 
-        {
-            CHECK(tree.erase_key(10) == 1);
-            CHECK(tree.erase_key(10) == 0);
-            CHECK(tree.size() == 5);
-            CHECK(NTH(tree, 0)->first == 20); CHECK(NTH(tree, 0)->second == 1);
-            CHECK(NTH(tree, 1)->first == 20); CHECK(NTH(tree, 1)->second == 1);
-            CHECK(NTH(tree, 2)->first == 30); CHECK(NTH(tree, 2)->second == 1);
-            CHECK(NTH(tree, 3)->first == 30); CHECK(NTH(tree, 3)->second == 1);
-            CHECK(NTH(tree, 4)->first == 30); CHECK(NTH(tree, 4)->second == 1);
-        }
+    CHECK(tree.erase_key_equal(10) == 1);
+    CHECK(tree.erase_key_equal(10) == 0);
 
-        {
-            CHECK(tree.erase_key(30) == 3);
-            CHECK(tree.erase_key(30) == 0);
-            CHECK(tree.size() == 2);
-            CHECK(NTH(tree, 0)->first == 20); CHECK(NTH(tree, 0)->second == 1);
-            CHECK(NTH(tree, 1)->first == 20); CHECK(NTH(tree, 1)->second == 1);
-        }
+    CHECK(tree.size() == 0);
+    CHECK(COUNT_KV(tree, 10, 1) == 0);
+    CHECK(COUNT_KV(tree, 20, 2) == 0);
+    CHECK(COUNT_KV(tree, 20, 3) == 0);
+    CHECK(COUNT_KV(tree, 30, 4) == 0);
+    CHECK(COUNT_KV(tree, 30, 5) == 0);
+    CHECK(COUNT_KV(tree, 30, 6) == 0);
+    CHECK(tree.verify());
+}
 
-        {
-            CHECK(tree.erase_key(20) == 2);
-            CHECK(tree.erase_key(20) == 0);
-            CHECK(tree.size() == 0);
-        }
-    }
+PRINT("Test erase_key_unique(const K&)");
+{
+    using key_type = xint;
+    using value_type = std::pair<xint, xint>;
+    using key_of_value = sfl::dtl::first;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using rb_tree = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+
+    rb_tree tree;
+
+    tree.emplace_unique(10, 1);
+    tree.emplace_unique(20, 2);
+    tree.emplace_unique(20, 3);
+    tree.emplace_unique(30, 4);
+    tree.emplace_unique(30, 5);
+    tree.emplace_unique(30, 6);
+
+    CHECK(tree.size() == 3);
+    CHECK(COUNT_KV(tree, 10, 1) == 1);
+    CHECK(COUNT_KV(tree, 20, 2) == 1);
+    CHECK(COUNT_KV(tree, 20, 3) == 0);
+    CHECK(COUNT_KV(tree, 30, 4) == 1);
+    CHECK(COUNT_KV(tree, 30, 5) == 0);
+    CHECK(COUNT_KV(tree, 30, 6) == 0);
+    CHECK(tree.verify());
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    CHECK(tree.erase_key_unique(30) == 1);
+    CHECK(tree.erase_key_unique(30) == 0);
+
+    CHECK(tree.size() == 2);
+    CHECK(COUNT_KV(tree, 10, 1) == 1);
+    CHECK(COUNT_KV(tree, 20, 2) == 1);
+    CHECK(COUNT_KV(tree, 20, 3) == 0);
+    CHECK(COUNT_KV(tree, 30, 4) == 0);
+    CHECK(COUNT_KV(tree, 30, 5) == 0);
+    CHECK(COUNT_KV(tree, 30, 6) == 0);
+    CHECK(tree.verify());
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    CHECK(tree.erase_key_unique(20) == 1);
+    CHECK(tree.erase_key_unique(20) == 0);
+
+    CHECK(tree.size() == 1);
+    CHECK(COUNT_KV(tree, 10, 1) == 1);
+    CHECK(COUNT_KV(tree, 20, 2) == 0);
+    CHECK(COUNT_KV(tree, 20, 3) == 0);
+    CHECK(COUNT_KV(tree, 30, 4) == 0);
+    CHECK(COUNT_KV(tree, 30, 5) == 0);
+    CHECK(COUNT_KV(tree, 30, 6) == 0);
+    CHECK(tree.verify());
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    CHECK(tree.erase_key_unique(10) == 1);
+    CHECK(tree.erase_key_unique(10) == 0);
+
+    CHECK(tree.size() == 0);
+    CHECK(COUNT_KV(tree, 10, 1) == 0);
+    CHECK(COUNT_KV(tree, 20, 2) == 0);
+    CHECK(COUNT_KV(tree, 20, 3) == 0);
+    CHECK(COUNT_KV(tree, 30, 4) == 0);
+    CHECK(COUNT_KV(tree, 30, 5) == 0);
+    CHECK(COUNT_KV(tree, 30, 6) == 0);
+    CHECK(tree.verify());
 }
 
 PRINT("Test swap(container&)");

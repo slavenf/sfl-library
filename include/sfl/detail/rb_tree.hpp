@@ -946,12 +946,28 @@ public:
     }
 
     template <typename K>
-    size_type erase_key(const K& k)
+    size_type erase_key_equal(const K& k)
     {
         const auto er = equal_range(k);
         const auto sz = std::distance(er.first, er.second);
         erase(er.first, er.second);
         return sz;
+    }
+
+    template <typename K>
+    size_type erase_key_unique(const K& k)
+    {
+        auto it = find(k);
+
+        if (it != end())
+        {
+            erase(it);
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     void swap(rb_tree& other)
@@ -2720,8 +2736,8 @@ private:
         {
             return data_.size_ == 0
                 && begin() == end()
-                && data_.header_.parent_ == std::pointer_traits<base_node_pointer>::pointer_to(data_.header_)
-                && data_.header_.left_ == nullptr;
+                && data_.header()->parent_ == data_.header()
+                && data_.header()->left_ == nullptr;
         }
 
         const std::size_t len = verify_black_count(data_.minimum(), data_.root());
