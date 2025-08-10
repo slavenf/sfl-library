@@ -97,7 +97,7 @@ PRINT("Test emplace_equal(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 1);
+            CHECK(hash_table.count_equal(elem) == 1);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -125,7 +125,7 @@ PRINT("Test emplace_equal(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 2);
+            CHECK(hash_table.count_equal(elem) == 2);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -153,7 +153,7 @@ PRINT("Test emplace_equal(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 2);
+            CHECK(hash_table.count_equal(elem) == 2);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -162,7 +162,7 @@ PRINT("Test emplace_equal(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == 2 * elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 1);
+            CHECK(hash_table.count_equal(100 + elem) == 1);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -191,7 +191,7 @@ PRINT("Test emplace_equal(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 2);
+            CHECK(hash_table.count_equal(elem) == 2);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -200,7 +200,7 @@ PRINT("Test emplace_equal(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == 2 * elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 2);
+            CHECK(hash_table.count_equal(100 + elem) == 2);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -229,7 +229,7 @@ PRINT("Test emplace_equal(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 2);
+            CHECK(hash_table.count_equal(elem) == 2);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -238,7 +238,7 @@ PRINT("Test emplace_equal(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == 2 * elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 2);
+            CHECK(hash_table.count_equal(100 + elem) == 2);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -247,7 +247,7 @@ PRINT("Test emplace_equal(Args&&...)");
             CHECK(std::accumulate(er2.first, er2.second, 0) == 2 * (100 + elem));
 
             CHECK(hash_table.contains(200 + elem));
-            CHECK(hash_table.count(200 + elem) == 1);
+            CHECK(hash_table.count_equal(200 + elem) == 1);
             auto it3 = hash_table.find(200 + elem);
             CHECK(it3 != hash_table.end());
             CHECK(*it3 == 200 + elem);
@@ -277,7 +277,7 @@ PRINT("Test emplace_equal(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 2);
+            CHECK(hash_table.count_equal(elem) == 2);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -286,7 +286,7 @@ PRINT("Test emplace_equal(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == 2 * elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 2);
+            CHECK(hash_table.count_equal(100 + elem) == 2);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -295,7 +295,7 @@ PRINT("Test emplace_equal(Args&&...)");
             CHECK(std::accumulate(er2.first, er2.second, 0) == 2 * (100 + elem));
 
             CHECK(hash_table.contains(200 + elem));
-            CHECK(hash_table.count(200 + elem) == 2);
+            CHECK(hash_table.count_equal(200 + elem) == 2);
             auto it3 = hash_table.find(200 + elem);
             CHECK(it3 != hash_table.end());
             CHECK(*it3 == 200 + elem);
@@ -408,7 +408,7 @@ PRINT("Test emplace_unique(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 1);
+            CHECK(hash_table.count_equal(elem) == 1);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -437,7 +437,7 @@ PRINT("Test emplace_unique(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 1);
+            CHECK(hash_table.count_equal(elem) == 1);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -466,7 +466,7 @@ PRINT("Test emplace_unique(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 1);
+            CHECK(hash_table.count_equal(elem) == 1);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -475,7 +475,7 @@ PRINT("Test emplace_unique(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 1);
+            CHECK(hash_table.count_equal(100 + elem) == 1);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -505,7 +505,7 @@ PRINT("Test emplace_unique(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 1);
+            CHECK(hash_table.count_equal(elem) == 1);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -514,7 +514,7 @@ PRINT("Test emplace_unique(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 1);
+            CHECK(hash_table.count_equal(100 + elem) == 1);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -544,7 +544,7 @@ PRINT("Test emplace_unique(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 1);
+            CHECK(hash_table.count_equal(elem) == 1);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -553,7 +553,7 @@ PRINT("Test emplace_unique(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 1);
+            CHECK(hash_table.count_equal(100 + elem) == 1);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -562,7 +562,7 @@ PRINT("Test emplace_unique(Args&&...)");
             CHECK(std::accumulate(er2.first, er2.second, 0) == 100 + elem);
 
             CHECK(hash_table.contains(200 + elem));
-            CHECK(hash_table.count(200 + elem) == 1);
+            CHECK(hash_table.count_equal(200 + elem) == 1);
             auto it3 = hash_table.find(200 + elem);
             CHECK(it3 != hash_table.end());
             CHECK(*it3 == 200 + elem);
@@ -593,7 +593,7 @@ PRINT("Test emplace_unique(Args&&...)");
         for (auto& elem : row)
         {
             CHECK(hash_table.contains(elem));
-            CHECK(hash_table.count(elem) == 1);
+            CHECK(hash_table.count_equal(elem) == 1);
             auto it1 = hash_table.find(elem);
             CHECK(it1 != hash_table.end());
             CHECK(*it1 == elem);
@@ -602,7 +602,7 @@ PRINT("Test emplace_unique(Args&&...)");
             CHECK(std::accumulate(er1.first, er1.second, 0) == elem);
 
             CHECK(hash_table.contains(100 + elem));
-            CHECK(hash_table.count(100 + elem) == 1);
+            CHECK(hash_table.count_equal(100 + elem) == 1);
             auto it2 = hash_table.find(100 + elem);
             CHECK(it2 != hash_table.end());
             CHECK(*it2 == 100 + elem);
@@ -611,7 +611,7 @@ PRINT("Test emplace_unique(Args&&...)");
             CHECK(std::accumulate(er2.first, er2.second, 0) == 100 + elem);
 
             CHECK(hash_table.contains(200 + elem));
-            CHECK(hash_table.count(200 + elem) == 1);
+            CHECK(hash_table.count_equal(200 + elem) == 1);
             auto it3 = hash_table.find(200 + elem);
             CHECK(it3 != hash_table.end());
             CHECK(*it3 == 200 + elem);
@@ -715,7 +715,7 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
                 // Make sure hash table contains all initial elements
                 for (auto& x : initial_elems)
                 {
-                    CHECK(hash_table.count(x) == 1);
+                    CHECK(hash_table.count_equal(x) == 1);
                 }
 
                 ///////////////////////////////////////////////////////////////
@@ -732,11 +732,11 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
                 {
                     if (x != additional_elem)
                     {
-                        CHECK(hash_table.count(x) == 1);
+                        CHECK(hash_table.count_equal(x) == 1);
                     }
                     else
                     {
-                        CHECK(hash_table.count(x) == 2);
+                        CHECK(hash_table.count_equal(x) == 2);
                     }
                 }
 
@@ -748,11 +748,11 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
                     // If additional elements is not in initial elements
                     if (std::find(b, e, additional_elem) == e)
                     {
-                        CHECK(hash_table.count(additional_elem) == 1);
+                        CHECK(hash_table.count_equal(additional_elem) == 1);
                     }
                     else
                     {
-                        CHECK(hash_table.count(additional_elem) == 2);
+                        CHECK(hash_table.count_equal(additional_elem) == 2);
                     }
                 }
             }
@@ -807,7 +807,7 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
                 // Make sure hash table contains all initial elements
                 for (auto& x : initial_elems)
                 {
-                    CHECK(hash_table.count(x) == 1);
+                    CHECK(hash_table.count_equal(x) == 1);
                 }
 
                 ///////////////////////////////////////////////////////////////
@@ -822,12 +822,12 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
                 // Make sure hash table contains all initial elements
                 for (auto& x : initial_elems)
                 {
-                    CHECK(hash_table.count(x) == 1);
+                    CHECK(hash_table.count_equal(x) == 1);
                 }
 
                 // Make sure hash table contains additional element
                 {
-                    CHECK(hash_table.count(additional_elem) == 1);
+                    CHECK(hash_table.count_equal(additional_elem) == 1);
                 }
             }
         }
@@ -879,7 +879,7 @@ PRINT("Test insert_equal(V&&)");
             // Make sure hash table contains all initial elements
             for (auto& x : initial_elems)
             {
-                CHECK(hash_table.count(x) == 1);
+                CHECK(hash_table.count_equal(x) == 1);
             }
 
             ///////////////////////////////////////////////////////////////////
@@ -895,11 +895,11 @@ PRINT("Test insert_equal(V&&)");
             {
                 if (x != additional_elem)
                 {
-                    CHECK(hash_table.count(x) == 1);
+                    CHECK(hash_table.count_equal(x) == 1);
                 }
                 else
                 {
-                    CHECK(hash_table.count(x) == 2);
+                    CHECK(hash_table.count_equal(x) == 2);
                 }
             }
 
@@ -911,11 +911,11 @@ PRINT("Test insert_equal(V&&)");
                 // If additional elements is not in initial elements
                 if (std::find(b, e, additional_elem) == e)
                 {
-                    CHECK(hash_table.count(additional_elem) == 1);
+                    CHECK(hash_table.count_equal(additional_elem) == 1);
                 }
                 else
                 {
-                    CHECK(hash_table.count(additional_elem) == 2);
+                    CHECK(hash_table.count_equal(additional_elem) == 2);
                 }
             }
         }
@@ -967,7 +967,7 @@ PRINT("Test insert_unique(V&&)");
             // Make sure hash table contains all initial elements
             for (auto& x : initial_elems)
             {
-                CHECK(hash_table.count(x) == 1);
+                CHECK(hash_table.count_equal(x) == 1);
             }
 
             ///////////////////////////////////////////////////////////////////
@@ -984,12 +984,12 @@ PRINT("Test insert_unique(V&&)");
             // Make sure hash table contains all initial elements
             for (auto& x : initial_elems)
             {
-                CHECK(hash_table.count(x) == 1);
+                CHECK(hash_table.count_equal(x) == 1);
             }
 
             // Make sure hash table contains additional element
             {
-                CHECK(hash_table.count(additional_elem) == 1);
+                CHECK(hash_table.count_equal(additional_elem) == 1);
             }
         }
     }
@@ -1042,7 +1042,7 @@ PRINT("Test insert_hint_equal(const_iterator, Args&&...)");
                 // Make sure hash table contains all initial elements
                 for (auto& x : initial_elems)
                 {
-                    CHECK(hash_table.count(x) == 1);
+                    CHECK(hash_table.count_equal(x) == 1);
                 }
 
                 ///////////////////////////////////////////////////////////////
@@ -1059,11 +1059,11 @@ PRINT("Test insert_hint_equal(const_iterator, Args&&...)");
                 {
                     if (x != additional_elem)
                     {
-                        CHECK(hash_table.count(x) == 1);
+                        CHECK(hash_table.count_equal(x) == 1);
                     }
                     else
                     {
-                        CHECK(hash_table.count(x) == 2);
+                        CHECK(hash_table.count_equal(x) == 2);
                     }
                 }
 
@@ -1075,11 +1075,11 @@ PRINT("Test insert_hint_equal(const_iterator, Args&&...)");
                     // If additional elements is not in initial elements
                     if (std::find(b, e, additional_elem) == e)
                     {
-                        CHECK(hash_table.count(additional_elem) == 1);
+                        CHECK(hash_table.count_equal(additional_elem) == 1);
                     }
                     else
                     {
-                        CHECK(hash_table.count(additional_elem) == 2);
+                        CHECK(hash_table.count_equal(additional_elem) == 2);
                     }
                 }
             }
@@ -1134,7 +1134,7 @@ PRINT("Test insert_hint_unique(const_iterator, Args&&...)");
                 // Make sure hash table contains all initial elements
                 for (auto& x : initial_elems)
                 {
-                    CHECK(hash_table.count(x) == 1);
+                    CHECK(hash_table.count_equal(x) == 1);
                 }
 
                 ///////////////////////////////////////////////////////////////
@@ -1149,12 +1149,12 @@ PRINT("Test insert_hint_unique(const_iterator, Args&&...)");
                 // Make sure hash table contains all initial elements
                 for (auto& x : initial_elems)
                 {
-                    CHECK(hash_table.count(x) == 1);
+                    CHECK(hash_table.count_equal(x) == 1);
                 }
 
                 // Make sure hash table contains additional element
                 {
-                    CHECK(hash_table.count(additional_elem) == 1);
+                    CHECK(hash_table.count_equal(additional_elem) == 1);
                 }
             }
         }
@@ -2052,15 +2052,15 @@ PRINT("Test swap(container&)");
         CHECK(hash_table1.size() == 0);
 
         CHECK(hash_table2.size() == 9);
-        CHECK(hash_table2.count(10) == 1);
-        CHECK(hash_table2.count(20) == 1);
-        CHECK(hash_table2.count(30) == 1);
-        CHECK(hash_table2.count(40) == 1);
-        CHECK(hash_table2.count(50) == 1);
-        CHECK(hash_table2.count(60) == 1);
-        CHECK(hash_table2.count(70) == 1);
-        CHECK(hash_table2.count(80) == 1);
-        CHECK(hash_table2.count(90) == 1);
+        CHECK(hash_table2.count_equal(10) == 1);
+        CHECK(hash_table2.count_equal(20) == 1);
+        CHECK(hash_table2.count_equal(30) == 1);
+        CHECK(hash_table2.count_equal(40) == 1);
+        CHECK(hash_table2.count_equal(50) == 1);
+        CHECK(hash_table2.count_equal(60) == 1);
+        CHECK(hash_table2.count_equal(70) == 1);
+        CHECK(hash_table2.count_equal(80) == 1);
+        CHECK(hash_table2.count_equal(90) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2069,15 +2069,15 @@ PRINT("Test swap(container&)");
         hash_table1.swap(hash_table2);
 
         CHECK(hash_table1.size() == 9);
-        CHECK(hash_table1.count(10) == 1);
-        CHECK(hash_table1.count(20) == 1);
-        CHECK(hash_table1.count(30) == 1);
-        CHECK(hash_table1.count(40) == 1);
-        CHECK(hash_table1.count(50) == 1);
-        CHECK(hash_table1.count(60) == 1);
-        CHECK(hash_table1.count(70) == 1);
-        CHECK(hash_table1.count(80) == 1);
-        CHECK(hash_table1.count(90) == 1);
+        CHECK(hash_table1.count_equal(10) == 1);
+        CHECK(hash_table1.count_equal(20) == 1);
+        CHECK(hash_table1.count_equal(30) == 1);
+        CHECK(hash_table1.count_equal(40) == 1);
+        CHECK(hash_table1.count_equal(50) == 1);
+        CHECK(hash_table1.count_equal(60) == 1);
+        CHECK(hash_table1.count_equal(70) == 1);
+        CHECK(hash_table1.count_equal(80) == 1);
+        CHECK(hash_table1.count_equal(90) == 1);
         CHECK(hash_table2.size() == 0);
     }
     #undef CONDITION
@@ -2097,15 +2097,15 @@ PRINT("Test swap(container&)");
         hash_table1.emplace_unique(90);
 
         CHECK(hash_table1.size() == 9);
-        CHECK(hash_table1.count(10) == 1);
-        CHECK(hash_table1.count(20) == 1);
-        CHECK(hash_table1.count(30) == 1);
-        CHECK(hash_table1.count(40) == 1);
-        CHECK(hash_table1.count(50) == 1);
-        CHECK(hash_table1.count(60) == 1);
-        CHECK(hash_table1.count(70) == 1);
-        CHECK(hash_table1.count(80) == 1);
-        CHECK(hash_table1.count(90) == 1);
+        CHECK(hash_table1.count_equal(10) == 1);
+        CHECK(hash_table1.count_equal(20) == 1);
+        CHECK(hash_table1.count_equal(30) == 1);
+        CHECK(hash_table1.count_equal(40) == 1);
+        CHECK(hash_table1.count_equal(50) == 1);
+        CHECK(hash_table1.count_equal(60) == 1);
+        CHECK(hash_table1.count_equal(70) == 1);
+        CHECK(hash_table1.count_equal(80) == 1);
+        CHECK(hash_table1.count_equal(90) == 1);
 
         CHECK(hash_table2.size() == 0);
 
@@ -2117,15 +2117,15 @@ PRINT("Test swap(container&)");
 
         CHECK(hash_table1.size() == 0);
         CHECK(hash_table2.size() == 9);
-        CHECK(hash_table2.count(10) == 1);
-        CHECK(hash_table2.count(20) == 1);
-        CHECK(hash_table2.count(30) == 1);
-        CHECK(hash_table2.count(40) == 1);
-        CHECK(hash_table2.count(50) == 1);
-        CHECK(hash_table2.count(60) == 1);
-        CHECK(hash_table2.count(70) == 1);
-        CHECK(hash_table2.count(80) == 1);
-        CHECK(hash_table2.count(90) == 1);
+        CHECK(hash_table2.count_equal(10) == 1);
+        CHECK(hash_table2.count_equal(20) == 1);
+        CHECK(hash_table2.count_equal(30) == 1);
+        CHECK(hash_table2.count_equal(40) == 1);
+        CHECK(hash_table2.count_equal(50) == 1);
+        CHECK(hash_table2.count_equal(60) == 1);
+        CHECK(hash_table2.count_equal(70) == 1);
+        CHECK(hash_table2.count_equal(80) == 1);
+        CHECK(hash_table2.count_equal(90) == 1);
     }
     #undef CONDITION
 
@@ -2145,17 +2145,17 @@ PRINT("Test swap(container&)");
         hash_table2.emplace_unique(90);
 
         CHECK(hash_table1.size() == 3);
-        CHECK(hash_table1.count(10) == 1);
-        CHECK(hash_table1.count(20) == 1);
-        CHECK(hash_table1.count(30) == 1);
+        CHECK(hash_table1.count_equal(10) == 1);
+        CHECK(hash_table1.count_equal(20) == 1);
+        CHECK(hash_table1.count_equal(30) == 1);
 
         CHECK(hash_table2.size() == 6);
-        CHECK(hash_table2.count(40) == 1);
-        CHECK(hash_table2.count(50) == 1);
-        CHECK(hash_table2.count(60) == 1);
-        CHECK(hash_table2.count(70) == 1);
-        CHECK(hash_table2.count(80) == 1);
-        CHECK(hash_table2.count(90) == 1);
+        CHECK(hash_table2.count_equal(40) == 1);
+        CHECK(hash_table2.count_equal(50) == 1);
+        CHECK(hash_table2.count_equal(60) == 1);
+        CHECK(hash_table2.count_equal(70) == 1);
+        CHECK(hash_table2.count_equal(80) == 1);
+        CHECK(hash_table2.count_equal(90) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2164,17 +2164,17 @@ PRINT("Test swap(container&)");
         hash_table1.swap(hash_table2);
 
         CHECK(hash_table1.size() == 6);
-        CHECK(hash_table1.count(40) == 1);
-        CHECK(hash_table1.count(50) == 1);
-        CHECK(hash_table1.count(60) == 1);
-        CHECK(hash_table1.count(70) == 1);
-        CHECK(hash_table1.count(80) == 1);
-        CHECK(hash_table1.count(90) == 1);
+        CHECK(hash_table1.count_equal(40) == 1);
+        CHECK(hash_table1.count_equal(50) == 1);
+        CHECK(hash_table1.count_equal(60) == 1);
+        CHECK(hash_table1.count_equal(70) == 1);
+        CHECK(hash_table1.count_equal(80) == 1);
+        CHECK(hash_table1.count_equal(90) == 1);
 
         CHECK(hash_table2.size() == 3);
-        CHECK(hash_table2.count(10) == 1);
-        CHECK(hash_table2.count(20) == 1);
-        CHECK(hash_table2.count(30) == 1);
+        CHECK(hash_table2.count_equal(10) == 1);
+        CHECK(hash_table2.count_equal(20) == 1);
+        CHECK(hash_table2.count_equal(30) == 1);
     }
     #undef CONDITION
 
@@ -2193,16 +2193,16 @@ PRINT("Test swap(container&)");
         hash_table2.emplace_unique(80);
 
         CHECK(hash_table1.size() == 4);
-        CHECK(hash_table1.count(10) == 1);
-        CHECK(hash_table1.count(20) == 1);
-        CHECK(hash_table1.count(30) == 1);
-        CHECK(hash_table1.count(40) == 1);
+        CHECK(hash_table1.count_equal(10) == 1);
+        CHECK(hash_table1.count_equal(20) == 1);
+        CHECK(hash_table1.count_equal(30) == 1);
+        CHECK(hash_table1.count_equal(40) == 1);
 
         CHECK(hash_table2.size() == 4);
-        CHECK(hash_table2.count(50) == 1);
-        CHECK(hash_table2.count(60) == 1);
-        CHECK(hash_table2.count(70) == 1);
-        CHECK(hash_table2.count(80) == 1);
+        CHECK(hash_table2.count_equal(50) == 1);
+        CHECK(hash_table2.count_equal(60) == 1);
+        CHECK(hash_table2.count_equal(70) == 1);
+        CHECK(hash_table2.count_equal(80) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2211,16 +2211,16 @@ PRINT("Test swap(container&)");
         hash_table1.swap(hash_table2);
 
         CHECK(hash_table1.size() == 4);
-        CHECK(hash_table1.count(50) == 1);
-        CHECK(hash_table1.count(60) == 1);
-        CHECK(hash_table1.count(70) == 1);
-        CHECK(hash_table1.count(80) == 1);
+        CHECK(hash_table1.count_equal(50) == 1);
+        CHECK(hash_table1.count_equal(60) == 1);
+        CHECK(hash_table1.count_equal(70) == 1);
+        CHECK(hash_table1.count_equal(80) == 1);
 
         CHECK(hash_table2.size() == 4);
-        CHECK(hash_table2.count(10) == 1);
-        CHECK(hash_table2.count(20) == 1);
-        CHECK(hash_table2.count(30) == 1);
-        CHECK(hash_table2.count(40) == 1);
+        CHECK(hash_table2.count_equal(10) == 1);
+        CHECK(hash_table2.count_equal(20) == 1);
+        CHECK(hash_table2.count_equal(30) == 1);
+        CHECK(hash_table2.count_equal(40) == 1);
     }
     #undef CONDITION
 
@@ -2240,17 +2240,17 @@ PRINT("Test swap(container&)");
         hash_table2.emplace_unique(90);
 
         CHECK(hash_table1.size() == 6);
-        CHECK(hash_table1.count(10) == 1);
-        CHECK(hash_table1.count(20) == 1);
-        CHECK(hash_table1.count(30) == 1);
-        CHECK(hash_table1.count(40) == 1);
-        CHECK(hash_table1.count(50) == 1);
-        CHECK(hash_table1.count(60) == 1);
+        CHECK(hash_table1.count_equal(10) == 1);
+        CHECK(hash_table1.count_equal(20) == 1);
+        CHECK(hash_table1.count_equal(30) == 1);
+        CHECK(hash_table1.count_equal(40) == 1);
+        CHECK(hash_table1.count_equal(50) == 1);
+        CHECK(hash_table1.count_equal(60) == 1);
 
         CHECK(hash_table2.size() == 3);
-        CHECK(hash_table2.count(70) == 1);
-        CHECK(hash_table2.count(80) == 1);
-        CHECK(hash_table2.count(90) == 1);
+        CHECK(hash_table2.count_equal(70) == 1);
+        CHECK(hash_table2.count_equal(80) == 1);
+        CHECK(hash_table2.count_equal(90) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2259,17 +2259,17 @@ PRINT("Test swap(container&)");
         hash_table1.swap(hash_table2);
 
         CHECK(hash_table1.size() == 3);
-        CHECK(hash_table1.count(70) == 1);
-        CHECK(hash_table1.count(80) == 1);
-        CHECK(hash_table1.count(90) == 1);
+        CHECK(hash_table1.count_equal(70) == 1);
+        CHECK(hash_table1.count_equal(80) == 1);
+        CHECK(hash_table1.count_equal(90) == 1);
 
         CHECK(hash_table2.size() == 6);
-        CHECK(hash_table2.count(10) == 1);
-        CHECK(hash_table2.count(20) == 1);
-        CHECK(hash_table2.count(30) == 1);
-        CHECK(hash_table2.count(40) == 1);
-        CHECK(hash_table2.count(50) == 1);
-        CHECK(hash_table2.count(60) == 1);
+        CHECK(hash_table2.count_equal(10) == 1);
+        CHECK(hash_table2.count_equal(20) == 1);
+        CHECK(hash_table2.count_equal(30) == 1);
+        CHECK(hash_table2.count_equal(40) == 1);
+        CHECK(hash_table2.count_equal(50) == 1);
+        CHECK(hash_table2.count_equal(60) == 1);
     }
     #undef CONDITION
 }
@@ -2301,7 +2301,7 @@ PRINT("Stress test insert with rehashing");
 
             for (int j = 0; j < i; ++j)
             {
-                CHECK(hash_table.count(j) == 1);
+                CHECK(hash_table.count_equal(j) == 1);
             }
         }
     }
@@ -2329,7 +2329,7 @@ PRINT("Stress test insert with rehashing");
 
             for (int j = 0; j < i; ++j)
             {
-                CHECK(hash_table.count(j) == 1);
+                CHECK(hash_table.count_equal(j) == 1);
             }
         }
     }
@@ -2357,7 +2357,7 @@ PRINT("Stress test insert with rehashing");
 
             for (int j = 0; j < i; ++j)
             {
-                CHECK(hash_table.count(j) == 1);
+                CHECK(hash_table.count_equal(j) == 1);
             }
         }
     }
@@ -2672,23 +2672,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag)");
 
         CHECK(hash_table1.size() == 33);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 4);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 4);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 4);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 4);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 4);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 4);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 4);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 4);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 4);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 4);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 4);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 4);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2696,23 +2696,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag)");
 
         CHECK(hash_table2.size() == 33);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 4);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 4);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 4);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 4);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 4);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 4);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 4);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 4);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 4);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 4);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 4);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 4);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 
     {
@@ -2738,23 +2738,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag)");
 
         CHECK(hash_table1.size() == 15);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 1);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 1);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 1);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 1);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 1);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 1);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 1);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 1);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 1);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 1);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 1);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 1);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2762,23 +2762,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag)");
 
         CHECK(hash_table2.size() == 15);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 1);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 1);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 1);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 1);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 1);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 1);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 1);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 1);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 1);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 1);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 1);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 1);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 }
 
@@ -2867,23 +2867,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         CHECK(hash_table1.size() == 33);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 4);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 4);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 4);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 4);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 4);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 4);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 4);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 4);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 4);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 4);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 4);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 4);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2893,23 +2893,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         CHECK(hash_table2.size() == 33);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 4);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 4);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 4);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 4);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 4);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 4);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 4);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 4);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 4);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 4);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 4);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 4);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 
     {
@@ -2935,23 +2935,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         CHECK(hash_table1.size() == 15);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 1);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 1);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 1);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 1);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 1);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 1);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 1);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 1);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 1);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 1);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 1);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 1);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -2961,23 +2961,23 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         CHECK(hash_table2.size() == 15);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 1);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 1);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 1);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 1);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 1);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 1);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 1);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 1);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 1);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 1);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 1);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 1);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 }
 
@@ -3062,23 +3062,23 @@ PRINT("Test container(container&&)");
 
         CHECK(hash_table1.size() == 33);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 4);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 4);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 4);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 4);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 4);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 4);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 4);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 4);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 4);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 4);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 4);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 4);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -3088,23 +3088,23 @@ PRINT("Test container(container&&)");
         {
             // Elements are moved one-by-one
 
-            CHECK(hash_table1.count(1) == 0);
-            CHECK(hash_table1.count(2) == 0);
-            CHECK(hash_table1.count(3) == 0);
-            CHECK(hash_table1.count(4) == 0);
-            CHECK(hash_table1.count(5) == 0);
+            CHECK(hash_table1.count_equal(1) == 0);
+            CHECK(hash_table1.count_equal(2) == 0);
+            CHECK(hash_table1.count_equal(3) == 0);
+            CHECK(hash_table1.count_equal(4) == 0);
+            CHECK(hash_table1.count_equal(5) == 0);
 
-            CHECK(hash_table1.count(101) == 0);
-            CHECK(hash_table1.count(102) == 0);
-            CHECK(hash_table1.count(103) == 0);
-            CHECK(hash_table1.count(104) == 0);
-            CHECK(hash_table1.count(105) == 0);
+            CHECK(hash_table1.count_equal(101) == 0);
+            CHECK(hash_table1.count_equal(102) == 0);
+            CHECK(hash_table1.count_equal(103) == 0);
+            CHECK(hash_table1.count_equal(104) == 0);
+            CHECK(hash_table1.count_equal(105) == 0);
 
-            CHECK(hash_table1.count(201) == 0);
-            CHECK(hash_table1.count(202) == 0);
-            CHECK(hash_table1.count(203) == 0);
-            CHECK(hash_table1.count(204) == 0);
-            CHECK(hash_table1.count(205) == 0);
+            CHECK(hash_table1.count_equal(201) == 0);
+            CHECK(hash_table1.count_equal(202) == 0);
+            CHECK(hash_table1.count_equal(203) == 0);
+            CHECK(hash_table1.count_equal(204) == 0);
+            CHECK(hash_table1.count_equal(205) == 0);
         }
         else
         {
@@ -3113,23 +3113,23 @@ PRINT("Test container(container&&)");
 
         CHECK(hash_table2.size() == 33);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 4);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 4);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 4);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 4);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 4);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 4);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 4);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 4);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 4);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 4);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 4);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 4);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 
     {
@@ -3155,23 +3155,23 @@ PRINT("Test container(container&&)");
 
         CHECK(hash_table1.size() == 15);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 1);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 1);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 1);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 1);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 1);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 1);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 1);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 1);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 1);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 1);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 1);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 1);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -3181,23 +3181,23 @@ PRINT("Test container(container&&)");
         {
             // Elements are moved one-by-one
 
-            CHECK(hash_table1.count(1) == 0);
-            CHECK(hash_table1.count(2) == 0);
-            CHECK(hash_table1.count(3) == 0);
-            CHECK(hash_table1.count(4) == 0);
-            CHECK(hash_table1.count(5) == 0);
+            CHECK(hash_table1.count_equal(1) == 0);
+            CHECK(hash_table1.count_equal(2) == 0);
+            CHECK(hash_table1.count_equal(3) == 0);
+            CHECK(hash_table1.count_equal(4) == 0);
+            CHECK(hash_table1.count_equal(5) == 0);
 
-            CHECK(hash_table1.count(101) == 0);
-            CHECK(hash_table1.count(102) == 0);
-            CHECK(hash_table1.count(103) == 0);
-            CHECK(hash_table1.count(104) == 0);
-            CHECK(hash_table1.count(105) == 0);
+            CHECK(hash_table1.count_equal(101) == 0);
+            CHECK(hash_table1.count_equal(102) == 0);
+            CHECK(hash_table1.count_equal(103) == 0);
+            CHECK(hash_table1.count_equal(104) == 0);
+            CHECK(hash_table1.count_equal(105) == 0);
 
-            CHECK(hash_table1.count(201) == 0);
-            CHECK(hash_table1.count(202) == 0);
-            CHECK(hash_table1.count(203) == 0);
-            CHECK(hash_table1.count(204) == 0);
-            CHECK(hash_table1.count(205) == 0);
+            CHECK(hash_table1.count_equal(201) == 0);
+            CHECK(hash_table1.count_equal(202) == 0);
+            CHECK(hash_table1.count_equal(203) == 0);
+            CHECK(hash_table1.count_equal(204) == 0);
+            CHECK(hash_table1.count_equal(205) == 0);
         }
         else
         {
@@ -3206,23 +3206,23 @@ PRINT("Test container(container&&)");
 
         CHECK(hash_table2.size() == 15);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 1);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 1);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 1);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 1);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 1);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 1);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 1);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 1);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 1);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 1);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 1);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 1);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 }
 
@@ -3311,23 +3311,23 @@ PRINT("Test container(container&&, const Alloc&)");
 
         CHECK(hash_table1.size() == 33);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 4);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 4);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 4);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 4);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 4);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 4);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 4);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 4);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 4);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 4);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 4);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 4);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -3339,23 +3339,23 @@ PRINT("Test container(container&&, const Alloc&)");
         {
             // Elements are moved one-by-one
 
-            CHECK(hash_table1.count(1) == 0);
-            CHECK(hash_table1.count(2) == 0);
-            CHECK(hash_table1.count(3) == 0);
-            CHECK(hash_table1.count(4) == 0);
-            CHECK(hash_table1.count(5) == 0);
+            CHECK(hash_table1.count_equal(1) == 0);
+            CHECK(hash_table1.count_equal(2) == 0);
+            CHECK(hash_table1.count_equal(3) == 0);
+            CHECK(hash_table1.count_equal(4) == 0);
+            CHECK(hash_table1.count_equal(5) == 0);
 
-            CHECK(hash_table1.count(101) == 0);
-            CHECK(hash_table1.count(102) == 0);
-            CHECK(hash_table1.count(103) == 0);
-            CHECK(hash_table1.count(104) == 0);
-            CHECK(hash_table1.count(105) == 0);
+            CHECK(hash_table1.count_equal(101) == 0);
+            CHECK(hash_table1.count_equal(102) == 0);
+            CHECK(hash_table1.count_equal(103) == 0);
+            CHECK(hash_table1.count_equal(104) == 0);
+            CHECK(hash_table1.count_equal(105) == 0);
 
-            CHECK(hash_table1.count(201) == 0);
-            CHECK(hash_table1.count(202) == 0);
-            CHECK(hash_table1.count(203) == 0);
-            CHECK(hash_table1.count(204) == 0);
-            CHECK(hash_table1.count(205) == 0);
+            CHECK(hash_table1.count_equal(201) == 0);
+            CHECK(hash_table1.count_equal(202) == 0);
+            CHECK(hash_table1.count_equal(203) == 0);
+            CHECK(hash_table1.count_equal(204) == 0);
+            CHECK(hash_table1.count_equal(205) == 0);
         }
         else
         {
@@ -3364,23 +3364,23 @@ PRINT("Test container(container&&, const Alloc&)");
 
         CHECK(hash_table2.size() == 33);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 4);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 4);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 4);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 4);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 4);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 4);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 4);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 4);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 4);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 4);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 4);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 4);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 
     {
@@ -3406,23 +3406,23 @@ PRINT("Test container(container&&, const Alloc&)");
 
         CHECK(hash_table1.size() == 15);
 
-        CHECK(hash_table1.count(1) == 1);
-        CHECK(hash_table1.count(2) == 1);
-        CHECK(hash_table1.count(3) == 1);
-        CHECK(hash_table1.count(4) == 1);
-        CHECK(hash_table1.count(5) == 1);
+        CHECK(hash_table1.count_equal(1) == 1);
+        CHECK(hash_table1.count_equal(2) == 1);
+        CHECK(hash_table1.count_equal(3) == 1);
+        CHECK(hash_table1.count_equal(4) == 1);
+        CHECK(hash_table1.count_equal(5) == 1);
 
-        CHECK(hash_table1.count(101) == 1);
-        CHECK(hash_table1.count(102) == 1);
-        CHECK(hash_table1.count(103) == 1);
-        CHECK(hash_table1.count(104) == 1);
-        CHECK(hash_table1.count(105) == 1);
+        CHECK(hash_table1.count_equal(101) == 1);
+        CHECK(hash_table1.count_equal(102) == 1);
+        CHECK(hash_table1.count_equal(103) == 1);
+        CHECK(hash_table1.count_equal(104) == 1);
+        CHECK(hash_table1.count_equal(105) == 1);
 
-        CHECK(hash_table1.count(201) == 1);
-        CHECK(hash_table1.count(202) == 1);
-        CHECK(hash_table1.count(203) == 1);
-        CHECK(hash_table1.count(204) == 1);
-        CHECK(hash_table1.count(205) == 1);
+        CHECK(hash_table1.count_equal(201) == 1);
+        CHECK(hash_table1.count_equal(202) == 1);
+        CHECK(hash_table1.count_equal(203) == 1);
+        CHECK(hash_table1.count_equal(204) == 1);
+        CHECK(hash_table1.count_equal(205) == 1);
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -3434,23 +3434,23 @@ PRINT("Test container(container&&, const Alloc&)");
         {
             // Elements are moved one-by-one
 
-            CHECK(hash_table1.count(1) == 0);
-            CHECK(hash_table1.count(2) == 0);
-            CHECK(hash_table1.count(3) == 0);
-            CHECK(hash_table1.count(4) == 0);
-            CHECK(hash_table1.count(5) == 0);
+            CHECK(hash_table1.count_equal(1) == 0);
+            CHECK(hash_table1.count_equal(2) == 0);
+            CHECK(hash_table1.count_equal(3) == 0);
+            CHECK(hash_table1.count_equal(4) == 0);
+            CHECK(hash_table1.count_equal(5) == 0);
 
-            CHECK(hash_table1.count(101) == 0);
-            CHECK(hash_table1.count(102) == 0);
-            CHECK(hash_table1.count(103) == 0);
-            CHECK(hash_table1.count(104) == 0);
-            CHECK(hash_table1.count(105) == 0);
+            CHECK(hash_table1.count_equal(101) == 0);
+            CHECK(hash_table1.count_equal(102) == 0);
+            CHECK(hash_table1.count_equal(103) == 0);
+            CHECK(hash_table1.count_equal(104) == 0);
+            CHECK(hash_table1.count_equal(105) == 0);
 
-            CHECK(hash_table1.count(201) == 0);
-            CHECK(hash_table1.count(202) == 0);
-            CHECK(hash_table1.count(203) == 0);
-            CHECK(hash_table1.count(204) == 0);
-            CHECK(hash_table1.count(205) == 0);
+            CHECK(hash_table1.count_equal(201) == 0);
+            CHECK(hash_table1.count_equal(202) == 0);
+            CHECK(hash_table1.count_equal(203) == 0);
+            CHECK(hash_table1.count_equal(204) == 0);
+            CHECK(hash_table1.count_equal(205) == 0);
         }
         else
         {
@@ -3459,23 +3459,23 @@ PRINT("Test container(container&&, const Alloc&)");
 
         CHECK(hash_table2.size() == 15);
 
-        CHECK(hash_table2.count(1) == 1);
-        CHECK(hash_table2.count(2) == 1);
-        CHECK(hash_table2.count(3) == 1);
-        CHECK(hash_table2.count(4) == 1);
-        CHECK(hash_table2.count(5) == 1);
+        CHECK(hash_table2.count_equal(1) == 1);
+        CHECK(hash_table2.count_equal(2) == 1);
+        CHECK(hash_table2.count_equal(3) == 1);
+        CHECK(hash_table2.count_equal(4) == 1);
+        CHECK(hash_table2.count_equal(5) == 1);
 
-        CHECK(hash_table2.count(101) == 1);
-        CHECK(hash_table2.count(102) == 1);
-        CHECK(hash_table2.count(103) == 1);
-        CHECK(hash_table2.count(104) == 1);
-        CHECK(hash_table2.count(105) == 1);
+        CHECK(hash_table2.count_equal(101) == 1);
+        CHECK(hash_table2.count_equal(102) == 1);
+        CHECK(hash_table2.count_equal(103) == 1);
+        CHECK(hash_table2.count_equal(104) == 1);
+        CHECK(hash_table2.count_equal(105) == 1);
 
-        CHECK(hash_table2.count(201) == 1);
-        CHECK(hash_table2.count(202) == 1);
-        CHECK(hash_table2.count(203) == 1);
-        CHECK(hash_table2.count(204) == 1);
-        CHECK(hash_table2.count(205) == 1);
+        CHECK(hash_table2.count_equal(201) == 1);
+        CHECK(hash_table2.count_equal(202) == 1);
+        CHECK(hash_table2.count_equal(203) == 1);
+        CHECK(hash_table2.count_equal(204) == 1);
+        CHECK(hash_table2.count_equal(205) == 1);
     }
 }
 
@@ -3553,14 +3553,14 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_equal(6);
 
             CHECK(hash_table1.size() == 6);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 2);
-            CHECK(hash_table2.count(6) == 3);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 2);
+            CHECK(hash_table2.count_equal(6) == 3);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3569,17 +3569,17 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.assign_copy(hash_table1, sfl::dtl::hash_table_equal_t());
 
             CHECK(hash_table1.size() == 6);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 2);
-            CHECK(hash_table2.count(3) == 3);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 2);
+            CHECK(hash_table2.count_equal(3) == 3);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
         }
 
         {
@@ -3594,14 +3594,14 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_unique(6);
 
             CHECK(hash_table1.size() == 3);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3610,17 +3610,17 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.assign_copy(hash_table1, sfl::dtl::hash_table_unique_t());
 
             CHECK(hash_table1.size() == 3);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 1);
-            CHECK(hash_table2.count(3) == 1);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 1);
+            CHECK(hash_table2.count_equal(3) == 1);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
         }
     }
     #undef CONDITION
@@ -3648,17 +3648,17 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_equal(9);
 
             CHECK(hash_table1.size() == 6);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
 
             CHECK(hash_table2.size() == 9);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 2);
-            CHECK(hash_table2.count(6) == 3);
-            CHECK(hash_table2.count(7) == 1);
-            CHECK(hash_table2.count(8) == 1);
-            CHECK(hash_table2.count(9) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 2);
+            CHECK(hash_table2.count_equal(6) == 3);
+            CHECK(hash_table2.count_equal(7) == 1);
+            CHECK(hash_table2.count_equal(8) == 1);
+            CHECK(hash_table2.count_equal(9) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3667,20 +3667,20 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.assign_copy(hash_table1, sfl::dtl::hash_table_equal_t());
 
             CHECK(hash_table1.size() == 6);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 2);
-            CHECK(hash_table2.count(3) == 3);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
-            CHECK(hash_table2.count(8) == 0);
-            CHECK(hash_table2.count(9) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 2);
+            CHECK(hash_table2.count_equal(3) == 3);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
+            CHECK(hash_table2.count_equal(8) == 0);
+            CHECK(hash_table2.count_equal(9) == 0);
         }
 
         {
@@ -3698,17 +3698,17 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_unique(9);
 
             CHECK(hash_table1.size() == 3);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 1);
-            CHECK(hash_table2.count(7) == 1);
-            CHECK(hash_table2.count(8) == 1);
-            CHECK(hash_table2.count(9) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 1);
+            CHECK(hash_table2.count_equal(7) == 1);
+            CHECK(hash_table2.count_equal(8) == 1);
+            CHECK(hash_table2.count_equal(9) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3717,20 +3717,20 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.assign_copy(hash_table1, sfl::dtl::hash_table_unique_t());
 
             CHECK(hash_table1.size() == 3);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 1);
-            CHECK(hash_table2.count(3) == 1);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
-            CHECK(hash_table2.count(8) == 0);
-            CHECK(hash_table2.count(9) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 1);
+            CHECK(hash_table2.count_equal(3) == 1);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
+            CHECK(hash_table2.count_equal(8) == 0);
+            CHECK(hash_table2.count_equal(9) == 0);
         }
     }
     #undef CONDITION
@@ -3759,15 +3759,15 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_equal(7);
 
             CHECK(hash_table1.size() == 10);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
-            CHECK(hash_table1.count(4) == 4);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
+            CHECK(hash_table1.count_equal(4) == 4);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 2);
-            CHECK(hash_table2.count(7) == 3);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 2);
+            CHECK(hash_table2.count_equal(7) == 3);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3776,19 +3776,19 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.assign_copy(hash_table1, sfl::dtl::hash_table_equal_t());
 
             CHECK(hash_table1.size() == 10);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
-            CHECK(hash_table1.count(4) == 4);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
+            CHECK(hash_table1.count_equal(4) == 4);
 
             CHECK(hash_table2.size() == 10);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 2);
-            CHECK(hash_table2.count(3) == 3);
-            CHECK(hash_table2.count(4) == 4);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 2);
+            CHECK(hash_table2.count_equal(3) == 3);
+            CHECK(hash_table2.count_equal(4) == 4);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
         }
 
         {
@@ -3804,15 +3804,15 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_unique(7);
 
             CHECK(hash_table1.size() == 4);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
-            CHECK(hash_table1.count(4) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
+            CHECK(hash_table1.count_equal(4) == 1);
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 1);
-            CHECK(hash_table2.count(7) == 1);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 1);
+            CHECK(hash_table2.count_equal(7) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3821,19 +3821,19 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
             hash_table2.assign_copy(hash_table1, sfl::dtl::hash_table_unique_t());
 
             CHECK(hash_table1.size() == 4);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
-            CHECK(hash_table1.count(4) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
+            CHECK(hash_table1.count_equal(4) == 1);
 
             CHECK(hash_table2.size() == 4);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 1);
-            CHECK(hash_table2.count(3) == 1);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 1);
+            CHECK(hash_table2.count_equal(3) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
         }
     }
     #undef CONDITION
@@ -3911,14 +3911,14 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_equal(6);
 
             CHECK(hash_table1.size() == 6);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 2);
-            CHECK(hash_table2.count(6) == 3);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 2);
+            CHECK(hash_table2.count_equal(6) == 3);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3929,9 +3929,9 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             if (hash_table1.size() == 6)
             {
                 // Elements are moved one-by-one
-                CHECK(hash_table1.count(1) == 0);
-                CHECK(hash_table1.count(2) == 0);
-                CHECK(hash_table1.count(3) == 0);
+                CHECK(hash_table1.count_equal(1) == 0);
+                CHECK(hash_table1.count_equal(2) == 0);
+                CHECK(hash_table1.count_equal(3) == 0);
             }
             else
             {
@@ -3939,12 +3939,12 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             }
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 2);
-            CHECK(hash_table2.count(3) == 3);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 2);
+            CHECK(hash_table2.count_equal(3) == 3);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
         }
 
         {
@@ -3959,14 +3959,14 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_unique(6);
 
             CHECK(hash_table1.size() == 3);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -3977,9 +3977,9 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             if (hash_table1.size() == 3)
             {
                 // Elements are moved one-by-one
-                CHECK(hash_table1.count(1) == 0);
-                CHECK(hash_table1.count(2) == 0);
-                CHECK(hash_table1.count(3) == 0);
+                CHECK(hash_table1.count_equal(1) == 0);
+                CHECK(hash_table1.count_equal(2) == 0);
+                CHECK(hash_table1.count_equal(3) == 0);
             }
             else
             {
@@ -3987,12 +3987,12 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             }
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 1);
-            CHECK(hash_table2.count(3) == 1);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 1);
+            CHECK(hash_table2.count_equal(3) == 1);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
         }
     }
     #undef CONDITION
@@ -4020,17 +4020,17 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_equal(9);
 
             CHECK(hash_table1.size() == 6);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
 
             CHECK(hash_table2.size() == 9);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 2);
-            CHECK(hash_table2.count(6) == 3);
-            CHECK(hash_table2.count(7) == 1);
-            CHECK(hash_table2.count(8) == 1);
-            CHECK(hash_table2.count(9) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 2);
+            CHECK(hash_table2.count_equal(6) == 3);
+            CHECK(hash_table2.count_equal(7) == 1);
+            CHECK(hash_table2.count_equal(8) == 1);
+            CHECK(hash_table2.count_equal(9) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -4041,9 +4041,9 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             if (hash_table1.size() == 6)
             {
                 // Elements are moved one-by-one
-                CHECK(hash_table1.count(1) == 0);
-                CHECK(hash_table1.count(2) == 0);
-                CHECK(hash_table1.count(3) == 0);
+                CHECK(hash_table1.count_equal(1) == 0);
+                CHECK(hash_table1.count_equal(2) == 0);
+                CHECK(hash_table1.count_equal(3) == 0);
             }
             else
             {
@@ -4051,15 +4051,15 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             }
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 2);
-            CHECK(hash_table2.count(3) == 3);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
-            CHECK(hash_table2.count(8) == 0);
-            CHECK(hash_table2.count(9) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 2);
+            CHECK(hash_table2.count_equal(3) == 3);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
+            CHECK(hash_table2.count_equal(8) == 0);
+            CHECK(hash_table2.count_equal(9) == 0);
         }
 
         {
@@ -4077,17 +4077,17 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_unique(9);
 
             CHECK(hash_table1.size() == 3);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 1);
-            CHECK(hash_table2.count(7) == 1);
-            CHECK(hash_table2.count(8) == 1);
-            CHECK(hash_table2.count(9) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 1);
+            CHECK(hash_table2.count_equal(7) == 1);
+            CHECK(hash_table2.count_equal(8) == 1);
+            CHECK(hash_table2.count_equal(9) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -4098,9 +4098,9 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             if (hash_table1.size() == 3)
             {
                 // Elements are moved one-by-one
-                CHECK(hash_table1.count(1) == 0);
-                CHECK(hash_table1.count(2) == 0);
-                CHECK(hash_table1.count(3) == 0);
+                CHECK(hash_table1.count_equal(1) == 0);
+                CHECK(hash_table1.count_equal(2) == 0);
+                CHECK(hash_table1.count_equal(3) == 0);
             }
             else
             {
@@ -4108,15 +4108,15 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             }
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 1);
-            CHECK(hash_table2.count(3) == 1);
-            CHECK(hash_table2.count(4) == 0);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
-            CHECK(hash_table2.count(8) == 0);
-            CHECK(hash_table2.count(9) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 1);
+            CHECK(hash_table2.count_equal(3) == 1);
+            CHECK(hash_table2.count_equal(4) == 0);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
+            CHECK(hash_table2.count_equal(8) == 0);
+            CHECK(hash_table2.count_equal(9) == 0);
         }
     }
     #undef CONDITION
@@ -4145,15 +4145,15 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_equal(7);
 
             CHECK(hash_table1.size() == 10);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 2);
-            CHECK(hash_table1.count(3) == 3);
-            CHECK(hash_table1.count(4) == 4);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 2);
+            CHECK(hash_table1.count_equal(3) == 3);
+            CHECK(hash_table1.count_equal(4) == 4);
 
             CHECK(hash_table2.size() == 6);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 2);
-            CHECK(hash_table2.count(7) == 3);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 2);
+            CHECK(hash_table2.count_equal(7) == 3);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -4164,10 +4164,10 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             if (hash_table1.size() == 10)
             {
                 // Elements are moved one-by-one
-                CHECK(hash_table1.count(1) == 0);
-                CHECK(hash_table1.count(2) == 0);
-                CHECK(hash_table1.count(3) == 0);
-                CHECK(hash_table1.count(4) == 0);
+                CHECK(hash_table1.count_equal(1) == 0);
+                CHECK(hash_table1.count_equal(2) == 0);
+                CHECK(hash_table1.count_equal(3) == 0);
+                CHECK(hash_table1.count_equal(4) == 0);
             }
             else
             {
@@ -4175,13 +4175,13 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             }
 
             CHECK(hash_table2.size() == 10);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 2);
-            CHECK(hash_table2.count(3) == 3);
-            CHECK(hash_table2.count(4) == 4);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 2);
+            CHECK(hash_table2.count_equal(3) == 3);
+            CHECK(hash_table2.count_equal(4) == 4);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
         }
 
         {
@@ -4197,15 +4197,15 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             hash_table2.emplace_unique(7);
 
             CHECK(hash_table1.size() == 4);
-            CHECK(hash_table1.count(1) == 1);
-            CHECK(hash_table1.count(2) == 1);
-            CHECK(hash_table1.count(3) == 1);
-            CHECK(hash_table1.count(4) == 1);
+            CHECK(hash_table1.count_equal(1) == 1);
+            CHECK(hash_table1.count_equal(2) == 1);
+            CHECK(hash_table1.count_equal(3) == 1);
+            CHECK(hash_table1.count_equal(4) == 1);
 
             CHECK(hash_table2.size() == 3);
-            CHECK(hash_table2.count(5) == 1);
-            CHECK(hash_table2.count(6) == 1);
-            CHECK(hash_table2.count(7) == 1);
+            CHECK(hash_table2.count_equal(5) == 1);
+            CHECK(hash_table2.count_equal(6) == 1);
+            CHECK(hash_table2.count_equal(7) == 1);
 
             ///////////////////////////////////////////////////////////////////
 
@@ -4216,10 +4216,10 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             if (hash_table1.size() == 4)
             {
                 // Elements are moved one-by-one
-                CHECK(hash_table1.count(1) == 0);
-                CHECK(hash_table1.count(2) == 0);
-                CHECK(hash_table1.count(3) == 0);
-                CHECK(hash_table1.count(4) == 0);
+                CHECK(hash_table1.count_equal(1) == 0);
+                CHECK(hash_table1.count_equal(2) == 0);
+                CHECK(hash_table1.count_equal(3) == 0);
+                CHECK(hash_table1.count_equal(4) == 0);
             }
             else
             {
@@ -4227,13 +4227,13 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
             }
 
             CHECK(hash_table2.size() == 4);
-            CHECK(hash_table2.count(1) == 1);
-            CHECK(hash_table2.count(2) == 1);
-            CHECK(hash_table2.count(3) == 1);
-            CHECK(hash_table2.count(4) == 1);
-            CHECK(hash_table2.count(5) == 0);
-            CHECK(hash_table2.count(6) == 0);
-            CHECK(hash_table2.count(7) == 0);
+            CHECK(hash_table2.count_equal(1) == 1);
+            CHECK(hash_table2.count_equal(2) == 1);
+            CHECK(hash_table2.count_equal(3) == 1);
+            CHECK(hash_table2.count_equal(4) == 1);
+            CHECK(hash_table2.count_equal(5) == 0);
+            CHECK(hash_table2.count_equal(6) == 0);
+            CHECK(hash_table2.count_equal(7) == 0);
         }
     }
     #undef CONDITION
@@ -4264,9 +4264,9 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<int> data({40, 50, 60});
 
@@ -4279,12 +4279,12 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.assign_range_equal(data.begin(), data.end());
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
     }
     #undef CONDITION
 
@@ -4300,12 +4300,12 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.emplace_unique(60);
 
         CHECK(hash_table.size() == 6);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
 
         std::vector<int> data({70, 80, 90});
 
@@ -4318,15 +4318,15 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.assign_range_equal(data.begin(), data.end());
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 0);
-        CHECK(hash_table.count(50) == 0);
-        CHECK(hash_table.count(60) == 0);
-        CHECK(hash_table.count(70) == 1);
-        CHECK(hash_table.count(80) == 1);
-        CHECK(hash_table.count(90) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 0);
+        CHECK(hash_table.count_equal(50) == 0);
+        CHECK(hash_table.count_equal(60) == 0);
+        CHECK(hash_table.count_equal(70) == 1);
+        CHECK(hash_table.count_equal(80) == 1);
+        CHECK(hash_table.count_equal(90) == 1);
     }
     #undef CONDITION
 
@@ -4339,9 +4339,9 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<int> data({40, 50, 60, 70, 80, 90});
 
@@ -4354,15 +4354,15 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.assign_range_equal(data.begin(), data.end());
 
         CHECK(hash_table.size() == 6);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
-        CHECK(hash_table.count(70) == 1);
-        CHECK(hash_table.count(80) == 1);
-        CHECK(hash_table.count(90) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
+        CHECK(hash_table.count_equal(70) == 1);
+        CHECK(hash_table.count_equal(80) == 1);
+        CHECK(hash_table.count_equal(90) == 1);
     }
     #undef CONDITION
 
@@ -4375,9 +4375,9 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<int> data({40, 50, 60, 50, 50});
 
@@ -4386,12 +4386,12 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.assign_range_equal(data.begin(), data.end());
 
         CHECK(hash_table.size() == 5);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 3);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 3);
+        CHECK(hash_table.count_equal(60) == 1);
     }
 
     // Move iterator range with duplicates
@@ -4403,9 +4403,9 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<xint> data({40, 50, 60, 50, 50});
 
@@ -4414,12 +4414,12 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         hash_table.assign_range_equal(std::make_move_iterator(data.begin()), std::make_move_iterator(data.end()));
 
         CHECK(hash_table.size() == 5);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 3);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 3);
+        CHECK(hash_table.count_equal(60) == 1);
 
         CHECK(data.size() == 5);
         CHECK(data[0] == -40);
@@ -4455,9 +4455,9 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<int> data({40, 50, 60});
 
@@ -4470,12 +4470,12 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.assign_range_unique(data.begin(), data.end());
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
     }
     #undef CONDITION
 
@@ -4491,12 +4491,12 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.emplace_unique(60);
 
         CHECK(hash_table.size() == 6);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
 
         std::vector<int> data({70, 80, 90});
 
@@ -4509,15 +4509,15 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.assign_range_unique(data.begin(), data.end());
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 0);
-        CHECK(hash_table.count(50) == 0);
-        CHECK(hash_table.count(60) == 0);
-        CHECK(hash_table.count(70) == 1);
-        CHECK(hash_table.count(80) == 1);
-        CHECK(hash_table.count(90) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 0);
+        CHECK(hash_table.count_equal(50) == 0);
+        CHECK(hash_table.count_equal(60) == 0);
+        CHECK(hash_table.count_equal(70) == 1);
+        CHECK(hash_table.count_equal(80) == 1);
+        CHECK(hash_table.count_equal(90) == 1);
     }
     #undef CONDITION
 
@@ -4530,9 +4530,9 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<int> data({40, 50, 60, 70, 80, 90});
 
@@ -4545,15 +4545,15 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.assign_range_unique(data.begin(), data.end());
 
         CHECK(hash_table.size() == 6);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
-        CHECK(hash_table.count(70) == 1);
-        CHECK(hash_table.count(80) == 1);
-        CHECK(hash_table.count(90) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
+        CHECK(hash_table.count_equal(70) == 1);
+        CHECK(hash_table.count_equal(80) == 1);
+        CHECK(hash_table.count_equal(90) == 1);
     }
     #undef CONDITION
 
@@ -4566,9 +4566,9 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<int> data({40, 50, 60, 50, 50});
 
@@ -4577,12 +4577,12 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.assign_range_unique(data.begin(), data.end());
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
     }
 
     // Move iterator range with duplicates
@@ -4594,9 +4594,9 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.emplace_unique(30);
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 1);
-        CHECK(hash_table.count(20) == 1);
-        CHECK(hash_table.count(30) == 1);
+        CHECK(hash_table.count_equal(10) == 1);
+        CHECK(hash_table.count_equal(20) == 1);
+        CHECK(hash_table.count_equal(30) == 1);
 
         std::vector<xint> data({40, 50, 60, 50, 50});
 
@@ -4605,12 +4605,12 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         hash_table.assign_range_unique(std::make_move_iterator(data.begin()), std::make_move_iterator(data.end()));
 
         CHECK(hash_table.size() == 3);
-        CHECK(hash_table.count(10) == 0);
-        CHECK(hash_table.count(20) == 0);
-        CHECK(hash_table.count(30) == 0);
-        CHECK(hash_table.count(40) == 1);
-        CHECK(hash_table.count(50) == 1);
-        CHECK(hash_table.count(60) == 1);
+        CHECK(hash_table.count_equal(10) == 0);
+        CHECK(hash_table.count_equal(20) == 0);
+        CHECK(hash_table.count_equal(30) == 0);
+        CHECK(hash_table.count_equal(40) == 1);
+        CHECK(hash_table.count_equal(50) == 1);
+        CHECK(hash_table.count_equal(60) == 1);
 
         CHECK(data.size() == 5);
         CHECK(data[0] == -40);

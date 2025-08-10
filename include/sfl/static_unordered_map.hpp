@@ -661,7 +661,7 @@ public:
     SFL_NODISCARD
     size_type count(const Key& key) const
     {
-        return hash_table_.count(key);
+        return hash_table_.count_unique(key);
     }
 
     template <typename K,
@@ -670,7 +670,7 @@ public:
     SFL_NODISCARD
     size_type count(const K& x) const
     {
-        return hash_table_.count(x);
+        return hash_table_.count_unique(x);
     }
 
     SFL_NODISCARD
