@@ -102,8 +102,7 @@ template < typename Key,
            typename Value,
            typename KeyOfValue,
            typename KeyCompare,
-           typename Allocator,
-           typename UpperLevelContainer >
+           typename Allocator >
 class rb_tree
 {
     static_assert
@@ -116,8 +115,6 @@ class rb_tree
     template <int>
     friend void ::test_rb_tree();
     #endif
-
-    friend UpperLevelContainer;
 
 public:
 
@@ -156,8 +153,6 @@ public:
         #endif
 
         friend class rb_tree;
-
-        friend UpperLevelContainer;
 
     public:
 
@@ -255,8 +250,6 @@ public:
         #endif
 
         friend class rb_tree;
-
-        friend UpperLevelContainer;
 
     public:
 
@@ -581,6 +574,38 @@ public:
             insert_unique(*first, make_node);
             ++first;
         }
+    }
+
+    //
+    // ---- KEY COMPARE -------------------------------------------------------
+    //
+
+    SFL_NODISCARD
+    key_compare& ref_to_key_compare() noexcept
+    {
+        return data_.ref_to_key_compare();
+    }
+
+    SFL_NODISCARD
+    const key_compare& ref_to_key_compare() const noexcept
+    {
+        return data_.ref_to_key_compare();
+    }
+
+    //
+    // ---- ALLOCATOR ---------------------------------------------------------
+    //
+
+    SFL_NODISCARD
+    node_allocator_type& ref_to_node_alloc() noexcept
+    {
+        return data_.ref_to_node_alloc();
+    }
+
+    SFL_NODISCARD
+    const node_allocator_type& ref_to_node_alloc() const noexcept
+    {
+        return data_.ref_to_node_alloc();
     }
 
     //
@@ -2791,67 +2816,67 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
 bool operator==
 (
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& y
 )
 {
     return x.size() == y.size() && std::equal(x.begin(), x.end(), y.begin());
 }
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
 bool operator!=
 (
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& y
 )
 {
     return !(x == y);
 }
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
 bool operator<
 (
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& y
 )
 {
     return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 }
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
 bool operator>
 (
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& y
 )
 {
     return y < x;
 }
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
 bool operator<=
 (
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& y
 )
 {
     return !(y < x);
 }
 
-template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6>
+template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
 bool operator>=
 (
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& x,
-    const rb_tree<TP1, TP2, TP3, TP4, TP5, TP6>& y
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
+    const rb_tree<TP1, TP2, TP3, TP4, TP5>& y
 )
 {
     return !(x < y);

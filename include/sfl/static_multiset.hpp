@@ -63,8 +63,7 @@ private:
         value_type,
         sfl::dtl::identity,
         key_compare,
-        sfl::dtl::static_node_allocator<value_type, N>,
-        static_multiset
+        sfl::dtl::static_node_allocator<value_type, N>
     >;
 
     tree_type tree_;
@@ -205,7 +204,7 @@ public:
     SFL_NODISCARD
     key_compare key_comp() const
     {
-        return key_compare(tree_.data_.ref_to_key_compare());
+        return key_compare(tree_.ref_to_key_compare());
     }
 
     //
@@ -215,7 +214,7 @@ public:
     SFL_NODISCARD
     value_compare value_comp() const
     {
-        return value_compare(tree_.data_.ref_to_key_compare());
+        return value_compare(tree_.ref_to_key_compare());
     }
 
     //

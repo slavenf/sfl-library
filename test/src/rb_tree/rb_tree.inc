@@ -12,7 +12,7 @@ PRINT("Test PRIVATE make_node and drop_node");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_pointer = typename tree_type::node_pointer;
 
     tree_type tree;
@@ -39,7 +39,7 @@ PRINT("Test PRIVATE underlying implementation [empty tree]");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     tree_type tree;
 
@@ -111,7 +111,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_equal(const K&) [empty tree]")
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     tree_type tree;
 
@@ -128,7 +128,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_unique(const K&) [empty tree]"
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     tree_type tree;
 
@@ -146,7 +146,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     tree_type tree;
 
@@ -163,7 +163,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     tree_type tree;
 
@@ -197,7 +197,7 @@ PRINT("Test PRIVATE underlying implementation [non-empty tree]");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
 
     tree_type tree;
@@ -521,7 +521,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_equal(const K&) [non-empty tre
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
 
     tree_type tree;
@@ -631,7 +631,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_unique(const K&) [non-empty tr
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
 
     tree_type tree;
@@ -735,7 +735,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
 
     {
@@ -1569,7 +1569,7 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
 
     {
@@ -2077,7 +2077,7 @@ PRINT("Test PRIVATE rotate_left(base_node_pointer)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
 
     {
@@ -2217,7 +2217,7 @@ PRINT("Test PRIVATE rotate_right(base_node_pointer)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
 
     {
@@ -2357,7 +2357,7 @@ PRINT("Test PRIVATE insert(base_node_pointer, base_node_pointer, bool, base_node
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
     using node_pointer = typename tree_type::node_pointer;
 
@@ -2487,7 +2487,7 @@ PRINT("Test PRIVATE remove(base_node_pointer, base_node_pointer&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<int>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_type = typename tree_type::node_type;
     using node_pointer = typename tree_type::node_pointer;
 
@@ -2647,7 +2647,7 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count_equal, count_uniq
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<int>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
         using node_type = typename tree_type::node_type;
 
         tree_type tree;
@@ -2757,7 +2757,7 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count_equal, count_uniq
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<int>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
         using node_type = typename tree_type::node_type;
 
         tree_type tree;
@@ -2854,7 +2854,7 @@ PRINT("Test clear()");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
     using node_pointer = typename tree_type::node_pointer;
 
     tree_type tree;
@@ -2909,7 +2909,7 @@ PRINT("Test emplace_equal(Args&&...)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -2944,7 +2944,7 @@ PRINT("Test emplace_equal(Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -2984,7 +2984,7 @@ PRINT("Test emplace_unique(Args&&...)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3019,7 +3019,7 @@ PRINT("Test emplace_unique(Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3059,7 +3059,7 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3096,7 +3096,7 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3138,7 +3138,7 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3173,7 +3173,7 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3213,7 +3213,7 @@ PRINT("Test insert_equal(V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3248,7 +3248,7 @@ PRINT("Test insert_equal(V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3291,7 +3291,7 @@ PRINT("Test insert_equal(V&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3331,7 +3331,7 @@ PRINT("Test insert_unique(V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3366,7 +3366,7 @@ PRINT("Test insert_unique(V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3409,7 +3409,7 @@ PRINT("Test insert_unique(V&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3449,7 +3449,7 @@ PRINT("Test insert_hint_equal(const_iterator, V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3486,7 +3486,7 @@ PRINT("Test insert_hint_equal(const_iterator, V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3531,7 +3531,7 @@ PRINT("Test insert_hint_equal(const_iterator, V&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3573,7 +3573,7 @@ PRINT("Test insert_hint_unique(const_iterator, V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3608,7 +3608,7 @@ PRINT("Test insert_hint_unique(const_iterator, V&&)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3651,7 +3651,7 @@ PRINT("Test insert_hint_unique(const_iterator, V&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3691,7 +3691,7 @@ PRINT("Test insert_or_assign(K&&, M&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3720,7 +3720,7 @@ PRINT("Test insert_or_assign(K&&, M&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3757,7 +3757,7 @@ PRINT("Test insert_or_assign(K&&, M&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3797,7 +3797,7 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3824,7 +3824,7 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3859,7 +3859,7 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3897,7 +3897,7 @@ PRINT("Test try_emplace(K&&, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3926,7 +3926,7 @@ PRINT("Test try_emplace(K&&, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -3963,7 +3963,7 @@ PRINT("Test try_emplace(K&&, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4003,7 +4003,7 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4030,7 +4030,7 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4065,7 +4065,7 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4103,7 +4103,7 @@ PRINT("Test erase(const_iterator)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4152,7 +4152,7 @@ PRINT("Test erase(const_iterator)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4204,7 +4204,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
         using key_of_value = sfl::dtl::identity;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4250,7 +4250,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
         using key_of_value = sfl::dtl::first;
         using key_compare = std::less<xint>;
         using allocator_type = TPARAM_ALLOCATOR<value_type>;
-        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+        using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
         tree_type tree;
 
@@ -4298,7 +4298,7 @@ PRINT("Test erase_key_equal(const K&)");
     using key_of_value = sfl::dtl::first;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using rb_tree = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using rb_tree = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     rb_tree tree;
 
@@ -4368,7 +4368,7 @@ PRINT("Test erase_key_unique(const K&)");
     using key_of_value = sfl::dtl::first;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using rb_tree = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using rb_tree = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     rb_tree tree;
 
@@ -4438,7 +4438,7 @@ PRINT("Test swap(container&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     #define CONDITION tree1.size() == 0 && tree2.size() == 0
     {
@@ -4708,7 +4708,7 @@ PRINT("Test container()");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     tree_type tree;
 
@@ -4722,7 +4722,7 @@ PRINT("Test container(const KeyCompare&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     typename tree_type::key_compare comp;
 
@@ -4738,7 +4738,7 @@ PRINT("Test container(const Allocator&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     typename tree_type::allocator_type alloc;
 
@@ -4754,7 +4754,7 @@ PRINT("Test container(const KeyCompare&, const Allocator&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     typename tree_type::key_compare comp;
 
@@ -4772,7 +4772,7 @@ PRINT("Test container(const container&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     {
         tree_type tree1;
@@ -4834,7 +4834,7 @@ PRINT("Test container(const container&, const Allocator&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     {
         tree_type tree1;
@@ -4900,7 +4900,7 @@ PRINT("Test container(const container&&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     {
         tree_type tree1;
@@ -4981,7 +4981,7 @@ PRINT("Test container(const container&&, const Allocator&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     {
         tree_type tree1;
@@ -5068,7 +5068,7 @@ PRINT("Test assign_copy(const container&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     #define CONDITION tree1.size() == tree2.size()
     {
@@ -5216,7 +5216,7 @@ PRINT("Test assign_move(container&)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     #define CONDITION tree1.size() == tree2.size()
     {
@@ -5385,7 +5385,7 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     #define CONDITION n == tree.size()
     {
@@ -5555,7 +5555,7 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     #define CONDITION n == tree.size()
     {
@@ -5723,7 +5723,7 @@ PRINT("Test NON-MEMBER comparison operators");
     using key_of_value = sfl::dtl::identity;
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
-    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type, void>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
 
     tree_type tree1, tree2;
 

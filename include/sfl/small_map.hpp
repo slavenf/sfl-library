@@ -95,8 +95,7 @@ private:
             value_type,
             N,
             typename sfl::dtl::allocator_traits<allocator_type>::template rebind_alloc<value_type>
-        >,
-        small_map
+        >
     >;
 
     tree_type tree_;
@@ -314,7 +313,7 @@ public:
     SFL_NODISCARD
     allocator_type get_allocator() const noexcept
     {
-        return allocator_type(tree_.data_.ref_to_node_alloc());
+        return allocator_type(tree_.ref_to_node_alloc());
     }
 
     //
@@ -324,7 +323,7 @@ public:
     SFL_NODISCARD
     key_compare key_comp() const
     {
-        return key_compare(tree_.data_.ref_to_key_compare());
+        return key_compare(tree_.ref_to_key_compare());
     }
 
     //
@@ -334,7 +333,7 @@ public:
     SFL_NODISCARD
     value_compare value_comp() const
     {
-        return value_compare(tree_.data_.ref_to_key_compare());
+        return value_compare(tree_.ref_to_key_compare());
     }
 
     //
