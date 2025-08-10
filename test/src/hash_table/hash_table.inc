@@ -7,20 +7,16 @@ using sfl::test::xobj;
 
 PRINT("Test PRIVATE make_node and drop_node");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
-
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
     using node_pointer = typename hash_table_type::node_pointer;
 
     hash_table_type hash_table(100);
@@ -44,6 +40,17 @@ PRINT("Test PRIVATE make_node and drop_node");
 
 PRINT("Test emplace_equal(Args&&...)");
 {
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
+
     static const std::vector<std::vector<int>> insert_patterns
     {
         {  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16 },
@@ -69,20 +76,6 @@ PRINT("Test emplace_equal(Args&&...)");
 
     for (auto& row : insert_patterns)
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         ///////////////////////////////////////////////////////////////////////
@@ -354,6 +347,17 @@ PRINT("Test emplace_equal(Args&&...)");
 
 PRINT("Test emplace_unique(Args&&...)");
 {
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
+
     static const std::vector<std::vector<int>> insert_patterns
     {
         {  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16 },
@@ -379,20 +383,6 @@ PRINT("Test emplace_unique(Args&&...)");
 
     for (auto& row : insert_patterns)
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         ///////////////////////////////////////////////////////////////////////
@@ -670,19 +660,16 @@ PRINT("Test emplace_unique(Args&&...)");
 
 PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     for (int initial_size = 0; initial_size <= 5; ++initial_size)
     {
@@ -762,19 +749,16 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
 
 PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     for (int initial_size = 0; initial_size <= 5; ++initial_size)
     {
@@ -836,19 +820,16 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
 
 PRINT("Test insert_equal(V&&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     for (int initial_size = 0; initial_size <= 5; ++initial_size)
     {
@@ -924,19 +905,16 @@ PRINT("Test insert_equal(V&&)");
 
 PRINT("Test insert_unique(V&&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     for (int initial_size = 0; initial_size <= 5; ++initial_size)
     {
@@ -997,19 +975,16 @@ PRINT("Test insert_unique(V&&)");
 
 PRINT("Test insert_hint_equal(const_iterator, Args&&...)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     for (int initial_size = 0; initial_size <= 5; ++initial_size)
     {
@@ -1089,19 +1064,16 @@ PRINT("Test insert_hint_equal(const_iterator, Args&&...)");
 
 PRINT("Test insert_hint_unique(const_iterator, Args&&...)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     for (int initial_size = 0; initial_size <= 5; ++initial_size)
     {
@@ -1163,19 +1135,16 @@ PRINT("Test insert_hint_unique(const_iterator, Args&&...)");
 
 PRINT("Test clear()");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     hash_table_type hash_table(100);
 
@@ -1214,21 +1183,18 @@ PRINT("Test clear()");
 
 PRINT("Test insert_or_assign(K&&, M&&)");
 {
-    {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
+    using key_type = xint;
+    using value_type = std::pair<const xint, xint>;
+    using key_of_value = sfl::dtl::first;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
+    {
         hash_table_type hash_table(100);
 
         {
@@ -1251,20 +1217,6 @@ PRINT("Test insert_or_assign(K&&, M&&)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1295,20 +1247,6 @@ PRINT("Test insert_or_assign(K&&, M&&)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1341,21 +1279,18 @@ PRINT("Test insert_or_assign(K&&, M&&)");
 
 PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
 {
-    {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
+    using key_type = xint;
+    using value_type = std::pair<const xint, xint>;
+    using key_of_value = sfl::dtl::first;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
+    {
         hash_table_type hash_table(100);
 
         {
@@ -1376,20 +1311,6 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1418,20 +1339,6 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1462,21 +1369,18 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
 
 PRINT("Test try_emplace(K&&, Args&&...)");
 {
-    {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
+    using key_type = xint;
+    using value_type = std::pair<const xint, xint>;
+    using key_of_value = sfl::dtl::first;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
+    {
         hash_table_type hash_table(100);
 
         {
@@ -1499,20 +1403,6 @@ PRINT("Test try_emplace(K&&, Args&&...)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1543,20 +1433,6 @@ PRINT("Test try_emplace(K&&, Args&&...)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1589,21 +1465,18 @@ PRINT("Test try_emplace(K&&, Args&&...)");
 
 PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
 {
-    {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
+    using key_type = xint;
+    using value_type = std::pair<const xint, xint>;
+    using key_of_value = sfl::dtl::first;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
+    {
         hash_table_type hash_table(100);
 
         {
@@ -1624,20 +1497,6 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1666,20 +1525,6 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            xint,
-            std::pair<const xint, xint>,
-            sfl::dtl::first,
-            sfl::test::hash<xint>,
-            std::equal_to<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            TPARAM_ALLOCATOR<xint>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_no_max_load_policy,
-            void
-        >;
-
         hash_table_type hash_table(100);
 
         {
@@ -1710,19 +1555,16 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
 
 PRINT("Test erase_equal(const_iterator)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     static const std::vector<int> elements
     {
@@ -1766,19 +1608,16 @@ PRINT("Test erase_equal(const_iterator)");
 
 PRINT("Test erase_unique(const_iterator)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     static const std::vector<int> elements
     {
@@ -1816,19 +1655,16 @@ PRINT("Test erase_unique(const_iterator)");
 
 PRINT("Test erase_equal(const_iterator, const_iterator)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     static const std::vector<int> elements
     {
@@ -1871,19 +1707,16 @@ PRINT("Test erase_equal(const_iterator, const_iterator)");
 
 PRINT("Test erase_unique(const_iterator, const_iterator)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     static const std::vector<int> elements
     {
@@ -1920,19 +1753,16 @@ PRINT("Test erase_unique(const_iterator, const_iterator)");
 
 PRINT("Test erase_key_unique(const K&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     static const std::vector<int> elements
     {
@@ -1960,19 +1790,16 @@ PRINT("Test erase_key_unique(const K&)");
 
 PRINT("Test erase_key_equal(const K&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     static const std::vector<int> elements
     {
@@ -2003,19 +1830,16 @@ PRINT("Test erase_key_equal(const K&)");
 
 PRINT("Test swap(container&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     #define CONDITION hash_table1.size() == 0 && hash_table2.size() == 0
     {
@@ -2279,19 +2103,16 @@ PRINT("Test swap(container&)");
 PRINT("Stress test insert with rehashing");
 {
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy,
-            sfl::dtl::hash_table_standard_max_load_policy,
-            void
-        >;
+        using key_type = int;
+        using value_type = int;
+        using key_of_value = sfl::dtl::identity;
+        using key_hash = sfl::test::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using node_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_count_policy = sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy;
+        using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+        using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
         hash_table_type hash_table(2);
 
@@ -2307,19 +2128,16 @@ PRINT("Stress test insert with rehashing");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_prime_bucket_count_policy,
-            sfl::dtl::hash_table_standard_max_load_policy,
-            void
-        >;
+        using key_type = int;
+        using value_type = int;
+        using key_of_value = sfl::dtl::identity;
+        using key_hash = sfl::test::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using node_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_count_policy = sfl::dtl::hash_table_dynamic_prime_bucket_count_policy;
+        using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+        using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
         hash_table_type hash_table(11);
 
@@ -2335,19 +2153,16 @@ PRINT("Stress test insert with rehashing");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_standard_max_load_policy,
-            void
-        >;
+        using key_type = int;
+        using value_type = int;
+        using key_of_value = sfl::dtl::identity;
+        using key_hash = sfl::test::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using node_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+        using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+        using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
         hash_table_type hash_table(1);
 
@@ -2368,19 +2183,16 @@ PRINT("Stress test insert with rehashing");
 PRINT("Test container(size_type)");
 {
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy,
-            sfl::dtl::hash_table_standard_max_load_policy,
-            void
-        >;
+        using key_type = xint;
+        using value_type = xint;
+        using key_of_value = sfl::dtl::identity;
+        using key_hash = sfl::test::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using node_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_count_policy = sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy;
+        using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+        using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
         hash_table_type hash_table(4);
 
@@ -2393,19 +2205,16 @@ PRINT("Test container(size_type)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_prime_bucket_count_policy,
-            sfl::dtl::hash_table_standard_max_load_policy,
-            void
-        >;
+        using key_type = xint;
+        using value_type = xint;
+        using key_of_value = sfl::dtl::identity;
+        using key_hash = sfl::test::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using node_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_count_policy = sfl::dtl::hash_table_dynamic_prime_bucket_count_policy;
+        using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+        using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
         hash_table_type hash_table(7);
 
@@ -2418,19 +2227,16 @@ PRINT("Test container(size_type)");
     }
 
     {
-        using hash_table_type = sfl::dtl::hash_table
-        <
-            int,
-            int,
-            sfl::dtl::identity,
-            sfl::test::hash<int>,
-            std::equal_to<int>,
-            TPARAM_ALLOCATOR<int>,
-            TPARAM_ALLOCATOR<int>,
-            sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-            sfl::dtl::hash_table_standard_max_load_policy,
-            void
-        >;
+        using key_type = xint;
+        using value_type = xint;
+        using key_of_value = sfl::dtl::identity;
+        using key_hash = sfl::test::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using node_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+        using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+        using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+        using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
         hash_table_type hash_table(9);
 
@@ -2445,21 +2251,18 @@ PRINT("Test container(size_type)");
 
 PRINT("Test container(size_type, const Alloc&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy,
-        sfl::dtl::hash_table_standard_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
-    TPARAM_ALLOCATOR<int> alloc;
+    typename hash_table_type::node_allocator_type alloc;
 
     hash_table_type hash_table(4, alloc);
 
@@ -2473,21 +2276,18 @@ PRINT("Test container(size_type, const Alloc&)");
 
 PRINT("Test container(size_type, const key_hash&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy,
-        sfl::dtl::hash_table_standard_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
-    sfl::test::hash<int> hash;
+    typename hash_table_type::key_hash hash;
 
     hash_table_type hash_table(4, hash);
 
@@ -2501,23 +2301,20 @@ PRINT("Test container(size_type, const key_hash&)");
 
 PRINT("Test container(size_type, const key_hash&, const Alloc&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy,
-        sfl::dtl::hash_table_standard_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
-    sfl::test::hash<int> hash;
+    typename hash_table_type::key_hash hash;
 
-    TPARAM_ALLOCATOR<int> alloc;
+    typename hash_table_type::node_allocator_type alloc;
 
     hash_table_type hash_table(4, hash, alloc);
 
@@ -2531,23 +2328,20 @@ PRINT("Test container(size_type, const key_hash&, const Alloc&)");
 
 PRINT("Test container(size_type, const key_hash&, const key_equal&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy,
-        sfl::dtl::hash_table_standard_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
-    sfl::test::hash<int> hash;
+    typename hash_table_type::key_hash hash;
 
-    std::equal_to<int> equal;
+    typename hash_table_type::key_equal equal;
 
     hash_table_type hash_table(4, hash, equal);
 
@@ -2561,25 +2355,22 @@ PRINT("Test container(size_type, const key_hash&, const key_equal&)");
 
 PRINT("Test container(size_type, const key_hash&, const key_equal&, const Alloc&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        int,
-        int,
-        sfl::dtl::identity,
-        sfl::test::hash<int>,
-        std::equal_to<int>,
-        TPARAM_ALLOCATOR<int>,
-        TPARAM_ALLOCATOR<int>,
-        sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy,
-        sfl::dtl::hash_table_standard_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_pow2_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
-    sfl::test::hash<int> hash;
+    typename hash_table_type::key_hash hash;
 
-    std::equal_to<int> equal;
+    typename hash_table_type::key_equal equal;
 
-    TPARAM_ALLOCATOR<int> alloc;
+    typename hash_table_type::node_allocator_type alloc;
 
     hash_table_type hash_table(4, hash, equal, alloc);
 
@@ -2593,19 +2384,16 @@ PRINT("Test container(size_type, const key_hash&, const key_equal&, const Alloc&
 
 PRINT("Test container(const container&, EqualOrUniqueTag)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     {
         hash_table_type hash_table1(100);
@@ -2784,19 +2572,16 @@ PRINT("Test container(const container&, EqualOrUniqueTag)");
 
 PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     {
         hash_table_type hash_table1(100);
@@ -2805,7 +2590,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -2819,7 +2604,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -2887,7 +2672,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -2955,7 +2740,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -2983,19 +2768,16 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
 PRINT("Test container(container&&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     {
         hash_table_type hash_table1(100);
@@ -3228,19 +3010,16 @@ PRINT("Test container(container&&)");
 
 PRINT("Test container(container&&, const Alloc&)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     {
         hash_table_type hash_table1(100);
@@ -3249,7 +3028,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -3263,7 +3042,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -3331,7 +3110,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -3426,7 +3205,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename hash_table_type::node_allocator_type alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -3483,19 +3262,16 @@ PRINT("Test container(container&&, const Alloc&)");
 
 PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     #define CONDITION hash_table1.size() == 0 && hash_table2.size() == 0
     {
@@ -3841,19 +3617,16 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
 
 PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     #define CONDITION hash_table1.size() == 0 && hash_table2.size() == 0
     {
@@ -4241,19 +4014,16 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
 
 PRINT("Test assign_range_equal(InputIt, InputIt)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     #define CONDITION n == hash_table.size()
     {
@@ -4432,19 +4202,16 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
 
 PRINT("Test assign_range_unique(InputIt, InputIt)");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     #define CONDITION n == hash_table.size()
     {
@@ -4625,19 +4392,16 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
 
 PRINT("Test NON-MEMBER comparison operators");
 {
-    using hash_table_type = sfl::dtl::hash_table
-    <
-        xint,
-        xint,
-        sfl::dtl::identity,
-        sfl::test::hash<xint>,
-        std::equal_to<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        TPARAM_ALLOCATOR<xint>,
-        sfl::dtl::hash_table_dynamic_basic_bucket_count_policy,
-        sfl::dtl::hash_table_no_max_load_policy,
-        void
-    >;
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::test::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy, void>;
 
     hash_table_type hash_table1(100), hash_table2(100);
 
