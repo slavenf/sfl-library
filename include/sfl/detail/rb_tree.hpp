@@ -925,16 +925,6 @@ public:
         }
     }
 
-    iterator erase(iterator pos)
-    {
-        base_node_pointer x = pos.node_;
-        base_node_pointer y = next(x);
-        --data_.size_;
-        remove(x, data_.root(), data_.minimum());
-        drop_node(static_cast<node_pointer>(x));
-        return iterator(y);
-    }
-
     iterator erase(const_iterator pos)
     {
         base_node_pointer x = pos.node_;
@@ -956,7 +946,7 @@ public:
     }
 
     template <typename K>
-    size_type erase(const K& k)
+    size_type erase_key(const K& k)
     {
         const auto er = equal_range(k);
         const auto sz = std::distance(er.first, er.second);

@@ -4017,8 +4017,8 @@ PRINT("Test erase(const K&)");
         CHECK(*NTH(tree, 5) == 30);
 
         {
-            CHECK(tree.erase(10) == 1);
-            CHECK(tree.erase(10) == 0);
+            CHECK(tree.erase_key(10) == 1);
+            CHECK(tree.erase_key(10) == 0);
             CHECK(tree.size() == 5);
             CHECK(*NTH(tree, 0) == 20);
             CHECK(*NTH(tree, 1) == 20);
@@ -4028,16 +4028,16 @@ PRINT("Test erase(const K&)");
         }
 
         {
-            CHECK(tree.erase(30) == 3);
-            CHECK(tree.erase(30) == 0);
+            CHECK(tree.erase_key(30) == 3);
+            CHECK(tree.erase_key(30) == 0);
             CHECK(tree.size() == 2);
             CHECK(*NTH(tree, 0) == 20);
             CHECK(*NTH(tree, 1) == 20);
         }
 
         {
-            CHECK(tree.erase(20) == 2);
-            CHECK(tree.erase(20) == 0);
+            CHECK(tree.erase_key(20) == 2);
+            CHECK(tree.erase_key(20) == 0);
             CHECK(tree.size() == 0);
         }
     }
@@ -4065,8 +4065,8 @@ PRINT("Test erase(const K&)");
         CHECK(NTH(tree, 5)->first == 30); CHECK(NTH(tree, 5)->second == 1);
 
         {
-            CHECK(tree.erase(10) == 1);
-            CHECK(tree.erase(10) == 0);
+            CHECK(tree.erase_key(10) == 1);
+            CHECK(tree.erase_key(10) == 0);
             CHECK(tree.size() == 5);
             CHECK(NTH(tree, 0)->first == 20); CHECK(NTH(tree, 0)->second == 1);
             CHECK(NTH(tree, 1)->first == 20); CHECK(NTH(tree, 1)->second == 1);
@@ -4076,16 +4076,16 @@ PRINT("Test erase(const K&)");
         }
 
         {
-            CHECK(tree.erase(30) == 3);
-            CHECK(tree.erase(30) == 0);
+            CHECK(tree.erase_key(30) == 3);
+            CHECK(tree.erase_key(30) == 0);
             CHECK(tree.size() == 2);
             CHECK(NTH(tree, 0)->first == 20); CHECK(NTH(tree, 0)->second == 1);
             CHECK(NTH(tree, 1)->first == 20); CHECK(NTH(tree, 1)->second == 1);
         }
 
         {
-            CHECK(tree.erase(20) == 2);
-            CHECK(tree.erase(20) == 0);
+            CHECK(tree.erase_key(20) == 2);
+            CHECK(tree.erase_key(20) == 0);
             CHECK(tree.size() == 0);
         }
     }

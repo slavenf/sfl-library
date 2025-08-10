@@ -526,14 +526,14 @@ public:
 
     size_type erase(const Key& key)
     {
-        return tree_.erase(key);
+        return tree_.erase_key(key);
     }
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     size_type erase(K&& x)
     {
-        return tree_.erase(x);
+        return tree_.erase_key(x);
     }
 
     void swap(multimap& other)
