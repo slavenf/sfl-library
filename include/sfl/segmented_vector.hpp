@@ -629,7 +629,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
 
-        iterator p1 = begin() + std::distance(cbegin(), pos);
+        iterator p1(pos.segment_, pos.local_);
 
         if (data_.last_ == data_.eos_)
         {
@@ -808,7 +808,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        const iterator p = begin() + std::distance(cbegin(), pos);
+        const iterator p(pos.segment_, pos.local_);
 
         data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
@@ -823,11 +823,11 @@ public:
 
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), first);
+            return iterator(first.segment_, first.local_);
         }
 
-        const iterator p1 = begin() + std::distance(cbegin(), first);
-        const iterator p2 = begin() + std::distance(cbegin(), last);
+        const iterator p1(first.segment_, first.local_);
+        const iterator p2(last.segment_, last.local_);
 
         const iterator new_last = sfl::dtl::move(p2, data_.last_, p1);
 
@@ -1686,7 +1686,7 @@ private:
     {
         if (n == 0)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.segment_, pos.local_);
         }
 
         const value_type tmp(value);
@@ -1790,7 +1790,7 @@ private:
     {
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.segment_, pos.local_);
         }
 
         const size_type n = std::distance(first, last);

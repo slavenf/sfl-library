@@ -621,7 +621,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
 
-        iterator p1 = begin() + std::distance(cbegin(), pos);
+        iterator p1(pos.segment_, pos.local_);
 
         const size_type dist_to_begin = std::distance(cbegin(), pos);
         const size_type dist_to_end   = std::distance(pos, cend());
@@ -917,7 +917,7 @@ public:
         const size_type dist_to_begin = std::distance(cbegin(), pos);
         const size_type dist_to_end   = std::distance(pos, cend());
 
-        const iterator p1 = begin() + std::distance(cbegin(), pos);
+        const iterator p1(pos.segment_, pos.local_);
         const iterator p2 = ++iterator(p1);
 
         if (dist_to_begin < dist_to_end)
@@ -946,17 +946,17 @@ public:
 
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), first);
+            return iterator(first.segment_, first.local_);
         }
 
         const size_type dist_to_begin = std::distance(cbegin(), first);
         const size_type dist_to_end   = std::distance(last, cend());
 
+        const iterator p1(first.segment_, first.local_);
+        const iterator p2(last.segment_, last.local_);
+
         if (dist_to_begin < dist_to_end)
         {
-            const iterator p1 = begin() + std::distance(cbegin(), first);
-            const iterator p2 = begin() + std::distance(cbegin(), last);
-
             const iterator new_first = sfl::dtl::move_backward(data_.first_, p1, p2);
 
             sfl::dtl::destroy_a(data_.ref_to_alloc(), data_.first_, new_first);
@@ -967,9 +967,6 @@ public:
         }
         else
         {
-            const iterator p1 = begin() + std::distance(cbegin(), first);
-            const iterator p2 = begin() + std::distance(cbegin(), last);
-
             const iterator new_last = sfl::dtl::move(p2, data_.last_, p1);
 
             sfl::dtl::destroy_a(data_.ref_to_alloc(), new_last, data_.last_);
@@ -2316,7 +2313,7 @@ private:
     {
         if (n == 0)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.segment_, pos.local_);
         }
 
         const value_type tmp(value);
@@ -2503,7 +2500,7 @@ private:
     {
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.segment_, pos.local_);
         }
 
         const size_type n = std::distance(first, last);
