@@ -26,9 +26,10 @@
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 
-#include <cstddef>
-#include <iterator>
-#include <type_traits>
+#include <cstddef>      // size_t
+#include <iterator>     // iterator_traits
+#include <memory>       // pointer_traits
+#include <type_traits>  // conditional
 
 namespace sfl
 {
@@ -36,31 +37,38 @@ namespace sfl
 namespace dtl
 {
 
-template <typename SegmentIterator, typename LocalIterator, std::size_t SegmentSize, typename Container>
+template <typename SegmentIterator, typename LocalIterator, std::size_t SegmentSize, bool IsConst>
 class segmented_iterator
 {
-    template <typename, typename, std::size_t, typename>
+    template <typename, typename, std::size_t, bool>
     friend class segmented_iterator;
-
-    friend Container;
 
     template <typename>
     friend struct sfl::dtl::segmented_iterator_traits;
 
-private:
+public:
 
     SegmentIterator segment_;
     LocalIterator   local_;
 
 public:
 
-    using difference_type   = typename std::iterator_traits<LocalIterator>::difference_type;
-    using value_type        = typename std::iterator_traits<LocalIterator>::value_type;
-    using pointer           = typename std::iterator_traits<LocalIterator>::pointer;
-    using reference         = typename std::iterator_traits<LocalIterator>::reference;
+    using difference_type = typename std::iterator_traits<LocalIterator>::difference_type;
+
+    using value_type = typename std::iterator_traits<LocalIterator>::value_type;
+
+    using pointer = typename std::conditional
+    <
+        IsConst,
+        typename std::pointer_traits<LocalIterator>::template rebind<const value_type>,
+        LocalIterator
+    >::type;
+
+    using reference = typename std::iterator_traits<pointer>::reference;
+
     using iterator_category = typename std::iterator_traits<LocalIterator>::iterator_category;
 
-private:
+public:
 
     explicit segmented_iterator(const SegmentIterator& segment, const LocalIterator& local) noexcept
         : segment_(segment)
@@ -82,10 +90,9 @@ public:
     {}
 
     // Converting constructor (from iterator to const_iterator)
-    template <typename OtherSegmentIterator, typename OtherLocalIterator,
-              sfl::dtl::enable_if_t< std::is_convertible<OtherSegmentIterator, SegmentIterator>::value &&
-                                     std::is_convertible<OtherLocalIterator, LocalIterator>::value >* = nullptr >
-    segmented_iterator(const segmented_iterator<OtherSegmentIterator, OtherLocalIterator, SegmentSize, Container>& other) noexcept
+    template <bool IsConst2 = IsConst,
+              sfl::dtl::enable_if_t<IsConst2 == false>* = nullptr>
+    segmented_iterator(const segmented_iterator<SegmentIterator, LocalIterator, SegmentSize, IsConst2>& other) noexcept
         : segment_(other.segment_)
         , local_(other.local_)
     {}
@@ -252,12 +259,12 @@ public:
     }
 };
 
-template <typename SegmentIterator, typename LocalIterator, std::size_t SegmentSize, typename Container>
-struct segmented_iterator_traits<sfl::dtl::segmented_iterator<SegmentIterator, LocalIterator, SegmentSize, Container>>
+template <typename SegmentIterator, typename LocalIterator, std::size_t SegmentSize, bool IsConst>
+struct segmented_iterator_traits<sfl::dtl::segmented_iterator<SegmentIterator, LocalIterator, SegmentSize, IsConst>>
 {
     using is_segmented_iterator = std::true_type;
 
-    using iterator = sfl::dtl::segmented_iterator<SegmentIterator, LocalIterator, SegmentSize, Container>;
+    using iterator = sfl::dtl::segmented_iterator<SegmentIterator, LocalIterator, SegmentSize, IsConst>;
 
     using segment_iterator = SegmentIterator;
 

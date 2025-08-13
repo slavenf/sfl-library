@@ -83,8 +83,8 @@ private:
 
 public:
 
-    using iterator               = sfl::dtl::segmented_iterator<segment_pointer, pointer,       N, segmented_devector>;
-    using const_iterator         = sfl::dtl::segmented_iterator<segment_pointer, const_pointer, N, segmented_devector>;
+    using iterator               = sfl::dtl::segmented_iterator<segment_pointer, pointer, N, false>;
+    using const_iterator         = sfl::dtl::segmented_iterator<segment_pointer, pointer, N, true>;
     using reverse_iterator       = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
