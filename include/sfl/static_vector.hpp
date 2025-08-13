@@ -69,8 +69,8 @@ public:
     using const_reference        = const value_type&;
     using pointer                = value_type*;
     using const_pointer          = const value_type*;
-    using iterator               = sfl::dtl::normal_iterator<pointer, static_vector>;
-    using const_iterator         = sfl::dtl::normal_iterator<const_pointer, static_vector>;
+    using iterator               = sfl::dtl::normal_iterator<pointer, false>;
+    using const_iterator         = sfl::dtl::normal_iterator<pointer, true>;
     using reverse_iterator       = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 

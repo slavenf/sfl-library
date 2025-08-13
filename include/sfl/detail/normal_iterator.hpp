@@ -25,8 +25,9 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/cpp.hpp>
 
-#include <iterator>
-#include <type_traits>
+#include <iterator>     // iterator_traits
+#include <memory>       // pointer_traits
+#include <type_traits>  // conditional
 
 namespace sfl
 {
@@ -34,13 +35,11 @@ namespace sfl
 namespace dtl
 {
 
-template <typename Iterator, typename Container>
+template <typename Iterator, bool IsConst>
 class normal_iterator
 {
-    template <typename, typename>
+    template <typename, bool>
     friend class normal_iterator;
-
-    friend Container;
 
 private:
 
@@ -48,16 +47,38 @@ private:
 
 public:
 
-    using difference_type   = typename std::iterator_traits<Iterator>::difference_type;
-    using value_type        = typename std::iterator_traits<Iterator>::value_type;
-    using pointer           = typename std::iterator_traits<Iterator>::pointer;
-    using reference         = typename std::iterator_traits<Iterator>::reference;
-    using iterator_category = typename std::iterator_traits<Iterator>::iterator_category;
-#if SFL_CPP_VERSION >= SFL_CPP_20
-    using iterator_concept  = std::contiguous_iterator_tag;
-#endif
+    using difference_type = typename std::iterator_traits<Iterator>::difference_type;
 
-private:
+    using value_type = typename std::iterator_traits<Iterator>::value_type;
+
+    using pointer = typename std::conditional
+    <
+        IsConst,
+        typename std::pointer_traits<Iterator>::template rebind<const value_type>,
+        Iterator
+    >::type;
+
+    using reference = typename std::iterator_traits<pointer>::reference;
+
+    using iterator_category = typename std::iterator_traits<Iterator>::iterator_category;
+
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    using iterator_concept = std::contiguous_iterator_tag;
+    #endif
+
+public:
+
+    SFL_NODISCARD
+    Iterator& base() noexcept
+    {
+        return it_;
+    }
+
+    SFL_NODISCARD
+    const Iterator& base() const noexcept
+    {
+        return it_;
+    }
 
     explicit normal_iterator(const Iterator& it) noexcept
         : it_(it)
@@ -76,9 +97,9 @@ public:
     {}
 
     // Converting constructor (from iterator to const_iterator)
-    template <typename OtherIterator,
-              sfl::dtl::enable_if_t<std::is_convertible<OtherIterator, Iterator>::value>* = nullptr>
-    normal_iterator(const normal_iterator<OtherIterator, Container>& other) noexcept
+    template <bool IsConst2 = IsConst,
+              sfl::dtl::enable_if_t<IsConst2 == false>* = nullptr>
+    normal_iterator(const normal_iterator<Iterator, IsConst2>& other) noexcept
         : it_(other.it_)
     {}
 

@@ -68,8 +68,8 @@ public:
     using const_reference        = const T&;
     using pointer                = typename sfl::dtl::allocator_traits<allocator_type>::pointer;
     using const_pointer          = typename sfl::dtl::allocator_traits<allocator_type>::const_pointer;
-    using iterator               = sfl::dtl::normal_iterator<pointer, compact_vector>;
-    using const_iterator         = sfl::dtl::normal_iterator<const_pointer, compact_vector>;
+    using iterator               = sfl::dtl::normal_iterator<pointer, false>;
+    using const_iterator         = sfl::dtl::normal_iterator<pointer, true>;
     using reverse_iterator       = std::reverse_iterator<iterator>;
     using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
