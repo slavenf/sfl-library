@@ -956,7 +956,7 @@ public:
         const size_type dist_to_begin = std::distance(cbegin(), pos);
         const size_type dist_to_end   = std::distance(pos, cend());
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p1 = pos.base();
         const pointer p2 = p1 + 1;
 
         if (dist_to_begin < dist_to_end)
@@ -985,17 +985,17 @@ public:
 
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), first);
+            return iterator(first.base());
         }
 
         const size_type dist_to_begin = std::distance(cbegin(), first);
         const size_type dist_to_end   = std::distance(last, cend());
 
+        const pointer p1 = first.base();
+        const pointer p2 = last.base();
+
         if (dist_to_begin < dist_to_end)
         {
-            const pointer p1 = data_.first_ + std::distance(cbegin(), first);
-            const pointer p2 = data_.first_ + std::distance(cbegin(), last);
-
             const pointer new_first = sfl::dtl::move_backward(data_.first_, p1, p2);
 
             sfl::dtl::destroy_a(data_.ref_to_alloc(), data_.first_, new_first);
@@ -1006,9 +1006,6 @@ public:
         }
         else
         {
-            const pointer p1 = data_.first_ + std::distance(cbegin(), first);
-            const pointer p2 = data_.first_ + std::distance(cbegin(), last);
-
             const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
 
             sfl::dtl::destroy_a(data_.ref_to_alloc(), new_last, data_.last_);
@@ -2309,7 +2306,7 @@ private:
 
         if (insert_size == 0)
         {
-            return begin() + std::distance(cbegin(), insert_pos);
+            return iterator(insert_pos.base());
         }
 
         const size_type dist_to_begin = std::distance(cbegin(), insert_pos);
@@ -4071,7 +4068,7 @@ private:
             (
                 data_.ref_to_alloc(),
                 data_.first_,
-                data_.first_ + offset,
+                insert_pos.base(),
                 new_first
             );
 
@@ -4085,7 +4082,7 @@ private:
             new_last = sfl::dtl::uninitialized_move_a
             (
                 data_.ref_to_alloc(),
-                data_.first_ + offset,
+                insert_pos.base(),
                 data_.last_,
                 new_last
             );
@@ -4166,7 +4163,7 @@ private:
             (
                 data_.ref_to_alloc(),
                 data_.first_,
-                data_.first_ + offset,
+                insert_pos.base(),
                 new_first
             );
 
@@ -4180,7 +4177,7 @@ private:
             new_last = sfl::dtl::uninitialized_move_a
             (
                 data_.ref_to_alloc(),
-                data_.first_ + offset,
+                insert_pos.base(),
                 data_.last_,
                 new_last
             );

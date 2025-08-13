@@ -838,7 +838,7 @@ public:
 
         if (data_.last_ != data_.eos_)
         {
-            const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+            const pointer p1 = pos.base();
 
             if (p1 == data_.last_)
             {
@@ -1215,7 +1215,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        const pointer p = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p = pos.base();
 
         data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
@@ -1230,11 +1230,11 @@ public:
 
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), first);
+            return iterator(first.base());
         }
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), first);
-        const pointer p2 = data_.first_ + std::distance(cbegin(), last);
+        const pointer p1 = first.base();
+        const pointer p2 = last.base();
 
         const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
 
@@ -2216,14 +2216,14 @@ private:
     {
         if (n == 0)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.base());
         }
 
         if (available() >= n)
         {
             const value_type tmp(value);
 
-            const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+            const pointer p1 = pos.base();
             const pointer p2 = p1 + n;
 
             if (p2 <= data_.last_)
@@ -2433,14 +2433,14 @@ private:
     {
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.base());
         }
 
         const size_type n = std::distance(first, last);
 
         if (available() >= n)
         {
-            const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+            const pointer p1 = pos.base();
             const pointer p2 = p1 + n;
 
             if (p2 <= data_.last_)

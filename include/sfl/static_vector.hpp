@@ -320,19 +320,19 @@ public:
     SFL_NODISCARD
     iterator begin() noexcept
     {
-        return iterator(data_.first_);
+        return iterator(pointer(data_.first_));
     }
 
     SFL_NODISCARD
     const_iterator begin() const noexcept
     {
-        return const_iterator(data_.first_);
+        return const_iterator(pointer(data_.first_));
     }
 
     SFL_NODISCARD
     const_iterator cbegin() const noexcept
     {
-        return const_iterator(data_.first_);
+        return const_iterator(pointer(data_.first_));
     }
 
     SFL_NODISCARD
@@ -546,7 +546,7 @@ public:
         SFL_ASSERT(!full());
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p1 = pos.base();
 
         if (p1 == data_.last_)
         {
@@ -606,12 +606,12 @@ public:
 
         if (n == 0)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.base());
         }
 
         const value_type tmp(value);
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p1 = pos.base();
         const pointer p2 = p1 + n;
 
         if (p2 <= data_.last_)
@@ -770,7 +770,7 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        const pointer p = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p = pos.base();
 
         data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
@@ -785,11 +785,11 @@ public:
 
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), first);
+            return iterator(first.base());
         }
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), first);
-        const pointer p2 = data_.first_ + std::distance(cbegin(), last);
+        const pointer p1 = first.base();
+        const pointer p2 = last.base();
 
         const pointer new_last = sfl::dtl::move(p2, data_.last_, p1);
 
@@ -1124,12 +1124,12 @@ private:
 
         if (first == last)
         {
-            return begin() + std::distance(cbegin(), pos);
+            return iterator(pos.base());
         }
 
         const size_type n = std::distance(first, last);
 
-        const pointer p1 = data_.first_ + std::distance(cbegin(), pos);
+        const pointer p1 = pos.base();
         const pointer p2 = p1 + n;
 
         if (p2 <= data_.last_)
