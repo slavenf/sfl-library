@@ -601,75 +601,8 @@ public:
 
     iterator insert(const_iterator pos, size_type n, const T& value)
     {
-        SFL_ASSERT(n <= available());
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
-
-        if (n == 0)
-        {
-            return iterator(pos.base());
-        }
-
-        const value_type tmp(value);
-
-        const pointer p1 = pos.base();
-        const pointer p2 = p1 + n;
-
-        if (p2 <= data_.last_)
-        {
-            const pointer p3 = data_.last_ - n;
-
-            const pointer old_last = data_.last_;
-
-            data_.last_ = sfl::dtl::uninitialized_move
-            (
-                p3,
-                data_.last_,
-                data_.last_
-            );
-
-            sfl::dtl::move_backward
-            (
-                p1,
-                p3,
-                old_last
-            );
-
-            sfl::dtl::fill
-            (
-                p1,
-                p2,
-                tmp
-            );
-        }
-        else
-        {
-            const pointer old_last = data_.last_;
-
-            sfl::dtl::uninitialized_fill
-            (
-                data_.last_,
-                p2,
-                tmp
-            );
-
-            data_.last_ = p2;
-
-            data_.last_ = sfl::dtl::uninitialized_move
-            (
-                p1,
-                old_last,
-                data_.last_
-            );
-
-            sfl::dtl::fill
-            (
-                p1,
-                old_last,
-                tmp
-            );
-        }
-
-        return iterator(p1);
+        return insert_fill_n(pos, n, value);
     }
 
     template <typename InputIt,
@@ -1094,6 +1027,78 @@ private:
                 data_.last_
             );
         }
+    }
+
+    iterator insert_fill_n(const_iterator pos, size_type n, const T& value)
+    {
+        SFL_ASSERT(n <= available());
+
+        if (n == 0)
+        {
+            return iterator(pos.base());
+        }
+
+        const value_type tmp(value);
+
+        const pointer p1 = pos.base();
+        const pointer p2 = p1 + n;
+
+        if (p2 <= data_.last_)
+        {
+            const pointer p3 = data_.last_ - n;
+
+            const pointer old_last = data_.last_;
+
+            data_.last_ = sfl::dtl::uninitialized_move
+            (
+                p3,
+                data_.last_,
+                data_.last_
+            );
+
+            sfl::dtl::move_backward
+            (
+                p1,
+                p3,
+                old_last
+            );
+
+            sfl::dtl::fill
+            (
+                p1,
+                p2,
+                tmp
+            );
+        }
+        else
+        {
+            const pointer old_last = data_.last_;
+
+            sfl::dtl::uninitialized_fill
+            (
+                data_.last_,
+                p2,
+                tmp
+            );
+
+            data_.last_ = p2;
+
+            data_.last_ = sfl::dtl::uninitialized_move
+            (
+                p1,
+                old_last,
+                data_.last_
+            );
+
+            sfl::dtl::fill
+            (
+                p1,
+                old_last,
+                tmp
+            );
+        }
+
+        return iterator(p1);
     }
 
     template <typename InputIt>
