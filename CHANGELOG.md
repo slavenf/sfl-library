@@ -1,7 +1,63 @@
+# New release
+
+* Renamed containers:
+  * Renamed `small_unordered_flat_map` to `small_unordered_linear_map`.
+  * Renamed `small_unordered_flat_set` to `small_unordered_linear_set`.
+  * Renamed `small_unordered_flat_multimap` to `small_unordered_linear_multimap`.
+  * Renamed `small_unordered_flat_multiset` to `small_unordered_linear_multiset`.
+  * Renamed `static_unordered_flat_map` to `static_unordered_linear_map`.
+  * Renamed `static_unordered_flat_set` to `static_unordered_linear_set`.
+  * Renamed `static_unordered_flat_multimap` to `static_unordered_linear_multimap`.
+  * Renamed `static_unordered_flat_multiset` to `static_unordered_linear_multiset`.
+* New associative containers based on sorted `vector`:
+  * `flat_map`
+  * `flat_set`
+  * `flat_multimap`
+  * `flat_multiset`
+
+<!---->
+
+* Iterators are no longer guaranteed to be distinct across all containers.
+
+  Previously, each container provided its own unique iterator type.
+
+  Now, it is no longer guaranteed that iterator types differ between containers.
+  Some containers may now use the same iterator type; that is, they may be aliases.
+
+  For example, the following types:
+
+      sfl::vector<T>::const_iterator
+      sfl::compact_vector<T>::const_iterator
+      sfl::small_vector<T, 1>::const_iterator
+      sfl::small_vector<T, 2>::const_iterator
+      sfl::small_flat_set<T, 3>::const_iterator
+      sfl::small_flat_set<T, 4>::const_iterator
+      sfl::small_unordered_linear_set<T, 5>::const_iterator
+      sfl::small_unordered_linear_set<T, 6>::const_iterator
+
+  were previously all distinct types, but may now be aliases.
+
+<!---->
+
+* Removed public member type `allocator_traits` from all containers.
+* Created *private* container template `associative_vector`.
+* Reimplemented all `small_flat_*` and `static_flat_*` containers in terms of `associative_vector`.
+* Created *private* container template `unordered_associative_vector`.
+* Reimplemented all `small_unordered_linear_*` and `static_unordered_linear_*` containers
+  in terms of `unordered_associative_vector`.
+* Set: Added transparent `insert` member function.
+* Small set: Added transparent `insert` member function.
+* Static set: Added transparent `insert` member function.
+* Unordered set: Added transparent `insert` member function.
+* Small unordered set: Added transparent `insert` member function.
+* Static unordered set: Added transparent `insert` member function.
+
+
+
 # 1.10.1 (2025-07-08)
 
 * Bug fix: Marked specialized template function as `inline` to avoid duplicate symbols. Thanks to @ZehMatt.
-* Improved and extended Nnatvis support. Thanks to @ZehMatt.
+* Improved and extended Natvis support. Thanks to @ZehMatt.
 
 
 
