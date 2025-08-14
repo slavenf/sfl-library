@@ -1748,6 +1748,31 @@ PRINT("Test insert(value_type&&)");
     }
 }
 
+PRINT("Test insert(K&&)");
+{
+    sfl::unordered_set<xobj, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<xobj>> set;
+
+    CHECK(set.size() == 0);
+
+    {
+        const auto res = set.insert(10);
+
+        CHECK(res.second == true);
+        CHECK(res.first->value() == 10);
+
+        CHECK(set.size() == 1);
+    }
+
+    {
+        const auto res = set.insert(10);
+
+        CHECK(res.second == false);
+        CHECK(res.first->value() == 10);
+
+        CHECK(set.size() == 1);
+    }
+}
+
 PRINT("Test insert(const_iterator, const value_type&)");
 {
     sfl::unordered_set<xint_xint, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
@@ -1809,6 +1834,29 @@ PRINT("Test insert(const_iterator, value_type&&)");
 
         CHECK(value_10_2.first  == +10);
         CHECK(value_10_2.second == +2);
+    }
+}
+
+PRINT("Test insert(const_iterator, K&&)");
+{
+    sfl::unordered_set<xobj, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<xobj>> set;
+
+    CHECK(set.size() == 0);
+
+    {
+        const auto res = set.insert(set.begin(), 10);
+
+        CHECK(res->value() == 10);
+
+        CHECK(set.size() == 1);
+    }
+
+    {
+        const auto res = set.insert(set.begin(), 10);
+
+        CHECK(res->value() == 10);
+
+        CHECK(set.size() == 1);
     }
 }
 

@@ -806,6 +806,31 @@ void test_static_set()
         }
     }
 
+    PRINT("Test insert(K&&)");
+    {
+        sfl::static_set<xobj, 32, xobj::less> set;
+
+        CHECK(set.size() == 0);
+
+        {
+            const auto res = set.insert(10);
+
+            CHECK(res.second == true);
+            CHECK(res.first->value() == 10);
+
+            CHECK(set.size() == 1);
+        }
+
+        {
+            const auto res = set.insert(10);
+
+            CHECK(res.second == false);
+            CHECK(res.first->value() == 10);
+
+            CHECK(set.size() == 1);
+        }
+    }
+
     PRINT("Test insert(const_iterator, const value_type&)");
     {
         sfl::static_set<xint_xint, 32, std::less<xint_xint>> set;
@@ -867,6 +892,29 @@ void test_static_set()
 
             CHECK(value_10_2.first  == +10);
             CHECK(value_10_2.second == +2);
+        }
+    }
+
+    PRINT("Test insert(const_iterator, K&&)");
+    {
+        sfl::static_set<xobj, 32, xobj::less> set;
+
+        CHECK(set.size() == 0);
+
+        {
+            const auto res = set.insert(set.begin(), 10);
+
+            CHECK(res->value() == 10);
+
+            CHECK(set.size() == 1);
+        }
+
+        {
+            const auto res = set.insert(set.begin(), 10);
+
+            CHECK(res->value() == 10);
+
+            CHECK(set.size() == 1);
         }
     }
 

@@ -434,6 +434,13 @@ public:
         return tree_.insert_unique(std::move(value));
     }
 
+    template <typename K,
+              sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    std::pair<iterator, bool> insert(K&& x)
+    {
+        return tree_.insert_unique(std::forward<K>(x));
+    }
+
     iterator insert(const_iterator hint, const value_type& value)
     {
         return tree_.insert_hint_unique(hint, value);
@@ -442,6 +449,15 @@ public:
     iterator insert(const_iterator hint, value_type&& value)
     {
         return tree_.insert_hint_unique(hint, std::move(value));
+    }
+
+    template <typename K,
+              sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
+                                    !std::is_convertible<K&&, const_iterator>::value &&
+                                    !std::is_convertible<K&&, iterator>::value >* = nullptr>
+    iterator insert(const_iterator hint, K&& x)
+    {
+        return tree_.insert_hint_unique(hint, std::forward<K>(x));
     }
 
     template <typename InputIt,
