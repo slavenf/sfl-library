@@ -640,6 +640,28 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 
 
 3.  ```
+    template <typename K>
+    std::pair<iterator, bool> insert(K&& x);
+    ```
+
+    **Preconditions:**
+    `!full()`
+
+    **Effects:**
+    Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
+
+    New element is constructed as `value_type(std::forward<K>(x))`.
+
+    **Note:** This overload participates in overload resolution only if both `Hash::is_transparent` and `KeyEqual::is_transparent` exist and are valid types. This allows the function to be called without constructing an instance of `Key`.
+
+    **Returns:**
+    The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
+
+    <br><br>
+
+
+
+4.  ```
     iterator insert(const_iterator hint, const value_type& value);
     ```
 
@@ -678,6 +700,34 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 
 
 6.  ```
+    template <typename K>
+    iterator insert(const_iterator hint, K&& x);
+    ```
+
+    **Preconditions:**
+    `!full()`
+
+    **Effects:**
+    Inserts new element if the container doesn't already contain an element with a key equivalent to `x`.
+
+    New element is constructed as `value_type(std::forward<K>(x))`.
+
+    Iterator `hint` is used as a suggestion where to start to search insert position.
+
+    **Note:**
+    This overload participates in overload resolution only if all following conditions are satisfied:
+    1. Both `Hash::is_transparent` and `KeyEqual::is_transparent` exist and are valid types. This allows the function to be called without constructing an instance of `Key`.
+    2. `std::is_convertible_v<K&&, iterator>` is `false`.
+    3. `std::is_convertible_v<K&&, const_iterator>` is `false`.
+
+    **Returns:**
+    Iterator to the inserted element or to the already existing element.
+
+    <br><br>
+
+
+
+7.  ```
     template <typename InputIt>
     void insert(InputIt first, InputIt last);
     ```
@@ -706,7 +756,7 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 
 
 
-7.  ```
+8.  ```
     void insert(std::initializer_list<value_type> ilist);
     ```
 
