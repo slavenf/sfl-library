@@ -663,7 +663,8 @@ static constexpr size_type static_capacity = N;
 
     New element is constructed as `value_type(std::forward<K>(x))`.
 
-    **Note:** This overload participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
+    **Note:**
+    This overload participates in overload resolution only if `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
 
     **Returns:**
     The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
@@ -716,7 +717,8 @@ static constexpr size_type static_capacity = N;
 
     Iterator `hint` is used as a suggestion where to start to search insert position.
 
-    **Note:** This overload participates in overload resolution only if all following conditions are satisfied:
+    **Note:**
+    This overload participates in overload resolution only if all following conditions are satisfied:
     1. `Compare::is_transparent` exists and is a valid type. It allows calling this function without constructing an instance of `Key`.
     2. `std::is_convertible_v<K&&, iterator>` is `false`.
     3. `std::is_convertible_v<K&&, const_iterator>` is `false`.

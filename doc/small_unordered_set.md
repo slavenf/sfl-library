@@ -687,7 +687,8 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 
     New element is constructed as `value_type(std::forward<K>(x))`.
 
-    **Note:** This overload participates in overload resolution only if both `Hash::is_transparent` and `KeyEqual::is_transparent` exist and are valid types. This allows the function to be called without constructing an instance of `Key`.
+    **Note:**
+    This overload participates in overload resolution only if both `Hash::is_transparent` and `KeyEqual::is_transparent` exist and are valid types. This allows the function to be called without constructing an instance of `Key`.
 
     **Returns:**
     The iterator component points to the inserted element or to the already existing element. The `bool` component is `true` if insertion happened and `false` if it did not.
