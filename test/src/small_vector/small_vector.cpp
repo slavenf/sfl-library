@@ -1,8 +1,3 @@
-//
-// g++ -std=c++11 -g -O0 -Wall -Wextra -Wpedantic -Werror -Wfatal-errors -I ../include small_vector.cpp
-// valgrind --leak-check=full ./a.out
-//
-
 #undef NDEBUG // This is very important. Must be in the first line.
 
 #include "sfl/small_vector.hpp"
@@ -21,23 +16,6 @@
 
 #include <sstream>
 #include <vector>
-
-#if 0 // TODO: Review this
-static_assert
-(
-    sizeof(sfl::small_vector<double, 0>) ==
-        3 * sizeof(sfl::small_vector<double, 0>::pointer),
-    "Invalid size"
-);
-
-static_assert
-(
-    sizeof(sfl::small_vector<double, 5>) ==
-        3 * sizeof(sfl::small_vector<double, 5>::pointer) +
-        5 * sizeof(sfl::small_vector<double, 5>::value_type),
-    "Invalid size"
-);
-#endif
 
 void test_small_vector_1()
 {

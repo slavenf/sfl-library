@@ -1,8 +1,3 @@
-//
-// g++ -std=c++11 -g -O0 -Wall -Wextra -Wpedantic -Werror -Wfatal-errors -I ../include compact_vector.cpp
-// valgrind --leak-check=full ./a.out
-//
-
 #undef NDEBUG // This is very important. Must be in the first line.
 
 #include "sfl/compact_vector.hpp"
@@ -21,15 +16,6 @@
 
 #include <sstream>
 #include <vector>
-
-#if 0 // TODO: Review this
-static_assert
-(
-    sizeof(sfl::compact_vector<int>) ==
-        2 * sizeof(sfl::compact_vector<int>::pointer),
-    "Invalid size"
-);
-#endif
 
 void test_compact_vector_1()
 {

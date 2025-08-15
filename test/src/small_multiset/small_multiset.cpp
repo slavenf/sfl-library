@@ -1,8 +1,3 @@
-//
-// g++ -std=c++11 -g -O0 -Wall -Wextra -Wpedantic -Werror -Wfatal-errors -I ../include small_multiset.cpp
-// valgrind --leak-check=full ./a.out
-//
-
 #undef NDEBUG // This is very important. Must be in the first line.
 
 #include "sfl/small_multiset.hpp"
