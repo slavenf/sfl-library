@@ -1,4 +1,4 @@
-# New release
+# 2.0.0 (2025-08-15)
 
 * Renamed containers:
   * Renamed `small_unordered_flat_map` to `small_unordered_linear_map`.
