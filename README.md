@@ -4,13 +4,13 @@ This is header-only C++11 library that offers several new or less-known containe
 
 #### Sequence containers:
 
-* [`vector`](doc/vector.md) — Vector equivalent to `std::vector`, but not specialized for `bool`, and with few minor differences.
-* [`devector`](doc/devector.md) — Double-ended vector that allows faster insertion/deletion at front than `vector`.
-* [`small_vector`](doc/small_vector.md) — Vector that internally embeds small statically allocated storage to avoid using dynamic memory management if number of elements is small.
-* [`static_vector`](doc/static_vector.md) — Vector with a fixed maximum capacity defined at compile time and backed entirely by statically alocated storage. Dynamic memory management is never used.
-* [`compact_vector`](doc/compact_vector.md) — Vector that always have `capacity()` equal to `size()`. It is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
-* [`segmented_vector`](doc/segmented_vector.md) — Vector with segmented storage that allows fast insertion/deletion at back without memory reallocation.
-* [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion/deletion at both front and back without memory reallocation.
+* [`vector`](doc/vector.md) — Vector equivalent to `std::vector`, but not specialized for `bool` and with a few minor differences.
+* [`devector`](doc/devector.md) — Double-ended vector that allows faster insertion and deletion at the front compared to `vector`.
+* [`small_vector`](doc/small_vector.md) — Vector that embeds small statically allocated storage internally to avoid dynamic memory allocation when the number of elements is small.
+* [`static_vector`](doc/static_vector.md) — Vector with a fixed maximum capacity defined at compile time, backed entirely by statically allocated storage. Dynamic memory is never used.
+* [`compact_vector`](doc/compact_vector.md) — Vector whose `capacity()` is always equal to its `size()`. Inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
+* [`segmented_vector`](doc/segmented_vector.md) — Vector with segmented storage that allows fast insertion and deletion at the back without memory reallocation.
+* [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion and deletion at both the front and back without memory reallocation.
 
 #### Associative containers based on **red-black trees**:
 
