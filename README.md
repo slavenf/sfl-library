@@ -17,11 +17,17 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`map`](doc/map.md)
 * [`set`](doc/set.md)
 * [`multimap`](doc/multimap.md)
-* [`multiset`](doc/multiset.md) <br><br>
+* [`multiset`](doc/multiset.md)
+
+<br>
+
 * [`small_map`](doc/small_map.md)
 * [`small_set`](doc/small_set.md)
 * [`small_multimap`](doc/small_multimap.md)
-* [`small_multiset`](doc/small_multiset.md) <br><br>
+* [`small_multiset`](doc/small_multiset.md)
+
+<br>
+
 * [`static_map`](doc/static_map.md)
 * [`static_set`](doc/static_set.md)
 * [`static_multimap`](doc/static_multimap.md)
@@ -32,11 +38,17 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`unordered_map`](doc/unordered_map.md)
 * [`unordered_set`](doc/unordered_set.md)
 * [`unordered_multimap`](doc/unordered_multimap.md)
-* [`unordered_multiset`](doc/unordered_multiset.md) <br><br>
+* [`unordered_multiset`](doc/unordered_multiset.md)
+
+<br>
+
 * [`small_unordered_map`](doc/small_unordered_map.md)
 * [`small_unordered_set`](doc/small_unordered_set.md)
 * [`small_unordered_multimap`](doc/small_unordered_multimap.md)
-* [`small_unordered_multiset`](doc/small_unordered_multiset.md) <br><br>
+* [`small_unordered_multiset`](doc/small_unordered_multiset.md)
+
+<br>
+
 * [`static_unordered_map`](doc/static_unordered_map.md)
 * [`static_unordered_set`](doc/static_unordered_set.md)
 * [`static_unordered_multimap`](doc/static_unordered_multimap.md)
@@ -47,11 +59,17 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`flat_map`](doc/flat_map.md)
 * [`flat_set`](doc/flat_set.md)
 * [`flat_multimap`](doc/flat_multimap.md)
-* [`flat_multiset`](doc/flat_multiset.md) <br><br>
+* [`flat_multiset`](doc/flat_multiset.md)
+
+<br>
+
 * [`small_flat_map`](doc/small_flat_map.md)
 * [`small_flat_set`](doc/small_flat_set.md)
 * [`small_flat_multimap`](doc/small_flat_multimap.md)
-* [`small_flat_multiset`](doc/small_flat_multiset.md) <br><br>
+* [`small_flat_multiset`](doc/small_flat_multiset.md)
+
+<br>
+
 * [`static_flat_map`](doc/static_flat_map.md)
 * [`static_flat_set`](doc/static_flat_set.md)
 * [`static_flat_multimap`](doc/static_flat_multimap.md)
@@ -62,7 +80,10 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`small_unordered_linear_map`](doc/small_unordered_linear_map.md)
 * [`small_unordered_linear_set`](doc/small_unordered_linear_set.md)
 * [`small_unordered_linear_multimap`](doc/small_unordered_linear_multimap.md)
-* [`small_unordered_linear_multiset`](doc/small_unordered_linear_multiset.md) <br><br>
+* [`small_unordered_linear_multiset`](doc/small_unordered_linear_multiset.md)
+
+<br>
+
 * [`static_unordered_linear_map`](doc/static_unordered_linear_map.md)
 * [`static_unordered_linear_set`](doc/static_unordered_linear_set.md)
 * [`static_unordered_linear_multimap`](doc/static_unordered_linear_multimap.md)
