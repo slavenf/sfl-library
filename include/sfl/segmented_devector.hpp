@@ -914,11 +914,11 @@ public:
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
 
-        const size_type dist_to_begin = std::distance(cbegin(), pos);
-        const size_type dist_to_end   = std::distance(pos, cend());
-
         const iterator p1(pos.segment_, pos.local_);
         const iterator p2 = ++iterator(p1);
+
+        const size_type dist_to_begin = std::distance(begin(), p1);
+        const size_type dist_to_end   = std::distance(p2, end());
 
         if (dist_to_begin < dist_to_end)
         {
@@ -949,11 +949,11 @@ public:
             return iterator(first.segment_, first.local_);
         }
 
-        const size_type dist_to_begin = std::distance(cbegin(), first);
-        const size_type dist_to_end   = std::distance(last, cend());
-
         const iterator p1(first.segment_, first.local_);
         const iterator p2(last.segment_, last.local_);
+
+        const size_type dist_to_begin = std::distance(begin(), p1);
+        const size_type dist_to_end   = std::distance(p2, end());
 
         if (dist_to_begin < dist_to_end)
         {
