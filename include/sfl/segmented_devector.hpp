@@ -1540,59 +1540,98 @@ private:
         const size_type table_available_front =
             std::distance(data_.table_bos_, data_.table_first_);
 
-        // Increase table capacity at back if neccessary
+        // If there is no enough free space at the front of table
         if (table_required_front > table_available_front)
         {
-            const size_type table_capacity =
-                std::distance(data_.table_bos_, data_.table_eos_);
+            // Available capacity at the back of table
+            const size_type table_available_back =
+                std::distance(data_.table_last_, data_.table_eos_);
 
-            const size_type new_table_capacity = std::max
-            (
-                table_capacity + table_capacity / 2,
-                table_capacity - table_available_front + table_required_front
-            );
+            // If there is enough free space at both front and back of table
+            if (table_required_front <= table_available_front + table_available_back)
+            {
+                // There is no need to allocate new table.
+                // We are going to shift elements in table to the right.
 
-            // Distance (in segments) from BEGIN of storage to FIRST element.
-            const size_type dist1 =
-                std::distance(data_.bos_.segment_, data_.first_.segment_);
+                // Calculate shift count (noexcept)
+                const size_type shift = table_required_front - table_available_front;
 
-            // Distance (in segments) from BEGIN of storage to LAST element.
-            const size_type dist2 =
-                std::distance(data_.bos_.segment_, data_.last_.segment_);
+                // New pointer to one-past-last element in table (noexcept)
+                const segment_pointer new_table_last = data_.table_last_ + shift;
 
-            // Allocate new table. No effects if allocation fails.
-            const segment_pointer new_table_bos =
-                allocate_table(new_table_capacity);
+                // Shift elements in table to the right (noexcept)
+                const segment_pointer new_table_first = sfl::dtl::copy_backward
+                (
+                    data_.table_first_,
+                    data_.table_last_,
+                    new_table_last
+                );
 
-            const segment_pointer new_table_eos =
-                new_table_bos + new_table_capacity;
+                // Update table (noexcept)
+                data_.table_first_ = new_table_first;
+                data_.table_last_  = new_table_last;
 
-            // Initialize LAST element in new table (noexecept).
-            const segment_pointer new_table_last =
-                new_table_eos - std::distance(data_.table_last_, data_.table_eos_);
+                // Update iterators (noexcept).
+                data_.bos_.segment_ = data_.table_first_;
+                data_.eos_.segment_ = data_.table_last_ - 1;
+                data_.first_.segment_ += shift;
+                data_.last_.segment_  += shift;
+            }
+            else
+            {
+                // We have to allocate new table.
 
-            // Initialize FIRST element in new table (noexecept).
-            const segment_pointer new_table_first = sfl::dtl::copy_backward
-            (
-                data_.table_first_,
-                data_.table_last_,
-                new_table_last
-            );
+                const size_type table_capacity =
+                    std::distance(data_.table_bos_, data_.table_eos_);
 
-            // Deallocate old table (noexecept).
-            deallocate_table(data_.table_bos_, table_capacity);
+                const size_type new_table_capacity = std::max
+                (
+                    table_capacity + table_capacity / 2,
+                    table_capacity - table_available_front + table_required_front
+                );
 
-            // Update table (noexcept).
-            data_.table_bos_   = new_table_bos;
-            data_.table_eos_   = new_table_eos;
-            data_.table_first_ = new_table_first;
-            data_.table_last_  = new_table_last;
+                // Distance (in segments) from BEGIN of storage to FIRST element.
+                const size_type dist1 =
+                    std::distance(data_.bos_.segment_, data_.first_.segment_);
 
-            // Update iterators (noexcept).
-            data_.bos_.segment_   = data_.table_first_;
-            data_.eos_.segment_   = data_.table_last_ - 1;
-            data_.first_.segment_ = data_.table_first_ + dist1;
-            data_.last_.segment_  = data_.table_first_ + dist2;
+                // Distance (in segments) from BEGIN of storage to LAST element.
+                const size_type dist2 =
+                    std::distance(data_.bos_.segment_, data_.last_.segment_);
+
+                // Allocate new table. No effects if allocation fails.
+                const segment_pointer new_table_bos =
+                    allocate_table(new_table_capacity);
+
+                const segment_pointer new_table_eos =
+                    new_table_bos + new_table_capacity;
+
+                // Initialize LAST element in new table (noexecept).
+                const segment_pointer new_table_last =
+                    new_table_eos - std::distance(data_.table_last_, data_.table_eos_);
+
+                // Initialize FIRST element in new table (noexecept).
+                const segment_pointer new_table_first = sfl::dtl::copy_backward
+                (
+                    data_.table_first_,
+                    data_.table_last_,
+                    new_table_last
+                );
+
+                // Deallocate old table (noexecept).
+                deallocate_table(data_.table_bos_, table_capacity);
+
+                // Update table (noexcept).
+                data_.table_bos_   = new_table_bos;
+                data_.table_eos_   = new_table_eos;
+                data_.table_first_ = new_table_first;
+                data_.table_last_  = new_table_last;
+
+                // Update iterators (noexcept).
+                data_.bos_.segment_   = data_.table_first_;
+                data_.eos_.segment_   = data_.table_last_ - 1;
+                data_.first_.segment_ = data_.table_first_ + dist1;
+                data_.last_.segment_  = data_.table_first_ + dist2;
+            }
         }
 
         const segment_pointer new_table_first =
@@ -1628,60 +1667,99 @@ private:
         const size_type table_available_back =
             std::distance(data_.table_last_, data_.table_eos_);
 
-        // Increase table capacity at back if neccessary
+        // If there is no enough free space at the back of table
         if (table_required_back > table_available_back)
         {
-            const size_type table_capacity =
-                std::distance(data_.table_bos_, data_.table_eos_);
+            // Available capacity at the front of table
+            const size_type table_available_front =
+                std::distance(data_.table_bos_, data_.table_first_);
 
-            const size_type new_table_capacity = std::max
-            (
-                table_capacity + table_capacity / 2,
-                table_capacity - table_available_back + table_required_back
-            );
+            // If there is enough free space at both front and back of table
+            if (table_required_back <= table_available_front + table_available_back)
+            {
+                // There is no need to allocate new table.
+                // We are going to shift elements in table to the right.
 
-            // Distance (in segments) from BEGIN of storage to FIRST element.
-            const size_type dist1 =
-                std::distance(data_.bos_.segment_, data_.first_.segment_);
+                // Calculate shift count (noexcept)
+                const size_type shift = table_required_back - table_available_back;
 
-            // Distance (in segments) from BEGIN of storage to LAST element.
-            const size_type dist2 =
-                std::distance(data_.bos_.segment_, data_.last_.segment_);
+                // New pointer to first element in table (noexcept)
+                const segment_pointer new_table_first = data_.table_first_ - shift;
 
-            // Allocate new table. No effects if allocation fails.
-            const segment_pointer new_table_bos =
-                allocate_table(new_table_capacity);
+                // Shift elements in table to the left (noexcept)
+                const segment_pointer new_table_last = sfl::dtl::copy
+                (
+                    data_.table_first_,
+                    data_.table_last_,
+                    new_table_first
+                );
 
-            const segment_pointer new_table_eos =
-                new_table_bos + new_table_capacity;
+                // Update table (noexcept)
+                data_.table_first_ = new_table_first;
+                data_.table_last_  = new_table_last;
 
-            // Initialize FIRST element in new table (noexcept).
-            const segment_pointer new_table_first =
-                new_table_bos +
-                    std::distance(data_.table_bos_, data_.table_first_);
+                // Update iterators (noexcept).
+                data_.bos_.segment_ = data_.table_first_;
+                data_.eos_.segment_ = data_.table_last_ - 1;
+                data_.first_.segment_ -= shift;
+                data_.last_.segment_  -= shift;
+            }
+            else
+            {
+                // We have to allocate new table.
 
-            // Initialize LAST element in new table (noexecept).
-            const segment_pointer new_table_last = sfl::dtl::copy
-            (
-                data_.table_first_,
-                data_.table_last_,
-                new_table_first
-            );
+                const size_type table_capacity =
+                    std::distance(data_.table_bos_, data_.table_eos_);
 
-            // Deallocate old table (noexecept).
-            deallocate_table(data_.table_bos_, table_capacity);
+                const size_type new_table_capacity = std::max
+                (
+                    table_capacity + table_capacity / 2,
+                    table_capacity - table_available_back + table_required_back
+                );
 
-            // Update table (noexcept).
-            data_.table_bos_   = new_table_bos;
-            data_.table_eos_   = new_table_eos;
-            data_.table_first_ = new_table_first;
-            data_.table_last_  = new_table_last;
+                // Distance (in segments) from BEGIN of storage to FIRST element.
+                const size_type dist1 =
+                    std::distance(data_.bos_.segment_, data_.first_.segment_);
 
-            // Update iterators (noexcept).
-            data_.bos_.segment_   = data_.table_first_;
-            data_.eos_.segment_   = data_.table_last_ - 1;
-            data_.first_.segment_ = data_.table_first_ + dist1;
-            data_.last_.segment_  = data_.table_first_ + dist2;
+                // Distance (in segments) from BEGIN of storage to LAST element.
+                const size_type dist2 =
+                    std::distance(data_.bos_.segment_, data_.last_.segment_);
+
+                // Allocate new table. No effects if allocation fails.
+                const segment_pointer new_table_bos =
+                    allocate_table(new_table_capacity);
+
+                const segment_pointer new_table_eos =
+                    new_table_bos + new_table_capacity;
+
+                // Initialize FIRST element in new table (noexcept).
+                const segment_pointer new_table_first =
+                    new_table_bos +
+                        std::distance(data_.table_bos_, data_.table_first_);
+
+                // Initialize LAST element in new table (noexecept).
+                const segment_pointer new_table_last = sfl::dtl::copy
+                (
+                    data_.table_first_,
+                    data_.table_last_,
+                    new_table_first
+                );
+
+                // Deallocate old table (noexecept).
+                deallocate_table(data_.table_bos_, table_capacity);
+
+                // Update table (noexcept).
+                data_.table_bos_   = new_table_bos;
+                data_.table_eos_   = new_table_eos;
+                data_.table_first_ = new_table_first;
+                data_.table_last_  = new_table_last;
+
+                // Update iterators (noexcept).
+                data_.bos_.segment_   = data_.table_first_;
+                data_.eos_.segment_   = data_.table_last_ - 1;
+                data_.first_.segment_ = data_.table_first_ + dist1;
+                data_.last_.segment_  = data_.table_first_ + dist2;
+            }
         }
 
         const segment_pointer new_table_last =
