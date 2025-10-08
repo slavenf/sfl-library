@@ -896,9 +896,24 @@ public:
     {
         SFL_ASSERT(!empty());
 
-        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*data_.first_));
+        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), data_.first_.local_);
 
         ++data_.first_;
+
+        // If local iterator points to the begin of the segment, that means
+        // we have just removed element that was at the back of segment.
+        // In that case, we are going to deallocate one segment at the front
+        // of table just to have predictable memory usage in case when this
+        // container is used as double-ended queue (push_back + pop_front)
+        if (data_.first_.local_ == *data_.first_.segment_)
+        {
+            deallocate_segment(*data_.table_first_);
+
+            ++data_.table_first_;
+
+            data_.bos_.segment_ =  data_.table_first_;
+            data_.bos_.local_   = *data_.table_first_;
+        }
     }
 
     void pop_back()
@@ -907,7 +922,22 @@ public:
 
         --data_.last_;
 
-        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*data_.last_));
+        sfl::dtl::destroy_at_a(data_.ref_to_alloc(), data_.last_.local_);
+
+        // If local iterator points to the end of the segment, that means
+        // we have just removed element that was at the front of segment.
+        // In that case, we are going to deallocate one segment at the back
+        // of table just to have predictable memory usage in case when this
+        // container is used as double-ended queue (push_front + pop_back)
+        if (data_.last_.local_ == *data_.last_.segment_ + (N - 1))
+        {
+            --data_.table_last_;
+
+            deallocate_segment(*data_.table_last_);
+
+            data_.eos_.segment_ =  (data_.table_last_ - 1);
+            data_.eos_.local_   = *(data_.table_last_ - 1) + (N - 1);
+        }
     }
 
     iterator erase(const_iterator pos)
@@ -922,19 +952,17 @@ public:
 
         if (dist_to_begin < dist_to_end)
         {
-            const iterator old_first = data_.first_;
+            sfl::dtl::move_backward(data_.first_, p1, p2);
 
-            data_.first_ = sfl::dtl::move_backward(data_.first_, p1, p2);
-
-            sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*old_first));
+            pop_front();
 
             return p2;
         }
         else
         {
-            data_.last_ = sfl::dtl::move(p2, data_.last_, p1);
+            sfl::dtl::move(p2, data_.last_, p1);
 
-            sfl::dtl::destroy_at_a(data_.ref_to_alloc(), std::addressof(*data_.last_));
+            pop_back();
 
             return p1;
         }
@@ -949,6 +977,12 @@ public:
             return iterator(first.segment_, first.local_);
         }
 
+        if (first == cbegin() && last == cend())
+        {
+            clear();
+            return end();
+        }
+
         const iterator p1(first.segment_, first.local_);
         const iterator p2(last.segment_, last.local_);
 
@@ -961,6 +995,20 @@ public:
 
             sfl::dtl::destroy_a(data_.ref_to_alloc(), data_.first_, new_first);
 
+            const size_type n = std::distance(data_.first_.segment_, new_first.segment_);
+
+            if (n != 0)
+            {
+                const segment_pointer new_table_first = data_.table_first_ + n;
+
+                deallocate_segments(data_.table_first_, new_table_first);
+
+                data_.table_first_ = new_table_first;
+
+                data_.bos_.segment_ =  data_.table_first_;
+                data_.bos_.local_   = *data_.table_first_;
+            }
+
             data_.first_ = new_first;
 
             return p2;
@@ -970,6 +1018,20 @@ public:
             const iterator new_last = sfl::dtl::move(p2, data_.last_, p1);
 
             sfl::dtl::destroy_a(data_.ref_to_alloc(), new_last, data_.last_);
+
+            const size_type n = std::distance(new_last.segment_, data_.last_.segment_);
+
+            if (n != 0)
+            {
+                const segment_pointer new_table_last = data_.table_last_ - n;
+
+                deallocate_segments(new_table_last, data_.table_last_);
+
+                data_.table_last_ = new_table_last;
+
+                data_.eos_.segment_ =  (data_.table_last_ - 1);
+                data_.eos_.local_   = *(data_.table_last_ - 1) + (N - 1);
+            }
 
             data_.last_ = new_last;
 
