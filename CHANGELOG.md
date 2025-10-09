@@ -1,3 +1,10 @@
+# 2.0.1 (2025-10-09)
+
+* Segmented devector: Fixed an issue where memory usage could grow indefinitely
+  during iterative push/emplace at one end and pop/erase at the other end.
+
+
+
 # 2.0.0 (2025-08-15)
 
 * Renamed containers:
