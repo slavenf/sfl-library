@@ -473,33 +473,33 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 64>* = nullptr>
-    std::size_t priv_calculate_bucket_index_for_hash(std::size_t hash) const
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr std::size_t a = 0x9e3779b97f4a7c15u;
+        static constexpr SizeType a = 0x9e3779b97f4a7c15u;
         static constexpr int w = 64;
-        const std::size_t bucket_index = (a * hash) >> (w - bucket_count_log2_);
+        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
         SFL_ASSERT(bucket_index < bucket_count_);
         return bucket_index;
     }
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 32>* = nullptr>
-    std::size_t priv_calculate_bucket_index_for_hash(std::size_t hash) const
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr std::size_t a = 0x9e3779b9u;
+        static constexpr SizeType a = 0x9e3779b9u;
         static constexpr int w = 32;
-        const std::size_t bucket_index = (a * hash) >> (w - bucket_count_log2_);
+        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
         SFL_ASSERT(bucket_index < bucket_count_);
         return bucket_index;
     }
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 16>* = nullptr>
-    std::size_t priv_calculate_bucket_index_for_hash(std::size_t hash) const
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr std::size_t a = 0x9e37u;
+        static constexpr SizeType a = 0x9e37u;
         static constexpr int w = 16;
-        const std::size_t bucket_index = (a * hash) >> (w - bucket_count_log2_);
+        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
         SFL_ASSERT(bucket_index < bucket_count_);
         return bucket_index;
     }
@@ -564,36 +564,36 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 64>* = nullptr>
-    std::size_t priv_calculate_bucket_index_for_hash(std::size_t hash) const
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr std::size_t a = 0x9e3779b97f4a7c15u;
+        static constexpr SizeType a = 0x9e3779b97f4a7c15u;
         static constexpr int w = 64;
         static constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
-        const std::size_t bucket_index = (a * hash) >> (w - m);
+        const SizeType bucket_index = (a * hash) >> (w - m);
         SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
     }
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 32>* = nullptr>
-    std::size_t priv_calculate_bucket_index_for_hash(std::size_t hash) const
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr std::size_t a = 0x9e3779b9u;
+        static constexpr SizeType a = 0x9e3779b9u;
         static constexpr int w = 32;
         static constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
-        const std::size_t bucket_index = (a * hash) >> (w - m);
+        const SizeType bucket_index = (a * hash) >> (w - m);
         SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
     }
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 16>* = nullptr>
-    std::size_t priv_calculate_bucket_index_for_hash(std::size_t hash) const
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr std::size_t a = 0x9e37u;
+        static constexpr SizeType a = 0x9e37u;
         static constexpr int w = 16;
         static constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
-        const std::size_t bucket_index = (a * hash) >> (w - m);
+        const SizeType bucket_index = (a * hash) >> (w - m);
         SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
     }
