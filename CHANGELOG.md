@@ -1,3 +1,9 @@
+# 2.0.2 (2025-10-10)
+
+* Hash table: Fixed compiler warnings when compiled in 32-bit mode.
+
+
+
 # 2.0.1 (2025-10-09)
 
 * Segmented devector: Fixed an issue where memory usage could grow indefinitely
