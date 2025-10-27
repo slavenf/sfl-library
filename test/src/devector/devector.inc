@@ -11399,7 +11399,7 @@ PRINT("Test assign(InputIt, InputIt)");
     }
 }
 
-PRINT("Test assign(std::initializer_list");
+PRINT("Test assign(std::initializer_list)");
 {
     sfl::devector<xint, TPARAM_ALLOCATOR<xint>> vec;
 

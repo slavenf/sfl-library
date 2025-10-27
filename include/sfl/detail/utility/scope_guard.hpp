@@ -40,6 +40,7 @@ private:
 
 public:
 
+    SFL_CONSTEXPR_20
     scope_guard(Lambda&& lambda)
         : dismissed_(false)
         , lambda_(std::forward<Lambda>(lambda))
@@ -47,6 +48,7 @@ public:
 
     scope_guard(const scope_guard& other) = delete;
 
+    SFL_CONSTEXPR_20
     scope_guard(scope_guard&& other)
         : dismissed_(other.dismissed_)
         , lambda_(std::move(other.lambda_))
@@ -56,6 +58,7 @@ public:
 
     scope_guard& operator=(const scope_guard& other) = delete;
 
+    SFL_CONSTEXPR_20
     scope_guard& operator=(scope_guard&& other)
     {
         dismissed_ = other.dismissed_;
@@ -63,6 +66,7 @@ public:
         other.dismissed_ = true;
     }
 
+    SFL_CONSTEXPR_20
     ~scope_guard()
     {
         if (!dismissed_)
@@ -71,6 +75,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void dismiss() const noexcept
     {
         dismissed_ = true;
@@ -78,6 +83,7 @@ public:
 };
 
 template <typename Lambda>
+SFL_CONSTEXPR_20
 scope_guard<Lambda> make_scope_guard(Lambda&& lambda)
 {
     return scope_guard<Lambda>(std::forward<Lambda>(lambda));

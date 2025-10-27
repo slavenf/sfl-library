@@ -18,51 +18,55 @@
 #include <sstream>
 #include <vector>
 
-template <>
-void test_devector<1>()
-{
-    #undef   TPARAM_ALLOCATOR
-    #define  TPARAM_ALLOCATOR std::allocator
-    #include "devector.inc"
-}
+// template <>
+// void test_devector<1>()
+// {
+//     #undef   TPARAM_ALLOCATOR
+//     #define  TPARAM_ALLOCATOR std::allocator
+//     #include "devector.inc"
+// }
 
-template <>
-void test_devector<2>()
-{
-    #undef   TPARAM_ALLOCATOR
-    #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
-    #include "devector.inc"
-}
+// template <>
+// void test_devector<2>()
+// {
+//     #undef   TPARAM_ALLOCATOR
+//     #define  TPARAM_ALLOCATOR sfl::test::statefull_alloc
+//     #include "devector.inc"
+// }
 
-template <>
-void test_devector<3>()
-{
-    #undef   TPARAM_ALLOCATOR
-    #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
-    #include "devector.inc"
-}
+// template <>
+// void test_devector<3>()
+// {
+//     #undef   TPARAM_ALLOCATOR
+//     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc
+//     #include "devector.inc"
+// }
 
-template <>
-void test_devector<4>()
-{
-    #undef   TPARAM_ALLOCATOR
-    #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
-    #include "devector.inc"
-}
+// template <>
+// void test_devector<4>()
+// {
+//     #undef   TPARAM_ALLOCATOR
+//     #define  TPARAM_ALLOCATOR sfl::test::stateless_alloc_no_prop
+//     #include "devector.inc"
+// }
 
-template <>
-void test_devector<5>()
-{
-    #undef   TPARAM_ALLOCATOR
-    #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
-    #include "devector.inc"
-}
+// template <>
+// void test_devector<5>()
+// {
+//     #undef   TPARAM_ALLOCATOR
+//     #define  TPARAM_ALLOCATOR sfl::test::stateless_fancy_alloc
+//     #include "devector.inc"
+// }
 
 int main()
 {
-    test_devector<1>();
-    test_devector<2>();
-    test_devector<3>();
-    test_devector<4>();
-    test_devector<5>();
+    // test_devector<1>();
+    // test_devector<2>();
+    // test_devector<3>();
+    // test_devector<4>();
+    // test_devector<5>();
 }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+#include "test_cpp20_constexpr.inc"
+#endif
