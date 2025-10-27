@@ -40,6 +40,7 @@ private:
 
 public:
 
+    SFL_CONSTEXPR_20
     optional_value() noexcept
     {}
 
@@ -51,28 +52,33 @@ public:
 
     optional_value& operator=(optional_value&& other) = delete;
 
+    SFL_CONSTEXPR_20
     ~optional_value() noexcept
     {}
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T* ptr() noexcept
     {
         return std::addressof(value_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const T* ptr() const noexcept
     {
         return std::addressof(value_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T& ref() noexcept
     {
         return value_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const T& ref() const noexcept
     {
         return value_;
