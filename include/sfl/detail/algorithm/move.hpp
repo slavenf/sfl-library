@@ -25,6 +25,7 @@
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
+#include <sfl/detail/cpp.hpp>
 
 #include <algorithm> // move, min
 #include <iterator>  // iterator_traits, distance
@@ -41,6 +42,7 @@ template <typename InputIt, typename OutputIt,
                                  (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                    sfl::dtl::is_segmented_iterator<OutputIt>::value &&
                                   !sfl::dtl::is_random_access_iterator<InputIt>::value) >* = nullptr>
+SFL_CONSTEXPR_20
 OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
     return std::move(first, last, d_first);
@@ -50,6 +52,7 @@ template <typename InputIt, typename OutputIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                   sfl::dtl::is_segmented_iterator<OutputIt>::value &&
                                   sfl::dtl::is_random_access_iterator<InputIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<OutputIt>;
@@ -101,6 +104,7 @@ OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 
 template <typename InputIt, typename OutputIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<InputIt>;

@@ -241,12 +241,14 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     static size_type max_size(const Allocator& a) noexcept
     {
         return priv_max_size(a, typename has_max_size<Allocator>::type());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     static Allocator select_on_container_copy_construction(const Allocator& a)
     {
         return priv_select_on_container_copy_construction(a, typename has_select_on_container_copy_construction<Allocator>::type());
@@ -281,22 +283,26 @@ private:
         return sfl::dtl::allocation_result<pointer, size_type>{a.allocate(n), n};
     }
 
+    SFL_CONSTEXPR_20
     static size_type priv_max_size(const Allocator& a, std::true_type)
     {
         return a.max_size();
     }
 
+    SFL_CONSTEXPR_20
     static size_type priv_max_size(const Allocator& a, std::false_type)
     {
         sfl::dtl::ignore_unused(a);
         return std::numeric_limits<size_type>::max() / sizeof(value_type);
     }
 
+    SFL_CONSTEXPR_20
     static Allocator priv_select_on_container_copy_construction(const Allocator& a, std::true_type)
     {
         return a.select_on_container_copy_construction(a);
     }
 
+    SFL_CONSTEXPR_20
     static Allocator priv_select_on_container_copy_construction(const Allocator& a, std::false_type)
     {
         return a;

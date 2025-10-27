@@ -24,6 +24,7 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
+#include <sfl/detail/cpp.hpp>
 
 #include <algorithm> // fill
 
@@ -35,6 +36,7 @@ namespace dtl
 
 template <typename ForwardIt, typename T,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 void fill(ForwardIt first, ForwardIt last, const T& value)
 {
     std::fill(first, last, value);
@@ -42,6 +44,7 @@ void fill(ForwardIt first, ForwardIt last, const T& value)
 
 template <typename ForwardIt, typename T,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 void fill(ForwardIt first, ForwardIt last, const T& value)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;

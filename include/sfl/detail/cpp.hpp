@@ -47,6 +47,12 @@
     #define SFL_NODISCARD
 #endif
 
+#if SFL_CPP_VERSION >= SFL_CPP_20
+    #define SFL_CONSTEXPR_20 constexpr
+#else
+    #define SFL_CONSTEXPR_20
+#endif
+
 #ifdef SFL_NO_EXCEPTIONS
     #define SFL_TRY      if (true)
     #define SFL_CATCH(x) if (false)

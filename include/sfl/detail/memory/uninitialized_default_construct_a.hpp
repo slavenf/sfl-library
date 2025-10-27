@@ -38,6 +38,7 @@ namespace dtl
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 void uninitialized_default_construct_a(Allocator& a, ForwardIt first, ForwardIt last)
 {
     ForwardIt curr = first;
@@ -58,6 +59,7 @@ void uninitialized_default_construct_a(Allocator& a, ForwardIt first, ForwardIt 
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 void uninitialized_default_construct_a(Allocator& a, ForwardIt first, ForwardIt last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;

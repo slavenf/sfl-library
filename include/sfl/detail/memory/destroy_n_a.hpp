@@ -39,6 +39,7 @@ namespace dtl
 
 template <typename Allocator, typename ForwardIt, typename Size,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 ForwardIt destroy_n_a(Allocator& a, ForwardIt first, Size n) noexcept
 {
     while (n > 0)
@@ -52,6 +53,7 @@ ForwardIt destroy_n_a(Allocator& a, ForwardIt first, Size n) noexcept
 
 template <typename Allocator, typename ForwardIt, typename Size,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 ForwardIt destroy_n_a(Allocator& a, ForwardIt first, Size n) noexcept
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;

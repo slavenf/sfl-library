@@ -21,6 +21,8 @@
 #ifndef SFL_DETAIL_ALLOCATE_HPP_INCLUDED
 #define SFL_DETAIL_ALLOCATE_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
 #include <memory> // allocator_traits
 
 namespace sfl
@@ -30,6 +32,7 @@ namespace dtl
 {
 
 template <typename Allocator, typename Size>
+SFL_CONSTEXPR_20
 auto allocate(Allocator& a, Size n) -> typename std::allocator_traits<Allocator>::pointer
 {
     if (n != 0)

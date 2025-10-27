@@ -46,6 +46,7 @@ template <typename Allocator, typename InputIt, typename ForwardIt,
                                  (!sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                    sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
                                   !sfl::dtl::is_random_access_iterator<InputIt>::value) >* = nullptr>
+SFL_CONSTEXPR_20
 ForwardIt uninitialized_move_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;
@@ -70,6 +71,7 @@ template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<InputIt>::value &&
                                   sfl::dtl::is_segmented_iterator<ForwardIt>::value &&
                                   sfl::dtl::is_random_access_iterator<InputIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 ForwardIt uninitialized_move_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;
@@ -135,6 +137,7 @@ ForwardIt uninitialized_move_a(Allocator& a, InputIt first, InputIt last, Forwar
 
 template <typename Allocator, typename InputIt, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<InputIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 ForwardIt uninitialized_move_a(Allocator& a, InputIt first, InputIt last, ForwardIt d_first)
 {
     using traits = sfl::dtl::segmented_iterator_traits<InputIt>;

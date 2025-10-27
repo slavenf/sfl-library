@@ -41,6 +41,7 @@ namespace dtl
 
 template <typename Allocator, typename ForwardIt, typename Size, typename T,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 ForwardIt uninitialized_fill_n_a(Allocator& a, ForwardIt first, Size n, const T& value)
 {
     ForwardIt curr = first;
@@ -63,6 +64,7 @@ ForwardIt uninitialized_fill_n_a(Allocator& a, ForwardIt first, Size n, const T&
 
 template <typename Allocator, typename ForwardIt, typename Size, typename T,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 ForwardIt uninitialized_fill_n_a(Allocator& a, ForwardIt first, Size n, const T& value)
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;

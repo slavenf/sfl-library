@@ -69,17 +69,20 @@ public:
 public:
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     Iterator& base() noexcept
     {
         return it_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const Iterator& base() const noexcept
     {
         return it_;
     }
 
+    SFL_CONSTEXPR_20
     explicit normal_iterator(const Iterator& it) noexcept
         : it_(it)
     {}
@@ -87,11 +90,13 @@ public:
 public:
 
     // Default constructor
+    SFL_CONSTEXPR_20
     normal_iterator() noexcept
         : it_()
     {}
 
     // Copy constructor
+    SFL_CONSTEXPR_20
     normal_iterator(const normal_iterator& other) noexcept
         : it_(other.it_)
     {}
@@ -99,11 +104,13 @@ public:
     // Converting constructor (from iterator to const_iterator)
     template <bool IsConst2 = IsConst,
               sfl::dtl::enable_if_t<IsConst2 == false>* = nullptr>
+    SFL_CONSTEXPR_20
     normal_iterator(const normal_iterator<Iterator, IsConst2>& other) noexcept
         : it_(other.it_)
     {}
 
     // Copy assignment operator
+    SFL_CONSTEXPR_20
     normal_iterator& operator=(const normal_iterator& other) noexcept
     {
         it_ = other.it_;
@@ -111,23 +118,27 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference operator*() const noexcept
     {
         return *it_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     pointer operator->() const noexcept
     {
         return sfl::dtl::to_address(it_);
     }
 
+    SFL_CONSTEXPR_20
     normal_iterator& operator++() noexcept
     {
         ++it_;
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     normal_iterator operator++(int) noexcept
     {
         auto temp = *this;
@@ -135,12 +146,14 @@ public:
         return temp;
     }
 
+    SFL_CONSTEXPR_20
     normal_iterator& operator--() noexcept
     {
         --it_;
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     normal_iterator operator--(int) noexcept
     {
         auto temp = *this;
@@ -148,12 +161,14 @@ public:
         return temp;
     }
 
+    SFL_CONSTEXPR_20
     normal_iterator& operator+=(difference_type n) noexcept
     {
         it_ += n;
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     normal_iterator& operator-=(difference_type n) noexcept
     {
         it_ -= n;
@@ -161,66 +176,77 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     normal_iterator operator+(difference_type n) const noexcept
     {
         return normal_iterator(it_ + n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     normal_iterator operator-(difference_type n) const noexcept
     {
         return normal_iterator(it_ - n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference operator[](difference_type n) const noexcept
     {
         return it_[n];
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend normal_iterator operator+(difference_type n, const normal_iterator& it) noexcept
     {
         return it + n;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend difference_type operator-(const normal_iterator& x, const normal_iterator& y) noexcept
     {
         return x.it_ - y.it_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator==(const normal_iterator& x, const normal_iterator& y) noexcept
     {
         return x.it_ == y.it_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator!=(const normal_iterator& x, const normal_iterator& y) noexcept
     {
         return !(x == y);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator<(const normal_iterator& x, const normal_iterator& y) noexcept
     {
         return x.it_ < y.it_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator>(const normal_iterator& x, const normal_iterator& y) noexcept
     {
         return y < x;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator<=(const normal_iterator& x, const normal_iterator& y) noexcept
     {
         return !(y < x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator>=(const normal_iterator& x, const normal_iterator& y) noexcept
     {
         return !(x < y);

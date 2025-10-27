@@ -21,6 +21,8 @@
 #ifndef SFL_DETAIL_COPY_N_HPP_INCLUDED
 #define SFL_DETAIL_COPY_N_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
 #include <algorithm> // copy_n
 
 namespace sfl
@@ -30,6 +32,7 @@ namespace dtl
 {
 
 template <typename InputIt, typename Size, typename OutputIt>
+SFL_CONSTEXPR_20
 OutputIt copy_n(InputIt first, Size count, OutputIt d_first)
 {
     return std::copy_n(first, count, d_first);

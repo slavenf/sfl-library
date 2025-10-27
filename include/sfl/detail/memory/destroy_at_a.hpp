@@ -22,6 +22,7 @@
 #define SFL_DETAIL_DESTROY_AT_A_HPP_INCLUDED
 
 #include <sfl/detail/memory/to_address.hpp>
+#include <sfl/detail/cpp.hpp>
 
 #include <memory> // allocator_traits
 
@@ -32,6 +33,7 @@ namespace dtl
 {
 
 template <typename Allocator, typename Pointer>
+SFL_CONSTEXPR_20
 void destroy_at_a(Allocator& a, Pointer p) noexcept
 {
     std::allocator_traits<Allocator>::destroy

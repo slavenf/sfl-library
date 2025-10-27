@@ -60,3 +60,7 @@ int main()
     test_vector_4();
     test_vector_5();
 }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+#include "test_cpp20_constexpr.inc"
+#endif

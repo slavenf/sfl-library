@@ -25,6 +25,7 @@
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
+#include <sfl/detail/cpp.hpp>
 
 #include <algorithm> // copy_backward, min
 #include <iterator>  // iterator_traits, distance
@@ -41,6 +42,7 @@ template <typename BidirIt1, typename BidirIt2,
                                  (!sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
                                    sfl::dtl::is_segmented_iterator<BidirIt2>::value &&
                                   !sfl::dtl::is_random_access_iterator<BidirIt1>::value) >* = nullptr>
+SFL_CONSTEXPR_20
 BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     return std::copy_backward(first, last, d_last);
@@ -50,6 +52,7 @@ template <typename BidirIt1, typename BidirIt2,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<BidirIt1>::value &&
                                   sfl::dtl::is_segmented_iterator<BidirIt2>::value &&
                                   sfl::dtl::is_random_access_iterator<BidirIt1>::value>* = nullptr>
+SFL_CONSTEXPR_20
 BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<BidirIt2>;
@@ -101,6 +104,7 @@ BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 
 template <typename BidirIt1, typename BidirIt2,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<BidirIt1>::value >* = nullptr>
+SFL_CONSTEXPR_20
 BidirIt2 copy_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
     using traits = sfl::dtl::segmented_iterator_traits<BidirIt1>;

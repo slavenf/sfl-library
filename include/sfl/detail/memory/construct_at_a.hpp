@@ -22,6 +22,7 @@
 #define SFL_DETAIL_CONSTRUCT_AT_A_HPP_INCLUDED
 
 #include <sfl/detail/memory/to_address.hpp>
+#include <sfl/detail/cpp.hpp>
 
 #include <memory>  // allocator_traits
 #include <utility> // forward
@@ -33,6 +34,7 @@ namespace dtl
 {
 
 template <typename Allocator, typename Pointer, typename... Args>
+SFL_CONSTEXPR_20
 void construct_at_a(Allocator& a, Pointer p, Args&&... args)
 {
     std::allocator_traits<Allocator>::construct

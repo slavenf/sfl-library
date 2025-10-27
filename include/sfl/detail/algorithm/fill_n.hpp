@@ -21,6 +21,8 @@
 #ifndef SFL_DETAIL_FILL_N_HPP_INCLUDED
 #define SFL_DETAIL_FILL_N_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
 #include <algorithm> // fill_n
 
 namespace sfl
@@ -30,6 +32,7 @@ namespace dtl
 {
 
 template <typename OutputIt, typename Size, typename T>
+SFL_CONSTEXPR_20
 OutputIt fill_n(OutputIt first, Size count, const T& value)
 {
     return std::fill_n(first, count, value);

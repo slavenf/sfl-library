@@ -25,6 +25,7 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
+#include <sfl/detail/cpp.hpp>
 
 #include <memory> // addressof
 
@@ -36,6 +37,7 @@ namespace dtl
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< !sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 void destroy_a(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 {
     while (first != last)
@@ -47,6 +49,7 @@ void destroy_a(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 
 template <typename Allocator, typename ForwardIt,
           sfl::dtl::enable_if_t< sfl::dtl::is_segmented_iterator<ForwardIt>::value >* = nullptr>
+SFL_CONSTEXPR_20
 void destroy_a(Allocator& a, ForwardIt first, ForwardIt last) noexcept
 {
     using traits = sfl::dtl::segmented_iterator_traits<ForwardIt>;

@@ -21,6 +21,8 @@
 #ifndef SFL_DETAIL_DEALLOCATE_HPP_INCLUDED
 #define SFL_DETAIL_DEALLOCATE_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
 #include <memory> // allocator_traits
 
 namespace sfl
@@ -30,6 +32,7 @@ namespace dtl
 {
 
 template <typename Allocator, typename Pointer, typename Size>
+SFL_CONSTEXPR_20
 void deallocate(Allocator& a, Pointer p, Size n) noexcept
 {
     if (p != nullptr)
