@@ -79,3 +79,7 @@ int main()
     test_rb_tree<5>();
     test_rb_tree<6>();
 }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+#include "test_cpp20_constexpr.inc"
+#endif

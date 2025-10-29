@@ -218,12 +218,14 @@ public:
 public:
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     static pointer allocate(Allocator& a, size_type n)
     {
         return a.allocate(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     static pointer allocate(Allocator& a, size_type n, const_void_pointer hint)
     {
         return priv_allocate(a, n, hint, typename has_allocate_hint<Allocator, size_type, const_void_pointer>::type());
@@ -235,6 +237,7 @@ public:
         return priv_allocate_at_least(a, n, typename has_allocate_at_least<Allocator>::type());
     }
 
+    SFL_CONSTEXPR_20
     static void deallocate(Allocator& a, pointer p, size_type n)
     {
         a.deallocate(p, n);
@@ -262,11 +265,13 @@ public:
 
 private:
 
+    SFL_CONSTEXPR_20
     static pointer priv_allocate(Allocator& a, size_type n, const_void_pointer hint, std::true_type)
     {
         return a.allocate(n, hint);
     }
 
+    SFL_CONSTEXPR_20
     static pointer priv_allocate(Allocator& a, size_type n, const_void_pointer hint, std::false_type)
     {
         sfl::dtl::ignore_unused(hint);

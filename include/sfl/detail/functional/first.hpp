@@ -34,6 +34,7 @@ struct first
 {
     template <typename Pair>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     typename Pair::first_type& operator()(Pair& p) const noexcept
     {
         return p.first;
@@ -41,6 +42,7 @@ struct first
 
     template <typename Pair>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const typename Pair::first_type& operator()(const Pair& p) const noexcept
     {
         return p.first;

@@ -34,6 +34,7 @@ struct identity
 {
     template <typename T>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T& operator()(T& t) const noexcept
     {
         return t;
@@ -41,6 +42,7 @@ struct identity
 
     template <typename T>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const T& operator()(const T& t) const noexcept
     {
         return t;

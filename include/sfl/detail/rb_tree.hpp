@@ -168,6 +168,7 @@ public:
 
     private:
 
+        SFL_CONSTEXPR_20
         explicit iterator(base_node_pointer x) noexcept
             : node_(x)
         {}
@@ -175,16 +176,19 @@ public:
     public:
 
         // Default constructor
+        SFL_CONSTEXPR_20
         iterator() noexcept
             : node_()
         {}
 
         // Copy constructor
+        SFL_CONSTEXPR_20
         iterator(const iterator& other) noexcept
             : node_(other.node_)
         {}
 
         // Copy assignment operator
+        SFL_CONSTEXPR_20
         iterator& operator=(const iterator& other) noexcept
         {
             node_ = other.node_;
@@ -192,23 +196,27 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         reference operator*() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         pointer operator->() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
+        SFL_CONSTEXPR_20
         iterator& operator++() noexcept
         {
             node_ = rb_tree::next(node_);
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         iterator operator++(int) noexcept
         {
             auto temp = *this;
@@ -216,12 +224,14 @@ public:
             return temp;
         }
 
+        SFL_CONSTEXPR_20
         iterator& operator--() noexcept
         {
             node_ = rb_tree::prev(node_);
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         iterator operator--(int) noexcept
         {
             auto temp = *this;
@@ -230,12 +240,14 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator==(const iterator& x, const iterator& y) noexcept
         {
             return x.node_ == y.node_;
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator!=(const iterator& x, const iterator& y) noexcept
         {
             return !(x == y);
@@ -265,6 +277,7 @@ public:
 
     private:
 
+        SFL_CONSTEXPR_20
         explicit const_iterator(base_node_pointer x) noexcept
             : node_(x)
         {}
@@ -272,21 +285,25 @@ public:
     public:
 
         // Default constructor
+        SFL_CONSTEXPR_20
         const_iterator() noexcept
             : node_()
         {}
 
         // Copy constructor
+        SFL_CONSTEXPR_20
         const_iterator(const const_iterator& other) noexcept
             : node_(other.node_)
         {}
 
         // Converting constructor (from iterator to const_iterator)
+        SFL_CONSTEXPR_20
         const_iterator(const iterator& other) noexcept
             : node_(other.node_)
         {}
 
         // Copy assignment operator
+        SFL_CONSTEXPR_20
         const_iterator& operator=(const const_iterator& other) noexcept
         {
             node_ = other.node_;
@@ -294,23 +311,27 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         reference operator*() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         pointer operator->() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
+        SFL_CONSTEXPR_20
         const_iterator& operator++() noexcept
         {
             node_ = rb_tree::next(node_);
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const_iterator operator++(int) noexcept
         {
             auto temp = *this;
@@ -318,12 +339,14 @@ public:
             return temp;
         }
 
+        SFL_CONSTEXPR_20
         const_iterator& operator--() noexcept
         {
             node_ = rb_tree::prev(node_);
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const_iterator operator--(int) noexcept
         {
             auto temp = *this;
@@ -332,12 +355,14 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator==(const const_iterator& x, const const_iterator& y) noexcept
         {
             return x.node_ == y.node_;
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator!=(const const_iterator& x, const const_iterator& y) noexcept
         {
             return !(x == y);
@@ -362,21 +387,25 @@ private:
 
         size_type size_;
 
+        SFL_CONSTEXPR_20
         base_node_pointer header() noexcept
         {
             return std::pointer_traits<base_node_pointer>::pointer_to(header_);
         }
 
+        SFL_CONSTEXPR_20
         base_node_pointer& root() noexcept
         {
             return header_.left_;
         }
 
+        SFL_CONSTEXPR_20
         base_node_pointer& minimum() noexcept
         {
             return header_.parent_;
         }
 
+        SFL_CONSTEXPR_20
         void reset() noexcept
         {
             header_.color_  = rb_tree_node_color::red;
@@ -388,6 +417,7 @@ private:
 
     public:
 
+        SFL_CONSTEXPR_20
         data()
             : key_compare()
             , node_allocator_type()
@@ -395,6 +425,7 @@ private:
             reset();
         }
 
+        SFL_CONSTEXPR_20
         data(const key_compare& comp)
             : key_compare(comp)
             , node_allocator_type()
@@ -403,6 +434,7 @@ private:
         }
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(const Alloc& alloc)
             : key_compare()
             , node_allocator_type(alloc)
@@ -411,6 +443,7 @@ private:
         }
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(const key_compare& comp, const Alloc& alloc)
             : key_compare(comp)
             , node_allocator_type(alloc)
@@ -418,6 +451,7 @@ private:
             reset();
         }
 
+        SFL_CONSTEXPR_20
         data(const data& other)
             : key_compare(other.ref_to_key_compare())
             , node_allocator_type(sfl::dtl::allocator_traits<node_allocator_type>::select_on_container_copy_construction(other.ref_to_node_alloc()))
@@ -426,6 +460,7 @@ private:
         }
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(const data& other, const Alloc& alloc)
             : key_compare(other.ref_to_key_compare())
             , node_allocator_type(alloc)
@@ -433,6 +468,7 @@ private:
             reset();
         }
 
+        SFL_CONSTEXPR_20
         data(data&& other)
             : key_compare(std::move(other.ref_to_key_compare()))
             , node_allocator_type(std::move(other.ref_to_node_alloc()))
@@ -441,6 +477,7 @@ private:
         }
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(data&& other, const Alloc& alloc)
             : key_compare(std::move(other.ref_to_key_compare()))
             , node_allocator_type(alloc)
@@ -450,21 +487,25 @@ private:
 
         ///////////////////////////////////////////////////////////////////////
 
+        SFL_CONSTEXPR_20
         key_compare& ref_to_key_compare()
         {
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const key_compare& ref_to_key_compare() const
         {
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         node_allocator_type& ref_to_node_alloc()
         {
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const node_allocator_type& ref_to_node_alloc() const
         {
             return *this;
@@ -479,23 +520,28 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     rb_tree()
     {}
 
+    SFL_CONSTEXPR_20
     rb_tree(const KeyCompare& comp)
         : data_(comp)
     {}
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     rb_tree(const Alloc& alloc)
         : data_(alloc)
     {}
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     rb_tree(const KeyCompare& comp, const Alloc& alloc)
         : data_(comp, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     rb_tree(const rb_tree& other)
         : data_(other.data_)
     {
@@ -503,12 +549,14 @@ public:
     }
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     rb_tree(const rb_tree& other, const Alloc& alloc)
         : data_(other.data_, alloc)
     {
         initialize_copy(other);
     }
 
+    SFL_CONSTEXPR_20
     rb_tree(rb_tree&& other)
         : data_(std::move(other.data_))
     {
@@ -516,12 +564,14 @@ public:
     }
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     rb_tree(rb_tree&& other, const Alloc& alloc)
         : data_(std::move(other.data_), alloc)
     {
         initialize_move(other);
     }
 
+    SFL_CONSTEXPR_20
     ~rb_tree()
     {
         if (data_.root() != nullptr)
@@ -540,11 +590,13 @@ public:
     // This is deleted. Use `assign_move` instead.
     rb_tree& operator=(rb_tree&& other) = delete;
 
+    SFL_CONSTEXPR_20
     void assign_copy(const rb_tree& other)
     {
         assign_copy_impl(other);
     }
 
+    SFL_CONSTEXPR_20
     void assign_move(rb_tree& other)
     {
         assign_move_impl(other);
@@ -552,6 +604,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void assign_range_equal(InputIt first, InputIt last)
     {
         make_node_with_recycling_functor make_node(*this);
@@ -565,6 +618,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void assign_range_unique(InputIt first, InputIt last)
     {
         make_node_with_recycling_functor make_node(*this);
@@ -581,12 +635,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     key_compare& ref_to_key_compare() noexcept
     {
         return data_.ref_to_key_compare();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const key_compare& ref_to_key_compare() const noexcept
     {
         return data_.ref_to_key_compare();
@@ -597,12 +653,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     node_allocator_type& ref_to_node_alloc() noexcept
     {
         return data_.ref_to_node_alloc();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const node_allocator_type& ref_to_node_alloc() const noexcept
     {
         return data_.ref_to_node_alloc();
@@ -613,72 +671,84 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return iterator(data_.minimum());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return const_iterator(data_.minimum());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return const_iterator(data_.minimum());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return iterator(data_.header());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return const_iterator(data_.header());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return const_iterator(data_.header());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rbegin() noexcept
     {
         return reverse_iterator(end());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rbegin() const noexcept
     {
         return const_reverse_iterator(end());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crbegin() const noexcept
     {
         return const_reverse_iterator(end());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rend() noexcept
     {
         return reverse_iterator(begin());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rend() const noexcept
     {
         return const_reverse_iterator(begin());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crend() const noexcept
     {
         return const_reverse_iterator(begin());
@@ -689,18 +759,21 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return data_.size_ == 0;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return data_.size_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_size() const noexcept
     {
         return sfl::dtl::allocator_traits<node_allocator_type>::max_size(data_.ref_to_node_alloc());
@@ -710,6 +783,7 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear()
     {
         if (data_.root() != nullptr)
@@ -721,6 +795,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_equal(Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -732,6 +807,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> emplace_unique(Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -751,6 +827,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint_equal(const_iterator hint, Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -762,6 +839,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint_unique(const_iterator hint, Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -783,6 +861,7 @@ public:
 private:
 
     template <typename V, typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     iterator insert_equal(V&& value, MakeNodeFunctor& make_node)
     {
         auto res = calculate_position_for_insert_equal(KeyOfValue()(value));
@@ -793,6 +872,7 @@ private:
     }
 
     template <typename V, typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_unique(V&& value, MakeNodeFunctor& make_node)
     {
         auto res = calculate_position_for_insert_unique(KeyOfValue()(value));
@@ -812,6 +892,7 @@ private:
 public:
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_equal(V&& value)
     {
         make_node_functor make_node(*this);
@@ -819,6 +900,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_unique(V&& value)
     {
         make_node_functor make_node(*this);
@@ -826,6 +908,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_hint_equal(const_iterator hint, V&& value)
     {
         auto res = calculate_position_for_insert_hint_equal(hint, KeyOfValue()(value));
@@ -837,6 +920,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_hint_unique(const_iterator hint, V&& value)
     {
         auto res = calculate_position_for_insert_hint_unique(hint, KeyOfValue()(value));
@@ -855,6 +939,7 @@ public:
     }
 
     template <typename K, typename M>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_or_assign(K&& k, M&& obj)
     {
         auto res = calculate_position_for_insert_unique(k);
@@ -880,6 +965,7 @@ public:
     }
 
     template <typename K, typename M>
+    SFL_CONSTEXPR_20
     iterator insert_or_assign_hint(const_iterator hint, K&& k, M&& obj)
     {
         auto res = calculate_position_for_insert_hint_unique(hint, k);
@@ -905,6 +991,7 @@ public:
     }
 
     template <typename K, typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> try_emplace(K&& k, Args&&... args)
     {
         auto res = calculate_position_for_insert_unique(k);
@@ -928,6 +1015,7 @@ public:
     }
 
     template <typename K, typename... Args>
+    SFL_CONSTEXPR_20
     iterator try_emplace_hint(const_iterator hint, K&& k, Args&&... args)
     {
         auto res = calculate_position_for_insert_hint_unique(hint, k);
@@ -950,6 +1038,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator pos)
     {
         base_node_pointer x = pos.node_;
@@ -960,6 +1049,7 @@ public:
         return iterator(y);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator first, const_iterator last)
     {
         iterator it(first.node_);
@@ -971,6 +1061,7 @@ public:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     size_type erase_key_equal(const K& k)
     {
         const auto er = equal_range(k);
@@ -980,6 +1071,7 @@ public:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     size_type erase_key_unique(const K& k)
     {
         auto it = find(k);
@@ -995,6 +1087,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void swap(rb_tree& other)
     {
         swap_impl(other);
@@ -1006,6 +1099,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const K& k)
     {
         base_node_pointer x = data_.root();
@@ -1029,6 +1123,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const K& k) const
     {
         base_node_pointer x = data_.root();
@@ -1052,6 +1147,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const K& k)
     {
         base_node_pointer x = data_.root();
@@ -1075,6 +1171,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const K& k) const
     {
         base_node_pointer x = data_.root();
@@ -1098,6 +1195,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const K& k)
     {
         base_node_pointer x = data_.root();
@@ -1157,6 +1255,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const K& k) const
     {
         base_node_pointer x = data_.root();
@@ -1216,6 +1315,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const K& k)
     {
         auto it = lower_bound(k);
@@ -1230,6 +1330,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const K& k) const
     {
         auto it = lower_bound(k);
@@ -1244,6 +1345,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count_equal(const K& k) const
     {
         const auto er = equal_range(k);
@@ -1252,6 +1354,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count_unique(const K& k) const
     {
         return find(k) != end() ? 1 : 0;
@@ -1259,6 +1362,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const K& k) const
     {
         return find(k) != end();
@@ -1268,6 +1372,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     static base_node_pointer minimum(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
@@ -1280,6 +1385,7 @@ private:
         return x;
     }
 
+    SFL_CONSTEXPR_20
     static base_node_pointer maximum(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
@@ -1292,6 +1398,7 @@ private:
         return x;
     }
 
+    SFL_CONSTEXPR_20
     static base_node_pointer next(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
@@ -1314,6 +1421,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     static base_node_pointer prev(base_node_pointer x) noexcept
     {
         SFL_ASSERT(x != nullptr);
@@ -1336,6 +1444,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     static void rotate_left(base_node_pointer x) noexcept
     {
         /*
@@ -1375,6 +1484,7 @@ private:
         x->parent_ = y;
     }
 
+    SFL_CONSTEXPR_20
     static void rotate_right(base_node_pointer x) noexcept
     {
         /*
@@ -1414,6 +1524,7 @@ private:
         x->parent_ = y;
     }
 
+    SFL_CONSTEXPR_20
     static void insert(base_node_pointer x,
                        base_node_pointer parent,
                        bool insert_left,
@@ -1446,6 +1557,7 @@ private:
         insert_fixup(x, root);
     }
 
+    SFL_CONSTEXPR_20
     static void insert_fixup(base_node_pointer x, base_node_pointer& root) noexcept
     {
         while (x != root && x->parent_->color_ == rb_tree_node_color::red)
@@ -1506,6 +1618,7 @@ private:
         root->color_ = rb_tree_node_color::black;
     }
 
+    SFL_CONSTEXPR_20
     static void transplant(base_node_pointer x, base_node_pointer y)
     {
         SFL_ASSERT(x != nullptr);
@@ -1526,6 +1639,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     static void remove(base_node_pointer z, base_node_pointer& root, base_node_pointer& minimum)
     {
         SFL_ASSERT(z != nullptr);
@@ -1582,6 +1696,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     static void remove_fixup(base_node_pointer x, base_node_pointer x_parent, base_node_pointer& root)
     {
         while (x != root && (x == nullptr || x->color_ == rb_tree_node_color::black))
@@ -1684,6 +1799,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     node_pointer allocate_node()
     {
         return sfl::dtl::allocator_traits<node_allocator_type>::allocate
@@ -1693,6 +1809,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void deallocate_node(node_pointer p) noexcept
     {
         sfl::dtl::allocator_traits<node_allocator_type>::deallocate
@@ -1704,6 +1821,7 @@ private:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     void construct_node(node_pointer p, Args&&... args)
     {
         sfl::dtl::construct_at_a(data_.ref_to_node_alloc(), p);
@@ -1724,6 +1842,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void destroy_node(node_pointer p) noexcept
     {
         sfl::dtl::destroy_at_a(data_.ref_to_node_alloc(), p->value_.ptr());
@@ -1738,11 +1857,13 @@ private:
 
     public:
 
+        SFL_CONSTEXPR_20
         make_node_functor(rb_tree& tree)
             : tree_(tree)
         {}
 
         template <typename... Args>
+        SFL_CONSTEXPR_20
         node_pointer operator()(Args&&... args)
         {
             node_pointer p = tree_.allocate_node();
@@ -1771,6 +1892,7 @@ private:
 
     public:
 
+        SFL_CONSTEXPR_20
         make_node_with_recycling_functor(rb_tree& tree)
             : tree_(tree)
             , root_(tree.data_.root())
@@ -1778,6 +1900,7 @@ private:
             tree.data_.reset();
         }
 
+        SFL_CONSTEXPR_20
         ~make_node_with_recycling_functor()
         {
             if (root_ != nullptr)
@@ -1787,6 +1910,7 @@ private:
         }
 
         template <typename... Args>
+        SFL_CONSTEXPR_20
         node_pointer operator()(Args&&... args)
         {
             node_pointer p = this->allocate_node();
@@ -1806,6 +1930,7 @@ private:
 
     private:
 
+        SFL_CONSTEXPR_20
         node_pointer allocate_node()
         {
             if (root_ == nullptr)
@@ -1842,6 +1967,7 @@ private:
         }
     };
 
+    SFL_CONSTEXPR_20
     void drop_node(node_pointer p) noexcept
     {
         destroy_node(p);
@@ -1850,11 +1976,13 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     static const Key& key_of(node_pointer x) noexcept
     {
         return KeyOfValue()(x->value_.ref());
     }
 
+    SFL_CONSTEXPR_20
     static const Key& key_of(base_node_pointer x) noexcept
     {
         return KeyOfValue()(static_cast<node_pointer>(x)->value_.ref());
@@ -1876,6 +2004,7 @@ private:
     };
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_equal calculate_position_for_insert_equal(const K& k)
     {
         base_node_pointer x = data_.root();
@@ -1903,6 +2032,7 @@ private:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_unique calculate_position_for_insert_unique(const K& k)
     {
         base_node_pointer x = data_.root();
@@ -1942,6 +2072,7 @@ private:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_equal calculate_position_for_insert_hint_equal(const_iterator hint, const K& k)
     {
         if (hint == cend())
@@ -2021,6 +2152,7 @@ private:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_unique calculate_position_for_insert_hint_unique(const_iterator hint, const K& k)
     {
         if (hint == cend())
@@ -2106,6 +2238,7 @@ private:
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     base_node_pointer copy(base_node_pointer x, MakeNodeFunctor& make_node)
     {
         SFL_ASSERT(x != nullptr);
@@ -2140,6 +2273,7 @@ private:
     }
 
     template <typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     base_node_pointer move(base_node_pointer x, MakeNodeFunctor& make_node)
     {
         SFL_ASSERT(x != nullptr);
@@ -2173,6 +2307,7 @@ private:
         return y;
     }
 
+    SFL_CONSTEXPR_20
     void clear(base_node_pointer x)
     {
         SFL_ASSERT(x != nullptr);
@@ -2192,6 +2327,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void initialize_copy(const rb_tree& other)
     {
         if (other.data_.root() != nullptr)
@@ -2205,6 +2341,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void initialize_move(rb_tree& other)
     {
         initialize_move
@@ -2214,6 +2351,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void initialize_move(rb_tree& other, std::true_type)
     {
         if (other.data_.root() != nullptr)
@@ -2225,6 +2363,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void initialize_move(rb_tree& other, std::false_type)
     {
         initialize_move
@@ -2235,6 +2374,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void initialize_move(rb_tree& other, std::false_type, std::true_type)
     {
         data_.root() = other.data_.root();
@@ -2243,6 +2383,7 @@ private:
         other.data_.reset();
     }
 
+    SFL_CONSTEXPR_20
     void initialize_move(rb_tree& other, std::false_type, std::false_type)
     {
         if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
@@ -2257,6 +2398,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void assign_copy_impl(const rb_tree& other)
     {
         if (this != &other)
@@ -2289,6 +2431,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void assign_move_impl(rb_tree& other)
     {
         assign_move_impl
@@ -2298,6 +2441,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void assign_move_impl(rb_tree& other, std::true_type)
     {
         // Move function. May throw exception. No effects if throw.
@@ -2325,6 +2469,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void assign_move_impl(rb_tree& other, std::false_type)
     {
         assign_move_impl
@@ -2339,6 +2484,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void assign_move_impl(rb_tree& other, std::false_type, std::true_type)
     {
         // Move function. May throw exception. No effects if throw.
@@ -2362,6 +2508,7 @@ private:
         other.data_.reset();
     }
 
+    SFL_CONSTEXPR_20
     void assign_move_impl(rb_tree& other, std::false_type, std::false_type)
     {
         if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
@@ -2376,6 +2523,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void swap_impl(rb_tree& other)
     {
         swap_impl
@@ -2385,6 +2533,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(rb_tree& other, std::true_type)
     {
         SFL_ASSERT(this->size() < this->max_size());
@@ -2681,6 +2830,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(rb_tree& other, std::false_type)
     {
         swap_impl
@@ -2695,6 +2845,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(rb_tree& other, std::false_type, std::true_type)
     {
         using std::swap;
@@ -2714,6 +2865,7 @@ private:
         swap(data_.size_, other.data_.size_);
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(rb_tree& other, std::false_type, std::false_type)
     {
         if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
@@ -2728,6 +2880,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     std::size_t verify_black_count(base_node_pointer x, base_node_pointer root) const
     {
         if (x == nullptr)
@@ -2755,6 +2908,7 @@ private:
         return count;
     }
 
+    SFL_CONSTEXPR_20
     bool verify() const
     {
         if (data_.size_ == 0 || begin() == end())
@@ -2818,6 +2972,7 @@ private:
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
@@ -2829,6 +2984,7 @@ bool operator==
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
@@ -2840,6 +2996,7 @@ bool operator!=
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<
 (
     const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
@@ -2851,6 +3008,7 @@ bool operator<
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>
 (
     const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
@@ -2862,6 +3020,7 @@ bool operator>
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<=
 (
     const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
@@ -2873,6 +3032,7 @@ bool operator<=
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>=
 (
     const rb_tree<TP1, TP2, TP3, TP4, TP5>& x,
