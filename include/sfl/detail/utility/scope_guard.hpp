@@ -21,6 +21,8 @@
 #ifndef SFL_DETAIL_SCOPE_GUARD_HPP_INCLUDED
 #define SFL_DETAIL_SCOPE_GUARD_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
 #include <utility> // forward, move
 
 namespace sfl
