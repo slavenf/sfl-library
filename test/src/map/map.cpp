@@ -62,3 +62,7 @@ int main()
     test_map_4();
     test_map_5();
 }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+#include "test_cpp20_constexpr.inc"
+#endif
