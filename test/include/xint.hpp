@@ -1,6 +1,8 @@
 #ifndef SFL_TEST_XINT_HPP
 #define SFL_TEST_XINT_HPP
 
+#include <sfl/detail/cpp.hpp>
+
 #include "hash.hpp"
 #include "print.hpp"
 
@@ -24,127 +26,173 @@ class xint
 
 private:
 
-    static int counter_;
-
     int* value_;
 
 public:
 
+    SFL_CONSTEXPR_20
     xint() noexcept
     {
-        ++counter_;
         value_ = new int(SFL_TEST_XINT_DEFAULT_VALUE);
-        PRINT("  ++ xint::xint() [value = " << *value_ << "]");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (!std::is_constant_evaluated())
+        {
+            PRINT("  ++ xint::xint() [value = " << *value_ << "]");
+        }
+        #endif
     }
 
+    SFL_CONSTEXPR_20
     xint(int value) noexcept
     {
-        ++counter_;
         value_ = new int(value);
-        PRINT("  ++ xint::xint(int) [value = " << *value_ << "]");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (!std::is_constant_evaluated())
+        {
+            PRINT("  ++ xint::xint(int) [value = " << *value_ << "]");
+        }
+        #endif
     }
 
+    SFL_CONSTEXPR_20
     xint(const xint& other) noexcept
     {
-        ++counter_;
         value_ = new int(*other.value_);
-        PRINT("  ++ xint::xint(const xint&) [value = " << *value_ << "]");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (!std::is_constant_evaluated())
+        {
+            PRINT("  ++ xint::xint(const xint&) [value = " << *value_ << "]");
+        }
+        #endif
     }
 
+    SFL_CONSTEXPR_20
     xint(xint&& other) noexcept
     {
-        ++counter_;
         value_ = new int(*other.value_);
         *other.value_ = -*other.value_;
-        PRINT("  ++ xint::xint(xint&&) [value = " << *value_ << "]");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (!std::is_constant_evaluated())
+        {
+            PRINT("  ++ xint::xint(xint&&) [value = " << *value_ << "]");
+        }
+        #endif
     }
 
+    SFL_CONSTEXPR_20
     xint& operator=(const xint& other) noexcept
     {
         *value_ = *other.value_;
-        PRINT("  ++ xint::operator=(const xint&) [value = " << *value_ << "]");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (!std::is_constant_evaluated())
+        {
+            PRINT("  ++ xint::operator=(const xint&) [value = " << *value_ << "]");
+        }
+        #endif
+
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     xint& operator=(xint&& other) noexcept
     {
         *value_ = *other.value_;
         *other.value_ = -*other.value_;
-        PRINT("  ++ xint::operator=(xint&&) [value = " << *value_ << "]");
+
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (!std::is_constant_evaluated())
+        {
+            PRINT("  ++ xint::operator=(xint&&) [value = " << *value_ << "]");
+        }
+        #endif
+
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     ~xint()
     {
-        PRINT("  ++ xint::~xint() [value = " << *value_ << "]");
-        delete value_;
-
-        --counter_;
-
-        if (counter_ < 0)
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (!std::is_constant_evaluated())
         {
-            PRINT("ERROR: xint::~xint(): counter = " << counter_ << " < 0.");
-            std::abort();
+            PRINT("  ++ xint::~xint() [value = " << *value_ << "]");
         }
+        #endif
+
+        delete value_;
     }
 
+    SFL_CONSTEXPR_20
     int value() const
     {
         return *value_;
     }
 
+    SFL_CONSTEXPR_20
     int& value()
     {
         return *value_;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator==(const xint& x, const xint& y)
     {
         return *x.value_ == *y.value_;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator==(int x, const xint& y)
     {
         return x == *y.value_;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator==(const xint& x, int y)
     {
         return *x.value_ == y;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator<(const xint& x, const xint& y)
     {
         return *x.value_ < *y.value_;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator<(int x, const xint& y)
     {
         return x < *y.value_;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator<(const xint& x, int y)
     {
         return *x.value_ < y;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator<=(const xint& x, const xint& y)
     {
         return *x.value_ <= *y.value_;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator<=(int x, const xint& y)
     {
         return x <= *y.value_;
     }
 
+    SFL_CONSTEXPR_20
     friend bool operator<=(const xint& x, int y)
     {
         return *x.value_ <= y;
     }
 };
-
-int xint::counter_ = 0;
 
 template <>
 struct hash<xint>
