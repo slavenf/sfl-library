@@ -1,11 +1,14 @@
 #define BEGIN_STATIC_ASSERT static_assert([](){
 #define END_STATIC_ASSERT   return true;}());
 
+using sfl::test::xint;
+using sfl::test::xobj;
+
 // Test container()
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -21,8 +24,8 @@ END_STATIC_ASSERT
 // Test container(const Compare&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -40,8 +43,8 @@ END_STATIC_ASSERT
 // Test container(const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -59,8 +62,8 @@ END_STATIC_ASSERT
 // Test container(const Compare&, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -80,8 +83,8 @@ END_STATIC_ASSERT
 // Test container(InputIt, InputIt)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -111,8 +114,8 @@ END_STATIC_ASSERT
 // Test container(InputIt, InputIt, const Compare&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -144,8 +147,8 @@ END_STATIC_ASSERT
 // Test container(InputIt, InputIt, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -177,8 +180,8 @@ END_STATIC_ASSERT
 // Test container(InputIt, InputIt, const Compare&, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -212,8 +215,8 @@ END_STATIC_ASSERT
 // Test container(std::initializer_list)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -241,8 +244,8 @@ END_STATIC_ASSERT
 // Test container(std::initializer_list, const Compare&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -272,8 +275,8 @@ END_STATIC_ASSERT
 // Test container(std::initializer_list, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -303,8 +306,8 @@ END_STATIC_ASSERT
 // Test container(std::initializer_list, const Compare&, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -336,8 +339,8 @@ END_STATIC_ASSERT
 // Test container(const container&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -367,8 +370,8 @@ END_STATIC_ASSERT
 // Test container(const container&, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -400,8 +403,8 @@ END_STATIC_ASSERT
 // Test container(container&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -433,8 +436,8 @@ END_STATIC_ASSERT
 // Test container(container&&, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -468,8 +471,8 @@ END_STATIC_ASSERT
 // Test container(sfl::from_range_t, Range&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -499,8 +502,8 @@ END_STATIC_ASSERT
 // Test container(sfl::from_range_t, Range&&, const Compare&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -532,8 +535,8 @@ END_STATIC_ASSERT
 // Test container(sfl::from_range_t, Range&&, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -565,8 +568,8 @@ END_STATIC_ASSERT
 // Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -600,8 +603,8 @@ END_STATIC_ASSERT
 // Test operator=(const container&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -645,8 +648,8 @@ END_STATIC_ASSERT
 // Test operator=(container&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -687,8 +690,8 @@ END_STATIC_ASSERT
 // Test operator=(std::initializer_list)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -727,8 +730,8 @@ END_STATIC_ASSERT
 // Test get_allocator()
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -744,48 +747,86 @@ END_STATIC_ASSERT
 // Test key_comp()
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
-    using key_compare = std::less<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
-    using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+    {
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
-    map_type map;
+        map_type map;
 
-    auto key_comp = map.key_comp();
+        auto key_comp = map.key_comp();
 
-    CHECK(key_comp(10, 10) == false);
-    CHECK(key_comp(10, 20) == true);
-    CHECK(key_comp(20, 10) == false);
-    CHECK(key_comp(20, 20) == false);
+        CHECK(key_comp(10, 10) == false);
+        CHECK(key_comp(10, 20) == true);
+        CHECK(key_comp(20, 10) == false);
+        CHECK(key_comp(20, 20) == false);
+    }
+
+    {
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_compare = xobj::less;
+        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+
+        map_type map;
+
+        auto key_comp = map.key_comp();
+
+        CHECK(key_comp(xobj(10), 10) == false);
+        CHECK(key_comp(xobj(10), 20) == true);
+        CHECK(key_comp(xobj(20), 10) == false);
+        CHECK(key_comp(xobj(20), 20) == false);
+    }
 }
 END_STATIC_ASSERT
 
 // Test value_comp()
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
-    using key_compare = std::less<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
-    using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+    {
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
-    map_type map;
+        map_type map;
 
-    auto value_comp = map.value_comp();
+        auto value_comp = map.value_comp();
 
-    CHECK(value_comp({10, 1}, {10, 2}) == false);
-    CHECK(value_comp({10, 1}, {20, 2}) == true);
-    CHECK(value_comp({20, 1}, {10, 2}) == false);
-    CHECK(value_comp({20, 1}, {20, 2}) == false);
+        CHECK(value_comp({10, 1}, {10, 2}) == false);
+        CHECK(value_comp({10, 1}, {20, 2}) == true);
+        CHECK(value_comp({20, 1}, {10, 2}) == false);
+        CHECK(value_comp({20, 1}, {20, 2}) == false);
+    }
+
+    {
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_compare = xobj::less;
+        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+
+        map_type map;
+
+        auto value_comp = map.value_comp();
+
+        CHECK(value_comp({xobj(10), 1}, {xobj(10), 2}) == false);
+        CHECK(value_comp({xobj(10), 1}, {xobj(20), 2}) == true);
+        CHECK(value_comp({xobj(20), 1}, {xobj(10), 2}) == false);
+        CHECK(value_comp({xobj(20), 1}, {xobj(20), 2}) == false);
+    }
 }
 END_STATIC_ASSERT
 
 // Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -833,85 +874,163 @@ END_STATIC_ASSERT
 // Test lower_bound, upper_bound, equal_range, find, count, contains
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
-    using key_compare = std::less<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
-    using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+    // xint, xint
+    {
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
-    map_type map;
+        map_type map;
 
-    map.emplace(20, 1);
-    map.emplace(40, 1);
-    map.emplace(60, 1);
+        map.emplace(20, 1);
+        map.emplace(40, 1);
+        map.emplace(60, 1);
 
-    ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
-    CHECK(map.lower_bound(10) == NTH(map, 0));
-    CHECK(map.lower_bound(20) == NTH(map, 0));
-    CHECK(map.lower_bound(30) == NTH(map, 1));
-    CHECK(map.lower_bound(40) == NTH(map, 1));
-    CHECK(map.lower_bound(50) == NTH(map, 2));
-    CHECK(map.lower_bound(60) == NTH(map, 2));
-    CHECK(map.lower_bound(70) == NTH(map, 3));
+        CHECK(map.lower_bound(10) == NTH(map, 0));
+        CHECK(map.lower_bound(20) == NTH(map, 0));
+        CHECK(map.lower_bound(30) == NTH(map, 1));
+        CHECK(map.lower_bound(40) == NTH(map, 1));
+        CHECK(map.lower_bound(50) == NTH(map, 2));
+        CHECK(map.lower_bound(60) == NTH(map, 2));
+        CHECK(map.lower_bound(70) == NTH(map, 3));
 
-    ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
-    CHECK(map.upper_bound(10) == NTH(map, 0));
-    CHECK(map.upper_bound(20) == NTH(map, 1));
-    CHECK(map.upper_bound(30) == NTH(map, 1));
-    CHECK(map.upper_bound(40) == NTH(map, 2));
-    CHECK(map.upper_bound(50) == NTH(map, 2));
-    CHECK(map.upper_bound(60) == NTH(map, 3));
-    CHECK(map.upper_bound(70) == NTH(map, 3));
+        CHECK(map.upper_bound(10) == NTH(map, 0));
+        CHECK(map.upper_bound(20) == NTH(map, 1));
+        CHECK(map.upper_bound(30) == NTH(map, 1));
+        CHECK(map.upper_bound(40) == NTH(map, 2));
+        CHECK(map.upper_bound(50) == NTH(map, 2));
+        CHECK(map.upper_bound(60) == NTH(map, 3));
+        CHECK(map.upper_bound(70) == NTH(map, 3));
 
-    ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
-    CHECK(map.equal_range(10) == std::make_pair(NTH(map, 0), NTH(map, 0)));
-    CHECK(map.equal_range(20) == std::make_pair(NTH(map, 0), NTH(map, 1)));
-    CHECK(map.equal_range(30) == std::make_pair(NTH(map, 1), NTH(map, 1)));
-    CHECK(map.equal_range(40) == std::make_pair(NTH(map, 1), NTH(map, 2)));
-    CHECK(map.equal_range(50) == std::make_pair(NTH(map, 2), NTH(map, 2)));
-    CHECK(map.equal_range(60) == std::make_pair(NTH(map, 2), NTH(map, 3)));
-    CHECK(map.equal_range(70) == std::make_pair(NTH(map, 3), NTH(map, 3)));
+        CHECK(map.equal_range(10) == std::make_pair(NTH(map, 0), NTH(map, 0)));
+        CHECK(map.equal_range(20) == std::make_pair(NTH(map, 0), NTH(map, 1)));
+        CHECK(map.equal_range(30) == std::make_pair(NTH(map, 1), NTH(map, 1)));
+        CHECK(map.equal_range(40) == std::make_pair(NTH(map, 1), NTH(map, 2)));
+        CHECK(map.equal_range(50) == std::make_pair(NTH(map, 2), NTH(map, 2)));
+        CHECK(map.equal_range(60) == std::make_pair(NTH(map, 2), NTH(map, 3)));
+        CHECK(map.equal_range(70) == std::make_pair(NTH(map, 3), NTH(map, 3)));
 
-    ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
-    CHECK(map.find(10) == map.end());
-    CHECK(map.find(20) == NTH(map, 0));
-    CHECK(map.find(30) == map.end());
-    CHECK(map.find(40) == NTH(map, 1));
-    CHECK(map.find(50) == map.end());
-    CHECK(map.find(60) == NTH(map, 2));
-    CHECK(map.find(70) == map.end());
+        CHECK(map.find(10) == map.end());
+        CHECK(map.find(20) == NTH(map, 0));
+        CHECK(map.find(30) == map.end());
+        CHECK(map.find(40) == NTH(map, 1));
+        CHECK(map.find(50) == map.end());
+        CHECK(map.find(60) == NTH(map, 2));
+        CHECK(map.find(70) == map.end());
 
-    ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
-    CHECK(map.count(10) == 0);
-    CHECK(map.count(20) == 1);
-    CHECK(map.count(30) == 0);
-    CHECK(map.count(40) == 1);
-    CHECK(map.count(50) == 0);
-    CHECK(map.count(60) == 1);
-    CHECK(map.count(70) == 0);
+        CHECK(map.count(10) == 0);
+        CHECK(map.count(20) == 1);
+        CHECK(map.count(30) == 0);
+        CHECK(map.count(40) == 1);
+        CHECK(map.count(50) == 0);
+        CHECK(map.count(60) == 1);
+        CHECK(map.count(70) == 0);
 
-    ///////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////
 
-    CHECK(map.contains(10) == false);
-    CHECK(map.contains(20) == true);
-    CHECK(map.contains(30) == false);
-    CHECK(map.contains(40) == true);
-    CHECK(map.contains(50) == false);
-    CHECK(map.contains(60) == true);
-    CHECK(map.contains(70) == false);
+        CHECK(map.contains(10) == false);
+        CHECK(map.contains(20) == true);
+        CHECK(map.contains(30) == false);
+        CHECK(map.contains(40) == true);
+        CHECK(map.contains(50) == false);
+        CHECK(map.contains(60) == true);
+        CHECK(map.contains(70) == false);
+    }
+
+    // xobj, xint
+    {
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_compare = xobj::less;
+        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+
+        map_type map;
+
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
+        map.emplace(std::piecewise_construct, std::forward_as_tuple(60), std::forward_as_tuple(1));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.lower_bound(10) == NTH(map, 0));
+        CHECK(map.lower_bound(20) == NTH(map, 0));
+        CHECK(map.lower_bound(30) == NTH(map, 1));
+        CHECK(map.lower_bound(40) == NTH(map, 1));
+        CHECK(map.lower_bound(50) == NTH(map, 2));
+        CHECK(map.lower_bound(60) == NTH(map, 2));
+        CHECK(map.lower_bound(70) == NTH(map, 3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.upper_bound(10) == NTH(map, 0));
+        CHECK(map.upper_bound(20) == NTH(map, 1));
+        CHECK(map.upper_bound(30) == NTH(map, 1));
+        CHECK(map.upper_bound(40) == NTH(map, 2));
+        CHECK(map.upper_bound(50) == NTH(map, 2));
+        CHECK(map.upper_bound(60) == NTH(map, 3));
+        CHECK(map.upper_bound(70) == NTH(map, 3));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.equal_range(10) == std::make_pair(NTH(map, 0), NTH(map, 0)));
+        CHECK(map.equal_range(20) == std::make_pair(NTH(map, 0), NTH(map, 1)));
+        CHECK(map.equal_range(30) == std::make_pair(NTH(map, 1), NTH(map, 1)));
+        CHECK(map.equal_range(40) == std::make_pair(NTH(map, 1), NTH(map, 2)));
+        CHECK(map.equal_range(50) == std::make_pair(NTH(map, 2), NTH(map, 2)));
+        CHECK(map.equal_range(60) == std::make_pair(NTH(map, 2), NTH(map, 3)));
+        CHECK(map.equal_range(70) == std::make_pair(NTH(map, 3), NTH(map, 3)));
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.find(10) == map.end());
+        CHECK(map.find(20) == NTH(map, 0));
+        CHECK(map.find(30) == map.end());
+        CHECK(map.find(40) == NTH(map, 1));
+        CHECK(map.find(50) == map.end());
+        CHECK(map.find(60) == NTH(map, 2));
+        CHECK(map.find(70) == map.end());
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.count(10) == 0);
+        CHECK(map.count(20) == 1);
+        CHECK(map.count(30) == 0);
+        CHECK(map.count(40) == 1);
+        CHECK(map.count(50) == 0);
+        CHECK(map.count(60) == 1);
+        CHECK(map.count(70) == 0);
+
+        ///////////////////////////////////////////////////////////////////////
+
+        CHECK(map.contains(10) == false);
+        CHECK(map.contains(20) == true);
+        CHECK(map.contains(30) == false);
+        CHECK(map.contains(40) == true);
+        CHECK(map.contains(50) == false);
+        CHECK(map.contains(60) == true);
+        CHECK(map.contains(70) == false);
+    }
 }
 END_STATIC_ASSERT
 
 // Test emplace(Args&&...)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -943,8 +1062,8 @@ END_STATIC_ASSERT
 // Test emplace_hint(const_iterator, Args&&...)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -974,8 +1093,8 @@ END_STATIC_ASSERT
 // Test insert(const value_type&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1013,8 +1132,8 @@ END_STATIC_ASSERT
 // Test insert(value_type&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1034,6 +1153,9 @@ BEGIN_STATIC_ASSERT
         CHECK(res.first->first == 10); CHECK(res.first->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(value_10_1.first  == +10);
+        CHECK(value_10_1.second == -1);
     }
 
     {
@@ -1045,6 +1167,9 @@ BEGIN_STATIC_ASSERT
         CHECK(res.first->first == 10); CHECK(res.first->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(value_10_2.first  == +10);
+        CHECK(value_10_2.second == +2);
     }
 }
 END_STATIC_ASSERT
@@ -1052,8 +1177,8 @@ END_STATIC_ASSERT
 // Test insert(P&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1091,8 +1216,8 @@ END_STATIC_ASSERT
 // Test insert(const_iterator, const value_type&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1128,8 +1253,8 @@ END_STATIC_ASSERT
 // Test insert(const_iterator, value_type&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1148,6 +1273,9 @@ BEGIN_STATIC_ASSERT
         CHECK(res->first == 10); CHECK(res->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(value_10_1.first  == +10);
+        CHECK(value_10_1.second == -1);
     }
 
     {
@@ -1158,6 +1286,9 @@ BEGIN_STATIC_ASSERT
         CHECK(res->first == 10); CHECK(res->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(value_10_2.first  == +10);
+        CHECK(value_10_2.second == +2);
     }
 }
 END_STATIC_ASSERT
@@ -1165,8 +1296,8 @@ END_STATIC_ASSERT
 // Test insert(const_iterator, P&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1202,8 +1333,8 @@ END_STATIC_ASSERT
 // Test insert(InputIt, InputIt)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1235,8 +1366,8 @@ END_STATIC_ASSERT
 // Test insert(std::initializer_list)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1266,8 +1397,8 @@ END_STATIC_ASSERT
 // Test insert_range(Range&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1297,8 +1428,8 @@ END_STATIC_ASSERT
 // Test insert_or_assign(const Key&, M&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1334,8 +1465,8 @@ END_STATIC_ASSERT
 // Test insert_or_assign(Key&&, M&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1353,6 +1484,8 @@ BEGIN_STATIC_ASSERT
         CHECK(res.first->first == 10); CHECK(res.first->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == -10);
     }
 
     {
@@ -1364,6 +1497,8 @@ BEGIN_STATIC_ASSERT
         CHECK(res.first->first == 10); CHECK(res.first->second == 2);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == +10);
     }
 }
 END_STATIC_ASSERT
@@ -1371,8 +1506,8 @@ END_STATIC_ASSERT
 // Test insert_or_assign(const_iterator, const Key&, M&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1406,8 +1541,8 @@ END_STATIC_ASSERT
 // Test insert_or_assign(const_iterator, Key&&, M&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1424,6 +1559,8 @@ BEGIN_STATIC_ASSERT
         CHECK(res->first == 10); CHECK(res->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == -10);
     }
 
     {
@@ -1434,6 +1571,8 @@ BEGIN_STATIC_ASSERT
         CHECK(res->first == 10); CHECK(res->second == 2);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == +10);
     }
 }
 END_STATIC_ASSERT
@@ -1441,8 +1580,8 @@ END_STATIC_ASSERT
 // Test try_emplace(const Key&, Args&&...)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1478,8 +1617,8 @@ END_STATIC_ASSERT
 // Test try_emplace(Key&&, Args&&...)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1497,6 +1636,8 @@ BEGIN_STATIC_ASSERT
         CHECK(res.first->first == 10); CHECK(res.first->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == -10);
     }
 
     {
@@ -1508,6 +1649,41 @@ BEGIN_STATIC_ASSERT
         CHECK(res.first->first == 10); CHECK(res.first->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == +10);
+    }
+}
+END_STATIC_ASSERT
+
+// Test try_emplace(K&&, Args&&...)
+BEGIN_STATIC_ASSERT
+{
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+
+    map_type map;
+
+    CHECK(map.size() == 0);
+
+    {
+        const auto res = map.try_emplace(10, 1);
+
+        CHECK(res.second == true);
+        CHECK(res.first->first.value() == 10); CHECK(res.first->second == 1);
+
+        CHECK(map.size() == 1);
+    }
+
+    {
+        const auto res = map.try_emplace(10, 2);
+
+        CHECK(res.second == false);
+        CHECK(res.first->first.value() == 10); CHECK(res.first->second == 1);
+
+        CHECK(map.size() == 1);
     }
 }
 END_STATIC_ASSERT
@@ -1515,8 +1691,8 @@ END_STATIC_ASSERT
 // Test try_emplace(const_iterator, const Key&, Args&&...)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1550,8 +1726,8 @@ END_STATIC_ASSERT
 // Test try_emplace(const_iterator, Key&&, Args&&...)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1568,6 +1744,8 @@ BEGIN_STATIC_ASSERT
         CHECK(res->first == 10); CHECK(res->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == -10);
     }
 
     {
@@ -1578,6 +1756,39 @@ BEGIN_STATIC_ASSERT
         CHECK(res->first == 10); CHECK(res->second == 1);
 
         CHECK(map.size() == 1);
+
+        CHECK(key_10 == +10);
+    }
+}
+END_STATIC_ASSERT
+
+// Test try_emplace(const_iterator, K&&, Args&&...)
+BEGIN_STATIC_ASSERT
+{
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+
+    map_type map;
+
+    CHECK(map.size() == 0);
+
+    {
+        const auto res = map.try_emplace(map.begin(), 10, 1);
+
+        CHECK(res->first.value() == 10); CHECK(res->second == 1);
+
+        CHECK(map.size() == 1);
+    }
+
+    {
+        const auto res = map.try_emplace(map.begin(), 10, 2);
+
+        CHECK(res->first.value() == 10); CHECK(res->second == 1);
+
+        CHECK(map.size() == 1);
     }
 }
 END_STATIC_ASSERT
@@ -1585,8 +1796,8 @@ END_STATIC_ASSERT
 // Test erase(const_iterator)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1631,8 +1842,8 @@ END_STATIC_ASSERT
 // Test erase(const_iterator, const_iterator)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1660,8 +1871,8 @@ END_STATIC_ASSERT
 // Test erase(const Key&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1694,11 +1905,48 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+// Test erase(K&&)
+BEGIN_STATIC_ASSERT
+{
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+
+    map_type map;
+
+    map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
+    map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+    map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
+
+    CHECK(map.size() == 3);
+    CHECK(NTH(map, 0)->first.value() == 10); CHECK(NTH(map, 0)->second == 1);
+    CHECK(NTH(map, 1)->first.value() == 20); CHECK(NTH(map, 1)->second == 1);
+    CHECK(NTH(map, 2)->first.value() == 30); CHECK(NTH(map, 2)->second == 1);
+
+    CHECK(map.erase(30) == 1);
+    CHECK(map.erase(30) == 0);
+    CHECK(map.size() == 2);
+    CHECK(NTH(map, 0)->first.value() == 10); CHECK(NTH(map, 0)->second == 1);
+    CHECK(NTH(map, 1)->first.value() == 20); CHECK(NTH(map, 1)->second == 1);
+
+    CHECK(map.erase(20) == 1);
+    CHECK(map.erase(20) == 0);
+    CHECK(map.size() == 1);
+    CHECK(NTH(map, 0)->first.value() == 10); CHECK(NTH(map, 0)->second == 1);
+
+    CHECK(map.erase(10) == 1);
+    CHECK(map.erase(10) == 0);
+    CHECK(map.size() == 0);
+}
+END_STATIC_ASSERT
+
 // Test swap(container&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1760,8 +2008,8 @@ END_STATIC_ASSERT
 // Test at(const Key&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1799,8 +2047,8 @@ END_STATIC_ASSERT
 // Test operator[](const Key&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1852,8 +2100,8 @@ END_STATIC_ASSERT
 // Test operator[](Key&&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1895,11 +2143,50 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+// Test operator[](K&&)
+BEGIN_STATIC_ASSERT
+{
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
+
+    map_type map;
+
+    map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
+    map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
+    map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
+
+    CHECK(map.size() == 3);
+    CHECK(NTH(map, 0)->first.value() == 10); CHECK(NTH(map, 0)->second == 1);
+    CHECK(NTH(map, 1)->first.value() == 20); CHECK(NTH(map, 1)->second == 1);
+    CHECK(NTH(map, 2)->first.value() == 30); CHECK(NTH(map, 2)->second == 1);
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    map[10] = 2;
+    map[20] = 2;
+    map[30] = 2;
+    map[40] = 2;
+    map[50] = 2;
+    map[60] = 2;
+
+    CHECK(map.size() == 6);
+    CHECK(NTH(map, 0)->first.value() == 10); CHECK(NTH(map, 0)->second == 2);
+    CHECK(NTH(map, 1)->first.value() == 20); CHECK(NTH(map, 1)->second == 2);
+    CHECK(NTH(map, 2)->first.value() == 30); CHECK(NTH(map, 2)->second == 2);
+    CHECK(NTH(map, 3)->first.value() == 40); CHECK(NTH(map, 3)->second == 2);
+    CHECK(NTH(map, 4)->first.value() == 50); CHECK(NTH(map, 4)->second == 2);
+    CHECK(NTH(map, 5)->first.value() == 60); CHECK(NTH(map, 5)->second == 2);
+}
+END_STATIC_ASSERT
+
 // Test NON-MEMBER comparison operators
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -1951,8 +2238,8 @@ END_STATIC_ASSERT
 // Test NON-MEMBER swap(container&)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
@@ -2002,8 +2289,8 @@ END_STATIC_ASSERT
 // Test NON-MEMBER erase_if(container&, Predicate)
 BEGIN_STATIC_ASSERT
 {
-    using key_type = int;
-    using mapped_type = int;
+    using key_type = xint;
+    using mapped_type = xint;
     using key_compare = std::less<key_type>;
     using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
