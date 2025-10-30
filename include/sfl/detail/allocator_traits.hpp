@@ -41,6 +41,12 @@ namespace sfl
 namespace dtl
 {
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// ALLOCATION RESULT
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 #ifdef __cpp_lib_allocate_at_least
 
 template <typename Pointer, typename SizeType>
@@ -57,59 +63,16 @@ struct allocation_result
 
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// ALLOCATOR TRAITS
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
 template <typename Allocator>
 class allocator_traits
 {
 private:
-
-    template <typename Alloc, typename T>
-    struct has_rebind
-    {
-    private:
-        template <typename Alloc2, typename T2>
-        static std::true_type test(typename Alloc2::template rebind<T2>*);
-
-        template <typename Alloc2, typename T2>
-        static std::false_type test(...);
-
-    public:
-        using type = decltype(test<Alloc, T>(nullptr));
-    };
-
-    template <typename Alloc, typename T, typename = typename has_rebind<Alloc, T>::type>
-    struct rebind_alloc_aux;
-
-    template <typename Alloc, typename T>
-    struct rebind_alloc_aux<Alloc, T, std::true_type>
-    {
-        using type = typename Alloc::template rebind<T>::other;
-    };
-
-    template <template <typename, typename...> class Alloc, typename T, typename U, typename... Args>
-    struct rebind_alloc_aux<Alloc<T, Args...>, U, std::false_type>
-    {
-        using type = Alloc<U, Args...>;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    template <typename Alloc, typename SizeType, typename ConstVoidPointer>
-    struct has_allocate_hint
-    {
-    private:
-        template <typename Alloc2, typename SizeType2, typename ConstVoidPointer2,
-                  sfl::dtl::void_t<decltype(std::declval<Alloc2>().allocate(std::declval<SizeType2>(),
-                                                                            std::declval<ConstVoidPointer2>()))>* = nullptr>
-        static std::true_type test(int);
-
-        template <typename Alloc2, typename SizeType2, typename ConstVoidPointer2>
-        static std::false_type test(...);
-
-    public:
-        using type = decltype(test<Alloc, SizeType, ConstVoidPointer>(0));
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
 
     template <typename Alloc>
     struct has_allocate_at_least
@@ -117,38 +80,6 @@ private:
     private:
         template <typename Alloc2>
         static std::true_type test(decltype(&Alloc2::allocate_at_least));
-
-        template <typename Alloc2>
-        static std::false_type test(...);
-
-    public:
-        using type = decltype(test<Alloc>(nullptr));
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    template <typename Alloc>
-    struct has_max_size
-    {
-    private:
-        template <typename Alloc2>
-        static std::true_type test(decltype(&Alloc2::max_size));
-
-        template <typename Alloc2>
-        static std::false_type test(...);
-
-    public:
-        using type = decltype(test<Alloc>(nullptr));
-    };
-
-    ///////////////////////////////////////////////////////////////////////////
-
-    template <typename Alloc>
-    struct has_select_on_container_copy_construction
-    {
-    private:
-        template <typename Alloc2>
-        static std::true_type test(decltype(&Alloc2::select_on_container_copy_construction));
 
         template <typename Alloc2>
         static std::false_type test(...);
@@ -172,35 +103,30 @@ public:
     public:                                                                 \
     ///////////////////////////////////////////////////////////////////////////
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(pointer, value_type*)
-    using pointer = priv_pointer;
+    using pointer = typename std::allocator_traits<Allocator>::pointer;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(const_pointer, typename std::pointer_traits<pointer>::template rebind<const value_type>)
-    using const_pointer = priv_const_pointer;
+    using const_pointer = typename std::allocator_traits<Allocator>::const_pointer;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(void_pointer, typename std::pointer_traits<pointer>::template rebind<void>)
-    using void_pointer = priv_void_pointer;
+    using void_pointer = typename std::allocator_traits<Allocator>::void_pointer;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(const_void_pointer, typename std::pointer_traits<pointer>::template rebind<const void>)
-    using const_void_pointer = priv_const_void_pointer;
+    using const_void_pointer = typename std::allocator_traits<Allocator>::const_void_pointer;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(difference_type, typename std::pointer_traits<pointer>::difference_type)
-    using difference_type = priv_difference_type;
+    using difference_type = typename std::allocator_traits<Allocator>::difference_type;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(size_type, typename std::make_unsigned<difference_type>::type)
-    using size_type = priv_size_type;
+    using size_type = typename std::allocator_traits<Allocator>::size_type;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(propagate_on_container_copy_assignment, std::false_type)
-    using propagate_on_container_copy_assignment = priv_propagate_on_container_copy_assignment;
+    using propagate_on_container_copy_assignment = typename std::allocator_traits<Allocator>::propagate_on_container_copy_assignment;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(propagate_on_container_move_assignment, std::false_type)
-    using propagate_on_container_move_assignment = priv_propagate_on_container_move_assignment;
+    using propagate_on_container_move_assignment = typename std::allocator_traits<Allocator>::propagate_on_container_move_assignment;
 
-    SFL_NESTED_TYPE_OR_ALTERNATIVE(propagate_on_container_swap, std::false_type)
-    using propagate_on_container_swap = priv_propagate_on_container_swap;
+    using propagate_on_container_swap = typename std::allocator_traits<Allocator>::propagate_on_container_swap;
 
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    using is_always_equal = typename std::allocator_traits<Allocator>::is_always_equal;
+    #else
     SFL_NESTED_TYPE_OR_ALTERNATIVE(is_always_equal, typename std::is_empty<Allocator>::type)
     using is_always_equal = priv_is_always_equal;
+    #endif
 
     SFL_NESTED_TYPE_OR_ALTERNATIVE(is_partially_propagable, std::false_type)
     using is_partially_propagable = priv_is_partially_propagable;
@@ -210,7 +136,7 @@ public:
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename T>
-    using rebind_alloc = typename rebind_alloc_aux<Allocator, T>::type;
+    using rebind_alloc = typename std::allocator_traits<Allocator>::template rebind_alloc<T>;
 
     template <typename T>
     using rebind_traits = allocator_traits<rebind_alloc<T>>;
@@ -221,17 +147,18 @@ public:
     SFL_CONSTEXPR_20
     static pointer allocate(Allocator& a, size_type n)
     {
-        return a.allocate(n);
+        return std::allocator_traits<Allocator>::allocate(a, n);
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     static pointer allocate(Allocator& a, size_type n, const_void_pointer hint)
     {
-        return priv_allocate(a, n, hint, typename has_allocate_hint<Allocator, size_type, const_void_pointer>::type());
+        return std::allocator_traits<Allocator>::allocate(a, n, hint);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     static sfl::dtl::allocation_result<pointer, size_type> allocate_at_least(Allocator& a, size_type n)
     {
         return priv_allocate_at_least(a, n, typename has_allocate_at_least<Allocator>::type());
@@ -240,24 +167,25 @@ public:
     SFL_CONSTEXPR_20
     static void deallocate(Allocator& a, pointer p, size_type n)
     {
-        a.deallocate(p, n);
+        std::allocator_traits<Allocator>::deallocate(a, p, n);
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     static size_type max_size(const Allocator& a) noexcept
     {
-        return priv_max_size(a, typename has_max_size<Allocator>::type());
+        return std::allocator_traits<Allocator>::max_size(a);
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     static Allocator select_on_container_copy_construction(const Allocator& a)
     {
-        return priv_select_on_container_copy_construction(a, typename has_select_on_container_copy_construction<Allocator>::type());
+        return std::allocator_traits<Allocator>::select_on_container_copy_construction(a);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     static bool is_storage_unpropagable(const Allocator& a, pointer p) noexcept
     {
         return priv_is_storage_unpropagable(a, p, is_partially_propagable());
@@ -266,58 +194,24 @@ public:
 private:
 
     SFL_CONSTEXPR_20
-    static pointer priv_allocate(Allocator& a, size_type n, const_void_pointer hint, std::true_type)
-    {
-        return a.allocate(n, hint);
-    }
-
-    SFL_CONSTEXPR_20
-    static pointer priv_allocate(Allocator& a, size_type n, const_void_pointer hint, std::false_type)
-    {
-        sfl::dtl::ignore_unused(hint);
-        return a.allocate(n);
-    }
-
     static sfl::dtl::allocation_result<pointer, size_type> priv_allocate_at_least(Allocator& a, size_type n, std::true_type)
     {
         return a.allocate_at_least(n);
     }
 
+    SFL_CONSTEXPR_20
     static sfl::dtl::allocation_result<pointer, size_type> priv_allocate_at_least(Allocator& a, size_type n, std::false_type)
     {
         return sfl::dtl::allocation_result<pointer, size_type>{a.allocate(n), n};
     }
 
     SFL_CONSTEXPR_20
-    static size_type priv_max_size(const Allocator& a, std::true_type)
-    {
-        return a.max_size();
-    }
-
-    SFL_CONSTEXPR_20
-    static size_type priv_max_size(const Allocator& a, std::false_type)
-    {
-        sfl::dtl::ignore_unused(a);
-        return std::numeric_limits<size_type>::max() / sizeof(value_type);
-    }
-
-    SFL_CONSTEXPR_20
-    static Allocator priv_select_on_container_copy_construction(const Allocator& a, std::true_type)
-    {
-        return a.select_on_container_copy_construction(a);
-    }
-
-    SFL_CONSTEXPR_20
-    static Allocator priv_select_on_container_copy_construction(const Allocator& a, std::false_type)
-    {
-        return a;
-    }
-
     static bool priv_is_storage_unpropagable(const Allocator& a, pointer p, std::true_type) noexcept
     {
         return a.is_storage_unpropagable(p);
     }
 
+    SFL_CONSTEXPR_20
     static bool priv_is_storage_unpropagable(const Allocator& a, pointer p, std::false_type) noexcept
     {
         sfl::dtl::ignore_unused(a, p);
