@@ -21,6 +21,9 @@
 #ifndef SFL_DETAIL_CONSTRUCT_AT_HPP_INCLUDED
 #define SFL_DETAIL_CONSTRUCT_AT_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
+#include <memory> // construct_at
 #include <utility> // forward
 
 namespace sfl
@@ -30,9 +33,14 @@ namespace dtl
 {
 
 template <typename T, typename... Args>
+SFL_CONSTEXPR_20
 void construct_at(T* p, Args&&... args)
 {
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    std::construct_at(p, std::forward<Args>(args)...);
+    #else
     ::new (static_cast<void*>(p)) T(std::forward<Args>(args)...);
+    #endif
 }
 
 } // namespace dtl

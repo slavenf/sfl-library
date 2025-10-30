@@ -21,6 +21,10 @@
 #ifndef SFL_DETAIL_DESTROY_AT_HPP_INCLUDED
 #define SFL_DETAIL_DESTROY_AT_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
+#include <memory> // destroy_at
+
 namespace sfl
 {
 
@@ -28,9 +32,14 @@ namespace dtl
 {
 
 template <typename T>
+SFL_CONSTEXPR_20
 void destroy_at(T* p) noexcept
 {
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    std::destroy_at(p);
+    #else
     p->~T();
+    #endif
 }
 
 } // namespace dtl
