@@ -5,7 +5,9 @@
 using sfl::test::xint;
 using sfl::test::xobj;
 
-PRINT("Test PRIVATE make_node and drop_node");
+#ifndef TEST_CPP20_CONSTEXPR
+
+BEGIN_TEST("Test PRIVATE make_node and drop_node")
 {
     using key_type = xint;
     using value_type = xint;
@@ -31,8 +33,9 @@ PRINT("Test PRIVATE make_node and drop_node");
     tree.drop_node(p2);
     tree.drop_node(p1);
 }
+END_TEST();
 
-PRINT("Test PRIVATE underlying implementation [empty tree]");
+BEGIN_TEST("Test PRIVATE underlying implementation [empty tree]")
 {
     using key_type = int;
     using value_type = int;
@@ -103,8 +106,9 @@ PRINT("Test PRIVATE underlying implementation [empty tree]");
     (void)--crit2; // Undefined behavior, but should compile without errors
                    // and shouldn't be an infinite loop.
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_equal(const K&) [empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_equal(const K&) [empty tree]")
 {
     using key_type = int;
     using value_type = int;
@@ -120,8 +124,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_equal(const K&) [empty tree]")
     CHECK(res.pos == tree.data_.header());
     CHECK(res.left == true);
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_unique(const K&) [empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_unique(const K&) [empty tree]")
 {
     using key_type = int;
     using value_type = int;
@@ -138,8 +143,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_unique(const K&) [empty tree]"
     CHECK(res.left == true);
     CHECK(res.status == true);
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, const K&) [empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, const K&) [empty tree]")
 {
     using key_type = int;
     using value_type = int;
@@ -155,8 +161,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
     CHECK(res.pos == tree.data_.header());
     CHECK(res.left == true);
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, const K&) [empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, const K&) [empty tree]")
 {
     using key_type = int;
     using value_type = int;
@@ -173,8 +180,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
     CHECK(res.left == true);
     CHECK(res.status == true);
 }
+END_TEST();
 
-PRINT("Test PRIVATE underlying implementation [non-empty tree]");
+BEGIN_TEST("Test PRIVATE underlying implementation [non-empty tree]")
 {
     /*
      *                   (pointer to minumum value, i.e. 1)
@@ -501,8 +509,9 @@ PRINT("Test PRIVATE underlying implementation [non-empty tree]");
 
     tree.data_.reset();
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_equal(const K&) [non-empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_equal(const K&) [non-empty tree]")
 {
     /*
      *                 (pointer to minumum value, i.e. 10)
@@ -611,8 +620,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_equal(const K&) [non-empty tre
 
     tree.data_.reset();
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_unique(const K&) [non-empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_unique(const K&) [non-empty tree]")
 {
     /*
      *                 (pointer to minumum value, i.e. 10)
@@ -727,8 +737,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_unique(const K&) [non-empty tr
 
     tree.data_.reset();
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, const K&) [non-empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, const K&) [non-empty tree]")
 {
     using key_type = int;
     using value_type = int;
@@ -1561,8 +1572,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_equal(const_iterator, con
         tree.data_.reset();
     }
 }
+END_TEST();
 
-PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, const K&) [non-empty tree]");
+BEGIN_TEST("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, const K&) [non-empty tree]")
 {
     using key_type = int;
     using value_type = int;
@@ -2069,8 +2081,9 @@ PRINT("Test PRIVATE calculate_position_for_insert_hint_unique(const_iterator, co
         tree.data_.reset();
     }
 }
+END_TEST();
 
-PRINT("Test PRIVATE rotate_left(base_node_pointer)");
+BEGIN_TEST("Test PRIVATE rotate_left(base_node_pointer)")
 {
     using key_type = int;
     using value_type = int;
@@ -2209,8 +2222,9 @@ PRINT("Test PRIVATE rotate_left(base_node_pointer)");
         tree.data_.reset();
     }
 }
+END_TEST();
 
-PRINT("Test PRIVATE rotate_right(base_node_pointer)");
+BEGIN_TEST("Test PRIVATE rotate_right(base_node_pointer)")
 {
     using key_type = int;
     using value_type = int;
@@ -2349,8 +2363,9 @@ PRINT("Test PRIVATE rotate_right(base_node_pointer)");
         tree.data_.reset();
     }
 }
+END_TEST();
 
-PRINT("Test PRIVATE insert(base_node_pointer, base_node_pointer, bool, base_node_pointer&, base_node_pointer&)");
+BEGIN_TEST("Test PRIVATE insert(base_node_pointer, base_node_pointer, bool, base_node_pointer&, base_node_pointer&)")
 {
     using key_type = int;
     using value_type = int;
@@ -2479,8 +2494,9 @@ PRINT("Test PRIVATE insert(base_node_pointer, base_node_pointer, bool, base_node
         tree.data_.reset();
     }
 }
+END_TEST();
 
-PRINT("Test PRIVATE remove(base_node_pointer, base_node_pointer&)");
+BEGIN_TEST("Test PRIVATE remove(base_node_pointer, base_node_pointer&)")
 {
     using key_type = int;
     using value_type = int;
@@ -2621,10 +2637,15 @@ PRINT("Test PRIVATE remove(base_node_pointer, base_node_pointer&)");
         tree.data_.reset();
     }
 }
+END_TEST();
+
+#endif // TEST_CPP20_CONSTEXPR
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test lower_bound, upper_bound, equal_range, find, count_equal, count_unique, contains");
+#ifndef TEST_CPP20_CONSTEXPR
+
+BEGIN_TEST("Test lower_bound, upper_bound, equal_range, find, count_equal, count_unique, contains")
 {
     // Equal keys
     {
@@ -2844,10 +2865,13 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count_equal, count_uniq
         tree.data_.reset();
     }
 }
+END_TEST();
+
+#endif // TEST_CPP20_CONSTEXPR
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test clear()");
+BEGIN_TEST("Test clear()")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2855,32 +2879,18 @@ PRINT("Test clear()");
     using key_compare = std::less<xint>;
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
-    using node_pointer = typename tree_type::node_pointer;
 
     tree_type tree;
 
-    tree_type::make_node_functor make_node(tree);
+    tree.emplace_unique(10);
+    tree.emplace_unique(20);
+    tree.emplace_unique(30);
+    tree.emplace_unique(40);
+    tree.emplace_unique(50);
+    tree.emplace_unique(60);
+    tree.emplace_unique(70);
 
-    node_pointer n10 = make_node(10);
-    node_pointer n20 = make_node(20);
-    node_pointer n30 = make_node(30);
-    node_pointer n40 = make_node(40);
-    node_pointer n50 = make_node(50);
-    node_pointer n60 = make_node(60);
-    node_pointer n70 = make_node(70);
-
-    tree.data_.root() = n40;
-    tree.data_.minimum() = n10;
-    tree.data_.size_ = 7;
-
-    n10->left_ = nullptr;   n10->right_ = nullptr;  n10->parent_ = n20;
-    n20->left_ = n10;       n20->right_ = n30;      n20->parent_ = n40;
-    n30->left_ = nullptr;   n30->right_ = nullptr;  n30->parent_ = n20;
-    n40->left_ = n20;       n40->right_ = n60;      n40->parent_ = tree.data_.header();
-    n50->left_ = nullptr;   n50->right_ = nullptr;  n50->parent_ = n60;
-    n60->left_ = n50;       n60->right_ = n70;      n60->parent_ = n40;
-    n70->left_ = nullptr;   n70->right_ = nullptr;  n70->parent_ = n60;
-
+    CHECK(tree.size() == 7);
     auto it = tree.begin();
     CHECK(*it == 10); ++it;
     CHECK(*it == 20); ++it;
@@ -2895,13 +2905,12 @@ PRINT("Test clear()");
 
     tree.clear();
 
+    CHECK(tree.size() == 0);
     CHECK(tree.begin() == tree.end());
-    CHECK(tree.data_.root() == nullptr);
-    CHECK(tree.data_.minimum() == tree.data_.header());
-    CHECK(tree.data_.size_ == 0);
 }
+END_TEST();
 
-PRINT("Test emplace_equal(Args&&...)");
+BEGIN_TEST("Test emplace_equal(Args&&...)")
 {
     {
         using key_type = xint;
@@ -2975,8 +2984,9 @@ PRINT("Test emplace_equal(Args&&...)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test emplace_unique(Args&&...)");
+BEGIN_TEST("Test emplace_unique(Args&&...)")
 {
     {
         using key_type = xint;
@@ -3050,8 +3060,9 @@ PRINT("Test emplace_unique(Args&&...)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
+BEGIN_TEST("Test emplace_hint_equal(const_iterator, Args&&...)")
 {
     {
         using key_type = xint;
@@ -3129,8 +3140,9 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
+BEGIN_TEST("Test emplace_hint_unique(const_iterator, Args&&...)")
 {
     {
         using key_type = xint;
@@ -3204,8 +3216,9 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test insert_equal(V&&)");
+BEGIN_TEST("Test insert_equal(V&&)")
 {
     {
         using key_type = xint;
@@ -3322,8 +3335,9 @@ PRINT("Test insert_equal(V&&)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test insert_unique(V&&)");
+BEGIN_TEST("Test insert_unique(V&&)")
 {
     {
         using key_type = xint;
@@ -3440,8 +3454,9 @@ PRINT("Test insert_unique(V&&)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test insert_hint_equal(const_iterator, V&&)");
+BEGIN_TEST("Test insert_hint_equal(const_iterator, V&&)")
 {
     {
         using key_type = xint;
@@ -3564,8 +3579,9 @@ PRINT("Test insert_hint_equal(const_iterator, V&&)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test insert_hint_unique(const_iterator, V&&)");
+BEGIN_TEST("Test insert_hint_unique(const_iterator, V&&)")
 {
     {
         using key_type = xint;
@@ -3682,8 +3698,9 @@ PRINT("Test insert_hint_unique(const_iterator, V&&)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test insert_or_assign(K&&, M&&)");
+BEGIN_TEST("Test insert_or_assign(K&&, M&&)")
 {
     {
         using key_type = xint;
@@ -3788,8 +3805,9 @@ PRINT("Test insert_or_assign(K&&, M&&)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
+BEGIN_TEST("Test insert_or_assign_hint(const_iterator, K&&, M&&)")
 {
     {
         using key_type = xint;
@@ -3888,8 +3906,9 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test try_emplace(K&&, Args&&...)");
+BEGIN_TEST("Test try_emplace(K&&, Args&&...)")
 {
     {
         using key_type = xint;
@@ -3994,8 +4013,9 @@ PRINT("Test try_emplace(K&&, Args&&...)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
+BEGIN_TEST("Test try_emplace_hint(const_iterator, K&&, Args&&...)")
 {
     {
         using key_type = xint;
@@ -4094,8 +4114,9 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test erase(const_iterator)");
+BEGIN_TEST("Test erase(const_iterator)")
 {
     {
         using key_type = xint;
@@ -4195,8 +4216,9 @@ PRINT("Test erase(const_iterator)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
     {
         using key_type = xint;
@@ -4290,8 +4312,9 @@ PRINT("Test erase(const_iterator, const_iterator)");
         }
     }
 }
+END_TEST();
 
-PRINT("Test erase_key_equal(const K&)");
+BEGIN_TEST("Test erase_key_equal(const K&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -4316,7 +4339,9 @@ PRINT("Test erase_key_equal(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 1);
     CHECK(COUNT_KV(tree, 30, 5) == 1);
     CHECK(COUNT_KV(tree, 30, 6) == 1);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -4330,7 +4355,9 @@ PRINT("Test erase_key_equal(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 0);
     CHECK(COUNT_KV(tree, 30, 5) == 0);
     CHECK(COUNT_KV(tree, 30, 6) == 0);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -4344,7 +4371,9 @@ PRINT("Test erase_key_equal(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 0);
     CHECK(COUNT_KV(tree, 30, 5) == 0);
     CHECK(COUNT_KV(tree, 30, 6) == 0);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -4358,10 +4387,13 @@ PRINT("Test erase_key_equal(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 0);
     CHECK(COUNT_KV(tree, 30, 5) == 0);
     CHECK(COUNT_KV(tree, 30, 6) == 0);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 }
+END_TEST();
 
-PRINT("Test erase_key_unique(const K&)");
+BEGIN_TEST("Test erase_key_unique(const K&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -4386,7 +4418,9 @@ PRINT("Test erase_key_unique(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 1);
     CHECK(COUNT_KV(tree, 30, 5) == 0);
     CHECK(COUNT_KV(tree, 30, 6) == 0);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -4400,7 +4434,9 @@ PRINT("Test erase_key_unique(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 0);
     CHECK(COUNT_KV(tree, 30, 5) == 0);
     CHECK(COUNT_KV(tree, 30, 6) == 0);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -4414,7 +4450,9 @@ PRINT("Test erase_key_unique(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 0);
     CHECK(COUNT_KV(tree, 30, 5) == 0);
     CHECK(COUNT_KV(tree, 30, 6) == 0);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 
     ///////////////////////////////////////////////////////////////////////////
 
@@ -4428,10 +4466,13 @@ PRINT("Test erase_key_unique(const K&)");
     CHECK(COUNT_KV(tree, 30, 4) == 0);
     CHECK(COUNT_KV(tree, 30, 5) == 0);
     CHECK(COUNT_KV(tree, 30, 6) == 0);
+    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(tree.verify());
+    #endif
 }
+END_TEST();
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4631,9 +4672,7 @@ PRINT("Test swap(container&)");
 
         CHECK(CONDITION);
 
-        PRINT("SWAP BEGIN");
         tree1.swap(tree2);
-        PRINT("SWAP END");
 
         CHECK(tree1.size() == 4);
         CHECK(*NTH(tree1, 0) == 50);
@@ -4698,10 +4737,11 @@ PRINT("Test swap(container&)");
     }
     #undef CONDITION
 }
+END_TEST();
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4714,8 +4754,9 @@ PRINT("Test container()");
 
     CHECK(tree.size() == 0);
 }
+END_TEST();
 
-PRINT("Test container(const KeyCompare&)");
+BEGIN_TEST("Test container(const KeyCompare&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4730,8 +4771,9 @@ PRINT("Test container(const KeyCompare&)");
 
     CHECK(tree.size() == 0);
 }
+END_TEST();
 
-PRINT("Test container(const Allocator&)");
+BEGIN_TEST("Test container(const Allocator&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4746,8 +4788,9 @@ PRINT("Test container(const Allocator&)");
 
     CHECK(tree.size() == 0);
 }
+END_TEST();
 
-PRINT("Test container(const KeyCompare&, const Allocator&)");
+BEGIN_TEST("Test container(const KeyCompare&, const Allocator&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4764,8 +4807,9 @@ PRINT("Test container(const KeyCompare&, const Allocator&)");
 
     CHECK(tree.size() == 0);
 }
+END_TEST();
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4826,8 +4870,9 @@ PRINT("Test container(const container&)");
         CHECK(*NTH(tree2, 8) == 90);
     }
 }
+END_TEST();
 
-PRINT("Test container(const container&, const Allocator&)");
+BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4892,8 +4937,9 @@ PRINT("Test container(const container&, const Allocator&)");
         CHECK(*NTH(tree2, 8) == 90);
     }
 }
+END_TEST();
 
-PRINT("Test container(const container&&)");
+BEGIN_TEST("Test container(const container&&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4973,8 +5019,9 @@ PRINT("Test container(const container&&)");
         CHECK(*NTH(tree2, 8) == 90);
     }
 }
+END_TEST();
 
-PRINT("Test container(const container&&, const Allocator&)");
+BEGIN_TEST("Test container(const container&&, const Allocator&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -5058,10 +5105,11 @@ PRINT("Test container(const container&&, const Allocator&)");
         CHECK(*NTH(tree2, 8) == 90);
     }
 }
+END_TEST();
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test assign_copy(const container&)");
+BEGIN_TEST("Test assign_copy(const container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -5208,8 +5256,9 @@ PRINT("Test assign_copy(const container&)");
     }
     #undef CONDITION
 }
+END_TEST();
 
-PRINT("Test assign_move(container&)");
+BEGIN_TEST("Test assign_move(container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -5377,8 +5426,9 @@ PRINT("Test assign_move(container&)");
     }
     #undef CONDITION
 }
+END_TEST();
 
-PRINT("Test assign_range_equal(InputIt, InputIt)");
+BEGIN_TEST("Test assign_range_equal(InputIt, InputIt)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -5547,8 +5597,9 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         CHECK(data[4] == -50);
     }
 }
+END_TEST();
 
-PRINT("Test assign_range_unique(InputIt, InputIt)");
+BEGIN_TEST("Test assign_range_unique(InputIt, InputIt)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -5713,10 +5764,11 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         CHECK(data[4] == +50);
     }
 }
+END_TEST();
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     using key_type = xint;
     using value_type = xint;
@@ -5767,3 +5819,4 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((tree2 >= tree1) == true);
     CHECK((tree2 >= tree2) == true);
 }
+END_TEST();
