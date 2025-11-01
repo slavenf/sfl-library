@@ -4,16 +4,14 @@
 
 using sfl::test::xint;
 
-PRINT("Test emplace(const_iterator, Args&&...)");
+BEGIN_TEST("Test emplace(const_iterator, Args&&...)")
 {
     // Insert at the end
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 10);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 1);
@@ -22,9 +20,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 20);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 2);
@@ -34,9 +30,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 30);
-            PRINT("<");
 
             CHECK(res == vec.nth(2));
             CHECK(vec.size() == 3);
@@ -47,9 +41,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 40);
-            PRINT("<");
 
             CHECK(res == vec.nth(3));
             CHECK(vec.size() == 4);
@@ -61,9 +53,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 50);
-            PRINT("<");
 
             CHECK(res == vec.nth(4));
             CHECK(vec.size() == 5);
@@ -76,9 +66,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 60);
-            PRINT("<");
 
             CHECK(res == vec.nth(5));
             CHECK(vec.size() == 6);
@@ -92,9 +80,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 70);
-            PRINT("<");
 
             CHECK(res == vec.nth(6));
             CHECK(vec.size() == 7);
@@ -109,9 +95,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 80);
-            PRINT("<");
 
             CHECK(res == vec.nth(7));
             CHECK(vec.size() == 8);
@@ -127,9 +111,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 90);
-            PRINT("<");
 
             CHECK(res == vec.nth(8));
             CHECK(vec.size() == 9);
@@ -151,9 +133,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 90);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 1);
@@ -162,9 +142,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 80);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 2);
@@ -174,9 +152,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 70);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 3);
@@ -187,9 +163,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 60);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 4);
@@ -201,9 +175,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 50);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 5);
@@ -216,9 +188,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 40);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 6);
@@ -232,9 +202,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 30);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 7);
@@ -249,9 +217,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 20);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 8);
@@ -267,9 +233,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.begin(), 10);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 9);
@@ -291,9 +255,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 90);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 1);
@@ -302,9 +264,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 10);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 2);
@@ -314,9 +274,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 20);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 3);
@@ -327,9 +285,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 30);
-            PRINT("<");
 
             CHECK(res == vec.nth(2));
             CHECK(vec.size() == 4);
@@ -341,9 +297,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 40);
-            PRINT("<");
 
             CHECK(res == vec.nth(3));
             CHECK(vec.size() == 5);
@@ -356,9 +310,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 50);
-            PRINT("<");
 
             CHECK(res == vec.nth(4));
             CHECK(vec.size() == 6);
@@ -372,9 +324,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 60);
-            PRINT("<");
 
             CHECK(res == vec.nth(5));
             CHECK(vec.size() == 7);
@@ -389,9 +339,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 70);
-            PRINT("<");
 
             CHECK(res == vec.nth(6));
             CHECK(vec.size() == 8);
@@ -407,9 +355,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end() - 1, 80);
-            PRINT("<");
 
             CHECK(res == vec.nth(7));
             CHECK(vec.size() == 9);
@@ -431,9 +377,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 10);
-            PRINT("<");
 
             CHECK(res == vec.nth(0));
             CHECK(vec.size() == 1);
@@ -442,9 +386,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.end(), 90);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 2);
@@ -454,9 +396,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.nth(1), 80);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 3);
@@ -467,9 +407,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.nth(1), 70);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 4);
@@ -481,9 +419,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.nth(1), 60);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 5);
@@ -496,9 +432,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.nth(1), 50);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 6);
@@ -512,9 +446,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.nth(1), 40);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 7);
@@ -529,9 +461,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.nth(1), 30);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 8);
@@ -547,9 +477,7 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
 
         {
-            PRINT(">");
             const auto res = vec.emplace(vec.nth(1), 20);
-            PRINT("<");
 
             CHECK(res == vec.nth(1));
             CHECK(vec.size() == 9);
@@ -566,10 +494,11 @@ PRINT("Test emplace(const_iterator, Args&&...)");
         }
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of");
+BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -653,10 +582,11 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
     CHECK(vec.index_of(vec.nth(2)) == 2);
     CHECK(vec.index_of(vec.nth(3)) == 3);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test get_allocator()");
+BEGIN_TEST("Test get_allocator()")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -664,10 +594,11 @@ PRINT("Test get_allocator()");
 
     (void)alloc;
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test clear()");
+BEGIN_TEST("Test clear()")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -703,8 +634,9 @@ PRINT("Test clear()");
 
     CHECK(vec.size() == 0);
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, const T&)");
+BEGIN_TEST("Test insert(const_iterator, const T&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -717,8 +649,9 @@ PRINT("Test insert(const_iterator, const T&)");
     CHECK(*vec.nth(0) == 10);
     CHECK(value_10 == 10);
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, T&&)");
+BEGIN_TEST("Test insert(const_iterator, T&&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -731,8 +664,9 @@ PRINT("Test insert(const_iterator, T&&)");
     CHECK(*vec.nth(0) == 10);
     CHECK(value_10 == -10);
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, size_type, const T&)");
+BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
 {
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
@@ -914,10 +848,12 @@ PRINT("Test insert(const_iterator, size_type, const T&)");
         CHECK(*vec.nth(7) == 55);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, InputIt, InputIt)");
+BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         {
             sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
@@ -1141,6 +1077,7 @@ PRINT("Test insert(const_iterator, InputIt, InputIt)");
             CHECK(*vec.nth(7) == 53);
         }
     }
+    #endif
 
     // Forward iterator
     {
@@ -1337,8 +1274,9 @@ PRINT("Test insert(const_iterator, InputIt, InputIt)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, std::initializer_list");
+BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
 {
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
@@ -1532,10 +1470,12 @@ PRINT("Test insert(const_iterator, std::initializer_list");
         CHECK(*vec.nth(7) == 53);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, Range&&)");
+BEGIN_TEST("Test insert(const_iterator, Range&&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -1558,6 +1498,7 @@ PRINT("Test insert(const_iterator, Range&&)");
         CHECK(*vec.nth(4) == 50);
         CHECK(*vec.nth(5) == 60);
     }
+    #endif
 
     // Forward iterator
     {
@@ -1583,8 +1524,9 @@ PRINT("Test insert(const_iterator, Range&&)");
         CHECK(*vec.nth(5) == 60);
     }
 }
+END_TEST()
 
-PRINT("Test emplace_back(Args&&...)");
+BEGIN_TEST("Test emplace_back(Args&&...)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -1592,8 +1534,9 @@ PRINT("Test emplace_back(Args&&...)");
     CHECK(vec.size() == 1);
     CHECK(*vec.nth(0) == 10);
 }
+END_TEST()
 
-PRINT("Test push_back(const T&)");
+BEGIN_TEST("Test push_back(const T&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -1605,8 +1548,9 @@ PRINT("Test push_back(const T&)");
     CHECK(*vec.nth(0) == 10);
     CHECK(value_10 == 10);
 }
+END_TEST()
 
-PRINT("Test push_back(T&&)");
+BEGIN_TEST("Test push_back(T&&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -1618,10 +1562,12 @@ PRINT("Test push_back(T&&)");
     CHECK(*vec.nth(0) == 10);
     CHECK(value_10 == -10);
 }
+END_TEST()
 
-PRINT("Test append_range(Range&&)");
+BEGIN_TEST("Test append_range(Range&&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -1644,6 +1590,7 @@ PRINT("Test append_range(Range&&)");
         CHECK(*vec.nth(4) == 50);
         CHECK(*vec.nth(5) == 60);
     }
+    #endif
 
     // Forward iterator
     {
@@ -1669,8 +1616,9 @@ PRINT("Test append_range(Range&&)");
         CHECK(*vec.nth(5) == 60);
     }
 }
+END_TEST()
 
-PRINT("Test pop_back()");
+BEGIN_TEST("Test pop_back()")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -1704,8 +1652,9 @@ PRINT("Test pop_back()");
 
     CHECK(vec.size() == 0);
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator)");
+BEGIN_TEST("Test erase(const_iterator)")
 {
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
@@ -1837,8 +1786,9 @@ PRINT("Test erase(const_iterator)");
         CHECK(*vec.nth(3) == 40);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
@@ -2028,8 +1978,9 @@ PRINT("Test erase(const_iterator, const_iterator)");
         CHECK(*vec.nth(3) == 40);
     }
 }
+END_TEST()
 
-PRINT("Test resize(size_type)");
+BEGIN_TEST("Test resize(size_type)")
 {
     #define CONDITION n < vec.size()
     {
@@ -2136,8 +2087,9 @@ PRINT("Test resize(size_type)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test resize(size_type, const T&)");
+BEGIN_TEST("Test resize(size_type, const T&)")
 {
     #define CONDITION n < vec.size()
     {
@@ -2250,8 +2202,9 @@ PRINT("Test resize(size_type, const T&)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
 
@@ -2305,10 +2258,11 @@ PRINT("Test swap(container&)");
     CHECK(*vec2.nth(2) == 60);
     CHECK(*vec2.nth(3) == 70);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test at(size_type)");
+BEGIN_TEST("Test at(size_type)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -2334,7 +2288,8 @@ PRINT("Test at(size_type)");
     CHECK(*vec.nth(1) == 50);
     CHECK(*vec.nth(2) == 60);
 
-    #if !defined(SFL_NO_EXCEPTIONS)
+    #ifndef TEST_CPP20_CONSTEXPR
+    #ifndef SFL_NO_EXCEPTIONS
     bool caught_exception = false;
 
     try
@@ -2348,14 +2303,16 @@ PRINT("Test at(size_type)");
 
     CHECK(caught_exception == true);
     #endif
+    #endif
 
     CHECK(vec.size() == 3);
     CHECK(*vec.nth(0) == 40);
     CHECK(*vec.nth(1) == 50);
     CHECK(*vec.nth(2) == 60);
 }
+END_TEST()
 
-PRINT("Test operator[](size_type)");
+BEGIN_TEST("Test operator[](size_type)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -2381,8 +2338,9 @@ PRINT("Test operator[](size_type)");
     CHECK(*vec.nth(1) == 50);
     CHECK(*vec.nth(2) == 60);
 }
+END_TEST()
 
-PRINT("Test front() and back()");
+BEGIN_TEST("Test front() and back()")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -2406,8 +2364,9 @@ PRINT("Test front() and back()");
     CHECK(*vec.nth(1) == 20);
     CHECK(*vec.nth(2) == 60);
 }
+END_TEST()
 
-PRINT("Test data()");
+BEGIN_TEST("Test data()")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -2425,10 +2384,11 @@ PRINT("Test data()");
     CHECK(*data == 20); ++data;
     CHECK(*data == 30); ++data;
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -2436,8 +2396,9 @@ PRINT("Test container()");
     CHECK(vec.capacity() == 0);
     CHECK(vec.available() == 0);
 }
+END_TEST()
 
-PRINT("Test container(const Allocator&)");
+BEGIN_TEST("Test container(const Allocator&)")
 {
     TPARAM_ALLOCATOR<xint> alloc;
 
@@ -2447,8 +2408,9 @@ PRINT("Test container(const Allocator&)");
     CHECK(vec.capacity() == 0);
     CHECK(vec.available() == 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type)");
+BEGIN_TEST("Test container(size_type)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec(4);
 
@@ -2458,8 +2420,9 @@ PRINT("Test container(size_type)");
     CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const Allocator&)");
+BEGIN_TEST("Test container(size_type, const Allocator&)")
 {
     TPARAM_ALLOCATOR<xint> alloc;
 
@@ -2471,8 +2434,9 @@ PRINT("Test container(size_type, const Allocator&)");
     CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const T&)");
+BEGIN_TEST("Test container(size_type, const T&)")
 {
     xint value_99(99);
 
@@ -2484,8 +2448,9 @@ PRINT("Test container(size_type, const T&)");
     CHECK(*vec.nth(2) == value_99);
     CHECK(*vec.nth(3) == value_99);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const T&, const Allocator&)");
+BEGIN_TEST("Test container(size_type, const T&, const Allocator&)")
 {
     TPARAM_ALLOCATOR<xint> alloc;
 
@@ -2499,10 +2464,12 @@ PRINT("Test container(size_type, const T&, const Allocator&)");
     CHECK(*vec.nth(2) == value_99);
     CHECK(*vec.nth(3) == value_99);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt)");
+BEGIN_TEST("Test container(InputIt, InputIt)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
@@ -2518,6 +2485,7 @@ PRINT("Test container(InputIt, InputIt)");
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
     }
+    #endif
 
     // Forward iterator
     {
@@ -2532,10 +2500,12 @@ PRINT("Test container(InputIt, InputIt)");
         CHECK(*vec.nth(3) == 40);
     }
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
@@ -2554,6 +2524,7 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
     }
+    #endif
 
     // Forward iterator
     {
@@ -2570,8 +2541,9 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
         CHECK(*vec.nth(3) == 40);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list)");
+BEGIN_TEST("Test container(std::initializer_list)")
 {
     std::initializer_list<xint> ilist{10, 20, 30, 40};
 
@@ -2583,8 +2555,9 @@ PRINT("Test container(std::initializer_list)");
     CHECK(*vec.nth(2) == 30);
     CHECK(*vec.nth(3) == 40);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
 {
     std::initializer_list<xint> ilist{10, 20, 30, 40};
 
@@ -2598,8 +2571,9 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
     CHECK(*vec.nth(2) == 30);
     CHECK(*vec.nth(3) == 40);
 }
+END_TEST()
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
 
@@ -2621,8 +2595,9 @@ PRINT("Test container(const container&)");
     CHECK(*vec2.nth(1) == 20);
     CHECK(*vec2.nth(2) == 30);
 }
+END_TEST()
 
-PRINT("Test container(const container&, const Allocator&)");
+BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
 
@@ -2646,8 +2621,9 @@ PRINT("Test container(const container&, const Allocator&)");
     CHECK(*vec2.nth(1) == 20);
     CHECK(*vec2.nth(2) == 30);
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
 
@@ -2684,8 +2660,9 @@ PRINT("Test container(container&&)");
         CHECK(vec1.size() == 0);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Allocator&)");
+BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
 
@@ -2724,10 +2701,12 @@ PRINT("Test container(container&&, const Allocator&)");
         CHECK(vec1.size() == 0);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
@@ -2743,6 +2722,7 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
     }
+    #endif
 
     // Forward iterator
     {
@@ -2761,10 +2741,12 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(*vec.nth(3) == 40);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
@@ -2782,6 +2764,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
     }
+    #endif
 
     // Forward iterator
     {
@@ -2802,10 +2785,11 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         CHECK(*vec.nth(3) == 40);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
     #define CONDITION vec1.size() == vec2.size()
     {
@@ -2939,8 +2923,9 @@ PRINT("Test operator=(const container&)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test operator=(container&&)");
+BEGIN_TEST("Test operator=(container&&)")
 {
     #define CONDITION vec1.size() == vec2.size()
     {
@@ -3098,8 +3083,9 @@ PRINT("Test operator=(container&&)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test operator=(std::initializer_list)");
+BEGIN_TEST("Test operator=(std::initializer_list)")
 {
     #define CONDITION vec.size() == ilist.size()
     {
@@ -3191,10 +3177,11 @@ PRINT("Test operator=(std::initializer_list)");
     }
     #undef CONDITION
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test assign(size_type, const T&)");
+BEGIN_TEST("Test assign(size_type, const T&)")
 {
     #define CONDITION n < vec.size()
     {
@@ -3316,10 +3303,12 @@ PRINT("Test assign(size_type, const T&)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test assign(InputIt, InputIt)");
+BEGIN_TEST("Test assign(InputIt, InputIt)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         #define CONDITION n < vec.size()
         {
@@ -3465,6 +3454,7 @@ PRINT("Test assign(InputIt, InputIt)");
         }
         #undef CONDITION
     }
+    #endif
 
     // Forward iterator
     {
@@ -3604,8 +3594,9 @@ PRINT("Test assign(InputIt, InputIt)");
         #undef CONDITION
     }
 }
+END_TEST()
 
-PRINT("Test assign(std::initializer_list)");
+BEGIN_TEST("Test assign(std::initializer_list)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -3633,10 +3624,12 @@ PRINT("Test assign(std::initializer_list)");
     CHECK(*vec.nth(3) == 4);
     CHECK(*vec.nth(4) == 5);
 }
+END_TEST()
 
-PRINT("Test assign_range(Range&&)");
+BEGIN_TEST("Test assign_range(Range&&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -3654,6 +3647,7 @@ PRINT("Test assign_range(Range&&)");
         CHECK(*vec.nth(2) == 30);
         CHECK(*vec.nth(3) == 40);
     }
+    #endif
 
     // Forward iterator
     {
@@ -3674,10 +3668,11 @@ PRINT("Test assign_range(Range&&)");
         CHECK(*vec.nth(3) == 40);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
 
@@ -3721,8 +3716,9 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((vec2 >= vec1) == true);
     CHECK((vec2 >= vec2) == true);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER swap(container&)");
+BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
 
@@ -3764,8 +3760,9 @@ PRINT("Test NON-MEMBER swap(container&)");
     CHECK(*vec2.nth(1) == 20);
     CHECK(*vec2.nth(2) == 30);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER erase(container&, const U&)");
+BEGIN_TEST("Test NON-MEMBER erase(container&, const U&)")
 {
     sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>> vec;
 
@@ -3796,8 +3793,9 @@ PRINT("Test NON-MEMBER erase(container&, const U&)");
     CHECK(*vec.nth(0) == 10);
     CHECK(*vec.nth(1) == 30);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
     using container_type =
         sfl::compact_vector<xint, TPARAM_ALLOCATOR<xint>>;
@@ -3835,3 +3833,4 @@ PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     CHECK(*vec.nth(0) == 10);
     CHECK(*vec.nth(1) == 30);
 }
+END_TEST()
