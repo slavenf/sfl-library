@@ -236,8 +236,6 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Allocator&)")
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::allocator_type alloc;
-
     std::vector<typename map_type::value_type> data
     (
         {
@@ -248,6 +246,8 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Allocator&)")
             {20, 3}
         }
     );
+
+    typename map_type::allocator_type alloc;
 
     map_type map(data.begin(), data.end(), 11, alloc);
 
@@ -271,8 +271,6 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&)")
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
     std::vector<typename map_type::value_type> data
     (
         {
@@ -283,6 +281,8 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&)")
             {20, 3}
         }
     );
+
+    typename map_type::hasher hash;
 
     map_type map(data.begin(), data.end(), 11, hash);
 
@@ -306,10 +306,6 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const Alloc
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
-    typename map_type::allocator_type alloc;
-
     std::vector<typename map_type::value_type> data
     (
         {
@@ -320,6 +316,10 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const Alloc
             {20, 3}
         }
     );
+
+    typename map_type::hasher hash;
+
+    typename map_type::allocator_type alloc;
 
     map_type map(data.begin(), data.end(), 11, hash, alloc);
 
@@ -343,10 +343,6 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEq
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
-
     std::vector<typename map_type::value_type> data
     (
         {
@@ -357,6 +353,10 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEq
             {20, 3}
         }
     );
+
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
 
     map_type map(data.begin(), data.end(), 11, hash, equal);
 
@@ -380,12 +380,6 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEq
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
-
-    typename map_type::allocator_type alloc;
-
     std::vector<typename map_type::value_type> data
     (
         {
@@ -396,6 +390,12 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEq
             {20, 3}
         }
     );
+
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    typename map_type::allocator_type alloc;
 
     map_type map(data.begin(), data.end(), 11, hash, equal, alloc);
 
@@ -481,8 +481,6 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Allocator&)")
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::allocator_type alloc;
-
     std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
@@ -491,6 +489,8 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Allocator&)")
         {20, 2},
         {20, 3}
     };
+
+    typename map_type::allocator_type alloc;
 
     map_type map(ilist, 11, alloc);
 
@@ -514,8 +514,6 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&)")
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
     std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
@@ -524,6 +522,8 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&)")
         {20, 2},
         {20, 3}
     };
+
+    typename map_type::hasher hash;
 
     map_type map(ilist, 11, hash);
 
@@ -547,10 +547,6 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
-    typename map_type::allocator_type alloc;
-
     std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
@@ -559,6 +555,10 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
         {20, 2},
         {20, 3}
     };
+
+    typename map_type::hasher hash;
+
+    typename map_type::allocator_type alloc;
 
     map_type map(ilist, 11, hash, alloc);
 
@@ -582,10 +582,6 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
-
     std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
@@ -594,6 +590,10 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
         {20, 2},
         {20, 3}
     };
+
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
 
     map_type map(ilist, 11, hash, equal);
 
@@ -617,12 +617,6 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
     using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
-
-    typename map_type::allocator_type alloc;
-
     std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
@@ -631,6 +625,12 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
         {20, 2},
         {20, 3}
     };
+
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    typename map_type::allocator_type alloc;
 
     map_type map(ilist, 11, hash, equal, alloc);
 
@@ -827,17 +827,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss))
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)));
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss))
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)));
         #endif
 
         CHECK(map.empty() == false);
@@ -865,17 +857,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data)
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data));
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data
-        );
+        map_type map(sfl::from_range_t(), data);
         #endif
 
         CHECK(map.empty() == false);
@@ -905,19 +889,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type)")
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11);
         #endif
 
         CHECK(map.empty() == false);
@@ -945,19 +919,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type)")
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            11
-        );
+        map_type map(sfl::from_range_t(), data, 11);
         #endif
 
         CHECK(map.empty() == false);
@@ -989,21 +953,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Allocato
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, alloc);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1033,21 +985,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Allocato
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, alloc);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, 11, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1079,21 +1019,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)")
         typename map_type::hasher hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash);
         #endif
 
         CHECK(map.empty() == false);
@@ -1123,21 +1051,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)")
         typename map_type::hasher hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash);
         #endif
 
         CHECK(map.empty() == false);
@@ -1171,23 +1087,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash, alloc);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1219,23 +1121,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, alloc);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1269,23 +1157,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
         typename map_type::key_equal equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash, equal);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash, equal);
         #endif
 
         CHECK(map.empty() == false);
@@ -1317,23 +1191,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
         typename map_type::key_equal equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash,
-            equal
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, equal);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash,
-            equal
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash, equal);
         #endif
 
         CHECK(map.empty() == false);
@@ -1369,25 +1229,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash, equal, alloc);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash, equal, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1421,25 +1265,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, equal, alloc);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash, equal, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -2071,7 +1899,7 @@ BEGIN_TEST("Test insert(const value_type&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -2110,7 +1938,7 @@ BEGIN_TEST("Test insert(value_type&&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         value_type value_10_1(10, 1);
@@ -2194,7 +2022,7 @@ BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -2231,7 +2059,7 @@ BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         value_type value_10_1(10, 1);
