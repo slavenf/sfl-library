@@ -7,7 +7,14 @@ using sfl::test::xobj;
 
 PRINT("Test container()");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -16,9 +23,16 @@ PRINT("Test container()");
 
 PRINT("Test container(const Allocator&)");
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -27,7 +41,14 @@ PRINT("Test container(const Allocator&)");
 
 PRINT("Test container(size_type)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11);
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map(11);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -36,9 +57,16 @@ PRINT("Test container(size_type)");
 
 PRINT("Test container(size_type, const Allocator&)");
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(11, alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -47,9 +75,16 @@ PRINT("Test container(size_type, const Allocator&)");
 
 PRINT("Test container(size_type, const Hash&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash);
+    typename map_type::hasher hash;
+
+    map_type map(11, hash);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -58,11 +93,18 @@ PRINT("Test container(size_type, const Hash&)");
 
 PRINT("Test container(size_type, const Hash&, const Allocator&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::hasher hash;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(11, hash, alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -71,11 +113,18 @@ PRINT("Test container(size_type, const Hash&, const Allocator&)");
 
 PRINT("Test container(size_type, const Hash&, const KeyEqual&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash, equal);
+    typename map_type::key_equal equal;
+
+    map_type map(11, hash, equal);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -84,13 +133,20 @@ PRINT("Test container(size_type, const Hash&, const KeyEqual&)");
 
 PRINT("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::key_equal equal;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash, equal, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(11, hash, equal, alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -99,7 +155,14 @@ PRINT("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)
 
 PRINT("Test container(InputIt, InputIt)");
 {
-    std::vector<std::pair<xint, xint>> data
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -110,7 +173,7 @@ PRINT("Test container(InputIt, InputIt)");
         }
     );
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end());
+    map_type map(data.begin(), data.end());
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -124,7 +187,14 @@ PRINT("Test container(InputIt, InputIt)");
 
 PRINT("Test container(InputIt, InputIt, size_type)");
 {
-    std::vector<std::pair<xint, xint>> data
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -135,7 +205,7 @@ PRINT("Test container(InputIt, InputIt, size_type)");
         }
     );
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11);
+    map_type map(data.begin(), data.end(), 11);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -149,9 +219,16 @@ PRINT("Test container(InputIt, InputIt, size_type)");
 
 PRINT("Test container(InputIt, InputIt, size_type, const Allocator&)");
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::allocator_type alloc;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -162,7 +239,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Allocator&)");
         }
     );
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, alloc);
+    map_type map(data.begin(), data.end(), 11, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -176,9 +253,16 @@ PRINT("Test container(InputIt, InputIt, size_type, const Allocator&)");
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::hasher hash;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -189,7 +273,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
         }
     );
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash);
+    map_type map(data.begin(), data.end(), 11, hash);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -203,11 +287,18 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::hasher hash;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::allocator_type alloc;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -218,7 +309,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&
         }
     );
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash, alloc);
+    map_type map(data.begin(), data.end(), 11, hash, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -232,11 +323,18 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::key_equal equal;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -247,7 +345,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)
         }
     );
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash, equal);
+    map_type map(data.begin(), data.end(), 11, hash, equal);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -261,13 +359,20 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&, const Allocator&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::key_equal equal;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::allocator_type alloc;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -278,7 +383,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&,
         }
     );
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash, equal, alloc);
+    map_type map(data.begin(), data.end(), 11, hash, equal, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -292,7 +397,14 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&,
 
 PRINT("Test container(std::initializer_list)");
 {
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -301,7 +413,7 @@ PRINT("Test container(std::initializer_list)");
         {20, 3}
     };
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist);
+    map_type map(ilist);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -315,7 +427,14 @@ PRINT("Test container(std::initializer_list)");
 
 PRINT("Test container(std::initializer_list, size_type)");
 {
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -324,7 +443,7 @@ PRINT("Test container(std::initializer_list, size_type)");
         {20, 3}
     };
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11);
+    map_type map(ilist, 11);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -338,9 +457,16 @@ PRINT("Test container(std::initializer_list, size_type)");
 
 PRINT("Test container(std::initializer_list, size_type, const Allocator&)");
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::allocator_type alloc;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -349,7 +475,7 @@ PRINT("Test container(std::initializer_list, size_type, const Allocator&)");
         {20, 3}
     };
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, alloc);
+    map_type map(ilist, 11, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -363,9 +489,16 @@ PRINT("Test container(std::initializer_list, size_type, const Allocator&)");
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::hasher hash;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -374,7 +507,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&)");
         {20, 3}
     };
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash);
+    map_type map(ilist, 11, hash);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -388,11 +521,18 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&)");
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&, const Allocator&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::hasher hash;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::allocator_type alloc;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -401,7 +541,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const Alloc
         {20, 3}
     };
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash, alloc);
+    map_type map(ilist, 11, hash, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -415,11 +555,18 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const Alloc
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::key_equal equal;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -428,7 +575,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
         {20, 3}
     };
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash, equal);
+    map_type map(ilist, 11, hash, equal);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -442,13 +589,20 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&, const Allocator&)");
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::key_equal equal;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::allocator_type alloc;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -457,7 +611,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
         {20, 3}
     };
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash, equal, alloc);
+    map_type map(ilist, 11, hash, equal, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 3);
@@ -471,7 +625,14 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
 
 PRINT("Test container(const container&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -488,7 +649,7 @@ PRINT("Test container(const container&)");
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(map1);
+    map_type map2(map1);
 
     CHECK(map2.size() == 3);
     CHECK(COUNT_KV(map2, 10, 1) == 1);
@@ -500,7 +661,14 @@ PRINT("Test container(const container&)");
 
 PRINT("Test container(const container&, const Allocator&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -517,9 +685,9 @@ PRINT("Test container(const container&, const Allocator&)");
 
     ///////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::allocator_type alloc;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(map1, alloc);
+    map_type map2(map1, alloc);
 
     CHECK(map2.size() == 3);
     CHECK(COUNT_KV(map2, 10, 1) == 1);
@@ -531,7 +699,14 @@ PRINT("Test container(const container&, const Allocator&)");
 
 PRINT("Test container(container&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -548,7 +723,7 @@ PRINT("Test container(container&&)");
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(std::move(map1));
+    map_type map2(std::move(map1));
 
     CHECK(map1.size() == 0);
     CHECK(map2.size() == 3);
@@ -561,7 +736,14 @@ PRINT("Test container(container&&)");
 
 PRINT("Test container(container&&, const Allocator&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -578,9 +760,9 @@ PRINT("Test container(container&&, const Allocator&)");
 
     ///////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::allocator_type alloc;
 
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(std::move(map1), alloc);
+    map_type map2(std::move(map1), alloc);
 
     if (map1.size() == 3)
     {
@@ -606,18 +788,25 @@ PRINT("Test container(container&&, const Allocator&)");
 
 PRINT("Test container(sfl::from_range_t, Range&&)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<xint, xint>>(iss))
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<xint, xint>>(iss))
@@ -636,7 +825,7 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -648,13 +837,13 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             std::views::all(data)
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             data
@@ -674,19 +863,26 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
 
 PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<xint, xint>>(iss)),
             11
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
@@ -706,7 +902,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -718,14 +914,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             std::views::all(data),
             11
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             data,
@@ -746,14 +942,21 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
 
 PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<xint, xint>>(iss)),
@@ -761,7 +964,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
             alloc
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
@@ -782,7 +985,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -793,10 +996,10 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
             }
         );
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -804,7 +1007,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
             alloc
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             data,
@@ -826,14 +1029,21 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
 
 PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<xint, xint>>(iss)),
@@ -841,7 +1051,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
             hash
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
@@ -862,7 +1072,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -873,10 +1083,10 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -884,7 +1094,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
             hash
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             data,
@@ -906,16 +1116,23 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
 
 PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const Allocator&)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<xint, xint>>(iss)),
@@ -924,7 +1141,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
@@ -946,7 +1163,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -957,12 +1174,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -971,7 +1188,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             data,
@@ -994,16 +1211,23 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
 
 PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<xint, xint>>(iss)),
@@ -1012,7 +1236,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             equal
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
@@ -1034,7 +1258,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -1045,12 +1269,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -1059,7 +1283,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             equal
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             data,
@@ -1082,18 +1306,25 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
 
 PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&, const Allocator&)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (std::views::istream<std::pair<xint, xint>>(iss)),
@@ -1103,7 +1334,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
@@ -1126,7 +1357,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -1137,14 +1368,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -1154,7 +1385,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
+        map_type map
         (
             sfl::from_range_t(),
             data,
@@ -1180,7 +1411,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
 
 PRINT("Test operator=(const container&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -1225,7 +1463,14 @@ PRINT("Test operator=(const container&)");
 
 PRINT("Test operator=(container&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -1277,7 +1522,14 @@ PRINT("Test operator=(container&&)");
 
 PRINT("Test operator=(std::initializer_list)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -1294,7 +1546,7 @@ PRINT("Test operator=(std::initializer_list)");
 
     ///////////////////////////////////////////////////////////////////////
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {40, 2},
         {50, 2},
@@ -1317,7 +1569,14 @@ PRINT("Test operator=(std::initializer_list)");
 
 PRINT("Test get_allocator()");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     auto alloc = map.get_allocator();
 
@@ -1329,7 +1588,14 @@ PRINT("Test get_allocator()");
 PRINT("Test hash_function()");
 {
     {
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto hash_function = map.hash_function();
 
@@ -1340,7 +1606,14 @@ PRINT("Test hash_function()");
     }
 
     {
-        sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto hash_function = map.hash_function();
 
@@ -1356,7 +1629,14 @@ PRINT("Test hash_function()");
 PRINT("Test key_eq()");
 {
     {
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto key_eq = map.key_eq();
 
@@ -1367,7 +1647,14 @@ PRINT("Test key_eq()");
     }
 
     {
-        sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto key_eq = map.key_eq();
 
@@ -1382,7 +1669,14 @@ PRINT("Test key_eq()");
 
 PRINT("Test begin, end, cbegin, cend");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -1526,7 +1820,14 @@ PRINT("Test equal_range, find, count, contains");
 {
     // xint, xint
     {
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(20, 1);
         map.emplace(40, 1);
@@ -1578,7 +1879,14 @@ PRINT("Test equal_range, find, count, contains");
 
     // xobj, xint
     {
-        sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
@@ -1633,7 +1941,14 @@ PRINT("Test equal_range, find, count, contains");
 
 PRINT("Test emplace(Args&&...)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1658,7 +1973,14 @@ PRINT("Test emplace(Args&&...)");
 
 PRINT("Test emplace_hint(const_iterator, Args&&...)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1681,7 +2003,14 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
 
 PRINT("Test insert(const value_type&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1712,7 +2041,14 @@ PRINT("Test insert(const value_type&)");
 
 PRINT("Test insert(value_type&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1749,7 +2085,14 @@ PRINT("Test insert(value_type&&)");
 
 PRINT("Test insert(P&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1780,7 +2123,14 @@ PRINT("Test insert(P&&)");
 
 PRINT("Test insert(const_iterator, const value_type&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1809,7 +2159,14 @@ PRINT("Test insert(const_iterator, const value_type&)");
 
 PRINT("Test insert(const_iterator, value_type&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1844,7 +2201,14 @@ PRINT("Test insert(const_iterator, value_type&&)");
 
 PRINT("Test insert(const_iterator, P&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1871,13 +2235,20 @@ PRINT("Test insert(const_iterator, P&&)");
     }
 }
 
-PRINT("Test insert(InputIt, InputIt");
+PRINT("Test insert(InputIt, InputIt)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    std::vector<std::pair<const xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -1898,13 +2269,20 @@ PRINT("Test insert(InputIt, InputIt");
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
 
-PRINT("Test insert(std::initializer_list");
+PRINT("Test insert(std::initializer_list)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -1923,13 +2301,20 @@ PRINT("Test insert(std::initializer_list");
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
 
-PRINT("Test insert_range(Range&&");
+PRINT("Test insert_range(Range&&)");
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        map_type map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         map.insert_range(std::views::istream<std::pair<xint, xint>>(iss));
@@ -1947,7 +2332,7 @@ PRINT("Test insert_range(Range&&");
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -1958,7 +2343,7 @@ PRINT("Test insert_range(Range&&");
             }
         );
 
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        map_type map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         map.insert_range(std::views::all(data));
@@ -1977,7 +2362,14 @@ PRINT("Test insert_range(Range&&");
 
 PRINT("Test insert_or_assign(const Key&, M&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2006,7 +2398,14 @@ PRINT("Test insert_or_assign(const Key&, M&&)");
 
 PRINT("Test insert_or_assign(Key&&, M&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2039,7 +2438,14 @@ PRINT("Test insert_or_assign(Key&&, M&&)");
 
 PRINT("Test insert_or_assign(K&&, M&&)");
 {
-    sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2064,7 +2470,14 @@ PRINT("Test insert_or_assign(K&&, M&&)");
 
 PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2091,7 +2504,14 @@ PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
 
 PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2122,7 +2542,14 @@ PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
 
 PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
 {
-    sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2145,7 +2572,14 @@ PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
 
 PRINT("Test try_emplace(const Key&, Args&&...)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2174,7 +2608,14 @@ PRINT("Test try_emplace(const Key&, Args&&...)");
 
 PRINT("Test try_emplace(Key&&, Args&&...)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2207,7 +2648,14 @@ PRINT("Test try_emplace(Key&&, Args&&...)");
 
 PRINT("Test try_emplace(K&&, Args&&...)");
 {
-    sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2232,7 +2680,14 @@ PRINT("Test try_emplace(K&&, Args&&...)");
 
 PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2259,7 +2714,14 @@ PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
 
 PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2290,7 +2752,14 @@ PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
 
 PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
 {
-    sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -2313,7 +2782,14 @@ PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
 
 PRINT("Test erase(const_iterator)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2389,7 +2865,14 @@ PRINT("Test erase(const_iterator)");
 
 PRINT("Test erase(const_iterator, const_iterator)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2424,7 +2907,14 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
 PRINT("Test erase(const Key&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2455,7 +2945,14 @@ PRINT("Test erase(const Key&)");
 
 PRINT("Test erase(K&&)");
 {
-    sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -2486,7 +2983,14 @@ PRINT("Test erase(K&&)");
 
 PRINT("Test swap(container&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -2543,7 +3047,14 @@ PRINT("Test swap(container&)");
 
 PRINT("Test at(const Key&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2589,7 +3100,14 @@ PRINT("Test at(const Key&)");
 
 PRINT("Test at(const K&)");
 {
-    sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -2635,7 +3153,14 @@ PRINT("Test at(const K&)");
 
 PRINT("Test operator[](const Key&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2680,7 +3205,14 @@ PRINT("Test operator[](const Key&)");
 
 PRINT("Test operator[](Key&&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2725,7 +3257,14 @@ PRINT("Test operator[](Key&&)");
 
 PRINT("Test operator[](K&&)");
 {
-    sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -2760,7 +3299,14 @@ PRINT("Test bucket interface functions");
 {
     // xint, xint
     {
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(20, 1);
         map.emplace(40, 1);
@@ -2826,7 +3372,14 @@ PRINT("Test bucket interface functions");
 
     // xobj, xint
     {
-        sfl::unordered_map<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
@@ -2895,7 +3448,14 @@ PRINT("Test bucket interface functions");
 
 PRINT("Test hash policy functions");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11);
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map(11);
 
     map.emplace(20, 1);
     map.emplace(40, 1);
@@ -2945,7 +3505,14 @@ PRINT("Test hash policy functions");
 
 PRINT("Test NON-MEMBER comparison operators");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -2970,7 +3537,14 @@ PRINT("Test NON-MEMBER comparison operators");
 
 PRINT("Test NON-MEMBER swap(container&)");
 {
-    sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -3010,14 +3584,18 @@ PRINT("Test NON-MEMBER swap(container&)");
 
 PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
 {
-    using container_type =
-        sfl::unordered_map<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    using const_reference = typename container_type::const_reference;
+    using const_reference = typename map_type::const_reference;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);

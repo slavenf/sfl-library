@@ -1,6 +1,10 @@
 #define BEGIN_STATIC_ASSERT static_assert([](){
 #define END_STATIC_ASSERT   return true;}());
 
+#ifndef TPARAM_ALLOCATOR
+#error Please define macro TPARAM_ALLOCATOR
+#endif
+
 using sfl::test::xint;
 using sfl::test::xobj;
 
@@ -11,7 +15,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -29,12 +33,12 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     typename map_type::allocator_type alloc;
 
-    map_type map;
+    map_type map(alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -49,7 +53,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map(11);
@@ -67,7 +71,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     typename map_type::allocator_type alloc;
@@ -87,7 +91,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     typename map_type::hasher hash;
@@ -107,7 +111,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     typename map_type::hasher hash;
@@ -129,7 +133,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     typename map_type::hasher hash;
@@ -151,7 +155,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     typename map_type::hasher hash;
@@ -175,10 +179,10 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -209,10 +213,10 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -243,10 +247,12 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::allocator_type alloc;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -256,8 +262,6 @@ BEGIN_STATIC_ASSERT
             {20, 3}
         }
     );
-
-    typename map_type::allocator_type alloc;
 
     map_type map(data.begin(), data.end(), 11, alloc);
 
@@ -279,10 +283,12 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::hasher hash;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -292,8 +298,6 @@ BEGIN_STATIC_ASSERT
             {20, 3}
         }
     );
-
-    typename map_type::hasher hash;
 
     map_type map(data.begin(), data.end(), 11, hash);
 
@@ -315,10 +319,14 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::hasher hash;
+
+    typename map_type::allocator_type alloc;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -328,10 +336,6 @@ BEGIN_STATIC_ASSERT
             {20, 3}
         }
     );
-
-    typename map_type::hasher hash;
-
-    typename map_type::allocator_type alloc;
 
     map_type map(data.begin(), data.end(), 11, hash, alloc);
 
@@ -353,10 +357,14 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -366,10 +374,6 @@ BEGIN_STATIC_ASSERT
             {20, 3}
         }
     );
-
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
 
     map_type map(data.begin(), data.end(), 11, hash, equal);
 
@@ -391,10 +395,16 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    typename map_type::allocator_type alloc;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -404,12 +414,6 @@ BEGIN_STATIC_ASSERT
             {20, 3}
         }
     );
-
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
-
-    typename map_type::allocator_type alloc;
 
     map_type map(data.begin(), data.end(), 11, hash, equal, alloc);
 
@@ -431,10 +435,10 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -463,10 +467,10 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -495,10 +499,12 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::allocator_type alloc;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -506,8 +512,6 @@ BEGIN_STATIC_ASSERT
         {20, 2},
         {20, 3}
     };
-
-    typename map_type::allocator_type alloc;
 
     map_type map(ilist, 11, alloc);
 
@@ -529,10 +533,12 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::hasher hash;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -540,8 +546,6 @@ BEGIN_STATIC_ASSERT
         {20, 2},
         {20, 3}
     };
-
-    typename map_type::hasher hash;
 
     map_type map(ilist, 11, hash);
 
@@ -563,10 +567,14 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::hasher hash;
+
+    typename map_type::allocator_type alloc;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -574,10 +582,6 @@ BEGIN_STATIC_ASSERT
         {20, 2},
         {20, 3}
     };
-
-    typename map_type::hasher hash;
-
-    typename map_type::allocator_type alloc;
 
     map_type map(ilist, 11, hash, alloc);
 
@@ -599,10 +603,14 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -610,10 +618,6 @@ BEGIN_STATIC_ASSERT
         {20, 2},
         {20, 3}
     };
-
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
 
     map_type map(ilist, 11, hash, equal);
 
@@ -635,10 +639,16 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    typename map_type::allocator_type alloc;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -646,12 +656,6 @@ BEGIN_STATIC_ASSERT
         {20, 2},
         {20, 3}
     };
-
-    typename map_type::hasher hash;
-
-    typename map_type::key_equal equal;
-
-    typename map_type::allocator_type alloc;
 
     map_type map(ilist, 11, hash, equal, alloc);
 
@@ -673,7 +677,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1;
@@ -711,7 +715,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1;
@@ -751,7 +755,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1;
@@ -790,7 +794,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1;
@@ -844,30 +848,45 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    map_type map(sfl::from_range_t(), std::views::all(data));
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map_type map
+        (
+            sfl::from_range_t(),
+            std::views::all(data)
+        );
+        #else
+        map_type map
+        (
+            sfl::from_range_t(),
+            data
+        );
+        #endif
 
-    CHECK(map.empty() == false);
-    CHECK(map.size() == 3);
-    CHECK(map.max_size() > 0);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 3);
+        CHECK(map.max_size() > 0);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
 
@@ -878,30 +897,47 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    map_type map(sfl::from_range_t(), std::views::all(data), 11);
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map_type map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            11
+        );
+        #else
+        map_type map
+        (
+            sfl::from_range_t(),
+            data,
+            11
+        );
+        #endif
 
-    CHECK(map.empty() == false);
-    CHECK(map.size() == 3);
-    CHECK(map.max_size() > 0);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 3);
+        CHECK(map.max_size() > 0);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
 
@@ -912,32 +948,51 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    typename map_type::allocator_type alloc;
+        typename map_type::allocator_type alloc;
 
-    map_type map(sfl::from_range_t(), std::views::all(data), 11, alloc);
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map_type map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            11,
+            alloc
+        );
+        #else
+        map_type map
+        (
+            sfl::from_range_t(),
+            data,
+            11,
+            alloc
+        );
+        #endif
 
-    CHECK(map.empty() == false);
-    CHECK(map.size() == 3);
-    CHECK(map.max_size() > 0);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 3);
+        CHECK(map.max_size() > 0);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
 
@@ -948,32 +1003,51 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    typename map_type::hasher hash;
+        typename map_type::hasher hash;
 
-    map_type map(sfl::from_range_t(), std::views::all(data), 11, hash);
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map_type map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            11,
+            hash
+        );
+        #else
+        map_type map
+        (
+            sfl::from_range_t(),
+            data,
+            11,
+            hash
+        );
+        #endif
 
-    CHECK(map.empty() == false);
-    CHECK(map.size() == 3);
-    CHECK(map.max_size() > 0);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 3);
+        CHECK(map.max_size() > 0);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
 
@@ -984,34 +1058,55 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    typename map_type::hasher hash;
+        typename map_type::hasher hash;
 
-    typename map_type::allocator_type alloc;
+        typename map_type::allocator_type alloc;
 
-    map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, alloc);
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map_type map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            11,
+            hash,
+            alloc
+        );
+        #else
+        map_type map
+        (
+            sfl::from_range_t(),
+            data,
+            11,
+            hash,
+            alloc
+        );
+        #endif
 
-    CHECK(map.empty() == false);
-    CHECK(map.size() == 3);
-    CHECK(map.max_size() > 0);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 3);
+        CHECK(map.max_size() > 0);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
 
@@ -1022,34 +1117,55 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    typename map_type::hasher hash;
+        typename map_type::hasher hash;
 
-    typename map_type::key_equal equal;
+        typename map_type::key_equal equal;
 
-    map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, equal);
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map_type map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            11,
+            hash,
+            equal
+        );
+        #else
+        map_type map
+        (
+            sfl::from_range_t(),
+            data,
+            11,
+            hash,
+            equal
+        );
+        #endif
 
-    CHECK(map.empty() == false);
-    CHECK(map.size() == 3);
-    CHECK(map.max_size() > 0);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 3);
+        CHECK(map.max_size() > 0);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
 
@@ -1060,38 +1176,63 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    typename map_type::hasher hash;
+        typename map_type::hasher hash;
 
-    typename map_type::key_equal equal;
+        typename map_type::key_equal equal;
 
-    typename map_type::allocator_type alloc;
+        typename map_type::allocator_type alloc;
 
-    map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, equal, alloc);
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map_type map
+        (
+            sfl::from_range_t(),
+            std::views::all(data),
+            11,
+            hash,
+            equal,
+            alloc
+        );
+        #else
+        map_type map
+        (
+            sfl::from_range_t(),
+            data,
+            11,
+            hash,
+            equal,
+            alloc
+        );
+        #endif
 
-    CHECK(map.empty() == false);
-    CHECK(map.size() == 3);
-    CHECK(map.max_size() > 0);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.empty() == false);
+        CHECK(map.size() == 3);
+        CHECK(map.max_size() > 0);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
+
+///////////////////////////////////////////////////////////////////////////////
 
 // Test operator=(const container&)
 BEGIN_STATIC_ASSERT
@@ -1100,7 +1241,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1, map2;
@@ -1154,7 +1295,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1, map2;
@@ -1215,7 +1356,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1235,7 +1376,7 @@ BEGIN_STATIC_ASSERT
 
     ///////////////////////////////////////////////////////////////////////
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {40, 2},
         {50, 2},
@@ -1255,6 +1396,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test get_allocator()
 BEGIN_STATIC_ASSERT
 {
@@ -1262,7 +1405,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1273,6 +1416,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test hash_function()
 BEGIN_STATIC_ASSERT
 {
@@ -1281,7 +1426,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = std::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -1299,7 +1444,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = xobj::hash;
         using key_equal = xobj::equal;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -1314,6 +1459,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test key_eq()
 BEGIN_STATIC_ASSERT
 {
@@ -1322,7 +1469,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = std::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -1340,7 +1487,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = xobj::hash;
         using key_equal = xobj::equal;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -1355,6 +1502,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test begin, end, cbegin, cend
 BEGIN_STATIC_ASSERT
 {
@@ -1362,7 +1511,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1504,6 +1653,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test equal_range, find, count, contains
 BEGIN_STATIC_ASSERT
 {
@@ -1513,7 +1664,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = std::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -1572,7 +1723,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = xobj::hash;
         using key_equal = xobj::equal;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -1627,6 +1778,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test emplace(Args&&...)
 BEGIN_STATIC_ASSERT
 {
@@ -1634,7 +1787,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1668,7 +1821,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1700,7 +1853,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1740,7 +1893,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1786,7 +1939,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1826,7 +1979,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1864,7 +2017,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1908,7 +2061,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -1946,14 +2099,14 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
 
     CHECK(map.size() == 0);
 
-    std::vector<std::pair<const xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -1982,14 +2135,14 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
 
     CHECK(map.size() == 0);
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -2016,30 +2169,37 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
-    (
-        {
-            {10, 1},
-            {20, 1},
-            {30, 1},
-            {20, 2},
-            {20, 3}
-        }
-    );
+    // Forward iterator
+    {
+        std::vector<typename map_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
-    map_type map;
+        map_type map;
 
-    map.insert_range(std::views::all(data));
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        map.insert_range(std::views::all(data));
+        #else
+        map.insert_range(data);
+        #endif
 
-    CHECK(map.size() == 3);
-    CHECK(COUNT_KV(map, 10, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 1) == 1);
-    CHECK(COUNT_KV(map, 20, 2) == 0);
-    CHECK(COUNT_KV(map, 20, 3) == 0);
-    CHECK(COUNT_KV(map, 30, 1) == 1);
+        CHECK(map.size() == 3);
+        CHECK(COUNT_KV(map, 10, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 1) == 1);
+        CHECK(COUNT_KV(map, 20, 2) == 0);
+        CHECK(COUNT_KV(map, 20, 3) == 0);
+        CHECK(COUNT_KV(map, 30, 1) == 1);
+    }
 }
 END_STATIC_ASSERT
 
@@ -2050,7 +2210,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2088,7 +2248,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2130,7 +2290,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = xobj::hash;
     using key_equal = xobj::equal;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2164,7 +2324,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2200,7 +2360,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2240,7 +2400,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = xobj::hash;
     using key_equal = xobj::equal;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2272,7 +2432,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2310,7 +2470,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2352,7 +2512,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = xobj::hash;
     using key_equal = xobj::equal;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2386,7 +2546,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2422,7 +2582,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2462,7 +2622,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = xobj::hash;
     using key_equal = xobj::equal;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2494,7 +2654,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2579,7 +2739,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2623,7 +2783,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2663,7 +2823,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = xobj::hash;
     using key_equal = xobj::equal;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2703,7 +2863,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1, map2;
@@ -2760,6 +2920,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test at(const Key&)
 BEGIN_STATIC_ASSERT
 {
@@ -2767,7 +2929,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2807,7 +2969,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = xobj::hash;
     using key_equal = xobj::equal;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2847,7 +3009,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2901,7 +3063,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2955,7 +3117,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = xobj::hash;
     using key_equal = xobj::equal;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map;
@@ -2988,6 +3150,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test bucket interface functions
 BEGIN_STATIC_ASSERT
 {
@@ -2997,7 +3161,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = std::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -3070,7 +3234,7 @@ BEGIN_STATIC_ASSERT
         using mapped_type = xint;
         using key_hash = xobj::hash;
         using key_equal = xobj::equal;
-        using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
         using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
         map_type map;
@@ -3139,6 +3303,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test hash policy functions
 BEGIN_STATIC_ASSERT
 {
@@ -3146,7 +3312,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map(11);
@@ -3196,6 +3362,8 @@ BEGIN_STATIC_ASSERT
 }
 END_STATIC_ASSERT
 
+///////////////////////////////////////////////////////////////////////////////
+
 // Test NON-MEMBER comparison operators
 BEGIN_STATIC_ASSERT
 {
@@ -3203,7 +3371,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1, map2;
@@ -3237,7 +3405,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     map_type map1, map2;
@@ -3286,7 +3454,7 @@ BEGIN_STATIC_ASSERT
     using mapped_type = xint;
     using key_hash = std::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
-    using allocator_type = std::allocator<std::pair<const key_type, mapped_type>>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
     using map_type = sfl::unordered_map<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
     using const_reference = typename map_type::const_reference;

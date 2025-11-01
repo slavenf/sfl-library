@@ -65,5 +65,7 @@ int main()
 }
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
+#undef TPARAM_ALLOCATOR
+#define TPARAM_ALLOCATOR std::allocator
 #include "test_cpp20_constexpr.inc"
 #endif
