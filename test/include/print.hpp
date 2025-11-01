@@ -3,6 +3,6 @@
 
 #include <iostream>
 
-#define PRINT(x) std::cout << x << std::endl
+#define PRINT(x) std::cout << x << std::endl;
 
 #endif // SFL_TEST_PRINT_HPP

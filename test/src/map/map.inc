@@ -5,7 +5,7 @@
 using sfl::test::xint;
 using sfl::test::xobj;
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -19,8 +19,9 @@ PRINT("Test container()");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const Compare&)");
+BEGIN_TEST("Test container(const Compare&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -36,8 +37,9 @@ PRINT("Test container(const Compare&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const Allocator&)");
+BEGIN_TEST("Test container(const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -53,8 +55,9 @@ PRINT("Test container(const Allocator&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(const Compare&, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -72,8 +75,9 @@ PRINT("Test container(const Compare&, const Allocator&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt)");
+BEGIN_TEST("Test container(InputIt, InputIt)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -101,8 +105,9 @@ PRINT("Test container(InputIt, InputIt)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -132,8 +137,9 @@ PRINT("Test container(InputIt, InputIt, const Compare&)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -163,8 +169,9 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -196,8 +203,9 @@ PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list)");
+BEGIN_TEST("Test container(std::initializer_list)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -223,8 +231,9 @@ PRINT("Test container(std::initializer_list)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -252,8 +261,9 @@ PRINT("Test container(std::initializer_list, const Compare&)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -281,8 +291,9 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -312,8 +323,9 @@ PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)")
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -341,8 +353,9 @@ PRINT("Test container(const container&)");
     CHECK(NTH(map2, 1)->first == 20); CHECK(NTH(map2, 1)->second == 1);
     CHECK(NTH(map2, 2)->first == 30); CHECK(NTH(map2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(const container&, const Allocator&)");
+BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -372,8 +385,9 @@ PRINT("Test container(const container&, const Allocator&)");
     CHECK(NTH(map2, 1)->first == 20); CHECK(NTH(map2, 1)->second == 1);
     CHECK(NTH(map2, 2)->first == 30); CHECK(NTH(map2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -402,8 +416,9 @@ PRINT("Test container(container&&)");
     CHECK(NTH(map2, 1)->first == 20); CHECK(NTH(map2, 1)->second == 1);
     CHECK(NTH(map2, 2)->first == 30); CHECK(NTH(map2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Allocator&)");
+BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -445,8 +460,9 @@ PRINT("Test container(container&&, const Allocator&)");
     CHECK(NTH(map2, 1)->first == 20); CHECK(NTH(map2, 1)->second == 1);
     CHECK(NTH(map2, 2)->first == 30); CHECK(NTH(map2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -455,6 +471,7 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -479,6 +496,7 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -515,8 +533,9 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -525,6 +544,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -553,6 +573,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
         CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -593,8 +614,9 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -603,6 +625,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -631,6 +654,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -671,8 +695,9 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -681,6 +706,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocato
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -712,6 +738,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocato
         CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -755,10 +782,11 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocato
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -800,8 +828,9 @@ PRINT("Test operator=(const container&)");
     CHECK(NTH(map2, 1)->first == 20); CHECK(NTH(map2, 1)->second == 1);
     CHECK(NTH(map2, 2)->first == 30); CHECK(NTH(map2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test operator=(container&&)");
+BEGIN_TEST("Test operator=(container&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -850,8 +879,9 @@ PRINT("Test operator=(container&&)");
     CHECK(NTH(map2, 1)->first == 20); CHECK(NTH(map2, 1)->second == 1);
     CHECK(NTH(map2, 2)->first == 30); CHECK(NTH(map2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test operator=(std::initializer_list)");
+BEGIN_TEST("Test operator=(std::initializer_list)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -888,10 +918,11 @@ PRINT("Test operator=(std::initializer_list)");
     CHECK(NTH(map, 1)->first == 50); CHECK(NTH(map, 1)->second == 2);
     CHECK(NTH(map, 2)->first == 60); CHECK(NTH(map, 2)->second == 2);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test get_allocator()");
+BEGIN_TEST("Test get_allocator()")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -905,10 +936,11 @@ PRINT("Test get_allocator()");
 
     (void)alloc;
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test key_comp()");
+BEGIN_TEST("Test key_comp()")
 {
     {
         using key_type = xint;
@@ -944,10 +976,11 @@ PRINT("Test key_comp()");
         CHECK(key_comp(xobj(20), 20) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test value_comp()");
+BEGIN_TEST("Test value_comp()")
 {
     {
         using key_type = xint;
@@ -983,10 +1016,11 @@ PRINT("Test value_comp()");
         CHECK(value_comp({xobj(20), 1}, {xobj(20), 2}) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend");
+BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1032,10 +1066,11 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend");
     CHECK(crit->first == 20); CHECK(crit->second == 1); ++crit;
     CHECK(crit == map.crend());
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
+BEGIN_TEST("Test lower_bound, upper_bound, equal_range, find, count, contains")
 {
     // xint, xint
     {
@@ -1187,10 +1222,11 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
         CHECK(map.contains(70) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test emplace(Args&&...)");
+BEGIN_TEST("Test emplace(Args&&...)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1220,8 +1256,9 @@ PRINT("Test emplace(Args&&...)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test emplace_hint(const_iterator, Args&&...)");
+BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1249,8 +1286,9 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const value_type&)");
+BEGIN_TEST("Test insert(const value_type&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1286,8 +1324,9 @@ PRINT("Test insert(const value_type&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert(value_type&&)");
+BEGIN_TEST("Test insert(value_type&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1329,8 +1368,9 @@ PRINT("Test insert(value_type&&)");
         CHECK(value_10_2.second == +2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(P&&)");
+BEGIN_TEST("Test insert(P&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1366,8 +1406,9 @@ PRINT("Test insert(P&&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, const value_type&)");
+BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1401,8 +1442,9 @@ PRINT("Test insert(const_iterator, const value_type&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, value_type&&)");
+BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1442,8 +1484,9 @@ PRINT("Test insert(const_iterator, value_type&&)");
         CHECK(value_10_2.second == +2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, P&&)");
+BEGIN_TEST("Test insert(const_iterator, P&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1477,8 +1520,9 @@ PRINT("Test insert(const_iterator, P&&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert(InputIt, InputIt");
+BEGIN_TEST("Test insert(InputIt, InputIt")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1508,8 +1552,9 @@ PRINT("Test insert(InputIt, InputIt");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test insert(std::initializer_list)");
+BEGIN_TEST("Test insert(std::initializer_list)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1537,8 +1582,9 @@ PRINT("Test insert(std::initializer_list)");
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test insert_range(Range&&)");
+BEGIN_TEST("Test insert_range(Range&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1547,6 +1593,7 @@ PRINT("Test insert_range(Range&&)");
     using map_type = sfl::map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -1563,6 +1610,7 @@ PRINT("Test insert_range(Range&&)");
         CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 1);
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -1591,8 +1639,9 @@ PRINT("Test insert_range(Range&&)");
         CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(const Key&, M&&)");
+BEGIN_TEST("Test insert_or_assign(const Key&, M&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1626,8 +1675,9 @@ PRINT("Test insert_or_assign(const Key&, M&&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(Key&&, M&&)");
+BEGIN_TEST("Test insert_or_assign(Key&&, M&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1665,8 +1715,9 @@ PRINT("Test insert_or_assign(Key&&, M&&)");
         CHECK(key_10 == +10);
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(K&&, M&&)");
+BEGIN_TEST("Test insert_or_assign(K&&, M&&)")
 {
     using key_type = xobj;
     using mapped_type = xint;
@@ -1696,8 +1747,9 @@ PRINT("Test insert_or_assign(K&&, M&&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
+BEGIN_TEST("Test insert_or_assign(const_iterator, const Key&, M&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1729,8 +1781,9 @@ PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
+BEGIN_TEST("Test insert_or_assign(const_iterator, Key&&, M&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1766,8 +1819,9 @@ PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
         CHECK(key_10 == +10);
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
+BEGIN_TEST("Test insert_or_assign(const_iterator, K&&, M&&)")
 {
     using key_type = xobj;
     using mapped_type = xint;
@@ -1795,8 +1849,9 @@ PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace(const Key&, Args&&...)");
+BEGIN_TEST("Test try_emplace(const Key&, Args&&...)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1830,8 +1885,9 @@ PRINT("Test try_emplace(const Key&, Args&&...)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace(Key&&, Args&&...)");
+BEGIN_TEST("Test try_emplace(Key&&, Args&&...)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1869,8 +1925,9 @@ PRINT("Test try_emplace(Key&&, Args&&...)");
         CHECK(key_10 == +10);
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace(K&&, Args&&...)");
+BEGIN_TEST("Test try_emplace(K&&, Args&&...)")
 {
     using key_type = xobj;
     using mapped_type = xint;
@@ -1900,8 +1957,9 @@ PRINT("Test try_emplace(K&&, Args&&...)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
+BEGIN_TEST("Test try_emplace(const_iterator, const Key&, Args&&...)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1933,8 +1991,9 @@ PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
+BEGIN_TEST("Test try_emplace(const_iterator, Key&&, Args&&...)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -1970,8 +2029,9 @@ PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
         CHECK(key_10 == +10);
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
+BEGIN_TEST("Test try_emplace(const_iterator, K&&, Args&&...)")
 {
     using key_type = xobj;
     using mapped_type = xint;
@@ -1999,8 +2059,9 @@ PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
         CHECK(map.size() == 1);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator)");
+BEGIN_TEST("Test erase(const_iterator)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2043,8 +2104,9 @@ PRINT("Test erase(const_iterator)");
         CHECK(map.size() == 0);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2070,8 +2132,9 @@ PRINT("Test erase(const_iterator, const_iterator)");
     CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
     CHECK(NTH(map, 1)->first == 30); CHECK(NTH(map, 0)->second == 1);
 }
+END_TEST()
 
-PRINT("Test erase(const Key&)");
+BEGIN_TEST("Test erase(const Key&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2105,8 +2168,9 @@ PRINT("Test erase(const Key&)");
     CHECK(map.erase(10) == 0);
     CHECK(map.size() == 0);
 }
+END_TEST()
 
-PRINT("Test erase(K&&)");
+BEGIN_TEST("Test erase(K&&)")
 {
     using key_type = xobj;
     using mapped_type = xint;
@@ -2140,8 +2204,9 @@ PRINT("Test erase(K&&)");
     CHECK(map.erase(10) == 0);
     CHECK(map.size() == 0);
 }
+END_TEST()
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2201,10 +2266,11 @@ PRINT("Test swap(container&)");
     CHECK(NTH(map2, 2)->first == 60); CHECK(NTH(map2, 2)->second == 2);
     CHECK(NTH(map2, 3)->first == 70); CHECK(NTH(map2, 3)->second == 2);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test at(const Key&)");
+BEGIN_TEST("Test at(const Key&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2235,7 +2301,8 @@ PRINT("Test at(const Key&)");
     CHECK(map.at(20) == 2);
     CHECK(map.at(30) == 2);
 
-    #if !defined(SFL_NO_EXCEPTIONS)
+    #ifndef TEST_CPP20_CONSTEXPR
+    #ifndef SFL_NO_EXCEPTIONS
     bool caught_exception = false;
 
     try
@@ -2249,14 +2316,16 @@ PRINT("Test at(const Key&)");
 
     CHECK(caught_exception == true);
     #endif
+    #endif
 
     CHECK(map.size() == 3);
     CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 2);
     CHECK(NTH(map, 1)->first == 20); CHECK(NTH(map, 1)->second == 2);
     CHECK(NTH(map, 2)->first == 30); CHECK(NTH(map, 2)->second == 2);
 }
+END_TEST()
 
-PRINT("Test at(const K&)");
+BEGIN_TEST("Test at(const K&)")
 {
     using key_type = xobj;
     using mapped_type = xint;
@@ -2287,7 +2356,8 @@ PRINT("Test at(const K&)");
     CHECK(map.at(20) == 2);
     CHECK(map.at(30) == 2);
 
-    #if !defined(SFL_NO_EXCEPTIONS)
+    #ifndef TEST_CPP20_CONSTEXPR
+    #ifndef SFL_NO_EXCEPTIONS
     bool caught_exception = false;
 
     try
@@ -2301,14 +2371,16 @@ PRINT("Test at(const K&)");
 
     CHECK(caught_exception == true);
     #endif
+    #endif
 
     CHECK(map.size() == 3);
     CHECK(NTH(map, 0)->first.value() == 10); CHECK(NTH(map, 0)->second == 2);
     CHECK(NTH(map, 1)->first.value() == 20); CHECK(NTH(map, 1)->second == 2);
     CHECK(NTH(map, 2)->first.value() == 30); CHECK(NTH(map, 2)->second == 2);
 }
+END_TEST()
 
-PRINT("Test operator[](const Key&)");
+BEGIN_TEST("Test operator[](const Key&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2358,8 +2430,9 @@ PRINT("Test operator[](const Key&)");
     CHECK(key_50 == 50);
     CHECK(key_60 == 60);
 }
+END_TEST()
 
-PRINT("Test operator[](Key&&)");
+BEGIN_TEST("Test operator[](Key&&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2409,8 +2482,9 @@ PRINT("Test operator[](Key&&)");
     CHECK(key_50 == -50);
     CHECK(key_60 == -60);
 }
+END_TEST()
 
-PRINT("Test operator[](K&&)");
+BEGIN_TEST("Test operator[](K&&)")
 {
     using key_type = xobj;
     using mapped_type = xint;
@@ -2446,10 +2520,11 @@ PRINT("Test operator[](K&&)");
     CHECK(NTH(map, 4)->first.value() == 50); CHECK(NTH(map, 4)->second == 2);
     CHECK(NTH(map, 5)->first.value() == 60); CHECK(NTH(map, 5)->second == 2);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2499,8 +2574,9 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((map2 >= map1) == true);
     CHECK((map2 >= map2) == true);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER swap(container&)");
+BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2548,8 +2624,9 @@ PRINT("Test NON-MEMBER swap(container&)");
     CHECK(NTH(map2, 1)->first == 20); CHECK(NTH(map2, 1)->second == 1);
     CHECK(NTH(map2, 2)->first == 30); CHECK(NTH(map2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
     using key_type = xint;
     using mapped_type = xint;
@@ -2586,3 +2663,4 @@ PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     CHECK(NTH(map, 0)->first == 10); CHECK(NTH(map, 0)->second == 1);
     CHECK(NTH(map, 1)->first == 30); CHECK(NTH(map, 1)->second == 1);
 }
+END_TEST()
