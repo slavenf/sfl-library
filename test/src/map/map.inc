@@ -476,17 +476,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<int, int>>(iss))
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<int, int>>(iss)));
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<int, int>>(iss))
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<int, int>>(iss)));
         #endif
 
         CHECK(map.empty() == false);
@@ -500,7 +492,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -512,17 +504,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data)
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data));
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data
-        );
+        map_type map(sfl::from_range_t(), data);
         #endif
 
         CHECK(map.empty() == false);
@@ -551,19 +535,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
         typename map_type::key_compare comp;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<int, int>>(iss)),
-            comp
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<int, int>>(iss)), comp);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<int, int>>(iss)),
-            comp
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<int, int>>(iss)), comp);
         #endif
 
         CHECK(map.empty() == false);
@@ -577,7 +551,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -591,19 +565,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
         typename map_type::key_compare comp;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            comp
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), comp);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            comp
-        );
+        map_type map(sfl::from_range_t(), data, comp);
         #endif
 
         CHECK(map.empty() == false);
@@ -632,19 +596,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<int, int>>(iss)),
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<int, int>>(iss)), alloc);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<int, int>>(iss)),
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<int, int>>(iss)), alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -658,7 +612,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -672,19 +626,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), alloc);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -711,24 +655,13 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const All
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         typename map_type::key_compare comp;
+
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<int, int>>(iss)),
-            comp,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<int, int>>(iss)), comp, alloc);
         #else
-        map_type map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<int, int>>(iss)),
-            comp,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<int, int>>(iss)), comp, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -742,7 +675,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const All
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -754,24 +687,13 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const All
         );
 
         typename map_type::key_compare comp;
+
         typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map_type map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            comp,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), comp, alloc);
         #else
-        map_type map
-        (
-            sfl::from_range_t(),
-            data,
-            comp,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, comp, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1300,7 +1222,7 @@ BEGIN_TEST("Test insert(const value_type&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -1338,7 +1260,7 @@ BEGIN_TEST("Test insert(value_type&&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         value_type value_10_1(10, 1);
@@ -1420,7 +1342,7 @@ BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -1456,7 +1378,7 @@ BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         value_type value_10_1(10, 1);
@@ -1614,7 +1536,7 @@ BEGIN_TEST("Test insert_range(Range&&)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
