@@ -1,7 +1,39 @@
 #undef NDEBUG // This is very important. Must be in the first line.
 
+#include "sfl/detail/math/ceil.hpp"
+#include "sfl/detail/math/floor.hpp"
 #include "sfl/detail/math/is_pow2.hpp"
 #include "sfl/detail/math/is_prime.hpp"
+
+static_assert(sfl::dtl::ceil(0.0) == 0.0);
+static_assert(sfl::dtl::ceil(0.499999) == 1.0);
+static_assert(sfl::dtl::ceil(0.5) == 1.0);
+static_assert(sfl::dtl::ceil(0.999999) == 1.0);
+static_assert(sfl::dtl::ceil(1.0) == 1.0);
+static_assert(sfl::dtl::ceil(123.0) == 123.0);
+static_assert(sfl::dtl::ceil(123.4) == 124.0);
+
+static_assert(sfl::dtl::ceil(-0.499999) == 0.0);
+static_assert(sfl::dtl::ceil(-0.5) == 0.0);
+static_assert(sfl::dtl::ceil(-0.999999) == 0.0);
+static_assert(sfl::dtl::ceil(-1.0) == -1.0);
+static_assert(sfl::dtl::ceil(-123.0) == -123.0);
+static_assert(sfl::dtl::ceil(-123.4) == -123.0);
+
+static_assert(sfl::dtl::floor(0.0) == 0.0);
+static_assert(sfl::dtl::floor(0.499999) == 0.0);
+static_assert(sfl::dtl::floor(0.5) == 0.0);
+static_assert(sfl::dtl::floor(0.999999) == 0.0);
+static_assert(sfl::dtl::floor(1.0) == 1.0);
+static_assert(sfl::dtl::floor(123.0) == 123.0);
+static_assert(sfl::dtl::floor(123.4) == 123.0);
+
+static_assert(sfl::dtl::floor(-0.499999) == -1.0);
+static_assert(sfl::dtl::floor(-0.5) == -1.0);
+static_assert(sfl::dtl::floor(-0.999999) == -1.0);
+static_assert(sfl::dtl::floor(-1.0) == -1.0);
+static_assert(sfl::dtl::floor(-123.0) == -123.0);
+static_assert(sfl::dtl::floor(-123.4) == -124.0);
 
 static_assert(sfl::dtl::is_pow2(0ull) == false, "");
 static_assert(sfl::dtl::is_pow2(1ull) == true, "");

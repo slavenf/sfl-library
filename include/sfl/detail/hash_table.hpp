@@ -25,6 +25,7 @@
 #include <sfl/detail/bit/bit_log2.hpp>
 #include <sfl/detail/bit/has_single_bit.hpp>
 #include <sfl/detail/math/ceil.hpp>
+#include <sfl/detail/math/floor.hpp>
 #include <sfl/detail/math/is_prime.hpp>
 #include <sfl/detail/memory/construct_at.hpp>
 #include <sfl/detail/memory/construct_at_a.hpp>
@@ -47,7 +48,6 @@
 #include <sfl/detail/cpp.hpp>
 
 #include <algorithm>    // max, min
-#include <cmath>        // ceil, floor
 #include <cstddef>      // size_t, ptrdiff_t
 #include <iterator>     // iterator_traits, xxxxx_iterator_tag
 #include <limits>       // numeric_limits
@@ -530,6 +530,48 @@ private:
 
     int bucket_count_log2_;
 
+private:
+
+    // Fibonnaci hashing is used:
+    // https://en.wikipedia.org/wiki/Hash_function#Fibonacci_hashing
+    // https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/
+
+    template <typename SizeType,
+              sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 64>* = nullptr>
+    SFL_CONSTEXPR_20
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
+    {
+        constexpr SizeType a = 0x9e3779b97f4a7c15u;
+        constexpr int w = 64;
+        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
+        SFL_ASSERT(bucket_index < bucket_count_);
+        return bucket_index;
+    }
+
+    template <typename SizeType,
+              sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 32>* = nullptr>
+    SFL_CONSTEXPR_20
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
+    {
+        constexpr SizeType a = 0x9e3779b9u;
+        constexpr int w = 32;
+        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
+        SFL_ASSERT(bucket_index < bucket_count_);
+        return bucket_index;
+    }
+
+    template <typename SizeType,
+              sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 16>* = nullptr>
+    SFL_CONSTEXPR_20
+    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
+    {
+        constexpr SizeType a = 0x9e37u;
+        constexpr int w = 16;
+        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
+        SFL_ASSERT(bucket_index < bucket_count_);
+        return bucket_index;
+    }
+
 public:
 
     SFL_CONSTEXPR_20
@@ -585,6 +627,18 @@ public:
         swap(bucket_count_, other.bucket_count_);
         swap(bucket_count_log2_, other.bucket_count_log2_);
     }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+
+template <std::size_t StaticBucketCount>
+class hash_table_static_pow2_bucket_count_policy
+{
+    static_assert
+    (
+        sfl::dtl::has_single_bit(StaticBucketCount),
+        "StaticBucketCount must be power of 2"
+    );
 
 private:
 
@@ -599,8 +653,9 @@ private:
     {
         constexpr SizeType a = 0x9e3779b97f4a7c15u;
         constexpr int w = 64;
-        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
-        SFL_ASSERT(bucket_index < bucket_count_);
+        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
+        const SizeType bucket_index = (a * hash) >> (w - m);
+        SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
     }
 
@@ -611,8 +666,9 @@ private:
     {
         constexpr SizeType a = 0x9e3779b9u;
         constexpr int w = 32;
-        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
-        SFL_ASSERT(bucket_index < bucket_count_);
+        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
+        const SizeType bucket_index = (a * hash) >> (w - m);
+        SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
     }
 
@@ -623,22 +679,11 @@ private:
     {
         constexpr SizeType a = 0x9e37u;
         constexpr int w = 16;
-        const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
-        SFL_ASSERT(bucket_index < bucket_count_);
+        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
+        const SizeType bucket_index = (a * hash) >> (w - m);
+        SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
     }
-};
-
-///////////////////////////////////////////////////////////////////////////////
-
-template <std::size_t StaticBucketCount>
-class hash_table_static_pow2_bucket_count_policy
-{
-    static_assert
-    (
-        sfl::dtl::has_single_bit(StaticBucketCount),
-        "StaticBucketCount must be power of 2"
-    );
 
 public:
 
@@ -687,51 +732,6 @@ public:
     void swap(hash_table_static_pow2_bucket_count_policy& other)
     {
         sfl::dtl::ignore_unused(other);
-    }
-
-private:
-
-    // Fibonnaci hashing is used:
-    // https://en.wikipedia.org/wiki/Hash_function#Fibonacci_hashing
-    // https://probablydance.com/2018/06/16/fibonacci-hashing-the-optimization-that-the-world-forgot-or-a-better-alternative-to-integer-modulo/
-
-    template <typename SizeType,
-              sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 64>* = nullptr>
-    SFL_CONSTEXPR_20
-    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
-    {
-        constexpr SizeType a = 0x9e3779b97f4a7c15u;
-        constexpr int w = 64;
-        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
-        const SizeType bucket_index = (a * hash) >> (w - m);
-        SFL_ASSERT(bucket_index < StaticBucketCount);
-        return bucket_index;
-    }
-
-    template <typename SizeType,
-              sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 32>* = nullptr>
-    SFL_CONSTEXPR_20
-    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
-    {
-        constexpr SizeType a = 0x9e3779b9u;
-        constexpr int w = 32;
-        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
-        const SizeType bucket_index = (a * hash) >> (w - m);
-        SFL_ASSERT(bucket_index < StaticBucketCount);
-        return bucket_index;
-    }
-
-    template <typename SizeType,
-              sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 16>* = nullptr>
-    SFL_CONSTEXPR_20
-    SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
-    {
-        constexpr SizeType a = 0x9e37u;
-        constexpr int w = 16;
-        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
-        const SizeType bucket_index = (a * hash) >> (w - m);
-        SFL_ASSERT(bucket_index < StaticBucketCount);
-        return bucket_index;
     }
 };
 
@@ -2822,7 +2822,7 @@ public:
                 count,
                 sfl::dtl::floating_point_to_size_t
                 (
-                    std::floor
+                    sfl::dtl::floor
                     (
                         static_cast<double>(data_.size_) /
                         static_cast<double>(data_.get_max_load_factor())
@@ -3373,7 +3373,7 @@ private:
             (
                 sfl::dtl::floating_point_to_size_t
                 (
-                    std::floor
+                    sfl::dtl::floor
                     (
                         static_cast<double>(data_.size_) /
                         static_cast<double>(data_.get_max_load_factor())
@@ -3418,11 +3418,11 @@ private:
 
                 x->set_bucket_index(bucket_index, std::true_type());
 
-                while (true)
+                while (x->next_ != nullptr)
                 {
                     node_pointer next = static_cast<node_pointer>(x->next_);
 
-                    if (next == nullptr || next->is_first_in_group())
+                    if (next->is_first_in_group())
                     {
                         break;
                     }
