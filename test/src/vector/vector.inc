@@ -6,7 +6,11 @@ using sfl::test::xint;
 
 BEGIN_TEST("Test emplace_back(Args&&...)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     {
         const auto res = vec.emplace_back(10);
@@ -129,9 +133,13 @@ END_TEST()
 
 BEGIN_TEST("Test emplace(const_iterator, Args&&...)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Insert at the end
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         {
             const auto res = vec.emplace(vec.end(), 10);
@@ -253,7 +261,7 @@ BEGIN_TEST("Test emplace(const_iterator, Args&&...)")
 
     // Insert at the begin
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         {
             const auto res = vec.emplace(vec.begin(), 90);
@@ -375,7 +383,7 @@ BEGIN_TEST("Test emplace(const_iterator, Args&&...)")
 
     // Insert near the end
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         {
             const auto res = vec.emplace(vec.end(), 90);
@@ -497,7 +505,7 @@ BEGIN_TEST("Test emplace(const_iterator, Args&&...)")
 
     // Insert near the begin
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         {
             const auto res = vec.emplace(vec.end(), 10);
@@ -623,7 +631,11 @@ END_TEST()
 
 BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -711,7 +723,11 @@ END_TEST()
 
 BEGIN_TEST("Test get_allocator()")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     auto alloc = vec.get_allocator();
 
@@ -723,7 +739,11 @@ END_TEST()
 
 BEGIN_TEST("Test clear()")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     CHECK(vec.size() == 0);
 
@@ -761,7 +781,11 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, const T&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     xint value_10(10);
 
@@ -776,7 +800,11 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, T&&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     xint value_10(10);
 
@@ -791,8 +819,12 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -824,7 +856,7 @@ BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -856,7 +888,7 @@ BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -888,7 +920,7 @@ BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -920,7 +952,7 @@ BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -952,7 +984,7 @@ BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -987,11 +1019,15 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1030,7 +1066,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1069,7 +1105,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1108,7 +1144,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1147,7 +1183,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1186,7 +1222,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1229,7 +1265,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
     // Forward iterator
     {
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1263,7 +1299,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1297,7 +1333,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1331,7 +1367,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1365,7 +1401,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1399,7 +1435,7 @@ BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
         }
 
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
             vec.emplace(vec.end(), 10);
             vec.emplace(vec.end(), 20);
@@ -1437,8 +1473,12 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1454,7 +1494,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{1, 2, 3};
+        std::initializer_list<value_type> ilist{1, 2, 3};
 
         auto res = vec.insert(vec.nth(0), ilist);
 
@@ -1472,7 +1512,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1488,7 +1528,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{11, 12, 13};
+        std::initializer_list<value_type> ilist{11, 12, 13};
 
         auto res = vec.insert(vec.nth(1), ilist);
 
@@ -1506,7 +1546,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1522,7 +1562,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{21, 22, 23};
+        std::initializer_list<value_type> ilist{21, 22, 23};
 
         auto res = vec.insert(vec.nth(2), ilist);
 
@@ -1540,7 +1580,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1556,7 +1596,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{31, 32, 33};
+        std::initializer_list<value_type> ilist{31, 32, 33};
 
         auto res = vec.insert(vec.nth(3), ilist);
 
@@ -1574,7 +1614,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1590,7 +1630,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{41, 42, 43};
+        std::initializer_list<value_type> ilist{41, 42, 43};
 
         auto res = vec.insert(vec.nth(4), ilist);
 
@@ -1608,7 +1648,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1624,7 +1664,7 @@ BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{51, 52, 53};
+        std::initializer_list<value_type> ilist{51, 52, 53};
 
         auto res = vec.insert(vec.nth(5), ilist);
 
@@ -1645,10 +1685,14 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, Range&&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace_back(10);
         vec.emplace_back(60);
@@ -1673,7 +1717,7 @@ BEGIN_TEST("Test insert(const_iterator, Range&&)")
 
     // Forward iterator
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace_back(10);
         vec.emplace_back(60);
@@ -1699,7 +1743,11 @@ END_TEST()
 
 BEGIN_TEST("Test push_back(const T&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     xint value_10(10);
 
@@ -1713,7 +1761,11 @@ END_TEST()
 
 BEGIN_TEST("Test push_back(T&&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     xint value_10(10);
 
@@ -1727,10 +1779,14 @@ END_TEST()
 
 BEGIN_TEST("Test append_range(Range&&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -1755,7 +1811,7 @@ BEGIN_TEST("Test append_range(Range&&)")
 
     // Forward iterator
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -1781,7 +1837,11 @@ END_TEST()
 
 BEGIN_TEST("Test pop_back()")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -1817,8 +1877,12 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1842,7 +1906,7 @@ BEGIN_TEST("Test erase(const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1866,7 +1930,7 @@ BEGIN_TEST("Test erase(const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1890,7 +1954,7 @@ BEGIN_TEST("Test erase(const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1914,7 +1978,7 @@ BEGIN_TEST("Test erase(const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1941,8 +2005,12 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         CHECK(vec.size() == 0);
 
@@ -1950,7 +2018,7 @@ BEGIN_TEST("Test erase(const_iterator, const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -1980,7 +2048,7 @@ BEGIN_TEST("Test erase(const_iterator, const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -2008,7 +2076,7 @@ BEGIN_TEST("Test erase(const_iterator, const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -2036,7 +2104,7 @@ BEGIN_TEST("Test erase(const_iterator, const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -2064,7 +2132,7 @@ BEGIN_TEST("Test erase(const_iterator, const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -2092,7 +2160,7 @@ BEGIN_TEST("Test erase(const_iterator, const_iterator)")
     }
 
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -2123,11 +2191,15 @@ END_TEST()
 
 BEGIN_TEST("Test resize(size_type)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     #define CONDITION n < vec.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2158,9 +2230,9 @@ BEGIN_TEST("Test resize(size_type)")
 
     #define CONDITION n == vec.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2192,9 +2264,9 @@ BEGIN_TEST("Test resize(size_type)")
 
     #define CONDITION n > vec.size() && n < vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2236,9 +2308,9 @@ BEGIN_TEST("Test resize(size_type)")
 
     #define CONDITION n > vec.size() && n == vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2274,9 +2346,9 @@ BEGIN_TEST("Test resize(size_type)")
 
     #define CONDITION n > vec.size() && n > vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2314,11 +2386,15 @@ END_TEST()
 
 BEGIN_TEST("Test resize(size_type, const T&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     #define CONDITION n < vec.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2351,9 +2427,9 @@ BEGIN_TEST("Test resize(size_type, const T&)")
 
     #define CONDITION n == vec.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2387,9 +2463,9 @@ BEGIN_TEST("Test resize(size_type, const T&)")
 
     #define CONDITION n > vec.size() && n < vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2433,9 +2509,9 @@ BEGIN_TEST("Test resize(size_type, const T&)")
 
     #define CONDITION n > vec.size() && n == vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2473,9 +2549,9 @@ BEGIN_TEST("Test resize(size_type, const T&)")
 
     #define CONDITION n > vec.size() && n > vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -2515,7 +2591,11 @@ END_TEST()
 
 BEGIN_TEST("Test swap(container&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec1, vec2;
 
     vec1.emplace(vec1.end(), 10);
     vec1.emplace(vec1.end(), 20);
@@ -2579,7 +2659,11 @@ END_TEST()
 
 BEGIN_TEST("Test at(size_type)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -2629,7 +2713,11 @@ END_TEST()
 
 BEGIN_TEST("Test operator[](size_type)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -2657,7 +2745,11 @@ END_TEST()
 
 BEGIN_TEST("Test front() and back()")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -2683,7 +2775,11 @@ END_TEST()
 
 BEGIN_TEST("Test data()")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -2705,7 +2801,11 @@ END_TEST()
 
 BEGIN_TEST("Test reserve(size_type) and shrink_to_fit()")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -2755,7 +2855,11 @@ END_TEST()
 
 BEGIN_TEST("Test container()")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     CHECK(vec.size() == 0);
     CHECK(vec.capacity() == 0);
@@ -2765,9 +2869,13 @@ END_TEST()
 
 BEGIN_TEST("Test container(const Allocator&)")
 {
-    TPARAM_ALLOCATOR<xint> alloc;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(alloc);
+    typename vector_type::allocator_type alloc;
+
+    vector_type vec(alloc);
 
     CHECK(vec.size() == 0);
     CHECK(vec.capacity() == 0);
@@ -2777,7 +2885,11 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(4);
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec(4);
 
     CHECK(vec.size() == 4);
     CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
@@ -2789,9 +2901,13 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const Allocator&)")
 {
-    TPARAM_ALLOCATOR<xint> alloc;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(4, alloc);
+    typename vector_type::allocator_type alloc;
+
+    vector_type vec(4, alloc);
 
     CHECK(vec.size() == 4);
     CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
@@ -2803,9 +2919,13 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const T&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     xint value_99(99);
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(4, value_99);
+    vector_type vec(4, value_99);
 
     CHECK(vec.size() == 4);
     CHECK(*vec.nth(0) == value_99);
@@ -2817,11 +2937,15 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const T&, const Allocator&)")
 {
-    TPARAM_ALLOCATOR<xint> alloc;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    typename vector_type::allocator_type alloc;
 
     xint value_99(99);
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(4, value_99, alloc);
+    vector_type vec(4, value_99, alloc);
 
     CHECK(vec.size() == 4);
     CHECK(*vec.nth(0) == value_99);
@@ -2833,12 +2957,16 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec
+        vector_type vec
         (
             (std::istream_iterator<int>(iss)),
             (std::istream_iterator<int>())
@@ -2856,7 +2984,7 @@ BEGIN_TEST("Test container(InputIt, InputIt)")
     {
         std::vector<xint> data({10, 20, 30, 40});
 
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(data.begin(), data.end());
+        vector_type vec(data.begin(), data.end());
 
         CHECK(vec.size() == 4);
         CHECK(*vec.nth(0) == 10);
@@ -2869,14 +2997,18 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename vector_type::allocator_type alloc;
 
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec
+        vector_type vec
         (
             (std::istream_iterator<int>(iss)),
             (std::istream_iterator<int>()),
@@ -2895,9 +3027,9 @@ BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
     {
         std::vector<xint> data({10, 20, 30, 40});
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename vector_type::allocator_type alloc;
 
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(data.begin(), data.end(), alloc);
+        vector_type vec(data.begin(), data.end(), alloc);
 
         CHECK(vec.size() == 4);
         CHECK(*vec.nth(0) == 10);
@@ -2910,9 +3042,13 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list)")
 {
-    std::initializer_list<xint> ilist{10, 20, 30, 40};
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(ilist);
+    std::initializer_list<value_type> ilist{10, 20, 30, 40};
+
+    vector_type vec(ilist);
 
     CHECK(vec.size() == 4);
     CHECK(*vec.nth(0) == 10);
@@ -2924,11 +3060,15 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
 {
-    std::initializer_list<xint> ilist{10, 20, 30, 40};
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
 
-    TPARAM_ALLOCATOR<xint> alloc;
+    std::initializer_list<value_type> ilist{10, 20, 30, 40};
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(ilist, alloc);
+    typename vector_type::allocator_type alloc;
+
+    vector_type vec(ilist, alloc);
 
     CHECK(vec.size() == 4);
     CHECK(*vec.nth(0) == 10);
@@ -2940,7 +3080,11 @@ END_TEST()
 
 BEGIN_TEST("Test container(const container&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec1;
 
     vec1.emplace(vec1.end(), 10);
     vec1.emplace(vec1.end(), 20);
@@ -2953,7 +3097,7 @@ BEGIN_TEST("Test container(const container&)")
 
     ///////////////////////////////////////////////////////////////////////////
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec2(vec1);
+    vector_type vec2(vec1);
 
     CHECK(vec2.size() == 3);
     CHECK(*vec2.nth(0) == 10);
@@ -2964,7 +3108,11 @@ END_TEST()
 
 BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec1;
 
     vec1.emplace(vec1.end(), 10);
     vec1.emplace(vec1.end(), 20);
@@ -2977,9 +3125,9 @@ BEGIN_TEST("Test container(const container&, const Allocator&)")
 
     ///////////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<xint> alloc;
+    typename vector_type::allocator_type alloc;
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec2(vec1, alloc);
+    vector_type vec2(vec1, alloc);
 
     CHECK(vec2.size() == 3);
     CHECK(*vec2.nth(0) == 10);
@@ -2990,7 +3138,11 @@ END_TEST()
 
 BEGIN_TEST("Test container(container&&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec1;
 
     vec1.emplace(vec1.end(), 10);
     vec1.emplace(vec1.end(), 20);
@@ -3003,7 +3155,7 @@ BEGIN_TEST("Test container(container&&)")
 
     ///////////////////////////////////////////////////////////////////////////
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec2(std::move(vec1));
+    vector_type vec2(std::move(vec1));
 
     CHECK(vec2.size() == 3);
     CHECK(*vec2.nth(0) == 10);
@@ -3029,7 +3181,11 @@ END_TEST()
 
 BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec1;
 
     vec1.emplace(vec1.end(), 10);
     vec1.emplace(vec1.end(), 20);
@@ -3042,9 +3198,9 @@ BEGIN_TEST("Test container(container&&, const Allocator&)")
 
     ///////////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<xint> alloc;
+    typename vector_type::allocator_type alloc;
 
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec2(std::move(vec1), alloc);
+    vector_type vec2(std::move(vec1), alloc);
 
     CHECK(vec2.size() == 3);
     CHECK(*vec2.nth(0) == 10);
@@ -3070,15 +3226,19 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), (std::views::istream<int>(iss)));
+        vector_type vec(sfl::from_range_t(), (std::views::istream<int>(iss)));
         #else
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), (sfl::test::istream_view<int>(iss)));
+        vector_type vec(sfl::from_range_t(), (sfl::test::istream_view<int>(iss)));
         #endif
 
         CHECK(vec.size() == 4);
@@ -3094,9 +3254,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
         std::vector<int> data({10, 20, 30, 40});
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), std::views::all(data));
+        vector_type vec(sfl::from_range_t(), std::views::all(data));
         #else
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), data);
+        vector_type vec(sfl::from_range_t(), data);
         #endif
 
         CHECK(vec.size() == 4);
@@ -3110,17 +3270,21 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 40");
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename vector_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), std::views::istream<int>(iss), alloc);
+        vector_type vec(sfl::from_range_t(), std::views::istream<int>(iss), alloc);
         #else
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), sfl::test::istream_view<int>(iss), alloc);
+        vector_type vec(sfl::from_range_t(), sfl::test::istream_view<int>(iss), alloc);
         #endif
 
         CHECK(vec.size() == 4);
@@ -3135,12 +3299,12 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
     {
         std::vector<int> data({10, 20, 30, 40});
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename vector_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), std::views::all(data), alloc);
+        vector_type vec(sfl::from_range_t(), std::views::all(data), alloc);
         #else
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec(sfl::from_range_t(), data, alloc);
+        vector_type vec(sfl::from_range_t(), data, alloc);
         #endif
 
         CHECK(vec.size() == 4);
@@ -3156,9 +3320,13 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(const container&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     #define CONDITION vec1.size() == vec2.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+        vector_type vec1, vec2;
 
         vec1.emplace(vec1.end(), 10);
         vec1.emplace(vec1.end(), 20);
@@ -3198,7 +3366,7 @@ BEGIN_TEST("Test operator=(const container&)")
 
     #define CONDITION vec1.size() < vec2.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+        vector_type vec1, vec2;
 
         vec1.emplace(vec1.end(), 10);
         vec1.emplace(vec1.end(), 20);
@@ -3246,7 +3414,7 @@ BEGIN_TEST("Test operator=(const container&)")
 
     #define CONDITION vec1.size() > vec2.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+        vector_type vec1, vec2;
 
         vec1.emplace(vec1.end(), 10);
         vec1.emplace(vec1.end(), 20);
@@ -3292,9 +3460,13 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(container&&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     #define CONDITION vec1.size() == vec2.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+        vector_type vec1, vec2;
 
         vec1.emplace(vec1.end(), 10);
         vec1.emplace(vec1.end(), 20);
@@ -3342,7 +3514,7 @@ BEGIN_TEST("Test operator=(container&&)")
 
     #define CONDITION vec1.size() < vec2.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+        vector_type vec1, vec2;
 
         vec1.emplace(vec1.end(), 10);
         vec1.emplace(vec1.end(), 20);
@@ -3398,7 +3570,7 @@ BEGIN_TEST("Test operator=(container&&)")
 
     #define CONDITION vec1.size() > vec2.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+        vector_type vec1, vec2;
 
         vec1.emplace(vec1.end(), 10);
         vec1.emplace(vec1.end(), 20);
@@ -3452,9 +3624,13 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(std::initializer_list)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     #define CONDITION vec.size() == ilist.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -3465,7 +3641,7 @@ BEGIN_TEST("Test operator=(std::initializer_list)")
         CHECK(*vec.nth(1) == 20);
         CHECK(*vec.nth(2) == 30);
 
-        std::initializer_list<xint> ilist{40, 50, 60};
+        std::initializer_list<value_type> ilist{40, 50, 60};
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -3482,7 +3658,7 @@ BEGIN_TEST("Test operator=(std::initializer_list)")
 
     #define CONDITION vec.size() < ilist.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -3493,7 +3669,7 @@ BEGIN_TEST("Test operator=(std::initializer_list)")
         CHECK(*vec.nth(1) == 20);
         CHECK(*vec.nth(2) == 30);
 
-        std::initializer_list<xint> ilist{40, 50, 60, 70, 80};
+        std::initializer_list<value_type> ilist{40, 50, 60, 70, 80};
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -3512,7 +3688,7 @@ BEGIN_TEST("Test operator=(std::initializer_list)")
 
     #define CONDITION vec.size() > ilist.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         vec.emplace(vec.end(), 10);
         vec.emplace(vec.end(), 20);
@@ -3527,7 +3703,7 @@ BEGIN_TEST("Test operator=(std::initializer_list)")
         CHECK(*vec.nth(3) == 40);
         CHECK(*vec.nth(4) == 50);
 
-        std::initializer_list<xint> ilist{60, 70, 80};
+        std::initializer_list<value_type> ilist{60, 70, 80};
 
         ///////////////////////////////////////////////////////////////////////
 
@@ -3548,11 +3724,15 @@ END_TEST()
 
 BEGIN_TEST("Test assign(size_type, const T&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     #define CONDITION n < vec.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -3590,9 +3770,9 @@ BEGIN_TEST("Test assign(size_type, const T&)")
 
     #define CONDITION n == vec.size()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -3630,9 +3810,9 @@ BEGIN_TEST("Test assign(size_type, const T&)")
 
     #define CONDITION n > vec.size() && n < vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -3670,9 +3850,9 @@ BEGIN_TEST("Test assign(size_type, const T&)")
 
     #define CONDITION n > vec.size() && n == vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -3710,9 +3890,9 @@ BEGIN_TEST("Test assign(size_type, const T&)")
 
     #define CONDITION n > vec.size() && n > vec.capacity()
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
-        using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+        using size_type = typename vector_type::size_type;
 
         vec.emplace_back(10);
         vec.emplace_back(20);
@@ -3752,14 +3932,18 @@ END_TEST()
 
 BEGIN_TEST("Test assign(InputIt, InputIt)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         #define CONDITION n < vec.size()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -3805,9 +3989,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n == vec.size()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -3853,9 +4037,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n > vec.size() && n < vec.capacity()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -3901,9 +4085,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n > vec.size() && n == vec.capacity()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -3949,9 +4133,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n > vec.size() && n > vec.capacity()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -4001,9 +4185,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
     {
         #define CONDITION n < vec.size()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -4046,9 +4230,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n == vec.size()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -4091,9 +4275,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n > vec.size() && n < vec.capacity()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -4136,9 +4320,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n > vec.size() && n == vec.capacity()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -4181,9 +4365,9 @@ BEGIN_TEST("Test assign(InputIt, InputIt)")
 
         #define CONDITION n > vec.size() && n > vec.capacity()
         {
-            sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+            vector_type vec;
 
-            using size_type = typename sfl::vector<xint, TPARAM_ALLOCATOR<xint>>::size_type;
+            using size_type = typename vector_type::size_type;
 
             vec.emplace_back(10);
             vec.emplace_back(20);
@@ -4229,7 +4413,11 @@ END_TEST()
 
 BEGIN_TEST("Test assign(std::initializer_list)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -4244,7 +4432,7 @@ BEGIN_TEST("Test assign(std::initializer_list)")
     CHECK(*vec.nth(3) == 40);
     CHECK(*vec.nth(4) == 50);
 
-    std::initializer_list<xint> ilist{1, 2, 3, 4, 5};
+    std::initializer_list<value_type> ilist{1, 2, 3, 4, 5};
 
     vec.assign(ilist);
 
@@ -4259,10 +4447,14 @@ END_TEST()
 
 BEGIN_TEST("Test assign_range(Range&&)")
 {
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         std::istringstream iss("10 20 30 40");
 
@@ -4284,7 +4476,7 @@ BEGIN_TEST("Test assign_range(Range&&)")
     {
         std::vector<int> data({10, 20, 30, 40});
 
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+        vector_type vec;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         vec.assign_range(std::views::all(data));
@@ -4305,7 +4497,11 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec1, vec2;
 
     vec1.emplace(vec1.end(), 10);
     vec1.emplace(vec1.end(), 20);
@@ -4351,7 +4547,11 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec1, vec2;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec1, vec2;
 
     vec1.emplace(vec1.end(), 10);
     vec1.emplace(vec1.end(), 20);
@@ -4395,7 +4595,11 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER erase(container&, const U&)")
 {
-    sfl::vector<xint, TPARAM_ALLOCATOR<xint>> vec;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
+
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
@@ -4428,14 +4632,15 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
-    using container_type =
-        sfl::vector<xint, TPARAM_ALLOCATOR<xint>>;
+    using value_type = xint;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using vector_type = sfl::vector<value_type, allocator_type>;
 
-    using const_reference = typename container_type::const_reference;
+    using const_reference = typename vector_type::const_reference;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type vec;
+    vector_type vec;
 
     vec.emplace(vec.end(), 10);
     vec.emplace(vec.end(), 20);
