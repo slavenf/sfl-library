@@ -21,8 +21,6 @@
 #ifndef SFL_DETAIL_CEIL_HPP_INCLUDED
 #define SFL_DETAIL_CEIL_HPP_INCLUDED
 
-#include <sfl/detail/cpp.hpp>
-
 #include <type_traits> // enable_if, is_floating_point
 
 namespace sfl
