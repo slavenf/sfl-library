@@ -7,6 +7,7 @@
 #include "sfl/detail/functional/identity.hpp"
 
 #include "check.hpp"
+#include "count.hpp"
 #include "hash.hpp"
 #include "nth.hpp"
 #include "print.hpp"
@@ -86,3 +87,7 @@ int main()
     test_hash_table<5>();
     test_hash_table<6>();
 }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+#include "test_cpp20_constexpr.inc"
+#endif

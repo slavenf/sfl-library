@@ -197,6 +197,7 @@ public:
 template <>
 struct hash<xint>
 {
+    SFL_CONSTEXPR_20
     std::size_t operator()(const xint& x)
     {
         return static_cast<std::size_t>(*x.value_);
@@ -213,6 +214,7 @@ namespace std
 template <>
 struct hash<sfl::test::xint>
 {
+    SFL_CONSTEXPR_20
     std::size_t operator()(const sfl::test::xint& x)
     {
         return static_cast<std::size_t>(*x.value_);

@@ -24,6 +24,7 @@
 #include <sfl/detail/bit/bit_ceil.hpp>
 #include <sfl/detail/bit/bit_log2.hpp>
 #include <sfl/detail/bit/has_single_bit.hpp>
+#include <sfl/detail/math/ceil.hpp>
 #include <sfl/detail/math/is_prime.hpp>
 #include <sfl/detail/memory/construct_at.hpp>
 #include <sfl/detail/memory/construct_at_a.hpp>
@@ -39,6 +40,7 @@
 #include <sfl/detail/type_traits/is_nothrow_swappable.hpp>
 #include <sfl/detail/utility/compressed_pair.hpp>
 #include <sfl/detail/utility/floating_point_to_size_t.hpp>
+#include <sfl/detail/utility/ignore_unused.hpp>
 #include <sfl/detail/utility/optional_value.hpp>
 #include <sfl/detail/utility/scope_guard.hpp>
 #include <sfl/detail/allocator_traits.hpp>
@@ -88,10 +90,12 @@ struct hash_table_base_node
 
     base_node_pointer next_;
 
+    SFL_CONSTEXPR_20
     hash_table_base_node() noexcept
         : next_()
     {}
 
+    SFL_CONSTEXPR_20
     hash_table_base_node(base_node_pointer next) noexcept
         : next_(next)
     {}
@@ -111,33 +115,39 @@ struct hash_table_node : hash_table_base_node<VoidPointer>
     sfl::dtl::optional_value<Value> value_;
 
     // Use this if node is first in group.
+    SFL_CONSTEXPR_20
     void set_bucket_index(std::size_t bucket_index, std::true_type) noexcept
     {
         bucket_info_ = bucket_index;
     }
 
     // Use this if node is not first in group.
+    SFL_CONSTEXPR_20
     void set_bucket_index(std::size_t bucket_index, std::false_type) noexcept
     {
         bucket_info_ = bucket_index | ~mask;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_bucket_index() const noexcept
     {
         return bucket_info_ & mask;
     }
 
+    SFL_CONSTEXPR_20
     bool is_first_in_group() const noexcept
     {
         return !(bucket_info_ & ~mask);
     }
 
+    SFL_CONSTEXPR_20
     void set_first_in_group()
     {
         bucket_info_ = bucket_info_ & mask;
     }
 
     #if 0 // Not used, but leave it here just in case
+    SFL_CONSTEXPR_20
     void reset_first_in_group()
     {
         bucket_info_ = bucket_info_ | ~mask;
@@ -163,79 +173,98 @@ struct hash_table_bucket
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename KeyHash, typename KeyEqual>
+template < typename KeyHash, typename KeyEqual,
+           bool AreBothFunctionsEmpty = std::is_empty<KeyHash>::value && std::is_empty<KeyEqual>::value >
 class hash_table_functions
 {
 private:
 
-    unsigned char status_;
+    union
+    {
+        sfl::dtl::compressed_pair<KeyHash, KeyEqual> functions0_;
+    };
 
     union
     {
-        sfl::dtl::compressed_pair<KeyHash, KeyEqual> functions_[2];
+        sfl::dtl::compressed_pair<KeyHash, KeyEqual> functions1_;
     };
+
+    unsigned char status_;
 
 public:
 
+    SFL_CONSTEXPR_20
     hash_table_functions()
         : status_(0)
     {
         sfl::dtl::construct_at
         (
-            std::addressof(functions_[status_]),
+            std::addressof(functions0_),
             sfl::dtl::compressed_pair_default_init_t(),
             sfl::dtl::compressed_pair_default_init_t()
         );
     }
 
+    SFL_CONSTEXPR_20
     hash_table_functions(const KeyHash& hash)
         : status_(0)
     {
         sfl::dtl::construct_at
         (
-            std::addressof(functions_[status_]),
+            std::addressof(functions0_),
             hash,
             sfl::dtl::compressed_pair_default_init_t()
         );
     }
 
+    SFL_CONSTEXPR_20
     hash_table_functions(const KeyHash& hash, const KeyEqual& equal)
         : status_(0)
     {
         sfl::dtl::construct_at
         (
-            std::addressof(functions_[status_]),
+            std::addressof(functions0_),
             hash,
             equal
         );
     }
 
+    SFL_CONSTEXPR_20
     ~hash_table_functions()
     {
         SFL_ASSERT(status_ == 0 || status_ == 1);
-        sfl::dtl::destroy_at(std::addressof(functions_[status_]));
+        sfl::dtl::destroy_at(std::addressof(status_ == 0 ? functions0_ : functions1_));
     }
 
+    SFL_CONSTEXPR_20
     KeyHash& ref_to_key_hash()
     {
-        return functions_[status_].first();
+        SFL_ASSERT(status_ == 0 || status_ == 1);
+        return status_ == 0 ? functions0_.first() : functions1_.first();
     }
 
+    SFL_CONSTEXPR_20
     const KeyHash& ref_to_key_hash() const
     {
-        return functions_[status_].first();
+        SFL_ASSERT(status_ == 0 || status_ == 1);
+        return status_ == 0 ? functions0_.first() : functions1_.first();
     }
 
+    SFL_CONSTEXPR_20
     KeyEqual& ref_to_key_equal()
     {
-        return functions_[status_].second();
+        SFL_ASSERT(status_ == 0 || status_ == 1);
+        return status_ == 0 ? functions0_.second() : functions1_.second();
     }
 
+    SFL_CONSTEXPR_20
     const KeyEqual& ref_to_key_equal() const
     {
-        return functions_[status_].second();
+        SFL_ASSERT(status_ == 0 || status_ == 1);
+        return status_ == 0 ? functions0_.second() : functions1_.second();
     }
 
+    SFL_CONSTEXPR_20
     void assign_copy(const hash_table_functions& other)
     {
         priv_assign_copy
@@ -249,6 +278,7 @@ public:
         );
     }
 
+    SFL_CONSTEXPR_20
     void assign_move(hash_table_functions& other)
     {
         priv_assign_move
@@ -262,6 +292,7 @@ public:
         );
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_functions& other)
     {
         priv_swap
@@ -277,47 +308,65 @@ public:
 
 private:
 
+    SFL_CONSTEXPR_20
     void priv_assign_copy(const hash_table_functions& other, std::true_type)
     {
         SFL_ASSERT(status_ == 0 || status_ == 1);
         SFL_ASSERT(other.status_ == 0 || other.status_ == 1);
 
-        functions_[status_] = other.functions_[other.status_];
+        auto& this_functions = (status_ == 0) ? functions0_ : functions1_;
+
+        auto& other_functions = (other.status_ == 0) ? other.functions0_ : other.functions1_;
+
+        this_functions = other_functions;
     }
 
+    SFL_CONSTEXPR_20
     void priv_assign_copy(const hash_table_functions& other, std::false_type)
     {
         SFL_ASSERT(status_ == 0 || status_ == 1);
         SFL_ASSERT(other.status_ == 0 || other.status_ == 1);
 
-        // Construct a new pair of functions.
-        sfl::dtl::construct_at
-        (
-            std::addressof(functions_[status_ ^ 1]),
-            other.functions_[other.status_ & 1]
-        );
-        status_ |= 2;
+        auto& this_old_functions = (status_ == 0) ? functions0_ : functions1_;
 
-        // Destroy the old pair of functions.
-        sfl::dtl::destroy_at
-        (
-            std::addressof(functions_[status_] & 1)
-        );
-        status_ ^= 3;
+        auto& this_new_functions = (status_ == 0) ? functions1_ : functions0_;
+
+        auto& other_functions = (other.status_ == 0) ? other.functions0_ : other.functions1_;
+
+        // Construct a new pair of functions (may throw)
+        sfl::dtl::construct_at(std::addressof(this_new_functions), other_functions);
+
+        // Destroy the old pair of functions (noexcept)
+        sfl::dtl::destroy_at(std::addressof(this_old_functions));
+
+        // Change active functions (noexcept)
+        status_ ^= 1;
     }
 
+    SFL_CONSTEXPR_20
     void priv_assign_move(hash_table_functions& other, std::true_type)
     {
         SFL_ASSERT(status_ == 0 || status_ == 1);
         SFL_ASSERT(other.status_ == 0 || other.status_ == 1);
 
-        functions_[status_] = std::move(other.functions_[other.status_]);
+        auto& this_functions = (status_ == 0) ? functions0_ : functions1_;
+
+        auto& other_functions = (other.status_ == 0) ? other.functions0_ : other.functions1_;
+
+        this_functions = std::move(other_functions);
     }
 
+    SFL_CONSTEXPR_20
     void priv_assign_move(hash_table_functions& other, std::false_type)
     {
         SFL_ASSERT(status_ == 0 || status_ == 1);
         SFL_ASSERT(other.status_ == 0 || other.status_ == 1);
+
+        auto& this_old_functions = (status_ == 0) ? functions0_ : functions1_;
+
+        auto& this_new_functions = (status_ == 0) ? functions1_ : functions0_;
+
+        auto& other_functions = (other.status_ == 0) ? other.functions0_ : other.functions1_;
 
         // Construct a new pair of functions.
         // We intentionally avoid using std::move for the second argument.
@@ -326,81 +375,146 @@ private:
         // successfully, but the second element could throw during its move.
         // This would leave the pair in an inconsistent state: the first element
         // would be moved from the source, while the second would remain intact.
-        sfl::dtl::construct_at
-        (
-            std::addressof(functions_[status_ ^ 1]),
-            other.functions_[other.status_ & 1]
-        );
-        status_ |= 2;
+        sfl::dtl::construct_at(std::addressof(this_new_functions), other_functions);
 
-        // Destroy the old pair of functions.
-        sfl::dtl::destroy_at
-        (
-            std::addressof(functions_[status_] & 1)
-        );
-        status_ ^= 3;
+        // Destroy the old pair of functions (noexcept)
+        sfl::dtl::destroy_at(std::addressof(this_old_functions));
+
+        // Change active functions (noexcept)
+        status_ ^= 1;
     }
 
+    SFL_CONSTEXPR_20
     void priv_swap(hash_table_functions& other, std::true_type)
     {
         SFL_ASSERT(status_ == 0 || status_ == 1);
         SFL_ASSERT(other.status_ == 0 || other.status_ == 1);
 
+        auto& this_functions = (status_ == 0) ? functions0_ : functions1_;
+
+        auto& other_functions = (other.status_ == 0) ? other.functions0_ : other.functions1_;
+
         using std::swap;
 
-        swap(functions_[status_], other.functions_[other.status_]);
+        swap(this_functions, other_functions);
     }
 
+    SFL_CONSTEXPR_20
     void priv_swap(hash_table_functions& other, std::false_type)
     {
         SFL_ASSERT(status_ == 0 || status_ == 1);
         SFL_ASSERT(other.status_ == 0 || other.status_ == 1);
 
-        // Construct a new pair of functions in this
-        sfl::dtl::construct_at
-        (
-            std::addressof(this->functions_[this->status_ ^ 1]),
-            other.functions_[other.status_ & 1]
-        );
-        this->status_ |= 2;
+        auto& this_old_functions = (status_ == 0) ? functions0_ : functions1_;
 
-        // Construct a new pair of functions in other
+        auto& this_new_functions = (status_ == 0) ? functions1_ : functions0_;
+
+        auto& other_old_functions = (other.status_ == 0) ? other.functions0_ : other.functions1_;
+
+        auto& other_new_functions = (other.status_ == 0) ? other.functions1_ : other.functions0_;
+
+        // Construct a new pair of functions in this (may throw)
+        sfl::dtl::construct_at(std::addressof(this_new_functions), other_old_functions);
+
+        // Construct a new pair of functions in other (may throw)
         SFL_TRY
         {
-            sfl::dtl::construct_at
-            (
-                std::addressof(other.functions_[other.status_ ^ 1]),
-                this->functions_[this->status_ & 1]
-            );
-            other.status_ |= 2;
+            sfl::dtl::construct_at(std::addressof(other_new_functions), this_old_functions);
         }
         SFL_CATCH (...)
         {
-            this->status_ &= 1;
-
-            sfl::dtl::destroy_at
-            (
-                std::addressof(this->functions_[this->status_ ^ 1])
-            );
-
+            sfl::dtl::destroy_at(std::addressof(this_new_functions));
             SFL_RETHROW;
         }
 
-        // Destroy the old pair of functions in this
-        sfl::dtl::destroy_at
-        (
-            std::addressof(this->functions_[this->status_ & 1])
-        );
-        this->status_ ^= 3;
+        // Destroy the old pair of functions in this (noexcept)
+        sfl::dtl::destroy_at(std::addressof(this_old_functions));
 
-        // Destroy the old pair of functions in other
-        sfl::dtl::destroy_at
-        (
-            std::addressof(other.functions_[other.status_ & 1])
-        );
-        other.status_ ^= 3;
+        // Destroy the old pair of functions in other (noexcept)
+        sfl::dtl::destroy_at(std::addressof(other_old_functions));
+
+        // Change active functions (noexcept)
+        status_ ^= 1;
+        other.status_ ^= 1;
     }
 };
+
+#if defined(_MSC_VER) && SFL_CPP_VERSION >= SFL_CPP_20
+
+//
+// This is partial workaround for Visual C++ compiler bug
+// https://developercommunity.visualstudio.com/t/MSVC-false-positive-read-of-an-uninitial/10808174
+//
+template <typename KeyHash, typename KeyEqual>
+class hash_table_functions<KeyHash, KeyEqual, true> : private KeyHash, private KeyEqual
+{
+public:
+
+    SFL_CONSTEXPR_20
+    hash_table_functions()
+        : KeyHash()
+        , KeyEqual()
+    {}
+
+    SFL_CONSTEXPR_20
+    hash_table_functions(const KeyHash& hash)
+        : KeyHash(hash)
+        , KeyEqual()
+    {}
+
+    SFL_CONSTEXPR_20
+    hash_table_functions(const KeyHash& hash, const KeyEqual& equal)
+        : KeyHash(hash)
+        , KeyEqual(equal)
+    {}
+
+    SFL_CONSTEXPR_20
+    KeyHash& ref_to_key_hash()
+    {
+        return *this;
+    }
+
+    SFL_CONSTEXPR_20
+    const KeyHash& ref_to_key_hash() const
+    {
+        return *this;
+    }
+
+    SFL_CONSTEXPR_20
+    KeyEqual& ref_to_key_equal()
+    {
+        return *this;
+    }
+
+    SFL_CONSTEXPR_20
+    const KeyEqual& ref_to_key_equal() const
+    {
+        return *this;
+    }
+
+    SFL_CONSTEXPR_20
+    void assign_copy(const hash_table_functions& other)
+    {
+        // Nothing to do
+        sfl::dtl::ignore_unused(other);
+    }
+
+    SFL_CONSTEXPR_20
+    void assign_move(hash_table_functions& other)
+    {
+        // Nothing to do
+        sfl::dtl::ignore_unused(other);
+    }
+
+    SFL_CONSTEXPR_20
+    void swap(hash_table_functions& other)
+    {
+        // Nothing to do
+        sfl::dtl::ignore_unused(other);
+    }
+};
+
+#endif // defined(_MSC_VER) && SFL_CPP_VERSION >= SFL_CPP_20
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
@@ -418,16 +532,19 @@ private:
 
 public:
 
+    SFL_CONSTEXPR_20
     static bool check_bucket_count(std::size_t bucket_count)
     {
         return sfl::dtl::has_single_bit(bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t get_max_bucket_count()
     {
         return ~(std::numeric_limits<std::size_t>::max() >> 1) >> 1;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t calculate_new_bucket_count(std::size_t min_bucket_count)
     {
         return std::max<std::size_t>
@@ -441,11 +558,13 @@ public:
         );
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_bucket_count() const
     {
         return bucket_count_;
     }
 
+    SFL_CONSTEXPR_20
     void set_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(check_bucket_count(bucket_count));
@@ -453,11 +572,13 @@ public:
         bucket_count_log2_ = sfl::dtl::bit_log2(bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     std::size_t calculate_bucket_index_for_hash(std::size_t hash) const
     {
         return priv_calculate_bucket_index_for_hash<std::size_t>(hash);
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_dynamic_pow2_bucket_count_policy& other)
     {
         using std::swap;
@@ -473,10 +594,11 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 64>* = nullptr>
+    SFL_CONSTEXPR_20
     SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr SizeType a = 0x9e3779b97f4a7c15u;
-        static constexpr int w = 64;
+        constexpr SizeType a = 0x9e3779b97f4a7c15u;
+        constexpr int w = 64;
         const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
         SFL_ASSERT(bucket_index < bucket_count_);
         return bucket_index;
@@ -484,10 +606,11 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 32>* = nullptr>
+    SFL_CONSTEXPR_20
     SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr SizeType a = 0x9e3779b9u;
-        static constexpr int w = 32;
+        constexpr SizeType a = 0x9e3779b9u;
+        constexpr int w = 32;
         const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
         SFL_ASSERT(bucket_index < bucket_count_);
         return bucket_index;
@@ -495,15 +618,18 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 16>* = nullptr>
+    SFL_CONSTEXPR_20
     SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr SizeType a = 0x9e37u;
-        static constexpr int w = 16;
+        constexpr SizeType a = 0x9e37u;
+        constexpr int w = 16;
         const SizeType bucket_index = (a * hash) >> (w - bucket_count_log2_);
         SFL_ASSERT(bucket_index < bucket_count_);
         return bucket_index;
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
 
 template <std::size_t StaticBucketCount>
 class hash_table_static_pow2_bucket_count_policy
@@ -516,6 +642,7 @@ class hash_table_static_pow2_bucket_count_policy
 
 public:
 
+    SFL_CONSTEXPR_20
     static bool check_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count == StaticBucketCount);
@@ -523,11 +650,13 @@ public:
         return true;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t get_max_bucket_count()
     {
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t calculate_new_bucket_count(std::size_t min_bucket_count)
     {
         SFL_ASSERT(min_bucket_count == StaticBucketCount);
@@ -535,22 +664,26 @@ public:
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_bucket_count() const
     {
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     void set_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count == StaticBucketCount);
         sfl::dtl::ignore_unused(bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     std::size_t calculate_bucket_index_for_hash(std::size_t hash) const
     {
         return priv_calculate_bucket_index_for_hash<std::size_t>(hash);
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_static_pow2_bucket_count_policy& other)
     {
         sfl::dtl::ignore_unused(other);
@@ -564,11 +697,12 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 64>* = nullptr>
+    SFL_CONSTEXPR_20
     SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr SizeType a = 0x9e3779b97f4a7c15u;
-        static constexpr int w = 64;
-        static constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
+        constexpr SizeType a = 0x9e3779b97f4a7c15u;
+        constexpr int w = 64;
+        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
         const SizeType bucket_index = (a * hash) >> (w - m);
         SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
@@ -576,11 +710,12 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 32>* = nullptr>
+    SFL_CONSTEXPR_20
     SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr SizeType a = 0x9e3779b9u;
-        static constexpr int w = 32;
-        static constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
+        constexpr SizeType a = 0x9e3779b9u;
+        constexpr int w = 32;
+        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
         const SizeType bucket_index = (a * hash) >> (w - m);
         SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
@@ -588,11 +723,12 @@ private:
 
     template <typename SizeType,
               sfl::dtl::enable_if_t<std::numeric_limits<SizeType>::digits == 16>* = nullptr>
+    SFL_CONSTEXPR_20
     SizeType priv_calculate_bucket_index_for_hash(SizeType hash) const
     {
-        static constexpr SizeType a = 0x9e37u;
-        static constexpr int w = 16;
-        static constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
+        constexpr SizeType a = 0x9e37u;
+        constexpr int w = 16;
+        constexpr int m = sfl::dtl::bit_log2(StaticBucketCount);
         const SizeType bucket_index = (a * hash) >> (w - m);
         SFL_ASSERT(bucket_index < StaticBucketCount);
         return bucket_index;
@@ -600,6 +736,7 @@ private:
 };
 
 template <>
+SFL_CONSTEXPR_20
 inline std::size_t hash_table_static_pow2_bucket_count_policy<1>::calculate_bucket_index_for_hash(std::size_t hash) const
 {
     sfl::dtl::ignore_unused(hash);
@@ -644,6 +781,41 @@ const std::size_t hash_table_prime_list<Dummy>::list[] =
 template <typename Dummy>
 const std::size_t hash_table_prime_list<Dummy>::size = sizeof(hash_table_prime_list<Dummy>::list) / sizeof(std::size_t);
 
+///////////////////////////////////////////////////////////////////////////////
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
+template <typename Dummy = void>
+struct hash_table_prime_list_constexpr20
+{
+    static constexpr std::size_t list[] =
+    {
+        17u, 29u, 37u, 53u, 67u, 79u, 97u, 131u, 193u, 257u, 389u, 521u, 769u,
+        1031u, 1543u, 2053u, 3079u, 6151u, 12289u, 24593u, 49157u, 98317u, 196613u,
+        393241u, 786433u, 1572869u, 3145739u, 6291469u, 12582917u, 25165843u,
+        50331653u, 100663319u, 201326611u, 402653189u, 805306457u, 1610612741u,
+        3221225473u, 4294967291u
+    };
+
+    static constexpr std::size_t size = sizeof(list) / sizeof(std::size_t);
+
+    static constexpr std::size_t ceil(std::size_t x)
+    {
+        const std::size_t* begin = list;
+        const std::size_t* end = begin + size;
+        const std::size_t* res = std::lower_bound(begin, end, x);
+        if (res == end)
+        {
+            --res;
+        }
+        return *res;
+    }
+};
+
+#endif // SFL_CPP_VERSION >= SFL_CPP_20
+
+///////////////////////////////////////////////////////////////////////////////
+
 class hash_table_dynamic_prime_bucket_count_policy
 {
 private:
@@ -652,43 +824,66 @@ private:
 
 public:
 
+    SFL_CONSTEXPR_20
     static bool check_bucket_count(std::size_t bucket_count)
     {
         return sfl::dtl::is_prime(bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t get_max_bucket_count()
     {
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            return sfl::dtl::hash_table_prime_list_constexpr20<>::list[sfl::dtl::hash_table_prime_list_constexpr20<>::size - 1];
+        }
+        #endif
+
         return sfl::dtl::hash_table_prime_list<>::list[sfl::dtl::hash_table_prime_list<>::size - 1];
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t calculate_new_bucket_count(std::size_t min_bucket_count)
     {
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            return sfl::dtl::hash_table_prime_list_constexpr20<>::ceil(min_bucket_count);
+        }
+        #endif
+
         return sfl::dtl::hash_table_prime_list<>::ceil(min_bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_bucket_count() const
     {
         return bucket_count_;
     }
 
+    SFL_CONSTEXPR_20
     void set_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(check_bucket_count(bucket_count));
         bucket_count_ = bucket_count;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t calculate_bucket_index_for_hash(std::size_t hash) const
     {
         return hash % bucket_count_;
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_dynamic_prime_bucket_count_policy& other)
     {
         using std::swap;
         swap(bucket_count_, other.bucket_count_);
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
 
 template <std::size_t StaticBucketCount>
 class hash_table_static_prime_bucket_count_policy
@@ -701,6 +896,7 @@ class hash_table_static_prime_bucket_count_policy
 
 public:
 
+    SFL_CONSTEXPR_20
     static bool check_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count == StaticBucketCount);
@@ -708,11 +904,13 @@ public:
         return true;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t get_max_bucket_count()
     {
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t calculate_new_bucket_count(std::size_t min_bucket_count)
     {
         SFL_ASSERT(min_bucket_count == StaticBucketCount);
@@ -720,22 +918,26 @@ public:
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_bucket_count() const
     {
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     void set_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count == StaticBucketCount);
         sfl::dtl::ignore_unused(bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     std::size_t calculate_bucket_index_for_hash(std::size_t hash) const
     {
         return hash % StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_static_prime_bucket_count_policy& other)
     {
         sfl::dtl::ignore_unused(other);
@@ -756,43 +958,66 @@ private:
 
 public:
 
+    SFL_CONSTEXPR_20
     static bool check_bucket_count(std::size_t bucket_count)
     {
         return bucket_count > 0;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t get_max_bucket_count()
     {
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            return sfl::dtl::hash_table_prime_list_constexpr20<>::list[sfl::dtl::hash_table_prime_list_constexpr20<>::size - 1];
+        }
+        #endif
+
         return sfl::dtl::hash_table_prime_list<>::list[sfl::dtl::hash_table_prime_list<>::size - 1];
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t calculate_new_bucket_count(std::size_t min_bucket_count)
     {
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            return sfl::dtl::hash_table_prime_list_constexpr20<>::ceil(min_bucket_count);
+        }
+        #endif
+
         return sfl::dtl::hash_table_prime_list<>::ceil(min_bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_bucket_count() const
     {
         return bucket_count_;
     }
 
+    SFL_CONSTEXPR_20
     void set_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(check_bucket_count(bucket_count));
         bucket_count_ = bucket_count;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t calculate_bucket_index_for_hash(std::size_t hash) const
     {
         return hash % bucket_count_;
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_dynamic_basic_bucket_count_policy& other)
     {
         using std::swap;
         swap(bucket_count_, other.bucket_count_);
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
 
 template <std::size_t StaticBucketCount>
 class hash_table_static_basic_bucket_count_policy
@@ -805,6 +1030,7 @@ class hash_table_static_basic_bucket_count_policy
 
 public:
 
+    SFL_CONSTEXPR_20
     static bool check_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count == StaticBucketCount);
@@ -812,11 +1038,13 @@ public:
         return true;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t get_max_bucket_count()
     {
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t calculate_new_bucket_count(std::size_t min_bucket_count)
     {
         SFL_ASSERT(min_bucket_count == StaticBucketCount);
@@ -824,22 +1052,26 @@ public:
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_bucket_count() const
     {
         return StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     void set_bucket_count(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count == StaticBucketCount);
         sfl::dtl::ignore_unused(bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     std::size_t calculate_bucket_index_for_hash(std::size_t hash) const
     {
         return hash % StaticBucketCount;
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_static_basic_bucket_count_policy& other)
     {
         sfl::dtl::ignore_unused(other);
@@ -862,17 +1094,19 @@ private:
 
 public:
 
+    SFL_CONSTEXPR_20
     hash_table_standard_max_load_policy()
         : max_load_factor_(1.0f)
         , max_load_(0)
     {}
 
+    SFL_CONSTEXPR_20
     void recalculate_max_load(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count != 0);
         max_load_ = sfl::dtl::floating_point_to_size_t
         (
-            std::ceil
+            sfl::dtl::ceil
             (
                 static_cast<double>(max_load_factor_) *
                 static_cast<double>(bucket_count)
@@ -880,27 +1114,32 @@ public:
         );
     }
 
+    SFL_CONSTEXPR_20
     void set_max_load_factor(float max_load_factor)
     {
-        static constexpr float smallest_max_load_factor = 0.001f;
+        constexpr float smallest_max_load_factor = 0.001f;
         max_load_factor_ = std::max(smallest_max_load_factor, max_load_factor);
     }
 
+    SFL_CONSTEXPR_20
     float get_max_load_factor() const
     {
         return max_load_factor_;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_max_load() const
     {
         return max_load_;
     }
 
+    SFL_CONSTEXPR_20
     bool is_overloaded(std::size_t size) const
     {
         return size > max_load_;
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_standard_max_load_policy& other)
     {
         using std::swap;
@@ -919,33 +1158,39 @@ class hash_table_no_max_load_policy
 {
 public:
 
+    SFL_CONSTEXPR_20
     void recalculate_max_load(std::size_t bucket_count)
     {
         SFL_ASSERT(bucket_count != 0);
         sfl::dtl::ignore_unused(bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     void set_max_load_factor(float max_load_factor)
     {
         sfl::dtl::ignore_unused(max_load_factor);
     }
 
+    SFL_CONSTEXPR_20
     float get_max_load_factor() const
     {
         return 1.0f;
     }
 
+    SFL_CONSTEXPR_20
     std::size_t get_max_load() const
     {
         return std::numeric_limits<std::size_t>::max();
     }
 
+    SFL_CONSTEXPR_20
     bool is_overloaded(std::size_t size) const
     {
         sfl::dtl::ignore_unused(size);
         return false;
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table_no_max_load_policy& other)
     {
         sfl::dtl::ignore_unused(other);
@@ -1037,8 +1282,13 @@ public:
 
         base_node_pointer node_;
 
+    #if defined(_MSC_VER) // Workaround for Visual C++ bug in C++20 constexpr
+    public:
+    #else
     private:
+    #endif
 
+        SFL_CONSTEXPR_20
         explicit iterator(base_node_pointer x) noexcept
             : node_(x)
         {}
@@ -1046,15 +1296,18 @@ public:
     public:
 
         // Default constructor
+        SFL_CONSTEXPR_20
         iterator() noexcept
         {}
 
         // Copy constructor
+        SFL_CONSTEXPR_20
         iterator(const iterator& other) noexcept
             : node_(other.node_)
         {}
 
         // Copy assignment operator
+        SFL_CONSTEXPR_20
         iterator& operator=(const iterator& other) noexcept
         {
             node_ = other.node_;
@@ -1062,23 +1315,27 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         reference operator*() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         pointer operator->() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
+        SFL_CONSTEXPR_20
         iterator& operator++() noexcept
         {
             node_ = node_->next_;
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         iterator operator++(int) noexcept
         {
             auto temp = *this;
@@ -1087,12 +1344,14 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator==(const iterator& x, const iterator& y) noexcept
         {
             return x.node_ == y.node_;
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator!=(const iterator& x, const iterator& y) noexcept
         {
             return !(x == y);
@@ -1120,8 +1379,13 @@ public:
 
         base_node_pointer node_;
 
+    #if defined(_MSC_VER) // Workaround for Visual C++ bug in C++20 constexpr
+    public:
+    #else
     private:
+    #endif
 
+        SFL_CONSTEXPR_20
         explicit const_iterator(base_node_pointer x) noexcept
             : node_(x)
         {}
@@ -1129,20 +1393,24 @@ public:
     public:
 
         // Default constructor
+        SFL_CONSTEXPR_20
         const_iterator() noexcept
         {}
 
         // Copy constructor
+        SFL_CONSTEXPR_20
         const_iterator(const const_iterator& other) noexcept
             : node_(other.node_)
         {}
 
         // Converting constructor (from iterator to const_iterator)
+        SFL_CONSTEXPR_20
         const_iterator(const iterator& other) noexcept
             : node_(other.node_)
         {}
 
         // Copy assignment operator
+        SFL_CONSTEXPR_20
         const_iterator& operator=(const const_iterator& other) noexcept
         {
             node_ = other.node_;
@@ -1150,23 +1418,27 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         reference operator*() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         pointer operator->() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
+        SFL_CONSTEXPR_20
         const_iterator& operator++() noexcept
         {
             node_ = node_->next_;
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const_iterator operator++(int) noexcept
         {
             auto temp = *this;
@@ -1175,12 +1447,14 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator==(const const_iterator& x, const const_iterator& y) noexcept
         {
             return x.node_ == y.node_;
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator!=(const const_iterator& x, const const_iterator& y) noexcept
         {
             return !(x == y);
@@ -1212,10 +1486,13 @@ public:
 
     private:
 
+        SFL_CONSTEXPR_20
         explicit local_iterator(base_node_pointer x) noexcept
             : node_(x)
+            , bucket_index_() // Needed here only because of C++20 constexpr
         {}
 
+        SFL_CONSTEXPR_20
         explicit local_iterator(base_node_pointer x, std::size_t bucket_index) noexcept
             : node_(x)
             , bucket_index_(bucket_index)
@@ -1224,16 +1501,19 @@ public:
     public:
 
         // Default constructor
+        SFL_CONSTEXPR_20
         local_iterator() noexcept
         {}
 
         // Copy constructor
+        SFL_CONSTEXPR_20
         local_iterator(const local_iterator& other) noexcept
             : node_(other.node_)
             , bucket_index_(other.bucket_index_)
         {}
 
         // Copy assignment operator
+        SFL_CONSTEXPR_20
         local_iterator& operator=(const local_iterator& other) noexcept
         {
             node_ = other.node_;
@@ -1242,17 +1522,20 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         reference operator*() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         pointer operator->() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
+        SFL_CONSTEXPR_20
         local_iterator& operator++() noexcept
         {
             node_ = node_->next_;
@@ -1263,6 +1546,7 @@ public:
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         local_iterator operator++(int) noexcept
         {
             auto temp = *this;
@@ -1271,12 +1555,14 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator==(const local_iterator& x, const local_iterator& y) noexcept
         {
             return x.node_ == y.node_;
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator!=(const local_iterator& x, const local_iterator& y) noexcept
         {
             return !(x == y);
@@ -1307,10 +1593,13 @@ public:
 
     private:
 
+        SFL_CONSTEXPR_20
         explicit const_local_iterator(base_node_pointer x) noexcept
             : node_(x)
+            , bucket_index_() // Needed here only because of C++20 constexpr
         {}
 
+        SFL_CONSTEXPR_20
         explicit const_local_iterator(base_node_pointer x, std::size_t bucket_index) noexcept
             : node_(x)
             , bucket_index_(bucket_index)
@@ -1319,22 +1608,26 @@ public:
     public:
 
         // Default constructor
+        SFL_CONSTEXPR_20
         const_local_iterator() noexcept
         {}
 
         // Copy constructor
+        SFL_CONSTEXPR_20
         const_local_iterator(const const_local_iterator& other) noexcept
             : node_(other.node_)
             , bucket_index_(other.bucket_index_)
         {}
 
         // Converting constructor (from local_iterator to const_local_iterator)
+        SFL_CONSTEXPR_20
         const_local_iterator(const local_iterator& other) noexcept
             : node_(other.node_)
             , bucket_index_(other.bucket_index_)
         {}
 
         // Copy assignment operator
+        SFL_CONSTEXPR_20
         const_local_iterator& operator=(const const_local_iterator& other) noexcept
         {
             node_ = other.node_;
@@ -1343,17 +1636,20 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         reference operator*() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ref();
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         pointer operator->() const noexcept
         {
             return static_cast<node_pointer>(node_)->value_.ptr();
         }
 
+        SFL_CONSTEXPR_20
         const_local_iterator& operator++() noexcept
         {
             node_ = node_->next_;
@@ -1364,6 +1660,7 @@ public:
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const_local_iterator operator++(int) noexcept
         {
             auto temp = *this;
@@ -1372,12 +1669,14 @@ public:
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator==(const const_local_iterator& x, const const_local_iterator& y) noexcept
         {
             return x.node_ == y.node_;
         }
 
         SFL_NODISCARD
+        SFL_CONSTEXPR_20
         friend bool operator!=(const const_local_iterator& x, const const_local_iterator& y) noexcept
         {
             return !(x == y);
@@ -1401,6 +1700,7 @@ private:
     public:
 
         // Pointer to linked list head
+        SFL_CONSTEXPR_20
         base_node_pointer head()
         {
             return std::pointer_traits<base_node_pointer>::pointer_to(head_);
@@ -1414,12 +1714,14 @@ private:
 
     public:
 
+        SFL_CONSTEXPR_20
         data()
             : head_(nullptr)
             , size_(0)
         {}
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(const Alloc& alloc)
             : node_allocator_type(alloc)
             , bucket_allocator_type(alloc)
@@ -1427,6 +1729,7 @@ private:
             , size_(0)
         {}
 
+        SFL_CONSTEXPR_20
         data(const key_hash& hash)
             : functions(hash)
             , head_(nullptr)
@@ -1434,6 +1737,7 @@ private:
         {}
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(const key_hash& hash, const Alloc& alloc)
             : functions(hash)
             , node_allocator_type(alloc)
@@ -1442,6 +1746,7 @@ private:
             , size_(0)
         {}
 
+        SFL_CONSTEXPR_20
         data(const key_hash& hash, const key_equal& equal)
             : functions(hash, equal)
             , head_(nullptr)
@@ -1449,6 +1754,7 @@ private:
         {}
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(const key_hash& hash, const key_equal& equal, const Alloc& alloc)
             : functions(hash, equal)
             , node_allocator_type(alloc)
@@ -1457,6 +1763,7 @@ private:
             , size_(0)
         {}
 
+        SFL_CONSTEXPR_20
         data(const data& other)
             : functions(other.ref_to_key_hash(), other.ref_to_key_equal())
             , node_allocator_type(sfl::dtl::allocator_traits<node_allocator_type>::select_on_container_copy_construction(other.ref_to_node_alloc()))
@@ -1466,6 +1773,7 @@ private:
         {}
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(const data& other, const Alloc& alloc)
             : functions(other.ref_to_key_hash(), other.ref_to_key_equal())
             , node_allocator_type(alloc)
@@ -1474,6 +1782,7 @@ private:
             , size_(0)
         {}
 
+        SFL_CONSTEXPR_20
         data(data&& other)
             : functions(std::move(other.ref_to_key_hash()), std::move(other.ref_to_key_equal()))
             , node_allocator_type(std::move(other.ref_to_node_alloc()))
@@ -1483,6 +1792,7 @@ private:
         {}
 
         template <typename Alloc>
+        SFL_CONSTEXPR_20
         data(data&& other, const Alloc& alloc)
             : functions(std::move(other.ref_to_key_hash()), std::move(other.ref_to_key_equal()))
             , node_allocator_type(alloc)
@@ -1491,46 +1801,55 @@ private:
             , size_(0)
         {}
 
+        SFL_CONSTEXPR_20
         ~data()
         {}
 
         ///////////////////////////////////////////////////////////////////////
 
+        SFL_CONSTEXPR_20
         key_hash& ref_to_key_hash()
         {
             return static_cast<functions*>(this)->ref_to_key_hash();
         }
 
+        SFL_CONSTEXPR_20
         const key_hash& ref_to_key_hash() const
         {
             return static_cast<const functions*>(this)->ref_to_key_hash();
         }
 
+        SFL_CONSTEXPR_20
         key_equal& ref_to_key_equal()
         {
             return static_cast<functions*>(this)->ref_to_key_equal();
         }
 
+        SFL_CONSTEXPR_20
         const key_equal& ref_to_key_equal() const
         {
             return static_cast<const functions*>(this)->ref_to_key_equal();
         }
 
+        SFL_CONSTEXPR_20
         node_allocator_type& ref_to_node_alloc()
         {
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const node_allocator_type& ref_to_node_alloc() const
         {
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         bucket_allocator_type& ref_to_bucket_alloc()
         {
             return *this;
         }
 
+        SFL_CONSTEXPR_20
         const bucket_allocator_type& ref_to_bucket_alloc() const
         {
             return *this;
@@ -1538,53 +1857,63 @@ private:
 
         ///////////////////////////////////////////////////////////////////////
 
+        SFL_CONSTEXPR_20
         bool check_bucket_count(std::size_t n) const
         {
             return bucket_count_policy::check_bucket_count(n);
         }
 
+        SFL_CONSTEXPR_20
         std::size_t calculate_new_bucket_count(std::size_t min_bucket_count) const
         {
             return bucket_count_policy::calculate_new_bucket_count(min_bucket_count);
         }
 
+        SFL_CONSTEXPR_20
         std::size_t calculate_bucket_index_for_hash(std::size_t hash) const
         {
             return bucket_count_policy::calculate_bucket_index_for_hash(hash);
         }
 
+        SFL_CONSTEXPR_20
         void set_bucket_count(std::size_t n)
         {
             bucket_count_policy::set_bucket_count(n);
             max_load_policy::recalculate_max_load(n);
         }
 
+        SFL_CONSTEXPR_20
         std::size_t get_bucket_count() const
         {
             return bucket_count_policy::get_bucket_count();
         }
 
+        SFL_CONSTEXPR_20
         std::size_t get_max_bucket_count() const
         {
             return bucket_count_policy::get_max_bucket_count();
         }
 
+        SFL_CONSTEXPR_20
         float get_max_load_factor() const
         {
             return max_load_policy::get_max_load_factor();
         }
 
+        SFL_CONSTEXPR_20
         void set_max_load_factor(float mlf)
         {
             max_load_policy::set_max_load_factor(mlf);
             max_load_policy::recalculate_max_load(get_bucket_count());
         }
 
+        SFL_CONSTEXPR_20
         std::size_t get_max_load() const
         {
             return max_load_policy::get_max_load();
         }
 
+        SFL_CONSTEXPR_20
         bool is_overloaded() const
         {
             return max_load_policy::is_overloaded(size_);
@@ -1592,6 +1921,7 @@ private:
 
         ///////////////////////////////////////////////////////////////////////
 
+        SFL_CONSTEXPR_20
         void assign_copy_functions(const data& other)
         {
             functions::assign_copy(other);
@@ -1599,6 +1929,7 @@ private:
 
         ///////////////////////////////////////////////////////////////////////
 
+        SFL_CONSTEXPR_20
         void assign_move_functions(data& other)
         {
             functions::assign_move(other);
@@ -1606,16 +1937,19 @@ private:
 
         ///////////////////////////////////////////////////////////////////////
 
+        SFL_CONSTEXPR_20
         void swap_functions(data& other)
         {
             functions::swap(other);
         }
 
+        SFL_CONSTEXPR_20
         void swap_bucket_count(data& other)
         {
             bucket_count_policy::swap(other);
         }
 
+        SFL_CONSTEXPR_20
         void swap_max_load_factor(data& other)
         {
             max_load_policy::swap(other);
@@ -1630,8 +1964,10 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     hash_table() = delete;
 
+    SFL_CONSTEXPR_20
     hash_table(size_type initial_bucket_count)
         : data_()
     {
@@ -1639,12 +1975,14 @@ public:
     }
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     hash_table(size_type initial_bucket_count, const Alloc& alloc)
         : data_(alloc)
     {
         initialize_empty(initial_bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     hash_table(size_type initial_bucket_count, const key_hash& hash)
         : data_(hash)
     {
@@ -1652,12 +1990,14 @@ public:
     }
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     hash_table(size_type initial_bucket_count, const key_hash& hash, const Alloc& alloc)
         : data_(hash, alloc)
     {
         initialize_empty(initial_bucket_count);
     }
 
+    SFL_CONSTEXPR_20
     hash_table(size_type initial_bucket_count, const key_hash& hash, const key_equal& equal)
         : data_(hash, equal)
     {
@@ -1665,6 +2005,7 @@ public:
     }
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     hash_table(size_type initial_bucket_count, const key_hash& hash, const key_equal& equal, const Alloc& alloc)
         : data_(hash, equal, alloc)
     {
@@ -1672,6 +2013,7 @@ public:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     hash_table(const hash_table& other, EqualOrUniqueTag equal_or_unique_tag)
         : data_(other.data_)
     {
@@ -1679,6 +2021,7 @@ public:
     }
 
     template <typename EqualOrUniqueTag, typename Alloc>
+    SFL_CONSTEXPR_20
     hash_table(const hash_table& other, EqualOrUniqueTag equal_or_unique_tag, const Alloc& alloc)
         : data_(other.data_, alloc)
     {
@@ -1686,6 +2029,7 @@ public:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     hash_table(hash_table&& other, EqualOrUniqueTag equal_or_unique_tag)
         : data_(std::move(other.data_))
     {
@@ -1693,12 +2037,14 @@ public:
     }
 
     template <typename EqualOrUniqueTag, typename Alloc>
+    SFL_CONSTEXPR_20
     hash_table(hash_table&& other, EqualOrUniqueTag equal_or_unique_tag, const Alloc& alloc)
         : data_(std::move(other.data_), alloc)
     {
         initialize_move(other, equal_or_unique_tag);
     }
 
+    SFL_CONSTEXPR_20
     ~hash_table()
     {
         for (base_node_pointer x = data_.head()->next_; x != nullptr; )
@@ -1722,12 +2068,14 @@ public:
     hash_table& operator=(hash_table&& other) = delete;
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_copy(const hash_table& other, EqualOrUniqueTag equal_or_unique_tag)
     {
         assign_copy_impl(other, equal_or_unique_tag);
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_move(hash_table& other, EqualOrUniqueTag equal_or_unique_tag)
     {
         assign_move_impl(other, equal_or_unique_tag);
@@ -1735,6 +2083,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void assign_range_equal(InputIt first, InputIt last)
     {
         make_node_with_recycling_functor make_node(*this);
@@ -1748,6 +2097,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void assign_range_unique(InputIt first, InputIt last)
     {
         make_node_with_recycling_functor make_node(*this);
@@ -1764,12 +2114,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     key_hash& ref_to_key_hash() noexcept
     {
         return data_.ref_to_key_hash();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const key_hash& ref_to_key_hash() const noexcept
     {
         return data_.ref_to_key_hash();
@@ -1780,12 +2132,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     key_equal& ref_to_key_equal() noexcept
     {
         return data_.ref_to_key_equal();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const key_equal& ref_to_key_equal() const noexcept
     {
         return data_.ref_to_key_equal();
@@ -1796,12 +2150,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     node_allocator_type& ref_to_node_alloc() noexcept
     {
         return data_.ref_to_node_alloc();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const node_allocator_type& ref_to_node_alloc() const noexcept
     {
         return data_.ref_to_node_alloc();
@@ -1812,36 +2168,42 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return iterator(data_.head()->next_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return const_iterator(data_.head()->next_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return const_iterator(data_.head()->next_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return iterator(nullptr);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return const_iterator(nullptr);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return const_iterator(nullptr);
@@ -1852,18 +2214,21 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return data_.size_ == 0;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return data_.size_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_size() const noexcept
     {
         return sfl::dtl::allocator_traits<node_allocator_type>::max_size(data_.ref_to_node_alloc());
@@ -1873,6 +2238,7 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear()
     {
         for (base_node_pointer x = data_.head()->next_; x != nullptr; )
@@ -1892,6 +2258,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_equal(Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -1906,6 +2273,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> emplace_unique(Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -1927,6 +2295,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint_equal(const_iterator hint, Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -1941,6 +2310,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint_unique(const_iterator hint, Args&&... args)
     {
         make_node_functor make_node(*this);
@@ -1964,6 +2334,7 @@ public:
 private:
 
     template <typename V, typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     iterator insert_equal(V&& value, MakeNodeFunctor& make_node)
     {
         auto res = find_node(KeyOfValue()(value));
@@ -1975,6 +2346,7 @@ private:
     }
 
     template <typename V, typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_unique(V&& value, MakeNodeFunctor& make_node)
     {
         auto res = find_node(KeyOfValue()(value));
@@ -1995,6 +2367,7 @@ private:
 public:
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_equal(V&& value)
     {
         make_node_functor make_node(*this);
@@ -2002,6 +2375,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_unique(V&& value)
     {
         make_node_functor make_node(*this);
@@ -2009,6 +2383,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_hint_equal(const_iterator hint, V&& value)
     {
         auto res = find_node_hint(hint, KeyOfValue()(value));
@@ -2021,6 +2396,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_hint_unique(const_iterator hint, V&& value)
     {
         auto res = find_node_hint(hint, KeyOfValue()(value));
@@ -2040,6 +2416,7 @@ public:
     }
 
     template <typename K, typename M>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_or_assign(K&& k, M&& obj)
     {
         auto res = find_node(k);
@@ -2066,6 +2443,7 @@ public:
     }
 
     template <typename K, typename M>
+    SFL_CONSTEXPR_20
     iterator insert_or_assign_hint(const_iterator hint, K&& k, M&& obj)
     {
         auto res = find_node_hint(hint, k);
@@ -2092,6 +2470,7 @@ public:
     }
 
     template <typename K, typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> try_emplace(K&& k, Args&&... args)
     {
         auto res = find_node(k);
@@ -2116,6 +2495,7 @@ public:
     }
 
     template <typename K, typename... Args>
+    SFL_CONSTEXPR_20
     iterator try_emplace_hint(const_iterator hint, K&& k, Args&&... args)
     {
         auto res = find_node_hint(hint, k);
@@ -2139,6 +2519,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     iterator erase_equal(const_iterator pos)
     {
         base_node_pointer x = remove_node_equal(pos.node_);
@@ -2147,6 +2528,7 @@ public:
         return iterator(x);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase_unique(const_iterator pos)
     {
         base_node_pointer x = remove_node_unique(pos.node_);
@@ -2155,6 +2537,7 @@ public:
         return iterator(x);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase_equal(const_iterator first, const_iterator last)
     {
         while (first != last)
@@ -2164,6 +2547,7 @@ public:
         return iterator(first.node_);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase_unique(const_iterator first, const_iterator last)
     {
         while (first != last)
@@ -2174,6 +2558,7 @@ public:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     size_type erase_key_equal(const K& k)
     {
         const auto er = equal_range(k);
@@ -2183,6 +2568,7 @@ public:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     size_type erase_key_unique(const K& k)
     {
         base_node_pointer prev = find_node_before(k).pos;
@@ -2201,6 +2587,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void swap(hash_table& other)
     {
         swap_impl(other);
@@ -2212,6 +2599,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const K& k)
     {
         base_node_pointer x = find_node(k).pos;
@@ -2235,6 +2623,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const K& k) const
     {
         base_node_pointer x = find_node(k).pos;
@@ -2258,6 +2647,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const K& k)
     {
         return iterator(find_node(k).pos);
@@ -2265,6 +2655,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const K& k) const
     {
         return const_iterator(find_node(k).pos);
@@ -2272,6 +2663,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count_equal(const K& k) const
     {
         const auto er = equal_range(k);
@@ -2280,6 +2672,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count_unique(const K& k) const
     {
         return find(k) != end() ? 1 : 0;
@@ -2287,6 +2680,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const K& k) const
     {
         return find_node(k).pos != nullptr;
@@ -2297,6 +2691,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     local_iterator begin(size_type n)
     {
         SFL_ASSERT(n < bucket_count());
@@ -2307,6 +2702,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator begin(size_type n) const
     {
         SFL_ASSERT(n < bucket_count());
@@ -2317,6 +2713,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator cbegin(size_type n) const
     {
         SFL_ASSERT(n < bucket_count());
@@ -2327,6 +2724,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     local_iterator end(size_type n)
     {
         SFL_ASSERT(n < bucket_count());
@@ -2335,6 +2733,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator end(size_type n) const
     {
         SFL_ASSERT(n < bucket_count());
@@ -2343,6 +2742,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator cend(size_type n) const
     {
         SFL_ASSERT(n < bucket_count());
@@ -2351,12 +2751,14 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type bucket_count() const
     {
         return data_.get_bucket_count();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_bucket_count() const
     {
         return std::max<size_type>
@@ -2367,6 +2769,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type bucket_size(size_type n) const
     {
         SFL_ASSERT(n < bucket_count());
@@ -2375,6 +2778,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type bucket(const K& k) const
     {
         const std::size_t hash = data_.ref_to_key_hash()(k);
@@ -2387,6 +2791,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     float load_factor() const
     {
         SFL_ASSERT(bucket_count() != 0);
@@ -2395,16 +2800,19 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     float max_load_factor() const
     {
         return data_.get_max_load_factor();
     }
 
+    SFL_CONSTEXPR_20
     void max_load_factor(float mlf)
     {
         data_.set_max_load_factor(mlf);
     }
 
+    SFL_CONSTEXPR_20
     void rehash(size_type count)
     {
         const std::size_t new_bucket_count = data_.calculate_new_bucket_count
@@ -2429,13 +2837,14 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void reserve(size_type count)
     {
         rehash
         (
             sfl::dtl::floating_point_to_size_t
             (
-                std::ceil
+                sfl::dtl::ceil
                 (
                     static_cast<double>(count) /
                     static_cast<double>(data_.get_max_load_factor())
@@ -2448,6 +2857,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     sfl::dtl::allocation_result<bucket_pointer, size_type> make_buckets(size_type n)
     {
         const auto res = sfl::dtl::allocator_traits<bucket_allocator_type>::allocate_at_least
@@ -2480,6 +2890,7 @@ private:
         return res;
     }
 
+    SFL_CONSTEXPR_20
     void drop_buckets(bucket_pointer p, size_type n) noexcept
     {
         sfl::dtl::destroy_n_a
@@ -2499,6 +2910,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     node_pointer allocate_node()
     {
         return sfl::dtl::allocator_traits<node_allocator_type>::allocate
@@ -2508,6 +2920,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void deallocate_node(node_pointer p) noexcept
     {
         sfl::dtl::allocator_traits<node_allocator_type>::deallocate
@@ -2519,6 +2932,7 @@ private:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     void construct_node(node_pointer p, Args&&... args)
     {
         sfl::dtl::construct_at_a(data_.ref_to_node_alloc(), p);
@@ -2539,6 +2953,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void destroy_node(node_pointer p) noexcept
     {
         sfl::dtl::destroy_at_a(data_.ref_to_node_alloc(), p->value_.ptr());
@@ -2553,11 +2968,13 @@ private:
 
     public:
 
+        SFL_CONSTEXPR_20
         make_node_functor(hash_table& table)
             : table_(table)
         {}
 
         template <typename... Args>
+        SFL_CONSTEXPR_20
         node_pointer operator()(Args&&... args)
         {
             node_pointer p = table_.allocate_node();
@@ -2586,6 +3003,7 @@ private:
 
     public:
 
+        SFL_CONSTEXPR_20
         make_node_with_recycling_functor(hash_table& table)
             : table_(table)
             , x_(table.data_.head()->next_)
@@ -2599,6 +3017,7 @@ private:
             table.data_.size_ = 0;
         }
 
+        SFL_CONSTEXPR_20
         ~make_node_with_recycling_functor()
         {
             while (x_ != nullptr)
@@ -2610,6 +3029,7 @@ private:
         }
 
         template <typename... Args>
+        SFL_CONSTEXPR_20
         node_pointer operator()(Args&&... args)
         {
             node_pointer p = this->allocate_node();
@@ -2629,6 +3049,7 @@ private:
 
     private:
 
+        SFL_CONSTEXPR_20
         node_pointer allocate_node()
         {
             if (x_ == nullptr)
@@ -2645,6 +3066,7 @@ private:
         }
     };
 
+    SFL_CONSTEXPR_20
     void drop_node(node_pointer p) noexcept
     {
         destroy_node(p);
@@ -2653,11 +3075,13 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     static const Key& key_of(node_pointer x) noexcept
     {
         return KeyOfValue()(x->value_.ref());
     }
 
+    SFL_CONSTEXPR_20
     static const Key& key_of(base_node_pointer x) noexcept
     {
         return KeyOfValue()(static_cast<node_pointer>(x)->value_.ref());
@@ -2665,11 +3089,13 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     static std::size_t bucket_index_of(node_pointer x) noexcept
     {
         return x->get_bucket_index();
     }
 
+    SFL_CONSTEXPR_20
     static std::size_t bucket_index_of(base_node_pointer x) noexcept
     {
         return static_cast<node_pointer>(x)->get_bucket_index();
@@ -2684,6 +3110,7 @@ private:
     };
 
     template <typename K>
+    SFL_CONSTEXPR_20
     find_node_result find_node(const K& k) const
     {
         const std::size_t hash = data_.ref_to_key_hash()(k);
@@ -2711,6 +3138,7 @@ private:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     find_node_result find_node_hint(const_iterator hint, const K& k) const
     {
         if (hint.node_ != nullptr && data_.ref_to_key_equal()(key_of(hint.node_), k))
@@ -2724,6 +3152,7 @@ private:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     find_node_result find_node_before(const K& k) const
     {
         const std::size_t hash = data_.ref_to_key_hash()(k);
@@ -2754,6 +3183,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void insert_node_equal(node_pointer x, std::size_t bucket_index, base_node_pointer pos)
     {
         if (pos != nullptr)
@@ -2795,6 +3225,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void insert_node_unique(node_pointer x, std::size_t bucket_index)
     {
         x->set_bucket_index(bucket_index, std::true_type());
@@ -2820,6 +3251,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     base_node_pointer remove_node_equal(base_node_pointer x)
     {
         bucket_pointer bucket = data_.buckets_ + bucket_index_of(x);
@@ -2861,6 +3293,7 @@ private:
         return next;
     }
 
+    SFL_CONSTEXPR_20
     base_node_pointer remove_node_unique(base_node_pointer x)
     {
         bucket_pointer bucket = data_.buckets_ + bucket_index_of(x);
@@ -2897,6 +3330,7 @@ private:
         return next;
     }
 
+    SFL_CONSTEXPR_20
     base_node_pointer remove_node_unique(base_node_pointer prev, base_node_pointer x)
     {
         SFL_ASSERT(x == prev->next_);
@@ -2930,6 +3364,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void resize_buckets_and_rehash_if_overloaded()
     {
         if (data_.is_overloaded())
@@ -2953,6 +3388,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void resize_buckets_and_rehash(std::size_t new_bucket_count)
     {
         SFL_ASSERT(data_.check_bucket_count(new_bucket_count));
@@ -3031,6 +3467,7 @@ private:
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     void copy(base_node_pointer x, MakeNodeFunctor& make_node, sfl::dtl::hash_table_equal_t)
     {
         while (x != nullptr)
@@ -3054,6 +3491,7 @@ private:
     }
 
     template <typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     void copy(base_node_pointer x, MakeNodeFunctor& make_node, sfl::dtl::hash_table_unique_t)
     {
         while (x != nullptr)
@@ -3068,6 +3506,7 @@ private:
     }
 
     template <typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     void move(base_node_pointer x, MakeNodeFunctor& make_node, sfl::dtl::hash_table_equal_t)
     {
         while (x != nullptr)
@@ -3091,6 +3530,7 @@ private:
     }
 
     template <typename MakeNodeFunctor>
+    SFL_CONSTEXPR_20
     void move(base_node_pointer x, MakeNodeFunctor& make_node, sfl::dtl::hash_table_unique_t)
     {
         while (x != nullptr)
@@ -3106,6 +3546,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void initialize_empty(size_type initial_bucket_count)
     {
         SFL_ASSERT(data_.check_bucket_count(initial_bucket_count));
@@ -3118,6 +3559,7 @@ private:
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void initialize_copy(const hash_table& other, EqualOrUniqueTag equal_or_unique_tag)
     {
         SFL_ASSERT(data_.check_bucket_count(other.data_.get_bucket_count()));
@@ -3150,6 +3592,7 @@ private:
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void initialize_move(hash_table& other, EqualOrUniqueTag equal_or_unique_tag)
     {
         // PRECONDITION
@@ -3197,6 +3640,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void initialize_move(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::true_type)
     {
         SFL_ASSERT(data_.check_bucket_count(other.data_.get_bucket_count()));
@@ -3227,6 +3671,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void initialize_move(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::false_type)
     {
         initialize_move
@@ -3239,6 +3684,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void initialize_move(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::false_type, std::true_type)
     {
         sfl::dtl::ignore_unused(equal_or_unique_tag);
@@ -3269,6 +3715,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void initialize_move(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::false_type, std::false_type)
     {
         if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
@@ -3284,6 +3731,7 @@ private:
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_copy_impl(const hash_table& other, EqualOrUniqueTag equal_or_unique_tag)
     {
         // PRECONDITION
@@ -3436,6 +3884,7 @@ private:
     ///////////////////////////////////////////////////////////////////////////
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_move_impl(hash_table& other, EqualOrUniqueTag equal_or_unique_tag)
     {
         // PRECONDITION
@@ -3494,6 +3943,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_move_impl(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::true_type)
     {
         if (sfl::dtl::allocator_traits<node_allocator_type>::propagate_on_container_move_assignment::value)
@@ -3605,6 +4055,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_move_impl(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::false_type)
     {
         assign_move_impl
@@ -3621,6 +4072,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_move_impl(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::false_type, std::true_type)
     {
         sfl::dtl::ignore_unused(equal_or_unique_tag);
@@ -3680,6 +4132,7 @@ private:
     }
 
     template <typename EqualOrUniqueTag>
+    SFL_CONSTEXPR_20
     void assign_move_impl(hash_table& other, EqualOrUniqueTag equal_or_unique_tag, std::false_type, std::false_type)
     {
         if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
@@ -3694,6 +4147,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     void swap_impl(hash_table& other)
     {
         // PRECONDITION
@@ -3750,6 +4204,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(hash_table& other, std::true_type)
     {
         SFL_ASSERT(this->size() < this->max_size());
@@ -3966,6 +4421,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(hash_table& other, std::false_type)
     {
         swap_impl
@@ -3980,6 +4436,7 @@ private:
         );
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(hash_table& other, std::false_type, std::true_type)
     {
         using std::swap;
@@ -4016,6 +4473,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     void swap_impl(hash_table& other, std::false_type, std::false_type)
     {
         if (data_.ref_to_node_alloc() == other.data_.ref_to_node_alloc())
@@ -4030,6 +4488,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
 
+    SFL_CONSTEXPR_20
     bool verify() const
     {
         for (auto it = begin(); it != end(); ++it)
@@ -4082,6 +4541,7 @@ private:
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6, typename TP7, typename TP8, typename TP9>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9>& x,
@@ -4093,6 +4553,7 @@ bool operator==
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5, typename TP6, typename TP7, typename TP8, typename TP9>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const hash_table<TP1, TP2, TP3, TP4, TP5, TP6, TP7, TP8, TP9>& x,
