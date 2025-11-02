@@ -92,6 +92,7 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     set() noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
@@ -100,6 +101,7 @@ public:
         : tree_()
     {}
 
+    SFL_CONSTEXPR_20
     explicit set(const Compare& comp) noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
@@ -108,6 +110,7 @@ public:
         : tree_(comp)
     {}
 
+    SFL_CONSTEXPR_20
     explicit set(const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
@@ -116,6 +119,7 @@ public:
         : tree_(alloc)
     {}
 
+    SFL_CONSTEXPR_20
     explicit set(const Compare& comp, const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
@@ -126,6 +130,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     set(InputIt first, InputIt last)
         : tree_()
     {
@@ -134,6 +139,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     set(InputIt first, InputIt last, const Compare& comp)
         : tree_(comp)
     {
@@ -142,6 +148,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     set(InputIt first, InputIt last, const Allocator& alloc)
         : tree_(alloc)
     {
@@ -150,40 +157,49 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     set(InputIt first, InputIt last, const Compare& comp, const Allocator& alloc)
         : tree_(comp, alloc)
     {
         insert(first, last);
     }
 
+    SFL_CONSTEXPR_20
     set(std::initializer_list<value_type> ilist)
         : set(ilist.begin(), ilist.end())
     {}
 
+    SFL_CONSTEXPR_20
     set(std::initializer_list<value_type> ilist, const Compare& comp)
         : set(ilist.begin(), ilist.end(), comp)
     {}
 
+    SFL_CONSTEXPR_20
     set(std::initializer_list<value_type> ilist, const Allocator& alloc)
         : set(ilist.begin(), ilist.end(), alloc)
     {}
 
+    SFL_CONSTEXPR_20
     set(std::initializer_list<value_type> ilist, const Compare& comp, const Allocator& alloc)
         : set(ilist.begin(), ilist.end(), comp, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     set(const set& other)
         : tree_(other.tree_)
     {}
 
+    SFL_CONSTEXPR_20
     set(const set& other, const Allocator& alloc)
         : tree_(other.tree_, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     set(set&& other)
         : tree_(std::move(other.tree_))
     {}
 
+    SFL_CONSTEXPR_20
     set(set&& other, const Allocator& alloc)
         : tree_(std::move(other.tree_), alloc)
     {}
@@ -191,6 +207,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     set(sfl::from_range_t, Range&& range)
         : tree_()
     {
@@ -198,6 +215,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     set(sfl::from_range_t, Range&& range, const Compare& comp)
         : tree_(comp)
     {
@@ -205,6 +223,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     set(sfl::from_range_t, Range&& range, const Allocator& alloc)
         : tree_(alloc)
     {
@@ -212,6 +231,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     set(sfl::from_range_t, Range&& range, const Compare& comp, const Allocator& alloc)
         : tree_(comp, alloc)
     {
@@ -250,6 +270,7 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     ~set()
     {}
 
@@ -257,18 +278,21 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     set& operator=(const set& other)
     {
         tree_.assign_copy(other.tree_);
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     set& operator=(set&& other)
     {
         tree_.assign_move(other.tree_);
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     set& operator=(std::initializer_list<value_type> ilist)
     {
         tree_.assign_range_unique(ilist.begin(), ilist.end());
@@ -280,6 +304,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     allocator_type get_allocator() const noexcept
     {
         return allocator_type(tree_.ref_to_node_alloc());
@@ -290,6 +315,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     key_compare key_comp() const
     {
         return key_compare(tree_.ref_to_key_compare());
@@ -300,6 +326,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     value_compare value_comp() const
     {
         return value_compare(tree_.ref_to_key_compare());
@@ -310,72 +337,84 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return tree_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return tree_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return tree_.cbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return tree_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return tree_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return tree_.cend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rbegin() noexcept
     {
         return tree_.rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rbegin() const noexcept
     {
         return tree_.rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crbegin() const noexcept
     {
         return tree_.crbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rend() noexcept
     {
         return tree_.rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rend() const noexcept
     {
         return tree_.rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crend() const noexcept
     {
         return tree_.crend();
@@ -386,18 +425,21 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return tree_.empty();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return tree_.size();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_size() const noexcept
     {
         return tree_.max_size();
@@ -407,28 +449,33 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear()
     {
         tree_.clear();
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> emplace(Args&&... args)
     {
         return tree_.emplace_unique(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         return tree_.emplace_hint_unique(hint, std::forward<Args>(args)...);
     }
 
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert(const value_type& value)
     {
         return tree_.insert_unique(value);
     }
 
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert(value_type&& value)
     {
         return tree_.insert_unique(std::move(value));
@@ -436,16 +483,19 @@ public:
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert(K&& x)
     {
         return tree_.insert_unique(std::forward<K>(x));
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, const value_type& value)
     {
         return tree_.insert_hint_unique(hint, value);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, value_type&& value)
     {
         return tree_.insert_hint_unique(hint, std::move(value));
@@ -455,6 +505,7 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
                                     !std::is_convertible<K&&, const_iterator>::value &&
                                     !std::is_convertible<K&&, iterator>::value >* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, K&& x)
     {
         return tree_.insert_hint_unique(hint, std::forward<K>(x));
@@ -462,11 +513,13 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void insert(InputIt first, InputIt last)
     {
         insert_range_aux(first, last);
     }
 
+    SFL_CONSTEXPR_20
     void insert(std::initializer_list<value_type> ilist)
     {
         insert_range_aux(ilist.begin(), ilist.end());
@@ -475,6 +528,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     void insert_range(Range&& range)
     {
         insert_range_aux(std::ranges::begin(range), std::ranges::end(range));
@@ -492,16 +546,19 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator pos)
     {
         return tree_.erase(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator first, const_iterator last)
     {
         return tree_.erase(first, last);
     }
 
+    SFL_CONSTEXPR_20
     size_type erase(const Key& key)
     {
         return tree_.erase_key_unique(key);
@@ -509,11 +566,13 @@ public:
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     size_type erase(K&& x)
     {
         return tree_.erase_key_unique(x);
     }
 
+    SFL_CONSTEXPR_20
     void swap(set& other)
     {
         tree_.swap(other.tree_);
@@ -524,12 +583,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const Key& key)
     {
         return tree_.lower_bound(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const Key& key) const
     {
         return tree_.lower_bound(key);
@@ -538,6 +599,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const K& x)
     {
         return tree_.lower_bound(x);
@@ -546,18 +608,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const K& x) const
     {
         return tree_.lower_bound(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const Key& key)
     {
         return tree_.upper_bound(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const Key& key) const
     {
         return tree_.upper_bound(key);
@@ -566,6 +631,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const K& x)
     {
         return tree_.upper_bound(x);
@@ -574,18 +640,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const K& x) const
     {
         return tree_.upper_bound(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const Key& key)
     {
         return tree_.equal_range(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const Key& key) const
     {
         return tree_.equal_range(key);
@@ -594,6 +663,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const K& x)
     {
         return tree_.equal_range(x);
@@ -602,18 +672,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const K& x) const
     {
         return tree_.equal_range(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const Key& key)
     {
         return tree_.find(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const Key& key) const
     {
         return tree_.find(key);
@@ -622,6 +695,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const K& x)
     {
         return tree_.find(x);
@@ -630,12 +704,14 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const K& x) const
     {
         return tree_.find(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const Key& key) const
     {
         return tree_.count_unique(key);
@@ -644,12 +720,14 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const K& x) const
     {
         return tree_.count_unique(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const Key& key) const
     {
         return tree_.contains(key);
@@ -658,6 +736,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const K& x) const
     {
         return tree_.contains(x);
@@ -666,6 +745,7 @@ public:
 private:
 
     template <typename InputIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void insert_range_aux(InputIt first, Sentinel last)
     {
         while (first != last)
@@ -676,21 +756,27 @@ private:
     }
 
     template <typename K2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator==(const set<K2, C2, A2>& x, const set<K2, C2, A2>& y);
 
     template <typename K2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator!=(const set<K2, C2, A2>& x, const set<K2, C2, A2>& y);
 
     template <typename K2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator<(const set<K2, C2, A2>& x, const set<K2, C2, A2>& y);
 
     template <typename K2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator>(const set<K2, C2, A2>& x, const set<K2, C2, A2>& y);
 
     template <typename K2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator<=(const set<K2, C2, A2>& x, const set<K2, C2, A2>& y);
 
     template <typename K2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator>=(const set<K2, C2, A2>& x, const set<K2, C2, A2>& y);
 };
 
@@ -700,6 +786,7 @@ private:
 
 template <typename K, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const set<K, C, A>& x,
@@ -711,6 +798,7 @@ bool operator==
 
 template <typename K, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const set<K, C, A>& x,
@@ -722,6 +810,7 @@ bool operator!=
 
 template <typename K, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<
 (
     const set<K, C, A>& x,
@@ -733,6 +822,7 @@ bool operator<
 
 template <typename K, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>
 (
     const set<K, C, A>& x,
@@ -744,6 +834,7 @@ bool operator>
 
 template <typename K, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<=
 (
     const set<K, C, A>& x,
@@ -755,6 +846,7 @@ bool operator<=
 
 template <typename K, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>=
 (
     const set<K, C, A>& x,
@@ -765,6 +857,7 @@ bool operator>=
 }
 
 template <typename K, typename C, typename A>
+SFL_CONSTEXPR_20
 void swap
 (
     set<K, C, A>& x,
@@ -775,6 +868,7 @@ void swap
 }
 
 template <typename K, typename C, typename A, typename Predicate>
+SFL_CONSTEXPR_20
 typename set<K, C, A>::size_type
     erase_if(set<K, C, A>& c, Predicate pred)
 {
