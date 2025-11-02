@@ -8,7 +8,12 @@ using sfl::test::xobj;
 
 BEGIN_TEST("Test container()")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -18,9 +23,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(const Compare&)")
 {
-    std::less<xint_xint> comp;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(comp);
+    typename set_type::key_compare comp;
+
+    set_type set(comp);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -30,9 +40,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(const Allocator&)")
 {
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(alloc);
+    typename set_type::allocator_type alloc;
+
+    set_type set(alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -42,11 +57,16 @@ END_TEST()
 
 BEGIN_TEST("Test container(const Compare&, const Allocator&)")
 {
-    std::less<xint_xint> comp;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    typename set_type::key_compare comp;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(comp, alloc);
+    typename set_type::allocator_type alloc;
+
+    set_type set(comp, alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -56,7 +76,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt)")
 {
-    std::vector<xint_xint> data
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1},
@@ -67,7 +92,7 @@ BEGIN_TEST("Test container(InputIt, InputIt)")
         }
     );
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end());
+    set_type set(data.begin(), data.end());
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -80,7 +105,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, const Compare&)")
 {
-    std::vector<xint_xint> data
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1},
@@ -91,9 +121,9 @@ BEGIN_TEST("Test container(InputIt, InputIt, const Compare&)")
         }
     );
 
-    std::less<xint_xint> comp;
+    typename set_type::key_compare comp;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), comp);
+    set_type set(data.begin(), data.end(), comp);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -106,7 +136,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
 {
-    std::vector<xint_xint> data
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1},
@@ -117,9 +152,9 @@ BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
         }
     );
 
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    typename set_type::allocator_type alloc;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), alloc);
+    set_type set(data.begin(), data.end(), alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -132,7 +167,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, const Compare&, const Allocator&)")
 {
-    std::vector<xint_xint> data
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1},
@@ -143,11 +183,11 @@ BEGIN_TEST("Test container(InputIt, InputIt, const Compare&, const Allocator&)")
         }
     );
 
-    std::less<xint_xint> comp;
+    typename set_type::key_compare comp;
 
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    typename set_type::allocator_type alloc;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), comp, alloc);
+    set_type set(data.begin(), data.end(), comp, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -160,7 +200,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list)")
 {
-    std::initializer_list<xint_xint> ilist
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -169,7 +214,7 @@ BEGIN_TEST("Test container(std::initializer_list)")
         {20, 3}
     };
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist);
+    set_type set(ilist);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -182,7 +227,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, const Compare&)")
 {
-    std::initializer_list<xint_xint> ilist
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -191,9 +241,9 @@ BEGIN_TEST("Test container(std::initializer_list, const Compare&)")
         {20, 3}
     };
 
-    std::less<xint_xint> comp;
+    typename set_type::key_compare comp;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, comp);
+    set_type set(ilist, comp);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -206,7 +256,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
 {
-    std::initializer_list<xint_xint> ilist
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -215,9 +270,9 @@ BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
         {20, 3}
     };
 
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    typename set_type::allocator_type alloc;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, alloc);
+    set_type set(ilist, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -230,7 +285,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, const Compare&, const Allocator&)")
 {
-    std::initializer_list<xint_xint> ilist
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -239,11 +299,11 @@ BEGIN_TEST("Test container(std::initializer_list, const Compare&, const Allocato
         {20, 3}
     };
 
-    std::less<xint_xint> comp;
+    typename set_type::key_compare comp;
 
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    typename set_type::allocator_type alloc;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, comp, alloc);
+    set_type set(ilist, comp, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -256,7 +316,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(const container&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -269,7 +334,7 @@ BEGIN_TEST("Test container(const container&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(set1);
+    set_type set2(set1);
 
     CHECK(set2.size() == 3);
     CHECK(NTH(set2, 0)->first == 10); CHECK(NTH(set2, 0)->second == 1);
@@ -280,7 +345,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -293,9 +363,9 @@ BEGIN_TEST("Test container(const container&, const Allocator&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    typename set_type::allocator_type alloc;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(set1, alloc);
+    set_type set2(set1, alloc);
 
     CHECK(set2.size() == 3);
     CHECK(NTH(set2, 0)->first == 10); CHECK(NTH(set2, 0)->second == 1);
@@ -306,7 +376,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(container&&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -319,7 +394,7 @@ BEGIN_TEST("Test container(container&&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(std::move(set1));
+    set_type set2(std::move(set1));
 
     CHECK(set1.size() == 0);
     CHECK(set2.size() == 3);
@@ -331,7 +406,12 @@ END_TEST()
 
 BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -344,9 +424,9 @@ BEGIN_TEST("Test container(container&&, const Allocator&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<xint_xint> alloc;
+    typename set_type::allocator_type alloc;
 
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(std::move(set1), alloc);
+    set_type set2(std::move(set1), alloc);
 
     if (set1.size() == 3)
     {
@@ -369,23 +449,20 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
+    using key_type = xint;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<int>(iss))
-        );
+        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)));
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<int>(iss))
-        );
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)));
         #endif
 
         CHECK(set.empty() == false);
@@ -399,20 +476,12 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 
     // Forward iterator
     {
-        std::vector<xint> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            std::views::all(data)
-        );
+        set_type set(sfl::from_range_t(), std::views::all(data));
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            data
-        );
+        set_type set(sfl::from_range_t(), data);
         #endif
 
         CHECK(set.empty() == false);
@@ -427,27 +496,22 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
 {
+    using key_type = xint;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
-        std::less<xint> comp;
+        typename set_type::key_compare comp;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<int>(iss)),
-            comp
-        );
+        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)), comp);
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<int>(iss)),
-            comp
-        );
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)), comp);
         #endif
 
         CHECK(set.empty() == false);
@@ -461,24 +525,14 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
 
     // Forward iterator
     {
-        std::vector<xint> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
 
-        std::less<xint> comp;
+        typename set_type::key_compare comp;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            comp
-        );
+        set_type set(sfl::from_range_t(), std::views::all(data), comp);
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            data,
-            comp
-        );
+        set_type set(sfl::from_range_t(), data, comp);
         #endif
 
         CHECK(set.empty() == false);
@@ -493,27 +547,22 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 {
+    using key_type = xint;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename set_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<int>(iss)),
-            alloc
-        );
+        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)), alloc);
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<int>(iss)),
-            alloc
-        );
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)), alloc);
         #endif
 
         CHECK(set.empty() == false);
@@ -527,24 +576,14 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 
     // Forward iterator
     {
-        std::vector<xint> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
 
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename set_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            alloc
-        );
+        set_type set(sfl::from_range_t(), std::views::all(data), alloc);
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            data,
-            alloc
-        );
+        set_type set(sfl::from_range_t(), data, alloc);
         #endif
 
         CHECK(set.empty() == false);
@@ -559,30 +598,24 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)")
 {
+    using key_type = xint;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
-        std::less<xint> comp;
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename set_type::key_compare comp;
+
+        typename set_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<int>(iss)),
-            comp,
-            alloc
-        );
+        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)), comp, alloc);
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<int>(iss)),
-            comp,
-            alloc
-        );
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)), comp, alloc);
         #endif
 
         CHECK(set.empty() == false);
@@ -596,27 +629,16 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const All
 
     // Forward iterator
     {
-        std::vector<xint> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
 
-        std::less<xint> comp;
-        TPARAM_ALLOCATOR<xint> alloc;
+        typename set_type::key_compare comp;
+
+        typename set_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            comp,
-            alloc
-        );
+        set_type set(sfl::from_range_t(), std::views::all(data), comp, alloc);
         #else
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set
-        (
-            sfl::from_range_t(),
-            data,
-            comp,
-            alloc
-        );
+        set_type set(sfl::from_range_t(), data, comp, alloc);
         #endif
 
         CHECK(set.empty() == false);
@@ -633,7 +655,12 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(const container&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -671,7 +698,12 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(container&&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -716,7 +748,12 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(std::initializer_list)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -729,7 +766,7 @@ BEGIN_TEST("Test operator=(std::initializer_list)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    std::initializer_list<xint_xint> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {40, 2},
         {50, 2},
@@ -751,7 +788,12 @@ END_TEST()
 
 BEGIN_TEST("Test get_allocator()")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     auto alloc = set.get_allocator();
 
@@ -764,7 +806,12 @@ END_TEST()
 BEGIN_TEST("Test key_comp()")
 {
     {
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
+        using key_type = xint;
+        using key_compare = std::less<xint>;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+        set_type set;
 
         auto key_comp = set.key_comp();
 
@@ -775,7 +822,12 @@ BEGIN_TEST("Test key_comp()")
     }
 
     {
-        sfl::set<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>> set;
+        using key_type = xobj;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+        set_type set;
 
         auto key_comp = set.key_comp();
 
@@ -792,7 +844,12 @@ END_TEST()
 BEGIN_TEST("Test value_comp()")
 {
     {
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
+        using key_type = xint;
+        using key_compare = std::less<xint>;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+        set_type set;
 
         auto value_comp = set.value_comp();
 
@@ -803,7 +860,12 @@ BEGIN_TEST("Test value_comp()")
     }
 
     {
-        sfl::set<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>> set;
+        using key_type = xobj;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+        set_type set;
 
         auto value_comp = set.value_comp();
 
@@ -819,7 +881,12 @@ END_TEST()
 
 BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     set.emplace(20, 1);
     set.emplace(40, 1);
@@ -863,9 +930,14 @@ END_TEST()
 
 BEGIN_TEST("Test lower_bound, upper_bound, equal_range, find, count, contains")
 {
-    // xint,
+    // xint
     {
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint> > set;
+        using key_type = xint;
+        using key_compare = std::less<xint>;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+        set_type set;
 
         set.emplace(20);
         set.emplace(40);
@@ -934,7 +1006,12 @@ BEGIN_TEST("Test lower_bound, upper_bound, equal_range, find, count, contains")
 
     // xobj
     {
-        sfl::set<xobj, xobj::less, TPARAM_ALLOCATOR<xobj> > set;
+        using key_type = xobj;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+        set_type set;
 
         set.emplace(20);
         set.emplace(40);
@@ -1007,7 +1084,12 @@ END_TEST()
 
 BEGIN_TEST("Test emplace(Args&&...)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
@@ -1033,7 +1115,12 @@ END_TEST()
 
 BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
@@ -1057,11 +1144,16 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const value_type&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
-    using value_type = xint_xint;
+    using value_type = typename set_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -1089,11 +1181,16 @@ END_TEST()
 
 BEGIN_TEST("Test insert(value_type&&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
-    using value_type = xint_xint;
+    using value_type = typename set_type::value_type;
 
     {
         value_type value_10_1(10, 1);
@@ -1127,7 +1224,12 @@ END_TEST()
 
 BEGIN_TEST("Test insert(K&&)")
 {
-    sfl::set<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>> set;
+    using key_type = xobj;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
@@ -1153,11 +1255,16 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
-    using value_type = xint_xint;
+    using value_type = typename set_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -1183,11 +1290,16 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
-    using value_type = xint_xint;
+    using value_type = typename set_type::value_type;
 
     {
         value_type value_10_1(10, 1);
@@ -1219,7 +1331,12 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, K&&)")
 {
-    sfl::set<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>> set;
+    using key_type = xobj;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
@@ -1243,11 +1360,16 @@ END_TEST()
 
 BEGIN_TEST("Test insert(InputIt, InputIt")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
-    std::vector<xint_xint> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1},
@@ -1269,11 +1391,16 @@ END_TEST()
 
 BEGIN_TEST("Test insert(std::initializer_list")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     CHECK(set.size() == 0);
 
-    std::initializer_list<xint_xint> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -1293,12 +1420,17 @@ END_TEST()
 
 BEGIN_TEST("Test insert_range(Range&&")
 {
+    using key_type = xint;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
+        set_type set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set.insert_range(std::views::istream<int>(iss));
@@ -1315,9 +1447,9 @@ BEGIN_TEST("Test insert_range(Range&&")
 
     // Forward iterator
     {
-        std::vector<xint> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
 
-        sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
+        set_type set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set.insert_range(std::views::all(data));
@@ -1335,7 +1467,12 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -1374,7 +1511,12 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -1396,7 +1538,12 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const Key&)")
 {
-    sfl::set<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
+    using key_type = xint;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     set.emplace(10);
     set.emplace(20);
@@ -1426,7 +1573,12 @@ END_TEST()
 
 BEGIN_TEST("Test erase(K&&)")
 {
-    sfl::set<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>> set;
+    using key_type = xobj;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set;
 
     set.emplace(10);
     set.emplace(20);
@@ -1456,7 +1608,12 @@ END_TEST()
 
 BEGIN_TEST("Test swap(container&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -1514,7 +1671,12 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -1560,7 +1722,12 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
-    sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
+
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -1604,14 +1771,16 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
-    using container_type =
-        sfl::set<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
-    using const_reference = typename container_type::const_reference;
+    using const_reference = typename set_type::const_reference;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type set;
+    set_type set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
