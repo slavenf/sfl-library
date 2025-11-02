@@ -166,7 +166,11 @@ public:
 
         base_node_pointer node_;
 
+    #if defined(_MSC_VER) // Workaround for Visual C++ bug in C++20 constexpr
+    public:
+    #else
     private:
+    #endif
 
         SFL_CONSTEXPR_20
         explicit iterator(base_node_pointer x) noexcept
@@ -275,7 +279,11 @@ public:
 
         base_node_pointer node_;
 
+    #if defined(_MSC_VER) // Workaround for Visual C++ bug in C++20 constexpr
+    public:
+    #else
     private:
+    #endif
 
         SFL_CONSTEXPR_20
         explicit const_iterator(base_node_pointer x) noexcept
