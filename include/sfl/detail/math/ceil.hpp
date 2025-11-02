@@ -21,6 +21,9 @@
 #ifndef SFL_DETAIL_CEIL_HPP_INCLUDED
 #define SFL_DETAIL_CEIL_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
+#include <cmath> // ceil
 #include <type_traits> // enable_if, is_floating_point
 
 namespace sfl
@@ -31,11 +34,21 @@ namespace dtl
 
 template <typename T,
           typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
-constexpr T ceil(T num)
+SFL_CONSTEXPR_20
+T ceil(T num)
 {
-    return (static_cast<T>(static_cast<long long>(num)) == num)
-        ? static_cast<T>(static_cast<long long>(num))
-        : static_cast<T>(static_cast<long long>(num) + ((num > 0) ? 1 : 0));
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        return (static_cast<T>(static_cast<long long>(num)) == num)
+            ? static_cast<T>(static_cast<long long>(num))
+            : static_cast<T>(static_cast<long long>(num) + ((num > 0) ? 1 : 0));
+    }
+    else
+    #endif
+    {
+        return std::ceil(num);
+    }
 }
 
 } // namespace dtl

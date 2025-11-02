@@ -5,6 +5,8 @@
 #include "sfl/detail/math/is_pow2.hpp"
 #include "sfl/detail/math/is_prime.hpp"
 
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
 static_assert(sfl::dtl::ceil(0.0) == 0.0);
 static_assert(sfl::dtl::ceil(0.499999) == 1.0);
 static_assert(sfl::dtl::ceil(0.5) == 1.0);
@@ -34,6 +36,8 @@ static_assert(sfl::dtl::floor(-0.999999) == -1.0);
 static_assert(sfl::dtl::floor(-1.0) == -1.0);
 static_assert(sfl::dtl::floor(-123.0) == -123.0);
 static_assert(sfl::dtl::floor(-123.4) == -124.0);
+
+#endif // SFL_CPP_VERSION >= SFL_CPP_20
 
 static_assert(sfl::dtl::is_pow2(0ull) == false, "");
 static_assert(sfl::dtl::is_pow2(1ull) == true, "");
