@@ -5,7 +5,9 @@
 using sfl::test::xint;
 using sfl::test::xobj;
 
-PRINT("Test PRIVATE make_node and drop_node");
+#ifndef TEST_CPP20_CONSTEXPR
+
+BEGIN_TEST("Test PRIVATE make_node and drop_node")
 {
     using key_type = int;
     using value_type = int;
@@ -35,10 +37,13 @@ PRINT("Test PRIVATE make_node and drop_node");
     hash_table.drop_node(p2);
     hash_table.drop_node(p1);
 }
+END_TEST()
+
+#endif // TEST_CPP20_CONSTEXPR
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test emplace_equal(Args&&...)");
+BEGIN_TEST("Test emplace_equal(Args&&...)")
 {
     using key_type = int;
     using value_type = int;
@@ -50,6 +55,8 @@ PRINT("Test emplace_equal(Args&&...)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<std::vector<int>> insert_patterns
     {
@@ -343,9 +350,54 @@ PRINT("Test emplace_equal(Args&&...)");
             CHECK(cbeg != cend);
         }
     }
-}
 
-PRINT("Test emplace_unique(Args&&...)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_equal(1);
+    hash_table.emplace_equal(2);
+    hash_table.emplace_equal(3);
+
+    hash_table.emplace_equal(101);
+    hash_table.emplace_equal(102);
+    hash_table.emplace_equal(103);
+
+    hash_table.emplace_equal(101);
+    hash_table.emplace_equal(102);
+    hash_table.emplace_equal(103);
+
+    hash_table.emplace_equal(201);
+    hash_table.emplace_equal(202);
+    hash_table.emplace_equal(203);
+
+    hash_table.emplace_equal(201);
+    hash_table.emplace_equal(202);
+    hash_table.emplace_equal(203);
+
+    hash_table.emplace_equal(201);
+    hash_table.emplace_equal(202);
+    hash_table.emplace_equal(203);
+
+    CHECK(hash_table.size() == 18);
+
+    CHECK(COUNT(hash_table, 1) == 1);
+    CHECK(COUNT(hash_table, 2) == 1);
+    CHECK(COUNT(hash_table, 3) == 1);
+
+    CHECK(COUNT(hash_table, 101) == 2);
+    CHECK(COUNT(hash_table, 102) == 2);
+    CHECK(COUNT(hash_table, 103) == 2);
+
+    CHECK(COUNT(hash_table, 201) == 3);
+    CHECK(COUNT(hash_table, 202) == 3);
+    CHECK(COUNT(hash_table, 203) == 3);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test emplace_unique(Args&&...)")
 {
     using key_type = int;
     using value_type = int;
@@ -357,6 +409,8 @@ PRINT("Test emplace_unique(Args&&...)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<std::vector<int>> insert_patterns
     {
@@ -656,9 +710,54 @@ PRINT("Test emplace_unique(Args&&...)");
             CHECK(cbeg != cend);
         }
     }
-}
 
-PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_unique(1);
+    hash_table.emplace_unique(2);
+    hash_table.emplace_unique(3);
+
+    hash_table.emplace_unique(101);
+    hash_table.emplace_unique(102);
+    hash_table.emplace_unique(103);
+
+    hash_table.emplace_unique(101);
+    hash_table.emplace_unique(102);
+    hash_table.emplace_unique(103);
+
+    hash_table.emplace_unique(201);
+    hash_table.emplace_unique(202);
+    hash_table.emplace_unique(203);
+
+    hash_table.emplace_unique(201);
+    hash_table.emplace_unique(202);
+    hash_table.emplace_unique(203);
+
+    hash_table.emplace_unique(201);
+    hash_table.emplace_unique(202);
+    hash_table.emplace_unique(203);
+
+    CHECK(hash_table.size() == 9);
+
+    CHECK(COUNT(hash_table, 1) == 1);
+    CHECK(COUNT(hash_table, 2) == 1);
+    CHECK(COUNT(hash_table, 3) == 1);
+
+    CHECK(COUNT(hash_table, 101) == 1);
+    CHECK(COUNT(hash_table, 102) == 1);
+    CHECK(COUNT(hash_table, 103) == 1);
+
+    CHECK(COUNT(hash_table, 201) == 1);
+    CHECK(COUNT(hash_table, 202) == 1);
+    CHECK(COUNT(hash_table, 203) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test emplace_hint_equal(const_iterator, Args&&...)")
 {
     using key_type = int;
     using value_type = int;
@@ -746,8 +845,9 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
+BEGIN_TEST("Test emplace_hint_unique(const_iterator, Args&&...)")
 {
     using key_type = int;
     using value_type = int;
@@ -817,8 +917,9 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test insert_equal(V&&)");
+BEGIN_TEST("Test insert_equal(V&&)")
 {
     using key_type = int;
     using value_type = int;
@@ -902,8 +1003,9 @@ PRINT("Test insert_equal(V&&)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test insert_unique(V&&)");
+BEGIN_TEST("Test insert_unique(V&&)")
 {
     using key_type = int;
     using value_type = int;
@@ -972,8 +1074,9 @@ PRINT("Test insert_unique(V&&)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test insert_hint_equal(const_iterator, Args&&...)");
+BEGIN_TEST("Test insert_hint_equal(const_iterator, Args&&...)")
 {
     using key_type = int;
     using value_type = int;
@@ -1061,8 +1164,9 @@ PRINT("Test insert_hint_equal(const_iterator, Args&&...)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test insert_hint_unique(const_iterator, Args&&...)");
+BEGIN_TEST("Test insert_hint_unique(const_iterator, Args&&...)")
 {
     using key_type = int;
     using value_type = int;
@@ -1132,8 +1236,9 @@ PRINT("Test insert_hint_unique(const_iterator, Args&&...)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test clear()");
+BEGIN_TEST("Test clear()")
 {
     using key_type = int;
     using value_type = int;
@@ -1180,8 +1285,9 @@ PRINT("Test clear()");
         CHECK(hash_table.begin(i) == hash_table.end(i));
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(K&&, M&&)");
+BEGIN_TEST("Test insert_or_assign(K&&, M&&)")
 {
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
@@ -1276,8 +1382,9 @@ PRINT("Test insert_or_assign(K&&, M&&)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
+BEGIN_TEST("Test insert_or_assign_hint(const_iterator, K&&, M&&)")
 {
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
@@ -1366,8 +1473,9 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace(K&&, Args&&...)");
+BEGIN_TEST("Test try_emplace(K&&, Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
@@ -1462,8 +1570,9 @@ PRINT("Test try_emplace(K&&, Args&&...)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
+BEGIN_TEST("Test try_emplace_hint(const_iterator, K&&, Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
@@ -1552,8 +1661,9 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test erase_equal(const_iterator)");
+BEGIN_TEST("Test erase_equal(const_iterator)")
 {
     using key_type = int;
     using value_type = int;
@@ -1565,6 +1675,8 @@ PRINT("Test erase_equal(const_iterator)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<int> elements
     {
@@ -1604,9 +1716,64 @@ PRINT("Test erase_equal(const_iterator)");
             CHECK(hash_table.verify());
         }
     }
-}
 
-PRINT("Test erase_unique(const_iterator)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_equal(10);
+    hash_table.emplace_equal(20);
+    hash_table.emplace_equal(20);
+    hash_table.emplace_equal(30);
+    hash_table.emplace_equal(30);
+    hash_table.emplace_equal(30);
+
+    CHECK(hash_table.size() == 6);
+    CHECK(COUNT(hash_table, 10) == 1);
+    CHECK(COUNT(hash_table, 20) == 2);
+    CHECK(COUNT(hash_table, 30) == 3);
+
+    {
+        auto it = hash_table.find(10);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it);
+
+        CHECK(hash_table.size() == 5);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 2);
+        CHECK(COUNT(hash_table, 30) == 3);
+    }
+
+    {
+        auto it = hash_table.find(20);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it);
+
+        CHECK(hash_table.size() == 4);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 1);
+        CHECK(COUNT(hash_table, 30) == 3);
+    }
+
+    {
+        auto it = hash_table.find(30);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it);
+
+        CHECK(hash_table.size() == 3);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 1);
+        CHECK(COUNT(hash_table, 30) == 2);
+    }
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test erase_unique(const_iterator)")
 {
     using key_type = int;
     using value_type = int;
@@ -1618,6 +1785,8 @@ PRINT("Test erase_unique(const_iterator)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<int> elements
     {
@@ -1651,9 +1820,61 @@ PRINT("Test erase_unique(const_iterator)");
             CHECK(hash_table.verify());
         }
     }
-}
 
-PRINT("Test erase_equal(const_iterator, const_iterator)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_unique(10);
+    hash_table.emplace_unique(20);
+    hash_table.emplace_unique(30);
+
+    CHECK(hash_table.size() == 3);
+    CHECK(COUNT(hash_table, 10) == 1);
+    CHECK(COUNT(hash_table, 20) == 1);
+    CHECK(COUNT(hash_table, 30) == 1);
+
+    {
+        auto it = hash_table.find(10);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it);
+
+        CHECK(hash_table.size() == 2);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 1);
+        CHECK(COUNT(hash_table, 30) == 1);
+    }
+
+    {
+        auto it = hash_table.find(20);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it);
+
+        CHECK(hash_table.size() == 1);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 1);
+    }
+
+    {
+        auto it = hash_table.find(30);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it);
+
+        CHECK(hash_table.size() == 0);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 0);
+    }
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test erase_equal(const_iterator, const_iterator)")
 {
     using key_type = int;
     using value_type = int;
@@ -1665,6 +1886,8 @@ PRINT("Test erase_equal(const_iterator, const_iterator)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<int> elements
     {
@@ -1703,9 +1926,64 @@ PRINT("Test erase_equal(const_iterator, const_iterator)");
             }
         }
     }
-}
 
-PRINT("Test erase_unique(const_iterator, const_iterator)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_equal(10);
+    hash_table.emplace_equal(20);
+    hash_table.emplace_equal(20);
+    hash_table.emplace_equal(30);
+    hash_table.emplace_equal(30);
+    hash_table.emplace_equal(30);
+
+    CHECK(hash_table.size() == 6);
+    CHECK(COUNT(hash_table, 10) == 1);
+    CHECK(COUNT(hash_table, 20) == 2);
+    CHECK(COUNT(hash_table, 30) == 3);
+
+    {
+        auto it = hash_table.find(10);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it, std::next(it));
+
+        CHECK(hash_table.size() == 5);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 2);
+        CHECK(COUNT(hash_table, 30) == 3);
+    }
+
+    {
+        auto it = hash_table.find(20);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it, std::next(it));
+
+        CHECK(hash_table.size() == 4);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 1);
+        CHECK(COUNT(hash_table, 30) == 3);
+    }
+
+    {
+        auto it = hash_table.find(30);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it, std::next(it));
+
+        CHECK(hash_table.size() == 3);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 1);
+        CHECK(COUNT(hash_table, 30) == 2);
+    }
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test erase_unique(const_iterator, const_iterator)")
 {
     using key_type = int;
     using value_type = int;
@@ -1717,6 +1995,8 @@ PRINT("Test erase_unique(const_iterator, const_iterator)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<int> elements
     {
@@ -1749,9 +2029,61 @@ PRINT("Test erase_unique(const_iterator, const_iterator)");
             }
         }
     }
-}
 
-PRINT("Test erase_key_unique(const K&)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_unique(10);
+    hash_table.emplace_unique(20);
+    hash_table.emplace_unique(30);
+
+    CHECK(hash_table.size() == 3);
+    CHECK(COUNT(hash_table, 10) == 1);
+    CHECK(COUNT(hash_table, 20) == 1);
+    CHECK(COUNT(hash_table, 30) == 1);
+
+    {
+        auto it = hash_table.find(10);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it, std::next(it));
+
+        CHECK(hash_table.size() == 2);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 1);
+        CHECK(COUNT(hash_table, 30) == 1);
+    }
+
+    {
+        auto it = hash_table.find(20);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it, std::next(it));
+
+        CHECK(hash_table.size() == 1);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 1);
+    }
+
+    {
+        auto it = hash_table.find(30);
+        CHECK(it != hash_table.end());
+
+        hash_table.erase_equal(it, std::next(it));
+
+        CHECK(hash_table.size() == 0);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 0);
+    }
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test erase_key_unique(const K&)")
 {
     using key_type = int;
     using value_type = int;
@@ -1763,6 +2095,8 @@ PRINT("Test erase_key_unique(const K&)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<int> elements
     {
@@ -1786,9 +2120,52 @@ PRINT("Test erase_key_unique(const K&)");
         CHECK(hash_table.erase_key_unique(elem) == 0);
         CHECK(hash_table.verify());
     }
-}
 
-PRINT("Test erase_key_equal(const K&)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_equal(10);
+    hash_table.emplace_equal(20);
+    hash_table.emplace_equal(20);
+    hash_table.emplace_equal(30);
+    hash_table.emplace_equal(30);
+    hash_table.emplace_equal(30);
+
+    CHECK(hash_table.size() == 6);
+    CHECK(COUNT(hash_table, 10) == 1);
+    CHECK(COUNT(hash_table, 20) == 2);
+    CHECK(COUNT(hash_table, 30) == 3);
+
+    {
+        CHECK(hash_table.erase_key_equal(10) == 1);
+        CHECK(hash_table.size() == 5);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 2);
+        CHECK(COUNT(hash_table, 30) == 3);
+    }
+
+    {
+        CHECK(hash_table.erase_key_equal(20) == 2);
+        CHECK(hash_table.size() == 3);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 3);
+    }
+
+    {
+        CHECK(hash_table.erase_key_equal(30) == 3);
+        CHECK(hash_table.size() == 0);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 0);
+    }
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test erase_key_equal(const K&)")
 {
     using key_type = int;
     using value_type = int;
@@ -1800,6 +2177,8 @@ PRINT("Test erase_key_equal(const K&)");
     using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
     using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     static const std::vector<int> elements
     {
@@ -1826,9 +2205,49 @@ PRINT("Test erase_key_equal(const K&)");
         CHECK(hash_table.erase_key_equal(elem) == 0);
         CHECK(hash_table.verify());
     }
-}
 
-PRINT("Test swap(container&)");
+    #else // C++20 constexpr
+
+    hash_table_type hash_table(100);
+
+    hash_table.emplace_unique(10);
+    hash_table.emplace_unique(20);
+    hash_table.emplace_unique(30);
+
+    CHECK(hash_table.size() == 3);
+    CHECK(COUNT(hash_table, 10) == 1);
+    CHECK(COUNT(hash_table, 20) == 1);
+    CHECK(COUNT(hash_table, 30) == 1);
+
+    {
+        CHECK(hash_table.erase_key_unique(10) == 1);
+        CHECK(hash_table.size() == 2);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 1);
+        CHECK(COUNT(hash_table, 30) == 1);
+    }
+
+    {
+        CHECK(hash_table.erase_key_unique(20) == 1);
+        CHECK(hash_table.size() == 1);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 1);
+    }
+
+    {
+        CHECK(hash_table.erase_key_unique(30) == 1);
+        CHECK(hash_table.size() == 0);
+        CHECK(COUNT(hash_table, 10) == 0);
+        CHECK(COUNT(hash_table, 20) == 0);
+        CHECK(COUNT(hash_table, 30) == 0);
+    }
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test swap(container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2097,10 +2516,13 @@ PRINT("Test swap(container&)");
     }
     #undef CONDITION
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Stress test insert with rehashing");
+#ifndef TEST_CPP20_CONSTEXPR
+
+BEGIN_TEST("Stress test insert with rehashing")
 {
     {
         using key_type = int;
@@ -2177,10 +2599,13 @@ PRINT("Stress test insert with rehashing");
         }
     }
 }
+END_TEST()
+
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test container(size_type)");
+BEGIN_TEST("Test container(size_type)")
 {
     {
         using key_type = xint;
@@ -2196,12 +2621,9 @@ PRINT("Test container(size_type)");
 
         hash_table_type hash_table(4);
 
-        (void)hash_table;
-
-        for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-        {
-            CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-        }
+        CHECK(hash_table.empty() == true);
+        CHECK(hash_table.size() == 0);
+        CHECK(hash_table.max_size() > 0);
     }
 
     {
@@ -2218,12 +2640,9 @@ PRINT("Test container(size_type)");
 
         hash_table_type hash_table(7);
 
-        (void)hash_table;
-
-        for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-        {
-            CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-        }
+        CHECK(hash_table.empty() == true);
+        CHECK(hash_table.size() == 0);
+        CHECK(hash_table.max_size() > 0);
     }
 
     {
@@ -2240,16 +2659,14 @@ PRINT("Test container(size_type)");
 
         hash_table_type hash_table(9);
 
-        (void)hash_table;
-
-        for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-        {
-            CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-        }
+        CHECK(hash_table.empty() == true);
+        CHECK(hash_table.size() == 0);
+        CHECK(hash_table.max_size() > 0);
     }
 }
+END_TEST()
 
-PRINT("Test container(size_type, const Alloc&)");
+BEGIN_TEST("Test container(size_type, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2262,19 +2679,17 @@ PRINT("Test container(size_type, const Alloc&)");
     using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
 
-    typename hash_table_type::node_allocator_type alloc;
+    node_allocator alloc;
 
     hash_table_type hash_table(4, alloc);
 
-    (void)hash_table;
-
-    for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-    {
-        CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-    }
+    CHECK(hash_table.empty() == true);
+    CHECK(hash_table.size() == 0);
+    CHECK(hash_table.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const key_hash&)");
+BEGIN_TEST("Test container(size_type, const key_hash&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2287,19 +2702,17 @@ PRINT("Test container(size_type, const key_hash&)");
     using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
 
-    typename hash_table_type::key_hash hash;
+    key_hash hash;
 
     hash_table_type hash_table(4, hash);
 
-    (void)hash_table;
-
-    for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-    {
-        CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-    }
+    CHECK(hash_table.empty() == true);
+    CHECK(hash_table.size() == 0);
+    CHECK(hash_table.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const key_hash&, const Alloc&)");
+BEGIN_TEST("Test container(size_type, const key_hash&, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2312,21 +2725,19 @@ PRINT("Test container(size_type, const key_hash&, const Alloc&)");
     using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
 
-    typename hash_table_type::key_hash hash;
+    key_hash hash;
 
-    typename hash_table_type::node_allocator_type alloc;
+    node_allocator alloc;
 
     hash_table_type hash_table(4, hash, alloc);
 
-    (void)hash_table;
-
-    for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-    {
-        CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-    }
+    CHECK(hash_table.empty() == true);
+    CHECK(hash_table.size() == 0);
+    CHECK(hash_table.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const key_hash&, const key_equal&)");
+BEGIN_TEST("Test container(size_type, const key_hash&, const key_equal&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2339,21 +2750,19 @@ PRINT("Test container(size_type, const key_hash&, const key_equal&)");
     using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
 
-    typename hash_table_type::key_hash hash;
+    key_hash hash;
 
     typename hash_table_type::key_equal equal;
 
     hash_table_type hash_table(4, hash, equal);
 
-    (void)hash_table;
-
-    for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-    {
-        CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-    }
+    CHECK(hash_table.empty() == true);
+    CHECK(hash_table.size() == 0);
+    CHECK(hash_table.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const key_hash&, const key_equal&, const Alloc&)");
+BEGIN_TEST("Test container(size_type, const key_hash&, const key_equal&, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2366,23 +2775,21 @@ PRINT("Test container(size_type, const key_hash&, const key_equal&, const Alloc&
     using max_load_policy = sfl::dtl::hash_table_standard_max_load_policy;
     using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
 
-    typename hash_table_type::key_hash hash;
+    key_hash hash;
 
     typename hash_table_type::key_equal equal;
 
-    typename hash_table_type::node_allocator_type alloc;
+    node_allocator alloc;
 
     hash_table_type hash_table(4, hash, equal, alloc);
 
-    (void)hash_table;
-
-    for (int i = 0; i < int(hash_table.data_.get_bucket_count()); ++i)
-    {
-        CHECK(hash_table.data_.buckets_[i].next_ == nullptr);
-    }
+    CHECK(hash_table.empty() == true);
+    CHECK(hash_table.size() == 0);
+    CHECK(hash_table.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const container&, EqualOrUniqueTag)");
+BEGIN_TEST("Test container(const container&, EqualOrUniqueTag)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2569,8 +2976,9 @@ PRINT("Test container(const container&, EqualOrUniqueTag)");
         CHECK(hash_table2.count_equal(205) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
+BEGIN_TEST("Test container(const container&, EqualOrUniqueTag, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2590,7 +2998,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -2604,7 +3012,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -2672,7 +3080,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -2740,7 +3148,7 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(hash_table1, sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -2765,8 +3173,9 @@ PRINT("Test container(const container&, EqualOrUniqueTag, const Alloc&)");
         CHECK(hash_table2.count_equal(205) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -3007,8 +3416,9 @@ PRINT("Test container(container&&)");
         CHECK(hash_table2.count_equal(205) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Alloc&)");
+BEGIN_TEST("Test container(container&&, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -3028,7 +3438,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -3042,7 +3452,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -3110,7 +3520,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_equal_t(), alloc);
 
@@ -3205,7 +3615,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename hash_table_type::node_allocator_type alloc;
+        node_allocator alloc;
 
         hash_table_type hash_table2(std::move(hash_table1), sfl::dtl::hash_table_unique_t(), alloc);
 
@@ -3257,10 +3667,11 @@ PRINT("Test container(container&&, const Alloc&)");
         CHECK(hash_table2.count_equal(205) == 1);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
+BEGIN_TEST("Test assign_copy(const container&, EqualOrUniqueTag)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -3614,8 +4025,9 @@ PRINT("Test assign_copy(const container&, EqualOrUniqueTag)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
+BEGIN_TEST("Test assign_move(const container&, EqualOrUniqueTag)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4011,8 +4423,9 @@ PRINT("Test assign_move(const container&, EqualOrUniqueTag)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test assign_range_equal(InputIt, InputIt)");
+BEGIN_TEST("Test assign_range_equal(InputIt, InputIt)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4199,8 +4612,9 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         CHECK(data[4] == -50);
     }
 }
+END_TEST()
 
-PRINT("Test assign_range_unique(InputIt, InputIt)");
+BEGIN_TEST("Test assign_range_unique(InputIt, InputIt)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4387,10 +4801,11 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         CHECK(data[4] == +50);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     using key_type = xint;
     using value_type = xint;
@@ -4425,3 +4840,4 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((hash_table2 != hash_table1) == true);
     CHECK((hash_table2 != hash_table2) == false);
 }
+END_TEST()

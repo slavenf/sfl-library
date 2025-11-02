@@ -25,6 +25,9 @@
 #include <random>
 #include <vector>
 
+#define BEGIN_TEST(x) PRINT(x)
+#define END_TEST()
+
 template <>
 void test_hash_table<1>()
 {
@@ -89,5 +92,18 @@ int main()
 }
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
-#include "test_cpp20_constexpr.inc"
-#endif
+
+#undef  BEGIN_TEST
+#undef  END_TEST
+
+#define BEGIN_TEST(x) static_assert([](){
+#define END_TEST()    return true;}());
+
+#undef  TPARAM_ALLOCATOR
+#define TPARAM_ALLOCATOR std::allocator
+
+#define TEST_CPP20_CONSTEXPR
+
+#include "hash_table.inc"
+
+#endif // SFL_CPP_VERSION >= SFL_CPP_20
