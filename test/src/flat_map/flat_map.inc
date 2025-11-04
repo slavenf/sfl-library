@@ -5,67 +5,91 @@
 using sfl::test::xint;
 using sfl::test::xobj;
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
     CHECK(map.available() == map.capacity() - map.size());
 }
+END_TEST()
 
-PRINT("Test container(const Compare&)");
+BEGIN_TEST("Test container(const Compare&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    typename container_type::key_compare comp;
+    typename map_type::key_compare comp;
 
-    container_type map(comp);
+    map_type map(comp);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
     CHECK(map.available() == map.capacity() - map.size());
 }
+END_TEST()
 
-PRINT("Test container(const Allocator&)");
+BEGIN_TEST("Test container(const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map(alloc);
+    map_type map(alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
     CHECK(map.available() == map.capacity() - map.size());
 }
+END_TEST()
 
-PRINT("Test container(const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(const Compare&, const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    typename container_type::key_compare comp;
+    typename map_type::key_compare comp;
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map(comp, alloc);
+    map_type map(comp, alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
     CHECK(map.available() == map.capacity() - map.size());
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt)");
+BEGIN_TEST("Test container(InputIt, InputIt)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -86,7 +110,7 @@ PRINT("Test container(InputIt, InputIt)");
         }
     );
 
-    container_type map(data.begin(), data.end());
+    map_type map(data.begin(), data.end());
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -114,12 +138,17 @@ PRINT("Test container(InputIt, InputIt)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -140,9 +169,9 @@ PRINT("Test container(InputIt, InputIt, const Compare&)");
         }
     );
 
-    typename container_type::key_compare comp;
+    typename map_type::key_compare comp;
 
-    container_type map(data.begin(), data.end(), comp);
+    map_type map(data.begin(), data.end(), comp);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -170,12 +199,17 @@ PRINT("Test container(InputIt, InputIt, const Compare&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -196,9 +230,9 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
         }
     );
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map(data.begin(), data.end(), alloc);
+    map_type map(data.begin(), data.end(), alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -226,12 +260,17 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&, const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -252,11 +291,11 @@ PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
         }
     );
 
-    typename container_type::key_compare comp;
+    typename map_type::key_compare comp;
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map(data.begin(), data.end(), comp, alloc);
+    map_type map(data.begin(), data.end(), comp, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -284,12 +323,17 @@ PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list)");
+BEGIN_TEST("Test container(std::initializer_list)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -308,7 +352,7 @@ PRINT("Test container(std::initializer_list)");
         {50, 3050}
     };
 
-    container_type map(ilist);
+    map_type map(ilist);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -336,12 +380,17 @@ PRINT("Test container(std::initializer_list)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -360,9 +409,9 @@ PRINT("Test container(std::initializer_list, const Compare&)");
         {50, 3050}
     };
 
-    typename container_type::key_compare comp;
+    typename map_type::key_compare comp;
 
-    container_type map(ilist, comp);
+    map_type map(ilist, comp);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -390,12 +439,17 @@ PRINT("Test container(std::initializer_list, const Compare&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -414,9 +468,9 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
         {50, 3050}
     };
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map(ilist, alloc);
+    map_type map(ilist, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -444,12 +498,17 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&, const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -468,11 +527,11 @@ PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)")
         {50, 3050}
     };
 
-    typename container_type::key_compare comp;
+    typename map_type::key_compare comp;
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map(ilist, comp, alloc);
+    map_type map(ilist, comp, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -500,12 +559,17 @@ PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)")
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -526,7 +590,7 @@ PRINT("Test container(const container&)");
         }
     );
 
-    container_type map1(data.begin(), data.end());
+    map_type map1(data.begin(), data.end());
 
     CHECK(map1.empty() == false);
     CHECK(map1.size() == 5);
@@ -556,7 +620,7 @@ PRINT("Test container(const container&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type map2(map1);
+    map_type map2(map1);
 
     CHECK(map2.empty() == false);
     CHECK(map2.size() == 5);
@@ -584,12 +648,17 @@ PRINT("Test container(const container&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(const container&, const Allocator&)");
+BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -610,7 +679,7 @@ PRINT("Test container(const container&, const Allocator&)");
         }
     );
 
-    container_type map1(data.begin(), data.end());
+    map_type map1(data.begin(), data.end());
 
     CHECK(map1.empty() == false);
     CHECK(map1.size() == 5);
@@ -640,9 +709,9 @@ PRINT("Test container(const container&, const Allocator&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map2(map1, alloc);
+    map_type map2(map1, alloc);
 
     CHECK(map2.empty() == false);
     CHECK(map2.size() == 5);
@@ -670,12 +739,17 @@ PRINT("Test container(const container&, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -696,7 +770,7 @@ PRINT("Test container(container&&)");
         }
     );
 
-    container_type map1(data.begin(), data.end());
+    map_type map1(data.begin(), data.end());
 
     CHECK(map1.empty() == false);
     CHECK(map1.size() == 5);
@@ -726,7 +800,7 @@ PRINT("Test container(container&&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type map2(std::move(map1));
+    map_type map2(std::move(map1));
 
     CHECK(map1.empty() == true);
     CHECK(map1.size() == 0);
@@ -757,12 +831,17 @@ PRINT("Test container(container&&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Allocator&)");
+BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -783,7 +862,7 @@ PRINT("Test container(container&&, const Allocator&)");
         }
     );
 
-    container_type map1(data.begin(), data.end());
+    map_type map1(data.begin(), data.end());
 
     CHECK(map1.empty() == false);
     CHECK(map1.size() == 5);
@@ -813,9 +892,9 @@ PRINT("Test container(container&&, const Allocator&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    typename container_type::allocator_type alloc;
+    typename map_type::allocator_type alloc;
 
-    container_type map2(std::move(map1), alloc);
+    map_type map2(std::move(map1), alloc);
 
     if (map1.size() == 5)
     {
@@ -868,14 +947,19 @@ PRINT("Test container(container&&, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data1
+    std::vector<typename map_type::value_type> data1
     (
         {
             {10, 1010},
@@ -887,7 +971,7 @@ PRINT("Test operator=(const container&)");
         }
     );
 
-    std::vector<typename container_type::value_type> data2
+    std::vector<typename map_type::value_type> data2
     (
         {
             {40, 1040},
@@ -899,8 +983,8 @@ PRINT("Test operator=(const container&)");
         }
     );
 
-    container_type map1(data1.begin(), data1.end());
-    container_type map2(data2.begin(), data2.end());
+    map_type map1(data1.begin(), data1.end());
+    map_type map2(data2.begin(), data2.end());
 
     CHECK(map1.size() == 3);
     CHECK(COUNT_KV(map1, 10, 1010) == 1);
@@ -958,12 +1042,17 @@ PRINT("Test operator=(const container&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test operator=(container&&)");
+BEGIN_TEST("Test operator=(container&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data1
+    std::vector<typename map_type::value_type> data1
     (
         {
             {10, 1010},
@@ -975,7 +1064,7 @@ PRINT("Test operator=(container&&)");
         }
     );
 
-    std::vector<typename container_type::value_type> data2
+    std::vector<typename map_type::value_type> data2
     (
         {
             {40, 1040},
@@ -987,8 +1076,8 @@ PRINT("Test operator=(container&&)");
         }
     );
 
-    container_type map1(data1.begin(), data1.end());
-    container_type map2(data2.begin(), data2.end());
+    map_type map1(data1.begin(), data1.end());
+    map_type map2(data2.begin(), data2.end());
 
     CHECK(map1.size() == 3);
     CHECK(COUNT_KV(map1, 10, 1010) == 1);
@@ -1048,12 +1137,17 @@ PRINT("Test operator=(container&&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -1065,7 +1159,7 @@ PRINT("Test operator=(const container&)");
         }
     );
 
-    container_type map(data.begin(), data.end());
+    map_type map(data.begin(), data.end());
 
     CHECK(map.size() == 3);
     CHECK(COUNT_KV(map, 10, 1010) == 1);
@@ -1082,7 +1176,7 @@ PRINT("Test operator=(const container&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {40, 1040},
         {50, 1050},
@@ -1107,28 +1201,38 @@ PRINT("Test operator=(const container&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test get_allocator()");
+BEGIN_TEST("Test get_allocator()")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     auto alloc = map.get_allocator();
 
     (void)alloc;
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test key_comp()");
+BEGIN_TEST("Test key_comp()")
 {
     {
-        using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+        using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-        container_type map;
+        map_type map;
 
         auto key_comp = map.key_comp();
 
@@ -1139,9 +1243,13 @@ PRINT("Test key_comp()");
     }
 
     {
-        using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+        using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-        container_type map;
+        map_type map;
 
         auto key_comp = map.key_comp();
 
@@ -1151,15 +1259,20 @@ PRINT("Test key_comp()");
         CHECK(key_comp(xobj(20), 20) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test value_comp()");
+BEGIN_TEST("Test value_comp()")
 {
     {
-        using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+        using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-        container_type map;
+        map_type map;
 
         auto value_comp = map.value_comp();
 
@@ -1170,9 +1283,13 @@ PRINT("Test value_comp()");
     }
 
     {
-        using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+        using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-        container_type map;
+        map_type map;
 
         auto value_comp = map.value_comp();
 
@@ -1182,14 +1299,19 @@ PRINT("Test value_comp()");
         CHECK(value_comp({xobj(20), 1}, {xobj(20), 2}) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of");
+BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -1239,14 +1361,19 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
     CHECK(map.index_of(map.nth(1)) == 1);
     CHECK(map.index_of(map.nth(2)) == 2);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test clear()");
+BEGIN_TEST("Test clear()")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1010);
     map.emplace(20, 1020);
@@ -1260,10 +1387,17 @@ PRINT("Test clear()");
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
 }
+END_TEST()
 
-PRINT("Test emplace(Args&&...)");
+BEGIN_TEST("Test emplace(Args&&...)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1272,7 +1406,7 @@ PRINT("Test emplace(Args&&...)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -1319,11 +1453,40 @@ PRINT("Test emplace(Args&&...)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test emplace_hint(const_iterator, Args&&...)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    map.emplace(10, 1);
+    map.emplace(20, 1);
+    map.emplace(20, 2);
+    map.emplace(30, 1);
+    map.emplace(30, 2);
+    map.emplace(30, 3);
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1342,7 +1505,7 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -1424,11 +1587,40 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert(const value_type&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    map.emplace_hint(map.end(), 10, 1);
+    map.emplace_hint(map.end(), 20, 1);
+    map.emplace_hint(map.end(), 20, 2);
+    map.emplace_hint(map.end(), 30, 1);
+    map.emplace_hint(map.end(), 30, 2);
+    map.emplace_hint(map.end(), 30, 3);
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(const value_type&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1437,7 +1629,7 @@ PRINT("Test insert(const value_type&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -1453,7 +1645,7 @@ PRINT("Test insert(const value_type&)");
             const int key = elem;
             const int value = key + 1000 * (iter + 1);
 
-            typename container_type::value_type key_value(key, value);
+            typename map_type::value_type key_value(key, value);
 
             const auto res = map.insert(key_value);
 
@@ -1490,11 +1682,49 @@ PRINT("Test insert(const value_type&)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test insert(value_type&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    using value_type = typename map_type::value_type;
+
+    const value_type value_10_1(10, 1);
+    const value_type value_20_1(20, 1);
+    const value_type value_20_2(20, 2);
+    const value_type value_30_1(30, 1);
+    const value_type value_30_2(30, 2);
+    const value_type value_30_3(30, 3);
+
+    map.insert(value_10_1);
+    map.insert(value_20_1);
+    map.insert(value_20_2);
+    map.insert(value_30_1);
+    map.insert(value_30_2);
+    map.insert(value_30_3);
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(value_type&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1503,7 +1733,7 @@ PRINT("Test insert(value_type&&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -1519,7 +1749,7 @@ PRINT("Test insert(value_type&&)");
             const int key = elem;
             const int value = key + 1000 * (iter + 1);
 
-            typename container_type::value_type key_value(key, value);
+            typename map_type::value_type key_value(key, value);
 
             const auto res = map.insert(std::move(key_value));
 
@@ -1556,11 +1786,49 @@ PRINT("Test insert(value_type&&)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test insert(P&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    using value_type = typename map_type::value_type;
+
+    value_type value_10_1(10, 1);
+    value_type value_20_1(20, 1);
+    value_type value_20_2(20, 2);
+    value_type value_30_1(30, 1);
+    value_type value_30_2(30, 2);
+    value_type value_30_3(30, 3);
+
+    map.insert(std::move(value_10_1));
+    map.insert(std::move(value_20_1));
+    map.insert(std::move(value_20_2));
+    map.insert(std::move(value_30_1));
+    map.insert(std::move(value_30_2));
+    map.insert(std::move(value_30_3));
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(P&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1569,7 +1837,7 @@ PRINT("Test insert(P&&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -1618,11 +1886,49 @@ PRINT("Test insert(P&&)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test insert(const_iterator, const value_type&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    using value_type = std::pair<long, long>;
+
+    value_type value_10_1(10, 1);
+    value_type value_20_1(20, 1);
+    value_type value_20_2(20, 2);
+    value_type value_30_1(30, 1);
+    value_type value_30_2(30, 2);
+    value_type value_30_3(30, 3);
+
+    map.insert(value_10_1);
+    map.insert(value_20_1);
+    map.insert(value_20_2);
+    map.insert(value_30_1);
+    map.insert(value_30_2);
+    map.insert(value_30_3);
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1641,12 +1947,12 @@ PRINT("Test insert(const_iterator, const value_type&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
                 {
-                    typename container_type::value_type key_value(elem1, elem1 + 1000);
+                    typename map_type::value_type key_value(elem1, elem1 + 1000);
 
                     const auto hint = map.end();
 
@@ -1681,7 +1987,7 @@ PRINT("Test insert(const_iterator, const value_type&)");
 
                 // Insert additional element
                 {
-                    typename container_type::value_type key_value(elem2, elem2 + 2000);
+                    typename map_type::value_type key_value(elem2, elem2 + 2000);
 
                     const auto hint = NTH(map, insert_pos);
 
@@ -1735,11 +2041,49 @@ PRINT("Test insert(const_iterator, const value_type&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert(const_iterator, value_type&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    using value_type = typename map_type::value_type;
+
+    const value_type value_10_1(10, 1);
+    const value_type value_20_1(20, 1);
+    const value_type value_20_2(20, 2);
+    const value_type value_30_1(30, 1);
+    const value_type value_30_2(30, 2);
+    const value_type value_30_3(30, 3);
+
+    map.insert(map.end(), value_10_1);
+    map.insert(map.end(), value_20_1);
+    map.insert(map.end(), value_20_2);
+    map.insert(map.end(), value_30_1);
+    map.insert(map.end(), value_30_2);
+    map.insert(map.end(), value_30_3);
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1758,12 +2102,12 @@ PRINT("Test insert(const_iterator, value_type&&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
                 {
-                    typename container_type::value_type key_value(elem1, elem1 + 1000);
+                    typename map_type::value_type key_value(elem1, elem1 + 1000);
 
                     const auto hint = map.end();
 
@@ -1798,7 +2142,7 @@ PRINT("Test insert(const_iterator, value_type&&)");
 
                 // Insert additional element
                 {
-                    typename container_type::value_type key_value(elem2, elem2 + 2000);
+                    typename map_type::value_type key_value(elem2, elem2 + 2000);
 
                     const auto hint = NTH(map, insert_pos);
 
@@ -1852,11 +2196,49 @@ PRINT("Test insert(const_iterator, value_type&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert(const_iterator, P&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    using value_type = typename map_type::value_type;
+
+    value_type value_10_1(10, 1);
+    value_type value_20_1(20, 1);
+    value_type value_20_2(20, 2);
+    value_type value_30_1(30, 1);
+    value_type value_30_2(30, 2);
+    value_type value_30_3(30, 3);
+
+    map.insert(map.end(), std::move(value_10_1));
+    map.insert(map.end(), std::move(value_20_1));
+    map.insert(map.end(), std::move(value_20_2));
+    map.insert(map.end(), std::move(value_30_1));
+    map.insert(map.end(), std::move(value_30_2));
+    map.insert(map.end(), std::move(value_30_3));
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(const_iterator, P&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1875,7 +2257,7 @@ PRINT("Test insert(const_iterator, P&&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -1961,13 +2343,49 @@ PRINT("Test insert(const_iterator, P&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
+
+    #else // C++20 constexpr
+
+    map_type map;
+
+    using value_type = std::pair<long, long>;
+
+    value_type value_10_1(10, 1);
+    value_type value_20_1(20, 1);
+    value_type value_20_2(20, 2);
+    value_type value_30_1(30, 1);
+    value_type value_30_2(30, 2);
+    value_type value_30_3(30, 3);
+
+    map.insert(map.end(), value_10_1);
+    map.insert(map.end(), value_20_1);
+    map.insert(map.end(), value_20_2);
+    map.insert(map.end(), value_30_1);
+    map.insert(map.end(), value_30_2);
+    map.insert(map.end(), value_30_3);
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
 }
+END_TEST()
 
-PRINT("Test insert(InputIt, InputIt");
+BEGIN_TEST("Test insert(InputIt, InputIt")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1010},
@@ -1988,7 +2406,7 @@ PRINT("Test insert(InputIt, InputIt");
         }
     );
 
-    container_type map;
+    map_type map;
 
     map.insert(data.begin(), data.end());
 
@@ -2010,12 +2428,17 @@ PRINT("Test insert(InputIt, InputIt");
     CHECK(COUNT_KV(map, 40, 3040) == 0);
     CHECK(COUNT_KV(map, 50, 3050) == 0);
 }
+END_TEST()
 
-PRINT("Test insert(std::initializer_list");
+BEGIN_TEST("Test insert(std::initializer_list")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -2034,7 +2457,7 @@ PRINT("Test insert(std::initializer_list");
         {50, 3050}
     };
 
-    container_type map;
+    map_type map;
 
     map.insert(ilist);
 
@@ -2056,12 +2479,18 @@ PRINT("Test insert(std::initializer_list");
     CHECK(COUNT_KV(map, 40, 3040) == 0);
     CHECK(COUNT_KV(map, 50, 3050) == 0);
 }
+END_TEST()
 
-PRINT("Test insert_range(Range&&");
+BEGIN_TEST("Test insert_range(Range&&")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss
         (
@@ -2082,12 +2511,12 @@ PRINT("Test insert_range(Range&&");
             "50 3050 "
         );
 
-        container_type map;
+        map_type map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        map.insert_range(std::views::istream<typename container_type::value_type>(iss));
+        map.insert_range(std::views::istream<typename map_type::value_type>(iss));
         #else
-        map.insert_range(sfl::test::istream_view<typename container_type::value_type>(iss));
+        map.insert_range(sfl::test::istream_view<typename map_type::value_type>(iss));
         #endif
 
         CHECK(map.size() == 5);
@@ -2108,10 +2537,11 @@ PRINT("Test insert_range(Range&&");
         CHECK(COUNT_KV(map, 40, 3040) == 0);
         CHECK(COUNT_KV(map, 50, 3050) == 0);
     }
+    #endif
 
     // Forward iterator
     {
-        std::vector<typename container_type::value_type> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1010},
@@ -2132,7 +2562,7 @@ PRINT("Test insert_range(Range&&");
             }
         );
 
-        container_type map;
+        map_type map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         map.insert_range(std::views::all(data));
@@ -2159,10 +2589,17 @@ PRINT("Test insert_range(Range&&");
         CHECK(COUNT_KV(map, 50, 3050) == 0);
     }
 }
+END_TEST()
 
-PRINT("Test insert_or_assign(const Key&, M&&)");
+BEGIN_TEST("Test insert_or_assign(const Key&, M&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2171,7 +2608,7 @@ PRINT("Test insert_or_assign(const Key&, M&&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -2221,11 +2658,40 @@ PRINT("Test insert_or_assign(const Key&, M&&)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 1);
     }
-}
 
-PRINT("Test insert_or_assign(Key&&, M&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { const xint key_10(10); map.insert_or_assign(key_10, 1); }
+    { const xint key_20(20); map.insert_or_assign(key_20, 1); }
+    { const xint key_20(20); map.insert_or_assign(key_20, 2); }
+    { const xint key_30(30); map.insert_or_assign(key_30, 1); }
+    { const xint key_30(30); map.insert_or_assign(key_30, 2); }
+    { const xint key_30(30); map.insert_or_assign(key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 0);
+    CHECK(COUNT_KV(map, 20, 2) == 1);
+    CHECK(COUNT_KV(map, 30, 1) == 0);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_or_assign(Key&&, M&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2234,7 +2700,7 @@ PRINT("Test insert_or_assign(Key&&, M&&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -2284,11 +2750,40 @@ PRINT("Test insert_or_assign(Key&&, M&&)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 1);
     }
-}
 
-PRINT("Test insert_or_assign(K&&, M&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { xint key_10(10); map.insert_or_assign(std::move(key_10), 1); }
+    { xint key_20(20); map.insert_or_assign(std::move(key_20), 1); }
+    { xint key_20(20); map.insert_or_assign(std::move(key_20), 2); }
+    { xint key_30(30); map.insert_or_assign(std::move(key_30), 1); }
+    { xint key_30(30); map.insert_or_assign(std::move(key_30), 2); }
+    { xint key_30(30); map.insert_or_assign(std::move(key_30), 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 0);
+    CHECK(COUNT_KV(map, 20, 2) == 1);
+    CHECK(COUNT_KV(map, 30, 1) == 0);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_or_assign(K&&, M&&)")
 {
-    using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2297,7 +2792,7 @@ PRINT("Test insert_or_assign(K&&, M&&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -2336,11 +2831,39 @@ PRINT("Test insert_or_assign(K&&, M&&)");
             }
         }
     }
-}
 
-PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { int key_10(10); map.insert_or_assign(key_10, 1); }
+    { int key_20(20); map.insert_or_assign(key_20, 1); }
+    { int key_20(20); map.insert_or_assign(key_20, 2); }
+    { int key_30(30); map.insert_or_assign(key_30, 1); }
+    { int key_30(30); map.insert_or_assign(key_30, 2); }
+    { int key_30(30); map.insert_or_assign(key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    auto it = map.begin();
+    CHECK(it->first.value() == 10); CHECK(it->second == 1); ++it;
+    CHECK(it->first.value() == 20); CHECK(it->second == 2); ++it;
+    CHECK(it->first.value() == 30); CHECK(it->second == 3); ++it;
+    CHECK(it == map.end());
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_or_assign(const_iterator, const Key&, M&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2359,7 +2882,7 @@ PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -2455,11 +2978,40 @@ PRINT("Test insert_or_assign(const_iterator, const Key&, M&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { const xint key_10(10); map.insert_or_assign(map.end(), key_10, 1); }
+    { const xint key_20(20); map.insert_or_assign(map.end(), key_20, 1); }
+    { const xint key_20(20); map.insert_or_assign(map.end(), key_20, 2); }
+    { const xint key_30(30); map.insert_or_assign(map.end(), key_30, 1); }
+    { const xint key_30(30); map.insert_or_assign(map.end(), key_30, 2); }
+    { const xint key_30(30); map.insert_or_assign(map.end(), key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 0);
+    CHECK(COUNT_KV(map, 20, 2) == 1);
+    CHECK(COUNT_KV(map, 30, 1) == 0);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_or_assign(const_iterator, Key&&, M&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2478,7 +3030,7 @@ PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -2574,11 +3126,40 @@ PRINT("Test insert_or_assign(const_iterator, Key&&, M&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { xint key_10(10); map.insert_or_assign(map.end(), std::move(key_10), 1); }
+    { xint key_20(20); map.insert_or_assign(map.end(), std::move(key_20), 1); }
+    { xint key_20(20); map.insert_or_assign(map.end(), std::move(key_20), 2); }
+    { xint key_30(30); map.insert_or_assign(map.end(), std::move(key_30), 1); }
+    { xint key_30(30); map.insert_or_assign(map.end(), std::move(key_30), 2); }
+    { xint key_30(30); map.insert_or_assign(map.end(), std::move(key_30), 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 0);
+    CHECK(COUNT_KV(map, 20, 2) == 1);
+    CHECK(COUNT_KV(map, 30, 1) == 0);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_or_assign(const_iterator, K&&, M&&)")
 {
-    using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2597,7 +3178,7 @@ PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -2668,11 +3249,39 @@ PRINT("Test insert_or_assign(const_iterator, K&&, M&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test try_emplace(const Key&, Args&&...)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { int key_10(10); map.insert_or_assign(map.end(), key_10, 1); }
+    { int key_20(20); map.insert_or_assign(map.end(), key_20, 1); }
+    { int key_20(20); map.insert_or_assign(map.end(), key_20, 2); }
+    { int key_30(30); map.insert_or_assign(map.end(), key_30, 1); }
+    { int key_30(30); map.insert_or_assign(map.end(), key_30, 2); }
+    { int key_30(30); map.insert_or_assign(map.end(), key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    auto it = map.begin();
+    CHECK(it->first.value() == 10); CHECK(it->second == 1); ++it;
+    CHECK(it->first.value() == 20); CHECK(it->second == 2); ++it;
+    CHECK(it->first.value() == 30); CHECK(it->second == 3); ++it;
+    CHECK(it == map.end());
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace(const Key&, Args&&...)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2681,7 +3290,7 @@ PRINT("Test try_emplace(const Key&, Args&&...)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -2731,11 +3340,40 @@ PRINT("Test try_emplace(const Key&, Args&&...)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test try_emplace(Key&&, Args&&...)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { const xint key_10(10); map.try_emplace(key_10, 1); }
+    { const xint key_20(20); map.try_emplace(key_20, 1); }
+    { const xint key_20(20); map.try_emplace(key_20, 2); }
+    { const xint key_30(30); map.try_emplace(key_30, 1); }
+    { const xint key_30(30); map.try_emplace(key_30, 2); }
+    { const xint key_30(30); map.try_emplace(key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace(Key&&, Args&&...)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2744,7 +3382,7 @@ PRINT("Test try_emplace(Key&&, Args&&...)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -2794,11 +3432,40 @@ PRINT("Test try_emplace(Key&&, Args&&...)");
         CHECK(COUNT_KV(map, key, key + 2000) == 0);
         CHECK(COUNT_KV(map, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test try_emplace(K&&, Args&&...)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { xint key_10(10); map.try_emplace(std::move(key_10), 1); }
+    { xint key_20(20); map.try_emplace(std::move(key_20), 1); }
+    { xint key_20(20); map.try_emplace(std::move(key_20), 2); }
+    { xint key_30(30); map.try_emplace(std::move(key_30), 1); }
+    { xint key_30(30); map.try_emplace(std::move(key_30), 2); }
+    { xint key_30(30); map.try_emplace(std::move(key_30), 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace(K&&, Args&&...)")
 {
-    using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2807,7 +3474,7 @@ PRINT("Test try_emplace(K&&, Args&&...)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type map;
+    map_type map;
 
     int size = 0;
 
@@ -2846,11 +3513,39 @@ PRINT("Test try_emplace(K&&, Args&&...)");
             }
         }
     }
-}
 
-PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { int key_10(10); map.try_emplace(key_10, 1); }
+    { int key_20(20); map.try_emplace(key_20, 1); }
+    { int key_20(20); map.try_emplace(key_20, 2); }
+    { int key_30(30); map.try_emplace(key_30, 1); }
+    { int key_30(30); map.try_emplace(key_30, 2); }
+    { int key_30(30); map.try_emplace(key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    auto it = map.begin();
+    CHECK(it->first.value() == 10); CHECK(it->second == 1); ++it;
+    CHECK(it->first.value() == 20); CHECK(it->second == 1); ++it;
+    CHECK(it->first.value() == 30); CHECK(it->second == 1); ++it;
+    CHECK(it == map.end());
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace(const_iterator, const Key&, Args&&...)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2869,7 +3564,7 @@ PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -2961,11 +3656,40 @@ PRINT("Test try_emplace(const_iterator, const Key&, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { const xint key_10(10); map.try_emplace(map.end(), key_10, 1); }
+    { const xint key_20(20); map.try_emplace(map.end(), key_20, 1); }
+    { const xint key_20(20); map.try_emplace(map.end(), key_20, 2); }
+    { const xint key_30(30); map.try_emplace(map.end(), key_30, 1); }
+    { const xint key_30(30); map.try_emplace(map.end(), key_30, 2); }
+    { const xint key_30(30); map.try_emplace(map.end(), key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace(const_iterator, Key&&, Args&&...)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2984,7 +3708,7 @@ PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -3076,11 +3800,40 @@ PRINT("Test try_emplace(const_iterator, Key&&, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { xint key_10(10); map.try_emplace(map.end(), std::move(key_10), 1); }
+    { xint key_20(20); map.try_emplace(map.end(), std::move(key_20), 1); }
+    { xint key_20(20); map.try_emplace(map.end(), std::move(key_20), 2); }
+    { xint key_30(30); map.try_emplace(map.end(), std::move(key_30), 1); }
+    { xint key_30(30); map.try_emplace(map.end(), std::move(key_30), 2); }
+    { xint key_30(30); map.try_emplace(map.end(), std::move(key_30), 3); }
+
+    CHECK(map.size() == 3);
+
+    CHECK(COUNT_KV(map, 10, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 1) == 1);
+    CHECK(COUNT_KV(map, 20, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 1) == 1);
+    CHECK(COUNT_KV(map, 30, 2) == 0);
+    CHECK(COUNT_KV(map, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace(const_iterator, K&&, Args&&...)")
 {
-    using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -3099,7 +3852,7 @@ PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -3158,11 +3911,37 @@ PRINT("Test try_emplace(const_iterator, K&&, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test erase(const_iterator)");
+    #else // C++20 constexpr
+
+    map_type map;
+
+    { int key_10(10); map.try_emplace(map.end(), key_10, 1); }
+    { int key_20(20); map.try_emplace(map.end(), key_20, 1); }
+    { int key_20(20); map.try_emplace(map.end(), key_20, 2); }
+    { int key_30(30); map.try_emplace(map.end(), key_30, 1); }
+    { int key_30(30); map.try_emplace(map.end(), key_30, 2); }
+    { int key_30(30); map.try_emplace(map.end(), key_30, 3); }
+
+    CHECK(map.size() == 3);
+
+    auto it = map.begin();
+    CHECK(it->first.value() == 10); CHECK(it->second == 1); ++it;
+    CHECK(it->first.value() == 20); CHECK(it->second == 1); ++it;
+    CHECK(it->first.value() == 30); CHECK(it->second == 1); ++it;
+    CHECK(it == map.end());
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test erase(const_iterator)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Elements to be inserted into container
     const std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
@@ -3171,7 +3950,7 @@ PRINT("Test erase(const_iterator)");
     {
         for (int erase_pos = 0; erase_pos < size; ++erase_pos)
         {
-            container_type map;
+            map_type map;
 
             // Insert elements
             for (int i = 0; i < size; ++i)
@@ -3212,10 +3991,15 @@ PRINT("Test erase(const_iterator)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
     // Elements to be inserted into container
     const std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
@@ -3226,7 +4010,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
         {
             for (int erase_pos2 = erase_pos1; erase_pos2 < size; ++erase_pos2)
             {
-                container_type map;
+                map_type map;
 
                 // Insert elements
                 for (int i = 0; i < size; ++i)
@@ -3274,12 +4058,17 @@ PRINT("Test erase(const_iterator, const_iterator)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test erase(const Key&)");
+BEGIN_TEST("Test erase(const Key&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 2);
@@ -3335,12 +4124,17 @@ PRINT("Test erase(const Key&)");
     CHECK(COUNT_KV(map, 30, 5) == 0);
     CHECK(COUNT_KV(map, 30, 6) == 0);
 }
+END_TEST()
 
-PRINT("Test erase(K&&)");
+BEGIN_TEST("Test erase(K&&)")
 {
-    using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(2));
@@ -3384,12 +4178,17 @@ PRINT("Test erase(K&&)");
 
     CHECK(map.size() == 0);
 }
+END_TEST()
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map1, map2;
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -3441,15 +4240,20 @@ PRINT("Test swap(container&)");
     CHECK(COUNT_KV(map2, 60, 2) == 1);
     CHECK(COUNT_KV(map2, 70, 2) == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
+BEGIN_TEST("Test lower_bound, upper_bound, equal_range, find, count, contains")
 {
     {
-        using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+        using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-        container_type map;
+        map_type map;
 
         map.emplace(10, 1);
         map.emplace(20, 1);
@@ -3522,9 +4326,13 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
     }
 
     {
-        using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+        using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-        container_type map;
+        map_type map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(2));
@@ -3596,14 +4404,19 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
         }
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test at(const Key&)");
+BEGIN_TEST("Test at(const Key&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -3626,7 +4439,8 @@ PRINT("Test at(const Key&)");
     CHECK(map.at(20) == 2);
     CHECK(map.at(30) == 2);
 
-    #if !defined(SFL_NO_EXCEPTIONS)
+    #ifndef TEST_CPP20_CONSTEXPR
+    #ifndef SFL_NO_EXCEPTIONS
     bool caught_exception = false;
 
     try
@@ -3640,18 +4454,24 @@ PRINT("Test at(const Key&)");
 
     CHECK(caught_exception == true);
     #endif
+    #endif
 
     CHECK(map.size() == 3);
     CHECK(COUNT_KV(map, 10, 2) == 1);
     CHECK(COUNT_KV(map, 20, 2) == 1);
     CHECK(COUNT_KV(map, 30, 2) == 1);
 }
+END_TEST()
 
-PRINT("Test at(const K&)");
+BEGIN_TEST("Test at(const K&)")
 {
-    using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -3661,7 +4481,7 @@ PRINT("Test at(const K&)");
     CHECK(map.at(20) == 1);
     CHECK(map.at(30) == 1);
 
-    auto count_kv = [](const container_type& map, const int k, const int v)
+    auto count_kv = [](const map_type& map, const int k, const int v)
     {
         int n = 0;
         for (auto& kv : map)
@@ -3687,7 +4507,8 @@ PRINT("Test at(const K&)");
     CHECK(map.at(20) == 2);
     CHECK(map.at(30) == 2);
 
-    #if !defined(SFL_NO_EXCEPTIONS)
+    #ifndef TEST_CPP20_CONSTEXPR
+    #ifndef SFL_NO_EXCEPTIONS
     bool caught_exception = false;
 
     try
@@ -3701,20 +4522,26 @@ PRINT("Test at(const K&)");
 
     CHECK(caught_exception == true);
     #endif
+    #endif
 
     CHECK(map.size() == 3);
     CHECK(count_kv(map, 10, 2) == 1);
     CHECK(count_kv(map, 20, 2) == 1);
     CHECK(count_kv(map, 30, 2) == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test operator[](const Key&)");
+BEGIN_TEST("Test operator[](const Key&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -3756,12 +4583,17 @@ PRINT("Test operator[](const Key&)");
     CHECK(key_50 == 50);
     CHECK(key_60 == 60);
 }
+END_TEST()
 
-PRINT("Test operator[](Key&&)");
+BEGIN_TEST("Test operator[](Key&&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -3803,18 +4635,23 @@ PRINT("Test operator[](Key&&)");
     CHECK(key_50 == -50);
     CHECK(key_60 == -60);
 }
+END_TEST()
 
-PRINT("Test operator[](K&&)");
+BEGIN_TEST("Test operator[](K&&)")
 {
-    using container_type = sfl::flat_map<xobj, xint, xobj::less, TPARAM_ALLOCATOR<std::pair<xobj, xint>>>;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(30), std::forward_as_tuple(1));
 
-    auto count_kv = [](const container_type& map, const int k, const int v)
+    auto count_kv = [](const map_type& map, const int k, const int v)
     {
         int n = 0;
         for (auto& kv : map)
@@ -3849,14 +4686,19 @@ PRINT("Test operator[](K&&)");
     CHECK(count_kv(map, 50, 2) == 1);
     CHECK(count_kv(map, 60, 2) == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test data()");
+BEGIN_TEST("Test data()")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -3874,14 +4716,19 @@ PRINT("Test data()");
     CHECK(std::next(cref.data(), 1)->first == 20); CHECK(std::next(cref.data(), 1)->second == 1);
     CHECK(std::next(cref.data(), 2)->first == 30); CHECK(std::next(cref.data(), 2)->second == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map1, map2;
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -3923,12 +4770,17 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((map2 >= map1) == true);
     CHECK((map2 >= map2) == true);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER swap(container&)");
+BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    container_type map1, map2;
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -3968,16 +4820,21 @@ PRINT("Test NON-MEMBER swap(container&)");
     CHECK(COUNT_KV(map2, 20, 1) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
-    using container_type = sfl::flat_map<xint, xint, std::less<xint>, TPARAM_ALLOCATOR<std::pair<xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<key_type, mapped_type>>;
+    using map_type = sfl::flat_map<key_type, mapped_type, key_compare, allocator_type>;
 
-    using const_reference = typename container_type::const_reference;
+    using const_reference = typename map_type::const_reference;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -3996,3 +4853,4 @@ PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     CHECK(COUNT_KV(map, 10, 1) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
