@@ -5,7 +5,7 @@
 using sfl::test::xint;
 using sfl::test::xobj;
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -13,8 +13,9 @@ PRINT("Test container()");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const Allocator&)");
+BEGIN_TEST("Test container(const Allocator&)")
 {
     TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
@@ -24,8 +25,9 @@ PRINT("Test container(const Allocator&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type)");
+BEGIN_TEST("Test container(size_type)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11);
 
@@ -33,8 +35,9 @@ PRINT("Test container(size_type)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const Allocator&)");
+BEGIN_TEST("Test container(size_type, const Allocator&)")
 {
     TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
@@ -44,8 +47,9 @@ PRINT("Test container(size_type, const Allocator&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const Hash&)");
+BEGIN_TEST("Test container(size_type, const Hash&)")
 {
     std::hash<xint> hash;
 
@@ -55,8 +59,9 @@ PRINT("Test container(size_type, const Hash&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const Hash&, const Allocator&)");
+BEGIN_TEST("Test container(size_type, const Hash&, const Allocator&)")
 {
     std::hash<xint> hash;
 
@@ -68,8 +73,9 @@ PRINT("Test container(size_type, const Hash&, const Allocator&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const Hash&, const KeyEqual&)");
+BEGIN_TEST("Test container(size_type, const Hash&, const KeyEqual&)")
 {
     std::hash<xint> hash;
 
@@ -81,8 +87,9 @@ PRINT("Test container(size_type, const Hash&, const KeyEqual&)");
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)");
+BEGIN_TEST("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     std::hash<xint> hash;
 
@@ -96,8 +103,9 @@ PRINT("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)
     CHECK(map.size() == 0);
     CHECK(map.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt)");
+BEGIN_TEST("Test container(InputIt, InputIt)")
 {
     std::vector<std::pair<xint, xint>> data
     (
@@ -121,8 +129,9 @@ PRINT("Test container(InputIt, InputIt)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, size_type)");
+BEGIN_TEST("Test container(InputIt, InputIt, size_type)")
 {
     std::vector<std::pair<xint, xint>> data
     (
@@ -146,8 +155,9 @@ PRINT("Test container(InputIt, InputIt, size_type)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, size_type, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Allocator&)")
 {
     TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
@@ -173,8 +183,9 @@ PRINT("Test container(InputIt, InputIt, size_type, const Allocator&)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
+BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&)")
 {
     std::hash<xint> hash;
 
@@ -200,8 +211,9 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&)")
 {
     std::hash<xint> hash;
 
@@ -229,8 +241,9 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)");
+BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)")
 {
     std::hash<xint> hash;
 
@@ -258,8 +271,9 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     std::hash<xint> hash;
 
@@ -289,8 +303,9 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&,
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list)");
+BEGIN_TEST("Test container(std::initializer_list)")
 {
     std::initializer_list<std::pair<const xint, xint>> ilist
     {
@@ -312,8 +327,9 @@ PRINT("Test container(std::initializer_list)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, size_type)");
+BEGIN_TEST("Test container(std::initializer_list, size_type)")
 {
     std::initializer_list<std::pair<const xint, xint>> ilist
     {
@@ -335,8 +351,9 @@ PRINT("Test container(std::initializer_list, size_type)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, size_type, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, size_type, const Allocator&)")
 {
     TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
 
@@ -360,8 +377,9 @@ PRINT("Test container(std::initializer_list, size_type, const Allocator&)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, size_type, const Hash&)");
+BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&)")
 {
     std::hash<xint> hash;
 
@@ -385,8 +403,9 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&)");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, size_type, const Hash&, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const Allocator&)")
 {
     std::hash<xint> hash;
 
@@ -412,8 +431,9 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const Alloc
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&)");
+BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&)")
 {
     std::hash<xint> hash;
 
@@ -439,8 +459,9 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     std::hash<xint> hash;
 
@@ -468,8 +489,9 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
 
@@ -497,8 +519,9 @@ PRINT("Test container(const container&)");
     CHECK(COUNT_KV(map2, 20, 3) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(const container&, const Allocator&)");
+BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
 
@@ -528,8 +551,9 @@ PRINT("Test container(const container&, const Allocator&)");
     CHECK(COUNT_KV(map2, 20, 3) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
 
@@ -558,8 +582,9 @@ PRINT("Test container(container&&)");
     CHECK(COUNT_KV(map2, 20, 3) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Allocator&)");
+BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
 
@@ -603,10 +628,12 @@ PRINT("Test container(container&&, const Allocator&)");
     CHECK(COUNT_KV(map2, 20, 3) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -633,6 +660,7 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -671,10 +699,12 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -703,6 +733,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -743,10 +774,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -779,6 +812,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -823,10 +857,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -859,6 +895,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -903,10 +940,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const Allocator&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -943,6 +982,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -991,10 +1031,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -1031,6 +1073,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -1079,10 +1122,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -1123,6 +1168,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -1175,10 +1221,11 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
 
@@ -1222,8 +1269,9 @@ PRINT("Test operator=(const container&)");
     CHECK(COUNT_KV(map2, 20, 3) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test operator=(container&&)");
+BEGIN_TEST("Test operator=(container&&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
 
@@ -1274,8 +1322,9 @@ PRINT("Test operator=(container&&)");
     CHECK(COUNT_KV(map2, 20, 3) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test operator=(std::initializer_list)");
+BEGIN_TEST("Test operator=(std::initializer_list)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1312,10 +1361,11 @@ PRINT("Test operator=(std::initializer_list)");
     CHECK(COUNT_KV(map, 50, 4) == 1);
     CHECK(COUNT_KV(map, 60, 2) == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test get_allocator()");
+BEGIN_TEST("Test get_allocator()")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1323,10 +1373,11 @@ PRINT("Test get_allocator()");
 
     (void)alloc;
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test hash_function()");
+BEGIN_TEST("Test hash_function()")
 {
     {
         sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
@@ -1350,10 +1401,11 @@ PRINT("Test hash_function()");
         (void)hash_function(xobj(20));
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test key_eq()");
+BEGIN_TEST("Test key_eq()")
 {
     {
         sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
@@ -1377,10 +1429,11 @@ PRINT("Test key_eq()");
         CHECK(key_eq(xobj(20), 20) == true);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test begin, end, cbegin, cend");
+BEGIN_TEST("Test begin, end, cbegin, cend")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1519,10 +1572,11 @@ PRINT("Test begin, end, cbegin, cend");
         CHECK(count_30_1 == 1);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test equal_range, find, count, contains");
+BEGIN_TEST("Test equal_range, find, count, contains")
 {
     // xint, xint
     {
@@ -1628,10 +1682,11 @@ PRINT("Test equal_range, find, count, contains");
         CHECK(map.contains(70) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test emplace(Args&&...)");
+BEGIN_TEST("Test emplace(Args&&...)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1653,8 +1708,9 @@ PRINT("Test emplace(Args&&...)");
         CHECK(map.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test emplace_hint(const_iterator, Args&&...)");
+BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1676,8 +1732,9 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
         CHECK(map.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const value_type&)");
+BEGIN_TEST("Test insert(const value_type&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1705,8 +1762,9 @@ PRINT("Test insert(const value_type&)");
         CHECK(map.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(value_type&&)");
+BEGIN_TEST("Test insert(value_type&&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1740,8 +1798,9 @@ PRINT("Test insert(value_type&&)");
         CHECK(value_10_2.second == -2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(P&&)");
+BEGIN_TEST("Test insert(P&&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1769,8 +1828,9 @@ PRINT("Test insert(P&&)");
         CHECK(map.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, const value_type&)");
+BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1798,8 +1858,9 @@ PRINT("Test insert(const_iterator, const value_type&)");
         CHECK(map.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, value_type&&)");
+BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1833,8 +1894,9 @@ PRINT("Test insert(const_iterator, value_type&&)");
         CHECK(value_10_2.second == -2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, P&&)");
+BEGIN_TEST("Test insert(const_iterator, P&&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1862,8 +1924,9 @@ PRINT("Test insert(const_iterator, P&&)");
         CHECK(map.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(InputIt, InputIt");
+BEGIN_TEST("Test insert(InputIt, InputIt")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1889,8 +1952,9 @@ PRINT("Test insert(InputIt, InputIt");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test insert(std::initializer_list");
+BEGIN_TEST("Test insert(std::initializer_list")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -1914,10 +1978,12 @@ PRINT("Test insert(std::initializer_list");
     CHECK(COUNT_KV(map, 20, 3) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test insert_range(Range&&");
+BEGIN_TEST("Test insert_range(Range&&")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
@@ -1936,6 +2002,7 @@ PRINT("Test insert_range(Range&&");
         CHECK(COUNT_KV(map, 20, 3) == 1);
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
+    #endif
 
     // Forward iterator
     {
@@ -1966,8 +2033,9 @@ PRINT("Test insert_range(Range&&");
         CHECK(COUNT_KV(map, 30, 1) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator)");
+BEGIN_TEST("Test erase(const_iterator)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -2042,8 +2110,9 @@ PRINT("Test erase(const_iterator)");
         CHECK(map.size() == 0);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -2077,8 +2146,9 @@ PRINT("Test erase(const_iterator, const_iterator)");
     CHECK(COUNT_KV(map, 10, 1) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test erase(const Key&)");
+BEGIN_TEST("Test erase(const Key&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
 
@@ -2108,8 +2178,9 @@ PRINT("Test erase(const Key&)");
     CHECK(map.erase(10) == 0);
     CHECK(map.size() == 0);
 }
+END_TEST()
 
-PRINT("Test erase(K&&)");
+BEGIN_TEST("Test erase(K&&)")
 {
     sfl::unordered_multimap<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
 
@@ -2139,8 +2210,9 @@ PRINT("Test erase(K&&)");
     CHECK(map.erase(10) == 0);
     CHECK(map.size() == 0);
 }
+END_TEST()
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
 
@@ -2194,10 +2266,11 @@ PRINT("Test swap(container&)");
     CHECK(COUNT_KV(map2, 60, 2) == 1);
     CHECK(COUNT_KV(map2, 70, 2) == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test bucket interface functions");
+BEGIN_TEST("Test bucket interface functions")
 {
     // xint, xint
     {
@@ -2331,10 +2404,11 @@ PRINT("Test bucket interface functions");
         CHECK(sum == 240);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test hash policy functions");
+BEGIN_TEST("Test hash policy functions")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11);
 
@@ -2381,10 +2455,11 @@ PRINT("Test hash policy functions");
 
     CHECK(map.max_load_factor() == 0.5f);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
 
@@ -2408,8 +2483,9 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((map2 != map1) == true);
     CHECK((map2 != map2) == false);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER swap(container&)");
+BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
     sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
 
@@ -2448,8 +2524,9 @@ PRINT("Test NON-MEMBER swap(container&)");
     CHECK(COUNT_KV(map2, 20, 1) == 1);
     CHECK(COUNT_KV(map2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
     using container_type =
         sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>>;
@@ -2487,3 +2564,4 @@ PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     CHECK(COUNT_KV(map, 10, 1) == 1);
     CHECK(COUNT_KV(map, 30, 1) == 1);
 }
+END_TEST()

@@ -103,6 +103,7 @@ public:
 
 private:
 
+    SFL_CONSTEXPR_20
     static std::size_t calculate_initial_bucket_count(std::size_t n)
     {
         return bucket_count_policy::calculate_new_bucket_count(n);
@@ -114,42 +115,51 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     unordered_multimap()
         : hash_table_(calculate_initial_bucket_count(0))
     {}
 
     explicit
+    SFL_CONSTEXPR_20
     unordered_multimap(const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(0), alloc)
     {}
 
     explicit
+    SFL_CONSTEXPR_20
     unordered_multimap(size_type bucket_count)
         : hash_table_(calculate_initial_bucket_count(bucket_count))
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(size_type bucket_count, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), alloc)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(size_type bucket_count, const Hash& hash)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(size_type bucket_count, const Hash& hash, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(size_type bucket_count, const Hash& hash, const KeyEqual& equal)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, equal)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(size_type bucket_count, const Hash& hash, const KeyEqual& equal, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, equal, alloc)
     {}
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     unordered_multimap(InputIt first, InputIt last)
         : hash_table_(calculate_initial_bucket_count(0))
     {
@@ -158,6 +168,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     unordered_multimap(InputIt first, InputIt last, size_type bucket_count)
         : hash_table_(calculate_initial_bucket_count(bucket_count))
     {
@@ -166,6 +177,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     unordered_multimap(InputIt first, InputIt last, size_type bucket_count, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), alloc)
     {
@@ -174,6 +186,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     unordered_multimap(InputIt first, InputIt last, size_type bucket_count, const Hash& hash)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash)
     {
@@ -182,6 +195,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     unordered_multimap(InputIt first, InputIt last, size_type bucket_count, const Hash& hash, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, alloc)
     {
@@ -190,6 +204,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     unordered_multimap(InputIt first, InputIt last, size_type bucket_count, const Hash& hash, const KeyEqual& equal)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, equal)
     {
@@ -198,52 +213,64 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     unordered_multimap(InputIt first, InputIt last, size_type bucket_count, const Hash& hash, const KeyEqual& equal, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, equal, alloc)
     {
         insert(first, last);
     }
 
+    SFL_CONSTEXPR_20
     unordered_multimap(std::initializer_list<value_type> ilist)
         : unordered_multimap(ilist.begin(), ilist.end())
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(std::initializer_list<value_type> ilist, size_type bucket_count)
         : unordered_multimap(ilist.begin(), ilist.end(), bucket_count)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(std::initializer_list<value_type> ilist, size_type bucket_count, const Allocator& alloc)
         : unordered_multimap(ilist.begin(), ilist.end(), bucket_count, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(std::initializer_list<value_type> ilist, size_type bucket_count, const Hash& hash)
         : unordered_multimap(ilist.begin(), ilist.end(), bucket_count, hash)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(std::initializer_list<value_type> ilist, size_type bucket_count, const Hash& hash, const Allocator& alloc)
         : unordered_multimap(ilist.begin(), ilist.end(), bucket_count, hash, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(std::initializer_list<value_type> ilist, size_type bucket_count, const Hash& hash, const KeyEqual& equal)
         : unordered_multimap(ilist.begin(), ilist.end(), bucket_count, hash, equal)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(std::initializer_list<value_type> ilist, size_type bucket_count, const Hash& hash, const KeyEqual& equal, const Allocator& alloc)
         : unordered_multimap(ilist.begin(), ilist.end(), bucket_count, hash, equal, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(const unordered_multimap& other)
         : hash_table_(other.hash_table_, sfl::dtl::hash_table_equal_t())
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(const unordered_multimap& other, const Allocator& alloc)
         : hash_table_(other.hash_table_, sfl::dtl::hash_table_equal_t(), alloc)
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(unordered_multimap&& other)
         : hash_table_(std::move(other.hash_table_), sfl::dtl::hash_table_equal_t())
     {}
 
+    SFL_CONSTEXPR_20
     unordered_multimap(unordered_multimap&& other, const Allocator& alloc)
         : hash_table_(std::move(other.hash_table_), sfl::dtl::hash_table_equal_t(), alloc)
     {}
@@ -251,6 +278,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     unordered_multimap(sfl::from_range_t, Range&& range)
         : hash_table_(calculate_initial_bucket_count(0))
     {
@@ -258,6 +286,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     unordered_multimap(sfl::from_range_t, Range&& range, size_type bucket_count)
         : hash_table_(calculate_initial_bucket_count(bucket_count))
     {
@@ -265,6 +294,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     unordered_multimap(sfl::from_range_t, Range&& range, size_type bucket_count, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), alloc)
     {
@@ -272,6 +302,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     unordered_multimap(sfl::from_range_t, Range&& range, size_type bucket_count, const Hash& hash)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash)
     {
@@ -279,6 +310,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     unordered_multimap(sfl::from_range_t, Range&& range, size_type bucket_count, const Hash& hash, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, alloc)
     {
@@ -286,6 +318,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     unordered_multimap(sfl::from_range_t, Range&& range, size_type bucket_count, const Hash& hash, const KeyEqual& equal)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, equal)
     {
@@ -293,6 +326,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     unordered_multimap(sfl::from_range_t, Range&& range, size_type bucket_count, const Hash& hash, const KeyEqual& equal, const Allocator& alloc)
         : hash_table_(calculate_initial_bucket_count(bucket_count), hash, equal, alloc)
     {
@@ -352,6 +386,7 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     ~unordered_multimap()
     {}
 
@@ -359,18 +394,21 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     unordered_multimap& operator=(const unordered_multimap& other)
     {
         hash_table_.assign_copy(other.hash_table_, sfl::dtl::hash_table_equal_t());
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     unordered_multimap& operator=(unordered_multimap&& other)
     {
         hash_table_.assign_move(other.hash_table_, sfl::dtl::hash_table_equal_t());
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     unordered_multimap& operator=(std::initializer_list<value_type> ilist)
     {
         hash_table_.assign_range_equal(ilist.begin(), ilist.end());
@@ -382,6 +420,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     allocator_type get_allocator() const noexcept
     {
         return allocator_type(hash_table_.ref_to_node_alloc());
@@ -392,6 +431,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     hasher hash_function() const
     {
         return hasher(hash_table_.ref_to_key_hash());
@@ -402,6 +442,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     key_equal key_eq() const
     {
         return key_equal(hash_table_.ref_to_key_equal());
@@ -412,36 +453,42 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return hash_table_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return hash_table_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return hash_table_.cbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return hash_table_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return hash_table_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return hash_table_.cend();
@@ -452,18 +499,21 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return hash_table_.empty();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return hash_table_.size();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_size() const noexcept
     {
         return hash_table_.max_size();
@@ -473,28 +523,33 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear()
     {
         hash_table_.clear();
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace(Args&&... args)
     {
         return hash_table_.emplace_equal(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         return hash_table_.emplace_hint_equal(hint, std::forward<Args>(args)...);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const value_type& value)
     {
         return hash_table_.insert_equal(value);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(value_type&& value)
     {
         return hash_table_.insert_equal(std::move(value));
@@ -502,16 +557,19 @@ public:
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert(P&& value)
     {
         return hash_table_.insert_equal(std::forward<P>(value));
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, const value_type& value)
     {
         return hash_table_.insert_hint_equal(hint, value);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, value_type&& value)
     {
         return hash_table_.insert_hint_equal(hint, std::move(value));
@@ -519,6 +577,7 @@ public:
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, P&& value)
     {
         return hash_table_.insert_hint_equal(hint, std::forward<P>(value));
@@ -526,11 +585,13 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void insert(InputIt first, InputIt last)
     {
         insert_range_aux(first, last);
     }
 
+    SFL_CONSTEXPR_20
     void insert(std::initializer_list<value_type> ilist)
     {
         insert_range_aux(ilist.begin(), ilist.end());
@@ -539,6 +600,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     void insert_range(Range&& range)
     {
         insert_range_aux(std::ranges::begin(range), std::ranges::end(range));
@@ -556,21 +618,25 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     iterator erase(iterator pos)
     {
         return hash_table_.erase_equal(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator pos)
     {
         return hash_table_.erase_equal(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator first, const_iterator last)
     {
         return hash_table_.erase_equal(first, last);
     }
 
+    SFL_CONSTEXPR_20
     size_type erase(const Key& key)
     {
         return hash_table_.erase_key_equal(key);
@@ -579,11 +645,13 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
+    SFL_CONSTEXPR_20
     size_type erase(K&& x)
     {
         return hash_table_.erase_key_equal(x);
     }
 
+    SFL_CONSTEXPR_20
     void swap(unordered_multimap& other)
     {
         hash_table_.swap(other.hash_table_);
@@ -594,12 +662,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const Key& key)
     {
         return hash_table_.equal_range(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const Key& key) const
     {
         return hash_table_.equal_range(key);
@@ -609,6 +679,7 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const K& x)
     {
         return hash_table_.equal_range(x);
@@ -618,18 +689,21 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const K& x) const
     {
         return hash_table_.equal_range(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const Key& key)
     {
         return hash_table_.find(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const Key& key) const
     {
         return hash_table_.find(key);
@@ -639,6 +713,7 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const K& x)
     {
         return hash_table_.find(x);
@@ -648,12 +723,14 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const K& x) const
     {
         return hash_table_.find(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const Key& key) const
     {
         return hash_table_.count_equal(key);
@@ -663,12 +740,14 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const K& x) const
     {
         return hash_table_.count_equal(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const Key& key) const
     {
         return hash_table_.contains(key);
@@ -678,6 +757,7 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const K& x) const
     {
         return hash_table_.contains(x);
@@ -688,60 +768,70 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     local_iterator begin(size_type n) noexcept
     {
         return hash_table_.begin(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator begin(size_type n) const noexcept
     {
         return hash_table_.begin(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator cbegin(size_type n) const noexcept
     {
         return hash_table_.cbegin(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     local_iterator end(size_type n) noexcept
     {
         return hash_table_.end(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator end(size_type n) const noexcept
     {
         return hash_table_.end(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_local_iterator cend(size_type n) const noexcept
     {
         return hash_table_.cend(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type bucket_count() const
     {
         return hash_table_.bucket_count();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_bucket_count() const
     {
         return hash_table_.max_bucket_count();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type bucket_size(size_type n) const
     {
         return hash_table_.bucket_size(n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type bucket(const Key& key) const
     {
         return hash_table_.bucket(key);
@@ -751,6 +841,7 @@ public:
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Hash, K>::value &&
                                      sfl::dtl::has_is_transparent<KeyEqual, K>::value >* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type bucket(const K& x) const
     {
         return hash_table_.bucket(x);
@@ -761,27 +852,32 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     float load_factor() const
     {
         return hash_table_.load_factor();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     float max_load_factor() const
     {
         return hash_table_.max_load_factor();
     }
 
+    SFL_CONSTEXPR_20
     void max_load_factor(float mlf)
     {
         hash_table_.max_load_factor(mlf);
     }
 
+    SFL_CONSTEXPR_20
     void rehash(size_type count)
     {
         hash_table_.rehash(count);
     }
 
+    SFL_CONSTEXPR_20
     void reserve(size_type count)
     {
         hash_table_.reserve(count);
@@ -790,6 +886,7 @@ public:
 private:
 
     template <typename InputIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void insert_range_aux(InputIt first, Sentinel last)
     {
         while (first != last)
@@ -800,9 +897,11 @@ private:
     }
 
     template <typename K2, typename T2, typename H2, typename E2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator==(const unordered_multimap<K2, T2, H2, E2, A2>& x, const unordered_multimap<K2, T2, H2, E2, A2>& y);
 
     template <typename K2, typename T2, typename H2, typename E2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator!=(const unordered_multimap<K2, T2, H2, E2, A2>& x, const unordered_multimap<K2, T2, H2, E2, A2>& y);
 };
 
@@ -812,6 +911,7 @@ private:
 
 template <typename K, typename T, typename H, typename E, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const unordered_multimap<K, T, H, E, A>& x,
@@ -823,6 +923,7 @@ bool operator==
 
 template <typename K, typename T, typename H, typename E, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const unordered_multimap<K, T, H, E, A>& x,
@@ -833,6 +934,7 @@ bool operator!=
 }
 
 template <typename K, typename T, typename H, typename E, typename A>
+SFL_CONSTEXPR_20
 void swap
 (
     unordered_multimap<K, T, H, E, A>& x,
@@ -843,6 +945,7 @@ void swap
 }
 
 template <typename K, typename T, typename H, typename E, typename A, typename Predicate>
+SFL_CONSTEXPR_20
 typename unordered_multimap<K, T, H, E, A>::size_type
     erase_if(unordered_multimap<K, T, H, E, A>& c, Predicate pred)
 {
