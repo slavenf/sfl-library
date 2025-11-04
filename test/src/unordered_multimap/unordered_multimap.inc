@@ -7,7 +7,14 @@ using sfl::test::xobj;
 
 BEGIN_TEST("Test container()")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -17,9 +24,16 @@ END_TEST()
 
 BEGIN_TEST("Test container(const Allocator&)")
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -29,7 +43,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11);
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map(11);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -39,9 +60,16 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const Allocator&)")
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(11, alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -51,9 +79,16 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const Hash&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash);
+    typename map_type::hasher hash;
+
+    map_type map(11, hash);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -63,11 +98,18 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const Hash&, const Allocator&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::hasher hash;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(11, hash, alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -77,11 +119,18 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const Hash&, const KeyEqual&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash, equal);
+    typename map_type::key_equal equal;
+
+    map_type map(11, hash, equal);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -91,13 +140,20 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
+    typename map_type::hasher hash;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::key_equal equal;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11, hash, equal, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(11, hash, equal, alloc);
 
     CHECK(map.empty() == true);
     CHECK(map.size() == 0);
@@ -107,7 +163,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt)")
 {
-    std::vector<std::pair<xint, xint>> data
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -118,7 +181,7 @@ BEGIN_TEST("Test container(InputIt, InputIt)")
         }
     );
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end());
+    map_type map(data.begin(), data.end());
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -133,7 +196,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, size_type)")
 {
-    std::vector<std::pair<xint, xint>> data
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -144,7 +214,7 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type)")
         }
     );
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11);
+    map_type map(data.begin(), data.end(), 11);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -159,9 +229,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Allocator&)")
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -172,7 +247,9 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Allocator&)")
         }
     );
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(data.begin(), data.end(), 11, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -187,9 +264,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::vector<std::pair<xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -200,7 +282,9 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&)")
         }
     );
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash);
+    typename map_type::hasher hash;
+
+    map_type map(data.begin(), data.end(), 11, hash);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -215,11 +299,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
-
-    std::vector<std::pair<xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -230,7 +317,11 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const Alloc
         }
     );
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash, alloc);
+    typename map_type::hasher hash;
+
+    typename map_type::allocator_type alloc;
+
+    map_type map(data.begin(), data.end(), 11, hash, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -245,11 +336,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
-
-    std::vector<std::pair<xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -260,7 +354,11 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEq
         }
     );
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash, equal);
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    map_type map(data.begin(), data.end(), 11, hash, equal);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -275,13 +373,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
-
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
-
-    std::vector<std::pair<xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -292,7 +391,13 @@ BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEq
         }
     );
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(data.begin(), data.end(), 11, hash, equal, alloc);
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    typename map_type::allocator_type alloc;
+
+    map_type map(data.begin(), data.end(), 11, hash, equal, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -307,7 +412,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list)")
 {
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -316,7 +428,7 @@ BEGIN_TEST("Test container(std::initializer_list)")
         {20, 3}
     };
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist);
+    map_type map(ilist);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -331,7 +443,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, size_type)")
 {
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -340,7 +459,7 @@ BEGIN_TEST("Test container(std::initializer_list, size_type)")
         {20, 3}
     };
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11);
+    map_type map(ilist, 11);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -355,9 +474,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Allocator&)")
 {
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -366,7 +490,9 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Allocator&)")
         {20, 3}
     };
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, alloc);
+    typename map_type::allocator_type alloc;
+
+    map_type map(ilist, 11, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -381,9 +507,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -392,7 +523,9 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&)")
         {20, 3}
     };
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash);
+    typename map_type::hasher hash;
+
+    map_type map(ilist, 11, hash);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -407,11 +540,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const Allocator&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
-
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -420,7 +556,11 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
         {20, 3}
     };
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash, alloc);
+    typename map_type::hasher hash;
+
+    typename map_type::allocator_type alloc;
+
+    map_type map(ilist, 11, hash, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -435,11 +575,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
-
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -448,7 +591,11 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
         {20, 3}
     };
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash, equal);
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    map_type map(ilist, 11, hash, equal);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -463,13 +610,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
-    std::hash<xint> hash;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    std::equal_to<xint> equal;
-
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
-
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -478,7 +626,13 @@ BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const 
         {20, 3}
     };
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(ilist, 11, hash, equal, alloc);
+    typename map_type::hasher hash;
+
+    typename map_type::key_equal equal;
+
+    typename map_type::allocator_type alloc;
+
+    map_type map(ilist, 11, hash, equal, alloc);
 
     CHECK(map.empty() == false);
     CHECK(map.size() == 5);
@@ -493,7 +647,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(const container&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -510,7 +671,7 @@ BEGIN_TEST("Test container(const container&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(map1);
+    map_type map2(map1);
 
     CHECK(map2.size() == 5);
     CHECK(COUNT_KV(map2, 10, 1) == 1);
@@ -523,7 +684,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -540,9 +708,9 @@ BEGIN_TEST("Test container(const container&, const Allocator&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::allocator_type alloc;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(map1, alloc);
+    map_type map2(map1, alloc);
 
     CHECK(map2.size() == 5);
     CHECK(COUNT_KV(map2, 10, 1) == 1);
@@ -555,7 +723,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(container&&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -572,7 +747,7 @@ BEGIN_TEST("Test container(container&&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(std::move(map1));
+    map_type map2(std::move(map1));
 
     CHECK(map1.size() == 0);
     CHECK(map2.size() == 5);
@@ -586,7 +761,14 @@ END_TEST()
 
 BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -603,9 +785,9 @@ BEGIN_TEST("Test container(container&&, const Allocator&)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+    typename map_type::allocator_type alloc;
 
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map2(std::move(map1), alloc);
+    map_type map2(std::move(map1), alloc);
 
     if (map1.size() == 5)
     {
@@ -632,23 +814,22 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss))
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)));
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss))
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)));
         #endif
 
         CHECK(map.empty() == false);
@@ -664,7 +845,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -676,17 +857,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            std::views::all(data)
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data));
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            data
-        );
+        map_type map(sfl::from_range_t(), data);
         #endif
 
         CHECK(map.empty() == false);
@@ -703,25 +876,22 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type)")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11);
         #endif
 
         CHECK(map.empty() == false);
@@ -737,7 +907,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -749,19 +919,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type)")
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            data,
-            11
-        );
+        map_type map(sfl::from_range_t(), data, 11);
         #endif
 
         CHECK(map.empty() == false);
@@ -778,29 +938,24 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, alloc);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -816,7 +971,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Allocato
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -827,24 +982,12 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Allocato
             }
         );
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, alloc);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, 11, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -861,29 +1004,24 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash);
         #endif
 
         CHECK(map.empty() == false);
@@ -899,7 +1037,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -910,24 +1048,12 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)")
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash);
         #endif
 
         CHECK(map.empty() == false);
@@ -944,33 +1070,26 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const Allocator&)")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash, alloc);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -986,7 +1105,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -997,28 +1116,14 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, alloc);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1035,33 +1140,26 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&)")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash, equal);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash, equal);
         #endif
 
         CHECK(map.empty() == false);
@@ -1077,7 +1175,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -1088,28 +1186,14 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash,
-            equal
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, equal);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash,
-            equal
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash, equal);
         #endif
 
         CHECK(map.empty() == false);
@@ -1126,37 +1210,28 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (std::views::istream<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (std::views::istream<std::pair<xint, xint>>(iss)), 11, hash, equal, alloc);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            (sfl::from_range_t()),
-            (sfl::test::istream_view<std::pair<xint, xint>>(iss)),
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map((sfl::from_range_t()), (sfl::test::istream_view<std::pair<xint, xint>>(iss)), 11, hash, equal, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1172,7 +1247,7 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -1183,32 +1258,16 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, c
             }
         );
 
-        std::hash<xint> hash;
+        typename map_type::hasher hash;
 
-        std::equal_to<xint> equal;
+        typename map_type::key_equal equal;
 
-        TPARAM_ALLOCATOR<std::pair<const xint, xint>> alloc;
+        typename map_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            std::views::all(data),
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), std::views::all(data), 11, hash, equal, alloc);
         #else
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map
-        (
-            sfl::from_range_t(),
-            data,
-            11,
-            hash,
-            equal,
-            alloc
-        );
+        map_type map(sfl::from_range_t(), data, 11, hash, equal, alloc);
         #endif
 
         CHECK(map.empty() == false);
@@ -1227,7 +1286,14 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(const container&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -1273,7 +1339,14 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(container&&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -1326,7 +1399,14 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(std::initializer_list)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -1343,7 +1423,7 @@ BEGIN_TEST("Test operator=(std::initializer_list)")
 
     ///////////////////////////////////////////////////////////////////////
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {40, 2},
         {50, 2},
@@ -1367,7 +1447,14 @@ END_TEST()
 
 BEGIN_TEST("Test get_allocator()")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     auto alloc = map.get_allocator();
 
@@ -1380,7 +1467,14 @@ END_TEST()
 BEGIN_TEST("Test hash_function()")
 {
     {
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto hash_function = map.hash_function();
 
@@ -1391,7 +1485,14 @@ BEGIN_TEST("Test hash_function()")
     }
 
     {
-        sfl::unordered_multimap<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto hash_function = map.hash_function();
 
@@ -1408,7 +1509,14 @@ END_TEST()
 BEGIN_TEST("Test key_eq()")
 {
     {
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto key_eq = map.key_eq();
 
@@ -1419,7 +1527,14 @@ BEGIN_TEST("Test key_eq()")
     }
 
     {
-        sfl::unordered_multimap<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         auto key_eq = map.key_eq();
 
@@ -1435,7 +1550,14 @@ END_TEST()
 
 BEGIN_TEST("Test begin, end, cbegin, cend")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -1580,7 +1702,14 @@ BEGIN_TEST("Test equal_range, find, count, contains")
 {
     // xint, xint
     {
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(20, 1);
         map.emplace(40, 1);
@@ -1632,7 +1761,14 @@ BEGIN_TEST("Test equal_range, find, count, contains")
 
     // xobj, xint
     {
-        sfl::unordered_multimap<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
@@ -1688,7 +1824,14 @@ END_TEST()
 
 BEGIN_TEST("Test emplace(Args&&...)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1712,7 +1855,14 @@ END_TEST()
 
 BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1736,11 +1886,18 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const value_type&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -1766,11 +1923,18 @@ END_TEST()
 
 BEGIN_TEST("Test insert(value_type&&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         value_type value_10_1(10, 1);
@@ -1802,7 +1966,14 @@ END_TEST()
 
 BEGIN_TEST("Test insert(P&&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1832,11 +2003,18 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         const value_type value_10_1(10, 1);
@@ -1862,11 +2040,18 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    using value_type = std::pair<const xint, xint>;
+    using value_type = typename map_type::value_type;
 
     {
         value_type value_10_1(10, 1);
@@ -1898,7 +2083,14 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, P&&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
@@ -1928,11 +2120,18 @@ END_TEST()
 
 BEGIN_TEST("Test insert(InputIt, InputIt")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    std::vector<std::pair<const xint, xint>> data
+    std::vector<typename map_type::value_type> data
     (
         {
             {10, 1},
@@ -1956,11 +2155,18 @@ END_TEST()
 
 BEGIN_TEST("Test insert(std::initializer_list")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     CHECK(map.size() == 0);
 
-    std::initializer_list<std::pair<const xint, xint>> ilist
+    std::initializer_list<typename map_type::value_type> ilist
     {
         {10, 1},
         {20, 1},
@@ -1982,12 +2188,19 @@ END_TEST()
 
 BEGIN_TEST("Test insert_range(Range&&")
 {
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        map_type map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         map.insert_range(std::views::istream<std::pair<xint, xint>>(iss));
@@ -2006,7 +2219,7 @@ BEGIN_TEST("Test insert_range(Range&&")
 
     // Forward iterator
     {
-        std::vector<std::pair<xint, xint>> data
+        std::vector<typename map_type::value_type> data
         (
             {
                 {10, 1},
@@ -2017,7 +2230,7 @@ BEGIN_TEST("Test insert_range(Range&&")
             }
         );
 
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        map_type map;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         map.insert_range(std::views::all(data));
@@ -2037,7 +2250,14 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2114,7 +2334,14 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2150,7 +2377,14 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const Key&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
@@ -2182,7 +2416,14 @@ END_TEST()
 
 BEGIN_TEST("Test erase(K&&)")
 {
-    sfl::unordered_multimap<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+    using key_type = xobj;
+    using mapped_type = xint;
+    using key_hash = xobj::hash;
+    using key_equal = xobj::equal;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map;
 
     map.emplace(std::piecewise_construct, std::forward_as_tuple(10), std::forward_as_tuple(1));
     map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
@@ -2214,7 +2455,14 @@ END_TEST()
 
 BEGIN_TEST("Test swap(container&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -2274,7 +2522,14 @@ BEGIN_TEST("Test bucket interface functions")
 {
     // xint, xint
     {
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map;
+        using key_type = xint;
+        using mapped_type = xint;
+        using key_hash = std::hash<key_type>;
+        using key_equal = std::equal_to<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(20, 1);
         map.emplace(40, 1);
@@ -2340,7 +2595,14 @@ BEGIN_TEST("Test bucket interface functions")
 
     // xobj, xint
     {
-        sfl::unordered_multimap<xobj, xint, xobj::hash, xobj::equal, TPARAM_ALLOCATOR<std::pair<const xobj, xint>>> map;
+        using key_type = xobj;
+        using mapped_type = xint;
+        using key_hash = xobj::hash;
+        using key_equal = xobj::equal;
+        using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+        using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+        map_type map;
 
         map.emplace(std::piecewise_construct, std::forward_as_tuple(20), std::forward_as_tuple(1));
         map.emplace(std::piecewise_construct, std::forward_as_tuple(40), std::forward_as_tuple(1));
@@ -2410,7 +2672,14 @@ END_TEST()
 
 BEGIN_TEST("Test hash policy functions")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map(11);
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map(11);
 
     map.emplace(20, 1);
     map.emplace(40, 1);
@@ -2461,7 +2730,14 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -2487,7 +2763,14 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
-    sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>> map1, map2;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
+
+    map_type map1, map2;
 
     map1.emplace(10, 1);
     map1.emplace(20, 1);
@@ -2528,14 +2811,18 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
-    using container_type =
-        sfl::unordered_multimap<xint, xint, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<std::pair<const xint, xint>>>;
+    using key_type = xint;
+    using mapped_type = xint;
+    using key_hash = std::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<std::pair<const key_type, mapped_type>>;
+    using map_type = sfl::unordered_multimap<key_type, mapped_type, key_hash, key_equal, allocator_type>;
 
-    using const_reference = typename container_type::const_reference;
+    using const_reference = typename map_type::const_reference;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type map;
+    map_type map;
 
     map.emplace(10, 1);
     map.emplace(20, 1);
