@@ -449,34 +449,43 @@ END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
-    using key_type = xint;
-    using key_compare = std::less<xint>;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        std::istringstream iss("10 20 30 20 20");
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)));
+        set_type set((sfl::from_range_t()), (std::views::istream<xint_xint>(iss)));
         #else
-        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)));
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<xint_xint>(iss)));
         #endif
 
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
     #endif
 
     // Forward iterator
     {
-        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set_type set(sfl::from_range_t(), std::views::all(data));
@@ -487,45 +496,54 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
 }
 END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
 {
-    using key_type = xint;
-    using key_compare = std::less<xint>;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        std::istringstream iss("10 20 30 20 20");
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         typename set_type::key_compare comp;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)), comp);
+        set_type set((sfl::from_range_t()), (std::views::istream<xint_xint>(iss)), comp);
         #else
-        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)), comp);
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<xint_xint>(iss)), comp);
         #endif
 
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
     #endif
 
     // Forward iterator
     {
-        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
         typename set_type::key_compare comp;
 
@@ -538,45 +556,54 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
 }
 END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 {
-    using key_type = xint;
-    using key_compare = std::less<xint>;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        std::istringstream iss("10 20 30 20 20");
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         typename set_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)), alloc);
+        set_type set((sfl::from_range_t()), (std::views::istream<xint_xint>(iss)), alloc);
         #else
-        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)), alloc);
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<xint_xint>(iss)), alloc);
         #endif
 
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
     #endif
 
     // Forward iterator
     {
-        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
         typename set_type::allocator_type alloc;
 
@@ -589,47 +616,56 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
 }
 END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)")
 {
-    using key_type = xint;
-    using key_compare = std::less<xint>;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        std::istringstream iss("10 20 30 20 20");
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         typename set_type::key_compare comp;
 
         typename set_type::allocator_type alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        set_type set((sfl::from_range_t()), (std::views::istream<int>(iss)), comp, alloc);
+        set_type set((sfl::from_range_t()), (std::views::istream<xint_xint>(iss)), comp, alloc);
         #else
-        set_type set((sfl::from_range_t()), (sfl::test::istream_view<int>(iss)), comp, alloc);
+        set_type set((sfl::from_range_t()), (sfl::test::istream_view<xint_xint>(iss)), comp, alloc);
         #endif
 
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
     #endif
 
     // Forward iterator
     {
-        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
         typename set_type::key_compare comp;
 
@@ -644,9 +680,9 @@ BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const All
         CHECK(set.empty() == false);
         CHECK(set.size() == 3);
         CHECK(set.max_size() > 0);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
 }
 END_TEST()
@@ -1418,36 +1454,45 @@ BEGIN_TEST("Test insert(std::initializer_list")
 }
 END_TEST()
 
-BEGIN_TEST("Test insert_range(Range&&")
+BEGIN_TEST("Test insert_range(Range&&)")
 {
-    using key_type = xint;
-    using key_compare = std::less<xint>;
+    using key_type = xint_xint;
+    using key_compare = std::less<xint_xint>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::set<key_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
     #ifndef TEST_CPP20_CONSTEXPR
     {
-        std::istringstream iss("10 20 30 20 20");
+        std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         set_type set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        set.insert_range(std::views::istream<int>(iss));
+        set.insert_range(std::views::istream<xint_xint>(iss));
         #else
-        set.insert_range(sfl::test::istream_view<int>(iss));
+        set.insert_range(sfl::test::istream_view<xint_xint>(iss));
         #endif
 
         CHECK(set.size() == 3);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
     #endif
 
     // Forward iterator
     {
-        std::vector<typename set_type::value_type> data({10, 20, 30, 20, 20});
+        std::vector<typename set_type::value_type> data
+        (
+            {
+                {10, 1},
+                {20, 1},
+                {30, 1},
+                {20, 2},
+                {20, 3}
+            }
+        );
 
         set_type set;
 
@@ -1458,9 +1503,9 @@ BEGIN_TEST("Test insert_range(Range&&")
         #endif
 
         CHECK(set.size() == 3);
-        CHECK(*NTH(set, 0) == 10);
-        CHECK(*NTH(set, 1) == 20);
-        CHECK(*NTH(set, 2) == 30);
+        CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
+        CHECK(NTH(set, 1)->first == 20); CHECK(NTH(set, 1)->second == 1);
+        CHECK(NTH(set, 2)->first == 30); CHECK(NTH(set, 2)->second == 1);
     }
 }
 END_TEST()
