@@ -102,50 +102,59 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     associative_vector()
         : KeyCompare()
         , Vector()
     {}
 
+    SFL_CONSTEXPR_20
     associative_vector(const KeyCompare& comp)
         : KeyCompare(comp)
         , Vector()
     {}
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     associative_vector(const Alloc& alloc)
         : KeyCompare()
         , Vector(alloc)
     {}
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     associative_vector(const KeyCompare& comp, const Alloc& alloc)
         : KeyCompare(comp)
         , Vector(alloc)
     {}
 
+    SFL_CONSTEXPR_20
     associative_vector(const associative_vector& other)
         : KeyCompare(other.ref_to_key_compare())
         , Vector(other.ref_to_vector())
     {}
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     associative_vector(const associative_vector& other, const Alloc& alloc)
         : KeyCompare(other.ref_to_key_compare())
         , Vector(other.ref_to_vector(), alloc)
     {}
 
+    SFL_CONSTEXPR_20
     associative_vector(associative_vector&& other)
         : KeyCompare(std::move(other.ref_to_key_compare()))
         , Vector(std::move(other.ref_to_vector()))
     {}
 
     template <typename Alloc>
+    SFL_CONSTEXPR_20
     associative_vector(associative_vector&& other, const Alloc& alloc)
         : KeyCompare(std::move(other.ref_to_key_compare()))
         , Vector(std::move(other.ref_to_vector()), alloc)
     {}
 
+    SFL_CONSTEXPR_20
     ~associative_vector()
     {}
 
@@ -159,6 +168,7 @@ public:
     // This is deleted. Use `assign_move` instead.
     associative_vector& operator=(associative_vector&& other) = delete;
 
+    SFL_CONSTEXPR_20
     void assign_copy(const associative_vector& other)
     {
         if (this != &other)
@@ -168,6 +178,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void assign_move(associative_vector& other)
     {
         ref_to_key_compare() = std::move(other.ref_to_key_compare());
@@ -176,6 +187,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void assign_range_equal(InputIt first, InputIt last)
     {
         clear();
@@ -189,6 +201,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void assign_range_unique(InputIt first, InputIt last)
     {
         clear();
@@ -205,12 +218,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     KeyCompare& ref_to_key_compare() noexcept
     {
         return *this;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const KeyCompare& ref_to_key_compare() const noexcept
     {
         return *this;
@@ -221,12 +236,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     Vector& ref_to_vector() noexcept
     {
         return *this;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const Vector& ref_to_vector() const noexcept
     {
         return *this;
@@ -237,90 +254,105 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return ref_to_vector().begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return ref_to_vector().begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return ref_to_vector().cbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return ref_to_vector().end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return ref_to_vector().end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return ref_to_vector().cend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rbegin() noexcept
     {
         return ref_to_vector().rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rbegin() const noexcept
     {
         return ref_to_vector().rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crbegin() const noexcept
     {
         return ref_to_vector().crbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rend() noexcept
     {
         return ref_to_vector().rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rend() const noexcept
     {
         return ref_to_vector().rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crend() const noexcept
     {
         return ref_to_vector().crend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator nth(size_type pos) noexcept
     {
         return ref_to_vector().nth(pos);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator nth(size_type pos) const noexcept
     {
         return ref_to_vector().nth(pos);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type index_of(const_iterator pos) const noexcept
     {
         return ref_to_vector().index_of(pos);
@@ -331,40 +363,47 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return ref_to_vector().empty();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return ref_to_vector().size();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_size() const noexcept
     {
         return ref_to_vector().max_size();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type capacity() const noexcept
     {
         return ref_to_vector().capacity();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type available() const noexcept
     {
         return ref_to_vector().available();
     }
 
+    SFL_CONSTEXPR_20
     void reserve(size_type new_cap)
     {
         ref_to_vector().reserve(new_cap);
     }
 
+    SFL_CONSTEXPR_20
     void shrink_to_fit()
     {
         ref_to_vector().shrink_to_fit();
@@ -374,12 +413,14 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear() noexcept
     {
         ref_to_vector().clear();
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_equal(Args&&... args)
     {
         value_type v(std::forward<Args>(args)...);
@@ -388,6 +429,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> emplace_unique(Args&&... args)
     {
         value_type v(std::forward<Args>(args)...);
@@ -403,6 +445,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint_equal(const_iterator hint, Args&&... args)
     {
         value_type v(std::forward<Args>(args)...);
@@ -411,6 +454,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint_unique(const_iterator hint, Args&&... args)
     {
         value_type v(std::forward<Args>(args)...);
@@ -426,6 +470,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_equal(V&& value)
     {
         auto res = calculate_position_for_insert_equal(KeyOfValue()(value));
@@ -433,6 +478,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_unique(V&& value)
     {
         auto res = calculate_position_for_insert_unique(KeyOfValue()(value));
@@ -447,6 +493,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_hint_equal(const_iterator hint, V&& value)
     {
         auto res = calculate_position_for_insert_hint_equal(hint, KeyOfValue()(value));
@@ -454,6 +501,7 @@ public:
     }
 
     template <typename V>
+    SFL_CONSTEXPR_20
     iterator insert_hint_unique(const_iterator hint, V&& value)
     {
         auto res = calculate_position_for_insert_hint_unique(hint, KeyOfValue()(value));
@@ -468,6 +516,7 @@ public:
     }
 
     template <typename K, typename M>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_or_assign(K&& k, M&& obj)
     {
         auto res = calculate_position_for_insert_unique(k);
@@ -493,6 +542,7 @@ public:
     }
 
     template <typename K, typename M>
+    SFL_CONSTEXPR_20
     iterator insert_or_assign_hint(const_iterator hint, K&& k, M&& obj)
     {
         auto res = calculate_position_for_insert_hint_unique(hint, k);
@@ -514,6 +564,7 @@ public:
     }
 
     template <typename K, typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> try_emplace(K&& k, Args&&... args)
     {
         auto res = calculate_position_for_insert_unique(k);
@@ -538,6 +589,7 @@ public:
     }
 
     template <typename K, typename... Args>
+    SFL_CONSTEXPR_20
     iterator try_emplace_hint(const_iterator hint, K&& k, Args&&... args)
     {
         auto res = calculate_position_for_insert_hint_unique(hint, k);
@@ -557,17 +609,20 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator pos)
     {
         return ref_to_vector().erase(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator first, const_iterator last)
     {
         return ref_to_vector().erase(first, last);
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     size_type erase_key_equal(const K& k)
     {
         auto er = equal_range(k);
@@ -577,6 +632,7 @@ public:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     size_type erase_key_unique(const K& k)
     {
         auto it = find(k);
@@ -592,6 +648,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void swap(associative_vector& other)
     {
         using std::swap;
@@ -605,6 +662,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const K& k)
     {
         return std::lower_bound
@@ -621,6 +679,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const K& k) const
     {
         return std::lower_bound
@@ -637,6 +696,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const K& k)
     {
         return std::upper_bound
@@ -653,6 +713,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const K& k) const
     {
         return std::upper_bound
@@ -669,6 +730,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const K& k)
     {
         return std::make_pair(lower_bound(k), upper_bound(k));
@@ -676,6 +738,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const K& k) const
     {
         return std::make_pair(lower_bound(k), upper_bound(k));
@@ -683,6 +746,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const K& k)
     {
         auto it = lower_bound(k);
@@ -697,6 +761,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const K& k) const
     {
         auto it = lower_bound(k);
@@ -711,6 +776,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count_equal(const K& k) const
     {
         auto er = equal_range(k);
@@ -719,6 +785,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count_unique(const K& k) const
     {
         return find(k) != end() ? 1 : 0;
@@ -726,6 +793,7 @@ public:
 
     template <typename K>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const K& k) const
     {
         return find(k) != end();
@@ -736,12 +804,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     value_type* data() noexcept
     {
         return ref_to_vector().data();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const value_type* data() const noexcept
     {
         return ref_to_vector().data();
@@ -761,12 +831,14 @@ private:
     };
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_equal calculate_position_for_insert_equal(const K& k)
     {
         return position_for_insert_equal{lower_bound(k)};
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_unique calculate_position_for_insert_unique(const K& k)
     {
         iterator it = lower_bound(k);
@@ -782,6 +854,7 @@ private:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_equal calculate_position_for_insert_hint_equal(const_iterator hint, const K& k)
     {
         if
@@ -799,6 +872,7 @@ private:
     }
 
     template <typename K>
+    SFL_CONSTEXPR_20
     position_for_insert_unique calculate_position_for_insert_hint_unique(const_iterator hint, const K& k)
     {
         if
@@ -824,6 +898,7 @@ private:
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const associative_vector<TP1, TP2, TP3, TP4, TP5>& x,
@@ -835,6 +910,7 @@ bool operator==
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const associative_vector<TP1, TP2, TP3, TP4, TP5>& x,
@@ -846,6 +922,7 @@ bool operator!=
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<
 (
     const associative_vector<TP1, TP2, TP3, TP4, TP5>& x,
@@ -857,6 +934,7 @@ bool operator<
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>
 (
     const associative_vector<TP1, TP2, TP3, TP4, TP5>& x,
@@ -868,6 +946,7 @@ bool operator>
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<=
 (
     const associative_vector<TP1, TP2, TP3, TP4, TP5>& x,
@@ -879,6 +958,7 @@ bool operator<=
 
 template <typename TP1, typename TP2, typename TP3, typename TP4, typename TP5>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>=
 (
     const associative_vector<TP1, TP2, TP3, TP4, TP5>& x,
