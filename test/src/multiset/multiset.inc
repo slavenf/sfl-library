@@ -6,7 +6,7 @@ using sfl::test::xint;
 using sfl::test::xint_xint;
 using sfl::test::xobj;
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -14,8 +14,9 @@ PRINT("Test container()");
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const Compare&)");
+BEGIN_TEST("Test container(const Compare&)")
 {
     std::less<xint_xint> comp;
 
@@ -25,8 +26,9 @@ PRINT("Test container(const Compare&)");
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const Allocator&)");
+BEGIN_TEST("Test container(const Allocator&)")
 {
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
@@ -36,8 +38,9 @@ PRINT("Test container(const Allocator&)");
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(const Compare&, const Allocator&)")
 {
     std::less<xint_xint> comp;
 
@@ -49,8 +52,9 @@ PRINT("Test container(const Compare&, const Allocator&)");
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt)");
+BEGIN_TEST("Test container(InputIt, InputIt)")
 {
     std::vector<xint_xint> data
     (
@@ -74,8 +78,9 @@ PRINT("Test container(InputIt, InputIt)");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&)")
 {
     std::vector<xint_xint> data
     (
@@ -101,8 +106,9 @@ PRINT("Test container(InputIt, InputIt, const Compare&)");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
 {
     std::vector<xint_xint> data
     (
@@ -128,8 +134,9 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&, const Allocator&)")
 {
     std::vector<xint_xint> data
     (
@@ -157,8 +164,9 @@ PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list)");
+BEGIN_TEST("Test container(std::initializer_list)")
 {
     std::initializer_list<xint_xint> ilist
     {
@@ -180,8 +188,9 @@ PRINT("Test container(std::initializer_list)");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&)")
 {
     std::initializer_list<xint_xint> ilist
     {
@@ -205,8 +214,9 @@ PRINT("Test container(std::initializer_list, const Compare&)");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
 {
     std::initializer_list<xint_xint> ilist
     {
@@ -230,8 +240,9 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&, const Allocator&)")
 {
     std::initializer_list<xint_xint> ilist
     {
@@ -257,8 +268,9 @@ PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)")
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
@@ -280,8 +292,9 @@ PRINT("Test container(const container&)");
     CHECK(NTH(set2, 1)->first == 20); CHECK(NTH(set2, 1)->second == 1);
     CHECK(NTH(set2, 2)->first == 30); CHECK(NTH(set2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(const container&, const Allocator&)");
+BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
@@ -305,8 +318,9 @@ PRINT("Test container(const container&, const Allocator&)");
     CHECK(NTH(set2, 1)->first == 20); CHECK(NTH(set2, 1)->second == 1);
     CHECK(NTH(set2, 2)->first == 30); CHECK(NTH(set2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
@@ -329,8 +343,9 @@ PRINT("Test container(container&&)");
     CHECK(NTH(set2, 1)->first == 20); CHECK(NTH(set2, 1)->second == 1);
     CHECK(NTH(set2, 2)->first == 30); CHECK(NTH(set2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Allocator&)");
+BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
@@ -366,10 +381,12 @@ PRINT("Test container(container&&, const Allocator&)");
     CHECK(NTH(set2, 1)->first == 20); CHECK(NTH(set2, 1)->second == 1);
     CHECK(NTH(set2, 2)->first == 30); CHECK(NTH(set2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
@@ -396,6 +413,7 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(*NTH(set, 3) == 20);
         CHECK(*NTH(set, 4) == 30);
     }
+    #endif
 
     // Forward iterator
     {
@@ -425,10 +443,12 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         CHECK(*NTH(set, 4) == 30);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
@@ -459,6 +479,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
         CHECK(*NTH(set, 3) == 20);
         CHECK(*NTH(set, 4) == 30);
     }
+    #endif
 
     // Forward iterator
     {
@@ -492,10 +513,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&)");
         CHECK(*NTH(set, 4) == 30);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Allocator&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
@@ -526,6 +549,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         CHECK(*NTH(set, 3) == 20);
         CHECK(*NTH(set, 4) == 30);
     }
+    #endif
 
     // Forward iterator
     {
@@ -559,10 +583,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Allocator&)");
         CHECK(*NTH(set, 4) == 30);
     }
 }
+END_TEST()
 
-PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocator&)")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
@@ -596,6 +622,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocato
         CHECK(*NTH(set, 3) == 20);
         CHECK(*NTH(set, 4) == 30);
     }
+    #endif
 
     // Forward iterator
     {
@@ -632,10 +659,11 @@ PRINT("Test container(sfl::from_range_t, Range&&, const Compare&, const Allocato
         CHECK(*NTH(set, 4) == 30);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
@@ -671,8 +699,9 @@ PRINT("Test operator=(const container&)");
     CHECK(NTH(set2, 1)->first == 20); CHECK(NTH(set2, 1)->second == 1);
     CHECK(NTH(set2, 2)->first == 30); CHECK(NTH(set2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test operator=(container&&)");
+BEGIN_TEST("Test operator=(container&&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
@@ -715,8 +744,9 @@ PRINT("Test operator=(container&&)");
     CHECK(NTH(set2, 1)->first == 20); CHECK(NTH(set2, 1)->second == 1);
     CHECK(NTH(set2, 2)->first == 30); CHECK(NTH(set2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test operator=(std::initializer_list)");
+BEGIN_TEST("Test operator=(std::initializer_list)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -749,10 +779,11 @@ PRINT("Test operator=(std::initializer_list)");
     CHECK(NTH(set, 3)->first == 50); CHECK(NTH(set, 3)->second == 4);
     CHECK(NTH(set, 4)->first == 60); CHECK(NTH(set, 4)->second == 2);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test get_allocator()");
+BEGIN_TEST("Test get_allocator()")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -760,10 +791,11 @@ PRINT("Test get_allocator()");
 
     (void)alloc;
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test key_comp()");
+BEGIN_TEST("Test key_comp()")
 {
     {
         sfl::multiset<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
@@ -787,10 +819,11 @@ PRINT("Test key_comp()");
         CHECK(key_comp(xobj(20), 20) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test value_comp()");
+BEGIN_TEST("Test value_comp()")
 {
     {
         sfl::multiset<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
@@ -814,10 +847,11 @@ PRINT("Test value_comp()");
         CHECK(value_comp(xobj(20), 20) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend");
+BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -857,10 +891,11 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend");
     CHECK(crit->first == 20); CHECK(crit->second == 1); ++crit;
     CHECK(crit == set.crend());
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
+BEGIN_TEST("Test lower_bound, upper_bound, equal_range, find, count, contains")
 {
     // xint
     {
@@ -1000,10 +1035,11 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
         CHECK(set.contains(70) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test emplace(Args&&...)");
+BEGIN_TEST("Test emplace(Args&&...)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1025,8 +1061,9 @@ PRINT("Test emplace(Args&&...)");
         CHECK(set.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test emplace_hint(const_iterator, Args&&...)");
+BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1048,8 +1085,9 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
         CHECK(set.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const value_type&)");
+BEGIN_TEST("Test insert(const value_type&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1077,8 +1115,9 @@ PRINT("Test insert(const value_type&)");
         CHECK(set.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(value_type&&)");
+BEGIN_TEST("Test insert(value_type&&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1112,8 +1151,9 @@ PRINT("Test insert(value_type&&)");
         CHECK(value_10_2.second == -2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, const value_type&)");
+BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1141,8 +1181,9 @@ PRINT("Test insert(const_iterator, const value_type&)");
         CHECK(set.size() == 2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(const_iterator, value_type&&)");
+BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1176,8 +1217,9 @@ PRINT("Test insert(const_iterator, value_type&&)");
         CHECK(value_10_2.second == -2);
     }
 }
+END_TEST()
 
-PRINT("Test insert(InputIt, InputIt");
+BEGIN_TEST("Test insert(InputIt, InputIt")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1203,8 +1245,9 @@ PRINT("Test insert(InputIt, InputIt");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test insert(std::initializer_list");
+BEGIN_TEST("Test insert(std::initializer_list")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1228,10 +1271,12 @@ PRINT("Test insert(std::initializer_list");
     CHECK(NTH(set, 3)->first == 20); CHECK(NTH(set, 3)->second == 3);
     CHECK(NTH(set, 4)->first == 30); CHECK(NTH(set, 4)->second == 1);
 }
+END_TEST()
 
-PRINT("Test insert_range(Range&&");
+BEGIN_TEST("Test insert_range(Range&&")
 {
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss("10 20 30 20 20");
 
@@ -1252,6 +1297,7 @@ PRINT("Test insert_range(Range&&");
         CHECK(*NTH(set, 3) == 20);
         CHECK(*NTH(set, 4) == 30);
     }
+    #endif
 
     // Forward iterator
     {
@@ -1275,8 +1321,9 @@ PRINT("Test insert_range(Range&&");
         CHECK(*NTH(set, 4) == 30);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator)");
+BEGIN_TEST("Test erase(const_iterator)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1313,8 +1360,9 @@ PRINT("Test erase(const_iterator)");
         CHECK(set.size() == 0);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
@@ -1334,8 +1382,9 @@ PRINT("Test erase(const_iterator, const_iterator)");
     CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
     CHECK(NTH(set, 1)->first == 30); CHECK(NTH(set, 0)->second == 1);
 }
+END_TEST()
 
-PRINT("Test erase(const Key&)");
+BEGIN_TEST("Test erase(const Key&)")
 {
     sfl::multiset<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>> set;
 
@@ -1369,8 +1418,9 @@ PRINT("Test erase(const Key&)");
     CHECK(set.erase(10) == 0);
     CHECK(set.size() == 0);
 }
+END_TEST()
 
-PRINT("Test erase(K&&)");
+BEGIN_TEST("Test erase(K&&)")
 {
     sfl::multiset<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>> set;
 
@@ -1404,8 +1454,9 @@ PRINT("Test erase(K&&)");
     CHECK(set.erase(10) == 0);
     CHECK(set.size() == 0);
 }
+END_TEST()
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
@@ -1459,10 +1510,11 @@ PRINT("Test swap(container&)");
     CHECK(NTH(set2, 2)->first == 60); CHECK(NTH(set2, 2)->second == 2);
     CHECK(NTH(set2, 3)->first == 70); CHECK(NTH(set2, 3)->second == 2);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
@@ -1506,8 +1558,9 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((set2 >= set1) == true);
     CHECK((set2 >= set2) == true);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER swap(container&)");
+BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
     sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
@@ -1549,8 +1602,9 @@ PRINT("Test NON-MEMBER swap(container&)");
     CHECK(NTH(set2, 1)->first == 20); CHECK(NTH(set2, 1)->second == 1);
     CHECK(NTH(set2, 2)->first == 30); CHECK(NTH(set2, 2)->second == 1);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
     using container_type =
         sfl::multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
@@ -1588,3 +1642,4 @@ PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     CHECK(NTH(set, 0)->first == 10); CHECK(NTH(set, 0)->second == 1);
     CHECK(NTH(set, 1)->first == 30); CHECK(NTH(set, 1)->second == 1);
 }
+END_TEST()
