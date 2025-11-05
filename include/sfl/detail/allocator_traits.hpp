@@ -21,14 +21,11 @@
 #ifndef SFL_DETAIL_ALLOCATOR_TRAITS_HPP_INCLUDED
 #define SFL_DETAIL_ALLOCATOR_TRAITS_HPP_INCLUDED
 
-#include <sfl/detail/type_traits/void_t.hpp>
 #include <sfl/detail/utility/ignore_unused.hpp>
 #include <sfl/detail/cpp.hpp>
 
-#include <limits>       // numeric_limits
-#include <memory>       // pointer_traits
+#include <memory>       // allocator_traits, allocation_result
 #include <type_traits>  // true_type, false_type
-#include <utility>      // declval
 
 namespace sfl
 {
