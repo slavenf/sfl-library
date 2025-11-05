@@ -93,11 +93,13 @@ public:
 
     private:
 
+        SFL_CONSTEXPR_20
         value_compare(const key_compare& c) : key_compare(c)
         {}
 
     public:
 
+        SFL_CONSTEXPR_20
         bool operator()(const value_type& x, const value_type& y) const
         {
             return key_compare::operator()(x.first, y.first);
@@ -110,6 +112,7 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     flat_multimap() noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
@@ -118,6 +121,7 @@ public:
         : impl_()
     {}
 
+    SFL_CONSTEXPR_20
     explicit flat_multimap(const Compare& comp) noexcept
     (
         std::is_nothrow_default_constructible<Allocator>::value &&
@@ -126,6 +130,7 @@ public:
         : impl_(comp)
     {}
 
+    SFL_CONSTEXPR_20
     explicit flat_multimap(const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
@@ -134,6 +139,7 @@ public:
         : impl_(alloc)
     {}
 
+    SFL_CONSTEXPR_20
     explicit flat_multimap(const Compare& comp, const Allocator& alloc) noexcept
     (
         std::is_nothrow_copy_constructible<Allocator>::value &&
@@ -144,6 +150,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     flat_multimap(InputIt first, InputIt last)
         : impl_()
     {
@@ -152,6 +159,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     flat_multimap(InputIt first, InputIt last, const Compare& comp)
         : impl_(comp)
     {
@@ -160,6 +168,7 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     flat_multimap(InputIt first, InputIt last, const Allocator& alloc)
         : impl_(alloc)
     {
@@ -168,40 +177,49 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     flat_multimap(InputIt first, InputIt last, const Compare& comp, const Allocator& alloc)
         : impl_(comp, alloc)
     {
         insert(first, last);
     }
 
+    SFL_CONSTEXPR_20
     flat_multimap(std::initializer_list<value_type> ilist)
         : flat_multimap(ilist.begin(), ilist.end())
     {}
 
+    SFL_CONSTEXPR_20
     flat_multimap(std::initializer_list<value_type> ilist, const Compare& comp)
         : flat_multimap(ilist.begin(), ilist.end(), comp)
     {}
 
+    SFL_CONSTEXPR_20
     flat_multimap(std::initializer_list<value_type> ilist, const Allocator& alloc)
         : flat_multimap(ilist.begin(), ilist.end(), alloc)
     {}
 
+    SFL_CONSTEXPR_20
     flat_multimap(std::initializer_list<value_type> ilist, const Compare& comp, const Allocator& alloc)
         : flat_multimap(ilist.begin(), ilist.end(), comp, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     flat_multimap(const flat_multimap& other)
         : impl_(other.impl_)
     {}
 
+    SFL_CONSTEXPR_20
     flat_multimap(const flat_multimap& other, const Allocator& alloc)
         : impl_(other.impl_, alloc)
     {}
 
+    SFL_CONSTEXPR_20
     flat_multimap(flat_multimap&& other)
         : impl_(std::move(other.impl_))
     {}
 
+    SFL_CONSTEXPR_20
     flat_multimap(flat_multimap&& other, const Allocator& alloc)
         : impl_(std::move(other.impl_), alloc)
     {}
@@ -209,6 +227,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     flat_multimap(sfl::from_range_t, Range&& range)
         : impl_()
     {
@@ -216,6 +235,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     flat_multimap(sfl::from_range_t, Range&& range, const Compare& comp)
         : impl_(comp)
     {
@@ -223,6 +243,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     flat_multimap(sfl::from_range_t, Range&& range, const Allocator& alloc)
         : impl_(alloc)
     {
@@ -230,6 +251,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     flat_multimap(sfl::from_range_t, Range&& range, const Compare& comp, const Allocator& alloc)
         : impl_(comp, alloc)
     {
@@ -268,6 +290,7 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     ~flat_multimap()
     {}
 
@@ -275,18 +298,21 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     flat_multimap& operator=(const flat_multimap& other)
     {
         impl_.assign_copy(other.impl_);
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     flat_multimap& operator=(flat_multimap&& other)
     {
         impl_.assign_move(other.impl_);
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     flat_multimap& operator=(std::initializer_list<value_type> ilist)
     {
         impl_.assign_range_equal(ilist.begin(), ilist.end());
@@ -298,6 +324,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     allocator_type get_allocator() const noexcept
     {
         return impl_.ref_to_vector().get_allocator();
@@ -308,6 +335,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     key_compare key_comp() const
     {
         return impl_.ref_to_key_compare();
@@ -318,6 +346,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     value_compare value_comp() const
     {
         return value_compare(impl_.ref_to_key_compare());
@@ -328,78 +357,91 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return impl_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return impl_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return impl_.cbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return impl_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return impl_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return impl_.cend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rbegin() noexcept
     {
         return impl_.rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rbegin() const noexcept
     {
         return impl_.rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crbegin() const noexcept
     {
         return impl_.crbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rend() noexcept
     {
         return impl_.rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rend() const noexcept
     {
         return impl_.rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crend() const noexcept
     {
         return impl_.crend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
@@ -407,6 +449,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
@@ -414,6 +457,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type index_of(const_iterator pos) const noexcept
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
@@ -425,40 +469,47 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return impl_.empty();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return impl_.size();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type max_size() const noexcept
     {
         return impl_.max_size();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type capacity() const noexcept
     {
         return impl_.capacity();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type available() const noexcept
     {
         return impl_.available();
     }
 
+    SFL_CONSTEXPR_20
     void reserve(size_type new_cap)
     {
         impl_.reserve(new_cap);
     }
 
+    SFL_CONSTEXPR_20
     void shrink_to_fit()
     {
         impl_.shrink_to_fit();
@@ -468,29 +519,34 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear() noexcept
     {
         impl_.clear();
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace(Args&&... args)
     {
         return impl_.emplace_equal(std::forward<Args>(args)...);
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         return impl_.emplace_hint_equal(hint, std::forward<Args>(args)...);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const value_type& value)
     {
         return impl_.insert_equal(value);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(value_type&& value)
     {
         return impl_.insert_equal(std::move(value));
@@ -498,17 +554,20 @@ public:
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert(P&& value)
     {
         return impl_.insert_equal(std::forward<P>(value));
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
         return impl_.insert_hint_equal(hint, value);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
@@ -517,6 +576,7 @@ public:
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, P&& value)
     {
         SFL_ASSERT(cbegin() <= hint && hint <= cend());
@@ -525,11 +585,13 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void insert(InputIt first, InputIt last)
     {
         insert_range_aux(first, last);
     }
 
+    SFL_CONSTEXPR_20
     void insert(std::initializer_list<value_type> ilist)
     {
         insert_range_aux(ilist.begin(), ilist.end());
@@ -538,6 +600,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     void insert_range(Range&& range)
     {
         insert_range_aux(std::ranges::begin(range), std::ranges::end(range));
@@ -555,24 +618,28 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     iterator erase(iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
         return impl_.erase(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
         return impl_.erase(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator first, const_iterator last)
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
         return impl_.erase(first, last);
     }
 
+    SFL_CONSTEXPR_20
     size_type erase(const Key& key)
     {
         return impl_.erase_key_equal(key);
@@ -580,11 +647,13 @@ public:
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     size_type erase(K&& x)
     {
         return impl_.erase_key_equal(x);
     }
 
+    SFL_CONSTEXPR_20
     void swap(flat_multimap& other)
     {
         impl_.swap(other.impl_);
@@ -595,12 +664,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const Key& key)
     {
         return impl_.lower_bound(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const Key& key) const
     {
         return impl_.lower_bound(key);
@@ -609,6 +680,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const K& x)
     {
         return impl_.lower_bound(x);
@@ -617,18 +689,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const K& x) const
     {
         return impl_.lower_bound(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const Key& key)
     {
         return impl_.upper_bound(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const Key& key) const
     {
         return impl_.upper_bound(key);
@@ -637,6 +712,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const K& x)
     {
         return impl_.upper_bound(x);
@@ -645,18 +721,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const K& x) const
     {
         return impl_.upper_bound(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const Key& key)
     {
         return impl_.equal_range(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const Key& key) const
     {
         return impl_.equal_range(key);
@@ -665,6 +744,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const K& x)
     {
         return impl_.equal_range(x);
@@ -673,18 +753,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const K& x) const
     {
         return impl_.equal_range(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const Key& key)
     {
         return impl_.find(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const Key& key) const
     {
         return impl_.find(key);
@@ -693,6 +776,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const K& x)
     {
         return impl_.find(x);
@@ -701,12 +785,14 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const K& x) const
     {
         return impl_.find(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const Key& key) const
     {
         return impl_.count_equal(key);
@@ -715,12 +801,14 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const K& x) const
     {
         return impl_.count_equal(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const Key& key) const
     {
         return impl_.contains(key);
@@ -729,6 +817,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const K& x) const
     {
         return impl_.contains(x);
@@ -739,12 +828,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     value_type* data() noexcept
     {
         return impl_.data();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const value_type* data() const noexcept
     {
         return impl_.data();
@@ -753,6 +844,7 @@ public:
 private:
 
     template <typename InputIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void insert_range_aux(InputIt first, Sentinel last)
     {
         while (first != last)
@@ -763,21 +855,27 @@ private:
     }
 
     template <typename K2, typename T2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator==(const flat_multimap<K2, T2, C2, A2>& x, const flat_multimap<K2, T2, C2, A2>& y);
 
     template <typename K2, typename T2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator!=(const flat_multimap<K2, T2, C2, A2>& x, const flat_multimap<K2, T2, C2, A2>& y);
 
     template <typename K2, typename T2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator<(const flat_multimap<K2, T2, C2, A2>& x, const flat_multimap<K2, T2, C2, A2>& y);
 
     template <typename K2, typename T2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator>(const flat_multimap<K2, T2, C2, A2>& x, const flat_multimap<K2, T2, C2, A2>& y);
 
     template <typename K2, typename T2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator<=(const flat_multimap<K2, T2, C2, A2>& x, const flat_multimap<K2, T2, C2, A2>& y);
 
     template <typename K2, typename T2, typename C2, typename A2>
+    SFL_CONSTEXPR_20
     friend bool operator>=(const flat_multimap<K2, T2, C2, A2>& x, const flat_multimap<K2, T2, C2, A2>& y);
 };
 
@@ -787,6 +885,7 @@ private:
 
 template <typename K, typename T, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const flat_multimap<K, T, C, A>& x,
@@ -798,6 +897,7 @@ bool operator==
 
 template <typename K, typename T, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const flat_multimap<K, T, C, A>& x,
@@ -809,6 +909,7 @@ bool operator!=
 
 template <typename K, typename T, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<
 (
     const flat_multimap<K, T, C, A>& x,
@@ -820,6 +921,7 @@ bool operator<
 
 template <typename K, typename T, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>
 (
     const flat_multimap<K, T, C, A>& x,
@@ -831,6 +933,7 @@ bool operator>
 
 template <typename K, typename T, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<=
 (
     const flat_multimap<K, T, C, A>& x,
@@ -842,6 +945,7 @@ bool operator<=
 
 template <typename K, typename T, typename C, typename A>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>=
 (
     const flat_multimap<K, T, C, A>& x,
@@ -852,6 +956,7 @@ bool operator>=
 }
 
 template <typename K, typename T, typename C, typename A>
+SFL_CONSTEXPR_20
 void swap
 (
     flat_multimap<K, T, C, A>& x,
@@ -862,6 +967,7 @@ void swap
 }
 
 template <typename K, typename T, typename C, typename A, typename Predicate>
+SFL_CONSTEXPR_20
 typename flat_multimap<K, T, C, A>::size_type
     erase_if(flat_multimap<K, T, C, A>& c, Predicate pred)
 {
