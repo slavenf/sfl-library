@@ -32,6 +32,7 @@
 #include <sfl/detail/memory/deallocate.hpp>
 #include <sfl/detail/memory/destroy_a.hpp>
 #include <sfl/detail/memory/destroy_at_a.hpp>
+#include <sfl/detail/memory/destroy_n_a.hpp>
 #include <sfl/detail/memory/uninitialized_copy_a.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_a.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n_a.hpp>
@@ -1476,7 +1477,18 @@ private:
     segment_pointer allocate_table(size_type n)
     {
         segment_allocator seg_alloc(data_.ref_to_alloc());
-        return sfl::dtl::allocate(seg_alloc, n);
+
+        segment_pointer p = sfl::dtl::allocate(seg_alloc, n);
+
+        // Workaround for C++20 constexpr for Clang, but doesn't harm for other compilers
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            sfl::dtl::uninitialized_default_construct_n_a(seg_alloc, p, n);
+        }
+        #endif
+
+        return p;
     }
 
     // Deallocates table.
@@ -1487,6 +1499,15 @@ private:
     void deallocate_table(segment_pointer p, size_type n) noexcept
     {
         segment_allocator seg_alloc(data_.ref_to_alloc());
+
+        // Workaround for C++20 constexpr for Clang, but doesn't harm for other compilers
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            sfl::dtl::destroy_n_a(seg_alloc, p, n);
+        }
+        #endif
+
         sfl::dtl::deallocate(seg_alloc, p, n);
     }
 
