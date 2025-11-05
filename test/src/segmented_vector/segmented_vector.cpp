@@ -17,6 +17,9 @@
 #include <sstream>
 #include <vector>
 
+#define BEGIN_TEST(x) PRINT(x)
+#define END_TEST()
+
 void test_segmented_vector_N_1_A_1()
 {
     #undef   TPARAM_N
@@ -299,3 +302,23 @@ int main()
     test_segmented_vector_N_100_A_4();
     test_segmented_vector_N_100_A_5();
 }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
+#undef  BEGIN_TEST
+#undef  END_TEST
+
+#define BEGIN_TEST(x) static_assert([](){
+#define END_TEST()    return true;}());
+
+#undef  TPARAM_N
+#define TPARAM_N 2
+
+#undef  TPARAM_ALLOCATOR
+#define TPARAM_ALLOCATOR std::allocator
+
+#define TEST_CPP20_CONSTEXPR
+
+#include "segmented_vector.inc"
+
+#endif // SFL_CPP_VERSION >= SFL_CPP_20

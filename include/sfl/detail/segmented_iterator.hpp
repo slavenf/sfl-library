@@ -70,6 +70,7 @@ public:
 
 public:
 
+    SFL_CONSTEXPR_20
     explicit segmented_iterator(const SegmentIterator& segment, const LocalIterator& local) noexcept
         : segment_(segment)
         , local_(local)
@@ -78,12 +79,14 @@ public:
 public:
 
     // Default constructor
+    SFL_CONSTEXPR_20
     segmented_iterator() noexcept
         : segment_()
         , local_()
     {}
 
     // Copy constructor
+    SFL_CONSTEXPR_20
     segmented_iterator(const segmented_iterator& other) noexcept
         : segment_(other.segment_)
         , local_(other.local_)
@@ -92,12 +95,14 @@ public:
     // Converting constructor (from iterator to const_iterator)
     template <bool IsConst2 = IsConst,
               sfl::dtl::enable_if_t<IsConst2 == false>* = nullptr>
+    SFL_CONSTEXPR_20
     segmented_iterator(const segmented_iterator<SegmentIterator, LocalIterator, SegmentSize, IsConst2>& other) noexcept
         : segment_(other.segment_)
         , local_(other.local_)
     {}
 
     // Copy assignment operator
+    SFL_CONSTEXPR_20
     segmented_iterator& operator=(const segmented_iterator& other) noexcept
     {
         segment_ = other.segment_;
@@ -106,17 +111,20 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference operator*() const noexcept
     {
         return *local_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     pointer operator->() const noexcept
     {
         return sfl::dtl::to_address(local_);
     }
 
+    SFL_CONSTEXPR_20
     segmented_iterator& operator++() noexcept
     {
         ++local_;
@@ -130,6 +138,7 @@ public:
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     segmented_iterator operator++(int) noexcept
     {
         auto temp = *this;
@@ -137,6 +146,7 @@ public:
         return temp;
     }
 
+    SFL_CONSTEXPR_20
     segmented_iterator& operator--() noexcept
     {
         if (local_ == *segment_)
@@ -150,6 +160,7 @@ public:
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     segmented_iterator operator--(int) noexcept
     {
         auto temp = *this;
@@ -157,6 +168,7 @@ public:
         return temp;
     }
 
+    SFL_CONSTEXPR_20
     segmented_iterator& operator+=(difference_type n) noexcept
     {
         const difference_type offset = std::distance(LocalIterator(*segment_), local_) + n;
@@ -180,12 +192,14 @@ public:
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     segmented_iterator& operator-=(difference_type n) noexcept
     {
         return this->operator+=(-n);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     segmented_iterator operator+(difference_type n) const noexcept
     {
         auto temp = *this;
@@ -194,6 +208,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     segmented_iterator operator-(difference_type n) const noexcept
     {
         auto temp = *this;
@@ -202,6 +217,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference operator[](difference_type n) const noexcept
     {
         auto temp = *this;
@@ -210,12 +226,14 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend segmented_iterator operator+(difference_type n, const segmented_iterator& it) noexcept
     {
         return it + n;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend difference_type operator-(const segmented_iterator& x, const segmented_iterator& y) noexcept
     {
         return (x.segment_ - y.segment_) * difference_type(SegmentSize)
@@ -223,36 +241,42 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator==(const segmented_iterator& x, const segmented_iterator& y) noexcept
     {
         return x.local_ == y.local_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator!=(const segmented_iterator& x, const segmented_iterator& y) noexcept
     {
         return !(x == y);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator<(const segmented_iterator& x, const segmented_iterator& y) noexcept
     {
         return (x.segment_ == y.segment_) ? (x.local_ < y.local_) : (x.segment_ < y.segment_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator>(const segmented_iterator& x, const segmented_iterator& y) noexcept
     {
         return y < x;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator<=(const segmented_iterator& x, const segmented_iterator& y) noexcept
     {
         return !(y < x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     friend bool operator>=(const segmented_iterator& x, const segmented_iterator& y) noexcept
     {
         return !(x < y);
@@ -270,26 +294,31 @@ struct segmented_iterator_traits<sfl::dtl::segmented_iterator<SegmentIterator, L
 
     using local_iterator = LocalIterator;
 
+    SFL_CONSTEXPR_20
     static segment_iterator segment(iterator it) noexcept
     {
         return it.segment_;
     }
 
+    SFL_CONSTEXPR_20
     static local_iterator local(iterator it) noexcept
     {
         return it.local_;
     }
 
+    SFL_CONSTEXPR_20
     static local_iterator begin(segment_iterator it) noexcept
     {
         return *it;
     }
 
+    SFL_CONSTEXPR_20
     static local_iterator end(segment_iterator it) noexcept
     {
         return *it + SegmentSize;
     }
 
+    SFL_CONSTEXPR_20
     static iterator compose(segment_iterator segment, local_iterator local) noexcept
     {
         SFL_ASSERT(begin(segment) <= local && local <= end(segment));
