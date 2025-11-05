@@ -30,11 +30,6 @@
 #include <type_traits>  // true_type, false_type
 #include <utility>      // declval
 
-#ifdef _MSC_VER // Visual C++
-#pragma warning(push)
-#pragma warning(disable : 4996)
-#endif
-
 namespace sfl
 {
 
@@ -222,9 +217,5 @@ private:
 } // namespace dtl
 
 } // namespace sfl
-
-#ifdef _MSC_VER // Visual C++
-#pragma warning(pop)
-#endif
 
 #endif // SFL_DETAIL_ALLOCATOR_TRAITS_HPP_INCLUDED
