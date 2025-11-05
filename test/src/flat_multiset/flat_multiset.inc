@@ -6,67 +6,86 @@ using sfl::test::xint;
 using sfl::test::xint_xint;
 using sfl::test::xobj;
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set;
+    set_type set;
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
     CHECK(set.available() == set.capacity() - set.size());
 }
+END_TEST()
 
-PRINT("Test container(const Compare&)");
+BEGIN_TEST("Test container(const Compare&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    typename container_type::key_compare comp;
+    typename set_type::key_compare comp;
 
-    container_type set(comp);
+    set_type set(comp);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
     CHECK(set.available() == set.capacity() - set.size());
 }
+END_TEST()
 
-PRINT("Test container(const Allocator&)");
+BEGIN_TEST("Test container(const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set(alloc);
+    set_type set(alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
     CHECK(set.available() == set.capacity() - set.size());
 }
+END_TEST()
 
-PRINT("Test container(const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(const Compare&, const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    typename container_type::key_compare comp;
+    typename set_type::key_compare comp;
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set(comp, alloc);
+    set_type set(comp, alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
     CHECK(set.max_size() > 0);
     CHECK(set.available() == set.capacity() - set.size());
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt)");
+BEGIN_TEST("Test container(InputIt, InputIt)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -87,7 +106,7 @@ PRINT("Test container(InputIt, InputIt)");
         }
     );
 
-    container_type set(data.begin(), data.end());
+    set_type set(data.begin(), data.end());
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -115,12 +134,16 @@ PRINT("Test container(InputIt, InputIt)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -141,9 +164,9 @@ PRINT("Test container(InputIt, InputIt, const Compare&)");
         }
     );
 
-    typename container_type::key_compare comp;
+    typename set_type::key_compare comp;
 
-    container_type set(data.begin(), data.end(), comp);
+    set_type set(data.begin(), data.end(), comp);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -171,12 +194,16 @@ PRINT("Test container(InputIt, InputIt, const Compare&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -197,9 +224,9 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
         }
     );
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set(data.begin(), data.end(), alloc);
+    set_type set(data.begin(), data.end(), alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -227,12 +254,16 @@ PRINT("Test container(InputIt, InputIt, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(InputIt, InputIt, const Compare&, const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -253,11 +284,11 @@ PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
         }
     );
 
-    typename container_type::key_compare comp;
+    typename set_type::key_compare comp;
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set(data.begin(), data.end(), comp, alloc);
+    set_type set(data.begin(), data.end(), comp, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -285,12 +316,16 @@ PRINT("Test container(InputIt, InputIt, const Compare&, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list)");
+BEGIN_TEST("Test container(std::initializer_list)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -309,7 +344,7 @@ PRINT("Test container(std::initializer_list)");
         {50, 3050}
     };
 
-    container_type set(ilist);
+    set_type set(ilist);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -337,12 +372,16 @@ PRINT("Test container(std::initializer_list)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -361,9 +400,9 @@ PRINT("Test container(std::initializer_list, const Compare&)");
         {50, 3050}
     };
 
-    typename container_type::key_compare comp;
+    typename set_type::key_compare comp;
 
-    container_type set(ilist, comp);
+    set_type set(ilist, comp);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -391,12 +430,16 @@ PRINT("Test container(std::initializer_list, const Compare&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -415,9 +458,9 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
         {50, 3050}
     };
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set(ilist, alloc);
+    set_type set(ilist, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -445,12 +488,16 @@ PRINT("Test container(std::initializer_list, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)");
+BEGIN_TEST("Test container(std::initializer_list, const Compare&, const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -469,11 +516,11 @@ PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)")
         {50, 3050}
     };
 
-    typename container_type::key_compare comp;
+    typename set_type::key_compare comp;
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set(ilist, comp, alloc);
+    set_type set(ilist, comp, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 15);
@@ -501,12 +548,16 @@ PRINT("Test container(std::initializer_list, const Compare&, const Allocator&)")
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -527,7 +578,7 @@ PRINT("Test container(const container&)");
         }
     );
 
-    container_type set1(data.begin(), data.end());
+    set_type set1(data.begin(), data.end());
 
     CHECK(set1.empty() == false);
     CHECK(set1.size() == 15);
@@ -557,7 +608,7 @@ PRINT("Test container(const container&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type set2(set1);
+    set_type set2(set1);
 
     CHECK(set2.empty() == false);
     CHECK(set2.size() == 15);
@@ -585,12 +636,16 @@ PRINT("Test container(const container&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(const container&, const Allocator&)");
+BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -611,7 +666,7 @@ PRINT("Test container(const container&, const Allocator&)");
         }
     );
 
-    container_type set1(data.begin(), data.end());
+    set_type set1(data.begin(), data.end());
 
     CHECK(set1.empty() == false);
     CHECK(set1.size() == 15);
@@ -641,9 +696,9 @@ PRINT("Test container(const container&, const Allocator&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set2(set1, alloc);
+    set_type set2(set1, alloc);
 
     CHECK(set2.empty() == false);
     CHECK(set2.size() == 15);
@@ -671,12 +726,16 @@ PRINT("Test container(const container&, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -697,7 +756,7 @@ PRINT("Test container(container&&)");
         }
     );
 
-    container_type set1(data.begin(), data.end());
+    set_type set1(data.begin(), data.end());
 
     CHECK(set1.empty() == false);
     CHECK(set1.size() == 15);
@@ -727,7 +786,7 @@ PRINT("Test container(container&&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type set2(std::move(set1));
+    set_type set2(std::move(set1));
 
     CHECK(set1.empty() == true);
     CHECK(set1.size() == 0);
@@ -758,12 +817,16 @@ PRINT("Test container(container&&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Allocator&)");
+BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -784,7 +847,7 @@ PRINT("Test container(container&&, const Allocator&)");
         }
     );
 
-    container_type set1(data.begin(), data.end());
+    set_type set1(data.begin(), data.end());
 
     CHECK(set1.empty() == false);
     CHECK(set1.size() == 15);
@@ -814,9 +877,9 @@ PRINT("Test container(container&&, const Allocator&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    typename container_type::allocator_type alloc;
+    typename set_type::allocator_type alloc;
 
-    container_type set2(std::move(set1), alloc);
+    set_type set2(std::move(set1), alloc);
 
     if (set1.size() == 15)
     {
@@ -869,14 +932,18 @@ PRINT("Test container(container&&, const Allocator&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data1
+    std::vector<typename set_type::value_type> data1
     (
         {
             {10, 1010},
@@ -888,7 +955,7 @@ PRINT("Test operator=(const container&)");
         }
     );
 
-    std::vector<typename container_type::value_type> data2
+    std::vector<typename set_type::value_type> data2
     (
         {
             {40, 1040},
@@ -900,8 +967,8 @@ PRINT("Test operator=(const container&)");
         }
     );
 
-    container_type set1(data1.begin(), data1.end());
-    container_type set2(data2.begin(), data2.end());
+    set_type set1(data1.begin(), data1.end());
+    set_type set2(data2.begin(), data2.end());
 
     CHECK(set1.size() == 6);
     CHECK(COUNT_KV(set1, 10, 1010) == 1);
@@ -959,12 +1026,16 @@ PRINT("Test operator=(const container&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test operator=(container&&)");
+BEGIN_TEST("Test operator=(container&&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data1
+    std::vector<typename set_type::value_type> data1
     (
         {
             {10, 1010},
@@ -976,7 +1047,7 @@ PRINT("Test operator=(container&&)");
         }
     );
 
-    std::vector<typename container_type::value_type> data2
+    std::vector<typename set_type::value_type> data2
     (
         {
             {40, 1040},
@@ -988,8 +1059,8 @@ PRINT("Test operator=(container&&)");
         }
     );
 
-    container_type set1(data1.begin(), data1.end());
-    container_type set2(data2.begin(), data2.end());
+    set_type set1(data1.begin(), data1.end());
+    set_type set2(data2.begin(), data2.end());
 
     CHECK(set1.size() == 6);
     CHECK(COUNT_KV(set1, 10, 1010) == 1);
@@ -1049,12 +1120,16 @@ PRINT("Test operator=(container&&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
-PRINT("Test operator=(const container&)");
+BEGIN_TEST("Test operator=(const container&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -1066,7 +1141,7 @@ PRINT("Test operator=(const container&)");
         }
     );
 
-    container_type set(data.begin(), data.end());
+    set_type set(data.begin(), data.end());
 
     CHECK(set.size() == 6);
     CHECK(COUNT_KV(set, 10, 1010) == 1);
@@ -1083,7 +1158,7 @@ PRINT("Test operator=(const container&)");
 
     ///////////////////////////////////////////////////////////////////////////
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {40, 1040},
         {50, 1050},
@@ -1108,28 +1183,36 @@ PRINT("Test operator=(const container&)");
         CHECK(it1->first <= it2->first);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test get_allocator()");
+BEGIN_TEST("Test get_allocator()")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set;
+    set_type set;
 
     auto alloc = set.get_allocator();
 
     (void)alloc;
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test key_comp()");
+BEGIN_TEST("Test key_comp()")
 {
     {
-        using container_type = sfl::flat_multiset<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>>;
+        using key_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-        container_type set;
+        set_type set;
 
         auto key_comp = set.key_comp();
 
@@ -1140,9 +1223,12 @@ PRINT("Test key_comp()");
     }
 
     {
-        using container_type = sfl::flat_multiset<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>>;
+        using key_type = xobj;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-        container_type set;
+        set_type set;
 
         auto key_comp = set.key_comp();
 
@@ -1152,15 +1238,19 @@ PRINT("Test key_comp()");
         CHECK(key_comp(xobj(20), 20) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test value_comp()");
+BEGIN_TEST("Test value_comp()")
 {
     {
-        using container_type = sfl::flat_multiset<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>>;
+        using key_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-        container_type set;
+        set_type set;
 
         auto value_comp = set.value_comp();
 
@@ -1171,9 +1261,12 @@ PRINT("Test value_comp()");
     }
 
     {
-        using container_type = sfl::flat_multiset<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>>;
+        using key_type = xobj;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-        container_type set;
+        set_type set;
 
         auto value_comp = set.value_comp();
 
@@ -1183,14 +1276,18 @@ PRINT("Test value_comp()");
         CHECK(value_comp(xobj(20), xobj(20)) == false);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of");
+BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set;
+    set_type set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -1240,14 +1337,18 @@ PRINT("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_o
     CHECK(set.index_of(set.nth(1)) == 1);
     CHECK(set.index_of(set.nth(2)) == 2);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test clear()");
+BEGIN_TEST("Test clear()")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set;
+    set_type set;
 
     set.emplace(10, 1010);
     set.emplace(20, 1020);
@@ -1261,10 +1362,16 @@ PRINT("Test clear()");
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
 }
+END_TEST()
 
-PRINT("Test emplace(Args&&...)");
+BEGIN_TEST("Test emplace(Args&&...)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1273,7 +1380,7 @@ PRINT("Test emplace(Args&&...)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type set;
+    set_type set;
 
     int size = 0;
 
@@ -1316,11 +1423,39 @@ PRINT("Test emplace(Args&&...)");
         CHECK(COUNT_KV(set, key, key + 2000) == 1);
         CHECK(COUNT_KV(set, key, key + 3000) == 1);
     }
-}
 
-PRINT("Test emplace_hint(const_iterator, Args&&...)");
+    #else // C++20 constexpr
+
+    set_type set;
+
+    set.emplace(10, 1);
+    set.emplace(20, 1);
+    set.emplace(20, 2);
+    set.emplace(30, 1);
+    set.emplace(30, 2);
+    set.emplace(30, 3);
+
+    CHECK(set.size() == 6);
+
+    CHECK(COUNT_KV(set, 10, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 1) == 1);
+    CHECK(COUNT_KV(set, 30, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1339,7 +1474,7 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type set;
+                set_type set;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
@@ -1414,11 +1549,39 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert(const value_type&)");
+    #else // C++20 constexpr
+
+    set_type set;
+
+    set.emplace_hint(set.end(), 10, 1);
+    set.emplace_hint(set.end(), 20, 1);
+    set.emplace_hint(set.end(), 20, 2);
+    set.emplace_hint(set.end(), 30, 1);
+    set.emplace_hint(set.end(), 30, 2);
+    set.emplace_hint(set.end(), 30, 3);
+
+    CHECK(set.size() == 6);
+
+    CHECK(COUNT_KV(set, 10, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 1) == 1);
+    CHECK(COUNT_KV(set, 30, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(const value_type&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1427,7 +1590,7 @@ PRINT("Test insert(const value_type&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type set;
+    set_type set;
 
     int size = 0;
 
@@ -1443,7 +1606,7 @@ PRINT("Test insert(const value_type&)");
             const int key = elem;
             const int value = key + 1000 * (iter + 1);
 
-            typename container_type::value_type key_value(key, value);
+            typename set_type::value_type key_value(key, value);
 
             const auto res = set.insert(key_value);
 
@@ -1476,11 +1639,41 @@ PRINT("Test insert(const value_type&)");
         CHECK(COUNT_KV(set, key, key + 2000) == 1);
         CHECK(COUNT_KV(set, key, key + 3000) == 1);
     }
-}
 
-PRINT("Test insert(value_type&&)");
+    #else // C++20 constexpr
+
+    set_type set;
+
+    using value_type = typename set_type::value_type;
+
+    { const value_type value_10_1(10, 1); set.insert(value_10_1); }
+    { const value_type value_20_1(20, 1); set.insert(value_20_1); }
+    { const value_type value_20_2(20, 2); set.insert(value_20_2); }
+    { const value_type value_30_1(30, 1); set.insert(value_30_1); }
+    { const value_type value_30_2(30, 2); set.insert(value_30_2); }
+    { const value_type value_30_3(30, 3); set.insert(value_30_3); }
+
+    CHECK(set.size() == 6);
+
+    CHECK(COUNT_KV(set, 10, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 1) == 1);
+    CHECK(COUNT_KV(set, 30, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(value_type&&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1489,7 +1682,7 @@ PRINT("Test insert(value_type&&)");
     // Elements to be inserted into container
     std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
 
-    container_type set;
+    set_type set;
 
     int size = 0;
 
@@ -1505,7 +1698,7 @@ PRINT("Test insert(value_type&&)");
             const int key = elem;
             const int value = key + 1000 * (iter + 1);
 
-            typename container_type::value_type key_value(key, value);
+            typename set_type::value_type key_value(key, value);
 
             const auto res = set.insert(std::move(key_value));
 
@@ -1538,11 +1731,41 @@ PRINT("Test insert(value_type&&)");
         CHECK(COUNT_KV(set, key, key + 2000) == 1);
         CHECK(COUNT_KV(set, key, key + 3000) == 1);
     }
-}
 
-PRINT("Test insert(const_iterator, const value_type&)");
+    #else // C++20 constexpr
+
+    set_type set;
+
+    using value_type = typename set_type::value_type;
+
+    { value_type value_10_1(10, 1); set.insert(std::move(value_10_1)); }
+    { value_type value_20_1(20, 1); set.insert(std::move(value_20_1)); }
+    { value_type value_20_2(20, 2); set.insert(std::move(value_20_2)); }
+    { value_type value_30_1(30, 1); set.insert(std::move(value_30_1)); }
+    { value_type value_30_2(30, 2); set.insert(std::move(value_30_2)); }
+    { value_type value_30_3(30, 3); set.insert(std::move(value_30_3)); }
+
+    CHECK(set.size() == 6);
+
+    CHECK(COUNT_KV(set, 10, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 1) == 1);
+    CHECK(COUNT_KV(set, 30, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1561,12 +1784,12 @@ PRINT("Test insert(const_iterator, const value_type&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type set;
+                set_type set;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
                 {
-                    typename container_type::value_type key_value(elem1, elem1 + 1000);
+                    typename set_type::value_type key_value(elem1, elem1 + 1000);
 
                     const auto hint = set.end();
 
@@ -1601,7 +1824,7 @@ PRINT("Test insert(const_iterator, const value_type&)");
 
                 // Insert additional element
                 {
-                    typename container_type::value_type key_value(elem2, elem2 + 2000);
+                    typename set_type::value_type key_value(elem2, elem2 + 2000);
 
                     const auto hint = NTH(set, insert_pos);
 
@@ -1648,11 +1871,41 @@ PRINT("Test insert(const_iterator, const value_type&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert(const_iterator, value_type&&)");
+    #else // C++20 constexpr
+
+    set_type set;
+
+    using value_type = typename set_type::value_type;
+
+    { const value_type value_10_1(10, 1); set.insert(set.end(), value_10_1); }
+    { const value_type value_20_1(20, 1); set.insert(set.end(), value_20_1); }
+    { const value_type value_20_2(20, 2); set.insert(set.end(), value_20_2); }
+    { const value_type value_30_1(30, 1); set.insert(set.end(), value_30_1); }
+    { const value_type value_30_2(30, 2); set.insert(set.end(), value_30_2); }
+    { const value_type value_30_3(30, 3); set.insert(set.end(), value_30_3); }
+
+    CHECK(set.size() == 6);
+
+    CHECK(COUNT_KV(set, 10, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 1) == 1);
+    CHECK(COUNT_KV(set, 30, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1671,12 +1924,12 @@ PRINT("Test insert(const_iterator, value_type&&)");
         {
             for (const auto& elem2 : data2)
             {
-                container_type set;
+                set_type set;
 
                 // Insert initial elements
                 for (const auto& elem1 : data1)
                 {
-                    typename container_type::value_type key_value(elem1, elem1 + 1000);
+                    typename set_type::value_type key_value(elem1, elem1 + 1000);
 
                     const auto hint = set.end();
 
@@ -1711,7 +1964,7 @@ PRINT("Test insert(const_iterator, value_type&&)");
 
                 // Insert additional element
                 {
-                    typename container_type::value_type key_value(elem2, elem2 + 2000);
+                    typename set_type::value_type key_value(elem2, elem2 + 2000);
 
                     const auto hint = NTH(set, insert_pos);
 
@@ -1758,13 +2011,41 @@ PRINT("Test insert(const_iterator, value_type&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
+
+    #else // C++20 constexpr
+
+    set_type set;
+
+    using value_type = typename set_type::value_type;
+
+    { value_type value_10_1(10, 1); set.insert(set.end(), std::move(value_10_1)); }
+    { value_type value_20_1(20, 1); set.insert(set.end(), std::move(value_20_1)); }
+    { value_type value_20_2(20, 2); set.insert(set.end(), std::move(value_20_2)); }
+    { value_type value_30_1(30, 1); set.insert(set.end(), std::move(value_30_1)); }
+    { value_type value_30_2(30, 2); set.insert(set.end(), std::move(value_30_2)); }
+    { value_type value_30_3(30, 3); set.insert(set.end(), std::move(value_30_3)); }
+
+    CHECK(set.size() == 6);
+
+    CHECK(COUNT_KV(set, 10, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 1) == 1);
+    CHECK(COUNT_KV(set, 20, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 1) == 1);
+    CHECK(COUNT_KV(set, 30, 2) == 1);
+    CHECK(COUNT_KV(set, 30, 3) == 1);
+
+    #endif // C++20 constexpr
 }
+END_TEST()
 
-PRINT("Test insert(InputIt, InputIt");
+BEGIN_TEST("Test insert(InputIt, InputIt")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::vector<typename container_type::value_type> data
+    std::vector<typename set_type::value_type> data
     (
         {
             {10, 1010},
@@ -1785,7 +2066,7 @@ PRINT("Test insert(InputIt, InputIt");
         }
     );
 
-    container_type set;
+    set_type set;
 
     set.insert(data.begin(), data.end());
 
@@ -1807,12 +2088,16 @@ PRINT("Test insert(InputIt, InputIt");
     CHECK(COUNT_KV(set, 40, 3040) == 1);
     CHECK(COUNT_KV(set, 50, 3050) == 1);
 }
+END_TEST()
 
-PRINT("Test insert(std::initializer_list");
+BEGIN_TEST("Test insert(std::initializer_list")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    std::initializer_list<typename container_type::value_type> ilist
+    std::initializer_list<typename set_type::value_type> ilist
     {
         {10, 1010},
         {20, 1020},
@@ -1831,7 +2116,7 @@ PRINT("Test insert(std::initializer_list");
         {50, 3050}
     };
 
-    container_type set;
+    set_type set;
 
     set.insert(ilist);
 
@@ -1853,12 +2138,17 @@ PRINT("Test insert(std::initializer_list");
     CHECK(COUNT_KV(set, 40, 3040) == 1);
     CHECK(COUNT_KV(set, 50, 3050) == 1);
 }
+END_TEST()
 
-PRINT("Test insert_range(Range&&");
+BEGIN_TEST("Test insert_range(Range&&")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
     // Input iterator (exactly)
+    #ifndef TEST_CPP20_CONSTEXPR
     {
         std::istringstream iss
         (
@@ -1879,12 +2169,12 @@ PRINT("Test insert_range(Range&&");
             "50 3050 "
         );
 
-        container_type set;
+        set_type set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        set.insert_range(std::views::istream<typename container_type::value_type>(iss));
+        set.insert_range(std::views::istream<typename set_type::value_type>(iss));
         #else
-        set.insert_range(sfl::test::istream_view<typename container_type::value_type>(iss));
+        set.insert_range(sfl::test::istream_view<typename set_type::value_type>(iss));
         #endif
 
         CHECK(set.size() == 15);
@@ -1905,10 +2195,11 @@ PRINT("Test insert_range(Range&&");
         CHECK(COUNT_KV(set, 40, 3040) == 1);
         CHECK(COUNT_KV(set, 50, 3050) == 1);
     }
+    #endif
 
     // Forward iterator
     {
-        std::vector<typename container_type::value_type> data
+        std::vector<typename set_type::value_type> data
         (
             {
                 {10, 1010},
@@ -1929,7 +2220,7 @@ PRINT("Test insert_range(Range&&");
             }
         );
 
-        container_type set;
+        set_type set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set.insert_range(std::views::all(data));
@@ -1956,10 +2247,14 @@ PRINT("Test insert_range(Range&&");
         CHECK(COUNT_KV(set, 50, 3050) == 1);
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator)");
+BEGIN_TEST("Test erase(const_iterator)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
     // Elements to be inserted into container
     const std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
@@ -1968,7 +2263,7 @@ PRINT("Test erase(const_iterator)");
     {
         for (int erase_pos = 0; erase_pos < size; ++erase_pos)
         {
-            container_type set;
+            set_type set;
 
             // Insert elements
             for (int i = 0; i < size; ++i)
@@ -2009,10 +2304,14 @@ PRINT("Test erase(const_iterator)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
     // Elements to be inserted into container
     const std::vector<int> data({10, 20, 30, 40, 50, 60, 70, 80, 90});
@@ -2023,7 +2322,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
         {
             for (int erase_pos2 = erase_pos1; erase_pos2 < size; ++erase_pos2)
             {
-                container_type set;
+                set_type set;
 
                 // Insert elements
                 for (int i = 0; i < size; ++i)
@@ -2071,12 +2370,16 @@ PRINT("Test erase(const_iterator, const_iterator)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test erase(const Key&)");
+BEGIN_TEST("Test erase(const Key&)")
 {
-    using container_type = sfl::flat_multiset<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>>;
+    using key_type = xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set;
+    set_type set;
 
     set.emplace(10);
     set.emplace(20);
@@ -2120,12 +2423,16 @@ PRINT("Test erase(const Key&)");
     CHECK(COUNT(set, 20) == 0);
     CHECK(COUNT(set, 30) == 0);
 }
+END_TEST()
 
-PRINT("Test erase(K&&)");
+BEGIN_TEST("Test erase(K&&)")
 {
-    using container_type = sfl::flat_multiset<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>>;
+    using key_type = xobj;
+    using key_compare = xobj::less;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set;
+    set_type set;
 
     set.emplace(10);
     set.emplace(20);
@@ -2169,12 +2476,16 @@ PRINT("Test erase(K&&)");
 
     CHECK(set.size() == 0);
 }
+END_TEST()
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set1, set2;
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -2226,15 +2537,19 @@ PRINT("Test swap(container&)");
     CHECK(COUNT_KV(set2, 60, 2) == 1);
     CHECK(COUNT_KV(set2, 70, 2) == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
+BEGIN_TEST("Test lower_bound, upper_bound, equal_range, find, count, contains")
 {
     {
-        using container_type = sfl::flat_multiset<xint, std::less<xint>, TPARAM_ALLOCATOR<xint>>;
+        using key_type = xint;
+        using key_compare = std::less<key_type>;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-        container_type set;
+        set_type set;
 
         set.emplace(10);
         set.emplace(20);
@@ -2307,9 +2622,12 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
     }
 
     {
-        using container_type = sfl::flat_multiset<xobj, xobj::less, TPARAM_ALLOCATOR<xobj>>;
+        using key_type = xobj;
+        using key_compare = xobj::less;
+        using allocator_type = TPARAM_ALLOCATOR<key_type>;
+        using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-        container_type set;
+        set_type set;
 
         set.emplace(10);
         set.emplace(20);
@@ -2381,14 +2699,18 @@ PRINT("Test lower_bound, upper_bound, equal_range, find, count, contains");
         }
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test data()");
+BEGIN_TEST("Test data()")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set;
+    set_type set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -2406,14 +2728,18 @@ PRINT("Test data()");
     CHECK(std::next(cref.data(), 1)->first == 20); CHECK(std::next(cref.data(), 1)->second == 1);
     CHECK(std::next(cref.data(), 2)->first == 30); CHECK(std::next(cref.data(), 2)->second == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set1, set2;
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -2455,12 +2781,16 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((set2 >= set1) == true);
     CHECK((set2 >= set2) == true);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER swap(container&)");
+BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    container_type set1, set2;
+    set_type set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -2500,16 +2830,20 @@ PRINT("Test NON-MEMBER swap(container&)");
     CHECK(COUNT_KV(set2, 20, 1) == 1);
     CHECK(COUNT_KV(set2, 30, 1) == 1);
 }
+END_TEST()
 
-PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
+BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
-    using container_type = sfl::flat_multiset<xint_xint, std::less<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+    using key_type = xint_xint;
+    using key_compare = std::less<key_type>;
+    using allocator_type = TPARAM_ALLOCATOR<key_type>;
+    using set_type = sfl::flat_multiset<key_type, key_compare, allocator_type>;
 
-    using const_reference = typename container_type::const_reference;
+    using const_reference = typename set_type::const_reference;
 
     ///////////////////////////////////////////////////////////////////////////
 
-    container_type set;
+    set_type set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -2528,3 +2862,4 @@ PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
     CHECK(COUNT_KV(set, 10, 1) == 1);
     CHECK(COUNT_KV(set, 30, 1) == 1);
 }
+END_TEST()
