@@ -75,6 +75,10 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 
 `sfl::unordered_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), and [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer).
 
+`sfl::unordered_set` can be used in C++20 constant expressions. However, `sfl::unordered_set` objects generally cannot be `constexpr`, because any dynamically allocated storage must be released in the same evaluation of constant expression.
+
+**Note:** At the time of writing this document, when compiling with MSVC (version 19.44 and earlier), `sfl::unordered_set` container has a limitation in C++20 constant expressions: both the key hash and key equality functors must be empty types. That is, `std::is_empty<KeyHash>::value` and `std::is_empty<KeyEqual>::value` must both be `true`. This limitation does not apply when the container is used in non-constant expressions.
+
 <br><br>
 
 

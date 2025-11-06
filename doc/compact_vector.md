@@ -77,6 +77,8 @@ This container is inspired by [OpenFOAM's](https://openfoam.org/) container [`Li
 
 `sfl::compact_vector` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*SequenceContainer*](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
 
+`sfl::compact_vector` can be used in C++20 constant expressions. However, `sfl::compact_vector` objects generally cannot be `constexpr`, because any dynamically allocated storage must be released in the same evaluation of constant expression.
+
 <br><br>
 
 

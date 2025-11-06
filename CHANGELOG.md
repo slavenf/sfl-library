@@ -1,3 +1,26 @@
+# New Release
+
+* Added C++20 `constexpr` support for the following containers:
+  * `vector`
+  * `devector`
+  * `compact_vector`
+  * `segmented_vector`
+  * `segmented_devector`
+  * `map`
+  * `set`
+  * `multimap`
+  * `multiset`
+  * `unordered_map`
+  * `unordered_set`
+  * `unordered_multimap`
+  * `unordered_multiset`
+  * `flat_map`
+  * `flat_set`
+  * `flat_multimap`
+  * `flat_multiset`
+
+
+
 # 2.0.2 (2025-10-10)
 
 * Hash table: Fixed compiler warnings when compiled in 32-bit mode.

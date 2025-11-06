@@ -93,6 +93,8 @@ Indexed access to elements (`operator[]` and `at`) must perform two pointer dere
 
 `sfl::segmented_devector` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [*SequenceContainer*](https://en.cppreference.com/w/cpp/named_req/SequenceContainer).
 
+`sfl::segmented_devector` can be used in C++20 constant expressions. However, `sfl::segmented_devector` objects generally cannot be `constexpr`, because any dynamically allocated storage must be released in the same evaluation of constant expression.
+
 Key differences between `segmented_vector` and `segmented_devector`:
 * `segmented_vector` allows fast insertion and deletion only at its end and `segmented_devector` allows fast insertion and deletion at both its beginning and its end.
 * `segmented_vector` has much faster random access (`nth`, `operator[]` and `at`) than `segmented_devector`.

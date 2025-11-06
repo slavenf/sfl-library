@@ -81,6 +81,8 @@ Iterators to elements are bidirectional iterators and they meet the requirements
 
 `sfl::map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*AllocatorAwareContainer*](https://en.cppreference.com/w/cpp/named_req/AllocatorAwareContainer), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
+`sfl::map` can be used in C++20 constant expressions. However, `sfl::map` objects generally cannot be `constexpr`, because any dynamically allocated storage must be released in the same evaluation of constant expression.
+
 <br><br>
 
 

@@ -1,6 +1,6 @@
 # sfl library
 
-This is header-only C++11 library that offers several new or less-known containers.
+This is a header-only C++11 library that provides several new or lesser-known containers, some of which can be used in C++20 constant expressions.
 
 #### Sequence containers:
 
@@ -18,16 +18,12 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`set`](doc/set.md)
 * [`multimap`](doc/multimap.md)
 * [`multiset`](doc/multiset.md)
-
-<br>
-
+<!---->
 * [`small_map`](doc/small_map.md)
 * [`small_set`](doc/small_set.md)
 * [`small_multimap`](doc/small_multimap.md)
 * [`small_multiset`](doc/small_multiset.md)
-
-<br>
-
+<!---->
 * [`static_map`](doc/static_map.md)
 * [`static_set`](doc/static_set.md)
 * [`static_multimap`](doc/static_multimap.md)
@@ -39,16 +35,12 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`unordered_set`](doc/unordered_set.md)
 * [`unordered_multimap`](doc/unordered_multimap.md)
 * [`unordered_multiset`](doc/unordered_multiset.md)
-
-<br>
-
+<!---->
 * [`small_unordered_map`](doc/small_unordered_map.md)
 * [`small_unordered_set`](doc/small_unordered_set.md)
 * [`small_unordered_multimap`](doc/small_unordered_multimap.md)
 * [`small_unordered_multiset`](doc/small_unordered_multiset.md)
-
-<br>
-
+<!---->
 * [`static_unordered_map`](doc/static_unordered_map.md)
 * [`static_unordered_set`](doc/static_unordered_set.md)
 * [`static_unordered_multimap`](doc/static_unordered_multimap.md)
@@ -60,16 +52,12 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`flat_set`](doc/flat_set.md)
 * [`flat_multimap`](doc/flat_multimap.md)
 * [`flat_multiset`](doc/flat_multiset.md)
-
-<br>
-
+<!---->
 * [`small_flat_map`](doc/small_flat_map.md)
 * [`small_flat_set`](doc/small_flat_set.md)
 * [`small_flat_multimap`](doc/small_flat_multimap.md)
 * [`small_flat_multiset`](doc/small_flat_multiset.md)
-
-<br>
-
+<!---->
 * [`static_flat_map`](doc/static_flat_map.md)
 * [`static_flat_set`](doc/static_flat_set.md)
 * [`static_flat_multimap`](doc/static_flat_multimap.md)
@@ -81,9 +69,7 @@ This is header-only C++11 library that offers several new or less-known containe
 * [`small_unordered_linear_set`](doc/small_unordered_linear_set.md)
 * [`small_unordered_linear_multimap`](doc/small_unordered_linear_multimap.md)
 * [`small_unordered_linear_multiset`](doc/small_unordered_linear_multiset.md)
-
-<br>
-
+<!---->
 * [`static_unordered_linear_map`](doc/static_unordered_linear_map.md)
 * [`static_unordered_linear_set`](doc/static_unordered_linear_set.md)
 * [`static_unordered_linear_multimap`](doc/static_unordered_linear_multimap.md)
@@ -94,15 +80,16 @@ This is header-only C++11 library that offers several new or less-known containe
 # Features
 
 * Compiles with GCC 4.8.5 and Clang 3.4.2.
+* Some containers are usable in C++20 constant expressions. For more information, please see section [C++20 constexpr](#c20-constexpr).
 * Containers support [stateful allocators](https://en.cppreference.com/w/cpp/named_req/Allocator#Stateful_and_stateless_allocators) and allocators with [fancy pointers](https://en.cppreference.com/w/cpp/named_req/Allocator#Fancy_pointers).
-* Containers have available range constructor `container(sfl::from_range_t, Range&& r)` in C++11.
-* Containers have available range insertion member function `insert_range(Range&& r)` in C++11.
-* Maps and sets support heterogeneous insertion, erasure and lookup in C++11.
-* Functions taking iterator range properly handle [input iterators](https://en.cppreference.com/w/cpp/named_req/InputIterator).
-* There is no undefined behavior when constructing maps and sets from range containing duplicates.
-* There is no undefined behavior when inserting range containing duplicates into maps and sets.
+* Containers provide a range constructor `container(sfl::from_range_t, Range&& r)` in C++11.
+* Containers provide a range insertion member function `insert_range(Range&& r)` in C++11.
+* Maps and sets support heterogeneous insertion, erasure, and lookup in C++11.
+* Functions taking iterator ranges properly handle [input iterators](https://en.cppreference.com/w/cpp/named_req/InputIterator).
+* There is no undefined behavior when constructing maps and sets from ranges containing duplicates.
+* There is no undefined behavior when inserting ranges containing duplicates into maps and sets.
 * Vectors are not specialized for `bool`.
-* Static containers can be used for bare-metal embedded software development.
+* Static containers can be used in bare-metal embedded software development.
 
 
 
@@ -116,9 +103,9 @@ Tested compilers:
 * Clang 3.4.2 on CentOS 7 (C++11)
 * GCC 7.3.1 on CentOS 7 (C++11, 14, 17)
 * Clang 5.0.1 on CentOS 7 (C++11, 14, 17)
-* GCC 15.1.1 on Arch Linux (C++11, 14, 17, 20, 23)
-* Clang 20.1.6 on Arch Linux (C++11, 14, 17, 20, 23)
-* MSVC 19.38 (C++14, 17, 20, latest)
+* GCC 15.2.1 on Arch Linux (C++11, 14, 17, 20, 23)
+* Clang 21.1.4 on Arch Linux (C++11, 14, 17, 20, 23)
+* MSVC 19.44 (C++14, 17, 20, latest)
 
 
 
@@ -155,6 +142,37 @@ target_link_libraries(your_target_name PRIVATE sfl)
 ```
 
 **Step 3:** `#include` what you need.
+
+
+
+# C++20 constexpr
+
+The following containers are usable in C++20 constant expressions:
+
+* [`vector`](doc/vector.md)
+* [`devector`](doc/devector.md)
+* [`compact_vector`](doc/compact_vector.md)
+* [`segmented_vector`](doc/segmented_vector.md)
+* [`segmented_devector`](doc/segmented_devector.md)
+<!---->
+* [`map`](doc/map.md)
+* [`set`](doc/set.md)
+* [`multimap`](doc/multimap.md)
+* [`multiset`](doc/multiset.md)
+<!---->
+* [`unordered_map`](doc/unordered_map.md)
+* [`unordered_set`](doc/unordered_set.md)
+* [`unordered_multimap`](doc/unordered_multimap.md)
+* [`unordered_multiset`](doc/unordered_multiset.md)
+<!---->
+* [`flat_map`](doc/flat_map.md)
+* [`flat_set`](doc/flat_set.md)
+* [`flat_multimap`](doc/flat_multimap.md)
+* [`flat_multiset`](doc/flat_multiset.md)
+
+Other containers are not currently usable in C++20 constant expressions but may be supported in future library versions.
+
+**Note:** At the time of writing this document, when compiling with MSVC (version 19.44 and earlier), `unordered_*` containers have a limitation in C++20 constant expressions: both the key hash and key equality functors must be empty types. That is, `std::is_empty<KeyHash>::value` and `std::is_empty<KeyEqual>::value` must both be `true`. This limitation does not apply when the containers are used in non-constant expressions.
 
 
 
