@@ -1,4 +1,4 @@
-# New Release
+# 2.1.0 (2025-11-06)
 
 * Added C++20 `constexpr` support for the following containers:
   * `vector`
