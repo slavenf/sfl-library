@@ -22,6 +22,7 @@
 #define SFL_DETAIL_DESTROY_HPP_INCLUDED
 
 #include <sfl/detail/memory/destroy_at.hpp>
+#include <sfl/detail/cpp.hpp>
 
 #include <memory> // addressof
 
@@ -32,6 +33,7 @@ namespace dtl
 {
 
 template <typename ForwardIt>
+SFL_CONSTEXPR_20
 void destroy(ForwardIt first, ForwardIt last) noexcept
 {
     while (first != last)

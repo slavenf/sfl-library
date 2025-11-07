@@ -80,7 +80,33 @@ public:
 
 private:
 
-    struct data
+    template <bool IsTriviallyCopyable, typename Dummy = void>
+    struct static_vector_data;
+
+    template <typename Dummy>
+    struct static_vector_data<true, Dummy>
+    {
+        value_type first_[N];
+
+        pointer last_;
+
+        SFL_CONSTEXPR_20
+        static_vector_data() noexcept
+            #ifdef _MSC_VER // Visual C++
+            : first_() // Visual C++ compiler requires this
+            , last_(first_)
+            #else
+            : last_(first_)
+            #endif
+        {}
+
+        SFL_CONSTEXPR_20
+        ~static_vector_data()
+        {}
+    };
+
+    template <typename Dummy>
+    struct static_vector_data<false, Dummy>
     {
         union
         {
@@ -89,15 +115,21 @@ private:
 
         pointer last_;
 
-        data() noexcept
+        SFL_CONSTEXPR_20
+        static_vector_data() noexcept
             : last_(first_)
         {}
 
-        ~data()
+        SFL_CONSTEXPR_20
+        ~static_vector_data()
         {}
     };
 
-    data data_;
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    static_vector_data<std::is_trivially_copyable<value_type>::value> data_;
+    #else
+    static_vector_data<false> data_;
+    #endif
 
 public:
 
@@ -105,9 +137,11 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     static_vector() noexcept
     {}
 
+    SFL_CONSTEXPR_20
     static_vector(size_type n)
     {
         SFL_ASSERT(n <= capacity());
@@ -119,6 +153,7 @@ public:
         );
     }
 
+    SFL_CONSTEXPR_20
     static_vector(size_type n, sfl::default_init_t)
     {
         SFL_ASSERT(n <= capacity());
@@ -130,6 +165,7 @@ public:
         );
     }
 
+    SFL_CONSTEXPR_20
     static_vector(size_type n, const T& value)
     {
         SFL_ASSERT(n <= capacity());
@@ -144,15 +180,18 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     static_vector(InputIt first, InputIt last)
     {
         initialize_range(first, last);
     }
 
+    SFL_CONSTEXPR_20
     static_vector(std::initializer_list<T> ilist)
         : static_vector(ilist.begin(), ilist.end())
     {}
 
+    SFL_CONSTEXPR_20
     static_vector(const static_vector& other)
     {
         data_.last_ = sfl::dtl::uninitialized_copy
@@ -163,6 +202,7 @@ public:
         );
     }
 
+    SFL_CONSTEXPR_20
     static_vector(static_vector&& other)
     {
         data_.last_ = sfl::dtl::uninitialized_move
@@ -176,6 +216,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     static_vector(sfl::from_range_t, Range&& range)
         : data_()
     {
@@ -193,6 +234,7 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     ~static_vector() noexcept
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
@@ -202,6 +244,7 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void assign(size_type n, const T& value)
     {
         SFL_ASSERT(n <= capacity());
@@ -247,11 +290,13 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void assign(InputIt first, InputIt last)
     {
         assign_range(first, last);
     }
 
+    SFL_CONSTEXPR_20
     void assign(std::initializer_list<T> ilist)
     {
         assign_range(ilist.begin(), ilist.end());
@@ -260,6 +305,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     void assign_range(Range&& range)
     {
         if constexpr (std::ranges::forward_range<Range>)
@@ -284,6 +330,7 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     static_vector& operator=(const static_vector& other)
     {
         if (this != &other)
@@ -297,6 +344,7 @@ public:
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     static_vector& operator=(static_vector&& other)
     {
         assign
@@ -307,6 +355,7 @@ public:
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     static_vector& operator=(std::initializer_list<T> ilist)
     {
         assign(ilist.begin(), ilist.end());
@@ -318,78 +367,91 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return iterator(pointer(data_.first_));
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return const_iterator(pointer(data_.first_));
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return const_iterator(pointer(data_.first_));
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return iterator(data_.last_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return const_iterator(data_.last_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return const_iterator(data_.last_);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rbegin() noexcept
     {
         return reverse_iterator(end());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rbegin() const noexcept
     {
         return const_reverse_iterator(end());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crbegin() const noexcept
     {
         return const_reverse_iterator(end());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rend() noexcept
     {
         return reverse_iterator(begin());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rend() const noexcept
     {
         return const_reverse_iterator(begin());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crend() const noexcept
     {
         return const_reverse_iterator(begin());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
@@ -397,6 +459,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
@@ -404,6 +467,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type index_of(const_iterator pos) const noexcept
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
@@ -415,18 +479,21 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return data_.first_ == data_.last_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool full() const noexcept
     {
         return std::distance(begin(), end()) == N;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return std::distance(begin(), end());
@@ -445,6 +512,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type available() const noexcept
     {
         return capacity() - size();
@@ -455,6 +523,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference at(size_type pos)
     {
         if (pos >= size())
@@ -466,6 +535,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reference at(size_type pos) const
     {
         if (pos >= size())
@@ -477,6 +547,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference operator[](size_type pos) noexcept
     {
         SFL_ASSERT(pos < size());
@@ -484,6 +555,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reference operator[](size_type pos) const noexcept
     {
         SFL_ASSERT(pos < size());
@@ -491,6 +563,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference front() noexcept
     {
         SFL_ASSERT(!empty());
@@ -498,6 +571,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reference front() const noexcept
     {
         SFL_ASSERT(!empty());
@@ -505,6 +579,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reference back() noexcept
     {
         SFL_ASSERT(!empty());
@@ -512,6 +587,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reference back() const noexcept
     {
         SFL_ASSERT(!empty());
@@ -519,12 +595,14 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T* data() noexcept
     {
         return data_.first_;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const T* data() const noexcept
     {
         return data_.first_;
@@ -534,6 +612,7 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear() noexcept
     {
         sfl::dtl::destroy(data_.first_, data_.last_);
@@ -541,6 +620,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace(const_iterator pos, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -589,16 +669,19 @@ public:
         return iterator(p1);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator pos, const T& value)
     {
         return emplace(pos, value);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator pos, T&& value)
     {
         return emplace(pos, std::move(value));
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator pos, size_type n, const T& value)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
@@ -607,12 +690,14 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator pos, InputIt first, InputIt last)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
         return insert_range(pos, first, last);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator pos, std::initializer_list<T> ilist)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
@@ -622,6 +707,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     iterator insert_range(const_iterator pos, Range&& range)
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
@@ -649,6 +735,7 @@ public:
 #endif // before C++20
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     reference emplace_back(Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -662,11 +749,13 @@ public:
         return *old_last;
     }
 
+    SFL_CONSTEXPR_20
     void push_back(const T& value)
     {
         emplace_back(value);
     }
 
+    SFL_CONSTEXPR_20
     void push_back(T&& value)
     {
         emplace_back(std::move(value));
@@ -675,6 +764,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     void append_range(Range&& range)
     {
         insert_range(end(), std::forward<Range>(range));
@@ -690,6 +780,7 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     void pop_back()
     {
         SFL_ASSERT(!empty());
@@ -699,6 +790,7 @@ public:
         sfl::dtl::destroy_at(data_.last_);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
@@ -712,6 +804,7 @@ public:
         return iterator(p);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator first, const_iterator last)
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
@@ -733,6 +826,7 @@ public:
         return iterator(p1);
     }
 
+    SFL_CONSTEXPR_20
     void resize(size_type n)
     {
         SFL_ASSERT(n <= capacity());
@@ -763,6 +857,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void resize(size_type n, sfl::default_init_t)
     {
         SFL_ASSERT(n <= capacity());
@@ -793,6 +888,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void resize(size_type n, const T& value)
     {
         SFL_ASSERT(n <= capacity());
@@ -824,6 +920,7 @@ public:
         }
     }
 
+    SFL_CONSTEXPR_20
     void swap(static_vector& other)
     {
         if (this == &other)
@@ -886,12 +983,14 @@ public:
 private:
 
     template <typename InputIt>
+    SFL_CONSTEXPR_20
     void initialize_range(InputIt first, InputIt last)
     {
         initialize_range(first, last, typename std::iterator_traits<InputIt>::iterator_category());
     }
 
     template <typename InputIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void initialize_range(InputIt first, Sentinel last, std::input_iterator_tag)
     {
         SFL_TRY
@@ -910,6 +1009,7 @@ private:
     }
 
     template <typename ForwardIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void initialize_range(ForwardIt first, Sentinel last, std::forward_iterator_tag)
     {
         SFL_ASSERT(size_type(std::distance(first, last)) <= capacity());
@@ -925,6 +1025,7 @@ private:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     void initialize_range(Range&& range)
     {
         if constexpr (std::ranges::forward_range<Range>)
@@ -950,12 +1051,14 @@ private:
 #endif // before C++20
 
     template <typename InputIt>
+    SFL_CONSTEXPR_20
     void assign_range(InputIt first, InputIt last)
     {
         assign_range(first, last, typename std::iterator_traits<InputIt>::iterator_category());
     }
 
     template <typename InputIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void assign_range(InputIt first, Sentinel last, std::input_iterator_tag)
     {
         pointer curr = data_.first_;
@@ -984,6 +1087,7 @@ private:
     }
 
     template <typename ForwardIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void assign_range(ForwardIt first, Sentinel last, std::forward_iterator_tag)
     {
         SFL_ASSERT(size_type(std::distance(first, last)) <= capacity());
@@ -1029,6 +1133,7 @@ private:
         }
     }
 
+    SFL_CONSTEXPR_20
     iterator insert_fill_n(const_iterator pos, size_type n, const T& value)
     {
         SFL_ASSERT(n <= available());
@@ -1102,12 +1207,14 @@ private:
     }
 
     template <typename InputIt>
+    SFL_CONSTEXPR_20
     iterator insert_range(const_iterator pos, InputIt first, InputIt last)
     {
         return insert_range(pos, first, last, typename std::iterator_traits<InputIt>::iterator_category());
     }
 
     template <typename InputIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     iterator insert_range(const_iterator pos, InputIt first, Sentinel last, std::input_iterator_tag)
     {
         const difference_type offset = std::distance(cbegin(), pos);
@@ -1123,6 +1230,7 @@ private:
     }
 
     template <typename ForwardIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     iterator insert_range(const_iterator pos, ForwardIt first, Sentinel last, std::forward_iterator_tag)
     {
         SFL_ASSERT(size_type(std::distance(first, last)) <= available());
@@ -1202,6 +1310,7 @@ private:
 
 template <typename T, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const static_vector<T, N>& x,
@@ -1213,6 +1322,7 @@ bool operator==
 
 template <typename T, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const static_vector<T, N>& x,
@@ -1224,6 +1334,7 @@ bool operator!=
 
 template <typename T, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<
 (
     const static_vector<T, N>& x,
@@ -1235,6 +1346,7 @@ bool operator<
 
 template <typename T, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>
 (
     const static_vector<T, N>& x,
@@ -1246,6 +1358,7 @@ bool operator>
 
 template <typename T, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<=
 (
     const static_vector<T, N>& x,
@@ -1257,6 +1370,7 @@ bool operator<=
 
 template <typename T, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>=
 (
     const static_vector<T, N>& x,
@@ -1267,6 +1381,7 @@ bool operator>=
 }
 
 template <typename T, std::size_t N>
+SFL_CONSTEXPR_20
 void swap
 (
     static_vector<T, N>& x,
@@ -1277,6 +1392,7 @@ void swap
 }
 
 template <typename T, std::size_t N, typename U>
+SFL_CONSTEXPR_20
 typename static_vector<T, N>::size_type
     erase(static_vector<T, N>& c, const U& value)
 {
@@ -1287,6 +1403,7 @@ typename static_vector<T, N>::size_type
 }
 
 template <typename T, std::size_t N, typename Predicate>
+SFL_CONSTEXPR_20
 typename static_vector<T, N>::size_type
     erase_if(static_vector<T, N>& c, Predicate pred)
 {

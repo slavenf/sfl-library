@@ -3913,3 +3913,7 @@ int main()
 {
     test_static_vector();
 }
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+#include "test_cpp20_constexpr.inc"
+#endif

@@ -21,6 +21,10 @@
 #ifndef SFL_DETAIL_VALUE_CONSTRUCT_AT_HPP_INCLUDED
 #define SFL_DETAIL_VALUE_CONSTRUCT_AT_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
+#include <memory> // construct_at
+
 namespace sfl
 {
 
@@ -28,9 +32,14 @@ namespace dtl
 {
 
 template <typename T>
+SFL_CONSTEXPR_20
 void value_construct_at(T* p)
 {
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    std::construct_at(p);
+    #else
     ::new (static_cast<void*>(p)) T();
+    #endif
 }
 
 } // namespace dtl

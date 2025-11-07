@@ -34,6 +34,7 @@ namespace dtl
 {
 
 template <typename ForwardIt, typename Size>
+SFL_CONSTEXPR_20
 ForwardIt uninitialized_default_construct_n(ForwardIt first, Size n)
 {
     ForwardIt curr = first;

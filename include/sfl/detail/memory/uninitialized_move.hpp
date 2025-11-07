@@ -35,6 +35,7 @@ namespace dtl
 {
 
 template <typename InputIt, typename ForwardIt>
+SFL_CONSTEXPR_20
 ForwardIt uninitialized_move(InputIt first, InputIt last, ForwardIt d_first)
 {
     ForwardIt d_curr = d_first;

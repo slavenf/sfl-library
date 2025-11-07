@@ -21,6 +21,11 @@
 #ifndef SFL_DETAIL_DEFAULT_CONSTRUCT_AT_HPP_INCLUDED
 #define SFL_DETAIL_DEFAULT_CONSTRUCT_AT_HPP_INCLUDED
 
+#include <sfl/detail/cpp.hpp>
+
+#include <memory> // construct_at
+#include <type_traits> // is_constant_evaluated
+
 namespace sfl
 {
 
@@ -28,9 +33,21 @@ namespace dtl
 {
 
 template <typename T>
+SFL_CONSTEXPR_20
 void default_construct_at(T* p)
 {
-    ::new (static_cast<void*>(p)) T;
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        // We must use std::construct_at within a constant-evaluated context
+        // because there is no std::default_construct_at.
+        std::construct_at(p);
+    }
+    else
+    #endif
+    {
+        ::new (static_cast<void*>(p)) T;
+    }
 }
 
 } // namespace dtl

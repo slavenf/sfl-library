@@ -24,6 +24,7 @@
 #include <sfl/detail/cpp.hpp>
 
 #include <memory> // destroy_at
+#include <type_traits> // is_trivially_copyable
 
 namespace sfl
 {
@@ -36,7 +37,14 @@ SFL_CONSTEXPR_20
 void destroy_at(T* p) noexcept
 {
     #if SFL_CPP_VERSION >= SFL_CPP_20
-    std::destroy_at(p);
+    if constexpr (std::is_trivially_copyable<T>::value)
+    {
+        // Do nothing
+    }
+    else
+    {
+        std::destroy_at(p);
+    }
     #else
     p->~T();
     #endif

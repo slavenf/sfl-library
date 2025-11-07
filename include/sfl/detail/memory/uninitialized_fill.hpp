@@ -34,6 +34,7 @@ namespace dtl
 {
 
 template <typename ForwardIt, typename T>
+SFL_CONSTEXPR_20
 void uninitialized_fill(ForwardIt first, ForwardIt last, const T& value)
 {
     ForwardIt curr = first;
