@@ -90,6 +90,12 @@ struct rb_tree_node : rb_tree_node_base<VoidPointer>
     using node_pointer = typename std::pointer_traits<VoidPointer>::template rebind<rb_tree_node>;
 
     sfl::dtl::optional_value<Value> value_;
+
+    #if defined(_MSC_VER) && SFL_CPP_VERSION >= SFL_CPP_20 // Visual C++ needs this in C++20 constexpr
+    SFL_CONSTEXPR_20
+    ~rb_tree_node() noexcept
+    {}
+    #endif
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2592,6 +2598,7 @@ private:
         {
             struct help
             {
+                SFL_CONSTEXPR_20
                 static base_node_pointer next_to_swap(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
@@ -2610,6 +2617,7 @@ private:
                     }
                 }
 
+                SFL_CONSTEXPR_20
                 static base_node_pointer detach(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
@@ -2737,6 +2745,7 @@ private:
         {
             struct help
             {
+                SFL_CONSTEXPR_20
                 static base_node_pointer next_to_remove(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
@@ -2755,6 +2764,7 @@ private:
                     }
                 }
 
+                SFL_CONSTEXPR_20
                 static base_node_pointer detach(base_node_pointer x)
                 {
                     SFL_ASSERT(x != nullptr);
