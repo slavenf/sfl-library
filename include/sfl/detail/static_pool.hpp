@@ -24,7 +24,8 @@
 #include <sfl/detail/cpp.hpp>
 
 #include <cstddef> // size_t, ptrdiff_t
-#include <memory>  // addressof
+#include <memory> // addressof
+#include <type_traits> // is_constant_evaluated
 
 namespace sfl
 {
@@ -45,41 +46,90 @@ public:
 
 private:
 
-    union element
+    union bucket
     {
     public:
 
-        element* next_;
+        bucket* next_;
 
         T value_;
 
     public:
 
-        element() noexcept
+        SFL_CONSTEXPR_20
+        bucket() noexcept
         {}
 
-        element(const element& other) = delete;
+        bucket(const bucket& other) = delete;
 
-        element(element&& other) = delete;
+        bucket(bucket&& other) = delete;
 
-        element& operator=(const element& other) = delete;
+        bucket& operator=(const bucket& other) = delete;
 
-        element& operator=(element&& other) = delete;
+        bucket& operator=(bucket&& other) = delete;
 
-        ~element() noexcept
+        SFL_CONSTEXPR_20
+        ~bucket() noexcept
         {}
     };
 
-    element storage_[N];
+    bucket buckets_[N];
 
     size_type n_allocated = 0;
 
     size_type n_initialized = 0;
 
-    element* next_ = nullptr;
+    bucket* next_ = nullptr;
+
+private:
+
+    SFL_CONSTEXPR_20
+    bucket* get_bucket_ptr(T* p) noexcept
+    {
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            for (size_type i = 0; i < N; ++i)
+            {
+                if (p == std::addressof(buckets_[i].value_))
+                {
+                    return std::addressof(buckets_[i]);
+                }
+            }
+            return nullptr;
+        }
+        else
+        #endif
+        {
+            return reinterpret_cast<bucket*>(p);
+        }
+    }
+
+    SFL_CONSTEXPR_20
+    const bucket* get_bucket_ptr(const T* p) const noexcept
+    {
+        #if SFL_CPP_VERSION >= SFL_CPP_20
+        if (std::is_constant_evaluated())
+        {
+            for (size_type i = 0; i < N; ++i)
+            {
+                if (p == std::addressof(buckets_[i].value_))
+                {
+                    return std::addressof(buckets_[i]);
+                }
+            }
+            return nullptr;
+        }
+        else
+        #endif
+        {
+            return reinterpret_cast<const bucket*>(p);
+        }
+    }
 
 public:
 
+    SFL_CONSTEXPR_20
     static_pool() noexcept
     {}
 
@@ -91,18 +141,21 @@ public:
 
     static_pool& operator=(static_pool&& other) = delete;
 
+    SFL_CONSTEXPR_20
     ~static_pool() noexcept
     {
         SFL_ASSERT(empty());
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return n_allocated == 0;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool full() const noexcept
     {
         return n_allocated == N;
@@ -115,13 +168,15 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const T* p) const noexcept
     {
-        const element* q = reinterpret_cast<const element*>(p);
-        return storage_ <= q && q < storage_ + N;
+        const bucket* q = get_bucket_ptr(p);
+        return q != nullptr && buckets_ <= q && q < buckets_ + N;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T* allocate() noexcept
     {
         SFL_ASSERT(n_allocated < N);
@@ -134,14 +189,14 @@ public:
         {
             SFL_ASSERT(n_initialized < N);
 
-            element* p = std::addressof(storage_[n_initialized++]);
+            bucket* p = std::addressof(buckets_[n_initialized++]);
 
             p->next_ = nullptr;
 
             next_ = p;
         }
 
-        element* p = next_;
+        bucket* p = next_;
 
         next_ = p->next_;
 
@@ -150,12 +205,13 @@ public:
         return std::addressof(p->value_);
     }
 
+    SFL_CONSTEXPR_20
     void deallocate(T* p) noexcept
     {
         SFL_ASSERT(n_allocated > 0);
         SFL_ASSERT(contains(p));
 
-        element* q = reinterpret_cast<element*>(p);
+        bucket* q = get_bucket_ptr(p);
 
         q->next_ = next_;
 
