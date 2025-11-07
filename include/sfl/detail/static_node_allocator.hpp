@@ -69,46 +69,56 @@ private:
 
 public:
 
+    SFL_CONSTEXPR_20
     static_node_allocator() noexcept(std::is_nothrow_default_constructible<static_pool_type>::value)
     {}
 
+    SFL_CONSTEXPR_20
     static_node_allocator(const static_node_allocator& /*other*/) noexcept
     {}
 
+    SFL_CONSTEXPR_20
     static_node_allocator(static_node_allocator&& /*other*/) noexcept
     {}
 
     template <typename Node2, std::size_t N2>
+    SFL_CONSTEXPR_20
     static_node_allocator(const static_node_allocator<Node2, N2>& /*other*/) noexcept
     {}
 
     template <typename Node2, std::size_t N2>
+    SFL_CONSTEXPR_20
     static_node_allocator(static_node_allocator<Node2, N2>&& /*other*/) noexcept
     {}
 
+    SFL_CONSTEXPR_20
     static_node_allocator& operator=(const static_node_allocator& /*other*/) noexcept
     {
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     static_node_allocator& operator=(static_node_allocator&& /*other*/) noexcept
     {
         return *this;
     }
 
     template <typename Node2, std::size_t N2>
+    SFL_CONSTEXPR_20
     static_node_allocator& operator=(const static_node_allocator<Node2, N2>& /*other*/) noexcept
     {
         return *this;
     }
 
     template <typename Node2, std::size_t N2>
+    SFL_CONSTEXPR_20
     static_node_allocator& operator=(static_node_allocator<Node2, N2>&& /*other*/) noexcept
     {
         return *this;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     pointer allocate(size_type n)
     {
         SFL_ASSERT(n == 1);
@@ -118,6 +128,7 @@ public:
         return pool_.allocate();
     }
 
+    SFL_CONSTEXPR_20
     void deallocate(pointer p, std::size_t n) noexcept
     {
         SFL_ASSERT(n == 1);
@@ -134,6 +145,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool is_storage_unpropagable(pointer p) const noexcept
     {
         sfl::dtl::ignore_unused(p);
@@ -143,6 +155,7 @@ public:
 
 template <typename T1, typename T2, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const static_node_allocator<T1, N>& x,
@@ -155,6 +168,7 @@ bool operator==
 
 template <typename T1, typename T2, std::size_t N>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const static_node_allocator<T1, N>& x,

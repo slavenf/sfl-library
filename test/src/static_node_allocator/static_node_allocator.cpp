@@ -8,15 +8,13 @@
 #include "sfl/detail/memory/destroy_at_a.hpp"
 
 #include "check.hpp"
-#include "print.hpp"
 
 #include "xint.hpp"
 
-int main()
+SFL_CONSTEXPR_20
+bool test()
 {
     using sfl::test::xint;
-
-    PRINT("Test static_node_allocator<xint, 4>");
 
     sfl::dtl::static_node_allocator<xint, 4> a;
 
@@ -30,6 +28,11 @@ int main()
     sfl::dtl::construct_at_a(a, p3, 30);
     sfl::dtl::construct_at_a(a, p4, 40);
 
+    CHECK(*p1 == 10);
+    CHECK(*p2 == 20);
+    CHECK(*p3 == 30);
+    CHECK(*p4 == 40);
+
     sfl::dtl::destroy_at_a(a, p1);
     sfl::dtl::destroy_at_a(a, p2);
     sfl::dtl::destroy_at_a(a, p3);
@@ -39,4 +42,15 @@ int main()
     sfl::dtl::deallocate(a, p2, 1);
     sfl::dtl::deallocate(a, p3, 1);
     sfl::dtl::deallocate(a, p4, 1);
+
+    return true;
 }
+
+int main()
+{
+    test();
+}
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
+static_assert(test());
+#endif
