@@ -113,6 +113,12 @@ struct hash_table_node : hash_table_base_node<VoidPointer>
 
     sfl::dtl::optional_value<Value> value_;
 
+    #if defined(_MSC_VER) && SFL_CPP_VERSION >= SFL_CPP_20 // Visual C++ needs this in C++20 constexpr
+    SFL_CONSTEXPR_20
+    ~hash_table_node() noexcept
+    {}
+    #endif
+
     // Use this if node is first in group.
     SFL_CONSTEXPR_20
     void set_bucket_index(std::size_t bucket_index, std::true_type) noexcept
