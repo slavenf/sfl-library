@@ -15,7 +15,7 @@ template <typename Key>
 struct hash
 {
     SFL_CONSTEXPR_20
-    std::size_t operator()(const Key& key)
+    std::size_t operator()(const Key& key) const
     {
         return static_cast<std::size_t>(key);
     }

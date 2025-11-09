@@ -198,7 +198,7 @@ template <>
 struct hash<xint>
 {
     SFL_CONSTEXPR_20
-    std::size_t operator()(const xint& x)
+    std::size_t operator()(const xint& x) const
     {
         return static_cast<std::size_t>(*x.value_);
     }
@@ -215,7 +215,7 @@ template <>
 struct hash<sfl::test::xint>
 {
     SFL_CONSTEXPR_20
-    std::size_t operator()(const sfl::test::xint& x)
+    std::size_t operator()(const sfl::test::xint& x) const
     {
         return static_cast<std::size_t>(*x.value_);
     }

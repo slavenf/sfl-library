@@ -1715,9 +1715,9 @@ private:
 
         // Pointer to linked list head
         SFL_CONSTEXPR_20
-        base_node_pointer head()
+        base_node_pointer head() const
         {
-            return std::pointer_traits<base_node_pointer>::pointer_to(head_);
+            return std::pointer_traits<base_node_pointer>::pointer_to(const_cast<base_node_type&>(head_));
         }
 
         // Number of nodes in linked list
@@ -1970,7 +1970,7 @@ private:
         }
     };
 
-    mutable data data_;
+    data data_;
 
 public:
 
