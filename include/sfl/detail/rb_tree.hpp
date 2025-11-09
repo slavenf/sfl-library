@@ -74,6 +74,14 @@ struct rb_tree_node_base
     base_node_pointer left_;
 
     base_node_pointer right_;
+
+    SFL_CONSTEXPR_20
+    rb_tree_node_base() noexcept
+        : color_()
+        , parent_()
+        , left_()
+        , right_()
+    {}
 };
 
 template <typename Value, typename Allocator, typename VoidPointer>
@@ -390,8 +398,8 @@ public:
 private:
 
     class data
-        : public key_compare
-        , public node_allocator_type
+        : private key_compare
+        , private node_allocator_type
     {
     private:
 
@@ -402,21 +410,21 @@ private:
         size_type size_;
 
         SFL_CONSTEXPR_20
-        base_node_pointer header() noexcept
+        base_node_pointer header() const noexcept
         {
-            return std::pointer_traits<base_node_pointer>::pointer_to(header_);
+            return std::pointer_traits<base_node_pointer>::pointer_to(const_cast<base_node_type&>(header_));
         }
 
         SFL_CONSTEXPR_20
-        base_node_pointer& root() noexcept
+        base_node_pointer& root() const noexcept
         {
-            return header_.left_;
+            return const_cast<base_node_pointer&>(header_.left_);
         }
 
         SFL_CONSTEXPR_20
-        base_node_pointer& minimum() noexcept
+        base_node_pointer& minimum() const noexcept
         {
-            return header_.parent_;
+            return const_cast<base_node_pointer&>(header_.parent_);
         }
 
         SFL_CONSTEXPR_20
@@ -526,7 +534,7 @@ private:
         }
     };
 
-    mutable data data_;
+    data data_;
 
 public:
 
