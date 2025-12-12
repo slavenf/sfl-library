@@ -128,7 +128,7 @@ public:
     SFL_CONSTEXPR_20
     pointer operator->() const noexcept
     {
-        return sfl::dtl::to_address(it_);
+        return it_;
     }
 
     SFL_CONSTEXPR_20

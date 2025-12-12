@@ -37,4 +37,53 @@ int main()
 
 #include "static_vector.inc"
 
+///////////////////////////////////////////////////////////////////////////////
+
+namespace constexpr_test
+{
+
+using vector_type = sfl::static_vector<int, 8>;
+
+constexpr vector_type create_vector()
+{
+    vector_type vec;
+    vec.emplace_back(10);
+    vec.emplace_back(20);
+    vec.emplace_back(30);
+    return vec;
+}
+
+constexpr bool test()
+{
+    vector_type vec1 = create_vector();
+
+    vector_type vec2;
+
+    int sum_before = 0;
+
+    for (const auto& elem : vec2)
+    {
+        sum_before += elem;
+    }
+
+    vec2 = vec1;
+
+    int sum_after = 0;
+
+    for (const auto& elem : vec2)
+    {
+        sum_after += elem;
+    }
+
+    return sum_before == 0 && sum_after == 60;
+}
+
+static_assert(test());
+
+constexpr vector_type g_vec = create_vector();
+
+static_assert(g_vec.size() == 3);
+
+} // namespace constexpr_test
+
 #endif // SFL_CPP_VERSION >= SFL_CPP_20

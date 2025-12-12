@@ -4204,13 +4204,10 @@ BEGIN_TEST("Test front() and back()")
 }
 END_TEST()
 
+#ifndef TEST_CPP20_CONSTEXPR
 BEGIN_TEST("Test data()")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4231,6 +4228,7 @@ BEGIN_TEST("Test data()")
     CHECK(*data == 30); ++data;
 }
 END_TEST()
+#endif // TEST_CPP20_CONSTEXPR
 
 BEGIN_TEST("Test NON-MEMBER comparison operators")
 {

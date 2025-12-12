@@ -29,6 +29,7 @@
 #include <sfl/detail/memory/construct_at.hpp>
 #include <sfl/detail/memory/destroy.hpp>
 #include <sfl/detail/memory/destroy_at.hpp>
+#include <sfl/detail/memory/to_address.hpp>
 #include <sfl/detail/memory/uninitialized_copy.hpp>
 #include <sfl/detail/memory/uninitialized_default_construct_n.hpp>
 #include <sfl/detail/memory/uninitialized_fill.hpp>
@@ -42,6 +43,7 @@
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/exceptions.hpp>
 #include <sfl/detail/normal_iterator.hpp>
+#include <sfl/detail/static_storage.hpp>
 
 #include <algorithm>        // copy, move, swap, swap_ranges
 #include <cstddef>          // size_t
@@ -60,6 +62,10 @@ class static_vector
 {
     static_assert(N > 0, "N must be greater than zero.");
 
+private:
+
+    using static_storage_type = sfl::dtl::static_storage<T, N>;
+
 public:
 
     using value_type             = T;
@@ -67,8 +73,8 @@ public:
     using difference_type        = std::ptrdiff_t;
     using reference              = value_type&;
     using const_reference        = const value_type&;
-    using pointer                = value_type*;
-    using const_pointer          = const value_type*;
+    using pointer                = typename static_storage_type::pointer;
+    using const_pointer          = typename static_storage_type::const_pointer;
     using iterator               = sfl::dtl::normal_iterator<pointer, false>;
     using const_iterator         = sfl::dtl::normal_iterator<pointer, true>;
     using reverse_iterator       = std::reverse_iterator<iterator>;
@@ -80,44 +86,31 @@ public:
 
 private:
 
-    template <bool IsTriviallyCopyable, typename Dummy = void>
-    struct static_vector_data;
-
-    template <typename Dummy>
-    struct static_vector_data<true, Dummy>
+    class static_vector_data
     {
-        value_type first_[N];
+    private:
+
+        static_storage_type storage_;
+
+    public:
 
         pointer last_;
 
         SFL_CONSTEXPR_20
-        static_vector_data() noexcept
-            #ifdef _MSC_VER // Visual C++
-            : first_() // Visual C++ compiler requires this
-            , last_(first_)
-            #else
-            : last_(first_)
-            #endif
-        {}
-
-        SFL_CONSTEXPR_20
-        ~static_vector_data()
-        {}
-    };
-
-    template <typename Dummy>
-    struct static_vector_data<false, Dummy>
-    {
-        union
+        pointer first()
         {
-            value_type first_[N];
-        };
-
-        pointer last_;
+            return storage_.data();
+        }
 
         SFL_CONSTEXPR_20
-        static_vector_data() noexcept
-            : last_(first_)
+        pointer first() const
+        {
+            return storage_.data();
+        }
+
+        SFL_CONSTEXPR_20
+        static_vector_data()
+            : last_(first())
         {}
 
         SFL_CONSTEXPR_20
@@ -125,11 +118,7 @@ private:
         {}
     };
 
-    #if SFL_CPP_VERSION >= SFL_CPP_20
-    static_vector_data<std::is_trivially_copyable<value_type>::value> data_;
-    #else
-    static_vector_data<false> data_;
-    #endif
+    static_vector_data data_;
 
 public:
 
@@ -148,7 +137,7 @@ public:
 
         data_.last_ = sfl::dtl::uninitialized_value_construct_n
         (
-            data_.first_,
+            data_.first(),
             n
         );
     }
@@ -160,7 +149,7 @@ public:
 
         data_.last_ = sfl::dtl::uninitialized_default_construct_n
         (
-            data_.first_,
+            data_.first(),
             n
         );
     }
@@ -172,7 +161,7 @@ public:
 
         data_.last_ = sfl::dtl::uninitialized_fill_n
         (
-            data_.first_,
+            data_.first(),
             n,
             value
         );
@@ -196,9 +185,9 @@ public:
     {
         data_.last_ = sfl::dtl::uninitialized_copy
         (
-            pointer(other.data_.first_),
-            pointer(other.data_.last_),
-            data_.first_
+            other.data_.first(),
+            other.data_.last_,
+            data_.first()
         );
     }
 
@@ -207,9 +196,9 @@ public:
     {
         data_.last_ = sfl::dtl::uninitialized_move
         (
-            std::make_move_iterator(pointer(other.data_.first_)),
-            std::make_move_iterator(pointer(other.data_.last_)),
-            data_.first_
+            std::make_move_iterator(other.data_.first()),
+            std::make_move_iterator(other.data_.last_),
+            data_.first()
         );
     }
 
@@ -237,7 +226,7 @@ public:
     SFL_CONSTEXPR_20
     ~static_vector() noexcept
     {
-        sfl::dtl::destroy(data_.first_, data_.last_);
+        sfl::dtl::destroy(data_.first(), data_.last_);
     }
 
     //
@@ -251,13 +240,13 @@ public:
 
         const size_type size = this->size();
 
-        const pointer new_last = data_.first_ + n;
+        const pointer new_last = data_.first() + n;
 
         if (n <= size)
         {
             sfl::dtl::fill
             (
-                data_.first_,
+                data_.first(),
                 new_last,
                 value
             );
@@ -272,7 +261,7 @@ public:
         {
             sfl::dtl::fill
             (
-                data_.first_,
+                data_.first(),
                 data_.last_,
                 value
             );
@@ -337,8 +326,8 @@ public:
         {
             assign
             (
-                pointer(other.data_.first_),
-                pointer(other.data_.last_)
+                other.data_.first(),
+                other.data_.last_
             );
         }
         return *this;
@@ -349,8 +338,8 @@ public:
     {
         assign
         (
-            std::make_move_iterator(pointer(other.data_.first_)),
-            std::make_move_iterator(pointer(other.data_.last_))
+            std::make_move_iterator(other.data_.first()),
+            std::make_move_iterator(other.data_.last_)
         );
         return *this;
     }
@@ -370,21 +359,21 @@ public:
     SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
-        return iterator(pointer(data_.first_));
+        return iterator(data_.first());
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
-        return const_iterator(pointer(data_.first_));
+        return const_iterator(data_.first());
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
-        return const_iterator(pointer(data_.first_));
+        return const_iterator(data_.first());
     }
 
     SFL_NODISCARD
@@ -455,7 +444,7 @@ public:
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
-        return iterator(data_.first_ + pos);
+        return iterator(data_.first() + pos);
     }
 
     SFL_NODISCARD
@@ -463,7 +452,7 @@ public:
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
-        return const_iterator(data_.first_ + pos);
+        return const_iterator(data_.first() + pos);
     }
 
     SFL_NODISCARD
@@ -482,7 +471,7 @@ public:
     SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
-        return data_.first_ == data_.last_;
+        return data_.first() == data_.last_;
     }
 
     SFL_NODISCARD
@@ -531,7 +520,7 @@ public:
             sfl::dtl::throw_out_of_range("sfl::static_vector::at");
         }
 
-        return *(data_.first_ + pos);
+        return *(data_.first() + pos);
     }
 
     SFL_NODISCARD
@@ -543,7 +532,7 @@ public:
             sfl::dtl::throw_out_of_range("sfl::static_vector::at");
         }
 
-        return *(data_.first_ + pos);
+        return *(data_.first() + pos);
     }
 
     SFL_NODISCARD
@@ -551,7 +540,7 @@ public:
     reference operator[](size_type pos) noexcept
     {
         SFL_ASSERT(pos < size());
-        return *(data_.first_ + pos);
+        return *(data_.first() + pos);
     }
 
     SFL_NODISCARD
@@ -559,7 +548,7 @@ public:
     const_reference operator[](size_type pos) const noexcept
     {
         SFL_ASSERT(pos < size());
-        return *(data_.first_ + pos);
+        return *(data_.first() + pos);
     }
 
     SFL_NODISCARD
@@ -567,7 +556,7 @@ public:
     reference front() noexcept
     {
         SFL_ASSERT(!empty());
-        return *data_.first_;
+        return *data_.first();
     }
 
     SFL_NODISCARD
@@ -575,7 +564,7 @@ public:
     const_reference front() const noexcept
     {
         SFL_ASSERT(!empty());
-        return *data_.first_;
+        return *data_.first();
     }
 
     SFL_NODISCARD
@@ -598,14 +587,14 @@ public:
     SFL_CONSTEXPR_20
     T* data() noexcept
     {
-        return data_.first_;
+        return std::addressof(*data_.first());
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     const T* data() const noexcept
     {
-        return data_.first_;
+        return std::addressof(*data_.first());
     }
 
     //
@@ -615,8 +604,8 @@ public:
     SFL_CONSTEXPR_20
     void clear() noexcept
     {
-        sfl::dtl::destroy(data_.first_, data_.last_);
-        data_.last_ = data_.first_;
+        sfl::dtl::destroy(data_.first(), data_.last_);
+        data_.last_ = data_.first();
     }
 
     template <typename... Args>
@@ -632,7 +621,7 @@ public:
         {
             sfl::dtl::construct_at
             (
-                p1,
+                sfl::dtl::to_address(p1),
                 std::forward<Args>(args)...
             );
 
@@ -650,7 +639,7 @@ public:
 
             sfl::dtl::construct_at
             (
-                data_.last_,
+                sfl::dtl::to_address(data_.last_),
                 std::move(*p2)
             );
 
@@ -742,7 +731,11 @@ public:
 
         const pointer old_last = data_.last_;
 
-        sfl::dtl::construct_at(data_.last_, std::forward<Args>(args)...);
+        sfl::dtl::construct_at
+        (
+            sfl::dtl::to_address(data_.last_),
+            std::forward<Args>(args)...
+        );
 
         ++data_.last_;
 
@@ -787,7 +780,7 @@ public:
 
         --data_.last_;
 
-        sfl::dtl::destroy_at(data_.last_);
+        sfl::dtl::destroy_at(sfl::dtl::to_address(data_.last_));
     }
 
     SFL_CONSTEXPR_20
@@ -799,7 +792,7 @@ public:
 
         data_.last_ = sfl::dtl::move(p + 1, data_.last_, p);
 
-        sfl::dtl::destroy_at(data_.last_);
+        sfl::dtl::destroy_at(sfl::dtl::to_address(data_.last_));
 
         return iterator(p);
     }
@@ -835,7 +828,7 @@ public:
 
         if (n < size)
         {
-            const pointer new_last = data_.first_ + n;
+            const pointer new_last = data_.first() + n;
 
             sfl::dtl::destroy
             (
@@ -866,7 +859,7 @@ public:
 
         if (n < size)
         {
-            const pointer new_last = data_.first_ + n;
+            const pointer new_last = data_.first() + n;
 
             sfl::dtl::destroy
             (
@@ -897,7 +890,7 @@ public:
 
         if (n < size)
         {
-            const pointer new_last = data_.first_ + n;
+            const pointer new_last = data_.first() + n;
 
             sfl::dtl::destroy
             (
@@ -935,49 +928,49 @@ public:
         {
             std::swap_ranges
             (
-                this->data_.first_,
-                this->data_.first_ + this_size,
-                other.data_.first_
+                this->data_.first(),
+                this->data_.first() + this_size,
+                other.data_.first()
             );
 
             sfl::dtl::uninitialized_move
             (
-                other.data_.first_ + this_size,
-                other.data_.first_ + other_size,
-                this->data_.first_ + this_size
+                other.data_.first() + this_size,
+                other.data_.first() + other_size,
+                this->data_.first() + this_size
             );
 
             sfl::dtl::destroy
             (
-                other.data_.first_ + this_size,
-                other.data_.first_ + other_size
+                other.data_.first() + this_size,
+                other.data_.first() + other_size
             );
         }
         else
         {
             std::swap_ranges
             (
-                other.data_.first_,
-                other.data_.first_ + other_size,
-                this->data_.first_
+                other.data_.first(),
+                other.data_.first() + other_size,
+                this->data_.first()
             );
 
             sfl::dtl::uninitialized_move
             (
-                this->data_.first_ + other_size,
-                this->data_.first_ + this_size,
-                other.data_.first_ + other_size
+                this->data_.first() + other_size,
+                this->data_.first() + this_size,
+                other.data_.first() + other_size
             );
 
             sfl::dtl::destroy
             (
-                this->data_.first_ + other_size,
-                this->data_.first_ + this_size
+                this->data_.first() + other_size,
+                this->data_.first() + this_size
             );
         }
 
-        this->data_.last_ = this->data_.first_ + other_size;
-        other.data_.last_ = other.data_.first_ + this_size;
+        this->data_.last_ = this->data_.first() + other_size;
+        other.data_.last_ = other.data_.first() + this_size;
     }
 
 private:
@@ -1003,7 +996,7 @@ private:
         }
         SFL_CATCH (...)
         {
-            sfl::dtl::destroy(data_.first_, data_.last_);
+            sfl::dtl::destroy(data_.first(), data_.last_);
             SFL_RETHROW;
         }
     }
@@ -1018,7 +1011,7 @@ private:
         (
             first,
             last,
-            data_.first_
+            data_.first()
         );
     }
 
@@ -1061,7 +1054,7 @@ private:
     SFL_CONSTEXPR_20
     void assign_range(InputIt first, Sentinel last, std::input_iterator_tag)
     {
-        pointer curr = data_.first_;
+        pointer curr = data_.first();
 
         while (first != last && curr != data_.last_)
         {
@@ -1102,7 +1095,7 @@ private:
             (
                 first,
                 last,
-                data_.first_
+                data_.first()
             );
 
             sfl::dtl::destroy
@@ -1121,7 +1114,7 @@ private:
             (
                 first,
                 mid,
-                data_.first_
+                data_.first()
             );
 
             data_.last_ = sfl::dtl::uninitialized_copy
