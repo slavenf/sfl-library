@@ -4494,6 +4494,11 @@ BEGIN_TEST("Test swap(container&)")
 
         tree1.swap(tree2);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree1.size() == 0);
         CHECK(tree2.size() == 0);
     }
@@ -4531,6 +4536,11 @@ BEGIN_TEST("Test swap(container&)")
         CHECK(CONDITION);
 
         tree1.swap(tree2);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
 
         CHECK(tree1.size() == 9);
         CHECK(*NTH(tree1, 0) == 10);
@@ -4578,6 +4588,11 @@ BEGIN_TEST("Test swap(container&)")
         CHECK(CONDITION);
 
         tree1.swap(tree2);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
 
         CHECK(tree1.size() == 0);
         CHECK(tree2.size() == 9);
@@ -4627,6 +4642,11 @@ BEGIN_TEST("Test swap(container&)")
 
         tree1.swap(tree2);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree1.size() == 6);
         CHECK(*NTH(tree1, 0) == 40);
         CHECK(*NTH(tree1, 1) == 50);
@@ -4673,6 +4693,11 @@ BEGIN_TEST("Test swap(container&)")
         CHECK(CONDITION);
 
         tree1.swap(tree2);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
 
         CHECK(tree1.size() == 4);
         CHECK(*NTH(tree1, 0) == 50);
@@ -4721,6 +4746,11 @@ BEGIN_TEST("Test swap(container&)")
         CHECK(CONDITION);
 
         tree1.swap(tree2);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
 
         CHECK(tree1.size() == 3);
         CHECK(*NTH(tree1, 0) == 70);
@@ -4827,6 +4857,11 @@ BEGIN_TEST("Test container(const container&)")
 
         tree_type tree2(tree1);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree2.size() == 0);
     }
 
@@ -4857,6 +4892,11 @@ BEGIN_TEST("Test container(const container&)")
         ///////////////////////////////////////////////////////////////////////
 
         tree_type tree2(tree1);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
 
         CHECK(tree2.size() == 9);
         CHECK(*NTH(tree2, 0) == 10);
@@ -4892,6 +4932,11 @@ BEGIN_TEST("Test container(const container&, const Allocator&)")
 
         tree_type tree2(tree1, alloc);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree2.size() == 0);
     }
 
@@ -4925,6 +4970,11 @@ BEGIN_TEST("Test container(const container&, const Allocator&)")
 
         tree_type tree2(tree1, alloc);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree2.size() == 9);
         CHECK(*NTH(tree2, 0) == 10);
         CHECK(*NTH(tree2, 1) == 20);
@@ -4957,6 +5007,11 @@ BEGIN_TEST("Test container(const container&&)")
 
         tree_type tree2(std::move(tree1));
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree1.size() == 0);
         CHECK(tree2.size() == 0);
     }
@@ -4988,6 +5043,11 @@ BEGIN_TEST("Test container(const container&&)")
         ///////////////////////////////////////////////////////////////////////
 
         tree_type tree2(std::move(tree1));
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        // CHECK(tree1.verify()); // tree1 is in a valid but unspecified state
+        CHECK(tree2.verify());
+        #endif
 
         if (tree1.size() == 9)
         {
@@ -5041,6 +5101,11 @@ BEGIN_TEST("Test container(const container&&, const Allocator&)")
 
         tree_type tree2(std::move(tree1), alloc);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree1.size() == 0);
         CHECK(tree2.size() == 0);
     }
@@ -5074,6 +5139,11 @@ BEGIN_TEST("Test container(const container&&, const Allocator&)")
         typename tree_type::allocator_type alloc;
 
         tree_type tree2(std::move(tree1), alloc);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        // CHECK(tree1.verify()); // tree1 is in a valid but unspecified state
+        CHECK(tree2.verify());
+        #endif
 
         if (tree1.size() == 9)
         {
@@ -5146,6 +5216,11 @@ BEGIN_TEST("Test assign_copy(const container&)")
 
         tree2.assign_copy(tree1);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree1.size() == 3);
         CHECK(*NTH(tree1, 0) == 10);
         CHECK(*NTH(tree1, 1) == 20);
@@ -5192,6 +5267,11 @@ BEGIN_TEST("Test assign_copy(const container&)")
 
         tree2.assign_copy(tree1);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
+
         CHECK(tree1.size() == 3);
         CHECK(*NTH(tree1, 0) == 10);
         CHECK(*NTH(tree1, 1) == 20);
@@ -5237,6 +5317,11 @@ BEGIN_TEST("Test assign_copy(const container&)")
         CHECK(CONDITION);
 
         tree2.assign_copy(tree1);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        CHECK(tree1.verify());
+        CHECK(tree2.verify());
+        #endif
 
         CHECK(tree1.size() == 6);
         CHECK(*NTH(tree1, 0) == 10);
@@ -5295,6 +5380,11 @@ BEGIN_TEST("Test assign_move(container&)")
 
         tree2.assign_move(tree1);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        // CHECK(tree1.verify()); // tree1 is in a valid but unspecified state
+        CHECK(tree2.verify());
+        #endif
+
         if (tree1.size() == 3)
         {
             // Elements are moved one-by-one
@@ -5348,6 +5438,11 @@ BEGIN_TEST("Test assign_move(container&)")
 
         tree2.assign_move(tree1);
 
+        #ifndef TEST_CPP20_CONSTEXPR
+        // CHECK(tree1.verify()); // tree1 is in a valid but unspecified state
+        CHECK(tree2.verify());
+        #endif
+
         if (tree1.size() == 3)
         {
             // Elements are moved one-by-one
@@ -5400,6 +5495,11 @@ BEGIN_TEST("Test assign_move(container&)")
         CHECK(CONDITION);
 
         tree2.assign_move(tree1);
+
+        #ifndef TEST_CPP20_CONSTEXPR
+        // CHECK(tree1.verify()); // tree1 is in a valid but unspecified state
+        CHECK(tree2.verify());
+        #endif
 
         if (tree1.size() == 6)
         {

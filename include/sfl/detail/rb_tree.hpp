@@ -2342,6 +2342,7 @@ private:
         {
             make_node_functor make_node(*this);
             data_.root() = copy(other.data_.root(), make_node);
+            data_.root()->parent_ = data_.header();
             data_.minimum() = minimum(data_.root());
             data_.size_ = other.data_.size_;
         }
@@ -2366,6 +2367,7 @@ private:
         {
             make_node_functor make_node(*this);
             data_.root() = move(other.data_.root(), make_node);
+            data_.root()->parent_ = data_.header();
             data_.minimum() = minimum(data_.root());
             data_.size_ = other.data_.size_;
         }
@@ -2385,10 +2387,14 @@ private:
     SFL_CONSTEXPR_20
     void initialize_move(rb_tree& other, std::false_type, std::true_type)
     {
-        data_.root() = other.data_.root();
-        data_.minimum() = other.data_.minimum();
-        data_.size_ = other.data_.size_;
-        other.data_.reset();
+        if (other.data_.root() != nullptr)
+        {
+            data_.root() = other.data_.root();
+            data_.root()->parent_ = data_.header();
+            data_.minimum() = other.data_.minimum();
+            data_.size_ = other.data_.size_;
+            other.data_.reset();
+        }
     }
 
     SFL_CONSTEXPR_20
@@ -2431,6 +2437,7 @@ private:
             if (other.data_.root() != nullptr)
             {
                 data_.root() = copy(other.data_.root(), make_node);
+                data_.root()->parent_ = data_.header();
                 data_.minimum() = minimum(data_.root());
                 data_.size_ = other.data_.size_;
             }
@@ -2472,6 +2479,7 @@ private:
         if (other.data_.root() != nullptr)
         {
             data_.root() = move(other.data_.root(), make_node);
+            data_.root()->parent_ = data_.header();
             data_.minimum() = minimum(data_.root());
             data_.size_ = other.data_.size_;
         }
@@ -2508,9 +2516,13 @@ private:
         clear();
 
         // Steal data (noexcept)
-        data_.root() = other.data_.root();
-        data_.minimum() = other.data_.minimum();
-        data_.size_ = other.data_.size_;
+        if (other.data_.root() != nullptr)
+        {
+            data_.root() = other.data_.root();
+            data_.root()->parent_ = data_.header();
+            data_.minimum() = other.data_.minimum();
+            data_.size_ = other.data_.size_;
+        }
 
         // Set other data (noexcept)
         other.data_.reset();
@@ -2868,9 +2880,40 @@ private:
         }
 
         // Swap data (noexcept)
-        swap(data_.root(), other.data_.root());
-        swap(data_.minimum(), other.data_.minimum());
-        swap(data_.size_, other.data_.size_);
+        if (data_.root() != nullptr)
+        {
+            if (other.data_.root() != nullptr)
+            {
+                swap(data_.root(), other.data_.root());
+                data_.root()->parent_ = data_.header();
+                other.data_.root()->parent_ = other.data_.header();
+                swap(data_.minimum(), other.data_.minimum());
+                swap(data_.size_, other.data_.size_);
+            }
+            else
+            {
+                other.data_.root() = data_.root();
+                other.data_.root()->parent_ = other.data_.header();
+                other.data_.minimum() = data_.minimum();
+                other.data_.size_ = data_.size_;
+                data_.reset();
+            }
+        }
+        else
+        {
+            if (other.data_.root() != nullptr)
+            {
+                data_.root() = other.data_.root();
+                data_.root()->parent_ = data_.header();
+                data_.minimum() = other.data_.minimum();
+                data_.size_ = other.data_.size_;
+                other.data_.reset();
+            }
+            else
+            {
+                // Do nothing
+            }
+        }
     }
 
     SFL_CONSTEXPR_20
