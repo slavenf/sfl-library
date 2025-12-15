@@ -1,3 +1,16 @@
+# 2.1.1 (2025-12-15)
+
+* Fixed critical bugs in all containers based on red-black trees:
+  * Fixed bugs in copy constructors.
+  * Fixed bugs in move constructors.
+  * Fixed bugs in copy assignment operators.
+  * Fixed bugs in move assignment operators.
+  * Fixed bugs in `swap` functions.
+
+  Bugs usually manifested as an invalid (dangling) `end()` iterator, which made iteration through containers impossible.
+
+
+
 # 2.1.0 (2025-11-06)
 
 * Added C++20 `constexpr` support for the following containers:
