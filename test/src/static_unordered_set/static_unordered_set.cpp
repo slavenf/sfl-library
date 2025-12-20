@@ -41,4 +41,65 @@ int main()
 
 #include "static_unordered_set.inc"
 
+///////////////////////////////////////////////////////////////////////////////
+
+namespace constexpr_test
+{
+
+struct hash_int
+{
+    constexpr std::size_t operator()(int x) const noexcept
+    {
+        return static_cast<std::size_t>(x);
+    }
+};
+
+using set_type = sfl::static_unordered_set<int, 8, 8, hash_int>;
+
+constexpr set_type create_set()
+{
+    set_type set;
+    set.emplace(10);
+    set.emplace(20);
+    set.emplace(30);
+    return set;
+}
+
+constexpr bool test()
+{
+    set_type set1 = create_set();
+
+    set_type set2;
+
+    int sum_before = 0;
+
+    for (const auto& elem : set2)
+    {
+        sum_before += elem;
+    }
+
+    set2 = set1;
+
+    int sum_after = 0;
+
+    for (const auto& elem : set2)
+    {
+        sum_after += elem;
+    }
+
+    return sum_before == 0 && sum_after == 60;
+}
+
+static_assert(test());
+
+#if !(defined(__GNUC__) && !defined(__clang__))
+
+constexpr set_type g_set = create_set();
+
+static_assert(g_set.size() == 3);
+
+#endif
+
+} // namespace constexpr_test
+
 #endif // SFL_CPP_VERSION >= SFL_CPP_20
