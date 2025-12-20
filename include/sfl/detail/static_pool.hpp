@@ -58,7 +58,6 @@ private:
 
         SFL_CONSTEXPR_20
         bucket() noexcept
-            : next_()
         {}
 
         bucket(const bucket& other) = delete;
