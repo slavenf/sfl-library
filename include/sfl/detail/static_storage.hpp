@@ -25,10 +25,11 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/cpp.hpp>
 
-#include <cstddef> // size_t, ptrdiff_t
+#include <algorithm> // copy, fill, move, move_backward
+#include <cstddef> // size_t, nullptrt_t, ptrdiff_t
 #include <iterator> // random_access_iterator_tag
 #include <memory> // addressof
-#include <type_traits> // add_lvalue_reference, remove_cv
+#include <type_traits> // add_lvalue_reference, is_constant_evaluated, remove_cv
 
 namespace sfl
 {
@@ -95,6 +96,12 @@ public:
     // Default constructor
     SFL_CONSTEXPR_20
     static_storage_pointer() noexcept
+    {}
+
+    // Construct from null pointer
+    SFL_CONSTEXPR_20
+    static_storage_pointer(std::nullptr_t) noexcept
+        : ptr_(nullptr)
     {}
 
     // Construct from raw pointer to bucket
@@ -318,6 +325,230 @@ public:
         return std::addressof(buckets_[0]);
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// ALGORITHMS
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+SFL_CONSTEXPR_20
+sfl::dtl::static_storage_pointer<T> copy
+(
+    sfl::dtl::static_storage_pointer<T> first,
+    sfl::dtl::static_storage_pointer<T> last,
+    sfl::dtl::static_storage_pointer<T> d_first
+)
+{
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        return std::copy(first, last, d_first);
+    }
+    else
+    #endif
+    {
+        return sfl::dtl::static_storage_pointer<T>
+        (
+            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            (
+                std::copy
+                (
+                    sfl::dtl::to_address(first),
+                    sfl::dtl::to_address(last),
+                    sfl::dtl::to_address(d_first)
+                )
+            )
+        );
+    }
+}
+
+template <typename InputIt, typename T>
+SFL_CONSTEXPR_20
+sfl::dtl::static_storage_pointer<T> copy
+(
+    InputIt first,
+    InputIt last,
+    sfl::dtl::static_storage_pointer<T> d_first
+)
+{
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        return std::copy(first, last, d_first);
+    }
+    else
+    #endif
+    {
+        return sfl::dtl::static_storage_pointer<T>
+        (
+            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            (
+                std::copy
+                (
+                    first,
+                    last,
+                    sfl::dtl::to_address(d_first)
+                )
+            )
+        );
+    }
+}
+
+template <typename T>
+SFL_CONSTEXPR_20
+void fill
+(
+    sfl::dtl::static_storage_pointer<T> first,
+    sfl::dtl::static_storage_pointer<T> last,
+    const T& value
+)
+{
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        std::fill(first, last, value);
+    }
+    else
+    #endif
+    {
+        std::fill
+        (
+            sfl::dtl::to_address(first),
+            sfl::dtl::to_address(last),
+            value
+        );
+    }
+}
+
+template <typename T>
+SFL_CONSTEXPR_20
+sfl::dtl::static_storage_pointer<T> move
+(
+    sfl::dtl::static_storage_pointer<T> first,
+    sfl::dtl::static_storage_pointer<T> last,
+    sfl::dtl::static_storage_pointer<T> d_first
+)
+{
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        return std::move(first, last, d_first);
+    }
+    else
+    #endif
+    {
+        return sfl::dtl::static_storage_pointer<T>
+        (
+            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            (
+                std::move
+                (
+                    sfl::dtl::to_address(first),
+                    sfl::dtl::to_address(last),
+                    sfl::dtl::to_address(d_first)
+                )
+            )
+        );
+    }
+}
+
+template <typename InputIt, typename T>
+SFL_CONSTEXPR_20
+sfl::dtl::static_storage_pointer<T> move
+(
+    InputIt first,
+    InputIt last,
+    sfl::dtl::static_storage_pointer<T> d_first
+)
+{
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        return std::move(first, last, d_first);
+    }
+    else
+    #endif
+    {
+        return sfl::dtl::static_storage_pointer<T>
+        (
+            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            (
+                std::move
+                (
+                    first,
+                    last,
+                    sfl::dtl::to_address(d_first)
+                )
+            )
+        );
+    }
+}
+
+template <typename T>
+SFL_CONSTEXPR_20
+sfl::dtl::static_storage_pointer<T> move_backward
+(
+    sfl::dtl::static_storage_pointer<T> first,
+    sfl::dtl::static_storage_pointer<T> last,
+    sfl::dtl::static_storage_pointer<T> d_last
+)
+{
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        return std::move_backward(first, last, d_last);
+    }
+    else
+    #endif
+    {
+        return sfl::dtl::static_storage_pointer<T>
+        (
+            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            (
+                std::move_backward
+                (
+                    sfl::dtl::to_address(first),
+                    sfl::dtl::to_address(last),
+                    sfl::dtl::to_address(d_last)
+                )
+            )
+        );
+    }
+}
+
+template <typename InputIt, typename T>
+SFL_CONSTEXPR_20
+sfl::dtl::static_storage_pointer<T> move_backward
+(
+    InputIt first,
+    InputIt last,
+    sfl::dtl::static_storage_pointer<T> d_last
+)
+{
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+    if (std::is_constant_evaluated())
+    {
+        return std::move_backward(first, last, d_last);
+    }
+    else
+    #endif
+    {
+        return sfl::dtl::static_storage_pointer<T>
+        (
+            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            (
+                std::move_backward
+                (
+                    first,
+                    last,
+                    sfl::dtl::to_address(d_last)
+                )
+            )
+        );
+    }
+}
 
 } // namespace dtl
 
