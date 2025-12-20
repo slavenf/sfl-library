@@ -74,14 +74,6 @@ struct rb_tree_node_base
     base_node_pointer left_;
 
     base_node_pointer right_;
-
-    SFL_CONSTEXPR_20
-    rb_tree_node_base() noexcept
-        : color_()
-        , parent_()
-        , left_()
-        , right_()
-    {}
 };
 
 template <typename Value, typename Allocator, typename VoidPointer>
@@ -196,7 +188,6 @@ public:
         // Default constructor
         SFL_CONSTEXPR_20
         iterator() noexcept
-            : node_()
         {}
 
         // Copy constructor
@@ -309,7 +300,6 @@ public:
         // Default constructor
         SFL_CONSTEXPR_20
         const_iterator() noexcept
-            : node_()
         {}
 
         // Copy constructor
