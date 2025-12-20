@@ -91,7 +91,6 @@ struct hash_table_base_node
 
     SFL_CONSTEXPR_20
     hash_table_base_node() noexcept
-        : next_()
     {}
 
     SFL_CONSTEXPR_20
@@ -1503,7 +1502,7 @@ public:
         SFL_CONSTEXPR_20
         explicit local_iterator(base_node_pointer x) noexcept
             : node_(x)
-            , bucket_index_() // Needed here only because of C++20 constexpr
+            , bucket_index_() // Needed here only because of C++20 constexpr (Clang 18 complains if not here)
         {}
 
         SFL_CONSTEXPR_20
@@ -1610,7 +1609,7 @@ public:
         SFL_CONSTEXPR_20
         explicit const_local_iterator(base_node_pointer x) noexcept
             : node_(x)
-            , bucket_index_() // Needed here only because of C++20 constexpr
+            , bucket_index_() // Needed here only because of C++20 constexpr (Clang 18 complains if not here)
         {}
 
         SFL_CONSTEXPR_20
