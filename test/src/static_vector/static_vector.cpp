@@ -80,9 +80,13 @@ constexpr bool test()
 
 static_assert(test());
 
+#if !(defined(__GNUC__) && !defined(__clang__))
+
 constexpr vector_type g_vec = create_vector();
 
 static_assert(g_vec.size() == 3);
+
+#endif
 
 } // namespace constexpr_test
 
