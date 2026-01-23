@@ -33,7 +33,6 @@
 #include <sfl/detail/memory/destroy_at_a.hpp>
 #include <sfl/detail/memory/destroy_n_a.hpp>
 #include <sfl/detail/memory/to_address.hpp>
-#include <sfl/detail/memory/uninitialized_default_construct_n_a.hpp>
 #include <sfl/detail/type_traits/conjunction.hpp>
 #include <sfl/detail/type_traits/disjunction.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
@@ -165,6 +164,15 @@ template <typename BaseNodePointer>
 struct hash_table_bucket
 {
     BaseNodePointer next_;
+
+    SFL_CONSTEXPR_20
+    hash_table_bucket() noexcept
+    {}
+
+    SFL_CONSTEXPR_20
+    hash_table_bucket(BaseNodePointer next) noexcept
+        : next_(next)
+    {}
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -2866,17 +2874,31 @@ private:
             n
         );
 
+        bucket_pointer curr = res.ptr;
+
         SFL_TRY
         {
-            sfl::dtl::uninitialized_default_construct_n_a
-            (
-                data_.ref_to_bucket_alloc(),
-                res.ptr,
-                res.count
-            );
+            for (bucket_pointer end = res.ptr + res.count; curr != end; ++curr)
+            {
+                sfl::dtl::construct_at_a
+                (
+                    data_.ref_to_bucket_alloc(),
+                    curr,
+                    nullptr
+                );
+            }
         }
         SFL_CATCH (...)
         {
+            while (curr-- != res.ptr)
+            {
+                sfl::dtl::destroy_at_a
+                (
+                    data_.ref_to_bucket_alloc(),
+                    curr
+                );
+            }
+
             sfl::dtl::allocator_traits<bucket_allocator_type>::deallocate
             (
                 data_.ref_to_bucket_alloc(),
@@ -3399,11 +3421,6 @@ private:
 
         data_.buckets_ = res.ptr;
         data_.set_bucket_count(res.count);
-
-        for (bucket_pointer x = data_.buckets_, end = x + data_.get_bucket_count(); x != end; ++x)
-        {
-            x->next_ = nullptr;
-        }
 
         base_node_pointer prev = data_.head();
 
