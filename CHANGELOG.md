@@ -1,3 +1,16 @@
+# 2.1.2 (2026-01-24)
+
+* Fixed a bug in the hash table and all containers based on hash tables: buckets
+  were not initialized to `nullptr` during construction.
+
+  The bug manifested when using a custom allocator with fancy pointers, or when
+  using a custom allocator that correctly default-initializes.
+
+  The bug did not manifest when using `std::allocator`, which is the default
+  allocator for all containers.
+
+
+
 # 2.1.1 (2025-12-15)
 
 * Fixed critical bugs in all containers based on red-black trees:
