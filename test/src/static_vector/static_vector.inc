@@ -2,11 +2,7 @@ using sfl::test::xint;
 
 BEGIN_TEST("Test emplace_back(Args&&...)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 5;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -94,11 +90,7 @@ END_TEST()
 
 BEGIN_TEST("Test emplace(const_iterator, Args&&...)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 5;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -437,11 +429,7 @@ END_TEST()
 
 BEGIN_TEST("Test static_capacity")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -451,11 +439,7 @@ END_TEST()
 
 BEGIN_TEST("Test container()")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -467,65 +451,39 @@ END_TEST()
 
 BEGIN_TEST("Test container(size_type)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
     vector_type vec(4);
 
     CHECK(vec.size() == 4);
-    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(1) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
-    #else
-    CHECK(*vec.nth(0) == 0);
-    CHECK(*vec.nth(1) == 0);
-    CHECK(*vec.nth(2) == 0);
-    CHECK(*vec.nth(3) == 0);
-    #endif
 }
 END_TEST()
 
 BEGIN_TEST("Test container(size_type, sfl::default_init_t)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
     vector_type vec(4, sfl::default_init_t());
 
     CHECK(vec.size() == 4);
-    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(*vec.nth(0) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(1) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(2) == SFL_TEST_XINT_DEFAULT_VALUE);
     CHECK(*vec.nth(3) == SFL_TEST_XINT_DEFAULT_VALUE);
-    #else
-    // *vec.nth(0) is undetermined
-    // *vec.nth(1) is undetermined
-    // *vec.nth(2) is undetermined
-    // *vec.nth(3) is undetermined
-    #endif
 }
 END_TEST()
 
 BEGIN_TEST("Test container(size_type, const T&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -543,11 +501,7 @@ END_TEST()
 
 BEGIN_TEST("Test container(InputIt, InputIt)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -583,11 +537,7 @@ END_TEST()
 
 BEGIN_TEST("Test container(std::initializer_list)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -605,11 +555,7 @@ END_TEST()
 
 BEGIN_TEST("Test container(const container&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -637,11 +583,7 @@ END_TEST()
 
 BEGIN_TEST("Test container(container&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -666,25 +608,15 @@ BEGIN_TEST("Test container(container&&)")
     CHECK(*vec2.nth(2) == 30);
 
     CHECK(vec1.size() == 3);
-    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(*vec1.nth(0) == -10);
     CHECK(*vec1.nth(1) == -20);
     CHECK(*vec1.nth(2) == -30);
-    #else
-    CHECK(*vec1.nth(0) == 10);
-    CHECK(*vec1.nth(1) == 20);
-    CHECK(*vec1.nth(2) == 30);
-    #endif
 }
 END_TEST()
 
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -728,11 +660,7 @@ END_TEST()
 
 BEGIN_TEST("Test assign(size_type, const T&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 10;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -880,11 +808,7 @@ END_TEST()
 
 BEGIN_TEST("Test assign(InputIt, InputIt)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 10;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1232,11 +1156,7 @@ END_TEST()
 
 BEGIN_TEST("Test assign(std::initializer_list")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 10;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1270,11 +1190,7 @@ END_TEST()
 
 BEGIN_TEST("Test assign_range(Range&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1322,11 +1238,7 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(const container&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1466,11 +1378,7 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(container&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1508,15 +1416,9 @@ BEGIN_TEST("Test operator=(container&&)")
         CHECK(*vec1.nth(2) == 60);
 
         CHECK(vec2.size() == 3);
-        #ifndef TEST_CPP20_CONSTEXPR
         CHECK(*vec2.nth(0) == -40);
         CHECK(*vec2.nth(1) == -50);
         CHECK(*vec2.nth(2) == -60);
-        #else
-        CHECK(*vec2.nth(0) == 40);
-        CHECK(*vec2.nth(1) == 50);
-        CHECK(*vec2.nth(2) == 60);
-        #endif
     }
     #undef CONDITION
 
@@ -1560,19 +1462,11 @@ BEGIN_TEST("Test operator=(container&&)")
         CHECK(*vec1.nth(4) == 80);
 
         CHECK(vec2.size() == 5);
-        #ifndef TEST_CPP20_CONSTEXPR
         CHECK(*vec2.nth(0) == -40);
         CHECK(*vec2.nth(1) == -50);
         CHECK(*vec2.nth(2) == -60);
         CHECK(*vec2.nth(3) == -70);
         CHECK(*vec2.nth(4) == -80);
-        #else
-        CHECK(*vec2.nth(0) == 40);
-        CHECK(*vec2.nth(1) == 50);
-        CHECK(*vec2.nth(2) == 60);
-        CHECK(*vec2.nth(3) == 70);
-        CHECK(*vec2.nth(4) == 80);
-        #endif
     }
     #undef CONDITION
 
@@ -1614,15 +1508,9 @@ BEGIN_TEST("Test operator=(container&&)")
         CHECK(*vec1.nth(2) == 80);
 
         CHECK(vec2.size() == 3);
-        #ifndef TEST_CPP20_CONSTEXPR
         CHECK(*vec2.nth(0) == -60);
         CHECK(*vec2.nth(1) == -70);
         CHECK(*vec2.nth(2) == -80);
-        #else
-        CHECK(*vec2.nth(0) == 60);
-        CHECK(*vec2.nth(1) == 70);
-        CHECK(*vec2.nth(2) == 80);
-        #endif
     }
     #undef CONDITION
 }
@@ -1630,11 +1518,7 @@ END_TEST()
 
 BEGIN_TEST("Test operator=(std::initializer_list)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1732,11 +1616,7 @@ END_TEST()
 
 BEGIN_TEST("Test begin, end, cbegin, cend, rbegin, rend, crbegin, crend, nth, index_of")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1826,11 +1706,7 @@ END_TEST()
 
 BEGIN_TEST("Test clear()")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1872,11 +1748,7 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, const T&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1895,11 +1767,7 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, T&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -1912,21 +1780,13 @@ BEGIN_TEST("Test insert(const_iterator, T&&)")
     CHECK(res == vec.nth(0));
     CHECK(vec.size() == 1);
     CHECK(*vec.nth(0) == 10);
-    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(value_10 == -10);
-    #else
-    CHECK(value_10 == 10);
-    #endif
 }
 END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, size_type, const T&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -2138,11 +1998,7 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, InputIt, InputIt)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -2620,11 +2476,7 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, std::initializer_list)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -2848,11 +2700,7 @@ END_TEST()
 
 BEGIN_TEST("Test insert(const_iterator, Range&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -2910,11 +2758,7 @@ END_TEST()
 
 BEGIN_TEST("Test push_back(const T&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -2932,11 +2776,7 @@ END_TEST()
 
 BEGIN_TEST("Test push_back(T&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -2948,21 +2788,13 @@ BEGIN_TEST("Test push_back(T&&)")
 
     CHECK(vec.size() == 1);
     CHECK(*vec.nth(0) == 10);
-    #ifndef TEST_CPP20_CONSTEXPR
     CHECK(value_10 == -10);
-    #else
-    CHECK(value_10 == 10);
-    #endif
 }
 END_TEST()
 
 BEGIN_TEST("Test append_range(Range&&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -3020,11 +2852,7 @@ END_TEST()
 
 BEGIN_TEST("Test pop_back()")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -3064,11 +2892,7 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -3206,11 +3030,7 @@ END_TEST()
 
 BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -3396,11 +3216,7 @@ END_TEST()
 
 BEGIN_TEST("Test resize(size_type)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -3516,11 +3332,7 @@ BEGIN_TEST("Test resize(size_type)")
         CHECK(*vec.nth(4) == 50);
         for (size_type i = 5; i < n; ++i)
         {
-            #ifndef TEST_CPP20_CONSTEXPR
             CHECK(*vec.nth(i) == SFL_TEST_XINT_DEFAULT_VALUE);
-            #else
-            CHECK(*vec.nth(i) == 0);
-            #endif
         }
     }
     #undef CONDITION
@@ -3562,11 +3374,7 @@ BEGIN_TEST("Test resize(size_type)")
         CHECK(*vec.nth(4) == 50);
         for (size_type i = 5; i < n; ++i)
         {
-            #ifndef TEST_CPP20_CONSTEXPR
             CHECK(*vec.nth(i) == SFL_TEST_XINT_DEFAULT_VALUE);
-            #else
-            CHECK(*vec.nth(i) == 0);
-            #endif
         }
     }
     #undef CONDITION
@@ -3575,11 +3383,7 @@ END_TEST()
 
 BEGIN_TEST("Test resize(size_type, sfl::default_init_t)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -3695,11 +3499,7 @@ BEGIN_TEST("Test resize(size_type, sfl::default_init_t)")
         CHECK(*vec.nth(4) == 50);
         for (size_type i = 5; i < n; ++i)
         {
-            #ifndef TEST_CPP20_CONSTEXPR
             CHECK(*vec.nth(i) == SFL_TEST_XINT_DEFAULT_VALUE);
-            #else
-            // *vec.nth(i) is undetermined
-            #endif
         }
     }
     #undef CONDITION
@@ -3741,11 +3541,7 @@ BEGIN_TEST("Test resize(size_type, sfl::default_init_t)")
         CHECK(*vec.nth(4) == 50);
         for (size_type i = 5; i < n; ++i)
         {
-            #ifndef TEST_CPP20_CONSTEXPR
             CHECK(*vec.nth(i) == SFL_TEST_XINT_DEFAULT_VALUE);
-            #else
-            // *vec.nth(i) is undetermined
-            #endif
         }
     }
     #undef CONDITION
@@ -3754,11 +3550,7 @@ END_TEST()
 
 BEGIN_TEST("Test resize(size_type, const T&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -3933,11 +3725,7 @@ END_TEST()
 
 BEGIN_TEST("Test swap(container&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4078,11 +3866,7 @@ END_TEST()
 
 BEGIN_TEST("Test at(size_type)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4136,11 +3920,7 @@ END_TEST()
 
 BEGIN_TEST("Test operator[](size_type)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4172,11 +3952,7 @@ END_TEST()
 
 BEGIN_TEST("Test front() and back()")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4232,11 +4008,7 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4286,11 +4058,7 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4338,11 +4106,7 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER erase(container&, const U&)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
@@ -4379,11 +4143,7 @@ END_TEST()
 
 BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
-    #ifndef TEST_CPP20_CONSTEXPR
     using T = xint;
-    #else
-    using T = int;
-    #endif
     constexpr std::size_t N = 100;
     using vector_type = sfl::static_vector<T, N>;
 
