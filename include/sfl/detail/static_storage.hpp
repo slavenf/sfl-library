@@ -292,7 +292,6 @@ public:
 
     SFL_CONSTEXPR_20
     static_storage() noexcept
-        : buckets_()
     {}
 
     SFL_CONSTEXPR_20
