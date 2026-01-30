@@ -8,6 +8,10 @@ using iterator = sfl::dtl::normal_iterator<int*, false>;
 
 using const_iterator = sfl::dtl::normal_iterator<int*, true>;
 
+static_assert(std::is_trivially_copyable<iterator>::value, "");
+
+static_assert(std::is_trivially_copyable<const_iterator>::value, "");
+
 static_assert(std::is_same<typename iterator::pointer, int*>::value, "");
 
 static_assert(std::is_same<typename const_iterator::pointer, const int*>::value, "");
