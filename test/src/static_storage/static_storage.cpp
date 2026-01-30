@@ -8,6 +8,10 @@ using pointer = sfl::dtl::static_storage_pointer<int>;
 
 using const_pointer = sfl::dtl::static_storage_pointer<const int>;
 
+static_assert(std::is_trivially_copyable<pointer>::value, "");
+
+static_assert(std::is_trivially_copyable<const_pointer>::value, "");
+
 static_assert(std::is_same<typename pointer::element_type, int>::value, "");
 
 static_assert(std::is_same<typename const_pointer::element_type, const int>::value, "");

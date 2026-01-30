@@ -116,12 +116,6 @@ public:
         : ptr_(const_cast<sfl::dtl::static_storage_bucket<value_type>*>(ptr))
     {}
 
-    // Copy constructor
-    SFL_CONSTEXPR_20
-    static_storage_pointer(const static_storage_pointer& other) noexcept
-        : ptr_(other.ptr_)
-    {}
-
     // Converting constructor from pointer to const_pointer
     template <typename U = T,
               sfl::dtl::enable_if_t<!std::is_const<U>::value>* = nullptr>
@@ -129,14 +123,6 @@ public:
     static_storage_pointer(const static_storage_pointer<U>& other) noexcept
         : ptr_(other.ptr_)
     {}
-
-    // Copy assignment operator
-    SFL_CONSTEXPR_20
-    static_storage_pointer& operator=(const static_storage_pointer& other) noexcept
-    {
-        ptr_ = other.ptr_;
-        return *this;
-    }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
