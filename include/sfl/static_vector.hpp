@@ -97,19 +97,19 @@ private:
         pointer last_;
 
         SFL_CONSTEXPR_20
-        pointer first()
+        pointer first() noexcept
         {
             return storage_.data();
         }
 
         SFL_CONSTEXPR_20
-        pointer first() const
+        pointer first() const noexcept
         {
             return storage_.data();
         }
 
         SFL_CONSTEXPR_20
-        static_vector_data()
+        static_vector_data() noexcept
             : last_(first())
         {}
 
