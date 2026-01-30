@@ -28,7 +28,6 @@
 #include <algorithm> // copy, fill, move, move_backward
 #include <cstddef> // size_t, nullptrt_t, ptrdiff_t
 #include <iterator> // random_access_iterator_tag
-#include <memory> // addressof
 #include <type_traits> // add_lvalue_reference, is_constant_evaluated, remove_cv
 
 namespace sfl
@@ -302,14 +301,14 @@ public:
     SFL_CONSTEXPR_20
     pointer data() noexcept
     {
-        return std::addressof(buckets_[0]);
+        return pointer(buckets_);
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     pointer data() const noexcept
     {
-        return std::addressof(buckets_[0]);
+        return pointer(buckets_);
     }
 };
 
