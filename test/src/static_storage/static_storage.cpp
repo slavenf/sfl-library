@@ -59,4 +59,8 @@ int main()
 
     // Copy assignment operator (from const_pointer to pointer) - NOT ALLOWED
     // p1 = cp1;
+
+    // Unused variables
+    (void)p3;
+    (void)cp3;
 }
