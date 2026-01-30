@@ -4,6 +4,8 @@
 
 #include <type_traits>
 
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
 using pointer = sfl::dtl::static_storage_pointer<int>;
 
 using const_pointer = sfl::dtl::static_storage_pointer<const int>;
@@ -64,3 +66,10 @@ int main()
     (void)p3;
     (void)cp3;
 }
+
+#else // before C++20
+
+int main()
+{}
+
+#endif // before C++20

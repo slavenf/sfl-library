@@ -37,6 +37,8 @@ namespace sfl
 namespace dtl
 {
 
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // STATIC STORAGE BUCKET
@@ -535,6 +537,54 @@ sfl::dtl::static_storage_pointer<T> move_backward
         );
     }
 }
+
+#else // before C++20
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// STATIC STORAGE
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+template <typename T, std::size_t N>
+union static_storage
+{
+private:
+
+    T storage_[N];
+
+public:
+
+    using pointer = T*;
+
+    using const_pointer = const T*;
+
+public:
+
+    SFL_CONSTEXPR_20
+    static_storage() noexcept
+    {}
+
+    SFL_CONSTEXPR_20
+    ~static_storage()
+    {}
+
+    SFL_NODISCARD
+    SFL_CONSTEXPR_20
+    pointer data() noexcept
+    {
+        return pointer(storage_);
+    }
+
+    SFL_NODISCARD
+    SFL_CONSTEXPR_20
+    pointer data() const noexcept
+    {
+        return pointer(storage_);
+    }
+};
+
+#endif // before C++20
 
 } // namespace dtl
 
