@@ -26,7 +26,7 @@
 #include <sfl/detail/cpp.hpp>
 
 #include <algorithm> // copy, fill, move, move_backward
-#include <cstddef> // size_t, nullptrt_t, ptrdiff_t
+#include <cstddef> // size_t, nullptr_t, ptrdiff_t
 #include <iterator> // random_access_iterator_tag
 #include <type_traits> // add_lvalue_reference, is_constant_evaluated, remove_cv
 
@@ -36,13 +36,13 @@ namespace sfl
 namespace dtl
 {
 
-#if SFL_CPP_VERSION >= SFL_CPP_20
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // STATIC STORAGE BUCKET
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
 
 template <typename T>
 union static_storage_bucket
@@ -58,11 +58,15 @@ union static_storage_bucket
     {}
 };
 
+#endif // SFL_CPP_VERSION >= SFL_CPP_20
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // STATIC STORAGE POINTER
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
 
 template <typename T>
 class static_storage_pointer
@@ -84,9 +88,7 @@ public:
 
     using iterator_category = std::random_access_iterator_tag;
 
-    #if SFL_CPP_VERSION >= SFL_CPP_20
     using iterator_concept = std::contiguous_iterator_tag;
-    #endif
 
 private:
 
@@ -268,18 +270,22 @@ public:
     }
 };
 
+#endif // SFL_CPP_VERSION >= SFL_CPP_20
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // STATIC STORAGE
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
+#if SFL_CPP_VERSION >= SFL_CPP_20
+
 template <typename T, std::size_t N>
 class static_storage
 {
 private:
 
-    sfl::dtl::static_storage_bucket<T> buckets_[N];
+    sfl::dtl::static_storage_bucket<T> storage_[N];
 
 public:
 
@@ -301,22 +307,66 @@ public:
     SFL_CONSTEXPR_20
     pointer data() noexcept
     {
-        return pointer(buckets_);
+        return pointer(storage_);
     }
 
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     pointer data() const noexcept
     {
-        return pointer(buckets_);
+        return pointer(storage_);
     }
 };
+
+#else // before C++20
+
+template <typename T, std::size_t N>
+union static_storage
+{
+private:
+
+    T storage_[N];
+
+public:
+
+    using pointer = T*;
+
+    using const_pointer = const T*;
+
+public:
+
+    SFL_CONSTEXPR_20
+    static_storage() noexcept
+    {}
+
+    SFL_CONSTEXPR_20
+    ~static_storage()
+    {}
+
+    SFL_NODISCARD
+    SFL_CONSTEXPR_20
+    pointer data() noexcept
+    {
+        return pointer(storage_);
+    }
+
+    SFL_NODISCARD
+    SFL_CONSTEXPR_20
+    pointer data() const noexcept
+    {
+        return pointer(storage_);
+    }
+};
+
+#endif // before C++20
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // ALGORITHMS
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
+
+#if SFL_CPP_VERSION >= SFL_CPP_20
 
 template <typename T>
 SFL_CONSTEXPR_20
@@ -536,53 +586,7 @@ sfl::dtl::static_storage_pointer<T> move_backward
     }
 }
 
-#else // before C++20
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-// STATIC STORAGE
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-template <typename T, std::size_t N>
-union static_storage
-{
-private:
-
-    T storage_[N];
-
-public:
-
-    using pointer = T*;
-
-    using const_pointer = const T*;
-
-public:
-
-    SFL_CONSTEXPR_20
-    static_storage() noexcept
-    {}
-
-    SFL_CONSTEXPR_20
-    ~static_storage()
-    {}
-
-    SFL_NODISCARD
-    SFL_CONSTEXPR_20
-    pointer data() noexcept
-    {
-        return pointer(storage_);
-    }
-
-    SFL_NODISCARD
-    SFL_CONSTEXPR_20
-    pointer data() const noexcept
-    {
-        return pointer(storage_);
-    }
-};
-
-#endif // before C++20
+#endif // SFL_CPP_VERSION >= SFL_CPP_20
 
 } // namespace dtl
 
