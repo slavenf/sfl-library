@@ -74,6 +74,9 @@ class static_storage_pointer
     template <typename>
     friend class static_storage_pointer;
 
+    template <typename, std::size_t>
+    friend class static_storage;
+
 public:
 
     using element_type = T;
@@ -107,6 +110,22 @@ public:
         : ptr_(nullptr)
     {}
 
+    // Construct from raw pointer to value_type
+    SFL_CONSTEXPR_20
+    static_storage_pointer(value_type* ptr) noexcept
+        : ptr_(reinterpret_cast<sfl::dtl::static_storage_bucket<value_type>*>(ptr))
+    {}
+
+    // Construct from raw pointer to const value_type
+    template <typename U = T,
+              sfl::dtl::enable_if_t<std::is_const<U>::value>* = nullptr>
+    SFL_CONSTEXPR_20
+    static_storage_pointer(const value_type* ptr) noexcept
+        : ptr_(reinterpret_cast<sfl::dtl::static_storage_bucket<value_type>*>(const_cast<value_type*>(ptr)))
+    {}
+
+private:
+
     // Construct from raw pointer to bucket
     SFL_CONSTEXPR_20
     static_storage_pointer(sfl::dtl::static_storage_bucket<value_type>* ptr) noexcept
@@ -118,6 +137,8 @@ public:
     static_storage_pointer(const sfl::dtl::static_storage_bucket<value_type>* ptr) noexcept
         : ptr_(const_cast<sfl::dtl::static_storage_bucket<value_type>*>(ptr))
     {}
+
+public:
 
     // Converting constructor from pointer to const_pointer
     template <typename U = T,
@@ -289,6 +310,8 @@ private:
 
 public:
 
+    using value_type = T;
+
     using pointer = sfl::dtl::static_storage_pointer<T>;
 
     using const_pointer = sfl::dtl::static_storage_pointer<const T>;
@@ -328,6 +351,8 @@ private:
     T storage_[N];
 
 public:
+
+    using value_type = T;
 
     using pointer = T*;
 
@@ -387,14 +412,11 @@ sfl::dtl::static_storage_pointer<T> copy
     {
         return sfl::dtl::static_storage_pointer<T>
         (
-            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            std::copy
             (
-                std::copy
-                (
-                    sfl::dtl::to_address(first),
-                    sfl::dtl::to_address(last),
-                    sfl::dtl::to_address(d_first)
-                )
+                sfl::dtl::to_address(first),
+                sfl::dtl::to_address(last),
+                sfl::dtl::to_address(d_first)
             )
         );
     }
@@ -419,14 +441,11 @@ sfl::dtl::static_storage_pointer<T> copy
     {
         return sfl::dtl::static_storage_pointer<T>
         (
-            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            std::copy
             (
-                std::copy
-                (
-                    first,
-                    last,
-                    sfl::dtl::to_address(d_first)
-                )
+                first,
+                last,
+                sfl::dtl::to_address(d_first)
             )
         );
     }
@@ -477,14 +496,11 @@ sfl::dtl::static_storage_pointer<T> move
     {
         return sfl::dtl::static_storage_pointer<T>
         (
-            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            std::move
             (
-                std::move
-                (
-                    sfl::dtl::to_address(first),
-                    sfl::dtl::to_address(last),
-                    sfl::dtl::to_address(d_first)
-                )
+                sfl::dtl::to_address(first),
+                sfl::dtl::to_address(last),
+                sfl::dtl::to_address(d_first)
             )
         );
     }
@@ -509,14 +525,11 @@ sfl::dtl::static_storage_pointer<T> move
     {
         return sfl::dtl::static_storage_pointer<T>
         (
-            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            std::move
             (
-                std::move
-                (
-                    first,
-                    last,
-                    sfl::dtl::to_address(d_first)
-                )
+                first,
+                last,
+                sfl::dtl::to_address(d_first)
             )
         );
     }
@@ -541,14 +554,11 @@ sfl::dtl::static_storage_pointer<T> move_backward
     {
         return sfl::dtl::static_storage_pointer<T>
         (
-            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            std::move_backward
             (
-                std::move_backward
-                (
-                    sfl::dtl::to_address(first),
-                    sfl::dtl::to_address(last),
-                    sfl::dtl::to_address(d_last)
-                )
+                sfl::dtl::to_address(first),
+                sfl::dtl::to_address(last),
+                sfl::dtl::to_address(d_last)
             )
         );
     }
@@ -573,14 +583,11 @@ sfl::dtl::static_storage_pointer<T> move_backward
     {
         return sfl::dtl::static_storage_pointer<T>
         (
-            reinterpret_cast<sfl::dtl::static_storage_bucket<T>*>
+            std::move_backward
             (
-                std::move_backward
-                (
-                    first,
-                    last,
-                    sfl::dtl::to_address(d_last)
-                )
+                first,
+                last,
+                sfl::dtl::to_address(d_last)
             )
         );
     }
