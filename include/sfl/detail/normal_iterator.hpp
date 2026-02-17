@@ -103,6 +103,16 @@ public:
         : it_(other.it_)
     {}
 
+    // Converting assignment operator (from iterator to const_iterator)
+    template <bool IsConst2 = IsConst,
+              sfl::dtl::enable_if_t<IsConst2 == false>* = nullptr>
+    SFL_CONSTEXPR_20
+    normal_iterator& operator=(const normal_iterator<Iterator, IsConst2>& other) noexcept
+    {
+        it_ = other.it_;
+        return *this;
+    }
+
     SFL_NODISCARD
     SFL_CONSTEXPR_20
     reference operator*() const noexcept
