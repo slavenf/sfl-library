@@ -89,12 +89,14 @@ public:
 
     private:
 
+        SFL_CONSTEXPR_20
         value_compare(const key_compare& c)
             : key_compare(c)
         {}
 
     public:
 
+        SFL_CONSTEXPR_20
         bool operator()(const value_type& x, const value_type& y) const
         {
             return key_compare::operator()(x.first, y.first);
@@ -111,16 +113,19 @@ public:
     // ---- CONSTRUCTION AND DESTRUCTION --------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     static_flat_map() noexcept(std::is_nothrow_default_constructible<Compare>::value)
         : impl_()
     {}
 
+    SFL_CONSTEXPR_20
     explicit static_flat_map(const Compare& comp) noexcept(std::is_nothrow_copy_constructible<Compare>::value)
         : impl_(comp)
     {}
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     static_flat_map(InputIt first, InputIt last)
         : impl_()
     {
@@ -129,24 +134,29 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     static_flat_map(InputIt first, InputIt last, const Compare& comp)
         : impl_(comp)
     {
         insert(first, last);
     }
 
+    SFL_CONSTEXPR_20
     static_flat_map(std::initializer_list<value_type> ilist)
         : static_flat_map(ilist.begin(), ilist.end())
     {}
 
+    SFL_CONSTEXPR_20
     static_flat_map(std::initializer_list<value_type> ilist, const Compare& comp)
         : static_flat_map(ilist.begin(), ilist.end(), comp)
     {}
 
+    SFL_CONSTEXPR_20
     static_flat_map(const static_flat_map& other)
         : impl_(other.impl_)
     {}
 
+    SFL_CONSTEXPR_20
     static_flat_map(static_flat_map&& other)
         : impl_(std::move(other.impl_))
     {}
@@ -154,6 +164,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     static_flat_map(sfl::from_range_t, Range&& range)
         : impl_()
     {
@@ -161,6 +172,7 @@ public:
     }
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     static_flat_map(sfl::from_range_t, Range&& range, const Compare& comp)
         : impl_(comp)
     {
@@ -185,6 +197,7 @@ public:
 
 #endif // before C++20
 
+    SFL_CONSTEXPR_20
     ~static_flat_map()
     {}
 
@@ -192,18 +205,21 @@ public:
     // ---- ASSIGNMENT --------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     static_flat_map& operator=(const static_flat_map& other)
     {
         impl_.assign_copy(other.impl_);
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     static_flat_map& operator=(static_flat_map&& other)
     {
         impl_.assign_move(other.impl_);
         return *this;
     }
 
+    SFL_CONSTEXPR_20
     static_flat_map& operator=(std::initializer_list<value_type> ilist)
     {
         SFL_ASSERT(size_type(ilist.size()) <= capacity());
@@ -216,6 +232,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     key_compare key_comp() const
     {
         return impl_.ref_to_key_compare();
@@ -226,6 +243,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     value_compare value_comp() const
     {
         return value_compare(impl_.ref_to_key_compare());
@@ -236,78 +254,91 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator begin() noexcept
     {
         return impl_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator begin() const noexcept
     {
         return impl_.begin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cbegin() const noexcept
     {
         return impl_.cbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator end() noexcept
     {
         return impl_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator end() const noexcept
     {
         return impl_.end();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator cend() const noexcept
     {
         return impl_.cend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rbegin() noexcept
     {
         return impl_.rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rbegin() const noexcept
     {
         return impl_.rbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crbegin() const noexcept
     {
         return impl_.crbegin();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     reverse_iterator rend() noexcept
     {
         return impl_.rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator rend() const noexcept
     {
         return impl_.rend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_reverse_iterator crend() const noexcept
     {
         return impl_.crend();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator nth(size_type pos) noexcept
     {
         SFL_ASSERT(pos <= size());
@@ -315,6 +346,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator nth(size_type pos) const noexcept
     {
         SFL_ASSERT(pos <= size());
@@ -322,6 +354,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type index_of(const_iterator pos) const noexcept
     {
         SFL_ASSERT(cbegin() <= pos && pos <= cend());
@@ -333,18 +366,21 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool empty() const noexcept
     {
         return impl_.empty();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool full() const noexcept
     {
         return impl_.ref_to_vector().full();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type size() const noexcept
     {
         return impl_.size();
@@ -363,6 +399,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type available() const noexcept
     {
         return impl_.available();
@@ -372,12 +409,14 @@ public:
     // ---- MODIFIERS ---------------------------------------------------------
     //
 
+    SFL_CONSTEXPR_20
     void clear() noexcept
     {
         impl_.clear();
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> emplace(Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -385,6 +424,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator emplace_hint(const_iterator hint, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -392,12 +432,14 @@ public:
         return impl_.emplace_hint_unique(hint, std::forward<Args>(args)...);
     }
 
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert(const value_type& value)
     {
         SFL_ASSERT(!full());
         return impl_.insert_unique(value);
     }
 
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert(value_type&& value)
     {
         SFL_ASSERT(!full());
@@ -406,12 +448,14 @@ public:
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert(P&& value)
     {
         SFL_ASSERT(!full());
         return impl_.insert_unique(std::forward<P>(value));
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, const value_type& value)
     {
         SFL_ASSERT(!full());
@@ -419,6 +463,7 @@ public:
         return impl_.insert_hint_unique(hint, value);
     }
 
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, value_type&& value)
     {
         SFL_ASSERT(!full());
@@ -428,6 +473,7 @@ public:
 
     template <typename P,
               sfl::dtl::enable_if_t<std::is_constructible<value_type, P>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert(const_iterator hint, P&& value)
     {
         SFL_ASSERT(!full());
@@ -437,11 +483,13 @@ public:
 
     template <typename InputIt,
               sfl::dtl::enable_if_t<sfl::dtl::is_input_iterator<InputIt>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     void insert(InputIt first, InputIt last)
     {
         insert_range_aux(first, last);
     }
 
+    SFL_CONSTEXPR_20
     void insert(std::initializer_list<value_type> ilist)
     {
         insert_range_aux(ilist.begin(), ilist.end());
@@ -450,6 +498,7 @@ public:
 #if SFL_CPP_VERSION >= SFL_CPP_20
 
     template <sfl::dtl::container_compatible_range<value_type> Range>
+    SFL_CONSTEXPR_20
     void insert_range(Range&& range)
     {
         insert_range_aux(std::ranges::begin(range), std::ranges::end(range));
@@ -469,6 +518,7 @@ public:
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_or_assign(const Key& key, M&& obj)
     {
         SFL_ASSERT(!full());
@@ -477,6 +527,7 @@ public:
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_or_assign(Key&& key, M&& obj)
     {
         SFL_ASSERT(!full());
@@ -486,6 +537,7 @@ public:
     template <typename K, typename M,
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
                                      std::is_assignable<mapped_type&, M&&>::value >* = nullptr>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> insert_or_assign(K&& key, M&& obj)
     {
         SFL_ASSERT(!full());
@@ -494,6 +546,7 @@ public:
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert_or_assign(const_iterator hint, const Key& key, M&& obj)
     {
         SFL_ASSERT(!full());
@@ -503,6 +556,7 @@ public:
 
     template <typename M,
               sfl::dtl::enable_if_t<std::is_assignable<mapped_type&, M&&>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert_or_assign(const_iterator hint, Key&& key, M&& obj)
     {
         SFL_ASSERT(!full());
@@ -513,6 +567,7 @@ public:
     template <typename K, typename M,
               sfl::dtl::enable_if_t< sfl::dtl::has_is_transparent<Compare, K>::value &&
                                      std::is_assignable<mapped_type&, M&&>::value >* = nullptr>
+    SFL_CONSTEXPR_20
     iterator insert_or_assign(const_iterator hint, K&& key, M&& obj)
     {
         SFL_ASSERT(!full());
@@ -521,6 +576,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> try_emplace(const Key& key, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -528,6 +584,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> try_emplace(Key&& key, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -544,6 +601,7 @@ public:
                 !std::is_convertible<K&&, const_iterator>::value &&
                 !std::is_convertible<K&&, iterator>::value
               >* = nullptr>
+    SFL_CONSTEXPR_20
     std::pair<iterator, bool> try_emplace(K&& key, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -551,6 +609,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator try_emplace(const_iterator hint, const Key& key, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -559,6 +618,7 @@ public:
     }
 
     template <typename... Args>
+    SFL_CONSTEXPR_20
     iterator try_emplace(const_iterator hint, Key&& key, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -574,6 +634,7 @@ public:
                 #endif
                 sfl::dtl::has_is_transparent<Compare, K>::value
               >* = nullptr>
+    SFL_CONSTEXPR_20
     iterator try_emplace(const_iterator hint, K&& key, Args&&... args)
     {
         SFL_ASSERT(!full());
@@ -581,24 +642,28 @@ public:
         return impl_.try_emplace_hint(hint, std::forward<K>(key), std::forward<Args>(args)...);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
         return impl_.erase(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator pos)
     {
         SFL_ASSERT(cbegin() <= pos && pos < cend());
         return impl_.erase(pos);
     }
 
+    SFL_CONSTEXPR_20
     iterator erase(const_iterator first, const_iterator last)
     {
         SFL_ASSERT(cbegin() <= first && first <= last && last <= cend());
         return impl_.erase(first, last);
     }
 
+    SFL_CONSTEXPR_20
     size_type erase(const Key& key)
     {
         return impl_.erase_key_unique(key);
@@ -606,11 +671,13 @@ public:
 
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
+    SFL_CONSTEXPR_20
     size_type erase(K&& x)
     {
         return impl_.erase_key_unique(x);
     }
 
+    SFL_CONSTEXPR_20
     void swap(static_flat_map& other)
     {
         impl_.swap(other.impl_);
@@ -621,12 +688,14 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const Key& key)
     {
         return impl_.lower_bound(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const Key& key) const
     {
         return impl_.lower_bound(key);
@@ -635,6 +704,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator lower_bound(const K& x)
     {
         return impl_.lower_bound(x);
@@ -643,18 +713,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator lower_bound(const K& x) const
     {
         return impl_.lower_bound(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const Key& key)
     {
         return impl_.upper_bound(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const Key& key) const
     {
         return impl_.upper_bound(key);
@@ -663,6 +736,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator upper_bound(const K& x)
     {
         return impl_.upper_bound(x);
@@ -671,18 +745,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator upper_bound(const K& x) const
     {
         return impl_.upper_bound(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const Key& key)
     {
         return impl_.equal_range(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const Key& key) const
     {
         return impl_.equal_range(key);
@@ -691,6 +768,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<iterator, iterator> equal_range(const K& x)
     {
         return impl_.equal_range(x);
@@ -699,18 +777,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     std::pair<const_iterator, const_iterator> equal_range(const K& x) const
     {
         return impl_.equal_range(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const Key& key)
     {
         return impl_.find(key);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const Key& key) const
     {
         return impl_.find(key);
@@ -719,6 +800,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     iterator find(const K& x)
     {
         return impl_.find(x);
@@ -727,12 +809,14 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const_iterator find(const K& x) const
     {
         return impl_.find(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const Key& key) const
     {
         return impl_.count_unique(key);
@@ -741,12 +825,14 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     size_type count(const K& x) const
     {
         return impl_.count_unique(x);
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const Key& key) const
     {
         return impl_.contains(key);
@@ -755,6 +841,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     bool contains(const K& x) const
     {
         return impl_.contains(x);
@@ -765,6 +852,7 @@ public:
     //
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T& at(const Key& key)
     {
         auto it = find(key);
@@ -778,6 +866,7 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const T& at(const Key& key) const
     {
         auto it = find(key);
@@ -793,6 +882,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T& at(const K& x)
     {
         auto it = find(x);
@@ -808,6 +898,7 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const T& at(const K& x) const
     {
         auto it = find(x);
@@ -821,12 +912,14 @@ public:
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T& operator[](const Key& key)
     {
         return try_emplace(key).first->second;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T& operator[](Key&& key)
     {
         return try_emplace(std::move(key)).first->second;
@@ -835,18 +928,21 @@ public:
     template <typename K,
               sfl::dtl::enable_if_t<sfl::dtl::has_is_transparent<Compare, K>::value>* = nullptr>
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     T& operator[](K&& key)
     {
         return try_emplace(std::forward<K>(key)).first->second;
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     value_type* data() noexcept
     {
         return impl_.data();
     }
 
     SFL_NODISCARD
+    SFL_CONSTEXPR_20
     const value_type* data() const noexcept
     {
         return impl_.data();
@@ -855,6 +951,7 @@ public:
 private:
 
     template <typename InputIt, typename Sentinel>
+    SFL_CONSTEXPR_20
     void insert_range_aux(InputIt first, Sentinel last)
     {
         while (first != last)
@@ -865,21 +962,27 @@ private:
     }
 
     template <typename K2, typename T2, std::size_t N2, typename C2>
+    SFL_CONSTEXPR_20
     friend bool operator==(const static_flat_map<K2, T2, N2, C2>& x, const static_flat_map<K2, T2, N2, C2>& y);
 
     template <typename K2, typename T2, std::size_t N2, typename C2>
+    SFL_CONSTEXPR_20
     friend bool operator!=(const static_flat_map<K2, T2, N2, C2>& x, const static_flat_map<K2, T2, N2, C2>& y);
 
     template <typename K2, typename T2, std::size_t N2, typename C2>
+    SFL_CONSTEXPR_20
     friend bool operator<(const static_flat_map<K2, T2, N2, C2>& x, const static_flat_map<K2, T2, N2, C2>& y);
 
     template <typename K2, typename T2, std::size_t N2, typename C2>
+    SFL_CONSTEXPR_20
     friend bool operator>(const static_flat_map<K2, T2, N2, C2>& x, const static_flat_map<K2, T2, N2, C2>& y);
 
     template <typename K2, typename T2, std::size_t N2, typename C2>
+    SFL_CONSTEXPR_20
     friend bool operator<=(const static_flat_map<K2, T2, N2, C2>& x, const static_flat_map<K2, T2, N2, C2>& y);
 
     template <typename K2, typename T2, std::size_t N2, typename C2>
+    SFL_CONSTEXPR_20
     friend bool operator>=(const static_flat_map<K2, T2, N2, C2>& x, const static_flat_map<K2, T2, N2, C2>& y);
 };
 
@@ -889,6 +992,7 @@ private:
 
 template <typename K, typename T, std::size_t N, typename C>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator==
 (
     const static_flat_map<K, T, N, C>& x,
@@ -900,6 +1004,7 @@ bool operator==
 
 template <typename K, typename T, std::size_t N, typename C>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator!=
 (
     const static_flat_map<K, T, N, C>& x,
@@ -911,6 +1016,7 @@ bool operator!=
 
 template <typename K, typename T, std::size_t N, typename C>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<
 (
     const static_flat_map<K, T, N, C>& x,
@@ -922,6 +1028,7 @@ bool operator<
 
 template <typename K, typename T, std::size_t N, typename C>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>
 (
     const static_flat_map<K, T, N, C>& x,
@@ -933,6 +1040,7 @@ bool operator>
 
 template <typename K, typename T, std::size_t N, typename C>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator<=
 (
     const static_flat_map<K, T, N, C>& x,
@@ -944,6 +1052,7 @@ bool operator<=
 
 template <typename K, typename T, std::size_t N, typename C>
 SFL_NODISCARD
+SFL_CONSTEXPR_20
 bool operator>=
 (
     const static_flat_map<K, T, N, C>& x,
@@ -954,6 +1063,7 @@ bool operator>=
 }
 
 template <typename K, typename T, std::size_t N, typename C>
+SFL_CONSTEXPR_20
 void swap
 (
     static_flat_map<K, T, N, C>& x,
@@ -964,6 +1074,7 @@ void swap
 }
 
 template <typename K, typename T, std::size_t N, typename C, typename Predicate>
+SFL_CONSTEXPR_20
 typename static_flat_map<K, T, N, C>::size_type
     erase_if(static_flat_map<K, T, N, C>& c, Predicate pred)
 {
