@@ -5,7 +5,9 @@
 using sfl::test::xint;
 using sfl::test::xobj;
 
-PRINT("Test PRIVATE find_hint(const_iterator, const K&)");
+#ifndef TEST_CPP20_CONSTEXPR
+
+BEGIN_TEST("Test PRIVATE find_hint(const_iterator, const K&)")
 {
     using key_type = int;
     using value_type = int;
@@ -78,10 +80,13 @@ PRINT("Test PRIVATE find_hint(const_iterator, const K&)");
         }
     }
 }
+END_TEST()
+
+#endif // TEST_CPP20_CONSTEXPR
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test container()");
+BEGIN_TEST("Test container()")
 {
     using key_type = xint;
     using value_type = xint;
@@ -98,8 +103,9 @@ PRINT("Test container()");
     CHECK(vec.max_size() > 0);
     CHECK(vec.available() == vec.capacity() - vec.size());
 }
+END_TEST()
 
-PRINT("Test container(const KeyEqual&)");
+BEGIN_TEST("Test container(const KeyEqual&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -118,8 +124,9 @@ PRINT("Test container(const KeyEqual&)");
     CHECK(vec.max_size() > 0);
     CHECK(vec.available() == vec.capacity() - vec.size());
 }
+END_TEST()
 
-PRINT("Test container(const Alloc&)");
+BEGIN_TEST("Test container(const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -129,7 +136,7 @@ PRINT("Test container(const Alloc&)");
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
 
-    typename unordered_associative_vector::allocator_type alloc;
+    typename unordered_associative_vector::vector::allocator_type alloc;
 
     unordered_associative_vector vec(alloc);
 
@@ -138,8 +145,9 @@ PRINT("Test container(const Alloc&)");
     CHECK(vec.max_size() > 0);
     CHECK(vec.available() == vec.capacity() - vec.size());
 }
+END_TEST()
 
-PRINT("Test container(const KeyEqual&, const Alloc&)");
+BEGIN_TEST("Test container(const KeyEqual&, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -151,7 +159,7 @@ PRINT("Test container(const KeyEqual&, const Alloc&)");
 
     typename unordered_associative_vector::key_equal equal;
 
-    typename unordered_associative_vector::allocator_type alloc;
+    typename unordered_associative_vector::vector::allocator_type alloc;
 
     unordered_associative_vector vec(equal, alloc);
 
@@ -160,8 +168,9 @@ PRINT("Test container(const KeyEqual&, const Alloc&)");
     CHECK(vec.max_size() > 0);
     CHECK(vec.available() == vec.capacity() - vec.size());
 }
+END_TEST()
 
-PRINT("Test container(const container&)");
+BEGIN_TEST("Test container(const container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -220,8 +229,9 @@ PRINT("Test container(const container&)");
         CHECK(COUNT(vec2, 30) == 3);
     }
 }
+END_TEST()
 
-PRINT("Test container(const container&, const Alloc&)");
+BEGIN_TEST("Test container(const container&, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -240,7 +250,7 @@ PRINT("Test container(const container&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename unordered_associative_vector::allocator_type alloc;
+        typename unordered_associative_vector::vector::allocator_type alloc;
 
         unordered_associative_vector vec2(vec1, alloc);
 
@@ -267,7 +277,7 @@ PRINT("Test container(const container&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename unordered_associative_vector::allocator_type alloc;
+        typename unordered_associative_vector::vector::allocator_type alloc;
 
         unordered_associative_vector vec2(vec1, alloc);
 
@@ -284,8 +294,9 @@ PRINT("Test container(const container&, const Alloc&)");
         CHECK(COUNT(vec2, 30) == 3);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&)");
+BEGIN_TEST("Test container(container&&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -350,8 +361,9 @@ PRINT("Test container(container&&)");
         CHECK(COUNT(vec2, 30) == 3);
     }
 }
+END_TEST()
 
-PRINT("Test container(container&&, const Alloc&)");
+BEGIN_TEST("Test container(container&&, const Alloc&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -370,7 +382,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename unordered_associative_vector::allocator_type alloc;
+        typename unordered_associative_vector::vector::allocator_type alloc;
 
         unordered_associative_vector vec2(std::move(vec1), alloc);
 
@@ -397,7 +409,7 @@ PRINT("Test container(container&&, const Alloc&)");
 
         ///////////////////////////////////////////////////////////////////////
 
-        typename unordered_associative_vector::allocator_type alloc;
+        typename unordered_associative_vector::vector::allocator_type alloc;
 
         unordered_associative_vector vec2(std::move(vec1), alloc);
 
@@ -420,10 +432,11 @@ PRINT("Test container(container&&, const Alloc&)");
         CHECK(COUNT(vec2, 30) == 3);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test assign_copy(const container&)");
+BEGIN_TEST("Test assign_copy(const container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -668,8 +681,9 @@ PRINT("Test assign_copy(const container&)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test assign_move(const container&)");
+BEGIN_TEST("Test assign_move(const container&)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -942,8 +956,9 @@ PRINT("Test assign_move(const container&)");
     }
     #undef CONDITION
 }
+END_TEST()
 
-PRINT("Test assign_range_equal(InputIt, InputIt)");
+BEGIN_TEST("Test assign_range_equal(InputIt, InputIt)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -1109,8 +1124,9 @@ PRINT("Test assign_range_equal(InputIt, InputIt)");
         CHECK(data[4] == -50);
     }
 }
+END_TEST()
 
-PRINT("Test assign_range_unique(InputIt, InputIt)");
+BEGIN_TEST("Test assign_range_unique(InputIt, InputIt)")
 {
     using key_type = xint;
     using value_type = xint;
@@ -1276,10 +1292,11 @@ PRINT("Test assign_range_unique(InputIt, InputIt)");
         CHECK(data[4] == +50);
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test clear()");
+BEGIN_TEST("Test clear()")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1303,8 +1320,9 @@ PRINT("Test clear()");
     CHECK(vec.empty() == true);
     CHECK(vec.size() == 0);
 }
+END_TEST()
 
-PRINT("Test emplace_equal(Args&&...)");
+BEGIN_TEST("Test emplace_equal(Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1313,6 +1331,8 @@ PRINT("Test emplace_equal(Args&&...)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1358,9 +1378,32 @@ PRINT("Test emplace_equal(Args&&...)");
         CHECK(COUNT_KV(vec, key, key + 2000) == 1);
         CHECK(COUNT_KV(vec, key, key + 3000) == 1);
     }
-}
 
-PRINT("Test emplace_unique(Args&&...)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.emplace_equal(10, 1);
+    vec.emplace_equal(20, 1);
+    vec.emplace_equal(20, 2);
+    vec.emplace_equal(30, 1);
+    vec.emplace_equal(30, 2);
+    vec.emplace_equal(30, 3);
+
+    CHECK(vec.size() == 6);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test emplace_unique(Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1369,6 +1412,8 @@ PRINT("Test emplace_unique(Args&&...)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1418,9 +1463,32 @@ PRINT("Test emplace_unique(Args&&...)");
         CHECK(COUNT_KV(vec, key, key + 2000) == 0);
         CHECK(COUNT_KV(vec, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.emplace_unique(10, 1);
+    vec.emplace_unique(20, 1);
+    vec.emplace_unique(20, 2);
+    vec.emplace_unique(30, 1);
+    vec.emplace_unique(30, 2);
+    vec.emplace_unique(30, 3);
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test emplace_hint_equal(const_iterator, Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1429,6 +1497,8 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1510,9 +1580,32 @@ PRINT("Test emplace_hint_equal(const_iterator, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.emplace_hint_equal(vec.end(), 10, 1);
+    vec.emplace_hint_equal(vec.end(), 20, 1);
+    vec.emplace_hint_equal(vec.end(), 20, 2);
+    vec.emplace_hint_equal(vec.end(), 30, 1);
+    vec.emplace_hint_equal(vec.end(), 30, 2);
+    vec.emplace_hint_equal(vec.end(), 30, 3);
+
+    CHECK(vec.size() == 6);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test emplace_hint_unique(const_iterator, Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1521,6 +1614,8 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1609,9 +1704,32 @@ PRINT("Test emplace_hint_unique(const_iterator, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert_equal(V&&)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.emplace_hint_unique(vec.end(), 10, 1);
+    vec.emplace_hint_unique(vec.end(), 20, 1);
+    vec.emplace_hint_unique(vec.end(), 20, 2);
+    vec.emplace_hint_unique(vec.end(), 30, 1);
+    vec.emplace_hint_unique(vec.end(), 30, 2);
+    vec.emplace_hint_unique(vec.end(), 30, 3);
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_equal(V&&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1620,6 +1738,8 @@ PRINT("Test insert_equal(V&&)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1671,9 +1791,32 @@ PRINT("Test insert_equal(V&&)");
         CHECK(COUNT_KV(vec, key, key + 2000) == 1);
         CHECK(COUNT_KV(vec, key, key + 3000) == 1);
     }
-}
 
-PRINT("Test insert_unique(V&&)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.insert_equal(std::make_pair(10, 1));
+    vec.insert_equal(std::make_pair(20, 1));
+    vec.insert_equal(std::make_pair(20, 2));
+    vec.insert_equal(std::make_pair(30, 1));
+    vec.insert_equal(std::make_pair(30, 2));
+    vec.insert_equal(std::make_pair(30, 3));
+
+    CHECK(vec.size() == 6);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_unique(V&&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1682,6 +1825,8 @@ PRINT("Test insert_unique(V&&)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1737,9 +1882,32 @@ PRINT("Test insert_unique(V&&)");
         CHECK(COUNT_KV(vec, key, key + 2000) == 0);
         CHECK(COUNT_KV(vec, key, key + 3000) == 0);
     }
-}
 
-PRINT("Test insert_hint_equal(const_iterator, V&&)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.insert_unique(std::make_pair(10, 1));
+    vec.insert_unique(std::make_pair(20, 1));
+    vec.insert_unique(std::make_pair(20, 2));
+    vec.insert_unique(std::make_pair(30, 1));
+    vec.insert_unique(std::make_pair(30, 2));
+    vec.insert_unique(std::make_pair(30, 3));
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_hint_equal(const_iterator, V&&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1748,6 +1916,8 @@ PRINT("Test insert_hint_equal(const_iterator, V&&)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1841,9 +2011,32 @@ PRINT("Test insert_hint_equal(const_iterator, V&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert_hint_unique(const_iterator, V&&)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.insert_hint_equal(vec.end(), std::make_pair(10, 1));
+    vec.insert_hint_equal(vec.end(), std::make_pair(20, 1));
+    vec.insert_hint_equal(vec.end(), std::make_pair(20, 2));
+    vec.insert_hint_equal(vec.end(), std::make_pair(30, 1));
+    vec.insert_hint_equal(vec.end(), std::make_pair(30, 2));
+    vec.insert_hint_equal(vec.end(), std::make_pair(30, 3));
+
+    CHECK(vec.size() == 6);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_hint_unique(const_iterator, V&&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1852,6 +2045,8 @@ PRINT("Test insert_hint_unique(const_iterator, V&&)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -1952,9 +2147,32 @@ PRINT("Test insert_hint_unique(const_iterator, V&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test insert_or_assign(K&&, M&&)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.insert_hint_unique(vec.end(), std::make_pair(10, 1));
+    vec.insert_hint_unique(vec.end(), std::make_pair(20, 1));
+    vec.insert_hint_unique(vec.end(), std::make_pair(20, 2));
+    vec.insert_hint_unique(vec.end(), std::make_pair(30, 1));
+    vec.insert_hint_unique(vec.end(), std::make_pair(30, 2));
+    vec.insert_hint_unique(vec.end(), std::make_pair(30, 3));
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_or_assign(K&&, M&&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -1963,6 +2181,8 @@ PRINT("Test insert_or_assign(K&&, M&&)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2004,9 +2224,32 @@ PRINT("Test insert_or_assign(K&&, M&&)");
             CHECK(int(vec.size()) == int(size));
         }
     }
-}
 
-PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.insert_or_assign(10, 1);
+    vec.insert_or_assign(20, 1);
+    vec.insert_or_assign(20, 2);
+    vec.insert_or_assign(30, 1);
+    vec.insert_or_assign(30, 2);
+    vec.insert_or_assign(30, 3);
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 0);
+    CHECK(COUNT_KV(vec, 20, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 1) == 0);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test insert_or_assign_hint(const_iterator, K&&, M&&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2015,6 +2258,8 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2092,9 +2337,32 @@ PRINT("Test insert_or_assign_hint(const_iterator, K&&, M&&)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test try_emplace(K&&, Args&&...)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.insert_or_assign_hint(vec.end(), 10, 1);
+    vec.insert_or_assign_hint(vec.end(), 20, 1);
+    vec.insert_or_assign_hint(vec.end(), 20, 2);
+    vec.insert_or_assign_hint(vec.end(), 30, 1);
+    vec.insert_or_assign_hint(vec.end(), 30, 2);
+    vec.insert_or_assign_hint(vec.end(), 30, 3);
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 0);
+    CHECK(COUNT_KV(vec, 20, 2) == 1);
+    CHECK(COUNT_KV(vec, 30, 1) == 0);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 1);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace(K&&, Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2103,6 +2371,8 @@ PRINT("Test try_emplace(K&&, Args&&...)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2144,9 +2414,32 @@ PRINT("Test try_emplace(K&&, Args&&...)");
             CHECK(int(vec.size()) == int(size));
         }
     }
-}
 
-PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.try_emplace(10, 1);
+    vec.try_emplace(20, 1);
+    vec.try_emplace(20, 2);
+    vec.try_emplace(30, 1);
+    vec.try_emplace(30, 2);
+    vec.try_emplace(30, 3);
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test try_emplace_hint(const_iterator, K&&, Args&&...)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2155,6 +2448,8 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
     using allocator_type = TPARAM_ALLOCATOR<value_type>;
     using base_vector = sfl::vector<value_type, allocator_type>;
     using unordered_associative_vector = sfl::dtl::unordered_associative_vector<key_type, value_type, key_of_value, key_equal, base_vector>;
+
+    #ifndef TEST_CPP20_CONSTEXPR
 
     // For shuffling
     std::random_device rd;
@@ -2220,9 +2515,32 @@ PRINT("Test try_emplace_hint(const_iterator, K&&, Args&&...)");
         std::shuffle(data1.begin(), data1.end(), gen);
         std::shuffle(data2.begin(), data2.end(), gen);
     }
-}
 
-PRINT("Test erase(const_iterator)");
+    #else // C++20 constexpr
+
+    unordered_associative_vector vec;
+
+    vec.try_emplace_hint(vec.end(), 10, 1);
+    vec.try_emplace_hint(vec.end(), 20, 1);
+    vec.try_emplace_hint(vec.end(), 20, 2);
+    vec.try_emplace_hint(vec.end(), 30, 1);
+    vec.try_emplace_hint(vec.end(), 30, 2);
+    vec.try_emplace_hint(vec.end(), 30, 3);
+
+    CHECK(vec.size() == 3);
+
+    CHECK(COUNT_KV(vec, 10, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 1) == 1);
+    CHECK(COUNT_KV(vec, 20, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 1) == 1);
+    CHECK(COUNT_KV(vec, 30, 2) == 0);
+    CHECK(COUNT_KV(vec, 30, 3) == 0);
+
+    #endif // C++20 constexpr
+}
+END_TEST()
+
+BEGIN_TEST("Test erase(const_iterator)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2280,8 +2598,9 @@ PRINT("Test erase(const_iterator)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test erase(const_iterator, const_iterator)");
+BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2348,8 +2667,9 @@ PRINT("Test erase(const_iterator, const_iterator)");
         }
     }
 }
+END_TEST()
 
-PRINT("Test erase_key_equal(const K&)");
+BEGIN_TEST("Test erase_key_equal(const K&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2415,8 +2735,9 @@ PRINT("Test erase_key_equal(const K&)");
     CHECK(COUNT_KV(vec, 30, 5) == 0);
     CHECK(COUNT_KV(vec, 30, 6) == 0);
 }
+END_TEST()
 
-PRINT("Test erase_key_unique(const K&)");
+BEGIN_TEST("Test erase_key_unique(const K&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2482,8 +2803,9 @@ PRINT("Test erase_key_unique(const K&)");
     CHECK(COUNT_KV(vec, 30, 5) == 0);
     CHECK(COUNT_KV(vec, 30, 6) == 0);
 }
+END_TEST()
 
-PRINT("Test swap(container&)");
+BEGIN_TEST("Test swap(container&)")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2545,10 +2867,11 @@ PRINT("Test swap(container&)");
     CHECK(COUNT_KV(vec2, 60, 2) == 1);
     CHECK(COUNT_KV(vec2, 70, 2) == 1);
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test find, count_equal, count_unique, contains");
+BEGIN_TEST("Test find, count_equal, count_unique, contains")
 {
     using key_type = xint;
     using value_type = std::pair<xint, xint>;
@@ -2644,10 +2967,11 @@ PRINT("Test find, count_equal, count_unique, contains");
         }
     }
 }
+END_TEST()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PRINT("Test NON-MEMBER comparison operators");
+BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     using key_type = xint;
     using value_type = xint;
@@ -2723,3 +3047,4 @@ PRINT("Test NON-MEMBER comparison operators");
     CHECK((vec4 != vec3) == false);
     CHECK((vec4 != vec4) == false);
 }
+END_TEST()
