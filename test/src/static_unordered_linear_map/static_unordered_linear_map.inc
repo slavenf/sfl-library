@@ -551,6 +551,7 @@ BEGIN_TEST("Test key_eq()")
         CHECK(key_eq(20, 20) == true);
     }
 
+    #if !(defined(_MSC_VER) && defined(TEST_CPP20_CONSTEXPR)) // There is some weird bug in Visual C++ compiler
     {
         using key_type = xobj;
         using mapped_type = xint;
@@ -567,6 +568,7 @@ BEGIN_TEST("Test key_eq()")
         CHECK(key_eq(xobj(20), 10) == false);
         CHECK(key_eq(xobj(20), 20) == true);
     }
+    #endif
 }
 END_TEST()
 
