@@ -25,7 +25,6 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/cpp.hpp>
 
-#include <algorithm> // copy, fill, move, move_backward
 #include <cstddef> // size_t, nullptr_t, ptrdiff_t
 #include <iterator> // random_access_iterator_tag
 #include <type_traits> // add_lvalue_reference, is_constant_evaluated, remove_cv
