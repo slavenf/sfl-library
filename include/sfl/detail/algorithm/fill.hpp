@@ -24,9 +24,11 @@
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
+#include <sfl/detail/type_traits/unwrap_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
 
 #include <algorithm> // fill
+#include <type_traits> // is_constant_evaluated
 
 namespace sfl
 {
@@ -39,7 +41,29 @@ template <typename ForwardIt, typename T,
 SFL_CONSTEXPR_20
 void fill(ForwardIt first, ForwardIt last, const T& value)
 {
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+
+    if (std::is_constant_evaluated())
+    {
+        std::fill(first, last, value);
+    }
+    else
+    {
+        // This is for containers based on static_storage (static_vector).
+        // It helps older compilers generate better code.
+        std::fill
+        (
+            sfl::dtl::unwrap_iterator<ForwardIt>(first),
+            sfl::dtl::unwrap_iterator<ForwardIt>(last),
+            value
+        );
+    }
+
+    #else // before C++20
+
     std::fill(first, last, value);
+
+    #endif // before C++20
 }
 
 template <typename ForwardIt, typename T,

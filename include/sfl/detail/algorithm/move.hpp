@@ -25,10 +25,12 @@
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
+#include <sfl/detail/type_traits/unwrap_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
 
 #include <algorithm> // move, min
 #include <iterator>  // iterator_traits, distance
+#include <type_traits> // is_constant_evaluated
 
 namespace sfl
 {
@@ -45,7 +47,29 @@ template <typename InputIt, typename OutputIt,
 SFL_CONSTEXPR_20
 OutputIt move(InputIt first, InputIt last, OutputIt d_first)
 {
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+
+    if (std::is_constant_evaluated())
+    {
+        return std::move(first, last, d_first);
+    }
+    else
+    {
+        // This is for containers based on static_storage (static_vector).
+        // It helps older compilers generate better code.
+        return std::move
+        (
+            sfl::dtl::unwrap_iterator<InputIt>(first),
+            sfl::dtl::unwrap_iterator<InputIt>(last),
+            sfl::dtl::unwrap_iterator<OutputIt>(d_first)
+        );
+    }
+
+    #else // before C++20
+
     return std::move(first, last, d_first);
+
+    #endif // before C++20
 }
 
 template <typename InputIt, typename OutputIt,

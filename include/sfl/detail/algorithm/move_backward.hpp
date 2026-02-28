@@ -25,10 +25,13 @@
 #include <sfl/detail/type_traits/is_random_access_iterator.hpp>
 #include <sfl/detail/type_traits/is_segmented_iterator.hpp>
 #include <sfl/detail/type_traits/segmented_iterator_traits.hpp>
+#include <sfl/detail/type_traits/unwrap_iterator.hpp>
+
 #include <sfl/detail/cpp.hpp>
 
 #include <algorithm> // move_backward, min
 #include <iterator>  // iterator_traits, distance
+#include <type_traits> // is_constant_evaluated
 
 namespace sfl
 {
@@ -45,7 +48,29 @@ template <typename BidirIt1, typename BidirIt2,
 SFL_CONSTEXPR_20
 BidirIt2 move_backward(BidirIt1 first, BidirIt1 last, BidirIt2 d_last)
 {
+    #if SFL_CPP_VERSION >= SFL_CPP_20
+
+    if (std::is_constant_evaluated())
+    {
+        return std::move_backward(first, last, d_last);
+    }
+    else
+    {
+        // This is for containers based on static_storage (static_vector).
+        // It helps older compilers generate better code.
+        return std::move_backward
+        (
+            sfl::dtl::unwrap_iterator<BidirIt1>(first),
+            sfl::dtl::unwrap_iterator<BidirIt1>(last),
+            sfl::dtl::unwrap_iterator<BidirIt2>(d_last)
+        );
+    }
+
+    #else // before C++20
+
     return std::move_backward(first, last, d_last);
+
+    #endif // before C++20
 }
 
 template <typename BidirIt1, typename BidirIt2,

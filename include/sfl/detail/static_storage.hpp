@@ -23,6 +23,7 @@
 
 #include <sfl/detail/memory/to_address.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
+#include <sfl/detail/type_traits/unwrap_iterator.hpp>
 #include <sfl/detail/cpp.hpp>
 
 #include <cstddef> // size_t, nullptr_t, ptrdiff_t
@@ -287,6 +288,15 @@ public:
     friend bool operator>=(const static_storage_pointer& x, const static_storage_pointer& y) noexcept
     {
         return !(x < y);
+    }
+};
+
+template <typename T>
+struct unwrap_iterator_impl<sfl::dtl::static_storage_pointer<T>>
+{
+    static T* unwrap(sfl::dtl::static_storage_pointer<T> p) noexcept
+    {
+        return sfl::dtl::to_address(p);
     }
 };
 
