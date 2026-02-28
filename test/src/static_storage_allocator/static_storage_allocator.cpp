@@ -15,11 +15,15 @@ bool test()
 {
     constexpr int N = 10;
 
+    using allocator_type = sfl::dtl::static_storage_allocator<T, N>;
+
+    using pointer = typename std::allocator_traits<allocator_type>::pointer;
+
     for (int n = 1; n <= N; ++n)
     {
-        sfl::dtl::static_storage_allocator<T, N> alloc;
+        allocator_type alloc;
 
-        auto* p = alloc.allocate(n);
+        pointer p = alloc.allocate(n);
 
         for (int i = 0; i < n; ++i)
         {
@@ -41,7 +45,7 @@ bool test()
 
     for (int n = 1; n <= N; ++n)
     {
-        sfl::dtl::static_storage_allocator<T, N> alloc;
+        allocator_type alloc;
 
         auto res = alloc.allocate_at_least(n);
 

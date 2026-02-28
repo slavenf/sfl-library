@@ -25,9 +25,10 @@
 #include <sfl/detail/utility/ignore_unused.hpp>
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
+#include <sfl/detail/static_storage.hpp>
 
 #include <cstddef>      // size_t, ptrdiff_t
-#include <type_traits>  // true_type, false_type, is_trivially_copyable
+#include <type_traits>  // true_type, false_type
 
 namespace sfl
 {
@@ -38,11 +39,15 @@ namespace dtl
 template <typename T, std::size_t N>
 class static_storage_allocator
 {
+private:
+
+    using static_storage_type = sfl::dtl::static_storage<T, N>;
+
 public:
 
     using value_type      = T;
-    using pointer         = T*;
-    using const_pointer   = const T*;
+    using pointer         = typename static_storage_type::pointer;
+    using const_pointer   = typename static_storage_type::const_pointer;
     using reference       = T&;
     using const_reference = const T&;
     using size_type       = std::size_t;
@@ -62,48 +67,10 @@ public:
 
 private:
 
-    template <bool IsTriviallyCopyable, typename Dummy = void>
-    struct data;
-
-    template <typename Dummy>
-    struct data<true, Dummy>
-    {
-        T internal_storage_[N];
-
-        SFL_CONSTEXPR_20
-        data() noexcept
-        {}
-
-        SFL_CONSTEXPR_20
-        ~data()
-        {}
-    };
-
-    template <typename Dummy>
-    struct data<false, Dummy>
-    {
-        union
-        {
-            T internal_storage_[N];
-        };
-
-        SFL_CONSTEXPR_20
-        data() noexcept
-        {}
-
-        SFL_CONSTEXPR_20
-        ~data()
-        {}
-    };
-
-    #if SFL_CPP_VERSION >= SFL_CPP_20
-    data<std::is_trivially_copyable<T>::value> data_;
-    #else
-    data<false> data_;
-    #endif
+    static_storage_type storage_;
 
     #ifndef NDEBUG
-    bool internal_storage_allocated_ = false;
+    bool storage_allocated_ = false;
     #endif
 
 public:
@@ -169,11 +136,11 @@ public:
         SFL_ASSERT(n <= N);
 
         #ifndef NDEBUG
-        SFL_ASSERT(!internal_storage_allocated_);
-        internal_storage_allocated_ = true;
+        SFL_ASSERT(!storage_allocated_);
+        storage_allocated_ = true;
         #endif
 
-        return pointer(data_.internal_storage_);
+        return storage_.data();
     }
 
     SFL_NODISCARD
@@ -185,11 +152,11 @@ public:
         SFL_ASSERT(n <= N);
 
         #ifndef NDEBUG
-        SFL_ASSERT(!internal_storage_allocated_);
-        internal_storage_allocated_ = true;
+        SFL_ASSERT(!storage_allocated_);
+        storage_allocated_ = true;
         #endif
 
-        return {pointer(data_.internal_storage_), size_type(N)};
+        return {storage_.data(), size_type(N)};
     }
 
     SFL_CONSTEXPR_20
@@ -197,12 +164,12 @@ public:
     {
         sfl::dtl::ignore_unused(p, n);
 
-        SFL_ASSERT(p == pointer(data_.internal_storage_));
+        SFL_ASSERT(p == storage_.data());
         SFL_ASSERT(n <= N);
 
         #ifndef NDEBUG
-        SFL_ASSERT(internal_storage_allocated_);
-        internal_storage_allocated_ = false;
+        SFL_ASSERT(storage_allocated_);
+        storage_allocated_ = false;
         #endif
     }
 
@@ -218,26 +185,14 @@ public:
     {
         sfl::dtl::ignore_unused(p);
 
-        SFL_ASSERT(p == pointer(data_.internal_storage_));
+        SFL_ASSERT(p == storage_.data());
 
         #ifndef NDEBUG
-        SFL_ASSERT(internal_storage_allocated_);
+        SFL_ASSERT(storage_allocated_);
         #endif
 
         return true;
     }
-
-    #if SFL_CPP_VERSION >= SFL_CPP_20
-
-    template <typename U, sfl::dtl::enable_if_t<std::is_trivially_copyable<U>::value>* = nullptr>
-    SFL_CONSTEXPR_20
-    void destroy(U* p)
-    {
-        // Do nothing
-        sfl::dtl::ignore_unused(p);
-    }
-
-    #endif // SFL_CPP_VERSION >= SFL_CPP_20
 };
 
 template <typename T1, typename T2, std::size_t N>
