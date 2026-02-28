@@ -304,6 +304,10 @@ public:
 template <typename T, std::size_t N>
 class static_storage
 {
+    static_assert(alignof(sfl::dtl::static_storage_bucket<T>) == alignof(T));
+
+    static_assert(sizeof(sfl::dtl::static_storage_bucket<T>) == sizeof(T));
+
 private:
 
     sfl::dtl::static_storage_bucket<T> storage_[N];
