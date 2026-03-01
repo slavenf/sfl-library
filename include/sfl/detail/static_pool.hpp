@@ -69,7 +69,7 @@ private:
         bucket& operator=(bucket&& other) = delete;
 
         SFL_CONSTEXPR_20
-        ~bucket() noexcept
+        ~bucket()
         {}
     };
 
@@ -142,7 +142,7 @@ public:
     static_pool& operator=(static_pool&& other) = delete;
 
     SFL_CONSTEXPR_20
-    ~static_pool() noexcept
+    ~static_pool()
     {
         SFL_ASSERT(empty());
     }

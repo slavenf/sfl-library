@@ -114,7 +114,7 @@ struct hash_table_node : hash_table_base_node<VoidPointer>
 
     #if defined(_MSC_VER) && SFL_CPP_VERSION >= SFL_CPP_20 // Visual C++ needs this in C++20 constexpr
     SFL_CONSTEXPR_20
-    ~hash_table_node() noexcept
+    ~hash_table_node()
     {}
     #endif
 

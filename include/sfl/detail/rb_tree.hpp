@@ -93,7 +93,7 @@ struct rb_tree_node : rb_tree_node_base<VoidPointer>
 
     #if defined(_MSC_VER) && SFL_CPP_VERSION >= SFL_CPP_20 // Visual C++ needs this in C++20 constexpr
     SFL_CONSTEXPR_20
-    ~rb_tree_node() noexcept
+    ~rb_tree_node()
     {}
     #endif
 };

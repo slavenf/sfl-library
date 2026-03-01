@@ -224,7 +224,7 @@ public:
 #endif // before C++20
 
     SFL_CONSTEXPR_20
-    ~static_vector() noexcept
+    ~static_vector()
     {
         sfl::dtl::destroy(data_.first(), data_.last_);
     }

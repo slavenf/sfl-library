@@ -53,7 +53,7 @@ public:
     optional_value& operator=(optional_value&& other) = delete;
 
     SFL_CONSTEXPR_20
-    ~optional_value() noexcept
+    ~optional_value()
     {}
 
     SFL_NODISCARD
