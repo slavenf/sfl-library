@@ -9,7 +9,7 @@ using sfl::test::xobj;
 BEGIN_TEST("Test container()")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -25,7 +25,7 @@ END_TEST()
 BEGIN_TEST("Test container(const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -43,7 +43,7 @@ END_TEST()
 BEGIN_TEST("Test container(size_type)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -59,7 +59,7 @@ END_TEST()
 BEGIN_TEST("Test container(size_type, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -77,7 +77,7 @@ END_TEST()
 BEGIN_TEST("Test container(size_type, const Hash&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -95,7 +95,7 @@ END_TEST()
 BEGIN_TEST("Test container(size_type, const Hash&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -115,7 +115,7 @@ END_TEST()
 BEGIN_TEST("Test container(size_type, const Hash&, const KeyEqual&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -135,7 +135,7 @@ END_TEST()
 BEGIN_TEST("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -157,7 +157,7 @@ END_TEST()
 BEGIN_TEST("Test container(InputIt, InputIt)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -189,7 +189,7 @@ END_TEST()
 BEGIN_TEST("Test container(InputIt, InputIt, size_type)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -221,7 +221,7 @@ END_TEST()
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -255,7 +255,7 @@ END_TEST()
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -289,7 +289,7 @@ END_TEST()
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -325,7 +325,7 @@ END_TEST()
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -361,7 +361,7 @@ END_TEST()
 BEGIN_TEST("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -399,7 +399,7 @@ END_TEST()
 BEGIN_TEST("Test container(std::initializer_list)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -429,7 +429,7 @@ END_TEST()
 BEGIN_TEST("Test container(std::initializer_list, size_type)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -459,7 +459,7 @@ END_TEST()
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -491,7 +491,7 @@ END_TEST()
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -523,7 +523,7 @@ END_TEST()
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -557,7 +557,7 @@ END_TEST()
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -591,7 +591,7 @@ END_TEST()
 BEGIN_TEST("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -627,7 +627,7 @@ END_TEST()
 BEGIN_TEST("Test container(const container&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -663,7 +663,7 @@ END_TEST()
 BEGIN_TEST("Test container(const container&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -701,7 +701,7 @@ END_TEST()
 BEGIN_TEST("Test container(container&&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -738,7 +738,7 @@ END_TEST()
 BEGIN_TEST("Test container(container&&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -790,7 +790,7 @@ END_TEST()
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -851,7 +851,7 @@ END_TEST()
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -912,7 +912,7 @@ END_TEST()
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -977,7 +977,7 @@ END_TEST()
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1042,7 +1042,7 @@ END_TEST()
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1111,7 +1111,7 @@ END_TEST()
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1180,7 +1180,7 @@ END_TEST()
 BEGIN_TEST("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const KeyEqual&, const Allocator&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1255,7 +1255,7 @@ END_TEST()
 BEGIN_TEST("Test operator=(const container&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1307,7 +1307,7 @@ END_TEST()
 BEGIN_TEST("Test operator=(container&&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1366,7 +1366,7 @@ END_TEST()
 BEGIN_TEST("Test operator=(std::initializer_list)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1413,7 +1413,7 @@ END_TEST()
 BEGIN_TEST("Test get_allocator()")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1432,7 +1432,7 @@ BEGIN_TEST("Test hash_function()")
 {
     {
         using key_type = xint;
-        using key_hash = std::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using allocator_type = TPARAM_ALLOCATOR<key_type>;
         using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1472,7 +1472,7 @@ BEGIN_TEST("Test key_eq()")
 {
     {
         using key_type = xint;
-        using key_hash = std::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using allocator_type = TPARAM_ALLOCATOR<key_type>;
         using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1511,7 +1511,7 @@ END_TEST()
 BEGIN_TEST("Test begin, end, cbegin, cend")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1662,7 +1662,7 @@ BEGIN_TEST("Test equal_range, find, count, contains")
     // xint
     {
         using key_type = xint;
-        using key_hash = std::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using allocator_type = TPARAM_ALLOCATOR<key_type>;
         using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1782,7 +1782,7 @@ END_TEST()
 BEGIN_TEST("Test emplace(Args&&...)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1812,7 +1812,7 @@ END_TEST()
 BEGIN_TEST("Test emplace_hint(const_iterator, Args&&...)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1842,7 +1842,7 @@ END_TEST()
 BEGIN_TEST("Test insert(const value_type&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1878,7 +1878,7 @@ END_TEST()
 BEGIN_TEST("Test insert(value_type&&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1920,7 +1920,7 @@ END_TEST()
 BEGIN_TEST("Test insert(const_iterator, const value_type&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1956,7 +1956,7 @@ END_TEST()
 BEGIN_TEST("Test insert(const_iterator, value_type&&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -1998,7 +1998,7 @@ END_TEST()
 BEGIN_TEST("Test insert(InputIt, InputIt")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2032,7 +2032,7 @@ END_TEST()
 BEGIN_TEST("Test insert(std::initializer_list")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2064,7 +2064,7 @@ END_TEST()
 BEGIN_TEST("Test insert_range(Range&&")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2125,7 +2125,7 @@ END_TEST()
 BEGIN_TEST("Test erase(const_iterator)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2208,7 +2208,7 @@ END_TEST()
 BEGIN_TEST("Test erase(const_iterator, const_iterator)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2250,7 +2250,7 @@ END_TEST()
 BEGIN_TEST("Test erase(const Key&)")
 {
     using key_type = xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2326,7 +2326,7 @@ END_TEST()
 BEGIN_TEST("Test swap(container&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2392,7 +2392,7 @@ BEGIN_TEST("Test bucket interface functions")
     // xint
     {
         using key_type = xint;
-        using key_hash = std::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using allocator_type = TPARAM_ALLOCATOR<key_type>;
         using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2540,7 +2540,7 @@ END_TEST()
 BEGIN_TEST("Test hash policy functions")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2597,7 +2597,7 @@ END_TEST()
 BEGIN_TEST("Test NON-MEMBER comparison operators")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2629,7 +2629,7 @@ END_TEST()
 BEGIN_TEST("Test NON-MEMBER swap(container&)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;
@@ -2676,7 +2676,7 @@ END_TEST()
 BEGIN_TEST("Test NON-MEMBER erase_if(container&, Predicate)")
 {
     using key_type = xint_xint;
-    using key_hash = std::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using allocator_type = TPARAM_ALLOCATOR<key_type>;
     using set_type = sfl::unordered_multiset<key_type, key_hash, key_equal, allocator_type>;

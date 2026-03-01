@@ -34,6 +34,7 @@
 #include <sfl/detail/hash_table.hpp>
 #include <sfl/detail/static_node_allocator.hpp>
 #include <sfl/detail/static_storage_allocator.hpp>
+#include <sfl/hash.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, hash
@@ -47,7 +48,7 @@ namespace sfl
 template < typename Key,
            std::size_t StaticCapacity,
            std::size_t StaticBucketCount = sfl::dtl::bit_ceil(StaticCapacity),
-           typename Hash = std::hash<Key>,
+           typename Hash = sfl::hash<Key>,
            typename KeyEqual = std::equal_to<Key> >
 class static_unordered_set
 {

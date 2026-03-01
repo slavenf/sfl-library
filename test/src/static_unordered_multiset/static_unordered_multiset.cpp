@@ -46,15 +46,7 @@ int main()
 namespace constexpr_test
 {
 
-struct hash_int
-{
-    constexpr std::size_t operator()(int x) const noexcept
-    {
-        return static_cast<std::size_t>(x);
-    }
-};
-
-using set_type = sfl::static_unordered_multiset<int, 8, 8, hash_int>;
+using set_type = sfl::static_unordered_multiset<int, 8>;
 
 constexpr set_type create_set()
 {

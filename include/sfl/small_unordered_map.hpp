@@ -37,6 +37,7 @@
 #include <sfl/detail/hash_table.hpp>
 #include <sfl/detail/small_node_allocator.hpp>
 #include <sfl/detail/small_storage_allocator.hpp>
+#include <sfl/hash.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, hash
@@ -52,7 +53,7 @@ template < typename Key,
            typename T,
            std::size_t StaticCapacity,
            std::size_t StaticBucketCount = StaticCapacity == 0 ? 0 : sfl::dtl::bit_ceil(StaticCapacity),
-           typename Hash = std::hash<Key>,
+           typename Hash = sfl::hash<Key>,
            typename KeyEqual = std::equal_to<Key>,
            typename Allocator = std::allocator<std::pair<const Key, T>> >
 class small_unordered_map

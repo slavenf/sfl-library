@@ -30,6 +30,7 @@
 #include <sfl/detail/allocator_traits.hpp>
 #include <sfl/detail/cpp.hpp>
 #include <sfl/detail/hash_table.hpp>
+#include <sfl/hash.hpp>
 
 #include <cstddef>          // size_t
 #include <functional>       // equal_to, hash
@@ -43,7 +44,7 @@ namespace sfl
 
 template < typename Key,
            typename T,
-           typename Hash = std::hash<Key>,
+           typename Hash = sfl::hash<Key>,
            typename KeyEqual = std::equal_to<Key>,
            typename Allocator = std::allocator<std::pair<const Key, T>> >
 class unordered_multimap

@@ -5,10 +5,10 @@
 
 #include "sfl/detail/functional/first.hpp"
 #include "sfl/detail/functional/identity.hpp"
+#include "sfl/hash.hpp"
 
 #include "check.hpp"
 #include "count.hpp"
-#include "hash.hpp"
 #include "nth.hpp"
 #include "print.hpp"
 

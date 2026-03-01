@@ -3,7 +3,6 @@
 
 #include <sfl/detail/cpp.hpp>
 
-#include "hash.hpp"
 #include "print.hpp"
 
 #include <iosfwd>
@@ -191,16 +190,6 @@ public:
     friend bool operator<=(const xint& x, int y)
     {
         return *x.value_ <= y;
-    }
-};
-
-template <>
-struct hash<xint>
-{
-    SFL_CONSTEXPR_20
-    std::size_t operator()(const xint& x) const
-    {
-        return static_cast<std::size_t>(*x.value_);
     }
 };
 

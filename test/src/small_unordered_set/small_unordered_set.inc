@@ -16,15 +16,15 @@ using sfl::test::xobj;
 
 PRINT("Test static_capacity and static_bucket_count");
 {
-    CHECK((sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint> >::static_capacity == TPARAM_N));
-    CHECK((sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint> >::static_bucket_count == TPARAM_M));
+    CHECK((sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint> >::static_capacity == TPARAM_N));
+    CHECK((sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint> >::static_bucket_count == TPARAM_M));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
 PRINT("Test container()");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -35,7 +35,7 @@ PRINT("Test container(const Allocator&)");
 {
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -44,7 +44,7 @@ PRINT("Test container(const Allocator&)");
 
 PRINT("Test container(size_type)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -55,7 +55,7 @@ PRINT("Test container(size_type, const Allocator&)");
 {
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -64,9 +64,9 @@ PRINT("Test container(size_type, const Allocator&)");
 
 PRINT("Test container(size_type, const Hash&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -75,11 +75,11 @@ PRINT("Test container(size_type, const Hash&)");
 
 PRINT("Test container(size_type, const Hash&, const Allocator&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash, alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -88,11 +88,11 @@ PRINT("Test container(size_type, const Hash&, const Allocator&)");
 
 PRINT("Test container(size_type, const Hash&, const KeyEqual&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::equal_to<xint_xint> equal;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash, equal);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash, equal);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -101,13 +101,13 @@ PRINT("Test container(size_type, const Hash&, const KeyEqual&)");
 
 PRINT("Test container(size_type, const Hash&, const KeyEqual&, const Allocator&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::equal_to<xint_xint> equal;
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash, equal, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11, hash, equal, alloc);
 
     CHECK(set.empty() == true);
     CHECK(set.size() == 0);
@@ -127,7 +127,7 @@ PRINT("Test container(InputIt, InputIt)");
         }
     );
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end());
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end());
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -152,7 +152,7 @@ PRINT("Test container(InputIt, InputIt, size_type)");
         }
     );
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -179,7 +179,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Allocator&)");
         }
     );
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -193,7 +193,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Allocator&)");
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::vector<xint_xint> data
     (
@@ -206,7 +206,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
         }
     );
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -220,7 +220,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&)");
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
@@ -235,7 +235,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&
         }
     );
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -249,7 +249,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const Allocator&
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::equal_to<xint_xint> equal;
 
@@ -264,7 +264,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)
         }
     );
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash, equal);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash, equal);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -278,7 +278,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&)
 
 PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&, const Allocator&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::equal_to<xint_xint> equal;
 
@@ -295,7 +295,7 @@ PRINT("Test container(InputIt, InputIt, size_type, const Hash&, const KeyEqual&,
         }
     );
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash, equal, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(data.begin(), data.end(), 11, hash, equal, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -318,7 +318,7 @@ PRINT("Test container(std::initializer_list)");
         {20, 3}
     };
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -341,7 +341,7 @@ PRINT("Test container(std::initializer_list, size_type)");
         {20, 3}
     };
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -366,7 +366,7 @@ PRINT("Test container(std::initializer_list, size_type, const Allocator&)");
         {20, 3}
     };
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -380,7 +380,7 @@ PRINT("Test container(std::initializer_list, size_type, const Allocator&)");
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::initializer_list<xint_xint> ilist
     {
@@ -391,7 +391,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&)");
         {20, 3}
     };
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -405,7 +405,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&)");
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&, const Allocator&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
@@ -418,7 +418,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const Alloc
         {20, 3}
     };
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -432,7 +432,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const Alloc
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::equal_to<xint_xint> equal;
 
@@ -445,7 +445,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
         {20, 3}
     };
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash, equal);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash, equal);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -459,7 +459,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
 
 PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEqual&, const Allocator&)");
 {
-    std::hash<xint_xint> hash;
+    sfl::hash<xint_xint> hash;
 
     std::equal_to<xint_xint> equal;
 
@@ -474,7 +474,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
         {20, 3}
     };
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash, equal, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(ilist, 11, hash, equal, alloc);
 
     CHECK(set.empty() == false);
     CHECK(set.size() == 3);
@@ -488,7 +488,7 @@ PRINT("Test container(std::initializer_list, size_type, const Hash&, const KeyEq
 
 PRINT("Test container(const container&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -505,7 +505,7 @@ PRINT("Test container(const container&)");
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(set1);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(set1);
 
     CHECK(set2.size() == 3);
     CHECK(COUNT_KV(set2, 10, 1) == 1);
@@ -517,7 +517,7 @@ PRINT("Test container(const container&)");
 
 PRINT("Test container(const container&, const Allocator&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -536,7 +536,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(set1, alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(set1, alloc);
 
     CHECK(set2.size() == 3);
     CHECK(COUNT_KV(set2, 10, 1) == 1);
@@ -548,7 +548,7 @@ PRINT("Test container(const container&, const Allocator&)");
 
 PRINT("Test container(container&&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -565,7 +565,7 @@ PRINT("Test container(container&&)");
 
     ///////////////////////////////////////////////////////////////////////
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(std::move(set1));
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(std::move(set1));
 
     if (TPARAM_N == 0)
     {
@@ -591,7 +591,7 @@ PRINT("Test container(container&&)");
 
 PRINT("Test container(container&&, const Allocator&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -610,7 +610,7 @@ PRINT("Test container(container&&, const Allocator&)");
 
     TPARAM_ALLOCATOR<xint_xint> alloc;
 
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(std::move(set1), alloc);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set2(std::move(set1), alloc);
 
     if (set1.size() == 3)
     {
@@ -641,13 +641,13 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<xint_xint>(iss))
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<xint_xint>(iss))
@@ -678,13 +678,13 @@ PRINT("Test container(sfl::from_range_t, Range&&)");
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data)
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             data
@@ -709,14 +709,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<xint_xint>(iss)),
             11
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<xint_xint>(iss)),
@@ -748,14 +748,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type)");
         );
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
             11
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -783,7 +783,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<xint_xint>(iss)),
@@ -791,7 +791,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
             alloc
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<xint_xint>(iss)),
@@ -826,7 +826,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -834,7 +834,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Allocator&)")
             alloc
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -860,10 +860,10 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<xint_xint>(iss)),
@@ -871,7 +871,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
             hash
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<xint_xint>(iss)),
@@ -903,10 +903,10 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
             }
         );
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -914,7 +914,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&)");
             hash
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -940,12 +940,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<xint_xint>(iss)),
@@ -954,7 +954,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<xint_xint>(iss)),
@@ -987,12 +987,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             }
         );
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -1001,7 +1001,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -1028,12 +1028,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         std::equal_to<xint_xint> equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<xint_xint>(iss)),
@@ -1042,7 +1042,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             equal
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<xint_xint>(iss)),
@@ -1075,12 +1075,12 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             }
         );
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         std::equal_to<xint_xint> equal;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -1089,7 +1089,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             equal
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -1116,14 +1116,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         std::equal_to<xint_xint> equal;
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (std::views::istream<xint_xint>(iss)),
@@ -1133,7 +1133,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             (sfl::from_range_t()),
             (sfl::test::istream_view<xint_xint>(iss)),
@@ -1167,14 +1167,14 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             }
         );
 
-        std::hash<xint_xint> hash;
+        sfl::hash<xint_xint> hash;
 
         std::equal_to<xint_xint> equal;
 
         TPARAM_ALLOCATOR<xint_xint> alloc;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             std::views::all(data),
@@ -1184,7 +1184,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
             alloc
         );
         #else
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set
         (
             sfl::from_range_t(),
             data,
@@ -1210,7 +1210,7 @@ PRINT("Test container(sfl::from_range_t, Range&&, size_type, const Hash&, const 
 
 PRINT("Test operator=(const container&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -1255,7 +1255,7 @@ PRINT("Test operator=(const container&)");
 
 PRINT("Test operator=(container&&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -1307,7 +1307,7 @@ PRINT("Test operator=(container&&)");
 
 PRINT("Test operator=(std::initializer_list)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -1347,7 +1347,7 @@ PRINT("Test operator=(std::initializer_list)");
 
 PRINT("Test get_allocator()");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     auto alloc = set.get_allocator();
 
@@ -1359,7 +1359,7 @@ PRINT("Test get_allocator()");
 PRINT("Test hash_function()");
 {
     {
-        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
+        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, sfl::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
 
         auto hash_function = set.hash_function();
 
@@ -1386,7 +1386,7 @@ PRINT("Test hash_function()");
 PRINT("Test key_eq()");
 {
     {
-        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
+        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, sfl::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
 
         auto key_eq = set.key_eq();
 
@@ -1412,7 +1412,7 @@ PRINT("Test key_eq()");
 
 PRINT("Test begin, end, cbegin, cend");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -1556,7 +1556,7 @@ PRINT("Test equal_range, find, count, contains");
 {
     // xint
     {
-        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
+        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, sfl::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
 
         set.emplace(20);
         set.emplace(40);
@@ -1663,7 +1663,7 @@ PRINT("Test equal_range, find, count, contains");
 
 PRINT("Test emplace(Args&&...)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1688,7 +1688,7 @@ PRINT("Test emplace(Args&&...)");
 
 PRINT("Test emplace_hint(const_iterator, Args&&...)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1711,7 +1711,7 @@ PRINT("Test emplace_hint(const_iterator, Args&&...)");
 
 PRINT("Test insert(const value_type&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1742,7 +1742,7 @@ PRINT("Test insert(const value_type&)");
 
 PRINT("Test insert(value_type&&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1804,7 +1804,7 @@ PRINT("Test insert(K&&)");
 
 PRINT("Test insert(const_iterator, const value_type&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1833,7 +1833,7 @@ PRINT("Test insert(const_iterator, const value_type&)");
 
 PRINT("Test insert(const_iterator, value_type&&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1891,7 +1891,7 @@ PRINT("Test insert(const_iterator, K&&)");
 
 PRINT("Test insert(InputIt, InputIt");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1918,7 +1918,7 @@ PRINT("Test insert(InputIt, InputIt");
 
 PRINT("Test insert(std::initializer_list");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     CHECK(set.size() == 0);
 
@@ -1947,7 +1947,7 @@ PRINT("Test insert_range(Range&&");
     {
         std::istringstream iss("10 1 20 1 30 1 20 2 20 3");
 
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set.insert_range(std::views::istream<xint_xint>(iss));
@@ -1976,7 +1976,7 @@ PRINT("Test insert_range(Range&&");
             }
         );
 
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
         #if SFL_CPP_VERSION >= SFL_CPP_20
         set.insert_range(std::views::all(data));
@@ -1995,7 +1995,7 @@ PRINT("Test insert_range(Range&&");
 
 PRINT("Test erase(const_iterator)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -2071,7 +2071,7 @@ PRINT("Test erase(const_iterator)");
 
 PRINT("Test erase(const_iterator, const_iterator)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set;
 
     set.emplace(10, 1);
     set.emplace(20, 1);
@@ -2106,7 +2106,7 @@ PRINT("Test erase(const_iterator, const_iterator)");
 
 PRINT("Test erase(const Key&)");
 {
-    sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
+    sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, sfl::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
 
     set.emplace(10);
     set.emplace(20);
@@ -2168,7 +2168,7 @@ PRINT("Test erase(K&&)");
 
 PRINT("Test swap(container&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -2227,7 +2227,7 @@ PRINT("Test bucket interface functions");
 {
     // xint
     {
-        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, std::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
+        sfl::small_unordered_set<xint, TPARAM_N, TPARAM_M, sfl::hash<xint>, std::equal_to<xint>, TPARAM_ALLOCATOR<xint>> set;
 
         set.emplace(20);
         set.emplace(40);
@@ -2362,7 +2362,7 @@ PRINT("Test bucket interface functions");
 
 PRINT("Test hash policy functions");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11);
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set(11);
 
     set.emplace(20, 1);
     set.emplace(40, 1);
@@ -2412,7 +2412,7 @@ PRINT("Test hash policy functions");
 
 PRINT("Test NON-MEMBER comparison operators");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -2437,7 +2437,7 @@ PRINT("Test NON-MEMBER comparison operators");
 
 PRINT("Test NON-MEMBER swap(container&)");
 {
-    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
+    sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>> set1, set2;
 
     set1.emplace(10, 1);
     set1.emplace(20, 1);
@@ -2478,7 +2478,7 @@ PRINT("Test NON-MEMBER swap(container&)");
 PRINT("Test NON-MEMBER erase_if(container&, Predicate)");
 {
     using container_type =
-        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, std::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
+        sfl::small_unordered_set<xint_xint, TPARAM_N, TPARAM_M, sfl::hash<xint_xint>, std::equal_to<xint_xint>, TPARAM_ALLOCATOR<xint_xint>>;
 
     using const_reference = typename container_type::const_reference;
 

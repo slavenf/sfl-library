@@ -45,15 +45,7 @@ int main()
 namespace constexpr_test
 {
 
-struct hash_int
-{
-    constexpr std::size_t operator()(int x) const noexcept
-    {
-        return static_cast<std::size_t>(x);
-    }
-};
-
-using map_type = sfl::static_unordered_multimap<int, int, 8, 8, hash_int>;
+using map_type = sfl::static_unordered_multimap<int, int, 8>;
 
 constexpr map_type create_map()
 {

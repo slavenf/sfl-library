@@ -12,7 +12,7 @@ BEGIN_TEST("Test PRIVATE make_node and drop_node")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -48,7 +48,7 @@ BEGIN_TEST("Test emplace_equal(Args&&...)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -402,7 +402,7 @@ BEGIN_TEST("Test emplace_unique(Args&&...)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -762,7 +762,7 @@ BEGIN_TEST("Test emplace_hint_equal(const_iterator, Args&&...)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -852,7 +852,7 @@ BEGIN_TEST("Test emplace_hint_unique(const_iterator, Args&&...)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -924,7 +924,7 @@ BEGIN_TEST("Test insert_equal(V&&)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1010,7 +1010,7 @@ BEGIN_TEST("Test insert_unique(V&&)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1081,7 +1081,7 @@ BEGIN_TEST("Test insert_hint_equal(const_iterator, Args&&...)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1171,7 +1171,7 @@ BEGIN_TEST("Test insert_hint_unique(const_iterator, Args&&...)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1243,7 +1243,7 @@ BEGIN_TEST("Test clear()")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1292,7 +1292,7 @@ BEGIN_TEST("Test insert_or_assign(K&&, M&&)")
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
     using key_of_value = sfl::dtl::first;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1389,7 +1389,7 @@ BEGIN_TEST("Test insert_or_assign_hint(const_iterator, K&&, M&&)")
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
     using key_of_value = sfl::dtl::first;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1480,7 +1480,7 @@ BEGIN_TEST("Test try_emplace(K&&, Args&&...)")
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
     using key_of_value = sfl::dtl::first;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1577,7 +1577,7 @@ BEGIN_TEST("Test try_emplace_hint(const_iterator, K&&, Args&&...)")
     using key_type = xint;
     using value_type = std::pair<const xint, xint>;
     using key_of_value = sfl::dtl::first;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1668,7 +1668,7 @@ BEGIN_TEST("Test erase_equal(const_iterator)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1778,7 +1778,7 @@ BEGIN_TEST("Test erase_unique(const_iterator)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1879,7 +1879,7 @@ BEGIN_TEST("Test erase_equal(const_iterator, const_iterator)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -1988,7 +1988,7 @@ BEGIN_TEST("Test erase_unique(const_iterator, const_iterator)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2088,7 +2088,7 @@ BEGIN_TEST("Test erase_key_unique(const K&)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2170,7 +2170,7 @@ BEGIN_TEST("Test erase_key_equal(const K&)")
     using key_type = int;
     using value_type = int;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2252,7 +2252,7 @@ BEGIN_TEST("Test swap(container&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2528,7 +2528,7 @@ BEGIN_TEST("Stress test insert with rehashing")
         using key_type = int;
         using value_type = int;
         using key_of_value = sfl::dtl::identity;
-        using key_hash = sfl::test::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using node_allocator = TPARAM_ALLOCATOR<key_type>;
         using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2553,7 +2553,7 @@ BEGIN_TEST("Stress test insert with rehashing")
         using key_type = int;
         using value_type = int;
         using key_of_value = sfl::dtl::identity;
-        using key_hash = sfl::test::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using node_allocator = TPARAM_ALLOCATOR<key_type>;
         using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2578,7 +2578,7 @@ BEGIN_TEST("Stress test insert with rehashing")
         using key_type = int;
         using value_type = int;
         using key_of_value = sfl::dtl::identity;
-        using key_hash = sfl::test::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using node_allocator = TPARAM_ALLOCATOR<key_type>;
         using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2611,7 +2611,7 @@ BEGIN_TEST("Test container(size_type)")
         using key_type = xint;
         using value_type = xint;
         using key_of_value = sfl::dtl::identity;
-        using key_hash = sfl::test::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using node_allocator = TPARAM_ALLOCATOR<key_type>;
         using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2630,7 +2630,7 @@ BEGIN_TEST("Test container(size_type)")
         using key_type = xint;
         using value_type = xint;
         using key_of_value = sfl::dtl::identity;
-        using key_hash = sfl::test::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using node_allocator = TPARAM_ALLOCATOR<key_type>;
         using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2649,7 +2649,7 @@ BEGIN_TEST("Test container(size_type)")
         using key_type = xint;
         using value_type = xint;
         using key_of_value = sfl::dtl::identity;
-        using key_hash = sfl::test::hash<key_type>;
+        using key_hash = sfl::hash<key_type>;
         using key_equal = std::equal_to<key_type>;
         using node_allocator = TPARAM_ALLOCATOR<key_type>;
         using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2671,7 +2671,7 @@ BEGIN_TEST("Test container(size_type, const Alloc&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2694,7 +2694,7 @@ BEGIN_TEST("Test container(size_type, const key_hash&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2717,7 +2717,7 @@ BEGIN_TEST("Test container(size_type, const key_hash&, const Alloc&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2742,7 +2742,7 @@ BEGIN_TEST("Test container(size_type, const key_hash&, const key_equal&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2767,7 +2767,7 @@ BEGIN_TEST("Test container(size_type, const key_hash&, const key_equal&, const A
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2794,7 +2794,7 @@ BEGIN_TEST("Test container(const container&, EqualOrUniqueTag)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -2983,7 +2983,7 @@ BEGIN_TEST("Test container(const container&, EqualOrUniqueTag, const Alloc&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -3180,7 +3180,7 @@ BEGIN_TEST("Test container(container&&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -3423,7 +3423,7 @@ BEGIN_TEST("Test container(container&&, const Alloc&)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -3676,7 +3676,7 @@ BEGIN_TEST("Test assign_copy(const container&, EqualOrUniqueTag)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -4032,7 +4032,7 @@ BEGIN_TEST("Test assign_move(const container&, EqualOrUniqueTag)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -4430,7 +4430,7 @@ BEGIN_TEST("Test assign_range_equal(InputIt, InputIt)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -4619,7 +4619,7 @@ BEGIN_TEST("Test assign_range_unique(InputIt, InputIt)")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
@@ -4810,7 +4810,7 @@ BEGIN_TEST("Test NON-MEMBER comparison operators")
     using key_type = xint;
     using value_type = xint;
     using key_of_value = sfl::dtl::identity;
-    using key_hash = sfl::test::hash<key_type>;
+    using key_hash = sfl::hash<key_type>;
     using key_equal = std::equal_to<key_type>;
     using node_allocator = TPARAM_ALLOCATOR<key_type>;
     using bucket_allocator = TPARAM_ALLOCATOR<key_type>;

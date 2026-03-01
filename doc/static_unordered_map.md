@@ -66,7 +66,7 @@ namespace sfl
                typename T,
                std::size_t StaticCapacity,
                std::size_t StaticBucketCount = /* see description below */,
-               typename Hash = std::hash<Key>,
+               typename Hash = sfl::hash<Key>,
                typename KeyEqual = std::equal_to<Key> >
     class static_unordered_map;
 }
