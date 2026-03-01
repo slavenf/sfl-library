@@ -373,23 +373,19 @@ public:
 
 public:
 
-    SFL_CONSTEXPR_20
     static_storage() noexcept
     {}
 
-    SFL_CONSTEXPR_20
     ~static_storage()
     {}
 
     SFL_NODISCARD
-    SFL_CONSTEXPR_20
     pointer data() noexcept
     {
         return pointer(storage_);
     }
 
     SFL_NODISCARD
-    SFL_CONSTEXPR_20
     pointer data() const noexcept
     {
         return pointer(storage_);
