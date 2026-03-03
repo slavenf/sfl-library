@@ -21,6 +21,7 @@
 #ifndef SFL_HASH_HPP_INCLUDED
 #define SFL_HASH_HPP_INCLUDED
 
+#include <sfl/detail/bit/bit_cast.hpp>
 #include <sfl/detail/type_traits/enable_if_t.hpp>
 #include <sfl/detail/cpp.hpp>
 
@@ -29,10 +30,6 @@
 #include <functional> // hash
 #include <limits> // numeric_limits
 #include <type_traits> // is_enum, is_integral, is_floating_point
-
-#if SFL_CPP_VERSION >= SFL_CPP_20
-#include <bit> // bit_cast
-#endif
 
 namespace sfl
 {
@@ -84,22 +81,7 @@ struct hash_impl<T, sfl::dtl::enable_if_t<std::is_floating_point<T>::value && si
             value = std::numeric_limits<T>::quiet_NaN();
         }
 
-        #if SFL_CPP_VERSION >= SFL_CPP_20
-        if (std::is_constant_evaluated())
-        {
-            return std::bit_cast<std::uint32_t>(value);
-        }
-        else
-        #endif
-        {
-            union
-            {
-                T t;
-                std::uint32_t a;
-            } u;
-            u.t = value;
-            return u.a;
-        }
+        return sfl::dtl::bit_cast<std::uint32_t>(value);
     }
 };
 
@@ -121,22 +103,7 @@ struct hash_impl<T, sfl::dtl::enable_if_t<std::is_floating_point<T>::value && si
             value = std::numeric_limits<T>::quiet_NaN();
         }
 
-        #if SFL_CPP_VERSION >= SFL_CPP_20
-        if (std::is_constant_evaluated())
-        {
-            return std::bit_cast<std::uint32_t>(value);
-        }
-        else
-        #endif
-        {
-            union
-            {
-                T t;
-                std::uint32_t a;
-            } u;
-            u.t = value;
-            return u.a;
-        }
+        return sfl::dtl::bit_cast<std::uint32_t>(value);
     }
 };
 
@@ -158,27 +125,10 @@ struct hash_impl<T, sfl::dtl::enable_if_t<std::is_floating_point<T>::value && si
             value = std::numeric_limits<T>::quiet_NaN();
         }
 
-        #if SFL_CPP_VERSION >= SFL_CPP_20
-        if (std::is_constant_evaluated())
-        {
-            std::uint64_t bits = std::bit_cast<std::uint64_t>(value);
-            std::size_t h1 = static_cast<std::size_t>(bits);
-            std::size_t h2 = static_cast<std::size_t>(bits >> 32);
-            return h1 ^ (h2 + 0x9e3779b9u + (h1 << 6) + (h1 >> 2));
-        }
-        else
-        #endif
-        {
-            union
-            {
-                T t;
-                std::uint64_t a;
-            } u;
-            u.t = value;
-            std::size_t h1 = static_cast<std::size_t>(u.a);
-            std::size_t h2 = static_cast<std::size_t>(u.a >> 32);
-            return h1 ^ (h2 + 0x9e3779b9u + (h1 << 6) + (h1 >> 2));
-        }
+        std::uint64_t bits = sfl::dtl::bit_cast<std::uint64_t>(value);
+        std::size_t h1 = static_cast<std::size_t>(bits);
+        std::size_t h2 = static_cast<std::size_t>(bits >> 32);
+        return h1 ^ (h2 + 0x9e3779b9u + (h1 << 6) + (h1 >> 2));
     }
 };
 
@@ -200,22 +150,7 @@ struct hash_impl<T, sfl::dtl::enable_if_t<std::is_floating_point<T>::value && si
             value = std::numeric_limits<T>::quiet_NaN();
         }
 
-        #if SFL_CPP_VERSION >= SFL_CPP_20
-        if (std::is_constant_evaluated())
-        {
-            return std::bit_cast<std::uint64_t>(value);
-        }
-        else
-        #endif
-        {
-            union
-            {
-                T t;
-                std::uint64_t a;
-            } u;
-            u.t = value;
-            return u.a;
-        }
+        return sfl::dtl::bit_cast<std::uint64_t>(value);
     }
 };
 
