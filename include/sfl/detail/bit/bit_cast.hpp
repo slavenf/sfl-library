@@ -39,9 +39,14 @@ namespace dtl
 template <typename To, typename From>
 To bit_cast_impl_11(const From& src) noexcept
 {
-    static_assert(sizeof(To) == sizeof(From), "Size mismatch");
+    static_assert(sizeof(To) == sizeof(From), "To and From must have the same size");
+    #if (defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 5)) || (defined(__clang__) && (__clang_major__ < 4))
+    static_assert(__has_trivial_copy(From), "From must be trivially copyable");
+    static_assert(__has_trivial_copy(To), "To must be trivially copyable");
+    #else
     static_assert(std::is_trivially_copyable<From>::value, "From must be trivially copyable");
     static_assert(std::is_trivially_copyable<To>::value, "To must be trivially copyable");
+    #endif
 
     To dst;
     std::memcpy(&dst, &src, sizeof(To));
