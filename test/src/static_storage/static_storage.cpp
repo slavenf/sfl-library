@@ -2,6 +2,8 @@
 
 #include "sfl/detail/static_storage.hpp"
 
+#include "sfl/detail/type_traits/is_trivially_copyable.hpp"
+
 #include "check.hpp"
 
 #include <iterator>
@@ -14,19 +16,9 @@ using pointer = typename static_storage::pointer;
 
 using const_pointer = typename static_storage::const_pointer;
 
-#if (defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 5)) || (defined(__clang__) && (__clang_major__ < 4))
+static_assert(sfl::dtl::is_trivially_copyable<pointer>::value, "");
 
-static_assert(__has_trivial_copy(pointer), "");
-
-static_assert(__has_trivial_copy(const_pointer), "");
-
-#else
-
-static_assert(std::is_trivially_copyable<pointer>::value, "");
-
-static_assert(std::is_trivially_copyable<const_pointer>::value, "");
-
-#endif
+static_assert(sfl::dtl::is_trivially_copyable<const_pointer>::value, "");
 
 static_assert(std::is_same<typename std::pointer_traits<pointer>::element_type, int>::value, "");
 

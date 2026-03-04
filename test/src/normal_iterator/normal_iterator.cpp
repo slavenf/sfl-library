@@ -2,25 +2,17 @@
 
 #include "sfl/detail/normal_iterator.hpp"
 
+#include "sfl/detail/type_traits/is_trivially_copyable.hpp"
+
 #include <type_traits>
 
 using iterator = sfl::dtl::normal_iterator<int*, false>;
 
 using const_iterator = sfl::dtl::normal_iterator<int*, true>;
 
-#if (defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 5)) || (defined(__clang__) && (__clang_major__ < 4))
+static_assert(sfl::dtl::is_trivially_copyable<iterator>::value, "");
 
-static_assert(__has_trivial_copy(iterator), "");
-
-static_assert(__has_trivial_copy(const_iterator), "");
-
-#else
-
-static_assert(std::is_trivially_copyable<iterator>::value, "");
-
-static_assert(std::is_trivially_copyable<const_iterator>::value, "");
-
-#endif
+static_assert(sfl::dtl::is_trivially_copyable<const_iterator>::value, "");
 
 static_assert(std::is_same<typename iterator::pointer, int*>::value, "");
 

@@ -21,10 +21,10 @@
 #ifndef SFL_DETAIL_BIT_CAST_HPP_INCLUDED
 #define SFL_DETAIL_BIT_CAST_HPP_INCLUDED
 
+#include <sfl/detail/type_traits/is_trivially_copyable.hpp>
 #include <sfl/detail/cpp.hpp>
 
 #include <cstring> // memcpy
-#include <type_traits> // is_trivially_copyable
 
 #if SFL_CPP_VERSION >= SFL_CPP_20
 #include <bit> // bit_cast
@@ -40,13 +40,8 @@ template <typename To, typename From>
 To bit_cast_impl_11(const From& src) noexcept
 {
     static_assert(sizeof(To) == sizeof(From), "To and From must have the same size");
-    #if (defined(__GNUC__) && !defined(__clang__) && (__GNUC__ < 5)) || (defined(__clang__) && (__clang_major__ < 4))
-    static_assert(__has_trivial_copy(From), "From must be trivially copyable");
-    static_assert(__has_trivial_copy(To), "To must be trivially copyable");
-    #else
-    static_assert(std::is_trivially_copyable<From>::value, "From must be trivially copyable");
-    static_assert(std::is_trivially_copyable<To>::value, "To must be trivially copyable");
-    #endif
+    static_assert(sfl::dtl::is_trivially_copyable<From>::value, "From must be trivially copyable");
+    static_assert(sfl::dtl::is_trivially_copyable<To>::value, "To must be trivially copyable");
 
     To dst;
     std::memcpy(&dst, &src, sizeof(To));
