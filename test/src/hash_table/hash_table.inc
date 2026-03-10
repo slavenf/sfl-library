@@ -7,6 +7,26 @@ using sfl::test::xobj;
 
 #ifndef TEST_CPP20_CONSTEXPR
 
+BEGIN_TEST("Test if iterators are trivially copyable")
+{
+    using key_type = int;
+    using value_type = int;
+    using key_of_value = sfl::dtl::identity;
+    using key_hash = sfl::hash<key_type>;
+    using key_equal = std::equal_to<key_type>;
+    using node_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_allocator = TPARAM_ALLOCATOR<key_type>;
+    using bucket_count_policy = sfl::dtl::hash_table_dynamic_basic_bucket_count_policy;
+    using max_load_policy = sfl::dtl::hash_table_no_max_load_policy;
+    using hash_table_type = sfl::dtl::hash_table<key_type, value_type, key_of_value, key_hash, key_equal, node_allocator, bucket_allocator, bucket_count_policy, max_load_policy>;
+
+    static_assert(sfl::dtl::is_trivially_copyable<typename hash_table_type::iterator>::value, "");
+    static_assert(sfl::dtl::is_trivially_copyable<typename hash_table_type::const_iterator>::value, "");
+    static_assert(sfl::dtl::is_trivially_copyable<typename hash_table_type::local_iterator>::value, "");
+    static_assert(sfl::dtl::is_trivially_copyable<typename hash_table_type::const_local_iterator>::value, "");
+}
+END_TEST()
+
 BEGIN_TEST("Test PRIVATE make_node and drop_node")
 {
     using key_type = int;
