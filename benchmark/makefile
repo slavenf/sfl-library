@@ -3,16 +3,23 @@
 #
 
 # C++ compiler
-CXX = g++
+CXX = g++ -std=c++20
 
 # C++ compiler flags
-CXXFLAGS = -std=c++20 -Wall -Wextra -Wfatal-errors -I ../include -DNDEBUG -O3
+CXXFLAGS = -Wall -Wextra -Wfatal-errors -I ../include -I include -DNDEBUG -O3
 
-# Command for removing all files and directories
-RM_RF = rm -rf
+# Function: Resursive wildcard
+# Usage: $(call rwildcard,dir,pattern)
+rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
+# Source directory
+SRC_DIR := ./src
 
 # List of all source files that must be compiled and tested
-SRCS := $(wildcard *.cpp)
+SRCS := $(call rwildcard,$(SRC_DIR),*.cpp)
+
+# Build directory
+BUILD_DIR := ./build
 
 # First rule
 .PHONY: all
@@ -22,10 +29,11 @@ all:
 # Usage: $(call generate_rules,source_file)
 define generate_rules
 
-.PHONY: $(basename $(1))
-all:    $(basename $(1))
-$(basename $(1)):
-	$(CXX) $(CXXFLAGS) $(1) -o $(basename $(1)).out
+.PHONY: $(basename $(notdir $(1)))
+all:  $(basename $(notdir $(1)))
+$(basename $(notdir $(1))):
+	mkdir -p $(dir $(BUILD_DIR)/$(basename $(1)).out)
+	$(CXX) $(CXXFLAGS) $(1) -o $(BUILD_DIR)/$(basename $(1)).out
 
 endef
 
@@ -34,4 +42,4 @@ $(foreach file,$(SRCS),$(eval $(call generate_rules,$(file))))
 
 .PHONY: clean
 clean:
-	$(RM_RF) *.out
+	rm -rf $(BUILD_DIR)

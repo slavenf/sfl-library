@@ -1,5 +1,4 @@
-#define ANKERL_NANOBENCH_IMPLEMENT
-#include "nanobench.h"
+#include "table.hpp"
 
 #include <sfl/small_unordered_linear_map.hpp>
 #include <sfl/small_unordered_map.hpp>
@@ -8,8 +7,8 @@
 #include <algorithm>
 #include <chrono>
 #include <iostream>
+#include <random> // mt19937, random_device
 #include <unordered_map>
-#include <vector>
 #include <vector>
 
 template <typename Map>
@@ -17,9 +16,11 @@ std::chrono::duration<double, std::milli> test_random_insert(const int num_eleme
 {
     std::vector<std::chrono::duration<double, std::milli>> times;
 
-    ankerl::nanobench::Rng rng;
+    std::random_device rd;
 
-    std::uint64_t sum = 0;
+    std::mt19937 gen(rd());
+
+    volatile std::uint64_t sum = 0;
 
     for (int i = 0; i < num_iterations; ++i)
     {
@@ -29,7 +30,7 @@ std::chrono::duration<double, std::milli> test_random_insert(const int num_eleme
 
         for (int i = 0; i < num_elements; ++i)
         {
-            std::uint64_t key = rng();
+            std::uint64_t key = gen();
             map[key] = i;
             sum += key;
         }
@@ -41,7 +42,7 @@ std::chrono::duration<double, std::milli> test_random_insert(const int num_eleme
         sum += map.size();
     }
 
-    ankerl::nanobench::doNotOptimizeAway(sum);
+    (void)sum;
 
     std::sort(times.begin(), times.end());
 
@@ -68,7 +69,7 @@ std::chrono::duration<double, std::milli> test_random_lookup(const int num_eleme
         map[data[i]] = i;
     }
 
-    std::uint64_t sum = 0;
+    volatile std::uint64_t sum = 0;
 
     for (int i = 0; i < num_iterations; ++i)
     {
@@ -92,7 +93,7 @@ std::chrono::duration<double, std::milli> test_random_lookup(const int num_eleme
         times.push_back(end - start);
     }
 
-    ankerl::nanobench::doNotOptimizeAway(sum);
+    (void)sum;
 
     std::sort(times.begin(), times.end());
 
@@ -106,25 +107,39 @@ int main()
     using sfl_unordered_map = sfl::unordered_map<std::uint64_t, std::uint64_t>;
     using std_unordered_map = std::unordered_map<std::uint64_t, std::uint64_t>;
 
-    std::cout << std::fixed;
-
-    for (const int n : {2, 4, 8, 16, 32, 64, 128})
+    for (const int num_elements : {2, 4, 8, 16, 32, 64, 128})
     {
-        std::cout << "random insert " << n << " integers:" << std::endl;
-        std::cout << " - sfl::small_unordered_map:      " << test_random_insert<sfl_small_unordered_map>(n, 100'000) << std::endl;
-        std::cout << " - sfl::small_unordered_linear_map: " << test_random_insert<sfl_small_unordered_linear_map>(n, 100'000) << std::endl;
-        std::cout << " - sfl::unordered_map:            " << test_random_insert<sfl_unordered_map>(n, 100'000) << std::endl;
-        std::cout << " - std::unordered_map:            " << test_random_insert<std_unordered_map>(n, 100'000) << std::endl;
-        std::cout << std::endl;
+        constexpr int num_iterations = 100'000;
+
+        sfl::benchmark::table table;
+
+        table.set_title("Random insert ", num_elements," integers");
+
+        table.set_header("Container", "Time");
+
+        table.add_row("sfl::small_unordered_map", test_random_insert<sfl_small_unordered_map>(num_elements, num_iterations));
+        table.add_row("sfl::small_unordered_linear_map", test_random_insert<sfl_small_unordered_linear_map>(num_elements, num_iterations));
+        table.add_row("sfl::unordered_map", test_random_insert<sfl_unordered_map>(num_elements, num_iterations));
+        table.add_row("std::unordered_map", test_random_insert<std_unordered_map>(num_elements, num_iterations));
+
+        std::cout << table << std::endl;
     }
 
-    for (const int n : {2, 4, 8, 16, 32, 64, 128})
+    for (const int num_elements : {2, 4, 8, 16, 32, 64, 128})
     {
-        std::cout << "random lookup " << n << " integers:" << std::endl;
-        std::cout << " - sfl::small_unordered_map:      " << test_random_lookup<sfl_small_unordered_map>(n, 100'000) << std::endl;
-        std::cout << " - sfl::small_unordered_linear_map: " << test_random_lookup<sfl_small_unordered_linear_map>(n, 100'000) << std::endl;
-        std::cout << " - sfl::unordered_map:            " << test_random_lookup<sfl_unordered_map>(n, 100'000) << std::endl;
-        std::cout << " - std::unordered_map:            " << test_random_lookup<std_unordered_map>(n, 100'000) << std::endl;
-        std::cout << std::endl;
+        constexpr int num_iterations = 100'000;
+
+        sfl::benchmark::table table;
+
+        table.set_title("Random lookup ", num_elements," integers");
+
+        table.set_header("Container", "Time");
+
+        table.add_row("sfl::small_unordered_map", test_random_lookup<sfl_small_unordered_map>(num_elements, num_iterations));
+        table.add_row("sfl::small_unordered_linear_map", test_random_lookup<sfl_small_unordered_linear_map>(num_elements, num_iterations));
+        table.add_row("sfl::unordered_map", test_random_lookup<sfl_unordered_map>(num_elements, num_iterations));
+        table.add_row("std::unordered_map", test_random_lookup<std_unordered_map>(num_elements, num_iterations));
+
+        std::cout << table << std::endl;
     }
 }

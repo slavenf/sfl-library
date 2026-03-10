@@ -6,16 +6,23 @@
 SHELL = cmd
 
 # C++ compiler
-CXX = cl
+CXX = cl /std:c++20
 
 # C++ compiler flags
-CXXFLAGS = /std:c++20 /nologo /EHsc /W4 /WX /I ..\include /O2
+CXXFLAGS = /nologo /EHsc /W4 /WX /Zc:__cplusplus /I ..\include /I include /O2
 
-# Command for removing all files and directories
-RM_RF = del /f /s /q
+# Function: Resursive wildcard
+# Usage: $(call rwildcard,dir,pattern)
+rwildcard = $(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
+
+# Source directory
+SRC_DIR := .\src
 
 # List of all source files that must be compiled and tested
-SRCS := $(wildcard *.cpp)
+SRCS := $(foreach path,$(call rwildcard,$(SRC_DIR),*.cpp),$(subst /,\,$(path)))
+
+# Build directory
+BUILD_DIR := .\build
 
 # First rule
 .PHONY: all
@@ -25,10 +32,13 @@ all:
 # Usage: $(call generate_rules,source_file)
 define generate_rules
 
-.PHONY: $(basename $(1))
-all:    $(basename $(1))
-$(basename $(1)):
-	$(CXX) $(CXXFLAGS) $(1)
+.PHONY: $(basename $(notdir $(1)))
+all:  $(basename $(notdir $(1)))
+$(basename $(notdir $(1))):
+	if not exist "$(BUILD_DIR)\$(dir $(1))" mkdir "$(BUILD_DIR)\$(dir $(1))"
+	$(CXX) $(CXXFLAGS) $(1) /Fe:$(BUILD_DIR)\$(basename $(1)).exe \
+		                    /Fo:$(BUILD_DIR)\$(basename $(1)).obj \
+		                    /Fd:$(BUILD_DIR)\$(basename $(1)).pdb
 
 endef
 
@@ -37,7 +47,4 @@ $(foreach file,$(SRCS),$(eval $(call generate_rules,$(file))))
 
 .PHONY: clean
 clean:
-	$(RM_RF) *.exe
-	$(RM_RF) *.ilk
-	$(RM_RF) *.obj
-	$(RM_RF) *.pdb
+	if exist $(BUILD_DIR) rmdir /s /q $(BUILD_DIR)
