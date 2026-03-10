@@ -98,7 +98,7 @@ public:
         : ptr_(static_cast<T*>(ptr))
     {}
 
-    // Construct from other fancy_ptr.
+    // Converting constructor from other fancy_ptr.
     // Participates in overload resolution if U* is convertible to T*.
     template <typename U,
               typename std::enable_if<std::is_convertible<U*, T*>::value>::type* = nullptr>
@@ -106,7 +106,7 @@ public:
         : ptr_(static_cast<T*>(other.ptr_))
     {}
 
-    // Construct from other fancy_ptr.
+    // Converting constructor from other fancy_ptr.
     // Participates in overload resolution if U* is constructible from T*.
     template <typename U,
               typename std::enable_if<!std::is_convertible<U*, T*>::value && std::is_constructible<U*, T*>::value>::type* = nullptr>
@@ -115,12 +115,29 @@ public:
         : ptr_(static_cast<T*>(other.ptr_))
     {}
 
-    #if 0 // Old code.
-    template <typename U = T, typename std::enable_if<std::is_const<U>::value>::type* = nullptr>
-    fancy_ptr(const fancy_ptr<typename std::remove_const<T>::type>& other) noexcept
-        : ptr_(other.operator->()  /* std::to_address(other) in C++20 */)
-    {}
-    #endif
+    //
+    // ---- ASSIGNMENT --------------------------------------------------------
+    //
+
+    // Converting assignment operator from other fancy_ptr
+    // Participates in overload resolution if U* is convertible to T*.
+    template <typename U,
+              typename std::enable_if<std::is_convertible<U*, T*>::value>::type* = nullptr>
+    fancy_ptr& operator=(const fancy_ptr<U>& other) noexcept
+    {
+        ptr_ = static_cast<T*>(other.ptr_);
+        return *this;
+    }
+
+    // Converting assignment operator from other fancy_ptr
+    // Participates in overload resolution if U* is constructible from T*.
+    template <typename U,
+              typename std::enable_if<!std::is_convertible<U*, T*>::value && std::is_constructible<U*, T*>::value>::type* = nullptr>
+    fancy_ptr& operator=(const fancy_ptr<U>& other) noexcept
+    {
+        ptr_ = static_cast<T*>(other.ptr_);
+        return *this;
+    }
 
     //
     // ---- OBSERVERS ---------------------------------------------------------
