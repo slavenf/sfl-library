@@ -2,11 +2,17 @@
 
 #include "sfl/detail/segmented_iterator.hpp"
 
+#include "sfl/detail/type_traits/is_trivially_copyable.hpp"
+
 #include <type_traits>
 
 using iterator = sfl::dtl::segmented_iterator<int**, int*, 4, false>;
 
 using const_iterator = sfl::dtl::segmented_iterator<int**, int*, 4, true>;
+
+static_assert(sfl::dtl::is_trivially_copyable<iterator>::value, "");
+
+static_assert(sfl::dtl::is_trivially_copyable<const_iterator>::value, "");
 
 static_assert(std::is_same<typename iterator::pointer, int*>::value, "");
 

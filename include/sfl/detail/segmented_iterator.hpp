@@ -85,13 +85,6 @@ public:
         , local_()
     {}
 
-    // Copy constructor
-    SFL_CONSTEXPR_20
-    segmented_iterator(const segmented_iterator& other) noexcept
-        : segment_(other.segment_)
-        , local_(other.local_)
-    {}
-
     // Converting constructor (from iterator to const_iterator)
     template <bool IsConst2 = IsConst,
               sfl::dtl::enable_if_t<IsConst2 == false>* = nullptr>
@@ -101,9 +94,11 @@ public:
         , local_(other.local_)
     {}
 
-    // Copy assignment operator
+    // Converting assignment operator (from iterator to const_iterator)
+    template <bool IsConst2 = IsConst,
+              sfl::dtl::enable_if_t<IsConst2 == false>* = nullptr>
     SFL_CONSTEXPR_20
-    segmented_iterator& operator=(const segmented_iterator& other) noexcept
+    segmented_iterator& operator=(const segmented_iterator<SegmentIterator, LocalIterator, SegmentSize, IsConst2>& other) noexcept
     {
         segment_ = other.segment_;
         local_ = other.local_;
