@@ -7,6 +7,20 @@ using sfl::test::xobj;
 
 #ifndef TEST_CPP20_CONSTEXPR
 
+BEGIN_TEST("Test if iterators are trivially copyable")
+{
+    using key_type = xint;
+    using value_type = xint;
+    using key_of_value = sfl::dtl::identity;
+    using key_compare = std::less<xint>;
+    using allocator_type = TPARAM_ALLOCATOR<value_type>;
+    using tree_type = sfl::dtl::rb_tree<key_type, value_type, key_of_value, key_compare, allocator_type>;
+
+    static_assert(sfl::dtl::is_trivially_copyable<typename tree_type::iterator>::value, "");
+    static_assert(sfl::dtl::is_trivially_copyable<typename tree_type::const_iterator>::value, "");
+}
+END_TEST();
+
 BEGIN_TEST("Test PRIVATE make_node and drop_node")
 {
     using key_type = xint;

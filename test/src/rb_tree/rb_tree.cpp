@@ -5,6 +5,7 @@
 
 #include "sfl/detail/functional/first.hpp"
 #include "sfl/detail/functional/identity.hpp"
+#include "sfl/detail/type_traits/is_trivially_copyable.hpp"
 
 #include "check.hpp"
 #include "count_kv.hpp"
