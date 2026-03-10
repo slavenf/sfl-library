@@ -98,11 +98,6 @@ public:
         : ptr_(static_cast<T*>(ptr))
     {}
 
-    // Copy constructor
-    fancy_ptr(const fancy_ptr& other) noexcept
-        : ptr_(other.ptr_)
-    {}
-
     // Construct from other fancy_ptr.
     // Participates in overload resolution if U* is convertible to T*.
     template <typename U,
@@ -126,17 +121,6 @@ public:
         : ptr_(other.operator->()  /* std::to_address(other) in C++20 */)
     {}
     #endif
-
-    //
-    // ---- ASSIGNMENT --------------------------------------------------------
-    //
-
-    // Copy assignment operator.
-    fancy_ptr& operator=(const fancy_ptr& other) noexcept
-    {
-        ptr_ = other.ptr_;
-        return *this;
-    }
 
     //
     // ---- OBSERVERS ---------------------------------------------------------
