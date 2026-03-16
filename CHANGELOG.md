@@ -1,4 +1,4 @@
-# New Release
+# 2.2.0 (2026-03-16)
 
 * Static unordered linear multimap: Fixed a bug in the constructor taking
   `std::initializer_list` that prevented insertion of duplicate elements.
