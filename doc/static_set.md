@@ -78,6 +78,11 @@ Iterators to elements are bidirectional iterators, and they meet the requirement
 
 `sfl::static_set` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
+`sfl::static_set` can be used in C++20 constant expressions.
+
+**Note:** Support for C++20 constant expressions is not fully mature in the major compilers (GCC, Clang, MSVC), so the following limitations apply:
+* On GCC, it is not possible to declare `constexpr` objects of `static_set`. Clang and MSVC allow this, so this is a compiler-specific limitation (possibly a bug).
+
 <br><br>
 
 

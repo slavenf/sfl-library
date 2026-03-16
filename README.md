@@ -1,16 +1,16 @@
 # sfl library
 
-This is a header-only C++11 library that provides several new or lesser-known containers, some of which can be used in C++20 constant expressions.
+This is a header-only C++11 library that provides several new or lesser-known containers, most of which can be used in C++20 constant expressions.
 
 #### Sequence containers:
 
-* [`vector`](doc/vector.md) — Vector equivalent to `std::vector`, but not specialized for `bool` and with a few minor differences.
+* [`vector`](doc/vector.md) — Vector equivalent to `std::vector`, but not specialized for `bool`.
 * [`devector`](doc/devector.md) — Double-ended vector that allows faster insertion and deletion at the front compared to `vector`.
 * [`small_vector`](doc/small_vector.md) — Vector that embeds small statically allocated storage internally to avoid dynamic memory allocation when the number of elements is small.
 * [`static_vector`](doc/static_vector.md) — Vector with a fixed maximum capacity defined at compile time, backed entirely by statically allocated storage. Dynamic memory is never used.
-* [`compact_vector`](doc/compact_vector.md) — Vector whose `capacity()` is always equal to its `size()`. Inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
+* [`compact_vector`](doc/compact_vector.md) — Vector whose `capacity()` is always equal to its `size()`. It is inspired by [OpenFOAM's](https://openfoam.org/) container [`List`](https://github.com/OpenFOAM/OpenFOAM-dev/blob/master/src/OpenFOAM/containers/Lists/List/List.H).
 * [`segmented_vector`](doc/segmented_vector.md) — Vector with segmented storage that allows fast insertion and deletion at the back without memory reallocation.
-* [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion and deletion at both the front and back without memory reallocation.
+* [`segmented_devector`](doc/segmented_devector.md) — Double-ended vector with segmented storage that allows fast insertion and deletion at both the front and back without memory reallocation. It is a superior alternative to `std::deque`.
 
 #### Associative containers based on **red-black trees**:
 
@@ -80,7 +80,7 @@ This is a header-only C++11 library that provides several new or lesser-known co
 # Features
 
 * Compiles with GCC 4.8.5 and Clang 3.4.2.
-* Some containers are usable in C++20 constant expressions. For more information, please see section [C++20 constexpr](#c20-constexpr).
+* Most containers can be used in C++20 constant expressions. For more information, please see section [C++20 constexpr](#c20-constexpr).
 * Containers support [stateful allocators](https://en.cppreference.com/w/cpp/named_req/Allocator#Stateful_and_stateless_allocators) and allocators with [fancy pointers](https://en.cppreference.com/w/cpp/named_req/Allocator#Fancy_pointers).
 * Containers provide a range constructor `container(sfl::from_range_t, Range&& r)` in C++11.
 * Containers provide a range insertion member function `insert_range(Range&& r)` in C++11.
@@ -104,7 +104,7 @@ Tested compilers:
 * GCC 7.3.1 on CentOS 7 (C++11, 14, 17)
 * Clang 5.0.1 on CentOS 7 (C++11, 14, 17)
 * GCC 15.2.1 on Arch Linux (C++11, 14, 17, 20, 23)
-* Clang 21.1.4 on Arch Linux (C++11, 14, 17, 20, 23)
+* Clang 22.1.1 on Arch Linux (C++11, 14, 17, 20, 23)
 * MSVC 19.44 (C++14, 17, 20, latest)
 
 
@@ -125,7 +125,7 @@ This library can be integrated into CMake project using CMake module [FetchConte
 
 **Step 1:** Add the following lines into your `CMakeLists.txt`:
 
-```
+```CMake
 include(FetchContent)
 
 FetchContent_Declare(
@@ -137,7 +137,7 @@ FetchContent_MakeAvailable(sfl)
 
 **Step 2:** Add this library as a dependency into your `CMakeLists.txt`::
 
-```
+```CMake
 target_link_libraries(your_target_name PRIVATE sfl)
 ```
 
@@ -147,32 +147,23 @@ target_link_libraries(your_target_name PRIVATE sfl)
 
 # C++20 constexpr
 
-The following containers are usable in C++20 constant expressions:
+All containers **except those with the `small_*` prefix** are usable in C++20 constant expressions.
 
-* [`vector`](doc/vector.md)
-* [`devector`](doc/devector.md)
-* [`compact_vector`](doc/compact_vector.md)
-* [`segmented_vector`](doc/segmented_vector.md)
-* [`segmented_devector`](doc/segmented_devector.md)
-<!---->
-* [`map`](doc/map.md)
-* [`set`](doc/set.md)
-* [`multimap`](doc/multimap.md)
-* [`multiset`](doc/multiset.md)
-<!---->
-* [`unordered_map`](doc/unordered_map.md)
-* [`unordered_set`](doc/unordered_set.md)
-* [`unordered_multimap`](doc/unordered_multimap.md)
-* [`unordered_multiset`](doc/unordered_multiset.md)
-<!---->
-* [`flat_map`](doc/flat_map.md)
-* [`flat_set`](doc/flat_set.md)
-* [`flat_multimap`](doc/flat_multimap.md)
-* [`flat_multiset`](doc/flat_multiset.md)
+Containers with the `small_*` prefix are currently not usable in constant expressions, but support may be added in future library versions.
 
-Other containers are not currently usable in C++20 constant expressions but may be supported in future library versions.
+This library provides `sfl::hash`, a drop-in replacement for `std::hash` that can be used in C++20 constant expressions. All unordered associative containers are using `sfl::hash` as a default key hash functors.
 
-**Note:** At the time of writing this document, when compiling with MSVC (version 19.44 and earlier), `unordered_*` containers have a limitation in C++20 constant expressions: both the key hash and key equality functors must be empty types. That is, `std::is_empty<KeyHash>::value` and `std::is_empty<KeyEqual>::value` must both be `true`. This limitation does not apply when the containers are used in non-constant expressions.
+Support for C++20 constant expressions is not fully mature in the major compilers (GCC, Clang, and MSVC), so the following limitations apply:
+* The `data()` member function of any `static_*` container cannot be used in constant expressions.
+* On GCC, it is not possible to declare `constexpr` objects of `static_*` containers, whereas Clang and MSVC allow it. This is a compiler-specific limitation (possibly a bug).
+* On MSVC, when using `unordered_*` or `static_unordered_*` containers in constant expressions:
+  * Both the key hash (`KeyHash`) and key equality (`KeyEqual`) functors must be empty types:
+    ```C++
+    std::is_empty<KeyHash>::value == true
+    std::is_empty<KeyEqual>::value == true
+    ```
+  * The default functors (`sfl::hash` and `std::equal_to`) are already empty, so this restriction does not apply when using them.
+  * This limitation only applies in constant expressions; it does not affect usage in non-constant expressions. This is a [compiler bug](https://developercommunity.visualstudio.com/t/MSVC-false-positive-read-of-an-uninitial/10808174).
 
 
 

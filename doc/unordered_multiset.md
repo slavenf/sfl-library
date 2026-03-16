@@ -77,7 +77,15 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 
 `sfl::unordered_multiset` can be used in C++20 constant expressions. However, `sfl::unordered_multiset` objects generally cannot be `constexpr`, because any dynamically allocated storage must be released in the same evaluation of constant expression.
 
-**Note:** At the time of writing this document, when compiling with MSVC (version 19.44 and earlier), `sfl::unordered_multiset` container has a limitation in C++20 constant expressions: both the key hash and key equality functors must be empty types. That is, `std::is_empty<KeyHash>::value` and `std::is_empty<KeyEqual>::value` must both be `true`. This limitation does not apply when the container is used in non-constant expressions.
+**Note:** Support for C++20 constant expressions is not fully mature in the major compilers (GCC, Clang, MSVC), so the following limitations apply:
+* On MSVC, when using in constant expressions:
+  * Both the key hash (`Hash`) and key equality (`KeyEqual`) functors must be empty types:
+    ```C++
+    std::is_empty<KeyHash>::value == true
+    std::is_empty<KeyEqual>::value == true
+    ```
+  * The default functors (`sfl::hash` and `std::equal_to`) are already empty, so this restriction does not apply when using them.
+  * This limitation only applies in constant expressions; it does not affect usage in non-constant expressions. This is a [compiler bug](https://developercommunity.visualstudio.com/t/MSVC-false-positive-read-of-an-uninitial/10808174).
 
 <br><br>
 

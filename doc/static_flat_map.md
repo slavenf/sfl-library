@@ -88,6 +88,12 @@ Iterators to elements are random access iterators and they meet the requirements
 
 `sfl::static_flat_map` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container), [*ReversibleContainer*](https://en.cppreference.com/w/cpp/named_req/ReversibleContainer), [*ContiguousContainer*](https://en.cppreference.com/w/cpp/named_req/ContiguousContainer) and [*AssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/AssociativeContainer).
 
+`sfl::static_flat_map` can be used in C++20 constant expressions.
+
+**Note:** Support for C++20 constant expressions is not fully mature in the major compilers (GCC, Clang, MSVC), so the following limitations apply:
+* The `data()` member function cannot be used in constant expressions.
+* On GCC, it is not possible to declare `constexpr` objects of `static_flat_map`. Clang and MSVC allow this, so this is a compiler-specific limitation (possibly a bug).
+
 <br><br>
 
 
@@ -129,13 +135,13 @@ Iterators to elements are random access iterators and they meet the requirements
 | `key_type`                | `Key` |
 | `mapped_type`             | `T` |
 | `value_type`              | `std::pair<Key, T>` |
-| `size_type`               | `std::size_t` |
-| `difference_type`         | `std::ptrdiff_t` |
+| `size_type`               | Unsigned integer type |
+| `difference_type`         | Signed integer type |
 | `key_compare`             | `Compare` |
 | `reference`               | `value_type&` |
 | `const_reference`         | `const value_type&` |
-| `pointer`                 | `value_type*` |
-| `const_pointer`           | `const value_type*` |
+| `pointer`                 | Pointer to `value_type` |
+| `const_pointer`           | Pointer to `const value_type` |
 | `iterator`                | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `value_type` |
 | `const_iterator`          | [*LegacyRandomAccessIterator*](https://en.cppreference.com/w/cpp/named_req/RandomAccessIterator) and [*LegacyContiguousIterator*](https://en.cppreference.com/w/cpp/named_req/ContiguousIterator) to `const value_type` |
 | `reverse_iterator`        | `std::reverse_iterator<iterator>` |

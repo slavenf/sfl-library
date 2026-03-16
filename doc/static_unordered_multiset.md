@@ -79,6 +79,19 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 
 `sfl::static_unordered_multiset` meets the requirements of [*Container*](https://en.cppreference.com/w/cpp/named_req/Container) and [*UnorderedAssociativeContainer*](https://en.cppreference.com/w/cpp/named_req/UnorderedAssociativeContainer).
 
+`sfl::static_unordered_multiset` can be used in C++20 constant expressions.
+
+**Note:** Support for C++20 constant expressions is not fully mature in the major compilers (GCC, Clang, MSVC), so the following limitations apply:
+* On GCC, it is not possible to declare `constexpr` objects of `static_unordered_multiset`. Clang and MSVC allow this, so this is a compiler-specific limitation (possibly a bug).
+* On MSVC, when using in constant expressions:
+  * Both the key hash (`Hash`) and key equality (`KeyEqual`) functors must be empty types:
+    ```C++
+    std::is_empty<KeyHash>::value == true
+    std::is_empty<KeyEqual>::value == true
+    ```
+  * The default functors (`sfl::hash` and `std::equal_to`) are already empty, so this restriction does not apply when using them.
+  * This limitation only applies in constant expressions; it does not affect usage in non-constant expressions. This is a [compiler bug](https://developercommunity.visualstudio.com/t/MSVC-false-positive-read-of-an-uninitial/10808174).
+
 <br><br>
 
 
@@ -133,8 +146,8 @@ Iterators to elements are forward iterators, and they meet the requirements of [
 | `key_equal`               | `KeyEqual` |
 | `reference`               | `value_type&` |
 | `const_reference`         | `const value_type&` |
-| `pointer`                 | `value_type*` |
-| `const_pointer`           | `const value_type*` |
+| `pointer`                 | Pointer to `value_type` |
+| `const_pointer`           | Pointer to `const value_type` |
 | `iterator`                | [*LegacyForwardIterator*](https://en.cppreference.com/w/cpp/named_req/ForwardIterator) to `const value_type` |
 | `const_iterator`          | [*LegacyForwardIterator*](https://en.cppreference.com/w/cpp/named_req/ForwardIterator) to `const value_type` |
 | `local_iterator`          | [*LegacyForwardIterator*](https://en.cppreference.com/w/cpp/named_req/ForwardIterator) to `const value_type`. This iterator can be used to iterate through a single bucket but not across buckets. |

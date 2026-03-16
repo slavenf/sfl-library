@@ -1,3 +1,36 @@
+# New Release
+
+* Static unordered linear multimap: Fixed a bug in the constructor taking
+  `std::initializer_list` that prevented insertion of duplicate elements.
+* Added C++20 `constexpr` support for the following containers:
+  * `static_vector`
+  * `static_map`
+  * `static_set`
+  * `static_multimap`
+  * `static_multiset`
+  * `static_unordered_map`
+  * `static_unordered_set`
+  * `static_unordered_multimap`
+  * `static_unordered_multiset`
+  * `static_flat_map`
+  * `static_flat_set`
+  * `static_flat_multimap`
+  * `static_flat_multiset`
+  * `static_unordered_linear_map`
+  * `static_unordered_linear_set`
+  * `static_unordered_linear_multimap`
+  * `static_unordered_linear_multiset`
+* Added `sfl::hash`, a drop-in replacement for `std::hash` that can be used in
+  C++20 constant expressions. It inherits from `std::hash` and supports
+  computing hashes in C++20 constant expressions for enumeration types,
+  integral types, 32-bit floating-point types, and 64-bit floating-point types.
+* Changed the default key hash functor in all unordered associative containers
+  from `std::hash` to `sfl::hash`. No changes to user code are required, since
+  `sfl::hash` inherits from `std::hash`.
+* Iterators of all containers are now trivially copyable.
+
+
+
 # 2.1.2 (2026-01-24)
 
 * Fixed a bug in the hash table and all containers based on hash tables: buckets
